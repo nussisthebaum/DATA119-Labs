@@ -1,0 +1,537 @@
+---
+title: "Lab 6"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+#py_install(c('numpy', 'pandas', 'plotnine', 'scikit-learn')) 
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code==solution_code){
+          return(list(message = "Exact match code!", correct = TRUE))
+      }
+    return(list(message = "Not exact match code", correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+## Goals
+
+* Practice calculating different distance metrics. 
+* Define a $k$NN classifier on a small dataset by hand. 
+* Practice calculations on confusion matrices.
+* Implement $k$NN classification and regression. 
+* Create a graph illustrating the effects of choosing $k$ on training and test set accuracy. 
+
+## Setup
+
+For this lab we will be using `plotnine`, `pandas`, `numpy`, `scikit-learn`, and the dataset `birthwt`. Refresh yourself on the variables it includes by reading the [documentation](https://vincentarelbundock.github.io/Rdatasets/doc/MASS/birthwt.html). Run the cell below to setup our environment. 
+
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import sklearn
+
+birthwt = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/main/birthwt.csv")
+birthwt = pd.get_dummies(birthwt, columns = ['race'], drop_first = True, dtype = float)
+```
+
+## Understanding $k$NN
+
+Consider the following example: we have two classes, 1 (blue triangles) and 2 (red circles). Observations A-M are used as training data for a $k$NN classifier based on two predictors $X_1$ and $X_2$. Observations A-G belong to Class 1, and observations H-M belong to Class 2. All of the observations are shown in the plot below.
+
+```{r, echo = FALSE, fig.height = 3.25}
+library(ggplot2)
+
+Label <- c("H", "I", "A", 
+           "J", "L", "B", 
+           "K", "C", "D", 
+           "E", "M", "F", "G")
+Color <- c("Red", "Red", "Blue", 
+           "Red", "Red", "Blue", 
+           "Red", "Blue", "Blue", 
+           "Blue", "Red", "Blue", "Blue")
+Shape <- c(1, 1, 2, 
+           1, 1, 2, 
+           1, 2, 2, 
+           2, 1, 2, 2)
+X <- c(2.5, 2.5, 2.75,
+       3, 3.5, 3.25, 
+       3.5, 4.5, 5.0, 
+       5.5, 6.0, 6.5, 7)
+Y <- c(3, 1.5, 3.75,
+       3, 4.5, 3.75, 
+       1.5, 7, 6, 
+       7, 7.5, 8.5, 7.5)
+
+knn_plot <- data.frame(X = X, Y = Y)
+knn_plot$Label <- Label
+knn_plot$Color <- Color
+knn_plot$Shape <- Shape
+
+ggplot(data = knn_plot, aes(x = X, y = Y, label = Label)) + 
+  geom_point(shape = Shape, color = Color, size = 7) + 
+  geom_text(hjust=0.5, vjust=0.5, color = Color) + 
+  #scale_x_continuous(name = TeX(r"($X_1$)"), minor_breaks = seq(from = 1.5, to = 7.5, by = 0.25)) +
+  #scale_y_continuous(name = TeX(r"($X_2$)"), limits = c(1.5, 9), minor_breaks = seq(from = 1.5, to = 9, by = 0.5)) +
+  ggtitle("Training Set")
+```
+
+### Distance Metrics
+
+Recall Manhattan distance:
+\begin{align*}
+\color{black}{d_{Man}(D, J)} & \color{black}{= \sum_{i = 1}^2|d_i - j_i|}
+\end{align*}
+
+```{r q1, echo=FALSE}
+question("1. If Point D is located at $(5, 6)$, and Point J is located at $(3, 3)$, what is the Manhattan distance between the two points?",
+         answer("2"),
+         answer("3"),
+         answer("4"),
+         answer("5", correct=TRUE),
+         answer("6"))
+```
+
+Recall Euclidean distance:
+\begin{align*}
+\color{black}{d_{Euc}(D, J)} & \color{black}{= \sqrt{\sum_{i = 1}^2(d_i - j_i)^2}}
+\end{align*}
+
+```{r q2, echo=FALSE}
+question("2. Point D is located at $(5, 6)$, and Point J is located at $(3, 3)$. Calculate the Euclidean distance between the two points.",
+         answer("$\\sqrt{3}$"),
+         answer("$\\sqrt{5}$"),
+         answer("$\\sqrt{6}$"),
+         answer("$\\sqrt{9}$"),
+         answer("$\\sqrt{13}$", correct=TRUE))
+```
+
+### $k$NN Classifier by Hand
+
+
+```{r q3, echo=FALSE}
+question("3. What are the 3 nearest neighbors for point J? You may use Euclidean distance, but you do not have to actually calculate the values--use your best judgment based on what you see.",
+         answer("A", correct=TRUE),
+         answer("B", correct=TRUE),
+         answer("C"),
+         answer("D"),
+         answer("E"),
+         answer("F"),
+         answer("G"),
+         answer("H", correct=TRUE),
+         answer("I"),
+         answer("J"),
+         answer("K"),
+         answer("L"),
+         answer("M"))
+```
+
+
+```{r q4, echo=FALSE}
+question("4. Predict the class for point J, based on its three nearest neighbors.",
+         answer("Red Circle (Class 1)"),
+         answer("Blue Triangle (Class 2)", correct=TRUE, message="Point H is Class 1 (red circles), but points A and B are Class 2 (blue triangles). Since 2/3 points are Class 2, we would predict point J to also be Class 2."))
+```
+
+
+```{r q5, echo=FALSE}
+question("5. Let Class 1 be the absence of some event, and Class 2 be the presence of some event. If we are predicting point J to be Class 2, is Point J a true positive, true negative, false positive, or false negative?",
+         answer("True Positive"),
+         answer("True Negative"),
+         answer("False Positive", correct=TRUE, message="If we are predicting point J to be Class 2, we are predicting the presence of some event. In reality, point J is Class 1, which means the event did not really happen. Thus, point J is a false positive."),
+         answer("False Negative"))
+```
+
+6. Examine this table with the closest neighbors for each point, the predicted class, and the true class. The predictions are using a threshold of 0.5.
+
+```{r, echo = FALSE}
+library(kableExtra)
+point <- sort(Label)
+n1 <- c("${H}$", "${A}$", "",
+        "${C}$", "${D}$", "${E}$",
+        "${E}$", "${A}$", "${H}$",
+        "${H}$", "${H}$", "${A}$", 
+        "${E}$")
+n2 <- c("${J}$", "${J}$", "",
+        "${E}$", "${D}$", "${G}$",
+        "${F}$", "${B}$", "${J}$",
+        "${A}$", "${I}$", "${B}$",
+        "${F}$")
+n3 <- c("${B}$", "${L}$", "",
+        "${M}$", "${M}$", "${M}$",
+        "${M}$", "${J}$", "${K}$", 
+        "${B}$", "${J}$", "${J}$",
+        "${G}$")
+preds <- c("${1}$", "${1}$", "",
+           "${2}$", "${2}$", "${2}$", 
+           "${2}$", "${2}$", "${1}$", 
+           "${2}$", "${1}$", "${2}$", 
+           "${2}$")
+truth <- c("${2}$", "${2}$", "",
+           "${2}$", "${2}$", "${2}$", 
+           "${2}$", "${1}$", "${1}$", 
+           "${1}$", "${1}$", "${1}$", 
+           "${1}$")
+
+knn_table <- data.frame(point = point, "Neighbor 1" = n1, n2 = n2, n3 = n3, preds = preds, truth = truth)
+knn_table <- t(knn_table)
+row.names(knn_table) <- c("Point", "Neighbor 1", "Neighbor 2", "Neighbor 3", "Predicted", "Truth")
+
+kable(knn_table, escape = FALSE) %>%
+  column_spec (1, border_left = T) %>%
+  column_spec (14, border_right = T) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
+
+```{r q6, echo=FALSE}
+question("Select the correct series of values for column C",
+         answer("D, E, M, 2, 2", correct=TRUE),
+         answer("D, E, L, 2, 2"),
+         answer("D, E, L, 1, 2"),
+         answer("D, E, M, 2, 1"))
+```
+
+
+### Confusion Matrix Practice
+
+8. Use this confusion matrix to calculate the accuracy and sensitivity
+
+```{r echo=FALSE}
+# Create the confusion matrix data
+confusion_matrix <- matrix(c(2, 2, 4, 5), nrow = 2, byrow = TRUE)
+rownames(confusion_matrix) <- c("True Class 1", "True Class 2")
+colnames(confusion_matrix) <- c("Predicted Class 1", "Predicted Class 2")
+
+# Convert the matrix to a data frame
+confusion_df <- as.data.frame(confusion_matrix)
+
+# Create a table using kable
+confusion_table <- kable(
+  confusion_df,
+  format = "html",
+  caption = "Confusion Matrix",
+  align = "c"
+) %>%
+  kable_styling(full_width = FALSE)
+
+confusion_table
+
+```
+
+Remember the formula for accuracy is:
+
+
+$$Accuracy = \frac{TP + TN}{n}$$
+
+```{r q9, echo=FALSE}
+question("9. Based off of your confusion matrix, what is the training set accuracy of the classifier?",
+         answer("4/13"),
+         answer("5/9"),
+         answer("9/13"),
+         answer("7/9"),
+         answer("7/13", correct=TRUE))
+```
+
+Remember the formula for sensitivity is:
+
+$$TPR = \frac{TP}{TP + FN}$$
+
+```{r q10, echo=FALSE}
+question("10. Based off of your confusion matrix, what is the training set sensitivity of the classifier?",
+         answer("4/13"),
+         answer("5/9", correct=TRUE),
+         answer("9/13"),
+         answer("7/9"),
+         answer("7/13"))
+```
+
+
+```{r q11, echo=FALSE}
+question("11. Would increasing the number of neighbors to 5 affect the training set accuracy of the classifier?",
+         answer("True", correct=TRUE),
+         answer("False"))
+```
+
+How do you know?
+
+## Implementing $k$NN
+
+```{r q12, echo=FALSE}
+question("12. Recall that in Homeworks 3 and 4 we were interested in predicting `low` from `age`, `lwt`, `smoke`, `ptl`, `ht`, `ui`, `ftv`, and `race` (but not `bwt`, since that will predict `low` perfectly). First, read the documentation for [kNN Classification](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html) and [kNN Regression](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsRegressor.html). For predicting `low`, which is the most appropriate method to use? ",
+         answer("Regression", message = "`low` is a binary variable!"),
+         answer("Classification", correct=TRUE))
+```
+
+Run this cell to prepare our data for classification--remember that for your assignments, you should be standardizing your data and using `sklearn` syntax.
+
+```{python prep, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+## Setup Chunk
+
+X = birthwt[['age', 'lwt', 'smoke', 'ptl', 'ht', 'ui', 'ftv', 'race_2', 'race_3']]
+Y = birthwt['low']
+
+from sklearn.preprocessing import StandardScaler
+from sklearn import neighbors
+
+scaler = StandardScaler()
+scaler.fit(X)
+
+X_pp = pd.DataFrame(scaler.transform(X), columns = [['age', 'lwt', 'smoke', 'ptl', 
+                                                     'ht', 'ui', 'ftv', 'race_2',                                                            'race_3']])
+```
+
+13. Look up the documentation for $k$NN implementation using the links in Question 1. Use the documentation to complete the line of code below, which should specify the number of neighbors in your classifier as $k = 5$. No need to fit anything yet, but name the model `knn5`.
+
+```{python k, exercise = TRUE, message = FALSE, exercise.setup="prep"}
+knn5 = sklearn.neighbors.KNeighborsClassifier(...)
+```
+
+```{python k-solution, message = FALSE, warning = FALSE, echo = FALSE}
+knn5 = sklearn.neighbors.KNeighborsClassifier(n_neighbors = 5)
+```
+
+```{r k-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+14. Now, fit your classifier from Question 13 with `X_pp` and `Y` from the setup chunk.
+
+```{python setup2, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="prep"}
+knn5 = sklearn.neighbors.KNeighborsClassifier(n_neighbors = 5)
+```
+
+```{python fit, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+knn5_fit = knn5.fit(...)
+```
+
+```{python fit-solution, message = FALSE, warning = FALSE, echo = FALSE}
+knn5_fit = knn5.fit(X_pp, Y)
+```
+
+```{r fit-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+15. Next, apply `.predict()` to get the probability predictions from the model in Step 3 (name them `knn5_preds` to use for later). 
+
+```{python setup3, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup2"}
+knn5_fit = knn5.fit(X_pp, Y)
+```
+
+```{python pred, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+knn5_preds = knn5_fit.predict(...)
+```
+
+```{python pred-solution, message = FALSE, warning = FALSE, echo = FALSE}
+knn5_preds = knn5_fit.predict(X_pp)
+```
+
+```{r pred-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+16. Now, use `pd.crosstabs()` to calculate a confusion matrix for this model.
+
+```{python setup4, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
+knn5_preds = knn5_fit.predict(X_pp)
+```
+
+```{python cross, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+cm = pd.crosstab(..., ...)
+```
+
+```{python cross-solution, message = FALSE, warning = FALSE, echo = FALSE}
+cm = pd.crosstab(knn5_preds, birthwt['low'])
+```
+
+```{r cross-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+17. Note that when you calculated the predictions, you were returned an array of 0's and 1's corresponding to a non-low birthweight and a low birthweight, respectively. This is not what we are used to--with the results of a logistic regression, for example, we see probabilities. To get probabilities out of a $k$NN model, use `.predict_proba()` and save the new predictions as `knn5_preds_proba`.
+
+```{python setup5, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup4"}
+knn5_preds = knn5_fit.predict(X_pp)
+```
+
+```{python prob, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+knn5_preds_proba = knn5_fit.predict_proba(...)
+knn5_preds_proba
+```
+
+```{python prob-solution, message = FALSE, warning = FALSE, echo = FALSE}
+knn5_preds_proba = knn5_fit.predict_proba(X_pp)
+knn5_preds_proba
+```
+
+```{r prob-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Here, we are given an array--there are a few things going on inside. First, we note that the array has two columns. This is because there is one column representing the probability of a non-low birthweight (the first column, or the column indexed with zero) and one column representing the probability of a low birthweight (the second column, or the column indexed with a 1). As a self-check, look at a few of the rows in the array--they add up to one, as two complementary probabilities should. Second, note that there are only a few values in the array--specifically, 0, 0.2, 0.4, 0.6, 0.8, and 1. This is because we are looking at the five nearest neighbors of any given point! So  0, 0.2, 0.4, 0.6, 0.8, and 1 are the only possible values to see. 
+
+18. Extract the second column of `knn5_preds_proba` to use as the predicted probabilities. Use that column, along with the column for the response variable, to calculate a ROC curve and value for AUC.
+
+```{python setup6, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup5"}
+knn5_preds_proba = knn5_fit.predict_proba(X_pp)[:,1]
+```
+
+```{python met, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+knn5_preds_proba = knn5_fit.predict_proba(X_pp)[:,1]
+
+from sklearn.metrics import (confusion_matrix, accuracy_score)
+from sklearn import metrics
+
+fpr, tpr, thresholds = metrics.roc_curve(..., ..., pos_label=1)
+print(metrics.auc(fpr, tpr))
+```
+
+```{python met-solution, message = FALSE, warning = FALSE, echo = FALSE}
+knn5_preds_proba = knn5_fit.predict_proba(X_pp)[:,1]
+
+from sklearn.metrics import (confusion_matrix, accuracy_score)
+from sklearn import metrics
+
+fpr, tpr, thresholds = metrics.roc_curve(birthwt['low'], knn5_preds_proba, pos_label=1)
+print(metrics.auc(fpr, tpr))
+```
+
+```{r met-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q18, echo=FALSE}
+question("Is this a good model? ",
+         answer("Yes", correct=TRUE, message="This is pretty far above 0.5, and should be bigger than most of the values you have seen previously--I am pretty happy with it!"),
+         answer("No"))
+```
+
+## Choosing $k$
+
+Remember that you've run this setup chunk:
+
+```{python prep2, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+## Setup Chunk
+
+X = birthwt[['age', 'lwt', 'smoke', 'ptl', 'ht', 'ui', 'ftv', 'race_2', 'race_3']]
+Y = birthwt['low']
+
+from sklearn.preprocessing import StandardScaler
+from sklearn import neighbors
+
+scaler = StandardScaler()
+scaler.fit(X)
+
+X_pp = pd.DataFrame(scaler.transform(X), columns = [['age', 'lwt', 'smoke', 'ptl', 
+                                                     'ht', 'ui', 'ftv', 'race_2',                                                            'race_3']])
+```
+
+19. Let's move on to choosing the best value of $k$ for this data. Remember that we typically do so by using cross-validation, or at least using some model selection statistic on a test set. Let's proceed with taking a 70/30 split of our data using the `train_test_split()` function from `sklearn`. Don't forget that you will need `X_train`, `X_test`, `y_train`, and `y_test`. You will want to use `random_state = 850` to get the same results I did.
+
+```{python choose, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(..., ..., test_size = ...)
+```
+
+```{python choose-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.3, random_state = 850)
+```
+
+```{r choose-code-check, echo=FALSE, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+20. Remember that we need to scale the data as well--if we used the scaled data from before, it would be scaled using statistics from all of the data, not just the training data. Go ahead and run this cell to rescale `X_train` and `X_test` with the summary statistics from the training data so that they both have column means all equal to 0 and column standard deviations all equal to 1. 
+
+
+```{python setup7, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup6"}
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.3)
+```
+
+```{python scale, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
+scaler = StandardScaler()
+scaler.fit(X_train)
+
+X_train_pp = pd.DataFrame(scaler.transform(X_train), columns = [['age', 'lwt', 'smoke', 'ptl', 'ht', 'ui', 'ftv', 'race_2', 'race_3']])
+                                                          
+X_test_pp = pd.DataFrame(scaler.transform(X_test), columns = [['age', 'lwt', 'smoke', 'ptl', 'ht', 'ui','ftv', 'race_2', 'race_3']])
+```
+
+21. Now, we need to write a loop again. This loop needs to search over a range of $k$ (I used 1 to 15), and in each iteration, fit a $k$NN model using the training set with the new value of $k$, predict the classes of the test set, and summarize the performance of the model using some appropriate value. For simplicity, let's use accuracy. Fill in the loop below, storing the results from the test set in `metric`. You may want to use your code from Steps 3, 4, and 5. 
+
+```{python loop, exercise = TRUE, message = FALSE, exercise.setup="scale"}
+metric = []
+
+for k in range(1, 16):
+  tempknn = sklearn.neighbors.KNeighborsRegressor(n_neighbors = k).fit(...,  ...)
+  tempknn_preds = tempknn.predict(...) > 0.5 
+  tempknn_cm = pd.crosstab(tempknn_preds.tolist(), y_test)
+  metric.append((tempknn_cm[0][0] + tempknn_cm[1][1])/X_test.shape[0])
+
+```
+
+```{python loop-solution, message = FALSE, warning = FALSE, echo = FALSE}
+metric = []
+
+for k in range(1, 16):
+  tempknn = sklearn.neighbors.KNeighborsRegressor(n_neighbors = k).fit(X_train_pp, y_train)
+  tempknn_preds = tempknn.predict(X_test_pp)
+  tempknn_cm = pd.crosstab(tempknn_preds > 0.5, y_test)
+  metric.append((tempknn_cm[0][0] + tempknn_cm[1][1])/X_test.shape[0])
+```
+
+```{r loop-code-check, message = FALSE, warning = FALSE}
+
+```
+
+Now, run the code below to create a plot showing the relationship between $k$ and test set accuracy (it may also help to just look at the metrics)
+
+```{python setup8, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="scale"}
+metric = []
+
+for k in range(1, 16):
+  tempknn = sklearn.neighbors.KNeighborsRegressor(n_neighbors = k).fit(X_train_pp, y_train)
+  tempknn_preds = tempknn.predict(X_test_pp)
+  tempknn_cm = pd.crosstab(tempknn_preds > 0.5, y_test)
+  metric.append((tempknn_cm[0][0] + tempknn_cm[1][1])/X_test.shape[0])
+```
+
+```{python plot, exercise = TRUE, message = FALSE, exercise.setup="setup8"}
+d_kNN = {'k': range(1, 16), 'Metric': metric}
+kNN_plot = pd.DataFrame(data = d_kNN)  
+
+print(p9.ggplot(kNN_plot, p9.aes(x = 'k', y = 'Metric')) +
+       p9.geom_line() +
+       p9.geom_vline(xintercept = k) + 
+       p9.scale_x_continuous(name = "$k$") + 
+       p9.scale_y_continuous(name = "Test Set Accuracy") +
+       p9.theme(legend_position = "none", figure_size = [6, 3.25]))
+```
+
+```{r q22, echo=FALSE}
+question("22. What is the best $k$?",
+         answer("1"),
+         answer("3"),
+         answer("5", correct=TRUE),
+         answer("10"),
+         answer("15"))
+```
