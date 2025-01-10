@@ -1,0 +1,188 @@
+---
+title: "$k$NN by Hand"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+#knitr::knit_engines$set(python = reticulate::eng_python)
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+#py_install(c('numpy', 'pandas', 'plotnine', 'scikit-learn')) 
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code==solution_code){
+          return(list(message = "Exact match code!", correct = TRUE))
+      }
+    return(list(message = "Not exact match code", correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+## Goals and Setup
+
+The goal of this tutorial is to practice calculating different distance metrics and define a $k$NN classifier on a small dataset by hand. 
+
+## Understanding $k$NN
+
+Consider the following example: we have two classes, 1 (blue triangles) and 2 (red circles). Observations A-M are used as training data for a $k$NN classifier based on two predictors $X_1$ and $X_2$. Observations A-G belong to Class 1, and observations H-M belong to Class 2. All of the observations are shown in the plot below.
+
+```{r, echo = FALSE, fig.height = 3.25}
+library(ggplot2)
+
+Label <- c("H", "I", "A", 
+           "J", "L", "B", 
+           "K", "C", "D", 
+           "E", "M", "F", "G")
+Color <- c("Red", "Red", "Blue", 
+           "Red", "Red", "Blue", 
+           "Red", "Blue", "Blue", 
+           "Blue", "Red", "Blue", "Blue")
+Shape <- c(1, 1, 2, 
+           1, 1, 2, 
+           1, 2, 2, 
+           2, 1, 2, 2)
+X <- c(2.5, 2.5, 2.75,
+       3, 3.5, 3.25, 
+       3.5, 4.5, 5.0, 
+       5.5, 6.0, 6.5, 7)
+Y <- c(3, 1.5, 3.75,
+       3, 4.5, 3.75, 
+       1.5, 7, 6, 
+       7, 7.5, 8.5, 7.5)
+
+knn_plot <- data.frame(X = X, Y = Y)
+knn_plot$Label <- Label
+knn_plot$Color <- Color
+knn_plot$Shape <- Shape
+
+ggplot(data = knn_plot, aes(x = X, y = Y, label = Label)) + 
+  geom_point(shape = Shape, color = Color, size = 7) + 
+  geom_text(hjust=0.5, vjust=0.5, color = Color) + 
+  #scale_x_continuous(name = TeX(r"($X_1$)"), minor_breaks = seq(from = 1.5, to = 7.5, by = 0.25)) +
+  #scale_y_continuous(name = TeX(r"($X_2$)"), limits = c(1.5, 9), minor_breaks = seq(from = 1.5, to = 9, by = 0.5)) +
+  ggtitle("Training Set")
+```
+
+### Distance Metrics
+
+Remember the formula for Manhattan distance is:
+
+$$d_{Man}(D, J) = \sum_{i = 1}^2|d_i - j_i|$$
+
+```{r q1, echo=FALSE}
+question("1. If Point D is located at $(5, 6)$, and Point J is located at $(3, 3)$, what is the Manhattan distance between the two points?",
+         answer("2"),
+         answer("3"),
+         answer("4"),
+         answer("5", correct=TRUE),
+         answer("6"))
+```
+
+Remember the formula for Euclidean distance is:
+
+$$d_{Euc}(D, J) = \sqrt{\sum_{i = 1}^2(d_i - j_i)^2}$$
+
+
+```{r q2, echo=FALSE}
+question("2. Point D is located at $(5, 6)$, and Point J is located at $(3, 3)$. Calculate the Euclidean distance between the two points.",
+         answer("$\\sqrt{3}$"),
+         answer("$\\sqrt{5}$"),
+         answer("$\\sqrt{6}$"),
+         answer("$\\sqrt{9}$"),
+         answer("$\\sqrt{13}$", correct=TRUE))
+```
+
+### $k$NN Classifier by Hand
+
+
+```{r q3, echo=FALSE}
+question("3. What are the 3 nearest neighbors for point J? You may use Euclidean distance, but you do not have to actually calculate the values--use your best judgment based on what you see.",
+         answer("A", correct=TRUE),
+         answer("B", correct=TRUE),
+         answer("C"),
+         answer("D"),
+         answer("E"),
+         answer("F"),
+         answer("G"),
+         answer("H", correct=TRUE),
+         answer("I"),
+         answer("J"),
+         answer("K"),
+         answer("L"),
+         answer("M"))
+```
+
+
+```{r q4, echo=FALSE}
+question("4. Predict the class for point J, based on its three nearest neighbors.",
+         answer("Red Circle (Class 1)"),
+         answer("Blue Triangle (Class 2)", correct=TRUE, message="Point H is Class 1 (red circles), but points A and B are Class 2 (blue triangles). Since 2/3 points are Class 2, we would predict point J to also be Class 2."))
+```
+
+
+```{r q5, echo=FALSE}
+question("5. Let Class 1 be the absence of some event, and Class 2 be the presence of some event. If we are predicting point J to be Class 2, is Point J a true positive, true negative, false positive, or false negative?",
+         answer("True Positive"),
+         answer("True Negative"),
+         answer("False Positive", correct=TRUE, message="If we are predicting point J to be Class 2, we are predicting the presence of some event. In reality, point J is Class 1, which means the event did not really happen. Thus, point J is a false positive."),
+         answer("False Negative"))
+```
+
+6. Examine this table with the closest neighbors for each point, the predicted class, and the true class. The predictions are using a threshold of 0.5.
+
+```{r, echo = FALSE}
+library(kableExtra)
+point <- sort(Label)
+n1 <- c("${H}$", "${A}$", "",
+        "${C}$", "${D}$", "${E}$",
+        "${E}$", "${A}$", "${H}$",
+        "${H}$", "${H}$", "${A}$", 
+        "${E}$")
+n2 <- c("${J}$", "${J}$", "",
+        "${E}$", "${D}$", "${G}$",
+        "${F}$", "${B}$", "${J}$",
+        "${A}$", "${I}$", "${B}$",
+        "${F}$")
+n3 <- c("${B}$", "${L}$", "",
+        "${M}$", "${M}$", "${M}$",
+        "${M}$", "${J}$", "${K}$", 
+        "${B}$", "${J}$", "${J}$",
+        "${G}$")
+preds <- c("${1}$", "${1}$", "",
+           "${2}$", "${2}$", "${2}$", 
+           "${2}$", "${2}$", "${1}$", 
+           "${2}$", "${1}$", "${2}$", 
+           "${2}$")
+truth <- c("${2}$", "${2}$", "",
+           "${2}$", "${2}$", "${2}$", 
+           "${2}$", "${1}$", "${1}$", 
+           "${1}$", "${1}$", "${1}$", 
+           "${1}$")
+
+knn_table <- data.frame(point = point, "Neighbor 1" = n1, n2 = n2, n3 = n3, preds = preds, truth = truth)
+knn_table <- t(knn_table)
+row.names(knn_table) <- c("Point", "Neighbor 1", "Neighbor 2", "Neighbor 3", "Predicted", "Truth")
+
+kable(knn_table, escape = FALSE) %>%
+  column_spec (1, border_left = T) %>%
+  column_spec (14, border_right = T) %>%
+  kable_styling(position = "center", latex_options = "HOLD_position")
+```
+
+```{r q6, echo=FALSE}
+question("Select the correct series of values for column C",
+         answer("D, E, M, 2, 2", correct=TRUE),
+         answer("D, E, L, 2, 2"),
+         answer("D, E, L, 1, 2"),
+         answer("D, E, M, 2, 1"))
+```
+
+
