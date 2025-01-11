@@ -9,6 +9,11 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA1
   + To practice data cleaning skills, including selecting columns, identifying and removing unusual values, and maintaining a tidy dataset.
   + To practice calculating summary statistics.
   + To practice making data visualizations, such as histograms and scatterplots.
+* Lab 2: Correlation and Simple Linear Regression
+  + To continue practicing making data visualizations.
+  + To familiarize yourself with Pearson’s correlation coefficient $R$.
+  + To practice writing functions.
+  + To practice calculating linear regression estimates.
 
 ## Extra Resources:
 
