@@ -36,7 +36,7 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 
 The goals of this lab are:
 
-* To refamiliarize yourself with Jupyter notebooks.
+* To re-familiarize yourself with Jupyter notebooks.
 * To practice data cleaning skills, including selecting columns, identifying and removing unusual values, and maintaining a tidy dataset.
 * To practice calculating summary statistics.
 * To practice making data visualizations, such as histograms and scatterplots.
@@ -89,7 +89,7 @@ This lab will use both `numpy` and `python`. We will also be using a dataset scr
 import numpy as np
 import pandas as pd
 
-epicurious = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/main/epi_mini.csv")
+epicurious = pd.read_csv("../data/epi_mini.csv")
 ```
 
 
@@ -145,7 +145,7 @@ grade_this_code()
 import numpy as np
 import pandas as pd
 
-epicurious = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/main/epi_mini.csv")
+epicurious = pd.read_csv("../data/epi_mini.csv")
 epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
 ```
 
@@ -223,7 +223,7 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 
-epicurious = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/main/epi_mini.csv")
+epicurious = pd.read_csv("../data/epi_mini.csv")
 epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
 epicurious_num_nd = epicurious_num.dropna()
 ```
