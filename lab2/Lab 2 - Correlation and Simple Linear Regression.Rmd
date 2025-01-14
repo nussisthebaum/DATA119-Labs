@@ -13,7 +13,7 @@ library(gradethis)
 library(reticulate)
 
 # Set the path to the existing Python environment
-reticulate::use_python("opt/python/3.9.21/bin/python", required = TRUE)
+reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
 # reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
