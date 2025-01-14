@@ -1,8 +1,8 @@
-import shiny
+from shiny import ui, App, render
 
-app_ui = shiny.ui.page_fluid(
-    shiny.ui.input_slider("n", "Number of bins", min=10, max=100, value=30),
-    shiny.ui.output_plot("hist"),
+app_ui = ui.page_fluid(
+    ui.input_slider("n", "Number of bins", min=10, max=100, value=30),
+    ui.output_plot("hist"),
 )
 
 def server(input, output, session):
@@ -14,4 +14,4 @@ def server(input, output, session):
         x = np.random.randn(1000)
         plt.hist(x, bins=input.n())
 
-app = shiny.App(app_ui, server)
+app = App(app_ui, server)
