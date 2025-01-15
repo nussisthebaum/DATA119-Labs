@@ -54,6 +54,9 @@ tags$style(HTML("
     padding: 10px;            /* Add some padding for better spacing */
     border-radius: 5px;       /* Optional: Rounds the corners */
   }
+  .btn-tutorial-run {
+    background-color: #77DD77;
+  }
 "))
 
 # Set the path to the existing Python environment
@@ -80,7 +83,7 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 tags$div(
   class = "topContainer",
   tags$img(
-    src = "./UChicago_DataScienceInstitute_Vertical_White RGB.svg",
+    src = "/UChicago_DataScienceInstitute_Vertical_White RGB.svg",
     alt = "DSI Logo",
     class = "topLogo"
   ),
