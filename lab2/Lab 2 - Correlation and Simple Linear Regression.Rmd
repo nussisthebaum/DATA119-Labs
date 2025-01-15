@@ -2,39 +2,6 @@
 title:  "Lab 2: Correlation and Simple Linear Regression"
 output: 
   learnr::tutorial:
-    css: |
-      .learnr-header {
-        background-color: #800000;
-        position: relative;
-        padding: 20px 0;
-      }
-      .learnr-header h1 {
-        text-align: center;
-        color: white;
-      }
-      .learnr-header .logo {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        height: 40px;
-        width: auto;
-        background-image: 'UChicago_DataScienceInstitute_Vertical_White RGB.svg'
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-      }
-      .learnr-reset {
-        font-size: 18px;
-        padding: 15px 25px;
-        background-color: #737373;
-        color: black;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      .learnr-reset:hover {
-        background-color: #d68914;
-      }
     theme: !expr bslib::bs_theme(
         bg = "white", fg = "black", primary = "#800000",
         secondary = "#737373", info = "#A6A6A6",
@@ -52,6 +19,29 @@ library(learnr)
 library(gradethis)
 library(reticulate)
 library(bslib)
+
+tags$style(HTML("
+  .learnr-header {
+    background-color: #800000;
+    position: relative;
+    padding: 20px 0;
+  }
+  .learnr-header h1 {
+    text-align: center;
+    color: white;
+  }
+  .learnr-header .logo {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 40px;
+    width: auto;
+    background-image: url('UChicago_DataScienceInstitute_Vertical_White_RGB.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+"))
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
