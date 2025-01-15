@@ -144,7 +144,7 @@ grade_this_code()
 import numpy as np
 import pandas as pd
 
-epicurious = pd.read_csv("../data/epi_mini.csv")
+epicurious = pd.read_csv("data/epi_mini.csv")
 epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
 ```
 
@@ -222,7 +222,7 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 
-epicurious = pd.read_csv("../data/epi_mini.csv")
+epicurious = pd.read_csv("data/epi_mini.csv")
 epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
 epicurious_num_nd = epicurious_num.dropna()
 ```
