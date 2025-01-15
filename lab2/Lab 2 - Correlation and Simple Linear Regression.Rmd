@@ -56,12 +56,6 @@ tags$style(HTML("
   }
 "))
 
-tags$div(
-  class = "learnr-header",
-  tags$div(class = "logo"),
-  tags$h1("Lab 2: Correlation and Simple Linear Regression")
-)
-
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
@@ -81,6 +75,13 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
+```{r, echo=False}
+tags$div(
+  class = "learnr-header",
+  tags$div(class = "logo"),
+  tags$h1("Lab 2: Correlation and Simple Linear Regression")
+)
+```
 
 ## Goals
 
