@@ -4,7 +4,7 @@ title: |
   "Lab 2: Correlation and Simple Linear Regression"
 output: 
   learnr::tutorial:
-    theme: !expr bs_theme(
+    theme: !expr bslib::bs_theme(
         bg = "white", fg = "#D9D9D9", primary = "#800000",
         secondary = "#737373", info = "#A6A6A6",
         base_font = bslib::font_google("EB Garamond"),
@@ -21,16 +21,6 @@ library(learnr)
 library(gradethis)
 library(reticulate)
 library(bslib)
-
-theme <- bs_theme(
-  bg = "white", 
-  fg = "#D9D9D9", 
-  primary = "#800000", 
-  secondary = "#737373", 
-  info = "#A6A6A6", 
-  base_font = bslib::font_google("EB Garamond"), 
-  code_font = bslib::font_google("Space Mono")
-)
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)

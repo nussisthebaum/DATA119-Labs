@@ -10,30 +10,6 @@
     "has_parameters": false
   },
   "packages": {
-    "bslib": {
-      "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
-      "description": {
-        "Package": "bslib",
-        "Version": "0.5.1",
-        "Date": "2023-12-15",
-        "Title": "Custom 'Bootstrap' 'Sass' Themes for 'Shiny' and 'rmarkdown'",
-        "Authors@R": "c(person(\"Carson\", \"Sievert\", role=c(\"aut\", \"cre\"), email=\"carson@rstudios.com\"),\n             person(\"Barret\", \"Schloerke\", role=\"aut\"),\n             person(\"Yihui\", \"Xie\", role=\"aut\"),\n             person(\"Jeff\", \"Allen\", role=\"aut\"),\n             person(\"Joe\", \"Cheng\", role=\"aut\"))",
-        "Maintainer": "Carson Sievert <carson@rstudios.com>",
-        "Imports": "htmltools (>= 0.5.0), sass (>= 0.4.0), jsonlite, base64enc, jquerylib (>= 0.1.4)",
-        "Suggests": "shiny (>= 1.7.0), rmarkdown (>= 2.11), ggplot2, knitr, testthat (>= 3.0.0)",
-        "Description": "Simplifies custom 'Bootstrap' themes, providing presets for the major versions of 'Bootstrap' and enabling advanced customization via 'Sass' and other tools. It is suitable for use in 'Shiny' apps, 'rmarkdown' documents, and other frameworks that use 'Bootstrap'.",
-        "URL": "https://rstudio.github.io/bslib/",
-        "Depends": "R (>= 4.1.0)",
-        "License": "MIT + file LICENSE",
-        "Repository": "CRAN",
-        "NeedsCompilation": "no",
-        "Packaged": "2023-12-15 16:35:00 UTC; carson",
-        "Author": "Carson Sievert [aut, cre], Barret Schloerke [aut], Yihui Xie [aut], Jeff Allen [aut], Joe Cheng [aut]",
-        "Date/Publication": "2023-12-15 16:35:00 UTC",
-        "Built": "R 4.4.0; ; 2024-04-05 15:00:10 UTC; unix"
-      }
-    },
     "Matrix": {
       "Source": "CRAN",
       "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
