@@ -4,9 +4,7 @@ output:
   learnr::tutorial:
     theme: !expr bslib::bs_theme(
         bg = "white", fg = "black", primary = "#800000",
-        secondary = "#737373", info = "#A6A6A6",
         base_font = bslib::font_google("EB Garamond"),
-        code_font = bslib::font_google("Space Mono")
       )
 runtime: shiny_prerendered
 ---
@@ -19,39 +17,35 @@ library(learnr)
 library(gradethis)
 library(reticulate)
 library(bslib)
+library(htmltools)
 
+# Custom CSS
 tags$style(HTML("
   .learnr-header {
     background-color: #800000;
-    position: relative;
+    color: white;
+    text-align: center;
     padding: 20px 0;
   }
-  .learnr-header h1 {
-    text-align: center;
-    color: white;
+  .learnr-header img {
+    max-height: 80px;
+    margin-bottom: 10px;
   }
-  .learnr-header .logo {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    height: 40px;
-    width: auto;
-    background-image: url('UChicago_DataScienceInstitute_Vertical_White_RGB.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+  .learnr-header h1 {
+    margin: 0;
+    font-size: 2rem;
   }
   .learnr-reset {
-        font-size: 18px;
-        padding: 15px 25px;
-        background-color: #800000;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
+    font-size: 18px;
+    padding: 15px 25px;
+    background-color: #800000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
   .learnr-reset:hover {
-        background-color: ##737373;
+    background-color: #737373;
   }
 "))
 
@@ -77,7 +71,11 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```{r, echo=FALSE}
 tags$div(
   class = "learnr-header",
-  tags$div(class = "logo"),
+  tags$img(
+    src = "https://datascience.uchicago.edu/wp-content/uploads/2023/01/DSI_Logo_Color-2@1x.svg",
+    alt = "DSI Logo",
+    style = "max-height: 80px;"
+  ),
   tags$h1("Correlation and Simple Linear Regression")
 )
 ```
