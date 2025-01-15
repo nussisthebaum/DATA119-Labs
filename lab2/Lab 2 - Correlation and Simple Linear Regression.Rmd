@@ -1,5 +1,5 @@
 ---
-title:  "DATA119 - Lab 2"
+title:  "Lessons:"
 output: 
   learnr::tutorial:
     theme: !expr bslib::bs_theme(
@@ -21,27 +21,21 @@ library(htmltools)
 
 # Custom CSS
 tags$style(HTML("
-  .topicsHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .topContainer {
     background-color: #800000;
-    padding: 10px 20px;
-  }
-  .learnr-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #800000;
-    padding: 20px 20px 20px 20px;
     color: white;
+    text-align: center;
+    padding: 20px;
+    border-bottom: 2px solid #737373;
   }
-  .headerImage {
-    max-height: 80px;
+  .topContainer img.topLogo {
+    max-height: 100px;
     width: auto;
+    margin-bottom: 10px;
   }
-  .paneCloser {
-    /* Optional styles for the pane closer */
+  .topContainer h1.pageTitle {
+    margin: 0;
+    font-size: 2.5rem;
   }
   .resetButton {
     font-size: 18px;
@@ -82,17 +76,15 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
 ```{r, echo=FALSE}
+# Top container
 tags$div(
-  class = "topicsHeader",
+  class = "topContainer",
   tags$img(
-    src = "UChicago_DataScienceInstitute_Vertical_White RGB.svg",
+    src = "./UChicago_DataScienceInstitute_Vertical_White RGB.svg",
     alt = "DSI Logo",
-    style = "max-height: 80px;"
+    class = "topLogo"
   ),
-)
-tags$div(
-  class = "learnr-header",
-  tags$h1("DATA119 - Lab 2:"),
+  tags$h1("Welcome to DATA119 - Lab 2", class = "pageTitle"),
   tags$h1("Correlation and Simple Linear Regression")
 )
 ```
@@ -645,7 +637,7 @@ minimize(calc_SSE, x0 = init, args = (fat, cal), method = "BFGS").x
 
 You should find that these estimates are very close to the numbers that we calculated using the equations above.
 
-## `statsmodels`
+## Using `statsmodels`
 
 In addition to writing your own functions, either to directly estimate parameters or to minimize the loss function, there are a lot of pre-packaged methods in Python to use for linear regression. You may be familiar with `scikit-learn` already, but I want to introduce another module, `statsmodels`. Both modules work similarly, but `statsmodels` has some functionality that will help us out in future weeks. 
 
