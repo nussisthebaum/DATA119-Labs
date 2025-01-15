@@ -21,31 +21,44 @@ library(htmltools)
 
 # Custom CSS
 tags$style(HTML("
+  .topicsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #800000;
+    padding: 10px 20px;
+  }
   .learnr-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background-color: #800000;
+    padding: 20px 20px 20px 20px;
     color: white;
-    text-align: center;
-    padding: 20px 0;
   }
-  .learnr-header img {
+  .headerImage {
     max-height: 80px;
-    margin-bottom: 10px;
+    width: auto;
   }
-  .learnr-header h1 {
-    margin: 0;
-    font-size: 2rem;
+  .paneCloser {
+    /* Optional styles for the pane closer */
   }
-  .learnr-reset {
+  .resetButton {
     font-size: 18px;
-    padding: 15px 25px;
-    background-color: #800000;
     color: white;
+    background-color: #800000;
+    padding: 15px 25px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
-  .learnr-reset:hover {
+  .resetButton:hover {
     background-color: #737373;
+  }
+  ul.nav.flex-column {
+    background-color: #D9D9D9;
+    padding: 10px;            /* Add some padding for better spacing */
+    border-radius: 5px;       /* Optional: Rounds the corners */
   }
 "))
 
@@ -70,12 +83,16 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 
 ```{r, echo=FALSE}
 tags$div(
-  class = "learnr-header",
+  class = "topicsHeader",
   tags$img(
-    src = "https://datascience.uchicago.edu/wp-content/uploads/2023/01/DSI_Logo_Color-2@1x.svg",
+    src = "UChicago_DataScienceInstitute_Vertical_White RGB.svg",
     alt = "DSI Logo",
     style = "max-height: 80px;"
   ),
+)
+tags$div(
+  class = "learnr-header",
+  tags$h1("DATA119 - Lab 2:"),
   tags$h1("Correlation and Simple Linear Regression")
 )
 ```
