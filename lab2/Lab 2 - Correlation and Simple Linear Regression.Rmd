@@ -1,11 +1,9 @@
 ---
-title: |
-  <img src="https://datascience.uchicago.edu/wp-content/uploads/2023/01/DSI_Logo_Color-2@1x.svg" alt="DSI Logo" style="height: 50px; vertical-align: middle;">
-  "Lab 2: Correlation and Simple Linear Regression"
+title:  "Lab 2: Correlation and Simple Linear Regression"
 output: 
   learnr::tutorial:
     theme: !expr bslib::bs_theme(
-        bg = "white", fg = "#D9D9D9", primary = "#800000",
+        bg = "white", fg = "black", primary = "#800000",
         secondary = "#737373", info = "#A6A6A6",
         base_font = bslib::font_google("EB Garamond"),
         code_font = bslib::font_google("Space Mono")
@@ -21,6 +19,15 @@ library(learnr)
 library(gradethis)
 library(reticulate)
 library(bslib)
+
+tags$div(
+  class = "custom-header",
+  tags$img(
+    src = "https://datascience.uchicago.edu/wp-content/uploads/2023/01/DSI_Logo_Color-2@1x.svg",
+    alt = "DSI Logo"
+  ),
+  tags$h1("Lab 2: Correlation and Simple Linear Regression")
+)
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
