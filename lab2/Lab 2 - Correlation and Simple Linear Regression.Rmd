@@ -3,7 +3,6 @@ title:  "Lab 2: Correlation and Simple Linear Regression"
 output: 
   learnr::tutorial:
     css: |
-      /* Insert your CSS here */
       .learnr-header {
         background-color: #800000;
         position: relative;
