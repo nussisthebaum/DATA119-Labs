@@ -2,10 +2,7 @@
 title:  "Lessons:"
 output: 
   learnr::tutorial:
-    theme: !expr bslib::bs_theme(
-        bg = "white", fg = "black", primary = "#800000",
-        base_font = bslib::font_google("EB Garamond"),
-      )
+    theme: !expr theme
 runtime: shiny_prerendered
 ---
 
@@ -20,8 +17,15 @@ library(bslib)
 library(htmltools)
 
 # Custom CSS
-tags$style(HTML("
-  .topContainer {
+
+theme <- bslib::bs_theme(
+  bg = "white",
+  fg = "black",
+  primary = "#800000",
+  base_font = bslib::font_google("EB Garamond")
+) %>%
+  bslib::bs_add_rules("
+    .topContainer {
     background-color: #800000;
     color: white;
     text-align: center;
@@ -57,7 +61,7 @@ tags$style(HTML("
   .btn-tutorial-run {
     background-color: #77DD77;
   }
-"))
+")
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
