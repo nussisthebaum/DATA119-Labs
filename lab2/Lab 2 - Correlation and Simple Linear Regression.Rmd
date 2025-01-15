@@ -75,7 +75,7 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
-```{r, echo=False}
+```{r, echo=FALSE}
 tags$div(
   class = "learnr-header",
   tags$div(class = "logo"),
