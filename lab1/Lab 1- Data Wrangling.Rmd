@@ -88,7 +88,7 @@ This lab will use both `numpy` and `python`. We will also be using a dataset scr
 import numpy as np
 import pandas as pd
 
-epicurious = pd.read_csv("/data/epi_mini.csv")
+epicurious = pd.read_csv("data/epi_mini.csv")
 ```
 
 
