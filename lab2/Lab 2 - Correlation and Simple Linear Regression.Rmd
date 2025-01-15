@@ -1,5 +1,5 @@
 ---
-title:  "Lab 2: Correlation and Simple Linear Regression"
+title:  "DATA119 - Lab 2"
 output: 
   learnr::tutorial:
     theme: !expr bslib::bs_theme(
@@ -49,10 +49,9 @@ tags$style(HTML("
         border: none;
         border-radius: 5px;
         cursor: pointer;
-      }
-      .learnr-reset:hover {
+  }
+  .learnr-reset:hover {
         background-color: ##737373;
-      }
   }
 "))
 
@@ -79,7 +78,7 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 tags$div(
   class = "learnr-header",
   tags$div(class = "logo"),
-  tags$h1("Lab 2: Correlation and Simple Linear Regression")
+  tags$h1("Correlation and Simple Linear Regression")
 )
 ```
 
