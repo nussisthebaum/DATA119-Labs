@@ -3,7 +3,10 @@ title: "DATA119 - Lab 2"
 output: 
   learnr::tutorial:
     theme: !expr bslib::bs_theme(
-        bg = "white", fg = "black", primary = "#800000"
+        bg = "white", fg = "black", primary = "#800000",
+        secondary = "#737373", info = "#A6A6A6",
+        base_font = bslib::font_google("EB Garamond"),
+        code_font = bslib::font_google("Space Mono")
       )
     css: custom-styles.css
 runtime: shiny_prerendered
@@ -36,21 +39,6 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
-```
-
-```{r, echo=FALSE}
-tags$div(
-  class = "topContainer",
-  tags$div(
-    class = "logoAndTitle",
-    tags$img(
-      src = "https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/dsi_logo.png",
-      alt = "DSI Logo",
-      class = "topLogo"
-    ),
-    tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
-  )
-)
 ```
 
 ## Goals
