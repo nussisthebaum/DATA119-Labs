@@ -1,14 +1,6 @@
 ---
 title: "DATA119 - Lab 2"
-output: 
-  learnr::tutorial:
-    theme: !expr bslib::bs_theme(
-        bg = "white", fg = "black", primary = "#800000",
-        secondary = "#737373", info = "#A6A6A6",
-        base_font = bslib::font_google("EB Garamond"),
-        code_font = bslib::font_google("Space Mono")
-      )
-    css: custom-styles.css
+output: learnr::tutorial
 runtime: shiny_prerendered
 ---
 
@@ -20,6 +12,7 @@ library(learnr)
 library(gradethis)
 library(reticulate)
 library(bslib)
+library(htmltools)
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
@@ -51,7 +44,7 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
-```{python packages, exercise = TRUE, exercise.eval = FALSE, messages = FALSE}
+```{python setup1, exercise = TRUE, exercise.eval = FALSE, messages = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
@@ -68,7 +61,7 @@ epicurious_nd = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DAT
 
 1. The `mtcars` dataset includes data on various aspects of 32 different cars, extracted from the 1974 US issue of *Motor Trend* magazine (check out the [`mtcars` documentation here](https://vincentarelbundock.github.io/Rdatasets/doc/datasets/mtcars.html)). Using `plotnine`, create a scatterplot displaying the relationship between `weight` and `displacement` in `mtcars`. Remember that you should be supplying an `x` and a `y` aesthetic, and that `x` is traditionally the explanatory variable and `y` is traditionally the response.
 
-```{python scatter, exercise = TRUE, message = FALSE, exercise.setup="packages"}
+```{python scatter, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
 (p9.ggplot(mtcars, p9.aes(x = ___, y = ___)) +
   p9.geom_point())
 ```
