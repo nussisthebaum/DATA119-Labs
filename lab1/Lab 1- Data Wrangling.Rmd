@@ -3,6 +3,7 @@ title: "DATA119 - Lab 1"
 output: learnr::tutorial
 runtime: shiny_prerendered
 ---
+
 <!-- 
     theme: !expr bslib::bs_theme(
         bg = "white", fg = "black", primary = "#800000",
@@ -12,7 +13,6 @@ runtime: shiny_prerendered
       )
     css: custom-styles.css
 
-    ```{r header, echo=FALSE}
 library(htmltools)
 
 tags$div(
@@ -27,7 +27,6 @@ tags$div(
     tags$h1("Data Cleaning and Visualization", class = "pageTitle")
   )
 )
-``` 
 -->
 
 
