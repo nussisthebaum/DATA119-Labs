@@ -31,6 +31,8 @@ system("/opt/python/3.9.21/bin/python -m pip install numpy pandas plotnine")
 Sys.setenv(PATH = paste(Sys.getenv("PATH"), "/opt/rstudio-connect/mnt/tmp/.local/bin", sep = ":"))
 reticulate::py_list_packages()
 reticulate::py_run_string("import sys; print(sys.path)")
+Sys.getenv("RETICULATE_PYTHON")
+Sys.getenv("PATH")
 #reticulate::py_run_string("import numpy; import pandas; import plotnine")
 
 
@@ -73,7 +75,7 @@ tags$div(
 
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
-```{python setup1, exercise = TRUE, exercise.eval = FALSE, engine = "python"}
+```{python setup1, exercise = TRUE, exercise.eval = FALSE}
 print("Hello")
 
 import numpy as np
