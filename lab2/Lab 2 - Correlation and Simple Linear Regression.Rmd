@@ -47,23 +47,13 @@ tags$div(
   tags$div(
     class = "logoAndTitle",
     tags$img(
-      src = url("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/dsi_logo.png"),
+      src = "https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/dsi_logo.png",
       alt = "DSI Logo",
       class = "topLogo"
     ),
     tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
   )
 )
-
-tags$script(HTML("
-  document.addEventListener('DOMContentLoaded', function() {
-    var topContainer = document.querySelector('.topContainer');
-    var bandContent = document.querySelector('.pageContent.band');
-    if (topContainer && pageContent) {
-      pageContent.insertBefore(topContainer, pageContent.firstChild);
-    }
-  });
-"))
 ```
 
 ## Goals
