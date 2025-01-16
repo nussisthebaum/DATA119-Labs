@@ -10,6 +10,7 @@ output:
       )
     css: custom-styles.css
 runtime: shiny_prerendered
+learnr.debug: true
 ---
 
 ```{r setup, include = FALSE}
