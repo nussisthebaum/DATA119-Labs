@@ -29,7 +29,7 @@ reticulate::py_config()
 reticulate::py_list_packages()
 
 # Optional: Install necessary Python packages if not already installed
-reticulate::py_install(c("numpy", "pandas", "plotnine"), envname = "/opt/python/3.9.21/bin/python")
+reticulate::py_install(c("numpy", "pandas", "plotnine"), python = "/opt/python/3.9.21/bin/python")
 reticulate::py_list_packages()
 reticulate::py_run_string("import numpy; import pandas; import plotnine")
 
