@@ -14,8 +14,7 @@ learnr.debug: true
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(error = TRUE)
-knitr::knit_engines$set(python = reticulate::eng_python)
+source(".Rprofile")
 
 library(learnr)
 library(gradethis)
@@ -23,7 +22,8 @@ library(reticulate)
 library(bslib)
 library(htmltools)
 
-source(".Rprofile")
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
