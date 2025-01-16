@@ -2,7 +2,12 @@
 title: "DATA119 - Lab 2"
 output: 
   learnr::tutorial:
-    css: custom-styles.css
+    theme: !expr bslib::bs_theme(
+        bg = "white", fg = "black", primary = "#800000",
+        secondary = "#737373", info = "#A6A6A6",
+        base_font = bslib::font_google("EB Garamond"),
+        code_font = bslib::font_google("Space Mono")
+      )
 runtime: shiny_prerendered
 ---
 
