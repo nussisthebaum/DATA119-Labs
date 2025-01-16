@@ -12,7 +12,7 @@ output:
 runtime: shiny_prerendered
 ---
 
-```{r setup}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
@@ -23,12 +23,11 @@ library(bslib)
 library(htmltools)
 
 # Set the path to the existing Python environment
-Sys.unsetenv("RETICULATE_PYTHON")
-reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+Sys.setenv(RETICULATE_PYTHON = "/opt/python/3.9.21/bin/python")
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
-reticulate::py_run_string("print('Python is initialized')")
 # Optional: Install necessary Python packages if not already installed
-reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+#reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
@@ -69,10 +68,10 @@ tags$div(
 
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
-```{python setup1, exercise = TRUE, exercise.eval = FALSE}
+```{python setup1, exercise = TRUE, exercise.eval = FALSE, engine = "python"}
 print("Hello")
 
-#import numpy as np
+import numpy as np
 #import pandas as pd
 #import plotnine as p9
 
