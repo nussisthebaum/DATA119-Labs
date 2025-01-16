@@ -1,8 +1,10 @@
 ---
-title:  "DATA119 - Lab 2"
+title: "DATA119 - Lab 2"
 output: learnr::tutorial
+runtime: shiny_prerendered
 knit: (function(input, ...) {
   library(bslib)
+  library(rmarkdown)
   theme <- bslib::bs_theme(
     bg = "white",
     fg = "black",
@@ -47,9 +49,8 @@ knit: (function(input, ...) {
       background-color: #77DD77;
     }
   ")
-  rmarkdown::render(input, ...)
+  render(input, ...)
 })
-runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
