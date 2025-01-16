@@ -9,14 +9,6 @@
     "content_category": null,
     "has_parameters": false
   },
-  "python": {
-    "version": "3.9.21",
-    "package_manager": {
-      "name": "pip",
-      "version": "21.2.4",
-      "package_file": "requirements.txt"
-    }
-  },
   "packages": {
     "Matrix": {
       "Source": "CRAN",
