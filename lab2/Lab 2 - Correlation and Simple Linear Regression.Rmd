@@ -20,6 +20,7 @@ library(learnr)
 library(gradethis)
 library(reticulate)
 library(bslib)
+library(htmltools)
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
@@ -40,16 +41,20 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
-<div class="topContainer">
-  <div class="logoAndTitle">
-    <img 
-      src="http://upload.wikimedia.org/wikipedia/commons/a/a7/UChicago_wordmark.svg" 
-      alt="DSI Logo" 
-      class="topLogo"
-    />
-    <h1 class="pageTitle">Correlation and Simple Linear Regression</h1>
-  </div>
-</div>
+```{r header, exercise=FALSE, echo=FALSE}
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "http://datascience.uchicago.edu/wp-content/uploads/2023/01/DSI_Logo_Color-2@1x.svg",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
+  )
+)
+```
 
 ## Goals
 
