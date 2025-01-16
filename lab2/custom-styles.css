@@ -13,12 +13,12 @@
     display: flex;
     align-items: center;      /* Vertically align items */
     justify-content: space-between; /* Space between logo and text */
-    gap: 10px;                /* Space between the logo and the title */
+    gap: 5px;                /* Space between the logo and the title */
 }
 
 /* Logo styling */
 .topLogo {
-    max-height: 80px;         /* Restrict logo height */
+    max-height: 90px;         /* Restrict logo height */
     width: auto;              /* Maintain aspect ratio */
 }
 
