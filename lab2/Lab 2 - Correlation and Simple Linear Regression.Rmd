@@ -23,6 +23,7 @@ library(bslib)
 library(htmltools)
 
 # Set the path to the existing Python environment
+Sys.unsetenv("RETICULATE_PYTHON")
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
