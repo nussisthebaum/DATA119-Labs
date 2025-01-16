@@ -47,7 +47,7 @@ tags$div(
   tags$div(
     class = "logoAndTitle",
     tags$img(
-      src = "https://chicagoparent.nyc3.cdn.digitaloceanspaces.com/wp-content/uploads/2021/01/adobestock_69580798.jpeghttps://www.marthastewart.com/thmb/yhgiLuSTcFaN1WbwUua_W9SMHws=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/prettiest-flowers-painted-tongue-flower-lead-getty-1123-00763085ad384a9b9bf1f5cc81bee390.jpg",
+      src = "https://upload.wikimedia.org/wikipedia/commons/a/a7/UChicago_wordmark.svg",
       alt = "DSI Logo",
       class = "topLogo"
     ),
