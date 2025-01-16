@@ -1,9 +1,3 @@
-.questiontryagain {
-    background-color: #800000 !important; 
-    color: white !important;             /* Force white text */
-    border: none !important;             /* Remove border */
-}
-
 /* Style the top container to match the width of .bandContent */
 .bandContent .topContainer {
     width: 100%;              /* Full width of .bandContent */
@@ -12,28 +6,28 @@
     padding: 20px;            /* Add padding for spacing */
     box-sizing: border-box;   /* Ensure padding doesn't exceed width */
     margin-bottom: 20px;      /* Add spacing below the header */
-  }
-  
-  /* Flexbox layout for logo and title */
-  .bandContent .logoAndTitle {
+}
+
+/* Flexbox layout for logo and title */
+.bandContent .logoAndTitle {
     display: flex;
     align-items: center;      /* Vertically align items */
     justify-content: space-between; /* Space between logo and text */
     gap: 20px;                /* Space between the logo and the title */
-  }
-  
-  /* Logo styling */
-  .bandContent .topLogo {
+}
+
+/* Logo styling */
+.bandContent .topLogo {
     max-height: 80px;         /* Restrict logo height */
     width: auto;              /* Maintain aspect ratio */
-  }
-  
-  /* Title styling */
-  .bandContent .pageTitle {
+}
+
+/* Title styling */
+.bandContent .pageTitle {
     font-size: 2.5rem;        /* Larger font size */
     margin: 0;
     text-align: left;         /* Align text to the left */
-  }
+}
   
 .resetButton {
     font-size: 18px;

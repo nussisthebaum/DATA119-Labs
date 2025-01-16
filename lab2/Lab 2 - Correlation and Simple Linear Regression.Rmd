@@ -47,7 +47,7 @@ tags$div(
   tags$div(
     class = "logoAndTitle",
     tags$img(
-      src = "UChicago_DataScienceInstitute_Vertical_White.svg",
+      src = "dsi_logo.png",
       alt = "DSI Logo",
       class = "topLogo"
     ),
