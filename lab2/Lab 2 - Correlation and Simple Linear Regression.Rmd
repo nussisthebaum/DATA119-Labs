@@ -47,7 +47,7 @@ tags$div(
   tags$div(
     class = "logoAndTitle",
     tags$img(
-      src = "http://datascience.uchicago.edu/wp-content/uploads/2023/01/DSI_Logo_Color-2@1x.svg",
+      src = "http://raw.github.com/nussisthebaum/DATA119-Labs/blob/main/dsi_logo.png",
       alt = "DSI Logo",
       class = "topLogo"
     ),
@@ -72,11 +72,11 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 
-mtcars = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/mtcars.csv")
-gasprice = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
-eagles = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/eagles.csv")
+mtcars = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/mtcars.csv")
+gasprice = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
+eagles = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/eagles.csv")
 
-epicurious_nd = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini_clean.csv")
+epicurious_nd = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini_clean.csv")
 ```
 
 
