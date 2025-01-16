@@ -23,14 +23,12 @@ library(bslib)
 library(htmltools)
 
 # Set the path to the existing Python environment
-Sys.setenv(RETICULATE_PYTHON = "/opt/python/3.9.21/bin/python")
-py_list_packages(python = "/opt/python/3.9.21/bin/python")
-#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
-reticulate::py_install(c('numpy', 'pandas', 'plotnine'),python = "/opt/python/3.9.21/bin/python")
+reticulate::py_install(c('numpy', 'pandas', 'plotnine'),envname = "'~/.virtualenvs/r-reticulate'")
 
-py_list_packages(python = "/opt/python/3.9.21/bin/python")
+py_list_packages(envname = "~/.virtualenvs/r-reticulate")
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
