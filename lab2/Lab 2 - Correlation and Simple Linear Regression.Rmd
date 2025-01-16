@@ -67,7 +67,7 @@ tags$div(
 
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE}
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, engine='python'}
 import numpy as np
 import pandas as pd
 import plotnine as p9
