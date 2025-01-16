@@ -25,14 +25,13 @@ library(htmltools)
 # Set the path to the existing Python environment
 Sys.setenv(RETICULATE_PYTHON = "/opt/python/3.9.21/bin/python")
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
-reticulate::py_config()
-reticulate::py_list_packages()
 
 # Optional: Install necessary Python packages if not already installed
 system("/opt/python/3.9.21/bin/python -m pip install numpy pandas plotnine")
 Sys.setenv(PATH = paste(Sys.getenv("PATH"), "/opt/rstudio-connect/mnt/tmp/.local/bin", sep = ":"))
 reticulate::py_list_packages()
-reticulate::py_run_string("import numpy; import pandas; import plotnine")
+reticulate::py_run_string("import sys; print(sys.path)")
+#reticulate::py_run_string("import numpy; import pandas; import plotnine")
 
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
