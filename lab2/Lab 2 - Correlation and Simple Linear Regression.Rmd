@@ -23,7 +23,7 @@ library(reticulate)
 library(bslib)
 library(htmltools)
 
-source("~/.Rprofile")
+source(".Rprofile")
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
