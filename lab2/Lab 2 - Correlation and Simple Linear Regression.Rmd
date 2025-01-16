@@ -29,12 +29,6 @@ reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 # Optional: Install necessary Python packages if not already installed
 system("/opt/python/3.9.21/bin/python -m pip install numpy pandas plotnine")
 Sys.setenv(PATH = paste(Sys.getenv("PATH"), "/opt/rstudio-connect/mnt/tmp/.local/bin", sep = ":"))
-reticulate::py_list_packages()
-reticulate::py_run_string("import sys; print(sys.path)")
-Sys.getenv("RETICULATE_PYTHON")
-Sys.getenv("PATH")
-#reticulate::py_run_string("import numpy; import pandas; import plotnine")
-
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
@@ -76,17 +70,15 @@ tags$div(
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
 ```{python setup1, exercise = TRUE, exercise.eval = FALSE}
-print("Hello")
-
 import numpy as np
-#import pandas as pd
-#import plotnine as p9
+import pandas as pd
+import plotnine as p9
 
-#mtcars = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/mtcars.csv")
-#gasprice = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
-#eagles = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/eagles.csv")
+mtcars = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/mtcars.csv")
+gasprice = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
+eagles = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/eagles.csv")
 
-#epicurious_nd = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini_clean.csv")
+epicurious_nd = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini_clean.csv")
 ```
 
 
