@@ -1,0 +1,57 @@
+/* Target the exact button */
+button.btn-tutorial-run {
+    background-color: #77DD77 !important; /* Force blue background */
+    color: white !important;             /* Force white text */
+    border: none !important;             /* Remove border */
+}
+  
+/* Target the hover state of the button */
+button.btn-tutorial-run:hover {
+    background-color: #5eb05e !important; /* Darker blue on hover */
+    color: white !important;             /* Ensure text remains white */
+}
+
+/* Target the disabled state */
+button.btn-tutorial-run.disabled {
+    background-color: #cccccc !important; /* Light grey for disabled state */
+    color: #666666 !important;           /* Dark grey text */
+    cursor: not-allowed;                 /* Show "not allowed" cursor */
+    pointer-events: none;                /* Prevent interaction */
+}
+.topContainer {
+    background-color: #800000;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-bottom: 2px solid #737373;
+}
+.topContainer img.topLogo {
+    max-height: 100px;
+    width: auto;
+    margin-bottom: 10px;
+}
+.topContainer h1.pageTitle {
+    margin: 0;
+    font-size: 2.5rem;
+}
+.resetButton {
+    font-size: 18px;
+    color: white;
+    background-color: #800000;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.resetButton:hover {
+    background-color: #737373;
+}
+ul.nav.flex-column {
+    background-color: #D9D9D9;
+    padding: 10px;
+    border-radius: 5px;
+}
+/* .btn-tutorial-run {
+    background-color: #77DD77;
+} */
+
