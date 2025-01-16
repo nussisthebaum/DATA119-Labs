@@ -1,7 +1,9 @@
 ---
 title: "DATA119 - Lab 1"
-output: 
-  learnr::tutorial:
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+<!-- 
     theme: !expr bslib::bs_theme(
         bg = "white", fg = "black", primary = "#800000",
         secondary = "#737373", info = "#A6A6A6",
@@ -9,11 +11,8 @@ output:
         code_font = bslib::font_google("Space Mono")
       )
     css: custom-styles.css
-runtime: shiny_prerendered
-learnr.debug: true
----
 
-```{r header, echo=FALSE}
+    ```{r header, echo=FALSE}
 library(htmltools)
 
 tags$div(
@@ -28,7 +27,9 @@ tags$div(
     tags$h1("Data Cleaning and Visualization", class = "pageTitle")
   )
 )
-```
+``` 
+-->
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(error = TRUE)
