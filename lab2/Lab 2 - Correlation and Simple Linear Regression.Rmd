@@ -47,7 +47,7 @@ tags$div(
   tags$div(
     class = "logoAndTitle",
     tags$img(
-      src = "http://raw.github.com/nussisthebaum/DATA119-Labs/blob/main/dsi_logo.png",
+      src = "http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/lab2/img/dsi_logo.png",
       alt = "DSI Logo",
       class = "topLogo"
     ),
