@@ -27,7 +27,7 @@ library(htmltools)
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
-reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+#reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
