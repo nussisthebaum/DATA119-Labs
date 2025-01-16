@@ -13,6 +13,9 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
 library(learnr)
 library(gradethis)
 library(reticulate)
@@ -20,7 +23,7 @@ library(bslib)
 library(htmltools)
 
 # Set the path to the existing Python environment
-Sys.unsetenv("RETICULATE_PYTHON")
+#Sys.unsetenv("RETICULATE_PYTHON")
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
@@ -37,9 +40,6 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
-
-knitr::opts_chunk$set(error = TRUE)
-knitr::knit_engines$set(python = reticulate::eng_python)
 ```
 
 ```{r header, exercise=FALSE, echo=FALSE}
