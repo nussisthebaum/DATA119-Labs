@@ -12,7 +12,7 @@ output:
 runtime: shiny_prerendered
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
 knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
@@ -26,6 +26,7 @@ library(htmltools)
 #Sys.unsetenv("RETICULATE_PYTHON")
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
+reticulate::py_run_string("print('Python is initialized')")
 # Optional: Install necessary Python packages if not already installed
 #reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
 
@@ -69,9 +70,11 @@ tags$div(
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
 ```{python setup1, exercise = TRUE, exercise.eval = FALSE}
-import numpy as np
-import pandas as pd
-import plotnine as p9
+print("Hello")
+
+#import numpy as np
+#import pandas as pd
+#import plotnine as p9
 
 #mtcars = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/mtcars.csv")
 #gasprice = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
