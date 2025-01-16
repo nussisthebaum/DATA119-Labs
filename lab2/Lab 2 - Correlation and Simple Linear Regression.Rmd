@@ -47,7 +47,7 @@ tags$div(
   tags$div(
     class = "logoAndTitle",
     tags$img(
-      src = "https://upload.wikimedia.org/wikipedia/commons/a/a7/UChicago_wordmark.svg",
+      src = "",
       alt = "DSI Logo",
       class = "topLogo"
     ),
@@ -67,12 +67,12 @@ tags$div(
 
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE}
+```{python setup1, exercise = TRUE, exercise.eval = FALSE, messages = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
 
-mtcars = pd.read_csv("mtcars.csv")
+#mtcars = pd.read_csv("mtcars.csv")
 #gasprice = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
 #eagles = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/eagles.csv")
 
