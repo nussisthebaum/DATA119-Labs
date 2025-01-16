@@ -19,21 +19,29 @@ button.btn-tutorial-run.disabled {
     pointer-events: none;                /* Prevent interaction */
 }
 .topContainer {
-    background-color: #800000;
-    color: white;
-    text-align: center;
-    padding: 20px;
-    border-bottom: 2px solid #737373;
-}
-.topContainer img.topLogo {
-    max-height: 100px;
-    width: auto;
-    margin-bottom: 10px;
-}
-.topContainer h1.pageTitle {
-    margin: 0;
-    font-size: 2.5rem;
-}
+    background-color: #800000; /* Maroon background */
+    padding: 20px;            /* Add padding around the container */
+    color: white;             /* White text */
+  }
+  
+  /* Flex container to align the logo and text */
+  .logoAndTitle {
+    display: flex;
+    align-items: center;      /* Vertically align items */
+    gap: 20px;                /* Add space between the logo and text */
+  }
+  
+  /* Style for the image */
+  .topLogo {
+    max-height: 100px;        /* Restrict image height */
+    width: auto;              /* Maintain aspect ratio */
+  }
+  
+  /* Style for the title */
+  .pageTitle {
+    margin: 0;                /* Remove default margin */
+    font-size: 2rem;          /* Adjust title size */
+  }
 .resetButton {
     font-size: 18px;
     color: white;
@@ -54,4 +62,13 @@ ul.nav.flex-column {
 /* .btn-tutorial-run {
     background-color: #77DD77;
 } */
+li.topic.nav-item {
+    background-color: #D9D9D9;  /* Light grey background */
+    padding: 10px;             /* Add padding for better spacing */
+    border: 2px solid #737373; /* Darker grey border */
+    border-radius: 5px;        /* Round the corners */
+    text-align: center;        /* Center the text */
+    font-size: 1.2rem;         /* Larger font size */
+    font-weight: bold;         /* Make the text bold */
+  }
 

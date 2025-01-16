@@ -3,7 +3,7 @@ title: "DATA119 - Lab 2"
 output: 
   learnr::tutorial:
     theme: !expr bslib::bs_theme(
-        bg = "white", fg = "#D9D9D9", primary = "#800000",
+        bg = "white", fg = "black", primary = "#800000",
         secondary = "#737373", info = "#A6A6A6",
         base_font = bslib::font_google("EB Garamond"),
         code_font = bslib::font_google("Space Mono")
@@ -45,12 +45,15 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 # Top container
 tags$div(
   class = "topContainer",
-  tags$img(
-    src = "/UChicago_DataScienceInstitute_Vertical_White RGB.svg",
-    alt = "DSI Logo",
-    class = "topLogo"
-  ),
-  tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "UChicago_DataScienceInstitute_Vertical_White.svg",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
+  )
 )
 ```
 
