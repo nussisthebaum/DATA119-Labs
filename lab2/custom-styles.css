@@ -12,7 +12,7 @@
 .logoAndTitle {
     display: flex;
     align-items: center;      /* Vertically align items */
-    justify-content: space-between; /* Space between logo and text */
+    justify-content: space-around; /* Space between logo and text */
     gap: 5px;                /* Space between the logo and the title */
 }
 
@@ -55,5 +55,6 @@ li.topic.nav-item {
     text-align: center;        /* Center the text */
     font-size: 1.2rem;         /* Larger font size */
     font-weight: bold;         /* Make the text bold */
+    line-height: 1.2em;
   }
 
