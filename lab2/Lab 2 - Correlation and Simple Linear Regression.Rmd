@@ -20,7 +20,6 @@ library(learnr)
 library(gradethis)
 library(reticulate)
 library(bslib)
-library(htmltools)
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
@@ -41,21 +40,6 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
-```{r header, exercise=FALSE, echo=FALSE}
-tags$div(
-  class = "topContainer",
-  tags$div(
-    class = "logoAndTitle",
-    tags$img(
-      src = "",
-      alt = "DSI Logo",
-      class = "topLogo"
-    ),
-    tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
-  )
-)
-```
-
 ## Goals
 
 * To continue practicing making data visualizations.
@@ -67,11 +51,16 @@ tags$div(
 
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python packages, exercise = TRUE, exercise.eval = FALSE, messages = FALSE}
 import numpy as np
 import pandas as pd
+import plotnine as p9
 
-print('hello')
+mtcars = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/mtcars.csv")
+gasprice = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
+eagles = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/eagles.csv")
+
+epicurious_nd = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini_clean.csv")
 ```
 
 
@@ -79,7 +68,7 @@ print('hello')
 
 1. The `mtcars` dataset includes data on various aspects of 32 different cars, extracted from the 1974 US issue of *Motor Trend* magazine (check out the [`mtcars` documentation here](https://vincentarelbundock.github.io/Rdatasets/doc/datasets/mtcars.html)). Using `plotnine`, create a scatterplot displaying the relationship between `weight` and `displacement` in `mtcars`. Remember that you should be supplying an `x` and a `y` aesthetic, and that `x` is traditionally the explanatory variable and `y` is traditionally the response.
 
-```{python scatter, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python scatter, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 (p9.ggplot(mtcars, p9.aes(x = ___, y = ___)) +
   p9.geom_point())
 ```
