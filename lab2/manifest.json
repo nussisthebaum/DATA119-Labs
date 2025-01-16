@@ -9,10 +9,18 @@
     "content_category": null,
     "has_parameters": false
   },
+  "python": {
+    "version": "3.9.21",
+    "package_manager": {
+      "name": "pip",
+      "version": "21.2.4",
+      "package_file": "requirements.txt"
+    }
+  },
   "packages": {
     "Matrix": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "Matrix",
         "Version": "1.7-0",
@@ -45,7 +53,7 @@
     },
     "R6": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "R6",
         "Title": "Encapsulated Classes with Reference Semantics",
@@ -69,7 +77,7 @@
     },
     "Rcpp": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "Rcpp",
         "Title": "Seamless R and C++ Integration",
@@ -96,7 +104,7 @@
     },
     "RcppTOML": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "RcppTOML",
         "Type": "Package",
@@ -124,7 +132,7 @@
     },
     "backports": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "backports",
         "Type": "Package",
@@ -151,7 +159,7 @@
     },
     "base64enc": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "base64enc",
         "Version": "0.1-3",
@@ -173,7 +181,7 @@
     },
     "bslib": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "bslib",
         "Title": "Custom 'Bootstrap' 'Sass' Themes for 'shiny' and 'rmarkdown'",
@@ -206,7 +214,7 @@
     },
     "cachem": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "cachem",
         "Version": "1.1.0",
@@ -234,7 +242,7 @@
     },
     "checkmate": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "checkmate",
         "Type": "Package",
@@ -266,7 +274,7 @@
     },
     "cli": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "cli",
         "Title": "Helpers for Developing Command Line Interfaces",
@@ -295,7 +303,7 @@
     },
     "commonmark": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "commonmark",
         "Type": "Package",
@@ -322,7 +330,7 @@
     },
     "crayon": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "crayon",
         "Title": "Colored Terminal Output",
@@ -349,7 +357,7 @@
     },
     "diffobj": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "diffobj",
         "Type": "Package",
@@ -379,7 +387,7 @@
     },
     "digest": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "digest",
         "Authors@R": "c(person(\"Dirk\", \"Eddelbuettel\", role = c(\"aut\", \"cre\"), email = \"edd@debian.org\",\n                    comment = c(ORCID = \"0000-0001-6419-907X\")),\n             person(\"Antoine\", \"Lucas\", role=\"ctb\"),\n             person(\"Jarek\", \"Tuszynski\", role=\"ctb\"),\n             person(\"Henrik\", \"Bengtsson\", role=\"ctb\", comment = c(ORCID = \"0000-0002-7579-5165\")),\n             person(\"Simon\", \"Urbanek\", role=\"ctb\", comment = c(ORCID = \"0000-0003-2297-1732\")),\n             person(\"Mario\", \"Frasca\", role=\"ctb\"),\n             person(\"Bryan\", \"Lewis\", role=\"ctb\"),\n             person(\"Murray\", \"Stokely\", role=\"ctb\"),\n             person(\"Hannes\", \"Muehleisen\", role=\"ctb\"),\n             person(\"Duncan\", \"Murdoch\", role=\"ctb\"),\n             person(\"Jim\", \"Hester\", role=\"ctb\"),\n             person(\"Wush\", \"Wu\", role=\"ctb\", comment = c(ORCID = \"0000-0001-5180-0567\")),\n             person(\"Qiang\", \"Kou\", role=\"ctb\", comment = c(ORCID = \"0000-0001-6786-5453\")),\n             person(\"Thierry\", \"Onkelinx\", role=\"ctb\", comment = c(ORCID = \"0000-0001-8804-4216\")),\n             person(\"Michel\", \"Lang\", role=\"ctb\", comment = c(ORCID = \"0000-0001-9754-0393\")),\n             person(\"Viliam\", \"Simko\", role=\"ctb\"),\n             person(\"Kurt\", \"Hornik\", role=\"ctb\", comment = c(ORCID = \"0000-0003-4198-9911\")),\n             person(\"Radford\", \"Neal\", role=\"ctb\", comment = c(ORCID = \"0000-0002-2473-3407\")),\n             person(\"Kendon\", \"Bell\", role=\"ctb\", comment = c(ORCID = \"0000-0002-9093-8312\")),\n             person(\"Matthew\", \"de Queljoe\", role=\"ctb\"),\n             person(\"Dmitry\", \"Selivanov\", role=\"ctb\"),\n             person(\"Ion\", \"Suruceanu\", role=\"ctb\"),\n             person(\"Bill\", \"Denney\", role=\"ctb\"),\n             person(\"Dirk\", \"Schumacher\", role=\"ctb\"),\n             person(\"András\", \"Svraka\", role=\"ctb\"),\n             person(\"Sergey\", \"Fedorov\", role=\"ctb\"),\n             person(\"Will\", \"Landau\", role=\"ctb\", comment = c(ORCID = \"0000-0003-1878-3253\")),\n             person(\"Floris\", \"Vanderhaeghe\", role=\"ctb\", comment = c(ORCID = \"0000-0002-6378-6229\")),\n             person(\"Kevin\", \"Tappe\", role=\"ctb\"),\n             person(\"Harris\", \"McGehee\", role=\"ctb\"),\n             person(\"Tim\", \"Mastny\", role=\"ctb\"),\n             person(\"Aaron\", \"Peikert\", role=\"ctb\", comment = c(ORCID = \"0000-0001-7813-818X\")),\n             person(\"Mark\", \"van der Loo\", role=\"ctb\", comment = c(ORCID = \"0000-0002-9807-4686\")),\n             person(\"Chris\", \"Muir\", role=\"ctb\", comment = c(ORCID = \"0000-0003-2555-3878\")),\n             person(\"Moritz\", \"Beller\", role=\"ctb\", comment = c(ORCID = \"0000-0003-4852-0526\")),\n             person(\"Sebastian\", \"Campbell\", role=\"ctb\"),\n             person(\"Winston\", \"Chang\", role=\"ctb\", comment = c(ORCID = \"0000-0002-1576-2126\")),\n             person(\"Dean\", \"Attali\", role=\"ctb\", comment = c(ORCID = \"0000-0002-5645-3493\")),\n             person(\"Michael\", \"Chirico\", role=\"ctb\", comment = c(ORCID = \"0000-0003-0787-087X\")),\n             person(\"Kevin\", \"Ushey\", role=\"ctb\"))",
@@ -407,7 +415,7 @@
     },
     "ellipsis": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "ellipsis",
         "Version": "0.3.2",
@@ -434,7 +442,7 @@
     },
     "evaluate": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "evaluate",
@@ -462,7 +470,7 @@
     },
     "fansi": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "fansi",
         "Title": "ANSI Control Sequence Aware String Functions",
@@ -491,7 +499,7 @@
     },
     "fastmap": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "fastmap",
         "Title": "Fast Data Structures",
@@ -516,7 +524,7 @@
     },
     "fontawesome": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "fontawesome",
@@ -545,7 +553,7 @@
     },
     "fs": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "fs",
         "Title": "Cross-Platform File System Operations Based on 'libuv'",
@@ -579,7 +587,7 @@
     },
     "glue": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "glue",
         "Title": "Interpreted String Literals",
@@ -653,7 +661,7 @@
     },
     "here": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "here",
         "Title": "A Simpler Way to Find Your Files",
@@ -682,7 +690,7 @@
     },
     "highr": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "highr",
         "Type": "Package",
@@ -710,7 +718,7 @@
     },
     "htmltools": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "htmltools",
@@ -742,7 +750,7 @@
     },
     "htmlwidgets": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "htmlwidgets",
@@ -770,7 +778,7 @@
     },
     "httpuv": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "httpuv",
@@ -801,7 +809,7 @@
     },
     "jquerylib": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "jquerylib",
         "Title": "Obtain 'jQuery' as an HTML Dependency Object",
@@ -825,7 +833,7 @@
     },
     "jsonlite": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "jsonlite",
         "Version": "1.8.9",
@@ -852,7 +860,7 @@
     },
     "knitr": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "knitr",
         "Type": "Package",
@@ -882,7 +890,7 @@
     },
     "later": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "later",
         "Type": "Package",
@@ -911,7 +919,7 @@
     },
     "lattice": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "lattice",
         "Version": "0.22-6",
@@ -980,7 +988,7 @@
     },
     "lifecycle": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "lifecycle",
         "Title": "Manage the Life Cycle of your Package Functions",
@@ -1009,7 +1017,7 @@
     },
     "magrittr": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "magrittr",
@@ -1039,7 +1047,7 @@
     },
     "markdown": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "markdown",
         "Type": "Package",
@@ -1066,7 +1074,7 @@
     },
     "memoise": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "memoise",
         "Title": "'Memoisation' of Functions",
@@ -1091,7 +1099,7 @@
     },
     "mime": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "mime",
         "Type": "Package",
@@ -1117,7 +1125,7 @@
     },
     "pillar": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "pillar",
         "Title": "Coloured Formatting for Columns",
@@ -1150,7 +1158,7 @@
     },
     "pkgconfig": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "pkgconfig",
         "Title": "Private Configuration for 'R' Packages",
@@ -1174,7 +1182,7 @@
     },
     "png": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "png",
         "Version": "0.1-8",
@@ -1196,7 +1204,7 @@
     },
     "promises": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "promises",
@@ -1227,7 +1235,7 @@
     },
     "purrr": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "purrr",
         "Title": "Functional Programming Tools",
@@ -1259,7 +1267,7 @@
     },
     "rappdirs": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "rappdirs",
@@ -1288,7 +1296,7 @@
     },
     "rematch2": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "rematch2",
         "Title": "Tidy Output from Regular Expression Matching",
@@ -1314,7 +1322,7 @@
     },
     "renv": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "renv",
         "Type": "Package",
@@ -1345,7 +1353,7 @@
     },
     "reticulate": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "reticulate",
         "Type": "Package",
@@ -1377,7 +1385,7 @@
     },
     "rlang": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "rlang",
         "Version": "1.1.4",
@@ -1409,7 +1417,7 @@
     },
     "rmarkdown": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "rmarkdown",
@@ -1440,7 +1448,7 @@
     },
     "rprojroot": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "rprojroot",
         "Title": "Finding Files in Project Subdirectories",
@@ -1467,7 +1475,7 @@
     },
     "rstudioapi": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "rstudioapi",
         "Title": "Safely Access the RStudio API",
@@ -1492,7 +1500,7 @@
     },
     "sass": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "sass",
@@ -1522,7 +1530,7 @@
     },
     "shiny": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "shiny",
         "Type": "Package",
@@ -1553,7 +1561,7 @@
     },
     "sourcetools": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "sourcetools",
         "Type": "Package",
@@ -1578,7 +1586,7 @@
     },
     "tibble": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "tibble",
         "Title": "Simple Data Frames",
@@ -1613,7 +1621,7 @@
     },
     "tinytex": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "tinytex",
         "Type": "Package",
@@ -1639,7 +1647,7 @@
     },
     "utf8": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "utf8",
         "Title": "Unicode Text Processing",
@@ -1667,7 +1675,7 @@
     },
     "vctrs": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "vctrs",
         "Title": "Vector Helpers",
@@ -1698,7 +1706,7 @@
     },
     "waldo": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "waldo",
         "Title": "Find Differences Between R Objects",
@@ -1726,7 +1734,7 @@
     },
     "withr": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "withr",
         "Title": "Run Code 'With' Temporarily Modified Global State",
@@ -1756,7 +1764,7 @@
     },
     "xfun": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "xfun",
         "Type": "Package",
@@ -1785,7 +1793,7 @@
     },
     "xtable": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "xtable",
         "Version": "1.8-4",
@@ -1810,7 +1818,7 @@
     },
     "yaml": {
       "Source": "CRAN",
-      "Repository": "https://mirror.aarnet.edu.au/pub/CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Package": "yaml",
         "Type": "Package",
@@ -1834,11 +1842,26 @@
     }
   },
   "files": {
+    "custom-styles.css": {
+      "checksum": "4381ccd872d1411ecaa265a508d6a355"
+    },
+    "img/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "img/UChicago_DataScienceInstitute_Vertical_White.svg": {
+      "checksum": "7894d22f6e55c4c962a089bb8b023349"
+    },
     "Lab 2 - Correlation and Simple Linear Regression.Rmd": {
-      "checksum": "e845f2f9ab1b2c16da5f04474438d07c"
+      "checksum": "9c09af3aee837bb1c1b9f1bf7954c68a"
+    },
+    "mtcars.csv": {
+      "checksum": "6463474bfe6973a81dc7cbc4a71e8dd1"
     },
     "README.md": {
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "requirements.txt": {
+      "checksum": "c9e550794b8d1407f30b7201aa05f46b"
     }
   },
   "users": null
