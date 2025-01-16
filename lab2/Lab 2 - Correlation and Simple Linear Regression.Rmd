@@ -2,6 +2,12 @@
 title: "DATA119 - Lab 2"
 output: 
   learnr::tutorial:
+    theme: !expr bslib::bs_theme(
+        bg = "white", fg = "black", primary = "#800000",
+        secondary = "#737373", info = "#A6A6A6",
+        base_font = bslib::font_google("EB Garamond"),
+        code_font = bslib::font_google("Space Mono")
+      )
     css: custom-styles.css
 runtime: shiny_prerendered
 learnr.debug: true
@@ -17,12 +23,13 @@ library(reticulate)
 library(bslib)
 library(htmltools)
 
+source("~/.Rprofile")
+
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
 system("/opt/python/3.9.21/bin/python -m pip install numpy pandas plotnine")
-Sys.setenv(PATH = paste(Sys.getenv("PATH"), "/opt/rstudio-connect/mnt/tmp/.local/bin", sep = ":"))
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
@@ -37,18 +44,8 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
   }
 }
 
-theme <- bs_theme(
-  bg = "white",
-  fg = "black",
-  primary = "#800000",
-  secondary = "#737373",
-  info = "#A6A6A6",
-  base_font = font_google("EB Garamond"),
-  code_font = font_google("Space Mono")
-)
-
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, theme=theme)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 #tutorial_options(exercise.startup = TRUE)
 ```
 
@@ -78,7 +75,7 @@ tags$div(
 
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python setup1, exercise=TRUE, exercise.eval = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
