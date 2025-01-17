@@ -1,6 +1,7 @@
 ---
 title: "DATA119 - Lab 1"
-output: learnr::tutorial:
+output: 
+  learnr::tutorial
 runtime: shiny_prerendered
 header-includes:
   - |
@@ -12,7 +13,6 @@ header-includes:
         padding: 20px;
       }
     </style>
-
 ---
 
 ```{r setup, include=FALSE}
