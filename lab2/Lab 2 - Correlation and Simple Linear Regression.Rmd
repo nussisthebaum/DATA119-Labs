@@ -2,14 +2,13 @@
 title: "DATA119 - Lab 2"
 output: learnr::tutorial
 runtime: shiny_prerendered
-learnr.debug: true
 ---
 
 ```{r setup, include = FALSE}
 library(learnr)
 library(gradethis)
 library(reticulate)
-library(bslib)
+#library(bslib)
 
 knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
@@ -18,7 +17,7 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
-system("/opt/python/3.9.21/bin/python -m pip install numpy pandas plotnine")
+#system("/opt/python/3.9.21/bin/python -m pip install numpy pandas plotnine")
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
