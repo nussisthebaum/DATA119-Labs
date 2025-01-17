@@ -2,7 +2,7 @@
 title: "DATA119 - Lab 1"
 output: 
   learnr::tutorial:
-    css: custom-styles.css
+    css: sty.css
 runtime: shiny_prerendered
 ---
 
@@ -39,7 +39,7 @@ tags$head(
   tags$link(
     rel = "stylesheet",
     type = "text/css",
-    href = "http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/lab1/custom-styles.css"
+    href = "http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/lab1/sty.css"
   )
 )
 
