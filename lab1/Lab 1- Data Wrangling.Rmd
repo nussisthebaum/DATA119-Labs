@@ -35,14 +35,6 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
 ```{r html-css, echo=FALSE}
-tags$head(
-  tags$link(
-    rel = "stylesheet",
-    type = "text/css",
-    href = "http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/lab1/sty.css"
-  )
-)
-
 tags$div(
   class = "topContainer",
   tags$div(
