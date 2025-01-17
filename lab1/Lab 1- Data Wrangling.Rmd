@@ -1,9 +1,32 @@
 ---
 title: "DATA119 - Lab 1"
-output: 
-  learnr::tutorial:
-    css: sty.css
+output: learnr::tutorial
 runtime: shiny_prerendered
+header-includes:
+  - |
+    <style>
+      .topContainer {
+        background-color: #800000;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+      .logoAndTitle {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+      }
+      .topLogo {
+        max-height: 90px;
+        width: auto;
+     }
+      .pageTitle {
+          font-size: 2.5rem;
+          margin: 0;
+          text-align: center;
+      }
+    </style>
+
 ---
 
 ```{r setup, include=FALSE}
