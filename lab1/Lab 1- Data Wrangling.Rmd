@@ -1,6 +1,8 @@
 ---
 title: "DATA119 - Lab 1"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    css: custom-styles.css
 runtime: shiny_prerendered
 ---
 
@@ -11,6 +13,20 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 library(learnr)
 library(gradethis)
 library(reticulate)
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/img/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
+  )
+)
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
