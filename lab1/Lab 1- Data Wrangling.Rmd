@@ -2,6 +2,9 @@
 title: "DATA119 - Lab 1"
 output: learnr::tutorial
 runtime: shiny_prerendered
+header-includes:
+  - <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
+  - <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
 ---
 
 <!-- 

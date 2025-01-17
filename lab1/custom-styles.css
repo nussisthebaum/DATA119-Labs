@@ -58,3 +58,40 @@ li.topic.nav-item {
     line-height: 1.2em;
   }
 
+/* Background and Foreground Colors */
+body {
+    background-color: white; /* Equivalent to bg = "white" */
+    color: black;            /* Equivalent to fg = "black" */
+}
+  
+  /* Primary Accent Color */
+.btn-primary, 
+  a {
+    color: white;           /* Button/link text color */
+    background-color: #800000; /* Primary color (maroon) */
+    border-color: #800000;     /* Border for buttons */
+}
+  
+  /* Secondary Accent Color */
+.btn-secondary, 
+  a:hover {
+    color: white;             /* Button/link hover text color */
+    background-color: #737373; /* Secondary color (grey) */
+    border-color: #737373;     /* Border for buttons */
+}
+  
+  /* Info Color */
+.alert-info {
+    background-color: #A6A6A6; /* Info background color */
+    color: black;              /* Info text color */
+}
+  
+  /* Fonts */
+body {
+    font-family: 'EB Garamond', serif; /* Base font */
+}
+  
+code, pre {
+    font-family: 'Space Mono', monospace; /* Code font */
+}
+  
