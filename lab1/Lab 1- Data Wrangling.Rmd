@@ -5,8 +5,8 @@ output:
     css: custom-styles.css
 runtime: shiny_prerendered
 header-includes:
-  - <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
-  - <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+  - <link href="http://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
+  - <link href="http://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
 ---
 
 ```{r header, echo=FALSE}
