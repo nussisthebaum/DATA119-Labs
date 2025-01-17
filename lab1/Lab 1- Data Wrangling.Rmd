@@ -6,6 +6,23 @@ output:
 runtime: shiny_prerendered
 ---
 
+```{r logo_header, echo=FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/img/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
+  )
+)
+```
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
@@ -32,17 +49,6 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
-
-<div class="topContainer">
-  <div class="logoAndTitle">
-    <img
-      src="http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/img/dsi_logo.png"
-      alt="DSI Logo"
-      class="topLogo"
-    />
-    <h1 class="pageTitle">Correlation and Simple Linear Regression</h1>
-  </div>
-</div>
 
 ## Goals
 
