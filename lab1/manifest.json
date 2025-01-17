@@ -38,5 +38,14 @@
       "Source": "CRAN",
       "Version": "0.5.2"
     }
-  }
+  },
+"files": {
+    "Lab 1- Data Wrangling.Rmd": {
+      "checksum": "fed1fae12dbcc63f308bb452ebf6fd10"
+    },
+    "requirements.txt": {
+      "checksum": "8195efb7d127efef95aa547f17380a9f"
+    }
+  },
+  "users": null
 }
