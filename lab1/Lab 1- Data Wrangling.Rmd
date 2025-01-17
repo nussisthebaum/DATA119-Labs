@@ -1,7 +1,6 @@
 ---
 title: "DATA119 - Lab 1"
-output:
-  learnr::tutorial
+output: learnr::tutorial
 runtime: shiny_prerendered
 ---
 
@@ -13,7 +12,6 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 library(learnr)
 library(gradethis)
 library(reticulate)
-library(htmltools)
 
 # Set the path to the existing Python environment
 reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
@@ -32,37 +30,6 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
-```
-
-```{r include-css, echo=FALSE}
-library(htmltools)
-
-tags$head(
-  tags$style(HTML("
-    body {
-      background-color: yellow;
-    }
-    .topContainer {
-      background-color: #800000;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-  "))
-)
-
-tags$div(
-  class = "topContainer",
-  tags$div(
-    class = "logoAndTitle",
-    tags$img(
-      src = "http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/img/dsi_logo.png",
-      alt = "DSI Logo",
-      class = "topLogo"
-    ),
-    tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
-  )
-)
 ```
 
 ## Goals
