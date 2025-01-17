@@ -1,35 +1,40 @@
 ---
-title: "Lab 2: Correlation and Simple Linear Regression"
+title: "DATA119 - Lab 2"
 output: learnr::tutorial
 runtime: shiny_prerendered
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(error = TRUE)
-knitr::knit_engines$set(python = reticulate::eng_python)
-
+```{r setup, include = FALSE}
 library(learnr)
 library(gradethis)
 library(reticulate)
+#library(bslib)
 
-virtualenv_dir = Sys.getenv('VIRTUALENV_NAME')
-python_path = Sys.getenv('PYTHON_PATH')
-dependencies = c('numpy', 'pandas', 'plotnine')
-reticulate::virtualenv_create(envname = virtualenv_dir, python = python_path)
-reticulate::virtualenv_install(virtualenv_dir, packages = dependencies)
-reticulate::use_virtualenv(virtualenv_dir, required = TRUE)
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+# Set the path to the existing Python environment
+reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+#system("/opt/python/3.9.21/bin/python -m pip install numpy pandas plotnine")
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
-      if (user_code == solution_code){
-          return(list(message = random_praise(), correct = TRUE))
-      }
-    return(list(message = random_encouragement(), correct = FALSE))
+    if (identical(user_code, solution_code)) {
+      return(gradethis::random_praise())
+    }
+    return(gradethis::random_encouragement())
+  }
+  # Handle other stages explicitly (e.g., setup, initialization)
+  if (stage %in% c("setup", "run")) {
+    return(NULL)
   }
 }
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+#tutorial_options(exercise.startup = TRUE)
 ```
 
 ## Goals
@@ -43,17 +48,18 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE, engine = "python"}
+```{python setup1, exercise=TRUE, exercise.eval = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
 
-mtcars = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/mtcars.csv")
-gasprice = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
-eagles = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/eagles.csv")
+mtcars = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/mtcars.csv")
+gasprice = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
+eagles = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/eagles.csv")
 
-epicurious_nd = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini_clean.csv")
+epicurious_nd = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini_clean.csv")
 ```
+
 
 ## Describing Relationships with `mtcars`
 
@@ -580,7 +586,7 @@ minimize(calc_SSE, x0 = init, args = (fat, cal), method = "BFGS").x
 
 You should find that these estimates are very close to the numbers that we calculated using the equations above.
 
-## `statsmodels`
+## Using `statsmodels`
 
 In addition to writing your own functions, either to directly estimate parameters or to minimize the loss function, there are a lot of pre-packaged methods in Python to use for linear regression. You may be familiar with `scikit-learn` already, but I want to introduce another module, `statsmodels`. Both modules work similarly, but `statsmodels` has some functionality that will help us out in future weeks. 
 
