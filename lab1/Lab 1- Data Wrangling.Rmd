@@ -2,7 +2,7 @@
 title: "DATA119 - Lab 1"
 output: 
   learnr::tutorial:
-    css: custom-styles.css
+    css: ./custom-styles.css
 runtime: shiny_prerendered
 ---
 

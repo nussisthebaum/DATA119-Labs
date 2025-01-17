@@ -1835,13 +1835,13 @@
   },
   "files": {
     "custom-styles.css": {
-      "checksum": "bb3445997b1c75728abe153db20325a5"
+      "checksum": "ff42d4a9dd5384f459ccd5b5886d91b1"
     },
     "data/epi_mini.csv": {
       "checksum": "e27eb5125d6828e88cf51fb4200b726e"
     },
     "Lab 1- Data Wrangling.Rmd": {
-      "checksum": "47fe0ec2b023b3f8c845d9cb1a32a503"
+      "checksum": "aa92999e8f15b8037c6d2949b13f499c"
     },
     "README.md": {
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"

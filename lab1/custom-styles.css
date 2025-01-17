@@ -1,7 +1,3 @@
-/* custom-styles.css */
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
-
 /* Style the top container to match the width of .bandContent */
 .topContainer {
     width: 100%;              /* Full width of .bandContent */
@@ -40,11 +36,8 @@
     padding: 15px 25px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
 }
-.resetButton:hover {
-    background-color: #737373;
-}
+
 ul.nav.flex-column {
     background-color: #737373;
     padding: 10px;
@@ -66,36 +59,10 @@ li.topic.nav-item {
 body {
     background-color: white; /* Equivalent to bg = "white" */
     color: black;            /* Equivalent to fg = "black" */
-}
-  
-  /* Primary Accent Color */
-.btn-primary, 
-  a {
-    color: white;           /* Button/link text color */
-    background-color: #800000; /* Primary color (maroon) */
-    border-color: #800000;     /* Border for buttons */
-}
-  
-  /* Secondary Accent Color */
-.btn-secondary, 
-  a:hover {
-    color: white;             /* Button/link hover text color */
-    background-color: #737373; /* Secondary color (grey) */
-    border-color: #737373;     /* Border for buttons */
-}
-  
-  /* Info Color */
-.alert-info {
-    background-color: #A6A6A6; /* Info background color */
-    color: black;              /* Info text color */
-}
-  
-  /* Fonts */
-body {
-    font-family: 'EB Garamond', serif; /* Base font */
+    font-family: Georgia, serif; /* A web-safe serif font */
 }
   
 code, pre {
-    font-family: 'Space Mono', monospace; /* Code font */
+    font-family: Courier, monospace; /* A web-safe monospace font */
 }
   
