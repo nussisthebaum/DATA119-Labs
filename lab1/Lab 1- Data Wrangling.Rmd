@@ -9,15 +9,7 @@ header-includes:
   - <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
 ---
 
-<!-- 
-    theme: !expr bslib::bs_theme(
-        bg = "white", fg = "black", primary = "#800000",
-        secondary = "#737373", info = "#A6A6A6",
-        base_font = bslib::font_google("EB Garamond"),
-        code_font = bslib::font_google("Space Mono")
-      )
-    css: custom-styles.css
-
+```{r header, echo=FALSE}
 library(htmltools)
 
 tags$div(
@@ -32,7 +24,7 @@ tags$div(
     tags$h1("Data Cleaning and Visualization", class = "pageTitle")
   )
 )
--->
+```
 
 
 ```{r setup, include=FALSE}
