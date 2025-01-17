@@ -1,6 +1,8 @@
 ---
 title: "DATA119 - Lab 1"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    css: custom-styles.css
 runtime: shiny_prerendered
 header-includes:
   - <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
