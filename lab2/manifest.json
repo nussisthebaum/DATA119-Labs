@@ -1842,14 +1842,8 @@
     }
   },
   "files": {
-    ".Rprofile": {
-      "checksum": "51ef3e43a85cb8af874dc058576c190b"
-    },
     "custom-styles.css": {
       "checksum": "d97b882aff936e8386749c643f1c28e7"
-    },
-    "img/dsi_logo.png": {
-      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
     "Lab 2 - Correlation and Simple Linear Regression.Rmd": {
       "checksum": "48a26c2862914843e359b2f690f34fa5"
