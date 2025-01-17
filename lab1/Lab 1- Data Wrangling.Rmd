@@ -1,27 +1,19 @@
 ---
 title: "DATA119 - Lab 1"
-output: 
-  learnr::tutorial:
-    css: custom-styles.css
+output: learnr::tutorial:
 runtime: shiny_prerendered
+header-includes:
+  - |
+    <style>
+      .topContainer {
+        background-color: #800000;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+    </style>
+
 ---
-
-```{r logo_header, echo=FALSE}
-library(htmltools)
-
-tags$div(
-  class = "topContainer",
-  tags$div(
-    class = "logoAndTitle",
-    tags$img(
-      src = "http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/dev_aj/img/dsi_logo.png",
-      alt = "DSI Logo",
-      class = "topLogo"
-    ),
-    tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
-  )
-)
-```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(error = TRUE)
