@@ -19,10 +19,12 @@ li.topic.nav-item {
     font-size: 18px;
     color: white;
     background-color: #800000;
-    padding: 15px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    padding: 25px 25px;
+}
+
+.btn-primary {
+    color: white;
+    background-color: #800000;
 }
 
 /* Style the top container to match the width of .bandContent */
