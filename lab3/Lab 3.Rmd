@@ -32,7 +32,6 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
 ```{python setup_python}
-
 ```
 
 ## Goals
