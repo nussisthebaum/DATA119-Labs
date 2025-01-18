@@ -89,5 +89,7 @@ a:hover {
     margin: 0;
     text-align: center;         /* Align text to the left */
     color: white;
+    font-family: Helvetica, Arial, sans-serif; /* Primary font */
+    font-weight: bold;
 }
 
