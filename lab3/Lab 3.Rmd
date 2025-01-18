@@ -64,10 +64,10 @@ pd.set_option('display.max_columns', None)
 1. Using `statsmodels` syntax, refit a simple linear regression model predicting `realSum` from `dist`, and make a note of the $R^2$ (which can be found in the `.summary()` output.
 
 ```{python slr, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
-X1 = AirBnB_prices[...]
+X1 = AirBnB_prices[___]
 X1 = sm.add_constant(X1)
 
-Y = AirBnB_prices[...]
+Y = AirBnB_prices[___]
 
 model1 = sm.OLS(Y, X1).fit()
 model1.summary()
