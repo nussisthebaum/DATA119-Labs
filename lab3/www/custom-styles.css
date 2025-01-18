@@ -7,84 +7,56 @@ body {
     padding: 0; /* Remove default padding */
 }
 
-/* Primary brand color as a reusable variable */
-:root {
-    --primary-brand-color: #800000; /* Define primary brand color */
-    --primary-hover-color: #5e0000; /* Define darker hover color */
-}
-
-/* Style for primary buttons */
-.btn-primary {
-    background-color: var(--primary-brand-color); /* Use primary brand color */
-    color: white; /* Button text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Button padding */
+/* Base button styles */
+button {
+    font-family: Helvetica, Arial, sans-serif; /* Consistent font */
     font-size: 16px; /* Font size */
+    padding: 10px 20px; /* Padding */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s ease; /* Smooth hover transition */
-    font-family: Helvetica, Arial, sans-serif; /* Match body font */
 }
 
-/* Hover effect for primary buttons */
-.btn-primary:hover {
-    background-color: var(--primary-hover-color); /* Use darker hover color */
-}
-
-/* Style for the reset button */
+/* Primary buttons and reset button */
+.btn-primary,
 .resetButton {
-    background-color: var(--primary-brand-color); /* Match primary button color */
-    color: white; /* Button text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Button padding */
-    font-size: 16px; /* Font size */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth hover transition */
-    font-family: Helvetica, Arial, sans-serif; /* Match body font */
+    background-color: #800000; /* Primary button color */
+    color: white; /* Text color */
 }
 
-/* Hover effect for the reset button */
+/* Hover behavior for primary buttons and reset button */
+.btn-primary:hover,
 .resetButton:hover {
-    background-color: var(--primary-hover-color); /* Use darker hover color */
+    background-color: #5e0000; /* Darker maroon on hover */
+}
+
+/* Disabled button state */
+button:disabled {
+    background-color: #cccccc; /* Grey background for disabled buttons */
+    color: #666666; /* Grey text for disabled buttons */
+    cursor: not-allowed; /* Show disabled cursor */
 }
 
 /* Primary brand elements (e.g., headers, links) */
 h1, h2, h3, h4, h5, h6 {
-    color: var(--primary-brand-color); /* Use primary brand color for headers */
+    color: #800000; /* Use primary brand color for headers */
 }
 
 a {
-    color: var(--primary-brand-color); /* Use primary brand color for links */
+    color: #800000; /* Use primary brand color for links */
     text-decoration: none; /* Remove underline */
 }
 
 a:hover {
-    color: var(--primary-hover-color); /* Darker shade on hover */
+    color: #5e0000; /* Darker shade on hover */
     text-decoration: underline; /* Add underline on hover */
-}
-
-body ul.nav.flex-column {
-    background-color: #737373 !important; /* Force the background color */
-    padding: 10px;
-    border-radius: 5px;
-}
-
-body li.topic.nav-item {
-    background-color: #D9D9D9 !important; /* Force the background color */
-    padding: 2px;
-    border: 2px solid #737373;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-    line-height: 1.2em;
 }
 
 /* Style the top container to match the width of .bandContent */
 .topContainer {
     width: 100%;              /* Full width of .bandContent */
-    background-color: var(--primary-brand-color); /* Maroon background */
+    background-color: #800000; /* Maroon background */
     color: white;             /* White text */
     padding: 20px;            /* Add padding for spacing */
     box-sizing: border-box;   /* Ensure padding doesn't exceed width */
