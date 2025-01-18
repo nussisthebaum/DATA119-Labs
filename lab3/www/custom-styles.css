@@ -7,35 +7,41 @@ body {
     padding: 0; /* Remove default padding */
 }
 
-/* Base button styles */
-button {
-    font-family: Helvetica, Arial, sans-serif; /* Consistent font */
-    font-size: 16px; /* Font size */
-    padding: 10px 20px; /* Padding */
-    border: none; /* Remove default border */
+/* Style for primary buttons */
+.btn-primary {
+    background-color: #800000; /* Use primary brand color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
     border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Button padding */
+    font-size: 16px; /* Font size */
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s ease; /* Smooth hover transition */
+    font-family: Helvetica, Arial, sans-serif; /* Match body font */
 }
 
-/* Primary buttons and reset button */
-.btn-primary,
+/* Hover effect for primary buttons */
+.btn-primary:hover {
+    background-color: #5e0000; /* Use darker hover color */
+}
+
+/* Style for the reset button */
 .resetButton {
-    background-color: #800000; /* Primary button color */
-    color: white; /* Text color */
+    background-color: #800000; /* Match primary button color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Button padding */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+    font-family: Helvetica, Arial, sans-serif; /* Match body font */
+    text-align: center;
 }
 
-/* Hover behavior for primary buttons and reset button */
-.btn-primary:hover,
+/* Hover effect for the reset button */
 .resetButton:hover {
-    background-color: #5e0000; /* Darker maroon on hover */
-}
-
-/* Disabled button state */
-button:disabled {
-    background-color: #cccccc; /* Grey background for disabled buttons */
-    color: #666666; /* Grey text for disabled buttons */
-    cursor: not-allowed; /* Show disabled cursor */
+    background-color: #5e0000; /* Use darker hover color */
 }
 
 /* Primary brand elements (e.g., headers, links) */
