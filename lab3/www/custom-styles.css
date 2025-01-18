@@ -9,50 +9,23 @@ body {
     padding: 0; /* Remove default padding */
 }
 
-/* Base button styles */
-button {
-    font-family: 'EB Garamond', serif; /* Consistent font */
-    font-size: 16px; /* Font size */
-    padding: 10px 20px; /* Padding */
-    border: none; /* Remove default border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth hover transition */
-    box-sizing: border-box; /* Ensure consistent sizing */
-}
-
-/* Run Code and Submit Answer buttons */
-.btn-primary,
-.btn-submit,
+/* Reset button styled to match primary buttons */
 .resetButton {
-    background-color: #800000; /* Primary button color */
-    color: white; /* Text color */
-    width: 150px; /* Set a fixed width */
-    height: 50px; /* Set a fixed height */
-    text-align: center; /* Center the text */
-    display: inline-block; /* Ensure proper alignment */
-    line-height: 1.5; /* Adjust for vertical centering */
+    background-color: #800000; /* Primary brand color */
+    color: white;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Button padding */
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+    font-family:'EB Garamond', serif;
+    text-align: center;
 }
 
-/* Hover effect for buttons */
-.btn-primary:hover,
-.btn-submit:hover,
+/* Hover effect for reset button */
 .resetButton:hover {
-    background-color: #5e0000; /* Darker hover color */
-}
-
-/* Prevent color change on click */
-button:active {
-    background-color: #800000 !important; /* Keep the same color when clicked */
-    color: white !important; /* Maintain text color */
-    outline: none; /* Remove focus outline */
-}
-
-/* Disabled button state */
-button:disabled {
-    background-color: #cccccc; /* Grey background for disabled buttons */
-    color: #666666; /* Grey text */
-    cursor: not-allowed; /* Show disabled cursor */
+    background-color: #5e0000; /* Darker shade */
 }
 
 /* Primary brand elements (e.g., headers, links) */
