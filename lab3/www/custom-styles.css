@@ -13,7 +13,17 @@ li.topic.nav-item {
     font-size: 1.2rem;         /* Larger font size */
     font-weight: bold;         /* Make the text bold */
     line-height: 1.2em;
-  }
+}
+
+.resetButton {
+    font-size: 18px;
+    color: white;
+    background-color: #800000;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 /* Style the top container to match the width of .bandContent */
 .topContainer {
