@@ -43,7 +43,7 @@ tags$div(
   tags$div(
     class = "logoAndTitle",
     tags$img(
-      href = "dsi_logo.png",
+      href = "www/dsi_logo.png",
       alt = "DSI Logo",
       class = "topLogo"
     ),
@@ -51,10 +51,6 @@ tags$div(
   )
 )
 ```
-
-<img src="dsi_logo.png"
- alt="DSI Logo"
- style="ftext-align:center; display: center;" />
 
 ## Goals
 
