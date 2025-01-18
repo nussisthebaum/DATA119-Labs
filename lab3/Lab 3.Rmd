@@ -1,6 +1,8 @@
 ---
-title: "Lab 3: Categorical Variables and Multiple Linear Regression"
-output: learnr::tutorial
+title: "Data 119 - Lab 3"
+output: 
+   learnr::tutorial:
+   css: custom-styles.css
 runtime: shiny_prerendered
 ---
 
@@ -31,7 +33,21 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
-```{python setup_python}
+```{r header, echo=FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Categorical Variables and Multiple Linear Regression", class = "pageTitle")
+  )
+)
 ```
 
 ## Goals

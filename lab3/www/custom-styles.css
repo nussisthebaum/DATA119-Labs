@@ -1,0 +1,47 @@
+ul.nav.flex-column {
+    background-color: #737373;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+li.topic.nav-item {
+    background-color: #D9D9D9;  /* Light grey background */
+    padding: 2px;             /* Add padding for better spacing */
+    border: 2px solid #737373; /* Darker grey border */
+    border-radius: 5px;        /* Round the corners */
+    text-align: center;        /* Center the text */
+    font-size: 1.2rem;         /* Larger font size */
+    font-weight: bold;         /* Make the text bold */
+    line-height: 1.2em;
+  }
+
+/* Style the top container to match the width of .bandContent */
+.topContainer {
+    width: 100%;              /* Full width of .bandContent */
+    background-color: #800000; /* Maroon background */
+    color: white;             /* White text */
+    padding: 20px;            /* Add padding for spacing */
+    box-sizing: border-box;   /* Ensure padding doesn't exceed width */
+    margin-bottom: 20px;      /* Add spacing below the header */
+}
+
+/* Flexbox layout for logo and title */
+.logoAndTitle {
+    display: flex;
+    align-items: center;      /* Vertically align items */
+    justify-content: space-around; /* Space between logo and text */
+    gap: 5px;                /* Space between the logo and the title */
+}
+
+/* Logo styling */
+.topLogo {
+    max-height: 90px;         /* Restrict logo height */
+    width: auto;              /* Maintain aspect ratio */
+}
+
+/* Title styling */
+.pageTitle {
+    font-size: 2.5rem;        /* Larger font size */
+    margin: 0;
+    text-align: center;         /* Align text to the left */
+}
