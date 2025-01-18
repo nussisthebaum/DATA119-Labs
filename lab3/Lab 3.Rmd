@@ -35,7 +35,7 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 library(htmltools)
 
 tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "custom-styles.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "dark_mode.css")
 )
 
 tags$div(
@@ -51,6 +51,10 @@ tags$div(
   )
 )
 ```
+
+<img src="http://www.richpat.com/wp-content/uploads/2019/04/logov5.png"
+ alt="Markdown Monster icon"
+ style="ftext-align:center; display: center;" />
 
 ## Goals
 
