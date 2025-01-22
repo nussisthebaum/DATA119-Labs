@@ -1,6 +1,8 @@
 ---
-title: "Lab 3: Assumption Checking and Multiple Linear Regression"
-output: learnr::tutorial
+title: "Data119 - Lab 3"
+output: 
+   learnr::tutorial:
+      css: www/custom-styles.css
 runtime: shiny_prerendered
 ---
 
@@ -29,6 +31,23 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "http://posit.ds.uchicago.edu/content/data119-lab3/www/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Assumption Checking and Multiple Linear Regression", class = "pageTitle")
+  )
+)
 ```
 
 ## Goals
