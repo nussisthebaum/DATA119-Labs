@@ -33,6 +33,23 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
+```{r header, echo=FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "http://posit.ds.uchicago.edu/content/5e57b15c-d945-4987-b998-b845c41c4662/www/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Categorical Variables and Multiple Linear Regression", class = "pageTitle")
+  )
+)
+```
+
 ## Goals
 
 * To continue practicing making data visualizations.
