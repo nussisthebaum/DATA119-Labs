@@ -22,10 +22,10 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
-    if (identical(user_code, solution_code)) {
-      return(gradethis::random_praise())
-    }
-    return(gradethis::random_encouragement())
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
   }
 }
 
