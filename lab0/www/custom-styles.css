@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap');
+
+/* Global styles */
+body {
+    font-family: 'EB Garamond', serif; /* Primary font */
+    background-color: white; /* White background */
+    color: black; /* Black text color */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+/* Reset button styled to match primary buttons */
+.resetButton {
+    background-color: #800000; /* Primary brand color */
+    color: white;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Button padding */
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+    font-family:'EB Garamond', serif;
+    text-align: center;
+}
+
+/* Hover effect for reset button */
+.resetButton:hover {
+    background-color: #5e0000; /* Darker shade */
+}
+
+/* Primary brand elements (e.g., headers, links) */
+h1, h2, h3, h4, h5, h6 {
+    color: #800000; /* Use primary brand color for headers */
+}
+
+a {
+    color: #800000; /* Use primary brand color for links */
+    text-decoration: none; /* Remove underline */
+}
+
+a:hover {
+    color: #5e0000; /* Darker shade on hover */
+    text-decoration: underline; /* Add underline on hover */
+}
+
+/* Style the top container to match the width of .bandContent */
+.topContainer {
+    width: 100%;              /* Full width of .bandContent */
+    background-color: #800000; /* Maroon background */
+    color: white;             /* White text */
+    padding: 20px;            /* Add padding for spacing */
+    box-sizing: border-box;   /* Ensure padding doesn't exceed width */
+    margin-bottom: 20px;      /* Add spacing below the header */
+}
+
+/* Flexbox layout for logo and title */
+.logoAndTitle {
+    display: flex;
+    align-items: center;      /* Vertically align items */
+    justify-content: space-around; /* Space between logo and text */
+    gap: 5px;                /* Space between the logo and the title */
+}
+
+/* Logo styling */
+.topLogo {
+    max-height: 90px;         /* Restrict logo height */
+    width: auto;              /* Maintain aspect ratio */
+}
+
+/* Title styling */
+.pageTitle {
+    font-size: 2.5rem;        /* Larger font size */
+    margin: 0;
+    text-align: center;         /* Align text to the left */
+    color: white;
+    font-family: 'EB Garamond', serif; /* Primary font */
+    font-weight: bold;
+}
+
