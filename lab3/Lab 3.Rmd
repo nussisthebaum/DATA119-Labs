@@ -7,12 +7,12 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(error = TRUE)
-knitr::knit_engines$set(python = reticulate::eng_python)
-
 library(learnr)
 library(gradethis)
 library(reticulate)
+
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
 
 # Set the path to the existing Python environment
 #reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)

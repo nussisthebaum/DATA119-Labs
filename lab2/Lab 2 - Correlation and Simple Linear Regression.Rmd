@@ -1,6 +1,8 @@
 ---
 title: "DATA119 - Lab 2"
-output: learnr::tutorial
+output: 
+   learnr::tutorial:
+      css: www/custom-styles.css
 runtime: shiny_prerendered
 ---
 
@@ -8,13 +10,12 @@ runtime: shiny_prerendered
 library(learnr)
 library(gradethis)
 library(reticulate)
-#library(bslib)
 
 knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
 # Set the path to the existing Python environment
-reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
 #system("/opt/python/3.9.21/bin/python -m pip install numpy pandas plotnine")
@@ -26,15 +27,10 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
     }
     return(gradethis::random_encouragement())
   }
-  # Handle other stages explicitly (e.g., setup, initialization)
-  if (stage %in% c("setup", "run")) {
-    return(NULL)
-  }
 }
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
-#tutorial_options(exercise.startup = TRUE)
 ```
 
 ## Goals

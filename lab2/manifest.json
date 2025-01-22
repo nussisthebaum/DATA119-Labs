@@ -947,43 +947,34 @@
       }
     },
     "learnr": {
-      "Source": "github",
-      "Repository": null,
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "learnr",
         "Title": "Interactive Tutorials for R",
-        "Version": "0.11.5.9000",
+        "Version": "0.11.5",
         "Authors@R": "c(\n    person(\"Garrick\", \"Aden-Buie\", , \"garrick@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-7111-0077\")),\n    person(\"Barret\", \"Schloerke\", , \"barret@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0001-9986-114X\")),\n    person(\"JJ\", \"Allaire\", , \"jj@posit.co\", role = c(\"aut\", \"ccp\")),\n    person(\"Alexander\", \"Rossell Hayes\", , \"alex.rossellhayes@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0001-9412-0457\")),\n    person(\"Nischal\", \"Shrestha\", , \"nischal@posit.co\", role = \"ctb\",\n           comment = c(ORCID = \"0000-0003-3321-1712\")),\n    person(\"Angela\", \"Li\", , \"angelali921@gmail.com\", role = \"ctb\",\n           comment = \"vignette\"),\n    person(\"Posit, PBC\", role = c(\"cph\", \"fnd\")),\n    person(, \"Ajax.org B.V.\", role = c(\"ctb\", \"cph\"),\n           comment = \"Ace library\"),\n    person(\"Zeno\", \"Rocha\", role = c(\"ctb\", \"cph\"),\n           comment = \"clipboard.js library\"),\n    person(\"Nick\", \"Payne\", role = c(\"ctb\", \"cph\"),\n           comment = \"Bootbox library\"),\n    person(\"Jake\", \"Archibald\", role = c(\"ctb\", \"cph\"),\n           comment = \"idb-keyval library\"),\n    person(\"i18next authors\", role = c(\"ctb\", \"cph\"),\n           comment = \"i18next library\")\n  )",
         "Description": "Create interactive tutorials using R Markdown. Use a\n    combination of narrative, figures, videos, exercises, and quizzes to\n    create self-paced tutorials for learning about R and R packages.",
         "License": "Apache License (>= 2.0)",
         "URL": "https://rstudio.github.io/learnr/,\nhttps://github.com/rstudio/learnr",
         "BugReports": "https://github.com/rstudio/learnr/issues",
-        "Imports": "checkmate, digest, evaluate, htmltools (>= 0.3.5),\nhtmlwidgets, jsonlite, knitr (>= 1.31), lifecycle, markdown (>=\n1.3), parallel, promises, rappdirs, renv (>= 0.8.0), rlang (>=\n1.0.0), rmarkdown (>= 1.12.0), rprojroot, shiny (>= 1.0),\nstats, utils, withr",
+        "Imports": "checkmate, digest, ellipsis (>= 0.2.0.1), evaluate, htmltools\n(>= 0.3.5), htmlwidgets, jsonlite, knitr (>= 1.31), lifecycle,\nmarkdown (>= 1.3), parallel, promises, rappdirs, renv (>=\n0.8.0), rlang, rmarkdown (>= 1.12.0), rprojroot, shiny (>=\n1.0), stats, utils, withr",
         "Suggests": "bslib, callr, curl, DBI (>= 0.4-1), httpuv, later,\nreticulate, RSQLite, rstudioapi (>= 0.11), shinytest2,\nsortable, testthat (>= 3.0.3)",
         "VignetteBuilder": "knitr",
         "Config/Needs/connect": "rsconnect",
         "Config/Needs/coverage": "covr",
         "Config/Needs/website": "pkgdown, tidyverse/tidytemplate",
         "Encoding": "UTF-8",
-        "Roxygen": "list(markdown = TRUE)",
-        "RoxygenNote": "7.3.2",
+        "RoxygenNote": "7.2.3",
         "SystemRequirements": "pandoc (>= 1.14) - http://pandoc.org",
-        "RemoteType": "github",
-        "RemoteHost": "api.github.com",
-        "RemoteRepo": "learnr",
-        "RemoteUsername": "rstudio",
-        "RemoteRef": "HEAD",
-        "RemoteSha": "a644d2dd4c083c7596fd73edc0431bcb52811357",
-        "GithubRepo": "learnr",
-        "GithubUsername": "rstudio",
-        "GithubRef": "HEAD",
-        "GithubSHA1": "a644d2dd4c083c7596fd73edc0431bcb52811357",
         "NeedsCompilation": "no",
-        "Packaged": "2024-10-01 03:06:05 UTC; amandajotte",
+        "Packaged": "2023-09-27 23:31:22 UTC; garrick",
         "Author": "Garrick Aden-Buie [aut, cre] (<https://orcid.org/0000-0002-7111-0077>),\n  Barret Schloerke [aut] (<https://orcid.org/0000-0001-9986-114X>),\n  JJ Allaire [aut, ccp],\n  Alexander Rossell Hayes [aut] (<https://orcid.org/0000-0001-9412-0457>),\n  Nischal Shrestha [ctb] (<https://orcid.org/0000-0003-3321-1712>),\n  Angela Li [ctb] (vignette),\n  Posit, PBC [cph, fnd],\n  Ajax.org B.V. [ctb, cph] (Ace library),\n  Zeno Rocha [ctb, cph] (clipboard.js library),\n  Nick Payne [ctb, cph] (Bootbox library),\n  Jake Archibald [ctb, cph] (idb-keyval library),\n  i18next authors [ctb, cph] (i18next library)",
         "Maintainer": "Garrick Aden-Buie <garrick@posit.co>",
-        "Built": "R 4.4.1; ; 2024-10-01 03:06:05 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2023-09-28 05:00:02 UTC",
+        "Built": "R 4.4.0; ; 2024-04-06 10:59:41 UTC; unix"
       }
     },
     "lifecycle": {
@@ -1422,9 +1413,8 @@
         "Type": "Package",
         "Package": "rmarkdown",
         "Title": "Dynamic Documents for R",
-        "Version": "2.28",
+        "Version": "2.29",
         "Authors@R": "c(\n    person(\"JJ\", \"Allaire\", , \"jj@posit.co\", role = \"aut\"),\n    person(\"Yihui\", \"Xie\", , \"xie@yihui.name\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0003-0645-5666\")),\n    person(\"Christophe\", \"Dervieux\", , \"cderv@posit.co\", role = \"aut\", comment = c(ORCID = \"0000-0003-4474-2498\")),\n    person(\"Jonathan\", \"McPherson\", , \"jonathan@posit.co\", role = \"aut\"),\n    person(\"Javier\", \"Luraschi\", role = \"aut\"),\n    person(\"Kevin\", \"Ushey\", , \"kevin@posit.co\", role = \"aut\"),\n    person(\"Aron\", \"Atkins\", , \"aron@posit.co\", role = \"aut\"),\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = \"aut\"),\n    person(\"Joe\", \"Cheng\", , \"joe@posit.co\", role = \"aut\"),\n    person(\"Winston\", \"Chang\", , \"winston@posit.co\", role = \"aut\"),\n    person(\"Richard\", \"Iannone\", , \"rich@posit.co\", role = \"aut\", comment = c(ORCID = \"0000-0003-3925-190X\")),\n    person(\"Andrew\", \"Dunning\", role = \"ctb\", comment = c(ORCID = \"0000-0003-0464-5036\")),\n    person(\"Atsushi\", \"Yasumoto\", role = c(\"ctb\", \"cph\"), comment = c(ORCID = \"0000-0002-8335-495X\", cph = \"Number sections Lua filter\")),\n    person(\"Barret\", \"Schloerke\", role = \"ctb\"),\n    person(\"Carson\", \"Sievert\", role = \"ctb\", comment = c(ORCID = \"0000-0002-4958-2844\")), \n    person(\"Devon\", \"Ryan\", , \"dpryan79@gmail.com\", role = \"ctb\", comment = c(ORCID = \"0000-0002-8549-0971\")),\n    person(\"Frederik\", \"Aust\", , \"frederik.aust@uni-koeln.de\", role = \"ctb\", comment = c(ORCID = \"0000-0003-4900-788X\")),\n    person(\"Jeff\", \"Allen\", , \"jeff@posit.co\", role = \"ctb\"), \n    person(\"JooYoung\", \"Seo\", role = \"ctb\", comment = c(ORCID = \"0000-0002-4064-6012\")),\n    person(\"Malcolm\", \"Barrett\", role = \"ctb\"),\n    person(\"Rob\", \"Hyndman\", , \"Rob.Hyndman@monash.edu\", role = \"ctb\"),\n    person(\"Romain\", \"Lesur\", role = \"ctb\"),\n    person(\"Roy\", \"Storey\", role = \"ctb\"),\n    person(\"Ruben\", \"Arslan\", , \"ruben.arslan@uni-goettingen.de\", role = \"ctb\"),\n    person(\"Sergio\", \"Oller\", role = \"ctb\"),\n    person(given = \"Posit Software, PBC\", role = c(\"cph\", \"fnd\")),\n    person(, \"jQuery UI contributors\", role = c(\"ctb\", \"cph\"), comment = \"jQuery UI library; authors listed in inst/rmd/h/jqueryui/AUTHORS.txt\"),\n    person(\"Mark\", \"Otto\", role = \"ctb\", comment = \"Bootstrap library\"),\n    person(\"Jacob\", \"Thornton\", role = \"ctb\", comment = \"Bootstrap library\"),\n    person(, \"Bootstrap contributors\", role = \"ctb\", comment = \"Bootstrap library\"),\n    person(, \"Twitter, Inc\", role = \"cph\", comment = \"Bootstrap library\"),\n    person(\"Alexander\", \"Farkas\", role = c(\"ctb\", \"cph\"), comment = \"html5shiv library\"),\n    person(\"Scott\", \"Jehl\", role = c(\"ctb\", \"cph\"), comment = \"Respond.js library\"),\n    person(\"Ivan\", \"Sagalaev\", role = c(\"ctb\", \"cph\"), comment = \"highlight.js library\"),\n    person(\"Greg\", \"Franko\", role = c(\"ctb\", \"cph\"), comment = \"tocify library\"),\n    person(\"John\", \"MacFarlane\", role = c(\"ctb\", \"cph\"), comment = \"Pandoc templates\"),\n    person(, \"Google, Inc.\", role = c(\"ctb\", \"cph\"), comment = \"ioslides library\"),\n    person(\"Dave\", \"Raggett\", role = \"ctb\", comment = \"slidy library\"),\n    person(, \"W3C\", role = \"cph\", comment = \"slidy library\"),\n    person(\"Dave\", \"Gandy\", role = c(\"ctb\", \"cph\"), comment = \"Font-Awesome\"),\n    person(\"Ben\", \"Sperry\", role = \"ctb\", comment = \"Ionicons\"),\n    person(, \"Drifty\", role = \"cph\", comment = \"Ionicons\"),\n    person(\"Aidan\", \"Lister\", role = c(\"ctb\", \"cph\"), comment = \"jQuery StickyTabs\"),\n    person(\"Benct Philip\", \"Jonsson\", role = c(\"ctb\", \"cph\"), comment = \"pagebreak Lua filter\"),\n    person(\"Albert\", \"Krewinkel\", role = c(\"ctb\", \"cph\"), comment = \"pagebreak Lua filter\")\n  )",
-        "Maintainer": "Yihui Xie <xie@yihui.name>",
         "Description": "Convert R Markdown documents into a variety of formats.",
         "License": "GPL-3",
         "URL": "https://github.com/rstudio/rmarkdown,\nhttps://pkgs.rstudio.com/rmarkdown/",
@@ -1436,14 +1426,15 @@
         "Config/Needs/website": "rstudio/quillt, pkgdown",
         "Config/testthat/edition": "3",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.1",
+        "RoxygenNote": "7.3.2",
         "SystemRequirements": "pandoc (>= 1.14) - http://pandoc.org",
         "NeedsCompilation": "no",
-        "Packaged": "2024-08-16 14:12:22 UTC; yihui",
+        "Packaged": "2024-11-01 19:32:48 UTC; runner",
         "Author": "JJ Allaire [aut],\n  Yihui Xie [aut, cre] (<https://orcid.org/0000-0003-0645-5666>),\n  Christophe Dervieux [aut] (<https://orcid.org/0000-0003-4474-2498>),\n  Jonathan McPherson [aut],\n  Javier Luraschi [aut],\n  Kevin Ushey [aut],\n  Aron Atkins [aut],\n  Hadley Wickham [aut],\n  Joe Cheng [aut],\n  Winston Chang [aut],\n  Richard Iannone [aut] (<https://orcid.org/0000-0003-3925-190X>),\n  Andrew Dunning [ctb] (<https://orcid.org/0000-0003-0464-5036>),\n  Atsushi Yasumoto [ctb, cph] (<https://orcid.org/0000-0002-8335-495X>,\n    Number sections Lua filter),\n  Barret Schloerke [ctb],\n  Carson Sievert [ctb] (<https://orcid.org/0000-0002-4958-2844>),\n  Devon Ryan [ctb] (<https://orcid.org/0000-0002-8549-0971>),\n  Frederik Aust [ctb] (<https://orcid.org/0000-0003-4900-788X>),\n  Jeff Allen [ctb],\n  JooYoung Seo [ctb] (<https://orcid.org/0000-0002-4064-6012>),\n  Malcolm Barrett [ctb],\n  Rob Hyndman [ctb],\n  Romain Lesur [ctb],\n  Roy Storey [ctb],\n  Ruben Arslan [ctb],\n  Sergio Oller [ctb],\n  Posit Software, PBC [cph, fnd],\n  jQuery UI contributors [ctb, cph] (jQuery UI library; authors listed in\n    inst/rmd/h/jqueryui/AUTHORS.txt),\n  Mark Otto [ctb] (Bootstrap library),\n  Jacob Thornton [ctb] (Bootstrap library),\n  Bootstrap contributors [ctb] (Bootstrap library),\n  Twitter, Inc [cph] (Bootstrap library),\n  Alexander Farkas [ctb, cph] (html5shiv library),\n  Scott Jehl [ctb, cph] (Respond.js library),\n  Ivan Sagalaev [ctb, cph] (highlight.js library),\n  Greg Franko [ctb, cph] (tocify library),\n  John MacFarlane [ctb, cph] (Pandoc templates),\n  Google, Inc. [ctb, cph] (ioslides library),\n  Dave Raggett [ctb] (slidy library),\n  W3C [cph] (slidy library),\n  Dave Gandy [ctb, cph] (Font-Awesome),\n  Ben Sperry [ctb] (Ionicons),\n  Drifty [cph] (Ionicons),\n  Aidan Lister [ctb, cph] (jQuery StickyTabs),\n  Benct Philip Jonsson [ctb, cph] (pagebreak Lua filter),\n  Albert Krewinkel [ctb, cph] (pagebreak Lua filter)",
+        "Maintainer": "Yihui Xie <xie@yihui.name>",
         "Repository": "CRAN",
-        "Date/Publication": "2024-08-17 04:50:13 UTC",
-        "Built": "R 4.4.0; ; 2024-08-17 08:03:57 UTC; unix"
+        "Date/Publication": "2024-11-04 12:30:09 UTC",
+        "Built": "R 4.4.1; ; 2024-11-04 13:07:16 UTC; unix"
       }
     },
     "rprojroot": {
@@ -1842,14 +1833,20 @@
     }
   },
   "files": {
-    "custom-styles.css": {
-      "checksum": "d97b882aff936e8386749c643f1c28e7"
-    },
     "Lab 2 - Correlation and Simple Linear Regression.Rmd": {
-      "checksum": "48a26c2862914843e359b2f690f34fa5"
+      "checksum": "e8157dd01bab3e5cc75cbc845a8ae36f"
     },
     "README.md": {
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "requirements.txt": {
+      "checksum": "c9e550794b8d1407f30b7201aa05f46b"
+    },
+    "www/custom-styles.css": {
+      "checksum": "53026cc16d8d96879dd8a4eaa065e763"
+    },
+    "www/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     }
   },
   "users": null
