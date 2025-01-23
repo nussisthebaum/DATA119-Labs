@@ -18,9 +18,9 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA1
 ## Lab Creation Workflow:
 
 ## Lab Publishing Workflow:
-1. Make sure all necessary files are in the folder with the designated lab number including a `requirements.txt` file and a folder named `www` containing the css file, and any image or data files.
+1. Make sure all necessary files are in the folder with the designated lab number including a `requirements.txt` file, a folder named `css` containing the css file, a folder named `images` with any image files, and a folder named `www` with any data files etc. 
 2. Ensure the css file is indicated in the yaml header of the lab file.
-3. Ensure necessary html for creating the lab header is included in the lab file after the setup chunk, the header title has been updated ('your header here' in the below code has been replaced), and the url to the logo has been updated to reflect this lab's url (the x's in the url below have been changed to the relevant course and lab number):
+3. Ensure necessary html for creating the lab header is included in the lab file after the setup chunk, the header title has been updated ('your header here' in the below code has been replaced):
   ```
     library(htmltools)
     tags$div(
@@ -28,7 +28,7 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA1
       tags$div(
         class = "logoAndTitle",
         tags$img(
-          src = "http://posit.ds.uchicago.edu/dataxxx-labx/www/dsi_logo.png",
+          src = "./images/dsi_logo.png",
           alt = "DSI Logo",
           class = "topLogo"
         ),
