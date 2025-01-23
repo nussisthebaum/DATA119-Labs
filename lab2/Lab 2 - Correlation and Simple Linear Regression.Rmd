@@ -41,7 +41,7 @@ tags$div(
   tags$div(
     class = "logoAndTitle",
     tags$img(
-      src = "https://posit.ds.uchicago.edu/data119-lab2-dev/images/dsi_logo.png",
+      src = "./images/dsi_logo.png",
       alt = "DSI Logo",
       class = "topLogo"
     ),
