@@ -62,7 +62,8 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA1
 
 ## Common Errors and their Fixes
 
-* "An internal error occurred while setting up the exercise. Please try again or contact the tutorial author.":
+* "Expected a python object, received a NULL" (commonly received while rendering):
+* "An internal error occurred while setting up the exercise. Please try again or contact the tutorial author." (commonly received while running code chunks):
 
 ## Extra Resources:
 
