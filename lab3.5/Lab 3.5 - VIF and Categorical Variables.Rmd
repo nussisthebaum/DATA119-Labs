@@ -1,0 +1,566 @@
+---
+title: "Data119 - Lab 3"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Assumption Checking and Multiple Linear Regression", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+-   Check for multicollinearity issues using the variance inflation factor. 
+-   Learn to incorporate categorical variables in multiple linear regression.
+
+
+## Setup
+
+For this lab we will be using  `numpy`, `pandas`, `plotnine`, `statsmodels`, and the AirBnB dataset from Lab 3. Refresh yourself on the variables the dataset includes by reading the [Kaggle documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities). 
+
+The other thing we want to be able to do is investigate more than a few columns (for example, in a correlation matrix). We can use the `set_option()` function from `pandas` to force Python to show us all of the output. See the last line of code in the cell below for an example. 
+Run the cell below to setup our environment.
+
+```{python setup1, exercise=TRUE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import statsmodels.api as sm
+
+AirBnB_prices = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/AirBnB_mini.csv")
+
+pd.set_option('display.max_columns', None)
+```
+
+## Identifying Multicollinearity with VIF
+
+1. Using `statsmodels` syntax, refit the last model from Lab 3 predicting `log(realSum)` from the numeric variables ....
+
+```{python setup2, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+X_num = AirBnB_prices[['person_capacity', 'cleanliness_rating', 
+                       'guest_satisfaction_overall', 'bedrooms', 'dist', 'metro_dist',
+                       'attr_index_norm', 'rest_index_norm', 'lng', 'lat']]
+X_num = sm.add_constant(X_num)
+
+Y_log = np.log(AirBnB_prices['realSum'])
+
+model_num = sm.OLS(Y_log, X_num).fit()
+```
+
+2. Now, investigate the summary. 
+
+```{python mlr_num, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+
+```
+
+```{python mlr_num-solution, message = FALSE, warning = FALSE, echo = FALSE}
+model_num.summary()
+```
+
+```{r mlr_num-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+You should see an error that says "The condition number is large, 1.73e+03. This might indicate that there are strong multicollinearity or other numerical problems." Recall that:
+
+* Two predictors being highly correlated are referred to as "collinear".
+* A predictor being highly correlated to more than one other predictor is referred to as multicollinear. 
+
+To identify collinear predictors, you can check out the dataset documentation, pairwise scatterplots, and correlation matrix, like you did in Lab 3. Multicollinearity requires more sophisticated methods, including the variance inflation factor, or VIF. 
+
+The VIF is defined as 
+
+$$VIF = \frac{1}{(1- R^2_X)}$$
+
+where $R^2_X$ is the proportion of variation in $X$ that can be explained by its linear relationship to the other explanatory variables in the model. Notice that the response variable, $y$, is nowhere in this equation! That is because we only care about the relationships between the predictors. 
+
+Let's investigate further. Here is how to calculate VIF using the `statsmodels` module (although it's buried very deep!!) and something called a list comprehension. Essentially, the `variance_inflation_factor()` function accepts [two arguments](https://www.statsmodels.org/dev/generated/statsmodels.stats.outliers_influence.variance_inflation_factor.html):
+
+1. A matrix of all of the explanatory variables (since we have a DataFrame, `X_num`, we have turned it into a matrix by using `.values`)
+2. An index, `i`, describing which column the variable of interest is in. 
+
+The list comprehension loops over all of the possible indices, which I have given with `range(len(X_num.columns))`. The result is a list with all of the variance inflation factors. 
+
+```{python VIF1, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+VIF_ls = [variance_inflation_factor(X_num.values, i) for i in range(len(X_num.columns))]
+VIF_ls
+```
+
+I think we can see that this list is difficult to parse; let's make it more readable by reformatting it as a DataFrame. 
+
+```{python VIF2-setup}
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+VIF_ls = [variance_inflation_factor(X_num.values, i) for i in range(len(X_num.columns))]
+VIF_ls
+```
+
+```{python VIF2, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+vif_model_num = pd.DataFrame({"feature": X_num.columns, "VIF": VIF_ls})
+
+vif_model_num
+```
+
+Let's consider the VIF for `guest_satisfaction_overall`, which is almost exactly two. 
+
+```{r q3, echo=FALSE}
+question("3. If the VIF for `guest_satisfaction_overall` is 2, what is $R^2_{guest \\; satisfaction \\; overall}?$ ",
+         answer("2"),
+         answer("4"),
+         answer("$\\sqrt{2}$"),
+         answer("0.5", correct=TRUE),
+         answer("0.25"),
+         answer("$\\sqrt{0.5}$"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the first secret word: TUNE."
+)
+```
+
+4. We can confirm this answer! Fit a new model predicting `guest_satisfaction_overall` from  `person_capacity`, `cleanliness_rating`, `bedrooms`, `dist`, `metro_dist`, `attr_index_norm`, `rest_index_norm`, `lng`, and `lat`. Then, extract the $r^2$. 
+
+```{python VIF3, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+X_gso = AirBnB_prices[[___]]
+X_gso = sm.add_constant(___)
+
+gso = AirBnB_prices['___']
+
+model_gso = sm.OLS(___, ___).fit()
+model_gso.___
+```
+
+```{python VIF3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+X_gso = AirBnB_prices[['person_capacity', 'cleanliness_rating', 'bedrooms', 'dist',
+                       'metro_dist', 'attr_index_norm', 'rest_index_norm', 'lng', 'lat']]
+X_gso = sm.add_constant(X_gso)
+
+gso = AirBnB_prices['guest_satisfaction_overall']
+
+model_gso = sm.OLS(gso, X_gso).fit()
+model_gso.rsquared
+```
+
+```{r VIF3-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Almost exactly what we would have expected, after accounting for rounding error!
+
+Now that you know where the VIF comes from and how to calculate it, let's interpret the output. When a predictor $X$ is well explained by the other variables, a.k.a., multicollinearity, VIF is very high. There are different rules of thumb, but in this class, over 10 is worrisome. 
+
+```{r q5, echo=FALSE}
+question("5. If the VIF is equal to 10, what percent of variation can be explained by the other predictors?",
+         answer("90.0%", correct=TRUE),
+         answer("10.0%"),
+         answer("1.0%"),
+         answer("31.6%"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the second secret word: HOTDOG."
+)
+```
+
+```{r q6, echo=FALSE}
+question("6. Using the rule of thumb that a VIF over 10 is worrisome, should we be worried about any of the variables?",
+         answer("`const`", correct=TRUE),
+         answer("`person_capacity`"),
+         answer("`cleanliness_rating`"),
+         answer("`guest_satisfaction_overall`"),
+         answer("`bedrooms`"),
+         answer("`dist`"),
+         answer("`metro_dist`"),
+         answer("`attr_index_norm`"),
+         answer("`rest_index_norm`"),
+         answer("`lng`"),
+         answer("`lat`"),
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the third secret word: SERMON."
+)
+```
+
+Interestingly, the only worrisome variable is the constant/intercept! We could remove it from the model, but we usually don't do that--that would be equivalent to forcing the line of best fit to go through the origin, which is unnecessary at best and too much structure at worst. So, even though we got the error message, there's nothing much to do! The best approach here might be to remove the non-significant variables and hope the error goes away. 
+
+## Categorical Variables and Multicollinearity
+
+We haven't added any categorical variables yet! Let's walk through it--the process isn't all that different from adding numerical variables, it just involves slightly more preprocessing.
+
+Let's try adding more variables! Run this cell to take a look at `AirBnB_prices` and review the [Kaggle documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities).
+
+```{python col, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2"}
+AirBnB_prices.columns
+```
+
+```{r q7, echo=FALSE}
+question("7. Which variables are categorical (regardless of how they have been stored)?",
+         answer("`realSum`"),
+         answer("`room_type`", correct=TRUE),
+         answer("`room_shared`", correct=TRUE),
+         answer("`room_private`", correct=TRUE),
+         answer("`person_capacity`"),
+         answer("`host_is_superhost`", correct=TRUE),
+         answer("`multi`", correct=TRUE),
+         answer("`biz`", correct=TRUE),
+         answer("`cleanliness_rating`"),
+         answer("`guest_satisfaction_overall`"),
+         answer("`bedrooms`"),
+         answer("`dist`"),
+         answer("`metro_dist`"),
+         answer("`attr_index`"),
+         answer("`attr_index_norm`"),
+         answer("`rest_index`"),
+         answer("`rest_index_norm`"),
+         answer("`lng`"),
+         answer("`lat`"),
+         answer("`city`", correct=TRUE),
+         answer("`dayTypes`", correct=TRUE),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the fourth secret word: BROTHER.")
+```
+
+8. `multi` and `biz` are already stored as 0's and 1's. `room_type`, `room_shared`, `room_private`, `host_is_superhost`, `city`, and `dayType` are not and need to be converted to dummy variables. Let's use the methods from `pandas`--the specific function is [`get_dummies()`](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html). The first argument is the DataFrame and the second is a list of categorical variables--try it now.
+
+```{python dummy1, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+pd.get_dummies(AirBnB_prices, columns = [ ___ ])
+```
+
+```{python dummy1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'])
+```
+
+```{r dummy1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Look closely at `room_type`-- you should see that there are already dummy variables for `room_type`, `room_shared` and `room_private`! WARNING! If you put two columns that have identical information into a linear regression model, the math will not work. **You need to be careful when examining the documentation to see that you do not put shared information into your model, but that also happens if we put the wrong number of categorical variables in.**
+
+```{r q9, echo=FALSE}
+question("9. How are the results of `pd.get_dummies()` stored?",
+         answer("Booleans", correct = TRUE),
+         answer("Integers`"),
+         answer("Strings"),
+         answer("Floats"),
+         random_answer_order = TRUE,
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the fourth secret word: BROTHER.")
+```
+
+10. Booleans, a.k.a, `True` and `False`, will not work with `statsmodels`. To convert to numbers rather than Booleans, look online at the [pd.get_dummies() syntax](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html) and fill in the correct `dtype`:
+
+```{python dummy2, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+AirBnB_prices = pd.get_dummies(AirBnB_prices, columns = ___, dtype = ___)
+```
+
+```{python dummy2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+AirBnB_prices = pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float)
+```
+
+```{r dummy2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+11. You might also introduce multicollinearity issues using your categorical variables. In fact, let's try it using `city`. Create a model predicting the log price from ALL of the `city` variables we just created with `pd.get_dummies`. Call this model `model_wrong`.
+
+```{python setup3, exercise=FALSE, echo=FALSE, exercise.setup="setup2"}
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+AirBnB_prices = pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float)
+```
+
+```{python dummy3, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+X_wrong = AirBnB_prices[[ ___ ]]
+X_wrong = sm.add_constant(X_wrong)
+
+model_wrong = sm.OLS(Y, ___ ).fit()
+model_wrong.summary()
+```
+
+```{python dummy3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+X_wrong = AirBnB_prices[['city_amsterdam', 'city_athens', 'city_barcelona',
+                         'city_berlin', 'city_budapest', 'city_lisbon',
+                         'city_london', 'city_paris', 'city_rome', 'city_vienna']]
+
+X_wrong = sm.add_constant(X_wrong)
+
+model_wrong = sm.OLS(Y_log, X_wrong).fit()
+model_wrong.summary()
+```
+
+```{r dummy3-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+12. Look at the output--do you see another warning message about multicollinearity? Just like before, you should look at the VIF.
+
+```{python setup4, exercise=FALSE, echo=FALSE, exercise.setup="setup3"}
+X_wrong = AirBnB_prices[['city_amsterdam', 'city_athens', 'city_barcelona',
+                         'city_berlin', 'city_budapest', 'city_lisbon',
+                         'city_london', 'city_paris', 'city_rome', 'city_vienna']]
+
+X_wrong = sm.add_constant(X_wrong)
+
+model_wrong = sm.OLS(Y_log, X_wrong).fit()
+model_wrong.summary()
+```
+
+```{python vif4, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE, exercise.setup="setup4"}
+VIF_cities = [variance_inflation_factor(___, i) for i in range(len(___.columns))]
+VIF_cities_df = pd.DataFrame({"feature": ___.columns, "VIF": ___})
+VIF_cities_df
+```
+
+```{python vif4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+VIF_cities = [variance_inflation_factor(X_wrong.values, i) for i in range(len(X_wrong.columns))]
+VIF_cities_df = pd.DataFrame({"feature": X_wrong.columns, "VIF": VIF_cities})
+VIF_cities_df
+```
+
+```{r vif4-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Many students ask, and yes--`inf` stands for infinity. So, you are getting:
+
+$$VIF = \frac{1}{1- R^2_X} = \infty$$
+
+How is this possible? If $R^2_x = 1$, we get $\frac{1}{0}$. Let's consider $R^2_{amsterdam}$, a.k.a., the proportion of variance in `city_amsterdam` that can be explained by all of the other predictors in the model (note that we have to do this using a slightly different model called Logistic regression, this will be covered in Week 4).
+
+```{python amsterdam, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE, exercise.setup="setup3"}
+X_amsterdam = AirBnB_prices[['city_athens', 'city_barcelona',
+                             'city_berlin', 'city_budapest', 'city_lisbon',
+                             'city_london', 'city_paris', 'city_rome', 'city_vienna']]
+
+X_amsterdam = sm.add_constant(X_amsterdam)
+
+Y_amsterdam = AirBnB_prices['city_amsterdam']
+
+model_amsterdam = sm.Logit(Y_amsterdam, X_amsterdam).fit()
+model_amsterdam.summary()
+```
+
+This code won't even run! It means that there is a perfect relationship between `city_amsterdam` and everything else--if the relationship is perfect, $r^2_{amsterdam} = 1$, **which is exactly the scenario that would give us a VIF of $\infty$. This would be true regardless of what city you picked (you can edit the code yourselves to confirm).** Think about it in terms of process of elimination. If you know an AirBnB is not in Athens, Barcelona, Berlin, Budapest, Lisbon, London, Paris, Rome, or Vienna, you know that it MUST be in Amsterdam. You do not need the extra variable to tell you that! So, if we refit the model, removing `city_amsterdam`, we will get mathematically sound results:
+
+```{python right, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE, exercise.setup="setup4"}
+X_right = AirBnB_prices[['city_athens', 'city_barcelona', 'city_berlin',
+                         'city_budapest', 'city_lisbon', 'city_london',
+                         'city_paris', 'city_rome', 'city_vienna']]
+X_right = sm.add_constant(X_right)
+
+model_right = sm.OLS(Y_log, X_right).fit()
+model_right.summary()
+
+VIF_cities = [variance_inflation_factor(X_right.values, i) for i in range(len(X_right.columns))]
+VIF_cities_df = pd.DataFrame({"feature": X_right.columns, "VIF": VIF_cities})
+VIF_cities_df
+```
+
+```{r q13, echo=FALSE}
+question("13. Do we have reason to be concerned about any of the `city` variables?",
+         answer("Yes, `athens`."),
+         answer("Yes, `barcelona`."),
+         answer("Yes, `berlin`."),
+         answer("Yes, `budapest`."),
+         answer("Yes, `lisbon`."),
+         answer("Yes, `london`."),
+         answer("Yes, `paris`."),
+         answer("Yes, `rome`."),
+         answer("Yes, `vienna`."),
+         answer("No.", correct = TRUE),
+         allow_retry = TRUE)
+```
+
+So, the moral of the story is that `pd.get_dummies()` will GIVE you $k$ columns, but you only need to use $k-1$. If you use all $k$, your math will not work out correctly.
+
+The nice part of `pd.get_dummies()` giving you all of the columns is that you can very easily change the reference level. Let's say that I am pursuing a data-driven approach to planning a vacation. I visit London semi-regularly, so I want to compare AirBnB prices in all of the other cities to London. My code would be:
+
+```{python right2, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE, exercise.setup="setup4"}
+X_right2 = AirBnB_prices[['dist', 'city_amsterdam', 'city_athens', 'city_barcelona', 'city_berlin', 'city_budapest',
+                         'city_lisbon', 'city_paris', 'city_rome', 'city_vienna']]
+X_right2 = sm.add_constant(X_right2)
+
+model_right2 = sm.OLS(Y_log, X_right2).fit()
+model_right2.summary()
+```
+
+Now, we can see that `city_amsterdam` is back in the model, but `city_london` is not. All of my interpretations are changed--for example, `city_lisbon` is now the expected difference in price for AirBnBs in Lisbon relative to those in London rather than those in Amsterdam. We can say that we would expect the difference to be about 202 Euros a night, again, RELATIVE TO LONDON. It doesn't really matter what you pick the reference level to be, but:
+
+1. You do have to pick something, and
+2. You do have to make the interpretation relative to the reference level.
+
+14. If you don't want to change the reference level, but you do want to avoid the multicollinearity issues incurred when converting to dummy variables outright, you can to add another argument. The `drop_first` argument will convert everything to dummy variables, and then drop the very first column (alphabetically), avoiding any multicollinearity issues. Edit the code to use the `drop_first` argument.
+
+```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float, ___)
+```
+
+```{python dummy_drop-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float, drop_first=True)
+```
+
+```{r dummy_drop-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Run this cell (which contains all of the options we have covered with `pd.get_dummies()`) to save the converted data frame for later use. 
+
+```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2"}
+AirBnB_prices = pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float, drop_first = True)
+```
+
+## Multiple Linear Regression with Categorical Variables
+
+15. Let's put everything in! Fit the model with all of the variables, and run the VIF code. Don't forget that the variable names change after running `pd.get_dummies()`!
+
+```{python fullmodel, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+X_full = AirBnB_prices[[___]]
+X_full = sm.add_constant(X_full)
+
+model_full = sm.OLS(Y_log, X_full).fit()
+model_full.summary()
+
+VIF_full = [variance_inflation_factor(X_full.values, i) for i in range(len(X_full.columns))]
+VIF_full_df = pd.DataFrame({"feature": X_full.columns, "VIF": VIF_full})
+VIF_full_df
+```
+
+```{python fullmodel-solution, message = FALSE, warning = FALSE, echo = FALSE}
+X_full = AirBnB_prices[['room_shared_True', 'room_private_True', 'person_capacity',
+                        'host_is_superhost_True', 'multi', 'biz',
+                        'cleanliness_rating', 'guest_satisfaction_overall',
+                        'bedrooms', 'dist', 'metro_dist', 'attr_index',
+                        'rest_index', 'city_athens', 'city_barcelona',
+                        'city_berlin', 'city_budapest', 'city_lisbon',
+                        'city_london', 'city_paris', 'city_rome', 'city_vienna',
+                        'dayType_weekends', 'lat', 'lng']]
+X_full = sm.add_constant(X_full)
+
+model_full = sm.OLS(Y_log, X_full).fit()
+model_full.summary()
+
+VIF_full = [variance_inflation_factor(X_full.values, i) for i in range(len(X_full.columns))]
+VIF_full_df = pd.DataFrame({"feature": X_full.columns, "VIF": VIF_full})
+VIF_full_df
+```
+
+```{r fullmodel-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+I don't think it's surprising that all of the city variables and the latitude and longitude have multicollinearity issues--these variables are different ways of conveying the same information.
+
+16. Remove `lat` and `lng` columns to see how they impact VIF and the model.
+
+```{python nolatlng, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+X_nolatlng = AirBnB_prices[[___]]
+X_nolatlng = sm.add_constant(X_nolatlng)
+
+model_nolatlng = sm.OLS(Y_log, X_nolatlng).fit()
+model_nolatlng.summary()
+
+VIF_nolatlng = [variance_inflation_factor(X_nolatlng.values, i) for i in range(len(X_nolatlng.columns))]
+VIF_nolatlng_df = pd.DataFrame({"feature": X_nolatlng.columns, "VIF": VIF_nolatlng})
+VIF_nolatlng_df
+```
+
+```{python nolatlng-solution, message = FALSE, warning = FALSE, echo = FALSE}
+X_nolatlng = AirBnB_prices[['room_shared_True', 'room_private_True', 'person_capacity',
+                            'host_is_superhost_True', 'multi', 'biz',
+                            'cleanliness_rating', 'guest_satisfaction_overall',
+                            'bedrooms', 'dist', 'metro_dist', 'attr_index',
+                            'rest_index', 'city_athens', 'city_barcelona',
+                            'city_berlin', 'city_budapest', 'city_lisbon',
+                            'city_london', 'city_paris', 'city_rome', 'city_vienna',
+                            'dayType_weekends']]
+X_nolatlng = sm.add_constant(X_nolatlng)
+
+model_nolatlng = sm.OLS(Y_log, X_nolatlng).fit()
+model_nolatlng.summary()
+
+VIF_nolatlng = [variance_inflation_factor(X_nolatlng.values, i) for i in range(len(X_nolatlng.columns))]
+VIF_nolatlng_df = pd.DataFrame({"feature": X_nolatlng.columns, "VIF": VIF_nolatlng})
+VIF_nolatlng_df
+```
+
+```{r nolatlng-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+17. Now try creating a model leaving out the city variables. Which would you recommend?
+
+```{python nocity, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+X_nolatlng = AirBnB_prices[[___]]
+X_nolatlng = sm.add_constant(X_nolatlng)
+
+model_nolatlng = sm.OLS(Y_log, X_nolatlng).fit()
+model_nolatlng.summary()
+
+VIF_nolatlng = [variance_inflation_factor(X_nolatlng.values, i) for i in range(len(X_nolatlng.columns))]
+VIF_nolatlng_df = pd.DataFrame({"feature": X_nolatlng.columns, "VIF": VIF_nolatlng})
+VIF_nolatlng_df
+```
+
+```{python nocity-solution, message = FALSE, warning = FALSE, echo = FALSE}
+X_nocity = AirBnB_prices[['room_shared_True', 'room_private_True', 'person_capacity',
+                            'host_is_superhost_True', 'multi', 'biz',
+                            'cleanliness_rating', 'guest_satisfaction_overall',
+                            'bedrooms', 'dist', 'metro_dist', 'attr_index',
+                            'rest_index', 'dayType_weekends', 'lat', 'lng']]
+X_nocity = sm.add_constant(X_nocity)
+
+model_nocity = sm.OLS(Y_log, X_nocity).fit()
+model_nocity.summary()
+
+VIF_nocity = [variance_inflation_factor(X_nocity.values, i) for i in range(len(X_nocity.columns))]
+VIF_nocity_df = pd.DataFrame({"feature": X_nocity.columns, "VIF": VIF_nocity})
+VIF_nocity_df
+```
+
+```{r nocity-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Either model would be an improvement in terms of VIF--there are no variance inflation factors greater than 10 for either model (with the exception of the constant, which, again, we traditionally keep in the model anyway). In addition, all factors are significant in both models. The advantage that the city model has over the latitude/longitude model is in terms of the adjusted $r^2$. The city model has an adjusted $r^2$ of 0.504, whereas the latitude/longitude model has an adjusted $r^2$ of 0.475. I would recommend the city model.
+
