@@ -108,7 +108,7 @@ This lab will use both `numpy` and `python`. We will also be using a dataset scr
 import numpy as np
 import pandas as pd
 
-epicurious = pd.read_csv("data/epi_mini.csv")
+epicurious = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini.csv")
 ```
 
 
@@ -164,7 +164,7 @@ grade_this_code()
 import numpy as np
 import pandas as pd
 
-epicurious = pd.read_csv("data/epi_mini.csv")
+epicurious = pd.read_csv("./www/epi_mini.csv")
 epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
 ```
 
@@ -242,7 +242,7 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 
-epicurious = pd.read_csv("data/epi_mini.csv")
+epicurious = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini.csv")
 epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
 epicurious_num_nd = epicurious_num.dropna()
 ```
