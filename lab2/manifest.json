@@ -1833,20 +1833,20 @@
     }
   },
   "files": {
+    "css/custom-styles.css": {
+      "checksum": "53026cc16d8d96879dd8a4eaa065e763"
+    },
+    "images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
     "Lab 2 - Correlation and Simple Linear Regression.Rmd": {
-      "checksum": "e8157dd01bab3e5cc75cbc845a8ae36f"
+      "checksum": "d3115720eb64ffd38efbe26a061dfc98"
     },
     "README.md": {
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
     },
     "requirements.txt": {
       "checksum": "c9e550794b8d1407f30b7201aa05f46b"
-    },
-    "www/custom-styles.css": {
-      "checksum": "53026cc16d8d96879dd8a4eaa065e763"
-    },
-    "www/dsi_logo.png": {
-      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     }
   },
   "users": null
