@@ -1,8 +1,8 @@
 ---
 title: "DATA119 - Lab 2"
 output: 
-   learnr::tutorial:
-      css: www/custom-styles.css
+  learnr::tutorial:
+    css: css/custom-styles.css
 runtime: shiny_prerendered
 ---
 
@@ -41,7 +41,7 @@ tags$div(
   tags$div(
     class = "logoAndTitle",
     tags$img(
-      src = "http://posit.ds.uchicago.edu/content/5e57b15c-d945-4987-b998-b845c41c4662/www/dsi_logo.png",
+      src = "./images/dsi_logo.png",
       alt = "DSI Logo",
       class = "topLogo"
     ),

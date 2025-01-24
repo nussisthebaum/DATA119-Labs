@@ -7,6 +7,7 @@ body {
     color: black; /* Black text color */
     margin: 0; /* Remove default margin */
     padding: 0; /* Remove default padding */
+    font-size: 18px;
 }
 
 /* Reset button styled to match primary buttons */
@@ -69,11 +70,33 @@ a:hover {
 
 /* Title styling */
 .pageTitle {
-    font-size: 2.5rem;        /* Larger font size */
+    font-size: 4rem;        /* Larger font size */
     margin: 0;
-    text-align: center;         /* Align text to the left */
+    text-align: center;        
     color: white;
     font-family: 'EB Garamond', serif; /* Primary font */
     font-weight: bold;
+}
+
+/* Style the output area for exercises */
+.exercise-output {
+    font-size: 14px; /* Adjust font size to make it more readable */
+    line-height: 1.5; /* Improve line spacing */
+    overflow: auto; /* Ensure scrolling for large outputs */
+    max-height: 500px; /* Set a maximum height if needed */
+}
+
+/* Optional: Adjust font for code outputs specifically */
+.exercise-output pre {
+    font-family: "Courier New", monospace; /* Use a monospace font for code */
+    font-size: 14px; /* Match font size */
+}
+
+/* Optional: Ensure the output container resizes well */
+.exercise-output-container {
+    padding: 10px; /* Add spacing for better visibility */
+    background-color: #f9f9f9; /* Light background for contrast */
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 5px; /* Rounded corners */
 }
 

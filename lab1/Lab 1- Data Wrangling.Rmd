@@ -1,6 +1,8 @@
 ---
 title: "DATA119 - Lab 1"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    css: css/custom-styles.css
 runtime: shiny_prerendered
 ---
 
@@ -14,7 +16,7 @@ library(gradethis)
 library(reticulate)
 
 # Set the path to the existing Python environment
-reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
 # reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
@@ -30,6 +32,23 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Data Wrangling", class = "pageTitle")
+  )
+)
 ```
 
 ## Goals
@@ -89,7 +108,7 @@ This lab will use both `numpy` and `python`. We will also be using a dataset scr
 import numpy as np
 import pandas as pd
 
-epicurious = pd.read_csv("data/epi_mini.csv")
+epicurious = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini.csv")
 ```
 
 
@@ -145,7 +164,7 @@ grade_this_code()
 import numpy as np
 import pandas as pd
 
-epicurious = pd.read_csv("data/epi_mini.csv")
+epicurious = pd.read_csv("./www/epi_mini.csv")
 epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
 ```
 
@@ -223,7 +242,7 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 
-epicurious = pd.read_csv("data/epi_mini.csv")
+epicurious = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini.csv")
 epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
 epicurious_num_nd = epicurious_num.dropna()
 ```

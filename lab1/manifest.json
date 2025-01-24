@@ -1833,20 +1833,20 @@
     }
   },
   "files": {
+    "css/custom-styles.css": {
+      "checksum": "53026cc16d8d96879dd8a4eaa065e763"
+    },
+    "images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
     "Lab 1- Data Wrangling.Rmd": {
-      "checksum": "fda4808e794c8101cbff123f87154710"
+      "checksum": "03994f294b7fe7d993123f1de93676f5"
     },
     "README.md": {
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
     },
     "requirements.txt": {
       "checksum": "c9e550794b8d1407f30b7201aa05f46b"
-    },
-    "www/custom-styles.css": {
-      "checksum": "53026cc16d8d96879dd8a4eaa065e763"
-    },
-    "www/dsi_logo.png": {
-      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     }
   },
   "users": null
