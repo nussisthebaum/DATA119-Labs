@@ -132,14 +132,14 @@ VIF_ls
 
 I think we can see that this list is difficult to parse; let's make it more readable by reformatting it as a DataFrame. 
 
-```{python setup2.5, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+```{python setup2_5, message = FALSE, exercise.setup="setup2"}
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 VIF_ls = [variance_inflation_factor(X_num.values, i) for i in range(len(X_num.columns))]
 VIF_ls
 ```
 
-```{python VIF2, exercise = TRUE, message = FALSE, exercise.setup="setup2.5"}
+```{python VIF2, exercise = TRUE, message = FALSE, exercise.setup="setup2_5"}
 vif_model_num = pd.DataFrame({"feature": X_num.columns, "VIF": VIF_ls})
 
 vif_model_num
@@ -163,7 +163,7 @@ question("3. If the VIF for `guest_satisfaction_overall` is 2, what is $R^2_{gue
 
 4. We can confirm this answer! Fit a new model predicting `guest_satisfaction_overall` from  `person_capacity`, `cleanliness_rating`, `bedrooms`, `dist`, `metro_dist`, `attr_index_norm`, `rest_index_norm`, `lng`, and `lat`. Then, extract the $r^2$. 
 
-```{python VIF3, exercise = TRUE, message = FALSE, exercise.setup="setup2.5"}
+```{python VIF3, exercise = TRUE, message = FALSE, exercise.setup="setup2_5"}
 X_gso = AirBnB_prices[[___]]
 X_gso = sm.add_constant(___)
 
@@ -230,7 +230,7 @@ We haven't added any categorical variables yet! Let's walk through it--the proce
 
 Let's try adding more variables! Run this cell to take a look at `AirBnB_prices` and review the [Kaggle documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities).
 
-```{python col, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2.5"}
+```{python col, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2_5"}
 AirBnB_prices.columns
 ```
 
@@ -263,7 +263,7 @@ question("7. Which variables are categorical (regardless of how they have been s
 
 8. `multi` and `biz` are already stored as 0's and 1's. `room_type`, `room_shared`, `room_private`, `host_is_superhost`, `city`, and `dayType` are not and need to be converted to dummy variables. Let's use the methods from `pandas`--the specific function is [`get_dummies()`](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html). The first argument is the DataFrame and the second is a list of categorical variables--try it now.
 
-```{python dummy1, exercise = TRUE, message = FALSE, exercise.setup="setup2.5"}
+```{python dummy1, exercise = TRUE, message = FALSE, exercise.setup="setup2_5"}
 pd.get_dummies(AirBnB_prices, columns = [ ___ ])
 ```
 
@@ -280,7 +280,7 @@ Look closely at `room_type`-- you should see that there are already dummy variab
 ```{r q9, echo=FALSE}
 question("9. How are the results of `pd.get_dummies()` stored?",
          answer("Booleans", correct = TRUE),
-         answer("Integers`"),
+         answer("Integers"),
          answer("Strings"),
          answer("Floats"),
          random_answer_order = TRUE,
@@ -290,7 +290,7 @@ question("9. How are the results of `pd.get_dummies()` stored?",
 
 10. Booleans, a.k.a, `True` and `False`, will not work with `statsmodels`. To convert to numbers rather than Booleans, look online at the [pd.get_dummies() syntax](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html) and fill in the correct `dtype`:
 
-```{python dummy2, exercise = TRUE, message = FALSE, exercise.setup="setup2.5"}
+```{python dummy2, exercise = TRUE, message = FALSE, exercise.setup="setup2_5"}
 AirBnB_prices = pd.get_dummies(AirBnB_prices, columns = ___, dtype = ___)
 ```
 
@@ -304,7 +304,7 @@ grade_this_code()
 
 11. You might also introduce multicollinearity issues using your categorical variables. In fact, let's try it using `city`. Create a model predicting the log price from ALL of the `city` variables we just created with `pd.get_dummies`. Call this model `model_wrong`.
 
-```{python setup3, exercise=FALSE, echo=FALSE, exercise.setup="setup2.5"}
+```{python setup3, exercise=FALSE, echo=FALSE, exercise.setup="setup2_5"}
 AirBnB_prices = pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float)
 ```
 
@@ -442,7 +442,7 @@ pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_priva
 grade_this_code()
 ```
 
-Run this cell (which contains all of the options we have covered with `pd.get_dummies()`) to save the converted data frame for later use. 
+Run this cell (which contains all of the options we have covered with `pd.get_dummies()`) to save the converted data frame for later use. Please note that conversion of categorical variables can now be considered an important data pre-processing step--from here on out, in most of your data science classes, this should be one of the first things to do when preparing to fit some type of model.
 
 ```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2"}
 AirBnB_prices = pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float, drop_first = True)
