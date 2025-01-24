@@ -1,6 +1,8 @@
 ---
-title: "Lab 3: Assumption Checking and Multiple Linear Regression"
-output: learnr::tutorial
+title: "Data119 - Lab 3"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
 runtime: shiny_prerendered
 ---
 
