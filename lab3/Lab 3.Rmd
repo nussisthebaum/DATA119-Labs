@@ -31,6 +31,23 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
+```{r header, echo = FALSE}
+  library(htmltools)
+
+  tags$div(
+    class = "topContainer",
+    tags$div(
+      class = "logoAndTitle",
+      tags$img(
+        src = "./images/dsi_logo.png",
+        alt = "DSI Logo",
+        class = "topLogo"
+      ),
+      tags$h1("Lab 3", class = "pageTitle")
+    )
+  )
+```
+
 ## Goals
 
 -   Address failed assumptions in linear regression.
