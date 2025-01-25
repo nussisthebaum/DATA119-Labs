@@ -375,7 +375,7 @@ preds1 = model1.predict(X_ts)
 from sklearn import metrics, linear_model
 ```
 
-```{python conf, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+```{python conf, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
 pd.crosstab(___, ___ > ___)
 ```
 
@@ -389,7 +389,7 @@ grade_this_code()
 
 19. A final method for confusion matrices that might be nice to use in reports and such is the `.confusion_matrix()` method from sklearn. See the code below for evaluating the confusion matrix on the training set. Adapt the code to return the confusion matrix for the test set.
 
-```{python sk, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+```{python sk, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
 sklearn.metrics.confusion_matrix(y_tr, model1.predict() > 0.5)
 sklearn.metrics.confusion_matrix(___, ___ > ___)
 ```
