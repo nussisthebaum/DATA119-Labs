@@ -1,0 +1,441 @@
+---
+title: "Data119 - Lab 3.5"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Assumption Checking and Multiple Linear Regression", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+-   To practice fitting logistic regression models.
+-   To calculate model fit statistics.
+-   To calculate confusion matrices.
+-   To apply LASSO to datasets used for linear and logistic regression.
+
+## Setup
+
+For this lab we will be using `numpy`, `plotnine`, `pandas`,  `scikit-learn`, and `statsmodels`, and a miniature version of the dataset `arrests` ([review the documentation here.](https://vincentarelbundock.github.io/Rdatasets/doc/carData/Arrests.html)). Run the cell below to setup our environment. 
+
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import sklearn
+import statsmodels.api as sm
+
+arrests = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/Arrests_mini.csv", index_col = 0)
+```
+
+## Exploratory Data Analysis
+
+1. Use `.head()` to look over the data in `arrests`.
+
+```{python des, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+
+```
+
+```{python des-solution, message = FALSE, warning = FALSE, echo = FALSE}
+arrests.head()
+```
+
+```{r des-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q2, echo=FALSE}
+question("2. Which of the variables in `arrests` are categorical? Select all that apply.",
+         answer("`released`", correct = TRUE, message = "Be especially careful with the response variable, it needs to be stored as an integer!"),
+         answer("`race`", correct = TRUE),
+         answer("`year`"),
+         answer("`age`"),
+         answer("`sex`", correct = TRUE),
+         answer("`employed`", correct = TRUE),
+         answer("`citizen`", correct = TRUE),
+         answer("`checks`"),
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the first secret word: BARGAIN."
+)
+```
+
+3. Use the empty cell to answer the following question. 
+
+```{python empty, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+
+```
+
+```{r q3, echo=FALSE}
+question_numeric("How many variables will you need to encode `race` as a categorical variable?",
+  answer(1, correct = TRUE),
+  answer(2, message = "Including both will cause multicollinearity issues!"),
+  correct = "Correct!",
+  incorrect = "Incorrect",
+  try_again = incorrect,
+  allow_retry = TRUE,
+  tolerance = 1.5e-08, 
+  post_message = "Congratulations! You have found the second secret word: AUTONOMY."
+)
+```
+
+4. Convert the categorical variables to dummies by using `pd.get_dummies()`. Choose the correct data type to allow for regression.
+
+```{python dum, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+arrests = pd.get_dummies(arrests, columns = [...], dtype = ___, drop_first = ___)
+```
+
+```{python dum-solution, message = FALSE, warning = FALSE, echo = FALSE}
+arrests = pd.get_dummies(arrests, columns = ['released', 'race', 'sex', 'employed', 'citizen'], dtype = float, drop_first = True)
+```
+
+```{r dum-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+5. Just like with linear regression, we will need to separate our explanatory and response variables. Take this step now--name them `X_arrests` and `y_arrests.` 
+
+```{python setup2, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup1"}
+arrests = pd.get_dummies(arrests, columns = ['released', 'race', 'sex', 'employed', 'citizen'], dtype = float)
+```
+
+```{python sep, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+X_arrests = [...]
+y_arrests = [...]
+```
+
+```{python sep-solution, message = FALSE, warning = FALSE, echo = FALSE}
+X_arrests = arrests['released_Yes']
+y_arrests = arrests[['year', 'age', 'checks', 'race_White', 'sex_Male', 'employed_Yes', 'citizen_Yes']]
+```
+
+```{r sep-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+6. Now that you have familiarized yourself with the data, split the data into a 70% training set and a 30% training set using the [`train_test_split()` function from `sklearn`](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html). Read through the options in the documentation to find the argument that allows a 70/30 split. Note that when you use this function, you should be saving four things at the same time--the explanatory variables for the training and test sets, and the response variables for the training and test sets. When you're done, calculate summary statistics for the the explanatory variables for the training and test sets using `.describe()`. 
+
+```{python setup3, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup2"}
+X_arrests = arrests['released_Yes']
+y_arrests = arrests[['year', 'age', 'checks', 'race_White', 'sex_Male', 'employed_Yes', 'citizen_Yes']]
+```
+
+```{python split, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+import sklearn.model_selection
+
+X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(___, ___, ___)
+```
+
+```{python split-solution, message = FALSE, warning = FALSE, echo = FALSE}
+import sklearn.model_selection
+
+X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(y_arrests, X_arrests, test_size = 0.3)
+
+X_tr.describe()
+X_ts.describe()
+```
+
+```{r split-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+7. Run the chunk above again, and look at the summary statistics. Did they change? `train_test_split()` relies on random selection to split the data. When you randomly split, you will get a different dataset each time--this will lead to consistent, but different, results. If you want to have the same results every time, you can set a random seed first--use the `random_state` argument. For now, I've set it to `1040` so that everyone can get the same results, but in the future, you can choose your own seeds for reproducibility--please note that statisticians recommend using different seeds for different problems, it should not be the exact same thing every time!
+
+```{python split2, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+import sklearn.model_selection
+
+X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(y_arrests, X_arrests, test_size = 0.3, random_state = 1040)
+```
+
+8. Now, using your training set, fit a logistic regression model. You will be using the `Logit()` function from `statsmodels`--you can review the [documentation here](https://www.statsmodels.org/stable/examples/notebooks/generated/discrete_choice_overview.html#Logit-Model), but the syntax will be almost identical to what we used with linear regression. Fit a model predicting whether an individual is released with a summons using all of the explanatory variables. 
+
+```{python setup4, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup3"}
+X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(y_arrests, X_arrests, test_size = 0.3, random_state = 1040)
+```
+
+```{python mod1, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+X_tr = 
+
+model1 = sm.Logit(___, ___).fit()
+```
+
+```{python mod1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+X_tr = sm.add_constant(X_tr)
+
+model1 = sm.Logit(y_tr, X_tr).fit()
+```
+
+```{r mod1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+9. Print out the summary output of the model.
+
+```{python setup5, exercise = FALSE, message = TRUE, echo=TRUE, exercise.setup="setup4"}
+X_tr = sm.add_constant(X_tr)
+model1 = sm.Logit(y_tr, X_tr).fit()
+```
+
+```{python sum, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+
+```
+
+```{python sum-solution, message = FALSE, warning = FALSE, echo = FALSE}
+model1.summary()
+```
+
+```{r sum-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q10, echo=FALSE}
+question("10. True or False: The coefficient on `age` is significant.",
+         answer("True"),
+         answer("False", correct=TRUE),
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the third secret word: MULTIMEDIA."
+)
+```
+
+```{r q11, echo=FALSE}
+question("11. Which variable is the most significant?",
+         answer("`const`", message = "Don't forget, we usually keep the intercept in the model regardless of its significance!"),
+         answer("`year`"),
+         answer("`age`"),
+         answer("`checks`", correct=TRUE),
+         answer("`race_White`"),
+         answer("`sex_Male`"),
+         answer("`employed_yes`"),
+         answer("`citizen_yes`"),
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the fourth secret word: CLASSIFY."
+)
+```
+
+```{r q12, echo=FALSE}
+question("12. What is the correct interpretation on the coefficient `employed_Yes`?",
+         answer("If an arrestee is employed, the odds they are released are expected to rise by a factor of $e^{0.7235}$, all other factors held equal.", correct = TRUE),
+         answer("If an arrestee is employed, the odds they are released are expected to rise by a factor of $0.7235$, all other factors held equal."),
+         answer("If an arrestee not is employed, the odds they are released are expected to rise by a factor of $0.7235$, all other factors held equal."),
+         answer("If an arrestee not is employed, the odds they are released are expected to rise by $e^{0.7235}$, all other factors held equal."),
+         answer("If an arrestee is employed, the odds they are released are expected to rise by a factor of $0.7235$."),         
+         allow_retry = TRUE, 
+         random_answer_order = TRUE#,
+         #post_message = "Congratulations! You have found the fourth secret word: CLASSIFY."
+)
+```
+
+## Confusion Matrices
+
+13. Last week we saw that sometimes we don't need all of the printed output, and sometimes we would like to find specific values. First, we need to identify what is included in the model fitting process. Apply the `dir()` function to your model to see what is included. Scan the terms and extract the `aic` and `bic`. 
+
+```{python dir, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+
+```
+
+```{python dir-solution, message = FALSE, warning = FALSE, echo = FALSE}
+dir(model1)
+
+model1.aic
+model1.bic
+```
+
+```{r dir-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+14. AIC and BIC are model fit statistics for classifiers, like logistic regression (they may get covered more in DATA221/231). Another common method for evaluating logistic regression models is the confusion matrix. Use `pred_table()` to print it out.
+
+```{python mat, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+
+```
+
+```{python mat-solution, message = FALSE, warning = FALSE, echo = FALSE}
+model1.pred_table()
+```
+
+```{r mat-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+15. Be careful when using `pred_table`! In this method, the rows indicate the truth and the columns indicate the predictions, which is "flipped" from what I presented in class. Read the [pred_table documentation](https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.LogitResults.pred_table.html) to confirm. Then, calculate the accuracy, true positive rate, and true negative rate. You should be using indexing with the square brackets (`[]`) in your calculations.
+
+```{python tab, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+cm1 = model1.pred_table()
+
+## Accuracy
+
+
+## TPR
+
+  
+## TNR
+
+
+```
+
+```{python tab-solution, message = FALSE, warning = FALSE, echo = FALSE}
+cm1 = model1.pred_table()
+
+## Accuracy
+(cm1[0][0] + cm1[1][1])/cm1.sum()
+
+## TPR
+cm1[1][1]/(cm1[1][0] + cm1[1][1])
+  
+## TNR
+cm1[0][0]/(cm1[0][0] + cm1[0][1])
+```
+
+```{r tab-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+16. Remember that we might want a baseline accuracy to compare with the new accuracy. Calculate the baseline accuracy for this dataset.
+
+```{python bs, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+
+```
+
+```{python bs-solution, message = FALSE, warning = FALSE, echo = FALSE}
+sum(y_tr == 1)/len(y_tr)
+```
+
+```{r bs-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+17. Use the `.predict()` method to predict the outcome for the test set. Save the list to use for later.
+
+```{python pred, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+X_ts = 
+
+preds1 = 
+```
+
+```{python pred-solution, message = FALSE, warning = FALSE, echo = FALSE}
+X_ts = sm.add_constant(X_ts)
+
+preds1 = model1.predict(X_ts)
+```
+
+```{r pred-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+18. Let's investigate an alternative method for finding the confusion matrix. You can use the `pd.crosstab()` function--the benefit of this function is that you have more control over what is in the rows and what is in the columns. See if you can use it to find the confusion matrix and accuracy metrics using a threshold of 0.5.
+
+```{python setup6, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup5"}
+X_ts = sm.add_constant(X_ts)
+
+preds1 = model1.predict(X_ts)
+
+from sklearn import metrics, linear_model
+```
+
+```{python conf, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+pd.crosstab(___, ___ > ___)
+```
+
+```{python conf-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pd.crosstab(y_ts, preds1 > 0.5)
+```
+
+```{r conf-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+19. A final method for confusion matrices that might be nice to use in reports and such is the `.confusion_matrix()` method from sklearn. See the code below for evaluating the confusion matrix on the training set. Adapt the code to return the confusion matrix for the test set.
+
+```{python sk, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+sklearn.metrics.confusion_matrix(y_tr, model1.predict() > 0.5)
+sklearn.metrics.confusion_matrix(___, ___ > ___)
+```
+
+```{python sk-solution, message = FALSE, warning = FALSE, echo = FALSE}
+sklearn.metrics.confusion_matrix(y_tr, model1.predict() > 0.5)
+sklearn.metrics.confusion_matrix(y_ts, preds1 > 0.5)
+```
+
+```{r sk-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+## AUC
+
+20. Another helpful function in `sklearn` is the AUC method. See the code below for evaluating the AUC of the training set. Can you adapt the code to return the AUC of the test set? You can read the [AUC documentation](https://www.w3schools.com/python/python_ml_auc_roc.asp) if you need it.
+
+```{python auc, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+from sklearn import metrics
+
+fpr, tpr, thresholds = metrics.roc_curve(y_tr, model1.predict(), pos_label = 1)
+metrics.auc(fpr, tpr)
+
+fpr, tpr, thresholds = metrics.roc_curve(...)
+metrics.auc(___, ___)
+```
+
+```{python auc-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from sklearn import metrics
+
+fpr, tpr, thresholds = metrics.roc_curve(y_tr, model1.predict(), pos_label=1)
+metrics.auc(fpr, tpr)
+
+fpr, tpr, thresholds = metrics.roc_curve(y_ts, preds1, pos_label=1)
+metrics.auc(fpr, tpr)
+```
+
+```{r auc-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q21, echo=FALSE}
+question("21. True or False: The test set AUC for `model1` represents an improvement over random chance.",
+         answer("True", correct=TRUE),
+         answer("False", message = "Don't forget, we want AUC to be above 0.5!"),
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the fifth and final secret word: PRINCIPLE."
+)
+```
