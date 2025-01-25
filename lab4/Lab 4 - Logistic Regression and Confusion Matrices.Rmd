@@ -218,7 +218,7 @@ X_tr = sm.add_constant(X_tr)
 model1 = sm.Logit(y_tr, X_tr).fit()
 ```
 
-```{python sum, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python sum, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
 
 ```
 
