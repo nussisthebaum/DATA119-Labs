@@ -1,5 +1,5 @@
 ---
-title: "Data119 - Lab 4"
+title: "Data119 - Lab 3.5"
 output: 
    learnr::tutorial:
       css: css/custom-styles.css
@@ -45,7 +45,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Logistic Regression and Confusion Matrices", class = "pageTitle")
+    tags$h1("Assumption Checking and Multiple Linear Regression", class = "pageTitle")
   )
 )
 ```
@@ -439,3 +439,160 @@ question("21. True or False: The test set AUC for `model1` represents an improve
          post_message = "Congratulations! You have found the fifth and final secret word: PRINCIPLE."
 )
 ```
+
+## ROC Curves
+
+Recall that we don't necessarily have to use a threshold of 0.5 for prediction. 
+
+```{r q22, echo=FALSE}
+question("22. What threshold will return the proportion of true positives in the data?",
+         answer("0"),
+         answer("1", correct = TRUE),
+         answer("There is no way to tell."),
+         allow_retry = TRUE
+         )
+```
+
+```{r q23, echo=FALSE}
+question("23. What threshold will return the proportion of true negatives in the data?",
+         answer("0", correct = TRUE),
+         answer("1"),
+         answer("There is no way to tell."),
+         allow_retry = TRUE
+         )
+```
+
+The ROC curve is one way of summarizing information over many possible thresholds. Let's work through an example of plotting one. 
+
+We will need to write a loop that is able to iterate over multiple thresholds and calculate the confusion matrix at each point. 
+
+24. First, create empty lists to store the true positive rate and true negative rate (we'll save the thresholds separately). 
+
+```{python empty_lists, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+TPR = 
+TNR = 
+```
+
+```{python empty_lists-solution, message = FALSE, warning = FALSE, echo = FALSE}
+TPR = []
+TNR = []
+```
+
+```{r empty_lists-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+25. Next, select a range of thresholds to iterate over. ($t$ from the lecture notes, `C` in `sklearn`). To actually create the range, you can use `np.arange()` (must be used instead of `range`() for floats). You should use a step size of 0.05--this step size can be smaller for a smoother curve, but should not go any larger. 
+
+```{python arange, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+thresholds = 
+```
+
+```{python arange-solution, message = FALSE, warning = FALSE, echo = FALSE}
+thresholds = np.arange(0.00001, 1, 0.05)
+```
+
+```{r arange-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+26. Now, use `thresholds` to create the loop. You can use the code from 15 to fill in the contents of the loops. You might also want to review the documentation of `pred_table()` to figure out how to change the threshold. 
+
+```{python setup7, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup6"}
+TPR = []
+TNR = []
+
+thresholds = np.arange(0.00001, 1, 0.05)
+```
+
+```{python loop, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
+for threshold in thresholds:
+  temp_cm = model1.pred_table(___)
+  
+  TPR.append(___)
+  TNR.append(___)
+```
+
+```{python loop-solution, message = FALSE, warning = FALSE, echo = FALSE}
+for threshold in thresholds:
+  temp_cm = model1.pred_table(threshold = threshold)
+  
+  TPR.append(temp_cm[1][1]/(temp_cm[1][0] + temp_cm[1][1]))
+  TNR.append(temp_cm[0][0]/(temp_cm[0][0] + temp_cm[0][1]))
+```
+
+```{r loop-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+27. If we want to plot this using `plotnine`, we need the data to be a DataFrame. Remember, one of the fastest ways to create a dataframe is by using a dictionary. Make sure to include the thresholds, the TPR, and the TNR.
+
+```{python setup8, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup7"}
+for threshold in thresholds:
+  temp_cm = model1.pred_table(threshold = threshold)
+  
+  TPR.append(temp_cm[1][1]/(temp_cm[1][0] + temp_cm[1][1]))
+  TNR.append(temp_cm[0][0]/(temp_cm[0][0] + temp_cm[0][1]))
+```
+
+```{python df, exercise = TRUE, message = FALSE, exercise.setup="setup8"}
+metrics_df = pd.DataFrame({...})
+```
+
+```{python df-solution, message = FALSE, warning = FALSE, echo = FALSE}
+metrics_df = pd.DataFrame({"Thresholds": thresholds,
+                           "TPR": TPR, 
+                           "TNR": TNR})
+```
+
+```{r df-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+28. Create a plot with the TNR on the $x$-axis and the TPR on the $y$-axis and add the coordinate pairs using `geom_point()`. 
+
+```{python setup9, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup8"}
+metrics_df = pd.DataFrame({"Thresholds": thresholds,
+                           "TPR": TPR, 
+                           "TNR": TNR})
+```
+
+```{python roc1, exercise = TRUE, message = FALSE, exercise.setup="setup9"}
+(p9.ggplot(___, p9.aes(...)) +
+  ___)
+```
+
+```{python roc1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(metrics_df, p9.aes(x = "TNR", y = "TPR")) +
+  p9.geom_point())
+```
+
+```{r roc1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+29. Instead of points, ROC curves are traditionally plotted with lines. Check out [the `plotnine` documentation](https://plotnine.org/reference/#geoms) to see if you can find the correct geom to use to change the points to a line. 
+
+```{python roc2, exercise = TRUE, message = FALSE, exercise.setup="setup9"}
+
+```
+
+```{python roc2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(metrics_df, p9.aes(x = "TNR", y = "TPR")) +
+  p9.geom_line())
+```
+
+```{r roc2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+30. We also traditionally plot ROC curves with $1-TNR$ on the $x$-axis. You could create a new column in your variable, or you could add another layer to the plot. Run the code below to see how this new command works!
+
+```{python roc3, exercise = TRUE, message = FALSE, exercise.setup="setup9"}
+(p9.ggplot(metrics_df, p9.aes(x = "TNR", y = "TPR")) +
+  p9.geom_line() + 
+  p9.scale_x_reverse())
+```
+
+
+
