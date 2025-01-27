@@ -226,7 +226,9 @@ grade_this_code()
 question("10. Is a linear relationship appropriate for describing the relationship between fat and calories? If not, what type of relationship might be more appropriate?",
          answer("Linear", correct=TRUE, message = "There are a few unusual values, but this is a good example of a linear relationship!"),
          answer("Quadratic"),
-         answer("Exponential"))
+         answer("Exponential"), 
+         allow_retry = TRUE
+)
 ```
 
 11. Now, define lists `fat` and `cal`, and calculate the correlation between fat and calories.
