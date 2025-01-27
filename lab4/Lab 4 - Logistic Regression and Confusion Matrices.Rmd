@@ -1,5 +1,5 @@
 ---
-title: "Data119 - Lab 3.5"
+title: "Data119 - Lab 4"
 output: 
    learnr::tutorial:
       css: css/custom-styles.css
