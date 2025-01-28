@@ -30,7 +30,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
 ```
 
 ```{r header, echo = FALSE}
@@ -69,7 +69,7 @@ import pandas as pd
 import plotnine as p9
 import statsmodels.api as sm
 
-AirBnB_prices = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/AirBnB_mini.csv")
+AirBnB_prices = pd.read_csv("./www/AirBnB_mini.csv")
 
 pd.set_option('display.max_columns', None)
 ```
@@ -366,7 +366,7 @@ $$VIF = \frac{1}{1- R^2_X} = \infty$$
 
 How is this possible? If $R^2_x = 1$, we get $\frac{1}{0}$. Let's consider $R^2_{amsterdam}$, a.k.a., the proportion of variance in `city_amsterdam` that can be explained by all of the other predictors in the model (note that we have to do this using a slightly different model called Logistic regression, this will be covered in Week 4).
 
-```{python amsterdam, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE, exercise.setup="setup3"}
+```{python amsterdam, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE, exercise.setup="setup4"}
 X_amsterdam = AirBnB_prices[['city_athens', 'city_barcelona',
                              'city_berlin', 'city_budapest', 'city_lisbon',
                              'city_london', 'city_paris', 'city_rome', 'city_vienna']]
@@ -430,7 +430,7 @@ Now, we can see that `city_amsterdam` is back in the model, but `city_london` is
 
 14. If you don't want to change the reference level, but you do want to avoid the multicollinearity issues incurred when converting to dummy variables outright, you can to add another argument. The `drop_first` argument will convert everything to dummy variables, and then drop the very first column (alphabetically), avoiding any multicollinearity issues. Edit the code to use the `drop_first` argument.
 
-```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
 pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float, ___)
 ```
 
@@ -444,7 +444,7 @@ grade_this_code()
 
 Run this cell (which contains all of the options we have covered with `pd.get_dummies()`) to save the converted data frame for later use. Please note that conversion of categorical variables can now be considered an important data pre-processing step--from here on out, in most of your data science classes, this should be one of the first things to do when preparing to fit some type of model.
 
-```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2"}
+```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup4"}
 AirBnB_prices = pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float, drop_first = True)
 ```
 
@@ -452,7 +452,7 @@ AirBnB_prices = pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shar
 
 15. Let's put everything in! Fit the model with all of the variables, and run the VIF code. Don't forget that the variable names change after running `pd.get_dummies()`!
 
-```{python fullmodel, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python fullmodel, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
 X_full = AirBnB_prices[[___]]
 X_full = sm.add_constant(X_full)
 
@@ -491,7 +491,7 @@ I don't think it's surprising that all of the city variables and the latitude an
 
 16. Remove `lat` and `lng` columns to see how they impact VIF and the model.
 
-```{python nolatlng, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python nolatlng, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
 X_nolatlng = AirBnB_prices[[___]]
 X_nolatlng = sm.add_constant(X_nolatlng)
 
@@ -528,7 +528,7 @@ grade_this_code()
 
 17. Now try creating a model leaving out the city variables. Which would you recommend?
 
-```{python nocity, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python nocity, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
 X_nolatlng = AirBnB_prices[[___]]
 X_nolatlng = sm.add_constant(X_nolatlng)
 

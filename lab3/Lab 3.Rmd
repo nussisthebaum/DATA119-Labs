@@ -30,7 +30,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
 ```
 
 ```{r header, echo = FALSE}
@@ -69,7 +69,7 @@ import pandas as pd
 import plotnine as p9
 import statsmodels.api as sm
 
-AirBnB_prices = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/AirBnB_mini.csv")
+AirBnB_prices = pd.read_csv("./www/AirBnB_mini.csv")
 
 pd.set_option('display.max_columns', None)
 ```
@@ -152,7 +152,7 @@ There are many other useful things to unpack from a `statsmodels` object, but fo
 
 5. Edit the cell below to extract the predicted values and the residuals and turns them into a DataFrame (which we need to use for `plotnine`).
 
-```{python setup2, exercise=FALSE, echo=FALSE, exercise.setup="setup1"}
+```{python setup2, exercise=FALSE, echo=FALSE, exercise.setup="setup1_5"}
 X1 = AirBnB_prices["dist"]
 X1 = sm.add_constant(X1)
 
