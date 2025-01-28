@@ -30,7 +30,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
 ```
 
 ```{r header, echo=FALSE}
@@ -66,11 +66,11 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 
-mtcars = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/mtcars.csv")
-gasprice = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
-eagles = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/eagles.csv")
+mtcars = pd.read_csv("./www/mtcars.csv")
+gasprice = pd.read_csv("./www/gasprice.csv")
+eagles = pd.read_csv("./www/eagles.csv")
 
-epicurious_nd = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini_clean.csv")
+epicurious_nd = pd.read_csv("./www/epi_mini_clean.csv")
 ```
 
 
@@ -152,7 +152,7 @@ question("5. Is a linear relationship appropriate for describing the relationshi
          answer("True", message = "This is an example of a time series, which should not be analyzed using linear regression."),
          answer("False", correct = TRUE, message = "This is an example of a time series, which should not be analyzed using linear regression"), 
          allow_retry = TRUE, 
-         post_message = "Congratulations! You have found the first second word: COMMISSION.")
+         post_message = "Congratulations! You have found the second secret word: COMMISSION.")
 ```
 
 ## Describing Relationships with `eagles`
@@ -393,7 +393,7 @@ grade_this_code()
 ```{r q18, echo=FALSE}
 question("18. Fill in the blank: if the recipe has 0 ___ then we should expect it to have 132.86 ___",
          answer("calories; grams of fat"),
-         answer("grams of fat; calories", correct=TRUE), , 
+         answer("grams of fat; calories", correct=TRUE),
          allow_retry = TRUE, 
          post_message = "Congratulations! You have found the fifth secret word: ARCHITECT.")
 
@@ -582,7 +582,7 @@ grade_this_code()
 
 We can give any real values for the initial guesses, but we have to give at least two, one for the intercept and one for the slope. For now, we can just use zero for both. With both of these pieces, we can run `minimize()`
 
-```{python minset, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="scipy"}
+```{python minset, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="sseo"}
 def calc_SSE(parms, x, y):  
     preds = parms[0] + parms[1]*x
     resids = y - preds
@@ -605,7 +605,7 @@ You should find that these estimates are very close to the numbers that we calcu
 
 In addition to writing your own functions, either to directly estimate parameters or to minimize the loss function, there are a lot of pre-packaged methods in Python to use for linear regression. You may be familiar with `scikit-learn` already, but I want to introduce another module, `statsmodels`. Both modules work similarly, but `statsmodels` has some functionality that will help us out in future weeks. 
 
-```{python stats, exercise = TRUE, message = FALSE, exercise.setup="scipy"}
+```{python stats, exercise = TRUE, message = FALSE, exercise.setup="min"}
 import statsmodels.api as sm
 ```
 
