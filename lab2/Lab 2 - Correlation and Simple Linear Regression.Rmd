@@ -270,7 +270,7 @@ grade_this_code()
 
 You should have found that the correlations that you just calculated are identical. This is because correlation is **unitless**--it does not depend on the units of either of the variables. Similarly, the order doesn't matter. Run the cell below to confirm.
 
-```{python switch, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup1"}
+```{python switch, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="fatoz"}
 cal.corr(fat)
 ```
 
