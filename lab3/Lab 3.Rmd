@@ -33,6 +33,7 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
 ```
 
+
 ```{r header, echo = FALSE}
 library(htmltools)
 
@@ -69,7 +70,9 @@ import pandas as pd
 import plotnine as p9
 import statsmodels.api as sm
 
-AirBnB_prices = pd.read_csv("./www/AirBnB_mini.csv")
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab3/www/AirBnB_mini.csv
+
+AirBnB_prices = pd.read_csv("./data/AirBnB_mini.csv") 
 
 pd.set_option('display.max_columns', None)
 ```
