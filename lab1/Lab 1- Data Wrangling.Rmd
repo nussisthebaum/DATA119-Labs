@@ -116,7 +116,7 @@ epicurious = pd.read_csv("./data/epi_mini.csv")
 
 ## Data Cleaning
 
-1. Print the dimensions of the `epicurious` dataset. How many observations are there? How many variables are there?
+1. Find the dimensions of the `epicurious` dataset. How many observations are there? How many variables are there?
 
 ```{python size, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 
