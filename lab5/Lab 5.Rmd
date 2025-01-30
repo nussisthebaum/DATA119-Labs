@@ -1,24 +1,31 @@
 ---
-title: "Tutorial"
-output: learnr::tutorial
+title: "Data119 - Lab 5"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
+
 library(learnr)
 library(gradethis)
 library(reticulate)
 
-py_install(c('pandas', 'numpy', 'plotnine', 'scikit-learn')) 
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
-      if (user_code==solution_code){
-          return(list(message = "Exact match code!", correct = TRUE))
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
       }
-    return(list(message = "Not exact match code", correct = FALSE))
+    return(list(message = random_encouragement(), correct = FALSE))
   }
 }
 
@@ -26,6 +33,22 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Logistic Regression and Confusion Matrices", class = "pageTitle")
+  )
+)
+```
 
 ## Goals
 
@@ -59,7 +82,9 @@ import pandas as pd
 import plotnine as p9
 import sklearn
 
-Workinghours = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/main/Workinghours_mini.csv", index_col = 0)
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab5/www/Workinghours_mini.csv
+
+Workinghours = pd.read_csv("./data/Workinghours_mini.csv", index_col = 0)
 ```
 
 ## Exploratory Data Analysis
