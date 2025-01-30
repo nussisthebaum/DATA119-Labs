@@ -148,7 +148,7 @@ epicurious.head()
 ```{r head-code-check, message = FALSE, warning = FALSE}
 grade_this_code(
   correct = "{random_praise()}",
-  incorrect = "Not quite. {code_feedback()} {random_encouragement()}"
+  incorrect = "Not quite. {maybe_code_feedback()} {random_encouragement()}"
 )
 ```
 
@@ -192,7 +192,7 @@ epicurious_num.describe()
 ```{r describe-code-check, message = FALSE, warning = FALSE}
 grade_this_code(
   correct = "{random_praise()}",
-  incorrect = "Not quite. {code_feedback()} {random_encouragement()}"
+  incorrect = "Not quite. {maybe_code_feedback()} {random_encouragement()}"
 )
 ```
 
@@ -208,10 +208,13 @@ sum(epicurious_num['protein'].isna())/len(epicurious_num['protein'])
 
 ```{r missing-code-check, message = FALSE, warning = FALSE, eval = FALSE}
 grade_this({
-  if (identical(.result, .solution){
-    pass("Great work! You calculated the average of the first ten integers.")
+  if (identical(.result, .solution)) {
+    pass("{random_praise()}")
   }
-  fail()
+  if (identical(.result, 7)) {
+    fail("This is a common mistake. Try xyz.")
+  }
+  fail("{random_encouragement()}")
 })
 ```
 
