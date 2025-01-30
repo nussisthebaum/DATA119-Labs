@@ -30,8 +30,9 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
 ```
+
 
 ```{r header, echo = FALSE}
 library(htmltools)
@@ -58,7 +59,7 @@ tags$div(
 
 ## Setup
 
-For this lab we will be using  `numpy`, `pandas`, `plotnine`, `statsmodels`, and a random sample of the AirBnB dataset you've seen in previous homework assignments. Refresh yourself on the variables the dataset includes by reading the [Kaggle documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities). 
+For this lab we will be using `numpy`, `pandas`, `plotnine`, `statsmodels`, and a random sample of the AirBnB dataset you've seen in previous homework assignments. Refresh yourself on the variables the dataset includes by reading the [Kaggle documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities). 
 
 The other thing we want to be able to do is investigate more than a few columns (for example, in a correlation matrix). We can use the `set_option()` function from `pandas` to force Python to show us all of the output. See the last line of code in the cell below for an example. 
 Run the cell below to setup our environment.
@@ -69,7 +70,9 @@ import pandas as pd
 import plotnine as p9
 import statsmodels.api as sm
 
-AirBnB_prices = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/AirBnB_mini.csv")
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab3/www/AirBnB_mini.csv
+
+AirBnB_prices = pd.read_csv("./data/AirBnB_mini.csv") 
 
 pd.set_option('display.max_columns', None)
 ```
@@ -104,7 +107,16 @@ grade_this_code()
 
 2. You might remember that the `dir()` function can identify different objects within another object, and that in `statsmodels` objects, there are lot of useful, pre-calculated objects. Apply it to `model1`.
 
-```{python dir, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python setup1_5, exercise=FALSE, echo=FALSE, exercise.setup="setup1"}
+X1 = AirBnB_prices["dist"]
+X1 = sm.add_constant(X1)
+
+Y = AirBnB_prices["realSum"]
+
+model1 = sm.OLS(Y, X1).fit()
+```
+
+```{python dir, exercise = TRUE, message = FALSE, exercise.setup="setup1_5"}
 
 ```
 
@@ -143,7 +155,7 @@ There are many other useful things to unpack from a `statsmodels` object, but fo
 
 5. Edit the cell below to extract the predicted values and the residuals and turns them into a DataFrame (which we need to use for `plotnine`).
 
-```{python setup2, exercise=FALSE, echo=FALSE, exercise.setup="setup1"}
+```{python setup2, exercise=FALSE, echo=FALSE, exercise.setup="setup1_5"}
 X1 = AirBnB_prices["dist"]
 X1 = sm.add_constant(X1)
 
@@ -178,7 +190,12 @@ grade_this_code()
 
 6. Now, using `model1_df`, edit the cell to produce the diagnostic plots (a scatterplot of residuals against the predicted values, and a histogram of the residuals).
 
-```{python dp_produce, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2"}
+```{python setup2_5, exercise=FALSE, echo=FALSE, exercise.setup="setup2"}
+model1_df = model1.fittedvalues.to_frame(name = 'Fitted')
+model1_df['Residuals'] = model1.resid
+```
+
+```{python dp_produce, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2_5"}
 (p9.ggplot(model1_df, p9.aes(x = ___, y = ___)) +
  p9.geom_point() +
  p9.xlab("Predicted Price") +
@@ -218,7 +235,7 @@ question("7. Describe the distribution of the residuals.",
 
 To address the skewness, apply the log (base $e$) transformation to `realSum`. Save the transformed values as a new column in your data frame (name it `logRealSum`). Plot the distribution of the transformed variable and re-examine the histogram.
 
-```{python log, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+```{python log, exercise = TRUE, message = FALSE, exercise.setup="setup2_5"}
 AirBnB_prices['logRealSum'] = np.log(___)
 
 (p9.ggplot(AirBnB_prices, p9.aes(x = ___)) +
@@ -240,7 +257,7 @@ This distribution is far less skewed! The center and spread have also changed si
 
 9. Now, edit this cell to fit a new model predicting `logRealSum` from `dist`. Make a note of the $R^2$. Examine the diagnostic plots from the new model, which you should call `model2`.
 
-```{python log_diag, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2"}
+```{python log_diag, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2_5"}
 Y2 = AirBnB_prices["logRealSum"]
 
 model2 = sm.OLS(___, ___).fit()
@@ -308,7 +325,7 @@ question("Given $H_0: \\beta_{dist} = 0$, what is an appropriate alternative hyp
 
 12. Print the summary output from `model2`.
 
-```{python setup3, exercise=FALSE, echo=FALSE, exercise.setup="setup2"}
+```{python setup3, exercise=FALSE, echo=FALSE, exercise.setup="setup2_5"}
 Y2 = AirBnB_prices["logRealSum"]
 
 model2 = sm.OLS(Y2, X1).fit()
@@ -436,7 +453,7 @@ question("20. What is the adjusted $R^2$?",
 
 21. Redo the diagnostic plots (use the code above as a reference if you need!).
 
-```{python diagnostic_plots_log, exercise=TRUE, message = FALSE, exercise.setup="setup4"}
+```{python diagnostic_plots_log, exercise=TRUE, message = FALSE, exercise.setup="setup5"}
 
 ```
 
