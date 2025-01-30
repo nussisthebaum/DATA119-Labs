@@ -31,7 +31,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE)
 ```
 
 ```{r header, echo = FALSE}
@@ -208,7 +208,7 @@ sum(epicurious_num['protein'].isna())/len(epicurious_num['protein'])
 
 ```{r missing-code-check, message = FALSE, warning = FALSE, eval = FALSE}
 grade_this({
-  if (identical(.result, sum(epicurious_num['protein'].isna())/len(epicurious_num['protein']))){
+  if (identical(.result, .solution){
     pass("Great work! You calculated the average of the first ten integers.")
   }
   fail()
