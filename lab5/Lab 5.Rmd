@@ -14,12 +14,6 @@ library(learnr)
 library(gradethis)
 library(reticulate)
 
-# Set the path to the existing Python environment
-#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
-
-# Optional: Install necessary Python packages if not already installed
-# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
-
 custom_code_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
       if (user_code == solution_code){
@@ -54,7 +48,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Logistic Regression and Confusion Matrices", class = "pageTitle")
+    tags$h1("Regularization and Model Comparison", class = "pageTitle")
   )
 )
 ```
@@ -81,7 +75,7 @@ For this lab, we will use the following modules:
 -   `plotnine`
 -   `sklearn`
 
-We will be using a new dataset containing information on womens' participation in the economy in 1987. Before we do anything, make sure to read the [`Workinghours` documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities). The data set can be loaded directly below, but if you'd like to play around with it on your own, you can download it from Canvas.
+We will be using a new dataset containing information on womens' participation in the economy in 1987. Before we do anything, make sure to read the [`Workinghours` documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities). The data set can be loaded directly below, but if you'd like to play around with it on your own, you can download it [here](https://posit.ds.uchicago.edu/data119-lab5/www/Workinghours_mini.csv).
 
 Run this chunk to set up the environment.
 
@@ -115,7 +109,7 @@ grade_this_code()
 ```
 
 
-2. Hopefully, you can see that there is a large peak at zero, and a somewhat smaller peak at about 2,000 (very close to 52, the number of weeks in a year, times 40, the "standard" number of hours to work in a week). What we are seeing is that there are many women who do not work outside of the home, a.k.a., have a zero recorded for hours worked. This weird, bimodal nature of the data likely requires more complicated methods than what we currently know--to make this slightly less complicated for ourselves, let's focus on women who worked at least one hour outside the home. Save `Workinghours` as a subset of the original data where `hours` is greater than 0.
+2. Hopefully, you can see that there is a large peak at zero, and another peak at about 2,000 (very close to 52, the number of weeks in a year, times 40, the "standard" number of hours to work in a week). What we are seeing is that there are many women who do not work outside of the home, a.k.a., have a zero recorded for hours worked. This weird, bimodal nature of the data likely requires more complicated methods than what we currently know--to make this slightly less complicated for ourselves, let's focus on women who worked at least one hour outside the home. Save `Workinghours` as a subset of the original data where `hours` is greater than 0.
 
 ```{python sub, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
 Workinghours = ...
@@ -219,6 +213,8 @@ Then, we have to tell Python explicitly that the scaler we are planning on using
 
 Now, we can actually apply the scaler using `.transform()`. I'm wrapping this into another command and instantly turning the data into a dataframe to use later--that's why we have to supply the column names. Now, we have `X_train_pp` (for **P**re-**p**rocessed) to use.
 
+Note: we could have also used `.fit_transform()` to do both the fitting and the transformation in one step.
+
 ```{python setup4, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
 from sklearn.preprocessing import StandardScaler
 
@@ -231,7 +227,7 @@ X_train_pp = pd.DataFrame(scaler.transform(X_train), columns = ['income',
                              'occupation_mp', 'occupation_other', 'occupation_swcc'])
 ```
 
-8.  It's important to note that you want to "pretend" that your training data is all that you have and your testing data is brand new. The testing data should not be accounted for when you are scaling the data! However, it does also need to be scaled using the means and standard deviations from the training data. See the code below for an example.
+8.  It's important to note that you want to "pretend" that your training data is all that you have and your testing data is brand new. The testing data should not be accounted for when you are scaling the data! However, it does also need to be scaled using the means and standard deviations from the **training** data. See the code below for an example.
 
 ```{python setup5, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
 X_test_pp = pd.DataFrame(scaler.transform(X_test), columns = ['income', 'age', 
@@ -242,9 +238,11 @@ X_test_pp = pd.DataFrame(scaler.transform(X_test), columns = ['income', 'age',
 
 ## Linear Regression Review
 
-We have been using `statsmodels` for the extra information packaged into the `.summary()` output, but we should also familiarize ourselves with the `sklearn` syntax--this syntax can be used for linear regression, but is also used similarly for ridge regression and LASSO, so it's helpful to know.
+So far in lab, we have been using `statsmodels` for the extra information packaged into the `.summary()` output, but we should also familiarize ourselves with the `sklearn` syntax--this syntax can be used for linear regression, but is also used similarly for ridge regression and LASSO, so it's helpful to know.
 
-8.  First, review the documentation for [`sklearn`'s `LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html). Fit the model predicting the number of hours a woman works outside the home from all the other factors, making sure you know how to add the intercept, since we did not add a constant (name it `model_ols`). Then, print out the coefficients and intercept.
+1.  First, review the documentation for [`sklearn`'s `LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html). Fit the model predicting the number of hours a woman works outside the home from all the other factors (name it `model_ols`). Then, print out the coefficients and intercept.
+
+Note: We do not need to add a constant to our data, `LinearRegression` will add an intercept to the model by default!
 
 ```{python model, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
 model_ols = ...
@@ -262,10 +260,10 @@ print("Intercept: ", model_ols.intercept_)
 grade_this_code()
 ```
 
-10.  Now use `.predict()` to get the predicted values for the test set (save them as `preds_ols`).
+1.   Now use `.predict()` to get the predicted values for the test set (save them as `preds_ols`).
 
 ```{python setup6, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup5"}
-model_ols = sklearn.linear_model.LinearRegression(fit_intercept = True).fit(X_train_pp, y_train)
+model_ols = sklearn.linear_model.LinearRegression().fit(X_train_pp, y_train)
 print("Coefficients: ", model_ols.coef_)
 print("Intercept: ", model_ols.intercept_)
 ```
@@ -329,7 +327,7 @@ Once you read the documentation and successfully fit the model, you should find 
 -   `alpha` (used in `sklearn.linear_model.Ridge()`, among others)
 -   `C` (used in `sklearn.linear_model.LogisticRegression`, among others)
 
-Be careful to double, triple, quadruple check the `sklearn` documentation to figure out what you are supposed to be using! Note further that in the documentation, `C` is described as the inverse of regularization strength, so smaller values mean a more restrictive model (the opposite of what we learned in class, but also the way that the graphs are usually constructed).
+Be careful to double, *triple*, **quadruple** check the `sklearn` documentation to figure out what you are supposed to be using! Note further that in the documentation, `C` is described as the inverse of regularization strength, so smaller values mean a more restrictive model (the opposite of what we learned in class, but also the way that the graphs are usually constructed).
 
 13. In the case of `.Ridge()`, we will be using `alpha` where `alpha = 0` is equivalent to least squares regression and large values of `alpha` lead to more regularization. Adapt the code below to change the value of `alpha`, just to test the function.
 
@@ -426,7 +424,7 @@ coefs_ridge = pd.DataFrame(data = None, columns = ['income', 'age',
                              'occupation_mp', 'occupation_other', 'occupation_swcc'])
 ```
 
-The next step is to create a range of `alphas`. Again, in the notes we called this $t$--in `sklearn`, it is called `alpha`. This will be what you iterate over in your loop and a piece that you will need if you want to graph the coefficients. I mentioned in class that this can take some trial and error--in the future you might have to run multiple loops to get something reasonable.
+The next step is to create a range of `alphas`. If you are in Dr. Nussbaum's section, in the notes we called this $t$--in `sklearn`, it is called `alpha`. This will be what you iterate over in your loop and a piece that you will need if you want to graph the coefficients. I mentioned in class that this can take some trial and error--in the future you might have to run multiple loops to get something reasonable.
 
 18. Now we can start creating the loop. Let's work on the calculations we would like to repeat first. Code one instance of the loop below, using code you wrote in Steps 14 and 16 but taking steps to make it more general. Some tips:
 
@@ -628,7 +626,7 @@ grade_this_code()
 
 ## Comparing Models
 
-26. To compare the models we will calculate the sum of squared errors for the from each model. Adapt the code used below that calculates the sum of squared errors for linear regression and apply it to the ridge regression and LASSO models.
+1.  To compare the models we will calculate the sum of squared errors for each model. Adapt the code used below that calculates the sum of squared errors for linear regression and apply it to the ridge regression and LASSO models.
 
 ```{python melty, exercise = FALSE, message = FALSE, exercise.setup="melt"}
 model_lasso = sklearn.linear_model.LassoCV(alphas = alphas).fit(X_train_pp, y_train)
