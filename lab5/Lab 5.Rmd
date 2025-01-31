@@ -20,7 +20,16 @@ library(reticulate)
 # Optional: Install necessary Python packages if not already installed
 # reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
 
-custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+custom_code_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+custom_answer_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
       if (user_code == solution_code){
           return(list(message = random_praise(), correct = TRUE))
