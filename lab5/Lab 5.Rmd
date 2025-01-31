@@ -39,7 +39,7 @@ custom_answer_checker <- function(label, user_code, solution_code, envir_result,
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_code_checker)
 ```
 
 ```{r header, echo = FALSE}
