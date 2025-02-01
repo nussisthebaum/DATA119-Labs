@@ -24,7 +24,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker())
+tutorial_options(exercise.completion = FALSE)
 ```
 
 ```{r header, echo = FALSE}
@@ -96,7 +96,7 @@ Workinghours = pd.read_csv("./data/Workinghours_mini.csv", index_col = 0)
 ```
 
 ```{r hist-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+custom_checker()
 ```
 
 
