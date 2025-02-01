@@ -24,7 +24,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker())
 ```
 
 ```{r header, echo = FALSE}
@@ -96,7 +96,7 @@ Workinghours = pd.read_csv("./data/Workinghours_mini.csv", index_col = 0)
 ```
 
 ```{r hist-code-check, message = FALSE, warning = FALSE}
-custom_checker()
+grade_this_code()
 ```
 
 
@@ -112,23 +112,8 @@ Workinghours = Workinghours[Workinghours['hours'] > 0]
 Workinghours
 ```
 
-```{r, sub-check, message = FALSE, warning = FALSE}
-grade_this(check = function(value, ...) {
-  # Get student's dataframe
-  student_df <- py$Workinghours  # Access the variable from Python
-
-  # Define the expected dataframe
-  py_run_string("expected_df = Workinghours[Workinghours['hours'] > 0]")
-  expected_df <- py$expected_df  # Get it in R
-
-  # Compare dataframes
-  if (py_run_string("student_df.equals(expected_df)")) {
-    pass("Congratulations! You have found the first secret word: PEBBLE.")
-  }
-  else {
-    fail(random_encouragement())
-  }
-})
+```{r, sub-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
 ```
 
 3.  Take some time to really explore this dataset. Look at summary statistics and distributions of each of the variables.  
@@ -144,6 +129,15 @@ Workinghours = Workinghours[Workinghours['hours'] > 0]
 \textcolor{red}{Note: I haven't included them here for space concerns, but when you write your reports for the project, you should be looking at graphs for the variables as well!}
 
 4. Now might also be a good time to identify categorical variables and convert them to indicators.
+
+```{r q1, echo=FALSE}
+question("Which of the following variables are categorical?",
+         answer("hours"),
+         answer("age"),
+         answer("occupation", message = "Congratulations! You found the X secret word: PEBBLE.", correct=TRUE),
+         answer("education"),
+         answer("unemp")
+```
 
 ```{python exxploreq, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
 Workinghours = pd.get_dummies(..., columns = ..., drop_first = True, dtype = float)
@@ -682,5 +676,5 @@ grade_this_code()
 question("Based on the SSE from our three models, which one do you think is the best model?",
          answer("OLS"),
          answer("Ridge Regression"),
-         answer("LASSO", correct=TRUE))
+         answer("LASSO", message = "Congratulations! You found the second (last) secret word: LANTERN.", correct=TRUE))
 ```
