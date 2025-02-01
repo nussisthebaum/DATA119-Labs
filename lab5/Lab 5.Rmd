@@ -112,7 +112,7 @@ Workinghours = Workinghours[Workinghours['hours'] > 0]
 Workinghours
 ```
 
-```{r, sub-code-check, message = FALSE, warning = FALSE}
+```{r sub-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
@@ -137,6 +137,7 @@ question("Which of the following variables are categorical?",
          answer("occupation", message = "Congratulations! You found the X secret word: PEBBLE.", correct=TRUE),
          answer("education"),
          answer("unemp")
+)
 ```
 
 ```{python exxploreq, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
