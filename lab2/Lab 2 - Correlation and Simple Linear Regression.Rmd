@@ -30,7 +30,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
 ```
 
 ```{r header, echo=FALSE}
@@ -66,11 +66,14 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 
-mtcars = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/mtcars.csv")
-gasprice = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/gasprice.csv")
-eagles = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/eagles.csv")
+# To download any of these data files 
+# go to https://posit.ds.uchicago.edu/data119-lab2/www/<name of file here>.csv
 
-epicurious_nd = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini_clean.csv")
+mtcars = pd.read_csv("./data/mtcars.csv")
+gasprice = pd.read_csv("./data/gasprice.csv")
+eagles = pd.read_csv("./data/eagles.csv")
+
+epicurious_nd = pd.read_csv("./data/epi_mini_clean.csv")
 ```
 
 
@@ -150,9 +153,9 @@ grade_this_code()
 ```{r q5, echo=FALSE}
 question("5. Is a linear relationship appropriate for describing the relationship between time and price? If not, what type of relationship might be more appropriate?",
          answer("True", message = "This is an example of a time series, which should not be analyzed using linear regression."),
-         answer("False", correct = TRUE, message = "This is an example of a time series, which should not be analyzed using linear regression"), 
+         answer("False", correct = TRUE), 
          allow_retry = TRUE, 
-         post_message = "Congratulations! You have found the first second word: COMMISSION.")
+         post_message = "This is an example of a time series, which should not be analyzed using linear regression. Also, congratulations! You have found the second secret word: COMMISSION.")
 ```
 
 ## Describing Relationships with `eagles`
@@ -180,10 +183,10 @@ grade_this_code()
 question("7. Is a linear relationship appropriate for describing the relationship between `Year` and `Pairs`? If not, what type of relationship might be more appropriate?",
          answer("Linear", message = "Look closely at the graph, all of the points below the line are clustered together, and all of the points above the line are clustered together."),
          answer("Quadratic"),
-         answer("Exponential", correct = TRUE, message = "Exponential curves are often used to model growth and decay.", 
+         answer("Exponential", correct = TRUE, 
          allow_retry = TRUE, 
          random_answer_order = TRUE, 
-         post_message = "Congratulations! You have found the third secret word: MOON."))
+         post_message = "This is an example of an exponential curve, which are often used to model growth and decay.Also, congratulations! You have found the third secret word: MOON."))
 ```
 
 Now to confirm the value of the correlation between `Year` and `Pairs` you can use `.corr()`. Run this cell to get the value of $R$.
@@ -226,7 +229,9 @@ grade_this_code()
 question("10. Is a linear relationship appropriate for describing the relationship between fat and calories? If not, what type of relationship might be more appropriate?",
          answer("Linear", correct=TRUE, message = "There are a few unusual values, but this is a good example of a linear relationship!"),
          answer("Quadratic"),
-         answer("Exponential"))
+         answer("Exponential"), 
+         allow_retry = TRUE
+)
 ```
 
 11. Now, define lists `fat` and `cal`, and calculate the correlation between fat and calories.
@@ -268,7 +273,7 @@ grade_this_code()
 
 You should have found that the correlations that you just calculated are identical. This is because correlation is **unitless**--it does not depend on the units of either of the variables. Similarly, the order doesn't matter. Run the cell below to confirm.
 
-```{python switch, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup1"}
+```{python switch, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="fatoz"}
 cal.corr(fat)
 ```
 
@@ -391,7 +396,7 @@ grade_this_code()
 ```{r q18, echo=FALSE}
 question("18. Fill in the blank: if the recipe has 0 ___ then we should expect it to have 132.86 ___",
          answer("calories; grams of fat"),
-         answer("grams of fat; calories", correct=TRUE), , 
+         answer("grams of fat; calories", correct=TRUE),
          allow_retry = TRUE, 
          post_message = "Congratulations! You have found the fifth secret word: ARCHITECT.")
 
@@ -580,7 +585,7 @@ grade_this_code()
 
 We can give any real values for the initial guesses, but we have to give at least two, one for the intercept and one for the slope. For now, we can just use zero for both. With both of these pieces, we can run `minimize()`
 
-```{python minset, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="scipy"}
+```{python minset, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="sseo"}
 def calc_SSE(parms, x, y):  
     preds = parms[0] + parms[1]*x
     resids = y - preds
@@ -603,7 +608,7 @@ You should find that these estimates are very close to the numbers that we calcu
 
 In addition to writing your own functions, either to directly estimate parameters or to minimize the loss function, there are a lot of pre-packaged methods in Python to use for linear regression. You may be familiar with `scikit-learn` already, but I want to introduce another module, `statsmodels`. Both modules work similarly, but `statsmodels` has some functionality that will help us out in future weeks. 
 
-```{python stats, exercise = TRUE, message = FALSE, exercise.setup="scipy"}
+```{python stats, exercise = TRUE, message = FALSE, exercise.setup="min"}
 import statsmodels.api as sm
 ```
 

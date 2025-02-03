@@ -108,7 +108,9 @@ This lab will use both `numpy` and `python`. We will also be using a dataset scr
 import numpy as np
 import pandas as pd
 
-epicurious = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini.csv")
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab1/www/epi_mini.csv
+
+epicurious = pd.read_csv("./data/epi_mini.csv")
 ```
 
 
