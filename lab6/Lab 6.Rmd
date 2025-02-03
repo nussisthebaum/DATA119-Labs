@@ -1,29 +1,53 @@
 ---
-title: "Lab 6"
-output: learnr::tutorial
+title: "Data119 - Lab 6"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
+
 library(learnr)
 library(gradethis)
 library(reticulate)
 
-#py_install(c('numpy', 'pandas', 'plotnine', 'scikit-learn')) 
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
-      if (user_code==solution_code){
-          return(list(message = "Exact match code!", correct = TRUE))
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
       }
-    return(list(message = "Not exact match code", correct = FALSE))
+    return(list(message = random_encouragement(), correct = FALSE))
   }
 }
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("kNN Classifiers and Confusion Matrices", class = "pageTitle")
+  )
+)
 ```
 
 ## Goals
@@ -44,7 +68,9 @@ import pandas as pd
 import plotnine as p9
 import sklearn
 
-birthwt = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/main/birthwt.csv")
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab5/www/birthwt.csv
+
+birthwt = pd.read_csv("./data/birthwt.csv", index_col = 0)
 birthwt = pd.get_dummies(birthwt, columns = ['race'], drop_first = True, dtype = float)
 ```
 
@@ -102,7 +128,10 @@ question("1. If Point D is located at $(5, 6)$, and Point J is located at $(3, 3
          answer("3"),
          answer("4"),
          answer("5", correct=TRUE),
-         answer("6"))
+         answer("6"), 
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the first secret word: INTENSIFY."
+)
 ```
 
 Recall Euclidean distance:
@@ -116,7 +145,8 @@ question("2. Point D is located at $(5, 6)$, and Point J is located at $(3, 3)$.
          answer("$\\sqrt{5}$"),
          answer("$\\sqrt{6}$"),
          answer("$\\sqrt{9}$"),
-         answer("$\\sqrt{13}$", correct=TRUE))
+         answer("$\\sqrt{13}$", correct=TRUE), 
+         allow_retry = TRUE)
 ```
 
 ### $k$NN Classifier by Hand
@@ -136,14 +166,19 @@ question("3. What are the 3 nearest neighbors for point J? You may use Euclidean
          answer("J"),
          answer("K"),
          answer("L"),
-         answer("M"))
+         answer("M"), 
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the second secret word: WILDERNESS."
+)
 ```
 
 
 ```{r q4, echo=FALSE}
 question("4. Predict the class for point J, based on its three nearest neighbors.",
          answer("Red Circle (Class 1)"),
-         answer("Blue Triangle (Class 2)", correct=TRUE, message="Point H is Class 1 (red circles), but points A and B are Class 2 (blue triangles). Since 2/3 points are Class 2, we would predict point J to also be Class 2."))
+         answer("Blue Triangle (Class 2)", correct=TRUE, message="Point H is Class 1 (red circles), but points A and B are Class 2 (blue triangles). Since two of the three neighboring points are Class 2, we would predict point J to also be Class 2."), 
+         allow_retry = TRUE
+)
 ```
 
 
@@ -152,7 +187,10 @@ question("5. Let Class 1 be the absence of some event, and Class 2 be the presen
          answer("True Positive"),
          answer("True Negative"),
          answer("False Positive", correct=TRUE, message="If we are predicting point J to be Class 2, we are predicting the presence of some event. In reality, point J is Class 1, which means the event did not really happen. Thus, point J is a false positive."),
-         answer("False Negative"))
+         answer("False Negative"), 
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the third secret word: DRIVE."
+)
 ```
 
 6. Examine this table with the closest neighbors for each point, the predicted class, and the true class. The predictions are using a threshold of 0.5.
@@ -197,17 +235,18 @@ kable(knn_table, escape = FALSE) %>%
 ```
 
 ```{r q6, echo=FALSE}
-question("Select the correct series of values for column C",
+question("Select the correct series of values for column C.",
          answer("D, E, M, 2, 2", correct=TRUE),
          answer("D, E, L, 2, 2"),
          answer("D, E, L, 1, 2"),
-         answer("D, E, M, 2, 1"))
+         answer("D, E, M, 2, 1"), 
+         allow_retry = TRUE)
 ```
 
 
 ### Confusion Matrix Practice
 
-8. Use this confusion matrix to calculate the accuracy and sensitivity
+8. Use this confusion matrix to calculate the accuracy and sensitivity.
 
 ```{r echo=FALSE}
 # Create the confusion matrix data
@@ -228,7 +267,6 @@ confusion_table <- kable(
   kable_styling(full_width = FALSE)
 
 confusion_table
-
 ```
 
 Remember the formula for accuracy is:
@@ -242,7 +280,9 @@ question("9. Based off of your confusion matrix, what is the training set accura
          answer("5/9"),
          answer("9/13"),
          answer("7/9"),
-         answer("7/13", correct=TRUE))
+         answer("7/13", correct=TRUE), 
+         allow_retry = TRUE
+)
 ```
 
 Remember the formula for sensitivity is:
@@ -252,17 +292,22 @@ $$TPR = \frac{TP}{TP + FN}$$
 ```{r q10, echo=FALSE}
 question("10. Based off of your confusion matrix, what is the training set sensitivity of the classifier?",
          answer("4/13"),
-         answer("5/9", correct=TRUE),
+         answer("5/9"), correct=TRUE),
          answer("9/13"),
          answer("7/9"),
-         answer("7/13"))
+         answer("7/13"), 
+         allow_retry = TRUE 
+)
 ```
 
 
 ```{r q11, echo=FALSE}
 question("11. Would increasing the number of neighbors to 5 affect the training set accuracy of the classifier?",
          answer("True", correct=TRUE),
-         answer("False"))
+         answer("False"), 
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the third secret word: MARBLE."
+)
 ```
 
 How do you know?
@@ -416,7 +461,9 @@ grade_this_code()
 ```{r q18, echo=FALSE}
 question("Is this a good model? ",
          answer("Yes", correct=TRUE, message="This is pretty far above 0.5, and should be bigger than most of the values you have seen previously--I am pretty happy with it!"),
-         answer("No"))
+         answer("No"), 
+         allow_retry = TRUE
+)
 ```
 
 ## Choosing $k$
@@ -503,7 +550,7 @@ for k in range(1, 16):
 
 ```
 
-Now, run the code below to create a plot showing the relationship between $k$ and test set accuracy (it may also help to just look at the metrics)
+Now, run the code below to create a plot showing the relationship between $k$ and test set accuracy (it may also help to just look at the metrics).
 
 ```{python setup8, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="scale"}
 metric = []
@@ -533,5 +580,8 @@ question("22. What is the best $k$?",
          answer("3"),
          answer("5", correct=TRUE),
          answer("10"),
-         answer("15"))
+         answer("15"), 
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the fifth and final secret word: SOUP."
+)
 ```
