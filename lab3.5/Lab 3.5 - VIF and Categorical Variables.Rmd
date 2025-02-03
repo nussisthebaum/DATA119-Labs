@@ -287,7 +287,7 @@ question("9. How are the results of `pd.get_dummies()` stored?",
          answer("Floats"),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         post_message = "Congratulations! You have found the fourth secret word: BROTHER.")
+         post_message = "Congratulations! You have found the fifth secret word: CURLY.")
 ```
 
 10. Booleans, a.k.a, `True` and `False`, will not work with `statsmodels`. To convert to numbers rather than Booleans, look online at the [pd.get_dummies() syntax](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html) and fill in the correct `dtype`:
