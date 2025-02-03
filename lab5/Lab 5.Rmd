@@ -27,7 +27,7 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
-```{r header, echo = FALSE, exercise = FALSE}
+```{r header, echo = FALSE}
 library(htmltools)
 
 tags$div(
@@ -99,8 +99,21 @@ Workinghours = pd.read_csv("./data/Workinghours_mini.csv", index_col = 0)
 grade_this_code()
 ```
 
+```{r q2, echo=FALSE}
+question("2. Describe the shape of this histogram.",
+         answer("Bimodal", correct=TRUE),
+         answer("Unimodal"),
+         answer("Multimodal"),
+         answer("Uniform"),
+         answer("Symmetric"),
+         answer("Asymmetric", correct=TRUE), 
+         answer("Normal/Bell-shaped"),
+         allow_retry = TRUE,
+  random_answer_order = TRUE,
+  post_message = "Congratulations! You have found the first secret word: CHOCOLATE.")
+```
 
-2. Hopefully, you can see that there is a large peak at zero, and another peak at about 2,000 (very close to 52, the number of weeks in a year, times 40, the "standard" number of hours to work in a week). What we are seeing is that there are many women who do not work outside of the home, a.k.a., have a zero recorded for hours worked. This weird, bimodal nature of the data likely requires more complicated methods than what we currently know--to make this slightly less complicated for ourselves, let's focus on women who worked at least one hour outside the home. Save `Workinghours` as a subset of the original data where `hours` is greater than 0.
+3. Hopefully, you can see that there is a large peak at zero, and another peak at about 2,000 (very close to 52, the number of weeks in a year, times 40, the "standard" number of hours to work in a week). What we are seeing is that there are many women who do not work outside of the home, a.k.a., have a zero recorded for hours worked. This weird, bimodal nature of the data likely requires more complicated methods than what we currently know--to make this slightly less complicated for ourselves, let's focus on women who worked at least one hour outside the home. Save `Workinghours` as a subset of the original data where `hours` is greater than 0.
 
 ```{python sub, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
 Workinghours = ...
@@ -116,7 +129,7 @@ Workinghours
 grade_this_code()
 ```
 
-3.  Take some time to really explore this dataset. Look at summary statistics and distributions of each of the variables.  
+4.Take some time to really explore this dataset. Look at summary statistics and distributions of each of the variables.  
 
 ```{python setup2, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup1"}
 Workinghours = Workinghours[Workinghours['hours'] > 0]
@@ -128,15 +141,18 @@ Workinghours = Workinghours[Workinghours['hours'] > 0]
 
 \textcolor{red}{Note: I haven't included them here for space concerns, but when you write your reports for the project, you should be looking at graphs for the variables as well!}
 
-4. Now might also be a good time to identify categorical variables and convert them to indicators.
+5. Now might also be a good time to identify categorical variables and convert them to indicators.
 
-```{r q1, echo=FALSE}
+```{r q5, echo=FALSE}
 question("Which of the following variables are categorical?",
-         answer("hours"),
-         answer("age"),
-         answer("occupation", message = "Congratulations! You found the X secret word: PEBBLE.", correct=TRUE),
+         answer("`hours`"),
+         answer("`age`"),
+         answer("`occupation`", correct=TRUE),
          answer("education"),
-         answer("unemp")
+         answer("unemp"), 
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+  post_message = "Congratulations! You have found the second secret word: PEBBLE."
 )
 ```
 
@@ -154,7 +170,7 @@ grade_this_code()
 
 ## Data Preparation
 
-5. Before we carry out any analysis, we need to prepare our data. First, let's learn how to split the data into training and test sets using the `train_test_split()` function from `sklearn` (you can check out [the documentation for `train_test_split()` here](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html).
+6. Before we carry out any analysis, we need to prepare our data. First, let's learn how to split the data into training and test sets using the `train_test_split()` function from `sklearn` (you can check out [the documentation for `train_test_split()` here](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html).
 
 You may remember that in Python, the convention is to work with your predictors and response separately, so first, store your `X` and `y`.
 
@@ -180,7 +196,7 @@ grade_this_code()
 ```
 
 
-6. Take a look at the code below. You should recognize that we are first importing a function. Then, things get a bit more complicated than we are previously seen. In a single line of code, we are saving a data frame of predictors for training and testing (`X_train` and `X_test`) as well as the response variable for training and testing (`y_train` and `y_test`). You will need to do this in most data analysis problems.
+7. Take a look at the code below. You should recognize that we are first importing a function. Then, things get a bit more complicated than we are previously seen. In a single line of code, we are saving a data frame of predictors for training and testing (`X_train` and `X_test`) as well as the response variable for training and testing (`y_train` and `y_test`). You will need to do this in most data analysis problems.
 
 The code that is more likely to change is the code on the right hand side. You can see within the `train_test_split()` function I have four arguments. The first two, `X` and `y`, should correspond to the predictors and response variable (similar to other code we have seen).
 
@@ -208,7 +224,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3,
 X_train.describe()
 ```
 
-7.  Now, we need to do one last thing. Remember that we like to scale the variables so that our results don't depend on the units recorded in the dataset. Let's do that know using another `sklearn` function, `StandardScaler()` ([the documentation for `StandardScaler()` is here if you need it](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)). Note that this code is complicated, and it's totally okay with me if you copy and paste the below code in your homework assignments and change the relevant variables when you need.
+8.  Now, we need to do one last thing. Remember that we like to scale the variables so that our results don't depend on the units recorded in the dataset. Let's do that know using another `sklearn` function, `StandardScaler()` ([the documentation for `StandardScaler()` is here if you need it](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)). Note that this code is complicated, and it's totally okay with me if you copy and paste the below code in your homework assignments and change the relevant variables when you need.
 
 Inspect the code below. Again, we start by importing the function.
 
@@ -230,7 +246,7 @@ X_train_pp = pd.DataFrame(scaler.transform(X_train), columns = ['income',
                              'occupation_mp', 'occupation_other', 'occupation_swcc'])
 ```
 
-8.  It's important to note that you want to "pretend" that your training data is all that you have and your testing data is brand new. The testing data should not be accounted for when you are scaling the data! However, it does also need to be scaled using the means and standard deviations from the **training** data. See the code below for an example.
+9.  It's important to note that you want to "pretend" that your training data is all that you have and your testing data is brand new. The testing data should not be accounted for when you are scaling the data! However, it does also need to be scaled using the means and standard deviations from the **training** data. See the code below for an example.
 
 ```{python setup5, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
 X_test_pp = pd.DataFrame(scaler.transform(X_test), columns = ['income', 'age', 
@@ -243,7 +259,7 @@ X_test_pp = pd.DataFrame(scaler.transform(X_test), columns = ['income', 'age',
 
 So far in lab, we have been using `statsmodels` for the extra information packaged into the `.summary()` output, but we should also familiarize ourselves with the `sklearn` syntax--this syntax can be used for linear regression, but is also used similarly for ridge regression and LASSO, so it's helpful to know.
 
-1.  First, review the documentation for [`sklearn`'s `LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html). Fit the model predicting the number of hours a woman works outside the home from all the other factors (name it `model_ols`). Then, print out the coefficients and intercept.
+10.  First, review the documentation for [`sklearn`'s `LinearRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html). Fit the model predicting the number of hours a woman works outside the home from all the other factors (name it `model_ols`). Then, print out the coefficients and intercept.
 
 Note: We do not need to add a constant to our data, `LinearRegression` will add an intercept to the model by default!
 
@@ -263,7 +279,7 @@ print("Intercept: ", model_ols.intercept_)
 grade_this_code()
 ```
 
-1.   Now use `.predict()` to get the predicted values for the test set (save them as `preds_ols`).
+11.  Now use `.predict()` to get the predicted values for the test set (save them as `preds_ols`).
 
 ```{python setup6, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup5"}
 model_ols = sklearn.linear_model.LinearRegression().fit(X_train_pp, y_train)
@@ -283,7 +299,7 @@ preds_ols = model_ols.predict(X_test_pp)
 grade_this_code()
 ```
 
-11. Remember that for cross validation, we want to get the errors for each observation and then "aggregate" them somehow. "Aggregate" in this context just means combine in a meaningful way--for cross validation with a numeric response, this often just means taking the sum or average of the squared errors (a.k.a., the loss function for ordinary least squares). Practice calculating this quantity with your existing model.
+12. Remember that for cross validation, we want to get the errors for each observation and then "aggregate" them somehow. "Aggregate" in this context just means combine in a meaningful way--for cross validation with a numeric response, this often just means taking the sum or average of the squared errors (a.k.a., the loss function for ordinary least squares). Practice calculating this quantity with your existing model.
 
 ```{python setup7, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup6"}
 preds_ols = model_ols.predict(X_test_pp)
@@ -306,7 +322,7 @@ grade_this_code()
 
 ## Ridge Regression
 
-12. The most straightforward way to fit ridge regression models is to use the `linear_model.Ridge` method from `sklearn`. Read [the documentation for `Ridge`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html) and fit a model predicting number of hours a woman works outside the home (ignore the threshold parameter for now) using all of the variables--even though we aren't performing feature selection with ridge regression, using everything is very common.
+13. The most straightforward way to fit ridge regression models is to use the `linear_model.Ridge` method from `sklearn`. Read [the documentation for `Ridge`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html) and fit a model predicting number of hours a woman works outside the home (ignore the threshold parameter for now) using all of the variables--even though we aren't performing feature selection with ridge regression, using everything is very common.
 
 ```{python ridge, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
 model = sklearn.linear_model.Ridge()
@@ -332,7 +348,7 @@ Once you read the documentation and successfully fit the model, you should find 
 
 Be careful to double, *triple*, **quadruple** check the `sklearn` documentation to figure out what you are supposed to be using! Note further that in the documentation, `C` is described as the inverse of regularization strength, so smaller values mean a more restrictive model (the opposite of what we learned in class, but also the way that the graphs are usually constructed).
 
-13. In the case of `.Ridge()`, we will be using `alpha` where `alpha = 0` is equivalent to least squares regression and large values of `alpha` lead to more regularization. Adapt the code below to change the value of `alpha`, just to test the function.
+14. In the case of `.Ridge()`, we will be using `alpha` where `alpha = 0` is equivalent to least squares regression and large values of `alpha` lead to more regularization. Adapt the code below to change the value of `alpha`, just to test the function.
 
 ```{python setup8, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup7"}
 model = sklearn.linear_model.Ridge(alpha=0.5)
@@ -344,7 +360,7 @@ model = sklearn.linear_model.Ridge(alpha = 0.5)
 modelRidge = model.fit(X_train_pp, y_train)
 ```
 
-14. Now, we are ready to use cross validation to try and select the best `alpha` for our dataset. Usually, we are looking over a range of numbers--let's go ahead and create one now using `np.arange()` (`range()` is just for floats). Edit the code below to create a range of numbers to use for `alpha` from -6 to 2 in increments of 0.1.
+15. Now, we are ready to use cross validation to try and select the best `alpha` for our dataset. Usually, we are looking over a range of numbers--let's go ahead and create one now using `np.arange()` (`range()` is just for floats). Edit the code below to create a range of numbers to use for `alpha` from -6 to 2 in increments of 0.1.
 
 Note: The second line takes 10 and raises it to the power of each value, specifically to make the plots nicer. This is a trick you can use in your plots as well.
 
@@ -362,7 +378,7 @@ alphas = np.power(10, alphas)
 grade_this_code()
 ```
 
-15. For the actual selection process, we could write some code from scratch, but let's also consider yet another method built into `sklearn`--[sklearn.linear_model.RidgeCV](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html#sklearn.linear_model.RidgeCV).
+16. For the actual selection process, we could write some code from scratch, but let's also consider yet another method built into `sklearn`--[sklearn.linear_model.RidgeCV](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html#sklearn.linear_model.RidgeCV).
 
 Inspect the code below.
 
@@ -387,7 +403,7 @@ print("alpha: ", model_ridge.alpha_)
 print("Coefficents: ", model_ridge.coef_)
 ```
 
-16. Take a closer look at the documentation for the `cv` argument--you'll see there are actually options for all three CV methods we have learned so far:
+17. Take a closer look at the documentation for the `cv` argument--you'll see there are actually options for all three CV methods we have learned so far:
 
 -   "An iterable yielding (train, test) splits as arrays of indices" for a single split into a training and test set (I am less familiar with this option, and would recommend one of the other two),
 -   `cv = K` where `K` is an integer for $K$-Fold CV, and
@@ -411,9 +427,21 @@ print("Coefficents: ", model_ridge.coef_)
 grade_this_code()
 ```
 
+```{r q18, echo=FALSE}
+question("18. What percent of the data is in each test fold if you perform 5-fold cross validation?.",
+         answer("0%"),
+         answer("10%"),
+         answer("20%", correct=TRUE),
+         answer("80%"),
+         answer("90%"),
+         answer("100%"), 
+         allow_retry = TRUE,
+  post_message = "Congratulations! You have found the third secret word: IGNITE.")
+```
+
 ## Writing Loops
 
-17. Note that the code in 14. produces only one set of coefficients with the chosen `alpha`--so we know what the threshold is, but we don't have the nice plots we are used to seeing. To do that, we need to write a loop fitting the model multiple times, saving the following:
+19. Note that the code in 16. produces only one set of coefficients with the chosen `alpha`--so we know what the threshold is, but we don't have the nice plots we are used to seeing. To do that, we need to write a loop fitting the model multiple times, saving the following:
 
 -   The value of the `alpha` you used to fit the model, and
 -   The coefficients of the model.
@@ -429,7 +457,7 @@ coefs_ridge = pd.DataFrame(data = None, columns = ['income', 'age',
 
 The next step is to create a range of `alphas`. If you are in Dr. Nussbaum's section, in the notes we called this $t$--in `sklearn`, it is called `alpha`. This will be what you iterate over in your loop and a piece that you will need if you want to graph the coefficients. I mentioned in class that this can take some trial and error--in the future you might have to run multiple loops to get something reasonable.
 
-18. Now we can start creating the loop. Let's work on the calculations we would like to repeat first. Code one instance of the loop below, using code you wrote in Steps 14 and 16 but taking steps to make it more general. Some tips:
+20. Now we can start creating the loop. Let's work on the calculations we would like to repeat first. Code one instance of the loop below, using code you wrote in Steps 14-16 but taking steps to make it more general. Some tips:
 
 -   When you are writing a loop, it is helpful to test the iterations before you run them repeatedly... use the first value of your `alphas` list as a test index.
 -   One of the things that I struggled with the most when I started writing loops was making sure I properly saved my calculations. Again, it's helpful to test the iteration and examine the output before you run them repeatedly! I used `.loc[]` with the same index as the `alphas` list.
@@ -450,7 +478,7 @@ coefs_ridge.loc[0] = temp_model.coef_
 grade_this_code()
 ```
 
-18. Now, make your code from 17 into a loop by adding a `for` statement. I found it most helpful to loop over a range of integers because of `.loc[]`.
+21. Now, make your code from 20 into a loop by adding a `for` statement. I found it most helpful to loop over a range of integers because of `.loc[]`.
 
 ```{python looped, exercise = TRUE, message = FALSE, exercise.setup="store"}
 for i in range(0, len(alphas)):
@@ -468,7 +496,7 @@ for i in range(0, len(alphas)):
 grade_this_code()
 ```
 
-19. In order to create plots with `plotnine` we need our data to be in a dataframe. You already have one with the coefficients, but you'll want to add a column with the `alphas`. The cell below does this. I'm adding the log version back in to "undo" the exponentiation we did earlier. Again, this is to make the plot nice. 
+22. In order to create plots with `plotnine` we need our data to be in a dataframe. You already have one with the coefficients, but you'll want to add a column with the `alphas`. The cell below does this. I'm adding the log version back in to "undo" the exponentiation we did earlier. Again, this is to make the plot nice. 
 
 ```{python storex, exercise = FALSE, message = FALSE, exercise.setup="store"}
 for i in range(0, len(alphas)):
@@ -480,7 +508,7 @@ for i in range(0, len(alphas)):
 coefs_ridge['alphas'] = np.log10(alphas)
 ```
 
-20. Now let's work on making the plot comparing the coefficients to the threshold. You will want to put the `alphas` on the $x$-axis, and the coefficients on the $y$-axis. You have used `geom_histogram()` and `geom_point()` before, but let's introduce a new geom, `geom_line()`. This will plot all values and connect them with a line. Code the plot below. 
+23. Now let's work on making the plot comparing the coefficients to the threshold. You will want to put the `alphas` on the $x$-axis, and the coefficients on the $y$-axis. You have used `geom_histogram()` and `geom_point()` before, but let's introduce a new geom, `geom_line()`. This will plot all values and connect them with a line. Code the plot below. 
 
 ```{python lineplot, exercise = TRUE, message = FALSE, exercise.setup="storea"}
 
@@ -495,7 +523,7 @@ coefs_ridge['alphas'] = np.log10(alphas)
 grade_this_code()
 ```
 
-21. Hopefully, you have identified that you can only specify one variable on the $y$-axis--but we have multiple coefficients we would like to investigate! We need to make a change to the dataframe so that there are two new columns--one with all the coefficient values, and one giving the coefficient it belongs to. We can use `pd.melt` to do so--familiarize yourself with the code below so that you know how to use these functions in the future. Obviously, there are a few arguments:
+24. Hopefully, you have identified that you can only specify one variable on the $y$-axis--but we have multiple coefficients we would like to investigate! We need to make a change to the dataframe so that there are two new columns--one with all the coefficient values, and one giving the coefficient it belongs to. We can use `pd.melt` to do so--familiarize yourself with the code below so that you know how to use these functions in the future. Obviously, there are a few arguments:
 
 -   The first, `coefs_ridge`, is the object we would like to melt--the dataframe with all of the coefficients from our loop.
 -   The second, `id_vars`, is the one column we don't want to melt! Basically, we need to keep it so that we have nice $(x, y)$ pairs to work with.
@@ -522,7 +550,7 @@ print(coefs_ridge_melt)
 grade_this_code()
 ```
 
-22. Now, we can use `geom_line()` to make the plot we want with `coefs_ridge_melt`. Add an argument for the color so you get nice separation.
+25. Now, we can use `geom_line()` to make the plot we want with `coefs_ridge_melt`. Add an argument for the color so you get nice separation.
 
 ```{python colorplot, exercise = TRUE, message = FALSE, exercise.setup="melt"}
 (p9.ggplot(coefs_ridge_melt, p9.aes(x = 'alphas', y = 'Coefficient', color = ...)) + p9.geom_line())
@@ -536,7 +564,7 @@ grade_this_code()
 grade_this_code()
 ```
 
-23. Most of the plots we saw in class are "flipped"--the large values of the coefficients are on the righthand side of the graph. To make this switch, you can add another command to your graph, `scale_x_reverse()`.
+26. Most of the plots we saw in class are "flipped"--the large values of the coefficients are on the righthand side of the graph. To make this switch, you can add another command to your graph, `scale_x_reverse()`.
 
 ```{python reversed, exercise = TRUE, message = FALSE, exercise.setup="melt"}
 (p9.ggplot(coefs_ridge_melt, p9.aes(x = 'alphas', y = 'Coefficient', color = 'Variable')) +
@@ -544,7 +572,7 @@ grade_this_code()
   p9.scale_x_reverse())
 ```
 
-24. One final thing to add to this plot would be a vertical line indicating where the regularization parameter actually is so we can quickly draw conclusions. We can do so using the command `p9.geom_vline()` for **V**ertical line. Remember that we can pull the parameter out using `.alpha_`--try and add this line to the plot. Don't forget that you're working with the log scale!
+27. One final thing to add to this plot would be a vertical line indicating where the regularization parameter actually is so we can quickly draw conclusions. We can do so using the command `p9.geom_vline()` for **V**ertical line. Remember that we can pull the parameter out using `.alpha_`--try and add this line to the plot. Don't forget that you're working with the log scale!
 
 ```{python lined, exercise = TRUE, message = FALSE, exercise.setup="melt"}
 (p9.ggplot(coefs_ridge_melt, p9.aes(x = 'alphas', y = 'Coefficient', color = 'Variable')) +
@@ -566,7 +594,7 @@ grade_this_code()
 
 ## LASSO
 
-25. Luckily, the code for LASSO is very similar to ridge regression. All of the code below you've already seen in various chunks throughout the lab--edit the chunk below so that we are performing LASSO rather than the ridge regression, and produce the plots. Once you have them, see if you can identify which variables are included in the model, and which is the most important.
+28. Luckily, the code for LASSO is very similar to ridge regression. All of the code below you've already seen in various chunks throughout the lab--edit the chunk below so that we are performing LASSO rather than the ridge regression, and produce the plots. Once you have them, see if you can identify which variables are included in the model, and which is the most important.
 
 ```{python lasso, exercise = TRUE, message = FALSE, exercise.setup="melt"}
 from sklearn.linear_model import LassoCV
@@ -627,9 +655,28 @@ coefs_LASSO_melt = pd.melt(coefs_LASSO, id_vars = 'alphas',
 grade_this_code()
 ```
 
+```{r q29, echo=FALSE}
+question("29. Which of the variables still remain in the model at the chosen value of the hyperparameter?",
+         answer("`income`"),
+         answer("`age`"),
+         answer("`education`"),
+         answer("`child5`", correct=TRUE),
+         answer("`child13`"),
+         answer("`child17`"), 
+         answer("`nonwhite`", correct=TRUE), 
+         answer("`owned`", correct=TRUE), 
+         answer("`mortgage`"), 
+         answer("`unemp`"), 
+         answer("`occupation_mp`"), 
+         answer("`occupation_other`"), 
+         answer("`occupation_swcc`"), 
+         allow_retry = TRUE,
+  post_message = "Congratulations! You have found the fourth secret word: MAYOR.")
+```
+
 ## Comparing Models
 
-1.  To compare the models we will calculate the sum of squared errors for each model. Adapt the code used below that calculates the sum of squared errors for linear regression and apply it to the ridge regression and LASSO models.
+30.  To compare the models we will calculate the sum of squared errors for each model. Adapt the code used below that calculates the sum of squared errors for linear regression and apply it to the ridge regression and LASSO models.
 
 ```{python melty, exercise = FALSE, message = FALSE, exercise.setup="melt"}
 model_lasso = sklearn.linear_model.LassoCV(alphas = alphas).fit(X_train_pp, y_train)
@@ -673,9 +720,9 @@ print("LASSO: ", resids_lasso_2.mean())
 grade_this_code()
 ```
 
-```{r q3, echo=FALSE}
-question("Based on the SSE from our three models, which one do you think is the best model?",
+```{r q31, echo=FALSE}
+question("31. Based on the SSE from our three models, which one do you think is the best model?",
          answer("OLS"),
          answer("Ridge Regression"),
-         answer("LASSO", message = "Congratulations! You found the second (last) secret word: LANTERN.", correct=TRUE))
+         answer("LASSO", message = "Congratulations! You found the fifth and final secret word: LANTERN.", correct=TRUE))
 ```
