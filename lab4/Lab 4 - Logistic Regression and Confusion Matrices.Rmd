@@ -45,7 +45,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Assumption Checking and Multiple Linear Regression", class = "pageTitle")
+    tags$h1("Logistic Regression and Confusion Matrices", class = "pageTitle")
   )
 )
 ```
