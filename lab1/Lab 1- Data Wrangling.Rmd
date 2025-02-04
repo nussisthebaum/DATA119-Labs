@@ -31,7 +31,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE)
 ```
 
 ```{r header, echo = FALSE}
@@ -116,7 +116,7 @@ epicurious = pd.read_csv("./data/epi_mini.csv")
 
 ## Data Cleaning
 
-1. Print the dimensions of the `epicurious` dataset. How many observations are there? How many variables are there?
+1. Find the dimensions of the `epicurious` dataset. How many observations are there? How many variables are there?
 
 ```{python size, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 
@@ -127,7 +127,9 @@ epicurious.shape
 ```
 
 ```{r size-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+grade_this_code(
+  correct = "Secret word",
+)
 ```
 
 2. View the head of the dataset. What kinds of variables do you see?
@@ -143,7 +145,9 @@ epicurious.head()
 
 
 ```{r head-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+grade_this_code(
+  correct = "Secret word",
+)
 ```
 
 3. Since many of the variables are binary variables indicating different facts about the recipes, let's discard most of them for now and focus on the numeric variables. Identify which of the variables are numeric (if you get stuck, check out the [data dictionary](https://www.kaggle.com/datasets/hugodarwood/epirecipes)). Save a version of the dataset with only those variables as `epicurious_num`. Also include the recipe titles to use later.
@@ -157,7 +161,12 @@ epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 's
 ```
 
 ```{r filter-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+grade_this({
+  if (identical(epicurious_num, epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']])) {
+    pass("Secrets")
+  }
+  fail()
+})
 ```
 
 4. Compute a table of summary statistics for these variables, including the minimum, first quartile, median, third quartile, maximum, mean, and standard deviation. Look at these numbers, and think about any red flags you see (we will come back to this).
@@ -179,7 +188,9 @@ epicurious_num.describe()
 ```
 
 ```{r describe-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+grade_this_code(
+  correct = "stuff"
+)
 ```
 
 5. It is also helpful to discuss how many missing values the dataset has. Identify the percentage of missing values in each column.
@@ -193,7 +204,15 @@ sum(epicurious_num['protein'].isna())/len(epicurious_num['protein'])
 ```
 
 ```{r missing-code-check, message = FALSE, warning = FALSE, eval = FALSE}
-grade_this_code()
+grade_this({
+  if (identical(round(.result,2), 0.18)) {
+    pass("things")
+  }
+  if (identical(.result, 7)) {
+    fail("This is a common mistake. Try xyz.")
+  }
+  fail()
+})
 ```
 
 ```{r missingquestion, echo=FALSE}
@@ -228,7 +247,10 @@ epicurious_num_nd = epicurious_num.dropna()
 ```
 
 ```{r drop-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+grade_this_code(
+  correct = "Things and stuff",
+  incorrect = "Stuff and things"
+)
 ```
 
 ## Making Plots
@@ -282,7 +304,10 @@ If you run this chunk, a big, nearly blank box appears--there is no actual graph
 ```
 
 ```{r bins-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+grade_this_code(
+  correct = "stuffnthings",
+  incorrect = "thingsnstuff"
+)
 ```
 
 ```{r impact, echo=FALSE}
@@ -314,7 +339,10 @@ You can also avoid the message by specifying the `binwidth` instead of `bins`. T
 ```
 
 ```{r binwidth-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+grade_this_code(
+  correct = "yep",
+  incorrect = "Nope"
+)
 ```
 
 Notice that on the $y$-axis we are displaying the counts of the observations in each bin. We can change this to instead display the proportion by adding another argument to `ggplot()`.
@@ -339,7 +367,10 @@ Notice that on the $y$-axis we are displaying the counts of the observations in 
 ```
 
 ```{r density-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+grade_this_code(
+  correct = "yep",
+  incorrect = "Nope"
+)
 ```
 
 12. Now, let's look at `calories` instead of `rating`.
@@ -357,7 +388,10 @@ grade_this_code()
 ```
 
 ```{r calorie-code-check, message=FALSE, warning=FALSE}
-grade_this_code()
+grade_this_code(
+  correct = "words of praise",
+  incorrect = "words of encouragement}"
+)
 ```
 
 
@@ -419,7 +453,10 @@ epicurious_num_clean = epicurious_num_nd.drop(labels = maxvals, axis=0).drop_dup
 ```
 
 ```{r calorieclean-code-check, message=FALSE, warning=FALSE}
-grade_this_code()
+grade_this_code(
+  correct = "things",
+  incorrect = "stuff"
+)
 ```
 
 
@@ -429,7 +466,7 @@ grade_this_code()
 
 ```{python scatter, exercise=TRUE, message = FALSE, exercise.setup="clean"}
 (p9.ggplot(epicurious_num_clean, p9.aes(x = '____' , y = '___' )) 
- + ___
+ + ___)
 
 ```
 
@@ -440,7 +477,10 @@ grade_this_code()
 ```
 
 ```{r scatter-code-check, message=FALSE, warning=FALSE}
-grade_this_code()
+grade_this_code(
+  correct = "stuff",
+  incorrect = "things"
+)
 ```
 
 ```{r scatterq, echo=FALSE}

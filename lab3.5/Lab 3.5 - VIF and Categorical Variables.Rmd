@@ -287,7 +287,7 @@ question("9. How are the results of `pd.get_dummies()` stored?",
          answer("Floats"),
          random_answer_order = TRUE,
          allow_retry = TRUE,
-         post_message = "Congratulations! You have found the fourth secret word: BROTHER.")
+         post_message = "Congratulations! You have found the fifth secret word: CURLY.")
 ```
 
 10. Booleans, a.k.a, `True` and `False`, will not work with `statsmodels`. To convert to numbers rather than Booleans, look online at the [pd.get_dummies() syntax](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html) and fill in the correct `dtype`:
@@ -430,9 +430,9 @@ Now, we can see that `city_amsterdam` is back in the model, but `city_london` is
 1. You do have to pick something, and
 2. You do have to make the interpretation relative to the reference level.
 
-14. If you don't want to change the reference level, but you do want to avoid the multicollinearity issues incurred when converting to dummy variables outright, you can to add another argument. The `drop_first` argument will convert everything to dummy variables, and then drop the very first column (alphabetically), avoiding any multicollinearity issues. Edit the code to use the `drop_first` argument.
+14. If you don't want to change the reference level, but you do want to avoid the multicollinearity issues incurred when converting to dummy variables outright, you can add another argument. The `drop_first` argument will convert everything to dummy variables, and then drop the very first column (alphabetically), avoiding any multicollinearity issues. Edit the code to use the `drop_first` argument.
 
-```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup="setup2_5"}
 pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float, ___)
 ```
 
@@ -446,7 +446,7 @@ grade_this_code()
 
 Run this cell (which contains all of the options we have covered with `pd.get_dummies()`) to save the converted data frame for later use. Please note that conversion of categorical variables can now be considered an important data pre-processing step--from here on out, in most of your data science classes, this should be one of the first things to do when preparing to fit some type of model.
 
-```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup4"}
+```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2_5"}
 AirBnB_prices = pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float, drop_first = True)
 ```
 
