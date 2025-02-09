@@ -22,10 +22,11 @@ library(reticulate)
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
-      if (user_code == solution_code){
+      # Convert Python objects to strings for comparison
+      if (identical(as.character(user_code), as.character(solution_code))) {
           return(list(message = random_praise(), correct = TRUE))
       }
-    return(list(message = random_encouragement(), correct = FALSE))
+      return(list(message = random_encouragement(), correct = FALSE))
   }
 }
 
