@@ -74,6 +74,17 @@ birthwt = pd.read_csv("./data/birthwt.csv", index_col = 0)
 birthwt = pd.get_dummies(birthwt, columns = ['race'], drop_first = True, dtype = float)
 ```
 
+```{python debugging, exercise = False, echo = True, message = True}
+import os
+print(os.getcwd()) 
+print(os.listdir("./data"))
+```
+
+```{r debugging_more, exercise = False, echo = True, message = True}
+reticulate::py_config()
+reticulate::py_last_error()
+```
+
 ## Understanding $k$NN
 
 Consider the following example: we have two classes, 1 (blue triangles) and 2 (red circles). Observations A-M are used as training data for a $k$NN classifier based on two predictors $X_1$ and $X_2$. Observations A-G belong to Class 1, and observations H-M belong to Class 2. All of the observations are shown in the plot below.
