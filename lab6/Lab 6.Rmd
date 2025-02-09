@@ -74,13 +74,13 @@ birthwt = pd.read_csv("./data/birthwt.csv", index_col = 0)
 birthwt = pd.get_dummies(birthwt, columns = ['race'], drop_first = True, dtype = float)
 ```
 
-```{python debugging, exercise = False, echo = True, message = True}
+```{python debugging, exercise = FALSE, echo = TRUE, message = TRUE}
 import os
 print(os.getcwd()) 
 print(os.listdir("./data"))
 ```
 
-```{r debugging_more, exercise = False, echo = True, message = True}
+```{r debugging_more, exercise = FALSE, echo = TRUE, message = TRUE}
 reticulate::py_config()
 reticulate::py_last_error()
 ```
