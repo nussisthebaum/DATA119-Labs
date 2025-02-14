@@ -576,11 +576,11 @@ print(p9.ggplot(kNN_plot, p9.aes(x = 'k', y = 'Metric')) +
 
 ```{r q22, echo=FALSE}
 question("22. What is the best $k$? A.k.a., what $k$ maximizes test set accuracy?",
-         answer("1"),
+         answer("2"),
          answer("3"),
-         answer("5", correct=TRUE),
-         answer("10"),
-         answer("15"), 
+         answer("5"),
+         answer("8"),
+         answer("11", correct=TRUE), 
          allow_retry = TRUE, 
          post_message = "Congratulations! You have found the fifth and final secret word: SOUP."
 )
