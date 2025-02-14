@@ -511,7 +511,7 @@ grade_this_code()
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.3)
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.3, random_state = 850)
 ```
 
 ```{python scale, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
@@ -575,7 +575,7 @@ print(p9.ggplot(kNN_plot, p9.aes(x = 'k', y = 'Metric')) +
 ```
 
 ```{r q22, echo=FALSE}
-question("22. What is the best $k$?",
+question("22. What is the best $k$? A.k.a., what $k$ maximizes test set accuracy?",
          answer("1"),
          answer("3"),
          answer("5", correct=TRUE),
