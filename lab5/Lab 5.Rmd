@@ -66,7 +66,7 @@ For this lab, we will use the following modules:
 -   `plotnine`
 -   `sklearn`
 
-We will be using a new dataset containing information on womens' participation in the economy in 1987. Before we do anything, make sure to read the [`Workinghours` documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities). The data set can be loaded directly below, but if you'd like to play around with it on your own, you can download it [here](https://posit.ds.uchicago.edu/data119-lab5/www/Workinghours_mini.csv).
+We will be using a new dataset containing information on womens' participation in the economy in 1987. Before we do anything, make sure to read the [`Workinghours` documentation](https://vincentarelbundock.github.io/Rdatasets/doc/Ecdat/Workinghours.html). The data set can be loaded directly below, but if you'd like to play around with it on your own, you can download it [here](https://posit.ds.uchicago.edu/data119-lab5/www/Workinghours_mini.csv).
 
 Run this chunk to set up the environment.
 
