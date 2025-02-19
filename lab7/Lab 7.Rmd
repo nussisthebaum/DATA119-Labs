@@ -82,16 +82,329 @@ import sklearn
 epi = pd.read_csv("./data/epi_mini2.csv", index_col = 0)
 ```
 
-## Data cleaning and exploration
+## Understanding Clustering
 
-Recall that the Epicurious dataset, created by a Kaggle user, has over 20,000 recipes from the website Epicurious. Loosely speaking, there are a few groups of variables in the dataset:
+A hierarchical clustering algorithm using Manhattan distance and complete linkage is applied to a dataset with 25 observations and two variables $X_1$ and $X_2$. At a certain stage, there are at least two clusters--one comprised of the points $F = (3, 6)$, $G = (4, 5)$, and $H = (4, 6)$, and another comprised of the points $I = (6, 7)$ and $J = (7, 8)$. Call these clusters 2 and 3. 
+
+```{r, echo = FALSE}
+library(latex2exp)
+
+Cluster <- c(1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 7, 7, 7, 5, 5, 5, 5, 5, 6, 6) 
+X <- c(2, 2, 3, 3, 4, 3, 4, 4, 6, 7, 6, 7, 7, 8, 8, 9, 9, 10, 11, 12, 12, 12, 13, 4, 4)
+Y <- c(1, 2, 2, 3, 2, 6, 5, 6, 7, 8, 3, 3, 4, 3, 4, 2, 1, 1, 7, 8, 9, 10, 9, 10, 11)
+
+cluster_XY <- data.frame(X = X, Y = Y)
+rownames(cluster_XY) = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+                         "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y")
+
+cluster_XY$Label <- rownames(cluster_XY)
+
+little_XY <- cluster_XY %>%
+  filter(Label %in% c("F", "G", "H", "I", "J"))
+
+ggplot(data = little_XY, aes(x = X, y = Y)) + 
+  geom_point(size = 2) + 
+  geom_text(hjust = -0.9, vjust = 0.5, color = "black", label = little_XY$Label) + 
+  scale_x_continuous(name = TeX(r"($X_1$)"), limits = c(1, 13.5), minor_breaks = seq(from = 1, to = 13, by = 1)) +
+  scale_y_continuous(name = TeX(r"($X_2$)"), minor_breaks = seq(from = 1, to = 12, by = 1))
+```
+
+Use the following calculations to help find the maximal intercluster dissimilarity using Manhattan distance.
+
+```{r q1, echo=FALSE}
+question_numeric(
+  "1. What is $d_{Man}(F, I)$, a.k.a., the Manhattan distance between $F = (3, 6)$ and $I = (6, 7)$?",
+  answer(4, correct = TRUE),
+  allow_retry = TRUE, 
+  random_answer_order = TRUE, 
+  post_message = "Congratulations! You have found the first secret word: SUPERINTENDENT."
+)
+```
+
+```{r q2, echo=FALSE}
+question_numeric(
+  "2. What is $d_{Man}(F, J)$, a.k.a., the Manhattan distance between $F = (3, 6)$ and $J = (7, 8)$?",
+  answer(6, correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+```{r q3, echo=FALSE}
+question_numeric(
+  "3. What is $d_{Man}(G, I)$, a.k.a., the Manhattan distance between $G = (4, 5)$ and $I = (6, 7)$?",
+  answer(4, correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+```{r q4, echo=FALSE}
+question_numeric(
+  "4. What is $d_{Man}(G, J)$, a.k.a., the Manhattan distance between $G = (4, 5)$ and $J = (7, 8)$?",
+  answer(6, correct = TRUE),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the second secret word: QUIET."
+)
+```
+
+```{r q5, echo=FALSE}
+question_numeric(
+  "5. What is $d_{Man}(H, I)$, a.k.a., the Manhattan distance between $H = (4, 6)$ and $I = (6, 7)$?",
+  answer(3, correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+```{r q6, echo=FALSE}
+question_numeric(
+  "6. What is $d_{Man}(H, J)$, a.k.a., the Manhattan distance between $H = (4, 6)$ and $J = (7, 8)$?",
+  answer(5, correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+```{r q7, echo=FALSE}
+question_numeric(
+  "7. Using your answers from Questions 1-6, what is the maximal intercluster dissimilarity between Clusters 2 and 3 using Manhattan distance?",
+  answer(6, correct = TRUE),
+  allow_retry = TRUE, 
+  min = 2,
+  max = 8
+)
+```
+
+Your answers from Question 7 can be fed into the following table (in red):
+
+```{r, echo = FALSE, eval = TRUE}
+library(kableExtra)
+
+man_D <- function(point1, point2){
+  man_dist = abs(point1[1] - point2[1]) + abs(point1[2] - point2[2])
+return(man_dist)}
+
+max_sim <- function(df1, df2){
+  M <- dim(df1)[1]
+  N <- dim(df2)[1]
+
+  man_Ds <- c()
+
+  for (m in 1:M){
+    for (n in 1:N){
+      man_Ds <- c(man_Ds, man_D(c(df1$X[m], df1$Y[m]), c(df2$X[n], df2$Y[n])))
+    }
+  }
+
+  return(max(man_Ds))}
+
+cluster_XY_2 <- cluster_XY
+cluster_XY_2$Cluster <- Cluster
+
+Cluster1 <- cluster_XY_2 %>%
+  filter(Cluster == 1)
+
+Cluster2 <- cluster_XY_2 %>%
+  filter(Cluster == 2)
+
+Cluster3 <- cluster_XY_2 %>%
+  filter(Cluster == 3)
+
+Cluster4 <- cluster_XY_2 %>%
+  filter(Cluster == 4)
+
+Cluster5 <- cluster_XY_2 %>%
+  filter(Cluster == 5)
+
+Cluster6 <- cluster_XY_2 %>%
+  filter(Cluster == 6)
+
+Cluster7 <- cluster_XY_2 %>%
+  filter(Cluster == 7)
+
+max_sim_12 <- max_sim(Cluster1, Cluster2)
+max_sim_13 <- max_sim(Cluster1, Cluster3)
+max_sim_14 <- max_sim(Cluster1, Cluster4)
+max_sim_15 <- max_sim(Cluster1, Cluster5)
+max_sim_16 <- max_sim(Cluster1, Cluster6)
+max_sim_17 <- max_sim(Cluster1, Cluster7)
+
+max_sim_23 <- max_sim(Cluster2, Cluster3)
+max_sim_24 <- max_sim(Cluster2, Cluster4)
+max_sim_25 <- max_sim(Cluster2, Cluster5)
+max_sim_26 <- max_sim(Cluster2, Cluster6)
+max_sim_27 <- max_sim(Cluster2, Cluster7)
+
+max_sim_34 <- max_sim(Cluster3, Cluster4)
+max_sim_35 <- max_sim(Cluster3, Cluster5)
+max_sim_36 <- max_sim(Cluster3, Cluster6)
+max_sim_37 <- max_sim(Cluster3, Cluster7)
+
+max_sim_45 <- max_sim(Cluster4, Cluster5)
+max_sim_46 <- max_sim(Cluster4, Cluster6)
+max_sim_47 <- max_sim(Cluster4, Cluster7)
+
+max_sim_56 <- max_sim(Cluster5, Cluster6)
+max_sim_57 <- max_sim(Cluster5, Cluster7)
+
+max_sim_67 <- max_sim(Cluster6, Cluster7)
+
+r1 <- c(max_sim_12, max_sim_13, max_sim_14, max_sim_15, max_sim_16, max_sim_17)
+r2 <- c("", max_sim_23, max_sim_24, max_sim_25, max_sim_26, max_sim_27)
+r3 <- c("", "", max_sim_34, max_sim_35, max_sim_36, max_sim_37)
+r4 <- c("", "", "", max_sim_45, max_sim_46, max_sim_47)
+r5 <- c("", "", "", "", max_sim_56, max_sim_57)
+r6 <- c("", "", "", "", "", max_sim_67)
+
+sim_table <- rbind(r1, r2, r3, r4, r5, r6)
+
+colnames(sim_table) <- c("Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6", "Cluster 7")
+rownames(sim_table) <- c("Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6")
+
+kable(sim_table, format = "html", escape = FALSE, booktabs = TRUE,
+      caption = "Maximal Intercluster Similarity", align = "c", linesep = "") %>%
+  kable_styling(position = "center") %>%
+  column_spec(3, color = "#FF0000") %>%
+  row_spec(1, color = "black")
+```
+
+```{r q8, echo=FALSE}
+question(
+  "8. Based on this table, will Clusters 1 and 2 be merged at the next step of the algorithm?",
+  answer("True", correct = TRUE),
+  answer("False"),
+  allow_retry = TRUE
+)
+```
+
+It is hard to tell since there are multiple pairs of clusters with a dissimilarity of 6. All of these clusters will be merged, since 6 is the lowest dissimilarity! Since Clusters 2 and 3 are one such pair, they will be merged also. 
+
+A dendrogram for the hierarchical clustering algorithm appears below. 
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(ggdendro)
+
+hclust_XY <- hclust(dist(cluster_XY, method = "manhattan"), method = "complete")
+
+col <- rep("black", 25)
+col[19] <- "red"
+col[6] <- "red"
+
+ggdendrogram(hclust_XY, rotate = FALSE, size = 2) + 
+  theme(axis.text.x=element_text(color = col))
+```
+
+
+```{r q9, echo=FALSE}
+question(
+  "9. According to the dendrogram, which point is most similar to Point $R$?",
+  answer("Point $D$"),
+  answer("Point $P$"),
+  answer("Point $Q$"),
+  answer("No way to tell.", correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+```{r q10, echo=FALSE}
+question(
+  "10. According to the dendrogram, which point is most similar to Point $X$?",
+  answer("Point $U$"),
+  answer("Point $Y$", correct = TRUE),
+  answer("More than one point."),
+  answer("No way to tell."),
+  allow_retry = TRUE
+)
+```
+
+```{r q11, echo=FALSE}
+question_numeric(
+  "11. Where could you cut the dendrogram to create two distinct clusters?",
+  answer(20, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(21, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(22, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(23, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(24, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(25, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(26, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(27, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(28, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(29, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(30, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  allow_retry = TRUE, 
+  min = 0,
+  max = 30,
+  step = 1
+)
+```
+
+A scatterplot of the $X_1, X_2$ values for each point appears below. 
+
+```{r, echo = FALSE}
+ggplot(data = cluster_XY, aes(x = X, y = Y)) + 
+  geom_point(size = 2) + 
+  geom_text(hjust = -0.9, vjust = 0.5, color = "black", label = cluster_XY$Label) + 
+  scale_x_continuous(name = TeX(r"($X_1$)"), limits = c(1, 13.5), minor_breaks = seq(from = 1, to = 13, by = 1)) +
+  scale_y_continuous(name = TeX(r"($X_2$)"), minor_breaks = seq(from = 1, to = 12, by = 1))
+```
+
+```{r q12, echo=FALSE}
+question(
+  "12. Where could you draw a line on the plot to separate the two clusters in the dendrogram?",
+  answer("$X_2 = 4.5$", correct = TRUE),
+  answer("$X_2 = 6.5$"),
+  answer("$X_1 = 5.0$"), 
+  answer("$X_1 = 10.0$"),
+  allow_retry = TRUE, 
+  random_answer_order = TRUE, 
+  post_message = "Congratulations! You have found the third secret word: HISTORY."
+)
+```
+
+A $K$-Means clustering algorithm is applied to the same dataset for $K = 1, 2, ..., 12$. A plot comparing the within-cluster variation to $K$ appears below. 
+
+```{r, echo = FALSE, fig.height = 3.1, fig.width = 6.5}
+set.seed(345)
+
+cluster_XY <- cluster_XY %>%
+  select(X:Y)
+
+wss <- NULL
+clusters <- NULL
+
+for (i in 1:12){
+  tempkmeans <- kmeans(x = cluster_XY, centers = i, nstart = 10)
+  wss[i] <- tempkmeans$tot.withinss
+  clusters <- cbind(clusters, tempkmeans$cluster)
+}
+
+k_plot <- data.frame(cbind(1:12, wss))
+colnames(k_plot) <- c("k", "WSS")
+
+ggplot(data = k_plot, aes(x = k, y = WSS)) + 
+  geom_point() + 
+  scale_x_continuous(name = TeX(r"($K$)"), limits = c(1, 12), breaks = seq(from = 1, to = 12, by = 1))
+```
+
+```{r q13, echo=FALSE}
+question(
+  "13. What value for $K$ would you choose based on this plot?",
+  answer("$K = 2$"),
+  answer("$K = 3$"),
+  answer("$K = 4$", correct = TRUE, message = "Other choices might be reasonable, but $K = 4$ is the most prominent elbow in the plot."),
+  answer("$K = 5$"),
+  answer("$K = 6$"),
+    allow_retry = TRUE
+)
+```
+
+## Data Cleaning and Exploration
+
+Let's move on to examples of clustering as applied to a real world dataset. Recall that the Epicurious dataset, created by a Kaggle user, has over 20,000 recipes from the website Epicurious. Loosely speaking, there are a few groups of variables in the dataset:
 
 * The nutritional variables (`calories`, `protein`, `fat`, `sodium`)
 * Ingredient tags (`almond`, `amaretto`, `anchovy`, and so on)
 * Place tags (`alabama`, `alaska`, `aspen`, `australia`, and so forth)
 * Other tags (`advance.prep.required`, `anthony.bourdain`, etc.)
 
-1. Before we do anything else, look at the column names of `epi`.
+14. Before we do anything else, look at the column names of `epi`.
 
 ```{python col, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
 
@@ -105,7 +418,7 @@ epi.columns
 grade_this_code()
 ```
 
-2. Notice that the first column is called `title.` Print it out and examine it.
+15. Notice that the first column is called `title.` Print it out and examine it.
 
 ```{python title, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
 
@@ -119,7 +432,7 @@ epi['title']
 grade_this_code()
 ```
 
-3. We've kind of ignored these type of variables so far--that is, variables that are ID numbers or names. They are technically a type of categorical variable and haven't really been useful to us so far. However, they can be very valuable much later in a clustering analysis, when we try to interpret the clusters. They are the most helpful when they are the row names rather than a separate variable column. Edit the line of code below to "re-import" the data with recipe titles as row names, and remember this trick for later!
+16. We've kind of ignored these type of variables so far--that is, variables that are ID numbers or names. They are technically a type of categorical variable and haven't really been useful to us so far. However, they can be very valuable much later in a clustering analysis, when we try to interpret the clusters. They are the most helpful when they are the row names rather than a separate variable column. Edit the line of code below to "re-import" the data with recipe titles as row names, and remember this trick for later!
 
 ```{python imp, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
 epi = pd.read_csv("./data/epi_mini2.csv", index_col = ...)
@@ -135,7 +448,7 @@ epi.head()
 grade_this_code()
 ```
 
-4. Now, check out the dataset with `.describe()`. 
+17. Now, check out the dataset with `.describe()`. 
 
 ```{python setup2, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
 epi = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
@@ -153,22 +466,21 @@ epi.describe()
 grade_this_code()
 ```
 
-5. Do you spot any issues with the data that might slow us down when attempting to analyze it? Use the cell below to answer the following questions.
+18. Do you spot any issues with the data that might slow us down when attempting to analyze it? Use the cell below to answer the following questions.
 
-```{python explore5, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
-
+```{python explore, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+## For data exploration only!
 ```
 
-```{r q5, echo=FALSE, eval = FALSE}
-question("What is the mean of `calories`?",
+```{r q19, echo=FALSE, eval = FALSE}
+question("19. What is the mean of `calories`?",
          answer("`-4.896259e+08`", correct=TRUE),
          answer("`-2.147484e+09`"),
          answer("`3.292000e+03`"),
          answer("`2.610000e+02`"),
          answer("$\\sqrt{13}$"), 
          allow_retry = TRUE, 
-         random_answer_order = TRUE, 
-         post_message = "Congratulations! You have found the first secret word: FLAVOR (feels appropriate for this dataset).")
+         random_answer_order = TRUE)
 ```
 
 <!-- Can you have a negative value for `calories`? No, not in the context of this dataset! For some reason, there are a lot of missing values, but rather than `NA`, they have been filled in with `-2147483648`. There are similar issues in `protein`, `fat`, and `sodium`. -->
@@ -191,7 +503,7 @@ question("What is the mean of `calories`?",
 <!-- **Hint:** You may want to use `pd.NA` for the missing values. -->
 <!-- </div> -->
 
-6. Write a line of code to find the number of missing values for each variable. 
+19. Write a line of code to find the number of missing values for each variable. 
 
 <!-- ```{python setup2_5, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup2"} -->
 <!-- epi = epi.replace(-2147483648, pd.NA) -->
@@ -209,8 +521,8 @@ np.sum(pd.isna(epi), axis = 0)
 grade_this_code()
 ```
 
-```{r q7, echo=FALSE}
-question("7. Which of the variables have at least some missing values? Select all that apply.",
+```{r q20, echo=FALSE}
+question("20. Which of the variables have at least some missing values? Select all that apply.",
          answer("`calories`", correct=TRUE),
          answer("`protein`"),
          answer("`fat`"),
@@ -221,7 +533,7 @@ question("7. Which of the variables have at least some missing values? Select al
          answer("`rosemary`"), 
          allow_retry = TRUE, 
          random_answer_order = TRUE, 
-         post_message = "Congratulations! You have found the first secret word: FLAVOR (feels appropriate for this dataset).")
+         post_message = "Congratulations! You have found the fourth secret word: FLAVOR (feels appropriate for this dataset).")
 ```
 
 
@@ -229,7 +541,7 @@ In earlier labs, we focused on data cleaning and identifying unusual values in t
 
 Most of the time, I've been redefining DataFrames with only a subset of columns by explicitly naming the variables I would like to keep. However, there are over 600 columns to keep here, and I don't really want to have to name all of them! Instead, I can supply the indices of the columns that I would like to keep.
 
-8. The line of code below returns a DataFrame with all of the columns. Can you edit it so that I keep only the last 674 columns and drop the numerical variables (a.k.a., the first five columns)? Print out the column names to confirm.
+21. The line of code below returns a DataFrame with all of the columns. Can you edit it so that I keep only the last 674 columns and drop the numerical variables (a.k.a., the first five columns)? Print out the column names to confirm.
 
 ```{python drop, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
 epi = epi.iloc[:, :]
@@ -255,7 +567,7 @@ Let's take a look at how to cluster with $K$-Means. The `sklearn` function [`KMe
 
 Obviously, `n_clusters` is the number of clusters. `n_init` is the number of times that we run the clustering algorithm. We mentioned in class that we need to run the clustering algorithm multiple times since there are random starts, this is especially true in large datasets like the one we are working with. To make our code reproducible, we can use `random_state`.\n
 
-9. The following lines of code create 12 clusters using 10 random starts. Can you edit them so that they create 6 clusters with 20 random starts? Save the object as `clust_1` so we can see what outputs are possible in the next few questions.
+22. The following lines of code create 12 clusters using 10 random starts. Can you edit them so that they create 6 clusters with 5 random starts? Save the object as `clust_1` so we can see what outputs are possible in the next few questions.
 
 ```{python setup3, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup2"}
 epi = epi.iloc[:, 6:680]
@@ -271,7 +583,7 @@ clust_1 = kmeans1.fit(epi)
 ```{python clust1-solution, message = FALSE, warning = FALSE, echo = FALSE}
 from sklearn.cluster import KMeans
 
-kmeans1 = KMeans(n_clusters = 6, n_init = 20, random_state = 1145)
+kmeans1 = KMeans(n_clusters = 6, n_init = 5, random_state = 1145)
 clust_1 = kmeans1.fit(epi)
 ```
 
@@ -279,26 +591,25 @@ clust_1 = kmeans1.fit(epi)
 grade_this_code()
 ```
 
-10. We are interested in a few outputs. First, the within cluster variation--in `sklearn`, this is called something different. Can you identify what object you should be extracting from the documentation (the [user guide for `Kmeans`](https://scikit-learn.org/stable/modules/clustering.html#k-means) might also be helpful)? 
+23. We are interested in a few outputs. First, the within cluster variation--in `sklearn`, this is called something different. Can you identify what object you should be extracting from the documentation (the [user guide for `Kmeans`](https://scikit-learn.org/stable/modules/clustering.html#k-means) might also be helpful)? 
 
-```{r q10, echo=FALSE}
-question("Which of the attributes of a `KMeans` object measures the within cluster variation?",
+```{r q23, echo=FALSE}
+question("23. Which of the attributes of a `KMeans` object measures the within cluster variation?",
          answer("`inertia_`", correct=TRUE),
          answer("`cluster_centers_`"),
          answer("`labels_`"),
          answer("`n_features_in_`"),
          answer("`n_iter_`"), 
          allow_retry = TRUE, 
-         random_answer_order = TRUE, 
-         post_message = "Congratulations! You have found the second secret word: QUIET.")
+         random_answer_order = TRUE)
 ```
 
-11. Once you find it, print it in the cell below.
+24. Once you find it, print it in the cell below.
 
 ```{python setup4, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
 from sklearn.cluster import KMeans
 
-kmeans1 = KMeans(n_clusters = 6, n_init = 20, random_state = 1145)
+kmeans1 = KMeans(n_clusters = 6, n_init = 5, random_state = 1145)
 clust_1 = kmeans1.fit(epi)
 ```
 
@@ -314,13 +625,13 @@ clust_1.inertia_
 grade_this_code()
 ```
 
-12. We used $K=6$ arbitrarily, but of course we need to choose it. As I mentioned in class, we will need to write a loop and create the elbow plot to justify the choice of $K$. Fill in the loop below to get the inertia for values of $K$ from 1 to 15 (I'm picking a large number because the data is so large, in smaller datasets you may not need to go so far).
+25. We used $K=6$ arbitrarily, but of course we need to choose it. As I mentioned in class, we will need to write a loop and create the elbow plot to justify the choice of $K$. Fill in the loop below to get the inertia for values of $K$ from 1 to 15 (I'm picking a large number because the data is so large, in smaller datasets you may not need to go so far).
 
 ```{python looped, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
 inertias = []
 
 for i in range(1,16):
-    kmeans = KMeans(n_clusters=i, n_init = 20, random_state = 1145)
+    kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 1145)
     kmeans.fit(epi)
     inertias.append(...)
 ```
@@ -329,7 +640,7 @@ for i in range(1,16):
 inertias = []
 
 for i in range(1,16):
-    kmeans = KMeans(n_clusters=i, n_init = 20, random_state = 1145)
+    kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 1145)
     kmeans.fit(epi)
     inertias.append(kmeans.inertia_)
 ```
@@ -338,7 +649,7 @@ for i in range(1,16):
 grade_this_code()
 ```
 
-13. Now, let's create the elbow plot. First, create a data frame with two columns--one for the value of $K$ and one for the inertia.
+26. Now, let's create the elbow plot. First, create a data frame with two columns--one for the value of $K$ and one for the inertia.
 
 ```{python setup5, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup4"}
 inertias = []
@@ -363,7 +674,7 @@ chooseK_df = pd.DataFrame(data = chooseK)
 grade_this_code()
 ```
 
-14. Now, run this cell to create a plot with $K$ on the $x$-axis and inertia on the $y$.
+27. Now, run this cell to create a plot with $K$ on the $x$-axis and inertia on the $y$.
 
 ```{python setup6, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup5"}
 chooseK = {'K': range(1, 16), 'Inertia': inertias}
@@ -385,15 +696,15 @@ print(p9.ggplot(chooseK_df, p9.aes(x = 'K', y = 'Inertia')) +
 
 Note: There does not appear to be a very clear "elbow" in the plot (although it's not terrible, either). This happens sometimes. I might consider the values 2, 5, or 11 based on my plot (yours will look different unless you used the same `random_state`). 
 
-15. Create an object `clust_2` on the `epi` dataset with 11 clusters.
+28. Create an object `clust_2` on the `epi` dataset with 11 clusters.
 
 ```{python label, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
-kmeans2 = KMeans(n_clusters = ..., n_init = 20)
+kmeans2 = KMeans(n_clusters = ..., n_init = 5)
 clust_2 = kmeans2.fit(epi)
 ```
 
 ```{python label-solution, message = FALSE, warning = FALSE, echo = FALSE}
-kmeans2 = KMeans(n_clusters = 11, n_init = 20, random_state = 1145)
+kmeans2 = KMeans(n_clusters = 11, n_init = 5, random_state = 1145)
 clust_2 = kmeans2.fit(epi)
 ```
 
@@ -401,10 +712,10 @@ clust_2 = kmeans2.fit(epi)
 grade_this_code()
 ```
 
-16. Now comes the fun part! We can try to interpret each cluster. You might learn more advanced methods for visualizing the clusters in later classes, but in this class, the best we can do is just printing out the "names" of the points in the clusters to try and see if there's a pattern. Adapt the code below to print out the names of the points in Cluster 1, 2, etc. Try and give each one a name--this might depend on context clues, you will really have to think about what they all have in common!
+29. Now comes the fun part! We can try to interpret each cluster. You might learn more advanced methods for visualizing the clusters in later classes, but in this class, the best we can do is just printing out the "names" of the points in the clusters to try and see if there's a pattern. Adapt the code below to print out the names of the points in Cluster 1, 2, etc. Try and give each one a name--this might depend on context clues, you will really have to think about what they all have in common!
 
 ```{python setup7, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup6"}
-kmeans2 = KMeans(n_clusters = 11, n_init = 20, random_state = 1145)
+kmeans2 = KMeans(n_clusters = 11, n_init = 5, random_state = 1145)
 clust_2 = kmeans2.fit(epi)
 ```
 
@@ -412,8 +723,8 @@ clust_2 = kmeans2.fit(epi)
 epi.index[clust_2.labels_ == 0.0]
 ```
 
-```{r q17, echo=FALSE}
-question("17. Which cluster(s) contain mostly meat recipes?",
+```{r q30, echo=FALSE}
+question("30. Which cluster(s) contain mostly meat recipes?",
          answer("`0.0`", correct = TRUE),
          answer("`1.0`"),
          answer("`2.0`"),
@@ -425,12 +736,11 @@ question("17. Which cluster(s) contain mostly meat recipes?",
          answer("`8.0`"), 
          answer("`9.0`"), 
          answer("`10.0`"), 
-         allow_retry = TRUE, 
-         post_message = "Congratulations! You have found the third secret word: HISTORY.")
+         allow_retry = TRUE)
 ```
 
-```{r q18, echo=FALSE}
-question("18. Which cluster(s) contain mostly vegetarian recipes?",
+```{r q31, echo=FALSE}
+question("31. Which cluster(s) contain mostly vegetarian recipes?",
          answer("`0.0`"),
          answer("`1.0`", correct = TRUE),
          answer("`2.0`"),
@@ -445,8 +755,8 @@ question("18. Which cluster(s) contain mostly vegetarian recipes?",
          allow_retry = TRUE)
 ```
 
-```{r q19, echo=FALSE}
-question("19. Which cluster(s) contain mostly desserts?",
+```{r q32, echo=FALSE}
+question("32. Which cluster(s) contain mostly desserts?",
          answer("`0.0`"),
          answer("`1.0`"),
          answer("`2.0`", correct = TRUE),
@@ -461,8 +771,8 @@ question("19. Which cluster(s) contain mostly desserts?",
          allow_retry = TRUE)
 ```
 
-```{r q20, echo=FALSE}
-question("20. Which cluster(s) contain mostly cocktails?",
+```{r q33, echo=FALSE}
+question("33. Which cluster(s) contain mostly cocktails?",
          answer("`0.0`"),
          answer("`1.0`"),
          answer("`2.0`"),
@@ -475,7 +785,7 @@ question("20. Which cluster(s) contain mostly cocktails?",
          answer("`9.0`"), 
          answer("`10.0`"), 
          allow_retry = TRUE, 
-         post_message = "Congratulations! You have found the fourth secret word: SOLVE.")
+         post_message = "Congratulations! You have found the fifth and final secret word: SOLVE.")
 ```
 
 There are some patterns--for example, it looks like cluster `9.0` might be side-dishes (lots of rice, potatoes, and salads). There might be other tags that we aren't thinking of (like all of the location or special occasion tags), but not all of the clusters have nice interpretations (which is not uncommon). 
@@ -490,7 +800,7 @@ Now let's move on to hierarchical clustering. Remember in class that I mentioned
 
 `n_clusters` may seem a little odd, because one of the advantages of hierarchical clustering is that we do not have to choose a number of clusters.You can just make this `None` to get all of the dendrogram, but if you wanted to cut your dendrogram, this is one way to do it! That would make it easier to investigate the members of each cluster. `metric` is of course how to measure similarity between two points, and `linkage` is how to measure similarity between groups of points. 
 
-21. The following line of code creates clusters using `ward` linkage. Can you edit it so that it creates clusters with `complete` linkage? Save the object as `clust_3` so we can see what outputs are possible in the next few questions.
+34. The following line of code creates clusters using `ward` linkage. Can you edit it so that it creates clusters with `complete` linkage? Save the object as `clust_3` so we can see what outputs are possible in the next few questions.
 
 ```{python complete, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
 from sklearn.cluster import AgglomerativeClustering
@@ -508,7 +818,7 @@ clust_3 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, lin
 grade_this_code()
 ```
 
-22. As mentioned in class, we like the dendrogram output. Unfortunately, `sklearn` does not have a nice function for plotting dendrograms. However, I did find a nice example from `sklearn` for [plotting hierarchical clustering Dendrograms](https://scikit-learn.org/stable/auto_examples/cluster/plot_agglomerative_dendrogram.html#sphx-glr-auto-examples-cluster-plot-agglomerative-dendrogram-py)--it makes use of a function from `scipy`. One other major change is that it uses `matplotlib` syntax rather than `plotnine`, we'll have to wait for `plotnine` to catch up. 
+35. As mentioned in class, we like the dendrogram output. Unfortunately, `sklearn` does not have a nice function for plotting dendrograms. However, I did find a nice example from `sklearn` for [plotting hierarchical clustering Dendrograms](https://scikit-learn.org/stable/auto_examples/cluster/plot_agglomerative_dendrogram.html#sphx-glr-auto-examples-cluster-plot-agglomerative-dendrogram-py)--it makes use of a function from `scipy`. One other major change is that it uses `matplotlib` syntax rather than `plotnine`, we'll have to wait for `plotnine` to catch up. 
 
 One thing you can do is copy and paste the function `plot_dendrogram` they have written in the tutorial, and apply that function to your own analysis. I've done that for you in the code chunk below--can you plot the dendrogram from the previous question?
 
@@ -594,15 +904,135 @@ plt.show()
 grade_this_code()
 ```
 
-Unfortunately, this dendrogram isn't very helpful because there are so many observations! It's also much more difficult to get the labels out visually. For now, let's use dendrograms for smaller datasets only.
+Unfortunately, this dendrogram isn't very helpful because there are so many observations! It's also much more difficult to get the labels out visually. 
 
-If you did want to get the labels out programatically, you would have to give a number of clusters. Let's use the same number, 11. 
+36. If you did want to get the labels out programmatically, you would have to give a number of clusters. Let's use the same number, 11. 
 
 ```{python labels2, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
 clust_4 = AgglomerativeClustering(distance_threshold = None, n_clusters = 11, linkage = 'ward').fit(epi)
 epi.index[clust_4.labels_ == 0.0].tolist()
 ```
 
+37. Another option would be to take a smaller random sample of the observations:
+
+```{python setup9, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup8"}
+from matplotlib import pyplot as plt
+from scipy.cluster.hierarchy import dendrogram
+
+def plot_dendrogram(model, **kwargs):
+    # Create linkage matrix and then plot the dendrogram
+
+    # create the counts of samples under each node
+    counts = np.zeros(model.children_.shape[0])
+    n_samples = len(model.labels_)
+    for i, merge in enumerate(model.children_):
+        current_count = 0
+        for child_idx in merge:
+            if child_idx < n_samples:
+                current_count += 1  # leaf node
+            else:
+                current_count += counts[child_idx - n_samples]
+        counts[i] = current_count
+
+    linkage_matrix = np.column_stack(
+        [model.children_, model.distances_, counts]
+    ).astype(float)
+
+    # Plot the corresponding dendrogram
+    dendrogram(linkage_matrix, **kwargs)
+```
+
+```{python, smalldendro, exercise = TRUE, message = FALSE, exercise.setup="setup9"}
+epi_tiny = epi.sample(50, random_state = 524)
+
+clust_5 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'complete').fit(epi_tiny)
+
+plot_dendrogram(clust_5, truncate_mode = "level", p = 12,
+                labels = epi_tiny.index)
+plt.title("Hierarchical Clustering Dendrogram with Complete Linkage")
+plt.xlabel("")
+
+plt.show() 
+```
+
+## Using `scipy`
+
+If you want to use simpler code than `sklearn`, you can try `scipy`! The first step in clustering this data using hierarchical clustering is to import the necessary functions.
+
+```{python scipy, exercise = TRUE, message = FALSE, exercise.setup="setup9"}
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+```
+
+```{python setup10, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup9"}
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+```
+
+We can use the `linkage()` function, which takes in a dataset and the type of linkage you want to use, to cluster the data. Check out [the documentation for `linkage()`]() to answer the following question.
+
+```{r q38, echo=FALSE}
+question("38. Which `method`'s can you use in `linkage()`?",
+         answer("`single`", correct = TRUE),
+         answer("`complete`", correct = TRUE),
+         answer("`average`", correct = TRUE),
+         answer("`weighted`", correct = TRUE),
+         answer("`centroid`", correct = TRUE), 
+         answer("`median`", correct = TRUE),
+         answer("`ward`", correct = TRUE),
+         answer("`variance`"), 
+         answer("`Mahalanobis`"), 
+         answer("`Chebychev`"), 
+         answer("`Minkowski`"), 
+         allow_retry = TRUE)
+```
 
 
+You can also change the distance metric used by using the argument method (the default distance metric is Euclidean distance). For this problem, we will use Euclidean distance and complete linkage. Remember that you don’t need to give a number of clusters for hierarchical clustering.
 
+39. In the code chunk below, apply `linkage()` to the `epi_tiny` dataset. Save the object as `l_epi` for use later.
+
+```{python sp_linkage, exercise = TRUE, message = FALSE, exercise.setup="setup10"}
+
+```
+
+```{python sp_linkage-solution, message = FALSE, warning = FALSE, echo = FALSE}
+l_epi = linkage(epi_tiny, method='complete')
+```
+
+```{r sp_linkage-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now, we can use the `dendrogram()` (which we borrowed above) method to depict our clustering. This function has a lot of options for customization which you read about in the [`dendrogram() documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.dendrogram.html). For our purposes, we will mostly use the default options.
+
+40. The function takes in a linkage matrix (which conveniently is the output of `linkage()`). The argument `no_labels` can be set to `True` to keep row labels from being printed at the leaves of the dendrogram. To avoid unnecessary clutter on our plot, change the argument. Lastly, I am setting the argument `above_threshold_color` equal to `k` to make the top of the dendrogram appear black so that it contrasts well with the colored clusters.
+
+```{python setup11, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup10"}
+l_epi = linkage(epi_tiny, method='complete')
+```
+
+```{python sp_dendro1, exercise = TRUE, message = FALSE, exercise.setup="setup11"}
+dendrogram(..., ..., above_threshold_color='k')
+```
+
+```{python sp_dendro1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+dendrogram(l_epi, no_labels = True, above_threshold_color='k')
+```
+
+```{r sp_dendro1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+41. We can also try to change the orientation to make it easier to read! Run the following cell. 
+
+```{python sp_dendro2, exercise = TRUE, message = FALSE, exercise.setup="setup11"}
+plt.figure(figsize=(8, 16))
+dendrogram(l_epi, labels = epi_tiny.index, orientation='right', above_threshold_color ='k')
+plt.xticks(fontsize=9)
+plt.yticks(fontsize=9)
+plt.ylabel('Recipes', fontsize=12)
+plt.xlabel('Euclidean Distance', fontsize=12)
+plt.title('Dendrogram of Recipe Clusters', fontsize=14)
+plt.show()
+```
+
+Do you see any similarities with the clusters from the previous section?
