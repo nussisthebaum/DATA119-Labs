@@ -1,0 +1,602 @@
+---
+title: "Data119 - Lab 7"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+library(dplyr)
+library(kableExtra)
+library(cvAUC)
+library(ggrepel)
+library(kableExtra)
+library(latex2exp)
+library(reshape2)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("$K$-Means and Hierarchical Clustering", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goals of this lab are:
+
+* To practice basic data cleaning, such as removing columns, dropping rows with missing values, and accessing row names of a dataframe.
+* To implement $K$-means clustering, including selecting an appropriate value for $K$ and interpreting the cluster output.
+* To implement hierarchical clustering, including creation of dendrograms.
+
+## Setup
+
+For this lab we will be using `plotnine`, `pandas`, `numpy`, `scikit-learn`, `scipy`, and the dataset `epi_r`. 
+
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy
+import sklearn
+
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab7/www/epi_mini2.csv
+
+epi = pd.read_csv("./data/epi_mini2.csv", index_col = 0)
+```
+
+## Data cleaning and exploration
+
+Recall that the Epicurious dataset, created by a Kaggle user, has over 20,000 recipes from the website Epicurious. Loosely speaking, there are a few groups of variables in the dataset:
+
+* The nutritional variables (`calories`, `protein`, `fat`, `sodium`)
+* Ingredient tags (`almond`, `amaretto`, `anchovy`, and so on)
+* Place tags (`alabama`, `alaska`, `aspen`, `australia`, and so forth)
+* Other tags (`advance.prep.required`, `anthony.bourdain`, etc.)
+
+1. Before we do anything else, look at the column names of `epi`.
+
+```{python col, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+
+```
+
+```{python col-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epi.columns
+```
+
+```{r col-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+2. Notice that the first column is called `title.` Print it out and examine it.
+
+```{python title, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+
+```
+
+```{python title-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epi['title']
+```
+
+```{r title-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+3. We've kind of ignored these type of variables so far--that is, variables that are ID numbers or names. They are technically a type of categorical variable and haven't really been useful to us so far. However, they can be very valuable much later in a clustering analysis, when we try to interpret the clusters. They are the most helpful when they are the row names rather than a separate variable column. Edit the line of code below to "re-import" the data with recipe titles as row names, and remember this trick for later!
+
+```{python imp, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+epi = pd.read_csv("./data/epi_mini2.csv", index_col = ...)
+epi.head()
+```
+
+```{python imp-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epi = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
+epi.head()
+```
+
+```{r imp-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+4. Now, check out the dataset with `.describe()`. 
+
+```{python setup2, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
+epi = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
+```
+
+```{python desc, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+
+```
+
+```{python desc-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epi.describe()
+```
+
+```{r desc-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+5. Do you spot any issues with the data that might slow us down when attempting to analyze it? Use the cell below to answer the following questions.
+
+```{python explore5, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+
+```
+
+```{r q5, echo=FALSE, eval = FALSE}
+question("What is the mean of `calories`?",
+         answer("`-4.896259e+08`", correct=TRUE),
+         answer("`-2.147484e+09`"),
+         answer("`3.292000e+03`"),
+         answer("`2.610000e+02`"),
+         answer("$\\sqrt{13}$"), 
+         allow_retry = TRUE, 
+         random_answer_order = TRUE, 
+         post_message = "Congratulations! You have found the first secret word: FLAVOR (feels appropriate for this dataset).")
+```
+
+<!-- Can you have a negative value for `calories`? No, not in the context of this dataset! For some reason, there are a lot of missing values, but rather than `NA`, they have been filled in with `-2147483648`. There are similar issues in `protein`, `fat`, and `sodium`. -->
+
+<!-- 6. Look up the syntax for the `pandas` method `.replace()`. Use what you have learned to replace the `-2147483648` values with `NA`'s. -->
+
+<!-- ```{python replace, exercise = TRUE, message = FALSE, exercise.setup="setup2"} -->
+
+<!-- ``` -->
+
+<!-- ```{python replace-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+<!-- epi = epi.replace(-2147483648, pd.NA) -->
+<!-- ``` -->
+
+<!-- ```{r replace-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
+
+<!-- <div id="filter-hint"> -->
+<!-- **Hint:** You may want to use `pd.NA` for the missing values. -->
+<!-- </div> -->
+
+6. Write a line of code to find the number of missing values for each variable. 
+
+<!-- ```{python setup2_5, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup2"} -->
+<!-- epi = epi.replace(-2147483648, pd.NA) -->
+<!-- ``` -->
+
+```{python missing, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+
+```
+
+```{python missing-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.sum(pd.isna(epi))
+```
+
+```{r replace-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q7, echo=FALSE}
+question("7. Which of the variables have at least some missing values? Select all that apply.",
+         answer("`calories`", correct=TRUE),
+         answer("`protein`"),
+         answer("`fat`"),
+         answer("`sodium`"),
+         answer("`wedding`"), 
+         answer("`chestnut`"), 
+         answer("`boston`"), 
+         answer("`rosemary`"), 
+         allow_retry = TRUE, 
+         random_answer_order = TRUE, 
+         post_message = "Congratulations! You have found the first secret word: FLAVOR (feels appropriate for this dataset).)
+```
+
+
+In earlier labs, we focused on data cleaning and identifying unusual values in the nutritional variables. We could just drop rows with missing values, for example, with the `.dropna()` method, but I would like to focus on the "tag" variables in this lab, so let's delete the columns with numerical variables entirely. Note that this means that we won't have to standardize the variables--everything left will be indictators and therefore on the same scale! Normally, we would have to--so make sure to do that on your homework.
+
+Most of the time, I've been redefining DataFrames with only a subset of columns by explicitly naming the variables I would like to keep. However, there are over 600 columns to keep here, and I don't really want to have to name all of them! Instead, I can supply the indices of the columns that I would like to keep.
+
+8. The line of code below returns a DataFrame with all of the columns. Can you edit it so that I keep only the last 674 columns and drop the numerical variables (a.k.a., the first five columns)? Print out the column names to confirm.
+
+```{python drop, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+epi = epi.iloc[:, :]
+epi.columns
+```
+
+```{python drop-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epi = epi.iloc[:, 7:681]
+epi.columns
+```
+
+```{r drop-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+## $K$-Means Clustering
+
+Let's take a look at how to cluster with $K$-Means. The `sklearn` function [`KMeans`](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html) will do this for us--read the linked documentation to brush up on the syntax and see what kind of arguments you can change. I'm particularly interested in:
+
+* `n_clusters`
+* `n_init`
+* `random_state`
+
+Obviously, `n_clusters` is the number of clusters. `n_init` is the number of times that we run the clustering algorithm. We mentioned in class that we need to run the clustering algorithm multiple times since there are random starts, this is especially true in large datasets like the one we are working with. To make our code reproducible, we can use `random_state`.\n
+
+9. The following lines of code create 12 clusters using 10 random starts. Can you edit them so that they create 6 clusters with 20 random starts? Save the object as `clust_1` so we can see what outputs are possible in the next few questions.
+
+```{python setup3, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup2"}
+epi = epi.iloc[:, 7:681]
+```
+
+```{python clust1, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+from sklearn.cluster import KMeans
+
+kmeans1 = KMeans(n_clusters = 12, n_init = 10, random_state = 1145)
+clust_1 = kmeans1.fit(epi)
+```
+
+```{python clust1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from sklearn.cluster import KMeans
+
+kmeans1 = KMeans(n_clusters = 6, n_init = 20, random_state = 1145)
+clust_1 = kmeans1.fit(epi)
+```
+
+```{r clust1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+10. We are interested in a few outputs. First, the within cluster variation--in `sklearn`, this is called something different. Can you identify what object you should be extracting from the documentation (the [user guide for `Kmeans`](https://scikit-learn.org/stable/modules/clustering.html#k-means) might also be helpful)? 
+
+```{r q10, echo=FALSE}
+question("Which of the attributes of a `KMeans` object measures the within cluster variation?",
+         answer("`inertia_`", correct=TRUE),
+         answer("`cluster_centers_`"),
+         answer("`labels_`"),
+         answer("`n_features_in_`"),
+         answer("`n_iter_`"), 
+         allow_retry = TRUE, 
+         random_answer_order = TRUE, 
+         post_message = "Congratulations! You have found the second secret word: QUIET.")
+```
+
+11. Once you find it, print it in the cell below.
+
+```{python setup4, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
+from sklearn.cluster import KMeans
+
+kmeans1 = KMeans(n_clusters = 6, n_init = 20, random_state = 1145)
+clust_1 = kmeans1.fit(epi)
+```
+
+```{python iner, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+
+```
+
+```{python iner-solution, message = FALSE, warning = FALSE, echo = FALSE}
+clust_1.inertia_
+```
+
+```{r iner-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+12. We used $K=6$ arbitrarily, but of course we need to choose it. As I mentioned in class, we will need to write a loop and create the elbow plot to justify the choice of $K$. Fill in the loop below to get the inertia for values of $K$ from 1 to 15 (I'm picking a large number because the data is so large, in smaller datasets you may not need to go so far).
+
+```{python looped, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+inertias = []
+
+for i in range(1,16):
+    kmeans = KMeans(n_clusters=i, n_init = 20, random_state = 1145)
+    kmeans.fit(epi)
+    inertias.append(...)
+```
+
+```{python looped-solution, message = FALSE, warning = FALSE, echo = FALSE}
+inertias = []
+
+for i in range(1,16):
+    kmeans = KMeans(n_clusters=i, n_init = 20, random_state = 1145)
+    kmeans.fit(epi)
+    inertias.append(kmeans.inertia_)
+```
+
+```{r looped-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+13. Now, let's create the elbow plot. First, create a data frame with two columns--one for the value of $K$ and one for the inertia.
+
+```{python setup5, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup4"}
+inertias = []
+
+for i in range(1,16):
+    kmeans = KMeans(n_clusters=i, n_init = 20, random_state = 1145)
+    kmeans.fit(epi)
+    inertias.append(kmeans.inertia_)
+```
+
+```{python elbow, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+chooseK = {'K': range(1, 16), 'Inertia': inertias}
+chooseK_df = pd.DataFrame(data = ...)
+```
+
+```{python elbow-solution, message = FALSE, warning = FALSE, echo = FALSE}
+chooseK = {'K': range(1, 16), 'Inertia': inertias}
+chooseK_df = pd.DataFrame(data = chooseK)
+```
+
+```{r elbow-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+14. Now, run this cell to create a plot with $K$ on the $x$-axis and inertia on the $y$.
+
+```{python setup6, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup5"}
+chooseK = {'K': range(1, 16), 'Inertia': inertias}
+chooseK_df = pd.DataFrame(data = chooseK)
+```
+
+```{python elbowp, exercise=TRUE, message = FALSE, exercise.setup="setup6"}
+import plotnine as p9
+
+print(p9.ggplot(chooseK_df, p9.aes(x = 'K', y = 'Inertia')) +
+       p9.geom_vline(xintercept = 2, color = "red") + 
+       p9.geom_vline(xintercept = 5, color = "red") + 
+       p9.geom_vline(xintercept = 11, color = "red") + 
+       p9.geom_line() +
+       p9.scale_x_continuous(name = "$K$") + 
+       p9.scale_y_continuous(name = "Inertia") +
+       p9.theme(legend_position = "none", figure_size = [6, 3.5]))
+```
+
+Note: There does not appear to be a very clear "elbow" in the plot (although it's not terrible, either). This happens sometimes. I might consider the values 2, 5, or 11 based on my plot (yours will look different unless you used the same `random_state`). 
+
+15. Create an object `clust_2` on the `epi` dataset with 11 clusters.
+
+```{python label, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+kmeans2 = KMeans(n_clusters = ..., n_init = 20)
+clust_2 = kmeans2.fit(epi)
+```
+
+```{python label-solution, message = FALSE, warning = FALSE, echo = FALSE}
+kmeans2 = KMeans(n_clusters = 11, n_init = 20, random_state = 1145)
+clust_2 = kmeans2.fit(epi)
+```
+
+```{r label-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+16. Now comes the fun part! We can try to interpret each cluster. You might learn more advanced methods for visualizing the clusters in later classes, but in this class, the best we can do is just printing out the "names" of the points in the clusters to try and see if there's a pattern. Adapt the code below to print out the names of the points in Cluster 1, 2, etc. Try and give each one a name--this might depend on context clues, you will really have to think about what they all have in common!
+
+```{python setup7, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup6"}
+kmeans2 = KMeans(n_clusters = 11, n_init = 20, random_state = 1145)
+clust_2 = kmeans2.fit(epi)
+```
+
+```{python labels, exercise=TRUE, message = FALSE, exercise.setup="setup7"}
+epi.index[clust_2.labels_ == 0.0]
+```
+
+```{r q17, echo=FALSE}
+question("17. Which cluster(s) contain mostly meat recipes?",
+         answer("`0.0`", correct = TRUE),
+         answer("`1.0`"),
+         answer("`2.0`"),
+         answer("`3.0`"),
+         answer("`4.0`"), 
+         answer("`5.0`"),
+         answer("`6.0`", correct = TRUE),
+         answer("`7.0`"), 
+         answer("`8.0`"), 
+         answer("`9.0`"), 
+         answer("`10.0`"), 
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the third secret word: HISTORY.")
+```
+
+```{r q18, echo=FALSE}
+question("18. Which cluster(s) contain mostly vegetarian recipes?",
+         answer("`0.0`"),
+         answer("`1.0`", correct = TRUE),
+         answer("`2.0`"),
+         answer("`3.0`"),
+         answer("`4.0`"), 
+         answer("`5.0`"),
+         answer("`6.0`", correct = TRUE),
+         answer("`7.0`"), 
+         answer("`8.0`"), 
+         answer("`9.0`"), 
+         answer("`10.0`"), 
+         allow_retry = TRUE)
+```
+
+```{r q19, echo=FALSE}
+question("19. Which cluster(s) contain mostly desserts?",
+         answer("`0.0`"),
+         answer("`1.0`"),
+         answer("`2.0`", correct = TRUE),
+         answer("`3.0`"),
+         answer("`4.0`"), 
+         answer("`5.0`"),
+         answer("`6.0`"),
+         answer("`7.0`"), 
+         answer("`8.0`"), 
+         answer("`9.0`"), 
+         answer("`10.0`"), 
+         allow_retry = TRUE)
+```
+
+```{r q20, echo=FALSE}
+question("20. Which cluster(s) contain mostly cocktails?",
+         answer("`0.0`"),
+         answer("`1.0`"),
+         answer("`2.0`"),
+         answer("`3.0`", correct = TRUE),
+         answer("`4.0`"), 
+         answer("`5.0`"),
+         answer("`6.0`"),
+         answer("`7.0`"), 
+         answer("`8.0`"), 
+         answer("`9.0`"), 
+         answer("`10.0`"), 
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the fourth secret word: SOLVE.")
+```
+
+There are some patterns--for example, it looks like cluster `9.0` might be side-dishes (lots of rice, potatoes, and salads). There might be other tags that we aren't thinking of (like all of the location or special occasion tags), but not all of the clusters have nice interpretations (which is not uncommon). 
+
+## Hierarchical Clustering
+
+Now let's move on to hierarchical clustering. Remember in class that I mentioned this also goes by the name of agglomerative clustering, which is the name of the `sklearn` command--[`AgglomerativeClustering()`](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AgglomerativeClustering.html). Read the linked documentation to brush up on the syntax and see what kind of arguments you can change. I'm particularly interested in:
+
+* `n_clusters`
+* `metric`
+* `linkage`
+
+`n_clusters` may seem a little odd, because one of the advantages of hierarchical clustering is that we do not have to choose a number of clusters.You can just make this `None` to get all of the dendrogram, but if you wanted to cut your dendrogram, this is one way to do it! That would make it easier to investigate the members of each cluster. `metric` is of course how to measure similarity between two points, and `linkage` is how to measure similarity between groups of points. 
+
+21. The following line of code creates clusters using `ward` linkage. Can you edit it so that it creates clusters with `complete` linkage? Save the object as `clust_3` so we can see what outputs are possible in the next few questions.
+
+```{python complete, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
+from sklearn.cluster import AgglomerativeClustering
+
+clust_3 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'ward').fit(epi)
+```
+
+```{python complete-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from sklearn.cluster import AgglomerativeClustering
+
+clust_3 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'complete').fit(epi)
+```
+
+```{r complete-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+22. As mentioned in class, we like the dendrogram output. Unfortunately, `sklearn` does not have a nice function for plotting dendrograms. However, I did find a nice example from `sklearn` for [plotting hierarchical clustering Dendrograms](https://scikit-learn.org/stable/auto_examples/cluster/plot_agglomerative_dendrogram.html#sphx-glr-auto-examples-cluster-plot-agglomerative-dendrogram-py)--it makes use of a function from `scipy`. One other major change is that it uses `matplotlib` syntax rather than `plotnine`, we'll have to wait for `plotnine` to catch up. 
+
+One thing you can do is copy and paste the function `plot_dendrogram` they have written in the tutorial, and apply that function to your own analysis. I've done that for you in the code chunk below--can you plot the dendrogram from the previous question?
+
+```{python dendo, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
+from matplotlib import pyplot as plt
+from scipy.cluster.hierarchy import dendrogram
+
+def plot_dendrogram(model, **kwargs):
+    # Create linkage matrix and then plot the dendrogram
+
+    # create the counts of samples under each node
+    counts = np.zeros(model.children_.shape[0])
+    n_samples = len(model.labels_)
+    for i, merge in enumerate(model.children_):
+        current_count = 0
+        for child_idx in merge:
+            if child_idx < n_samples:
+                current_count += 1  # leaf node
+            else:
+                current_count += counts[child_idx - n_samples]
+        counts[i] = current_count
+
+    linkage_matrix = np.column_stack(
+        [model.children_, model.distances_, counts]
+    ).astype(float)
+
+    # Plot the corresponding dendrogram
+    dendrogram(linkage_matrix, **kwargs)
+    
+## PLOT:
+
+plot_dendrogram(..., truncate_mode = "level", p = 12,
+                labels = epi.index)
+plt.title("Hierarchical Clustering Dendrogram with Complete Linkage")
+plt.xlabel("")
+
+plt.show() 
+```
+
+```{python dendo-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from matplotlib import pyplot as plt
+from scipy.cluster.hierarchy import dendrogram
+
+def plot_dendrogram(model, **kwargs):
+    # Create linkage matrix and then plot the dendrogram
+
+    # create the counts of samples under each node
+    counts = np.zeros(model.children_.shape[0])
+    n_samples = len(model.labels_)
+    for i, merge in enumerate(model.children_):
+        current_count = 0
+        for child_idx in merge:
+            if child_idx < n_samples:
+                current_count += 1  # leaf node
+            else:
+                current_count += counts[child_idx - n_samples]
+        counts[i] = current_count
+
+    linkage_matrix = np.column_stack(
+        [model.children_, model.distances_, counts]
+    ).astype(float)
+
+    # Plot the corresponding dendrogram
+    dendrogram(linkage_matrix, **kwargs)
+    
+## PLOT:
+
+plot_dendrogram(clust_3, truncate_mode = "level", p = 12,
+                labels = epi.index)
+plt.title("Hierarchical Clustering Dendrogram with Complete Linkage")
+plt.xlabel("")
+
+plt.show() 
+```
+
+```{r dendo-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Unfortunately, this dendrogram isn't very helpful because there are so many observations! It's also much more difficult to get the labels out visually. For now, let's use dendrograms for smaller datasets only.
+
+If you did want to get the labels out programatically, you would have to give a number of clusters. Let's use the same number, 11. 
+
+```{python labels2, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
+clust_4 = AgglomerativeClustering(distance_threshold = None, n_clusters = 11, linkage = 'ward').fit(epi)
+epi.index[clust_4.labels_ == 0.0].tolist()
+```
+
+
+
+
