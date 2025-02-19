@@ -202,10 +202,10 @@ question("What is the mean of `calories`?",
 ```
 
 ```{python missing-solution, message = FALSE, warning = FALSE, echo = FALSE}
-np.sum(pd.isna(epi))
+np.sum(pd.isna(epi), axis = 0)
 ```
 
-```{r replace-code-check, message = FALSE, warning = FALSE}
+```{r missing-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
@@ -221,7 +221,7 @@ question("7. Which of the variables have at least some missing values? Select al
          answer("`rosemary`"), 
          allow_retry = TRUE, 
          random_answer_order = TRUE, 
-         post_message = "Congratulations! You have found the first secret word: FLAVOR (feels appropriate for this dataset).)
+         post_message = "Congratulations! You have found the first secret word: FLAVOR (feels appropriate for this dataset).")
 ```
 
 
@@ -237,7 +237,7 @@ epi.columns
 ```
 
 ```{python drop-solution, message = FALSE, warning = FALSE, echo = FALSE}
-epi = epi.iloc[:, 7:681]
+epi = epi.iloc[:, 6:680]
 epi.columns
 ```
 
@@ -258,7 +258,7 @@ Obviously, `n_clusters` is the number of clusters. `n_init` is the number of tim
 9. The following lines of code create 12 clusters using 10 random starts. Can you edit them so that they create 6 clusters with 20 random starts? Save the object as `clust_1` so we can see what outputs are possible in the next few questions.
 
 ```{python setup3, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup2"}
-epi = epi.iloc[:, 7:681]
+epi = epi.iloc[:, 6:680]
 ```
 
 ```{python clust1, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
@@ -437,7 +437,7 @@ question("18. Which cluster(s) contain mostly vegetarian recipes?",
          answer("`3.0`"),
          answer("`4.0`"), 
          answer("`5.0`"),
-         answer("`6.0`", correct = TRUE),
+         answer("`6.0`"),
          answer("`7.0`"), 
          answer("`8.0`"), 
          answer("`9.0`"), 
@@ -512,7 +512,13 @@ grade_this_code()
 
 One thing you can do is copy and paste the function `plot_dendrogram` they have written in the tutorial, and apply that function to your own analysis. I've done that for you in the code chunk below--can you plot the dendrogram from the previous question?
 
-```{python dendo, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
+```{python setup8, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup7"}
+from sklearn.cluster import AgglomerativeClustering
+
+clust_3 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'complete').fit(epi)
+```
+
+```{python dendo, exercise = TRUE, message = FALSE, exercise.setup="setup8"}
 from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import dendrogram
 
