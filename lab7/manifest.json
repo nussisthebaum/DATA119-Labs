@@ -9,14 +9,6 @@
     "content_category": null,
     "has_parameters": false
   },
-  "python": {
-     "version": "3.9.21",
-     "package_manager": {
-       "name": "pip",
-       "version": "21.2.4",
-       "package_file": "requirements.txt"
-     }
-   },
   "packages": {
     "KernSmooth": {
       "Source": "CRAN",
@@ -934,6 +926,37 @@
         "Repository": "CRAN",
         "Date/Publication": "2022-07-05 19:40:02 UTC",
         "Built": "R 4.4.0; ; 2024-04-05 14:59:48 UTC; unix"
+      }
+    },
+    "ggdendro": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "ggdendro",
+        "Version": "0.2.0",
+        "Title": "Create Dendrograms and Tree Diagrams Using 'ggplot2'",
+        "Description": "This is a set of tools for dendrograms and\n    tree plots using 'ggplot2'.  The 'ggplot2' philosophy is to\n    clearly separate data from the presentation.\n    Unfortunately the plot method for dendrograms plots\n    directly to a plot device without exposing the data.\n    The 'ggdendro' package resolves this by making available\n    functions that extract the dendrogram plot data. The package\n    provides implementations for 'tree', 'rpart', as well as diana and agnes\n    (from 'cluster') diagrams.",
+        "Authors@R": "c(person(\"Andrie\", \"de Vries\", role=c(\"aut\", \"cre\"),\n    email=\"apdevries@gmail.com\"), person(c(\"Brian\", \"D.\"), \"Ripley\", role =\n    c(\"aut\"), comment = \"author of package tree\"))",
+        "License": "GPL-2 | GPL-3",
+        "LazyLoad": "true",
+        "ByteCompile": "true",
+        "URL": "https://andrie.github.io/ggdendro/",
+        "BugReports": "https://github.com/andrie/ggdendro/issues",
+        "Depends": "R(>= 3.5)",
+        "Imports": "MASS, ggplot2(>= 0.9.2)",
+        "Suggests": "rpart (>= 4.0-0), tree, testthat, knitr, cluster, scales,\nspelling, rmarkdown, covr",
+        "VignetteBuilder": "knitr",
+        "RoxygenNote": "7.3.1",
+        "Language": "en-US",
+        "Encoding": "UTF-8",
+        "Config/testthat/edition": "3",
+        "NeedsCompilation": "no",
+        "Packaged": "2024-02-18 21:50:45 UTC; apdev",
+        "Author": "Andrie de Vries [aut, cre],\n  Brian D. Ripley [aut] (author of package tree)",
+        "Maintainer": "Andrie de Vries <apdevries@gmail.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2024-02-23 12:40:02 UTC",
+        "Built": "R 4.4.0; ; 2024-04-06 11:15:13 UTC; unix"
       }
     },
     "ggplot2": {
@@ -2828,10 +2851,22 @@
   },
   "files": {
     "Lab 7.Rmd": {
-      "checksum": "5241a848344b2c277f841a4bad610855"
+      "checksum": "ca191d564cd9ee6d2cf380e60cce2d48"
+    },
+    "Lab-7_files/figure-html/unnamed-chunk-1-1.png": {
+      "checksum": "6b34af9a4086ad0a60de9dda3b68a034"
+    },
+    "Lab-7_files/figure-html/unnamed-chunk-3-1.png": {
+      "checksum": "e156bcff561ab7ea286bba45696ebe2f"
+    },
+    "Lab-7_files/figure-html/unnamed-chunk-4-1.png": {
+      "checksum": "d2709622dcda61e713392c99d6a79c0a"
+    },
+    "Lab-7_files/figure-html/unnamed-chunk-5-1.png": {
+      "checksum": "b75d6317077a0f77b11c8759d0120b69"
     },
     "Lab-7.html": {
-      "checksum": "7864f1eef9415c12539332babe0f373f"
+      "checksum": "b9e4ab89ddef50619dc973b4fd85ba31"
     }
   },
   "users": null

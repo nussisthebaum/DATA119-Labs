@@ -116,7 +116,6 @@ question_numeric(
   "1. What is $d_{Man}(F, I)$, a.k.a., the Manhattan distance between $F = (3, 6)$ and $I = (6, 7)$?",
   answer(4, correct = TRUE),
   allow_retry = TRUE, 
-  random_answer_order = TRUE, 
   post_message = "Congratulations! You have found the first secret word: SUPERINTENDENT."
 )
 ```
