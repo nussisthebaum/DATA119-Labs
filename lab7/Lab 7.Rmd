@@ -70,7 +70,7 @@ The goals of this lab are:
 
 For this lab we will be using `plotnine`, `pandas`, `numpy`, `scikit-learn`, `scipy`, and the dataset `epi_r`. 
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
@@ -405,6 +405,16 @@ Let's move on to examples of clustering as applied to a real world dataset. Reca
 
 14. Before we do anything else, look at the column names of `epi`.
 
+```{python setup1, exercise = FALSE, echo=FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy
+import sklearn
+
+epi = pd.read_csv("./data/epi_mini2.csv", index_col = 0)
+```
+
 ```{python col, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
 
 ```
@@ -449,7 +459,13 @@ grade_this_code()
 
 17. Now, check out the dataset with `.describe()`. 
 
-```{python setup2, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
+```{python setup2, exercise = FALSE, echo=FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy
+import sklearn
+
 epi = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
 ```
 
