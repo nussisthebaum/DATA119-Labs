@@ -1050,6 +1050,8 @@ grade_this_code()
 41. We can also try to change the orientation to make it easier to read! Run the following cell. 
 
 ```{python sp_dendro2, exercise = TRUE, message = FALSE, exercise.setup="setup11"}
+import matplotlib.pyplot as plt
+
 plt.figure(figsize=(8, 16))
 dendrogram(l_epi, labels = epi_tiny.index, orientation='right', above_threshold_color ='k')
 plt.xticks(fontsize=9)
@@ -1057,6 +1059,7 @@ plt.yticks(fontsize=9)
 plt.ylabel('Recipes', fontsize=12)
 plt.xlabel('Euclidean Distance', fontsize=12)
 plt.title('Dendrogram of Recipe Clusters', fontsize=14)
+plt.subplots_adjust(left=0.4, right=0.8, top=0.8, bottom=0.2)
 plt.show()
 ```
 
