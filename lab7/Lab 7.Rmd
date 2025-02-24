@@ -642,7 +642,7 @@ grade_this_code()
 
 Note that this number doesn't really have a scale! We have no idea if it is good or bad just by looking at it. To figure that out, we would need to compare it to the `inertia_` of a clustering object run with some other value of $K$. 
 
-25. We used $K=6$ arbitrarily, but of course we need to choose it. As I mentioned in class, we will need to write a loop and create the elbow plot to justify the choice of $K$. Fill in the loop below to get the inertia for values of $K$ from 1 to 15 (I'm picking a large number because the data is so large, in smaller datasets you may not need to go so far).
+25. We used $K=6$ arbitrarily, but of course we need to choose it. As I mentioned in class, we will need to write a loop and create the elbow plot to justify the choice of $K$. Fill in the loop below to get the inertia for values of $K$ from 1 to 15 (I'm picking a large number because the data is so large, in smaller datasets you may not need to go so far). Please note that since it is a loop with a lot of repeated calculations, this cell in particular WILL take a long time to run! As will 26 and 27 since they are related. 
 
 ```{python looped, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
 inertias = []
@@ -666,7 +666,7 @@ for i in range(1,16):
 grade_this_code()
 ```
 
-26. Now, let's create the elbow plot. First, create a data frame with two columns--one for the value of $K$ and one for the inertia.
+26. Now, let's create the elbow plot. First, create a data frame with two columns--one for the value of $K$ and one for the inertia. 
 
 ```{python setup5, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup4"}
 inertias = []
@@ -743,23 +743,7 @@ epi.index[clust_2.labels_ == 0.0]
 ```
 
 ```{r q30, echo=FALSE}
-question("30. Which cluster(s) contain mostly meat recipes?",
-         answer("`0.0`", correct = TRUE),
-         answer("`1.0`"),
-         answer("`2.0`"),
-         answer("`3.0`"),
-         answer("`4.0`"), 
-         answer("`5.0`"),
-         answer("`6.0`", correct = TRUE),
-         answer("`7.0`"), 
-         answer("`8.0`"), 
-         answer("`9.0`"), 
-         answer("`10.0`"), 
-         allow_retry = TRUE)
-```
-
-```{r q31, echo=FALSE}
-question("31. Which cluster(s) contain mostly vegetarian recipes?",
+question("30. Which cluster(s) contain mostly fish/meat recipes?",
          answer("`0.0`"),
          answer("`1.0`", correct = TRUE),
          answer("`2.0`"),
@@ -768,6 +752,22 @@ question("31. Which cluster(s) contain mostly vegetarian recipes?",
          answer("`5.0`"),
          answer("`6.0`"),
          answer("`7.0`"), 
+         answer("`8.0`", correct = TRUE), 
+         answer("`9.0`"), 
+         answer("`10.0`"), 
+         allow_retry = TRUE)
+```
+
+```{r q31, echo=FALSE}
+question("31. Which cluster(s) contain mostly cocktail recipes?",
+         answer("`0.0`"),
+         answer("`1.0`"),
+         answer("`2.0`"),
+         answer("`3.0`"),
+         answer("`4.0`"), 
+         answer("`5.0`"),
+         answer("`6.0`"),
+         answer("`7.0`", correct = TRUE), 
          answer("`8.0`"), 
          answer("`9.0`"), 
          answer("`10.0`"), 
@@ -778,10 +778,10 @@ question("31. Which cluster(s) contain mostly vegetarian recipes?",
 question("32. Which cluster(s) contain mostly desserts?",
          answer("`0.0`"),
          answer("`1.0`"),
-         answer("`2.0`", correct = TRUE),
+         answer("`2.0`"),
          answer("`3.0`"),
          answer("`4.0`"), 
-         answer("`5.0`"),
+         answer("`5.0`", correct = TRUE),
          answer("`6.0`"),
          answer("`7.0`"), 
          answer("`8.0`"), 
@@ -791,8 +791,8 @@ question("32. Which cluster(s) contain mostly desserts?",
 ```
 
 ```{r q33, echo=FALSE}
-question("33. Which cluster(s) contain mostly cocktails?",
-         answer("`0.0`"),
+question("33. Which cluster(s) contain mostly vegetarian recipes?",
+         answer("`0.0`", correct = TRUE),
          answer("`1.0`"),
          answer("`2.0`"),
          answer("`3.0`", correct = TRUE),
@@ -801,7 +801,7 @@ question("33. Which cluster(s) contain mostly cocktails?",
          answer("`6.0`"),
          answer("`7.0`"), 
          answer("`8.0`"), 
-         answer("`9.0`"), 
+         answer("`9.0`", correct = TRUE), 
          answer("`10.0`"), 
          allow_retry = TRUE, 
          post_message = "Congratulations! You have found the fifth and final secret word: SOLVE.")
@@ -821,7 +821,7 @@ Now let's move on to hierarchical clustering. Remember in class that I mentioned
 
 34. The following line of code creates clusters using `ward` linkage. Can you edit it so that it creates clusters with `complete` linkage? Save the object as `clust_3` so we can see what outputs are possible in the next few questions.
 
-```{python complete, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
+```{python complete, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
 from sklearn.cluster import AgglomerativeClustering
 
 clust_3 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'ward').fit(epi)
@@ -841,7 +841,7 @@ grade_this_code()
 
 One thing you can do is copy and paste the function `plot_dendrogram` they have written in the tutorial, and apply that function to your own analysis. I've done that for you in the code chunk below--can you plot the dendrogram from the previous question?
 
-```{python setup8, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup7"}
+```{python setup8, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
 from sklearn.cluster import AgglomerativeClustering
 
 clust_3 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'complete').fit(epi)
@@ -927,12 +927,12 @@ Unfortunately, this dendrogram isn't very helpful because there are so many obse
 
 36. If you did want to get the labels out programmatically, you would have to give a number of clusters. Let's use the same number, 11. 
 
-```{python labels2, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
+```{python labels2, exercise = TRUE, message = FALSE, exercise.setup="setup8"}
 clust_4 = AgglomerativeClustering(distance_threshold = None, n_clusters = 11, linkage = 'ward').fit(epi)
 epi.index[clust_4.labels_ == 0.0].tolist()
 ```
 
-37. Another option would be to take a smaller random sample of the observations:
+37. Another option would be to take a smaller random sample of the observations. Note that I've added a new line of code to give larger margins in line 10--it is not perfect, but it is good enough for now.
 
 ```{python setup9, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup8"}
 from matplotlib import pyplot as plt
@@ -971,18 +971,22 @@ plot_dendrogram(clust_5, truncate_mode = "level", p = 12,
 plt.title("Hierarchical Clustering Dendrogram with Complete Linkage")
 plt.xlabel("")
 
+plt.subplots_adjust(left=0.2, right=0.8, top=0.8, bottom=0.6)
+
 plt.show() 
 ```
+
+Do you see any patterns that were present in the $K$-means clustering?
 
 ## Using `scipy`
 
 If you want to use simpler code than `sklearn`, you can try `scipy`! The first step in clustering this data using hierarchical clustering is to import the necessary functions.
 
-```{python scipy, exercise = TRUE, message = FALSE, exercise.setup="setup9"}
+```{python scipy, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 ```
 
-```{python setup10, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup9"}
+```{python setup10, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 ```
 
