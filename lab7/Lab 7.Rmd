@@ -539,9 +539,9 @@ grade_this_code()
 ```{r q20, echo=FALSE}
 question("20. Which of the variables have at least some missing values? Select all that apply.",
          answer("`calories`", correct=TRUE),
-         answer("`protein`"),
-         answer("`fat`"),
-         answer("`sodium`"),
+         answer("`protein`", correct=TRUE),
+         answer("`fat`", correct=TRUE),
+         answer("`sodium`", correct=TRUE),
          answer("`wedding`"), 
          answer("`chestnut`"), 
          answer("`boston`"), 
@@ -552,7 +552,7 @@ question("20. Which of the variables have at least some missing values? Select a
 ```
 
 
-In earlier labs, we focused on data cleaning and identifying unusual values in the nutritional variables. We could just drop rows with missing values, for example, with the `.dropna()` method, but I would like to focus on the "tag" variables in this lab, so let's delete the columns with numerical variables entirely. Note that this means that we won't have to standardize the variables--everything left will be indictators and therefore on the same scale! Normally, we would have to--so make sure to do that on your homework.
+In earlier labs, we focused on data cleaning and identifying unusual values in the nutritional variables. We could just drop rows with missing values, for example, with the `.dropna()` method, but I would like to focus on the "tag" variables in this lab, so let's delete the columns with numerical variables entirely. Note that this means that we won't have to standardize the variables--everything left will be indictators and therefore on the same scale! Normally, we would have to--so make sure to do that when your variables have vastly different scales.
 
 Most of the time, I've been redefining DataFrames with only a subset of columns by explicitly naming the variables I would like to keep. However, there are over 600 columns to keep here, and I don't really want to have to name all of them! Instead, I can supply the indices of the columns that I would like to keep.
 
@@ -640,6 +640,8 @@ clust_1.inertia_
 grade_this_code()
 ```
 
+Note that this number doesn't really have a scale! We have no idea if it is good or bad just by looking at it. To figure that out, we would need to compare it to the `inertia_` of a clustering object run with some other value of $K$. 
+
 25. We used $K=6$ arbitrarily, but of course we need to choose it. As I mentioned in class, we will need to write a loop and create the elbow plot to justify the choice of $K$. Fill in the loop below to get the inertia for values of $K$ from 1 to 15 (I'm picking a large number because the data is so large, in smaller datasets you may not need to go so far).
 
 ```{python looped, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
@@ -670,7 +672,7 @@ grade_this_code()
 inertias = []
 
 for i in range(1,16):
-    kmeans = KMeans(n_clusters=i, n_init = 20, random_state = 1145)
+    kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 1145)
     kmeans.fit(epi)
     inertias.append(kmeans.inertia_)
 ```
@@ -729,7 +731,9 @@ grade_this_code()
 
 29. Now comes the fun part! We can try to interpret each cluster. You might learn more advanced methods for visualizing the clusters in later classes, but in this class, the best we can do is just printing out the "names" of the points in the clusters to try and see if there's a pattern. Adapt the code below to print out the names of the points in Cluster 1, 2, etc. Try and give each one a name--this might depend on context clues, you will really have to think about what they all have in common!
 
-```{python setup7, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup6"}
+```{python setup7, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
+from sklearn.cluster import KMeans
+
 kmeans2 = KMeans(n_clusters = 11, n_init = 5, random_state = 1145)
 clust_2 = kmeans2.fit(epi)
 ```
