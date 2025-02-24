@@ -988,6 +988,8 @@ from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 
 ```{python setup10, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+
+epi_tiny = epi.sample(50, random_state = 524)
 ```
 
 We can use the `linkage()` function, which takes in a dataset and the type of linkage you want to use, to cluster the data. Check out [the documentation for `linkage()`]() to answer the following question.
