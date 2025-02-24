@@ -2,4 +2,5 @@ numpy
 pandas
 plotnine
 scikit-learn
+scipy
 statsmodels
