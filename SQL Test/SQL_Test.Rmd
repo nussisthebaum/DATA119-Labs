@@ -64,3 +64,11 @@ tags$div(
 SELECT * FROM mtcars WHERE cyl = 4
 ```
 
+```{sql db-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT * FROM mtcars WHERE cyl = 4
+```
+
+```{r db-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
