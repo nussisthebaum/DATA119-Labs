@@ -1,0 +1,66 @@
+---
+title: "Data119 - SQL Test"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+
+# Create an ephemeral in-memory RSQLite database
+# Using the example in <https://dbi.r-dbi.org/#example>
+mtcars$name <- rownames(mtcars)
+mtcars <- mtcars[union("name", names(mtcars))]
+
+db_con <- DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
+DBI::dbWriteTable(db_con, "mtcars", mtcars)
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Test", class = "pageTitle")
+  )
+)
+```
+
+## Test
+
+```{sql db, exercise = TRUE, connection = "db_con"}
+SELECT * FROM mtcars WHERE cyl = 4
+```
+
