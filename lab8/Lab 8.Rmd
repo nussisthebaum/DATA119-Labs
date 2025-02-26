@@ -656,3 +656,25 @@ question(
 
 ```
 
+## Resources
+
+If you'd like to use our Posit server to do your homework, rather than trying to find an online SQL interpreter, you can use the chunk below. The database objects are `plots`, `species`, and `surveys`. 
+
+```{r setup_homework, exercise = FALSE, echo=FALSE, message = FALSE}
+plots <- read.csv("./data/plots.csv")
+plots <- DBI::dbWriteTable(db_con, "plots", plots)
+
+species <- read.csv("./data/species.csv")
+species <- DBI::dbWriteTable(db_con, "species", species)
+
+surveys <- read.csv("./data/surveys.csv")
+surveys <- DBI::dbWriteTable(db_con, "surveys", surveys)
+```
+
+```{sql homework, exercise = TRUE, connection = "db_con", exercise.setup = "setup_homework"}
+
+```
+
+Please note that this lab was programmed with a version of SQL called SQLite. As the name implies, SQLite does not have all of the features of a full version of SQL--for more on the "missing" features, please check out [SQL Features That SQLite Does Not Implement](https://www.sqlite.org/omitted.html). 
+
+Finally, if you would like to practice more SQL using Python, you will need to set the `MySQL` module on your laptops correctly. Please check out [the following tutorial](https://www.w3schools.com/python/python_mysql_getstarted.asp) if that is something you are interested in; however, note that following these steps does require a level of familiarity with Python that not everyone may have.
