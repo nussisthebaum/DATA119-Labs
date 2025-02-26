@@ -656,7 +656,3 @@ question(
 
 ```
 
-```{sql goodreads19, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
-
-```
-
