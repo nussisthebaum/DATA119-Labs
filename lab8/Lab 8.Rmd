@@ -1,0 +1,662 @@
+---
+title: "Data119 - Lab 7"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(DBI)
+library(gradethis)
+library(learnr)
+library(reticulate)
+library(RSQLite)
+
+goodreads_nussbaum <- read.csv("./data/goodreads_nussbaum.csv")
+colnames(goodreads_nussbaum) <- c("book_id", "title", "author", "author_lf", 
+                                  "additional_authors", "isbn", "isbn13",
+                                  "my_rating", "average_rating", "publisher",
+                                  "binding", "number_of_pages",
+                                  "year_published",
+                                  "original_year_published", "date_read", 
+                                  "date_added", "bookshelves", 
+                                  "bookshelves_with_positions",
+                                  "exclusive_shelf", "my_review", "spoilers",
+                                  "private_notes", "read_count",
+                                  "owned_copies")
+locations <- read.csv("./data/locations.csv", row.names = 1)
+colnames(locations) <- c("location", "title")
+
+db_con <- DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
+goodreads_nussbaum <- DBI::dbWriteTable(db_con, "goodreads_nussbaum", goodreads_nussbaum)
+locations <- DBI::dbWriteTable(db_con, "locations", locations)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("SQL", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goal of this lab is to practice SQL, including with joins.
+
+## Setup
+
+For this lab, you will use a dataset that I have been creating on [goodreads.com](goodreads.com). Goodreads allows you to keep track of and rate books that you have or would like to read. It also collects and aggregates user data. 
+
+You should have access to three tables in the code chunks in the lab--one with Professor Nussbaum's personal data in the `goodreads_nussbaum` database object, one with Professor Jotte's personal data in `goodreads_jotte` database object, and another database object called `locations`. 
+
+The `goodreads_nussbaum` and `goodreads_jotte` database objects include the following variables:
+
+* `book_id`: The ID number that Goodreads uses to identify a book in their database.
+* `title`: The title of the book.
+* `author`: The author of the book. 
+* `author_lf`: The author of the book, with their last name first.
+* `additional_authors`: Additional authors. We think that translators for books written in non-English languages may appear here. 
+* `isbn`: the International Standard Book Number, the standard for uniquely identifying books.
+* `isbn13`: the International Standard Book Number, 13 digit version.
+* `my_rating`: the rating an individual user (Professor Nussbaum or Professor Jotte) gave the book after reading it (1-5 stars).
+* `average_rating`: the average rating given to the book by all Goodreads users who have rated the book.
+* `publisher`: the publisher of the book.
+* `binding`: the "format" of the book (e.g., hardcover, paperback, ebook, etc.)
+* `number_of_pages`: number of pages in the book.
+* `year_published`: the publication year of the edition that the individual users read.
+* `original_year_published`: the first time the book was published.
+* `date_read`: the date the individual user read the book. Some of the books may have been entered well after the user read them, that is not necessarily an indication that the data was entered incorrectly.
+* `date_added`: the date that the individual user added a book to "my shelves" (account). 
+* `bookshelves`: a collection of descriptive tags. There are user-specified tags, like `"botm"` (representing books from Professor Nussbaum's Book of the Month club), and Goodreads tags, like `"to-read"` (books that a user wants to read) and `"currently-reading"` (the books that the user is reading right now), and `"read"` (the books that the individual has finished reading).
+* `bookshelves_with_positions`: the same information as above, but with a number representing the order in which the user has arranged the book on their shelf (usually the order in which the book was entered).
+* `exclusive_shelf`: Goodreads users can mark certain shelves as exclusive--for example, a book cannot be on the "Want to Read" shelf and the "Currently Reading Shelf" at the same time.
+* `my_review`: A written text review that the individual user has added about the book.
+* `spoilers`: Goodreads users can tag text as spoilers-if a user never uses this feature, the column will be completely empty.
+* `private_notes`: Goodreads users can enter notes for only themselves to view.
+* `read_count`: The number of times an individual user has read the book.
+* `owned_copies`: An indicator variable for whether or not I own the book (Professor Nussbaum suspects that at least for her, this information is not up to date).
+
+## SQL Exercises with a Single Table
+
+Before beginning these exercises, remember: **S**o **F**ew **W**orkers **G**o **H**ome **O**n time! A.k.a., **S**ELECT, **F**ROM, **W**HERE, **G**ROUP BY, **H**AVING, **O**RDER BY is the correct order of SQL clauses. 
+
+1. Using Professor Nussbaum's data, write a query that will give a table of binding types with their associated counts.
+
+```{sql goodreads1, exercise = TRUE, connection = "db_con"}
+SELECT ..., ... 
+FROM goodreads_nussbaum
+GROUP BY ...;
+```
+
+```{sql goodreads1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT binding, COUNT(binding)
+FROM goodreads_nussbaum
+GROUP BY binding;
+```
+
+```{r goodreads1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q1, echo=FALSE}
+question(
+  "What kind of binding occurs most frequently among Professor Nussbaum's books?",
+  answer("Audible Audio"),
+  answer("Audio CD"),
+  answer("Audiobook"),
+  answer("Board book"),
+  answer("Hardcover", correct = TRUE),
+  answer("Kindle Edition"),
+  answer("Library Binding"),
+  answer("Mass Market Paperback"),
+  answer("Paperback"),
+  answer("Preloaded Digital Audio Player"),
+  answer("Unknown Binding"),
+  answer("ebook"),
+  allow_retry = TRUE
+)
+```
+
+2. Write a query that will give you a table of the titles of all of Professor Nussbaum's books along with the date added, sorted by date added in descending order.
+
+```{sql goodreads2, exercise = TRUE, connection = "db_con"}
+SELECT ...
+FROM goodreads_nussbaum
+ORDER BY date_added;
+```
+
+```{sql goodreads2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT title, date_added
+FROM goodreads_nussbaum
+ORDER BY date_added DESC;
+```
+
+```{r goodreads2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q2, echo=FALSE}
+question(
+  "What book did Professor Nussbaum add to the database most recently?",
+  answer("Into the Fire (2) (Westfallen)"),
+  answer("Midwives", correct = TRUE),
+  answer("The Odyssey"),
+  answer("The Witches: Salem, 1692"),
+  allow_retry = TRUE
+)
+```
+
+3. Write a query that will return the average rating Professor Nussbaum has given to books that have the same publisher. For ease of answering the multiple choice question, sort the output by some reasonable value in descending order.
+
+```{sql goodreads3, exercise = TRUE, connection = "db_con"}
+SELECT ...
+FROM goodreads_nussbaum
+GROUP BY ...
+ORDER BY ...;
+```
+
+```{sql goodreads3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT publisher, AVG(my_rating)
+FROM goodreads_nussbaum
+GROUP BY publisher
+ORDER BY AVG(my_rating) DESC;
+```
+
+```{r goodreads3-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q3, echo=FALSE}
+question(
+  "Is there a publisher that Professor Nussbaum seems to enjoy more than others, based on her ratings?",
+  answer("Barnes & Noble Classics"),
+  answer("Children's Classics", correct = TRUE),
+  answer("Clarkson Potter", correct = TRUE),
+  answer("HarperCollins Publishers", correct = TRUE),
+  answer("Listening Library", correct = TRUE),
+  answer("Random House Books for Young Readers", correct = TRUE),
+  answer("Signet", correct = TRUE),
+  answer("Whole Story Audiobooks", correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+4. The results of the previous query should seem suspicious to you. Write a query that answers the same question--what publisher does Professor Nussbaum enjoy the most--but considering only publishers that she have read from at least five times.
+
+```{sql goodreads4, exercise = TRUE, connection = "db_con"}
+SELECT ...
+FROM ...
+GROUP BY ...
+HAVING ...
+ORDER BY ...;
+```
+
+```{sql goodreads4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT publisher, COUNT(publisher), AVG(my_rating)
+FROM goodreads_nussbaum
+GROUP BY publisher
+HAVING COUNT(publisher) >= 5
+ORDER BY AVG(my_rating) DESC, COUNT(publisher) DESC;
+```
+
+```{r goodreads4-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q4, echo=FALSE}
+question(
+  "Is there a publisher that Professor Nussbaum seems to enjoy more than others, assuming she has read from them at least five times, based on her ratings??",
+  answer("Audible Original"),
+  answer("Hachette Audio", correct = TRUE),
+  answer("One World"),
+  answer("Scholastic Inc."),
+  allow_retry = TRUE
+)
+```
+
+5. A friend of Professor Nussbaum's has a personal rule--he will not read books that are rated as less than a 3.8 on Goodreads. Write a query that will result in a list she can recommend to him, and specifically, will tell her which of those books is the most popular book that she read and could recommend to him.
+
+```{sql goodreads5, exercise = TRUE, connection = "db_con"}
+SELECT ...
+FROM ...
+WHERE ...
+```
+
+```{sql goodreads5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT title, average_rating, exclusive_shelf
+FROM goodreads_nussbaum
+WHERE average_rating > 3.8 AND exclusive_shelf = "read"
+ORDER BY average_rating DESC;
+```
+
+```{r goodreads5-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q5, echo=FALSE}
+question(
+  "What is the most popular book that Professor Nussbaum has read that has an average rating over 3.8?",
+  answer("Djinn Patrol on the Purple Line"), 
+  answer("Fatherland: A Memoir of War, Conscience, and Family Secrets"),
+  answer("I was Anastasia"),
+  answer("The Nightingale", correct = TRUE),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the first secret word: REPLACE."
+)
+```
+
+6. Write a query that will return the longest book Professor Nussbaum has read.
+
+```{sql goodreads6, exercise = TRUE, connection = "db_con"}
+SELECT ...
+FROM ...
+...
+```
+
+```{sql goodreads6-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT title, MAX(number_of_pages), exclusive_shelf
+FROM goodreads_nussbaum
+WHERE exclusive_shelf = "read";
+```
+
+```{r goodreads6-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q6, echo=FALSE}
+question(
+  "What is the longest book Professor Nussbaum has read?",
+  answer("The Hobbit And The Lord Of The Rings: Deluxe Pocket Boxed Set"), 
+  answer("Spitting Gold"),
+  answer("A Storm of Swords", correct = TRUE),
+  answer("Unruly: The Ridiculous History of England's Kings and Queens"),
+  allow_retry = TRUE
+)
+```
+
+7. Write a query that will return the shortest book Professor Nussbaum has read.
+
+```{sql goodreads7, exercise = TRUE, connection = "db_con"}
+SELECT ...
+FROM ...
+...
+```
+
+```{sql goodreads7-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT title, MIN(number_of_pages), exclusive_shelf
+FROM goodreads_nussbaum
+WHERE exclusive_shelf = "read";
+```
+
+```{r goodreads7-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q7, echo=FALSE}
+question(
+  "What is the longest book Professor Nussbaum has read?",
+  answer("The Hobbit And The Lord Of The Rings: Deluxe Pocket Boxed Set"), 
+  answer("Spitting Gold"),
+  answer("A Storm of Swords", correct = TRUE),
+  answer("Unruly: The Ridiculous History of England's Kings and Queens"),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the second secret word: AFFECT."
+)
+```
+
+8. Why might the shortest book from the previous question have 0 pages? Write a query that will result in the entry for that book and take a look.
+
+```{sql goodreads8, exercise = TRUE, connection = "db_con"}
+SELECT ...
+...
+```
+
+```{sql goodreads8-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT *
+FROM goodreads_nussbaum
+WHERE title = "Spitting Gold";
+```
+
+```{r goodreads8-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+9. Now, write a query that will result in all of the books with 0 pages. Does this give you any more insight into why a book might have 0 pages?
+
+```{sql goodreads9, exercise = TRUE, connection = "db_con"}
+
+```
+
+```{sql goodreads9-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT *
+FROM goodreads_nussbaum
+WHERE number_of_pages = 0;
+```
+
+```{r goodreads9-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+10. Let's confirm our hypothesis. Write a query that will return the average page length of an audiobook. Make sure to consider all possible bindings.
+
+```{sql goodreads10, exercise = TRUE, connection = "db_con"}
+
+```
+
+```{sql goodreads10-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT AVG(number_of_pages)
+FROM goodreads_nussbaum
+WHERE binding in ("Audible Audio", "Audio CD", "Audiobook", "Preloaded Digital Audio Player");
+```
+
+```{r goodreads10-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q10, echo=FALSE}
+question_numeric(
+  "What is the average page length of an audiobook (rounded to the nearest integer)?",
+  answer(24, correct = TRUE),
+  allow_retry = TRUE,
+  min = 0,
+  max = 100,
+  step = 1,
+  post_message = "Congratulations! You have found the third secret word: MASS."
+)
+```
+
+The average is not zero (even though audiobooks don't really have any pages), but it is very low--we are not sure how publishers determine what number to put there, but its often fairly low regardless of how long the actual book is.
+
+## SQL Exercises with Multiple Tables
+
+11. Write a query that will allow you to view all of the columns in `locations`.
+
+```{sql goodreads11, exercise = TRUE, connection = "db_con"}
+
+```
+
+```{sql goodreads11-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT *
+FROM locations;
+```
+
+```{r goodreads11-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q11a, echo=FALSE}
+question(
+  "How many rows are there in `locations`?",
+  answer("1000"),
+  answer("51755"), 
+  answer("120775", correct = TRUE),
+  allow_retry = TRUE,
+  post_message = "The way our labs are set up does not allow us to view more than 1000 rows! But there are 51,755 distinct titles and 120,775 entries in the table--experiment with `COUNT()` and `DISTINCT()` to see if you can recreate these numbers."
+)
+```
+
+```{r q11b, echo=FALSE}
+question_numeric(
+  "How many variables are there in `locations`?",
+  answer(2, correct = TRUE),
+  allow_retry = TRUE,
+  min = 0,
+  max = 10,
+  step = 1,
+  post_message = "Congratulations! You have found the fourth secret word: TRUNK."
+)
+```
+
+12. Read through the columns to try and get a sense of what each variable means. Then, write a query that will return a table with the counts of Professor Nussbaum's books taking place in each continent.
+
+```{sql goodreads12, exercise = TRUE, connection = "db_con"}
+
+```
+
+```{sql goodreads12-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT location, COUNT(location)
+FROM locations
+WHERE location IN ("africa", "antarctica", "asia", "europe", "north-america", "oceania", "latin-america")
+GROUP BY location;
+```
+
+```{r goodreads12-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q12, echo=FALSE}
+question(
+  "Which continent has the most titles associated with it?",
+  answer("`africa`"),
+  answer("`antarctica`"),
+  answer("`asia`"),  
+  answer("`europe`", correct = TRUE),
+  answer("`latin-america`"),  
+  answer("`north-america`"),  
+  answer("`oceania`"),  
+  allow_retry = TRUE
+)
+```
+
+Oddly, there is no Central or South America on this list. It uses Latin America instead–even though I’m not 100% sure those are direct analogs. The locations are open to interpretation, which means something like creating a map, the original task Professor Nussbaum was trying to carry out with this dataset, can be very subjective.
+
+13. Write a query that will return a count of all of the books that are in both `goodread_nussbaum` and `locations`. It may help to abbreviate the tables in your query.
+
+```{sql goodreads13, exercise = TRUE, connection = "db_con"}
+SELECT ...
+FROM ... as A
+JOIN ... as B ON ...;
+```
+
+```{sql goodreads13-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT COUNT(DISTINCT(A.title))
+FROM goodreads_nussbaum as A
+JOIN locations as B ON A.title = B.title;
+```
+
+```{r goodreads13-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q13a, echo=FALSE}
+question(
+  "What type of join should we be using to determine how many titles `goodreads_nussbaum` and `locations` have in common?",
+  answer("Inner", correct = TRUE),
+  answer("Outer"),
+  answer("Right"),
+  answer("Left"),
+  allow_retry = TRUE
+)
+```
+
+```{r q13b, echo=FALSE}
+question_numeric(
+  "How many titles occur in both lists?",
+  answer(166, correct = TRUE),
+  min = 0,
+  max = 200,
+  step = 1,  allow_retry = TRUE
+)
+```
+
+14. Write a query that will join Professor Nussbaum's books with the `locations` object. It may help to create a new table (call it `both`).
+
+```{sql goodreads14, exercise = TRUE, connection = "db_con"}
+...
+SELECT *
+FROM ... as a
+JOIN ... as b ON a.title = b.title;
+```
+
+```{sql goodreads14-solution, message = FALSE, warning = FALSE, echo = FALSE}
+CREATE TABLE both AS
+SELECT *
+FROM goodreads_nussbaum as a
+JOIN locations as b ON a.title = b.title;
+```
+
+```{r goodreads14-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+15. Using `both`, write a query that will return which of Professor Nussbaum’s books take place in Illinois. 
+
+```{sql setup1, exercise = FALSE, echo=FALSE, message = FALSE}
+CREATE TABLE both AS
+SELECT *
+FROM goodreads_nussbaum as a
+JOIN locations as b ON a.title = b.title;
+```
+
+```{sql goodreads15, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+
+```
+
+```{sql goodreads15-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT title, location, exclusive_shelf
+FROM both
+WHERE exclusive_shelf = "read" and location = "us-illinois";
+```
+
+```{r goodreads15-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q15, echo=FALSE}
+question_numeric(
+  "How many of Professor Nussbaum's books take place in Illinois?",
+  answer(4, correct = TRUE),
+  min = 0, 
+  max = 10, 
+  step = 1,
+  allow_retry = TRUE
+)
+```
+
+16. Write a query that will return Professor Nussbaum's most-liked books that have taken place in England. 
+
+```{sql goodreads16, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+
+```
+
+```{sql goodreads16-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT title, my_rating, location, exclusive_shelf
+FROM both
+WHERE exclusive_shelf = "read" and location = "uk-england" AND my_rating = 5;
+```
+
+```{r goodreads16-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q16, echo=FALSE}
+question(
+  "What is one of the books Professor Nussbaum liked best that took place in England?",
+  answer("Matilda", correct = TRUE),
+  answer("Persuasion"),
+  answer("The Girl on the Train"),
+  answer("The Weight of Ink"),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the fifth and final secret word: DEPUTY."
+)
+```
+
+17. Adapt your query to return Professor Nussbaum's least-liked books that have taken place in England.
+
+```{sql goodreads17, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+
+```
+
+```{sql goodreads17-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT title, my_rating, locations, exclusive_shelf
+FROM both
+WHERE exclusive_shelf = "read" and locations = "uk-england" AND my_rating = 2;
+```
+
+```{r goodreads17-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q17, echo=FALSE}
+question(
+  "What is one of the books Professor Nussbaum liked least that took place in England?",
+  answer("Mansfield Park"),
+  answer("The Mists of Avalon", correct = TRUE),
+  answer("The Princess Diarist"),
+  answer("Treasure Island"),
+  allow_retry = TRUE
+)
+```
+
+18. What is the most highly rated book that takes place in each of Argentina, France, Germany, Japan, Italy, and Switzerland?
+
+```{sql goodreads18, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+
+```
+
+```{sql goodreads18-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT title, MAX(average_rating), location
+FROM both
+WHERE location IN ("argentina", "france", "germany", "japan", "italy", "switzerland")
+GROUP BY location;
+```
+
+```{r goodreads18-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q18, echo=FALSE}
+question(
+  "According to this table, where does the book *Pachinko* take place?",
+  answer("Argentina"),
+  answer("France"),
+  answer("Germany"),
+  answer("Japan", correct = TRUE),
+  answer("Italy"),
+  answer("Switzerland"),
+  allow_retry = TRUE
+)
+```
+
+19. When you have finished, use the cell below to write a query that you think answers an interesting question about this dataset. You can also use the cell to [explore more keywords in SQLite](https://www.sqlite.org/lang_keywords.html). Post the question in the thread on Ed so that your classmates can get more practice!
+
+```{sql goodreads19, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+
+```
+
+```{sql goodreads19, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+
+```
+
