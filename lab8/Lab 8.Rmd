@@ -1,5 +1,5 @@
 ---
-title: "Data119 - Lab 7"
+title: "Data119 - Lab 8"
 output: 
    learnr::tutorial:
       css: css/custom-styles.css
@@ -16,6 +16,7 @@ library(learnr)
 library(reticulate)
 library(RSQLite)
 
+#goodreads_nussbaum <- read.csv("goodreads_nussbaum.csv")
 goodreads_nussbaum <- read.csv("./data/goodreads_nussbaum.csv")
 colnames(goodreads_nussbaum) <- c("book_id", "title", "author", "author_lf", 
                                   "additional_authors", "isbn", "isbn13",
@@ -28,11 +29,28 @@ colnames(goodreads_nussbaum) <- c("book_id", "title", "author", "author_lf",
                                   "exclusive_shelf", "my_review", "spoilers",
                                   "private_notes", "read_count",
                                   "owned_copies")
+
+#goodreads_jotte <- read.csv("goodreads_jotte.csv")
+goodreads_jotte <- read.csv("./data/goodreads_jotte.csv")
+colnames(goodreads_jotte) <- c("book_id", "title", "author", "author_lf", 
+                                  "additional_authors", "isbn", "isbn13",
+                                  "my_rating", "average_rating", "publisher",
+                                  "binding", "number_of_pages",
+                                  "year_published",
+                                  "original_year_published", "date_read", 
+                                  "date_added", "bookshelves", 
+                                  "bookshelves_with_positions",
+                                  "exclusive_shelf", "my_review", "spoilers",
+                                  "private_notes", "read_count",
+                                  "owned_copies")
+
+#locations <- read.csv("/Users/amynussbaum/Documents/U of C/Courses/119/2023 Spring/Week 8/Lab/locations.csv", row.names = 1)
 locations <- read.csv("./data/locations.csv", row.names = 1)
 colnames(locations) <- c("location", "title")
 
 db_con <- DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
 goodreads_nussbaum <- DBI::dbWriteTable(db_con, "goodreads_nussbaum", goodreads_nussbaum)
+goodreads_jotte <- DBI::dbWriteTable(db_con, "goodreads_jotte", goodreads_jotte)
 locations <- DBI::dbWriteTable(db_con, "locations", locations)
 
 # Set the path to the existing Python environment
@@ -110,7 +128,16 @@ The `goodreads_nussbaum` and `goodreads_jotte` database objects include the foll
 
 ## SQL Exercises with a Single Table
 
-Before beginning these exercises, remember: **S**o **F**ew **W**orkers **G**o **H**ome **O**n time! A.k.a., **S**ELECT, **F**ROM, **W**HERE, **G**ROUP BY, **H**AVING, **O**RDER BY is the correct order of SQL clauses. 
+Before beginning these exercises, remember: 
+
+**S**o 
+**F**ew 
+**W**orkers 
+**G**o 
+**H**ome 
+**O**n time! 
+
+A.k.a., `**S**ELECT`, `**F**ROM`, `**W**HERE`, `**G**ROUP BY`, `**H**AVING`, `**O**RDER BY` is the correct order of SQL clauses. 
 
 1. Using Professor Nussbaum's data, write a query that will give a table of binding types with their associated counts.
 
@@ -650,11 +677,175 @@ question(
 )
 ```
 
-19. When you have finished, use the cell below to write a query that you think answers an interesting question about this dataset. You can also use the cell to [explore more keywords in SQLite](https://www.sqlite.org/lang_keywords.html). Post the question in the thread on Ed so that your classmates can get more practice!
+## SQL Exercises with More Joins
+
+19. Now let's experiment a little bit with manipulating the tables we have. First, join the `goodreads_nussbaum` and `goodreads_jotte` tables in such a way that all of the information from books that both Professors Nussbaum and Jotte have in their databases appear in the dataset. You can use the `title` variable to join. It may help to assign the tables to an alias (use `n` for `goodreads_nussbaum` and `j` for `goodreads_jotte`.)
+
+<!-- ```{sql setup1, exercise = FALSE, echo=FALSE, message = FALSE} -->
+<!-- CREATE TABLE both AS -->
+<!-- SELECT * -->
+<!-- FROM goodreads_nussbaum as a -->
+<!-- JOIN locations as b ON a.title = b.title; -->
+<!-- ``` -->
 
 ```{sql goodreads19, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
 
 ```
+
+```{sql goodreads19-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT *
+FROM goodreads_nussbaum as n
+JOIN goodreads_jotte as j ON n.title = j.title;
+```
+
+```{r goodreads19-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q19, echo=FALSE}
+question_numeric(
+  "How many books do Professors Nussbaum and Jotte have in common?",
+  answer(61, correct = TRUE),
+  allow_retry = TRUE,
+  min = 0,
+  max = 100,
+  step = 1
+)
+```
+
+Scroll through the column titles. What do you notice as you work through them? With a simple join, you should see that 1. there are duplicate titles, and 2. there is no way to know which variables correspond to which database. 
+
+Unfortunately this issue does not appear to have an easy fix. Just like we can give a table an alias, we can give a column an alias; however, you would have to explicitly write out every old column name and every new column name in your query! We don't necessarily want to do this, but we might want to at least include a few columns. 
+
+20. Write a query that will return the title, author, and ratings and dates read for both Professor Jotte and Nussbaum. Rename the `my_rating` columns to `rating_n` and `rating_j` and the `date_read` columns to `date_read_n` and `date_read_j` for Professors Nussbaum and Jotte, respectively. Then, add a clause that will return only the books where Professor Nussbaum and Jotte's ratings match.
+
+<!-- Save this table as `professors` for later use.  -->
+
+```{sql goodreads20, exercise = TRUE, connection = "db_con"}
+
+```
+
+```{sql goodreads20-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT n.title, n.author, n.my_rating as my_rating_n, n.date_read as date_read_n, j.my_rating as my_rating_j, j.date_read as date_read_j
+FROM goodreads_nussbaum as n
+JOIN goodreads_jotte as j ON n.title = j.title
+WHERE my_rating_n = my_rating_j;
+```
+
+```{r goodreads20-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q20, echo=FALSE}
+question(
+  "Name an author from this list that Professors Nussbaum and Jotte appear to not actually have read--you may have to make some assumptions about the data.",
+  answer("F. Scott Fitzgerald"),
+  answer("Erik Larson", correct = TRUE),
+  answer("J.K. Rowling"),
+  answer("Mark Twain"),
+  allow_retry = TRUE
+)
+```
+
+Two things: 
+
+* First, you can see how annoying it is to write out aliases for the columns! If you wanted to use this table again, it would be a good idea to save it so that you don't have to continually type all of that. 
+* Second, you have hopefully identified that ratings of zero correspond to books that are missing ratings. We would not necessarily recommend this, since 0 is a meaningful number in this context! It would be much better to explicitly tag these values as missing.
+
+21. Suppose Professor Nussbaum wishes to analyze all of the books that she has read, but still wants Professor Jotte's ratings included in the dataset. 
+
+```{r q21, echo=FALSE}
+question(
+  "What kind of join should Professor Nussbaum be using here?",
+  answer("Full"),
+  answer("Inner"),
+  answer("Left", correct = TRUE),
+  answer("Outer"),
+  allow_retry = TRUE
+)
+```
+
+Using the appropriate join, write a query that will return the title, author, and ratings from both Professors Nussbaum and Jotte. Re-alias the ratings columns so that you know whose rating is whose.
+
+```{sql goodreads21, exercise = TRUE, connection = "db_con"}
+
+```
+
+```{sql goodreads21-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT n.title, n.author, n.my_rating as my_rating_n, j.my_rating as my_rating_j
+FROM goodreads_nussbaum as n
+LEFT JOIN goodreads_jotte as j ON n.title = j.title;
+```
+
+```{r goodreads21-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+22. Now, adapt this query so that Professor Jotte has all of the books that she has read, along with Professor Nussbaum's ratings. 
+
+```{sql goodreads22, exercise = TRUE, connection = "db_con"}
+
+```
+
+```{sql goodreads22-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT n.title, n.author, n.my_rating as my_rating_n, j.my_rating as my_rating_j
+FROM goodreads_nussbaum as n
+RIGHT JOIN goodreads_jotte as j ON n.title = j.title;
+```
+
+```{r goodreads22-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+23. Please note that in the above query, you could also have used a `LEFT JOIN`, switching the order of the tables! Try it below to confirm. 
+
+```{sql goodreads23, exercise = TRUE, connection = "db_con"}
+
+```
+
+```{sql goodreads23-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT j.title, j.author, j.my_rating as my_rating_j, n.my_rating as my_rating_n
+FROM goodreads_nussbaum as n
+LEFT JOIN goodreads_nussbaum as n ON n.title = j.title;
+```
+
+```{r goodreads23-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+24. Now, write a query that will return the same information as 23. for all of the books in Professor Nussbaum's database as well as the books in Professor Jotte's database.
+
+```{r q24, echo=FALSE}
+question(
+  "What kind of join should you be using here?",
+  answer("Full", correct = TRUE),
+  answer("Inner"),
+  answer("Left"),
+  answer("Outer", message = "This is another word for `FULL`, but is not supported by `SQLite`, which is the interpreter we are using."),
+  allow_retry = TRUE
+)
+```
+
+```{sql goodreads24, exercise = TRUE, connection = "db_con"}
+
+```
+
+```{sql goodreads24-solution, message = FALSE, warning = FALSE, echo = FALSE}
+SELECT n.title, n.author, n.my_rating as my_rating_n, j.title, j.author, j.my_rating as my_rating_j
+FROM goodreads_nussbaum as n
+FULL JOIN goodreads_jotte as j ON n.title = j.title;
+```
+
+```{r goodreads24-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+25. When you have finished, use the cell below to write a query that you think answers an interesting question about these datasets. You can also use the cell to [explore more keywords in SQLite](https://www.sqlite.org/lang_keywords.html). Post the question in the thread on Ed so that your classmates can get more practice!
+
+```{sql goodreadsfinal, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+
+```
+
 
 ## Resources
 
