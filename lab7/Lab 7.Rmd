@@ -124,8 +124,7 @@ question_numeric(
 question_numeric(
   "2. What is $d_{Man}(F, J)$, a.k.a., the Manhattan distance between $F = (3, 6)$ and $J = (7, 8)$?",
   answer(6, correct = TRUE),
-  allow_retry = TRUE
-)
+  allow_retry = TRUE)
 ```
 
 ```{r q3, echo=FALSE}
