@@ -805,7 +805,7 @@ grade_this_code()
 
 ```{sql goodreads23-solution, message = FALSE, warning = FALSE, echo = FALSE}
 SELECT j.title, j.author, j.my_rating as my_rating_j, n.my_rating as my_rating_n
-FROM goodreads_nussbaum as n
+FROM goodreads_jotte as j
 LEFT JOIN goodreads_nussbaum as n ON n.title = j.title;
 ```
 
