@@ -53,7 +53,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("$K$-Means and Hierarchical Clustering", class = "pageTitle")
+    tags$h1("K-Means and Hierarchical Clustering", class = "pageTitle")
   )
 )
 ```
