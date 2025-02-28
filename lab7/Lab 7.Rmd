@@ -107,6 +107,7 @@ ggplot(data = little_XY, aes(x = X, y = Y)) +
   geom_text(hjust = -0.9, vjust = 0.5, color = "black", label = little_XY$Label) + 
   scale_x_continuous(name = TeX(r"($X_1$)"), limits = c(1, 13.5), minor_breaks = seq(from = 1, to = 13, by = 1)) +
   scale_y_continuous(name = TeX(r"($X_2$)"), minor_breaks = seq(from = 1, to = 12, by = 1))
+
 ```
 
 Use the following calculations to help find the maximal intercluster dissimilarity using Manhattan distance.
