@@ -15,36 +15,12 @@ library(ggplot2)
 library(glmnet)
 library(dplyr)
 library(tidyr)
-library(DBI)
+#library(DBI)
 library(gradethis)
 library(learnr)
 library(reticulate)
-library(RSQLite)
+#library(RSQLite)
 
-goodreads_nussbaum <- read.csv("./data/goodreads_nussbaum.csv")
-colnames(goodreads_nussbaum) <- c("book_id", "title", "author", "author_lf", 
-                                  "additional_authors", "isbn", "isbn13",
-                                  "my_rating", "average_rating", "publisher",
-                                  "binding", "number_of_pages",
-                                  "year_published",
-                                  "original_year_published", "date_read", 
-                                  "date_added", "bookshelves", 
-                                  "bookshelves_with_positions",
-                                  "exclusive_shelf", "my_review", "spoilers",
-                                  "private_notes", "read_count",
-                                  "owned_copies")
-locations <- read.csv("./data/locations.csv", row.names = 1)
-colnames(locations) <- c("location", "title")
-
-db_con <- DBI::dbConnect(RSQLite::SQLite(), dbname = ":memory:")
-goodreads_nussbaum <- DBI::dbWriteTable(db_con, "goodreads_nussbaum", goodreads_nussbaum)
-locations <- DBI::dbWriteTable(db_con, "locations", locations)
-
-# Set the path to the existing Python environment
-#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
-
-# Optional: Install necessary Python packages if not already installed
-# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
@@ -80,32 +56,15 @@ tags$div(
 
 The goal of this lab is to help you review topics we've covered this quarter.
 
-## Setup
-
-For this lab we will be using `plotnine`, `pandas`, `numpy`, `scikit-learn`, `scipy`, and the dataset `epi_r`. 
-
-```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
-import numpy as np
-import pandas as pd
-import plotnine as p9
-import scipy
-import sklearn
-
-# To download this file go to https://posit.ds.uchicago.edu/data119-lab9/www/epi_mini2.csv
-
-epi = pd.read_csv("./data/epi_mini2.csv", index_col = 0)
-```
-
-
 ## Concept Review
 
 In the next few sections, you will review what we learned in class by using a few interactive widgets. Investigate the best choices of models, variables, transformations, and hyperparameters and then answer the questions that follow.
 
-### Reviewing regression
+### Reviewing Regression
 
 Use the widget below to review what we learned about multiple linear regression:
 
-```{r regression_app, echo = FALSE}
+<!--```{r regression_app, echo = FALSE}
 # Generate synthetic data
 set.seed(123)
 n <- 200
@@ -274,7 +233,7 @@ server <- function(input, output) {
 # Run the app
 shinyApp(ui = ui, server = server)
 ```
-
+-->
 Questions go here
 
 ### Reviewing Classification
@@ -552,256 +511,287 @@ Questions go here
 
 ## Implementation Review
 
-### Modeling `regression_var`
-- get data with sql
-- have them decide what type of model to use
-- 
+Now that we've reminded ourselves of the concepts we learned this quarter, let's implement some of them in Python.
 
-### Modeling `classification_var`
-- different data out of sql
-- what model
+### Setup
+
+For this lab we will be using `plotnine`, `pandas`, `numpy`, `scikit-learn`, `scipy`, and the dataset `msleep`.
+
+```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy
+import sklearn
+
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab9/www/msleep.csv
+
+msleep = pd.read_csv("./data/msleep.csv")
+msleep.head()
+```
+
+This dataset has 83 rows and 11 variables and contains information about sleep times for various mammals taken from V. M. Savage and G. B. West. A quantitative, theoretical framework for understanding mammalian sleep. Proceedings of the National Academy of Sciences, 104 (3):1051-1056, 2007. The variables and their descriptions are listed below:
+
+- `name`: common name
+- `genus`
+- `vore`: carnivore, omnivore or herbivore?
+- `order`
+- `conservation`: the conservation status of the animal
+- `sleep_total`: total amount of sleep, in hours
+- `sleep_rem`: rem sleep, in hours
+- `sleep_cycle`: length of sleep cycle, in hours
+- `awake`: amount of time spent awake, in hours
+- `brainwt`: brain weight in kilograms
+- `bodywt`: body weight in kilograms
+
+You can use the following cell to explore the data>
+
+```{python explore, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+
+```
+
+### Modeling `sleep_total`
+
+We want to learn if there are certain variables that we can use to help predict how long a mammal will sleep.
+
+```{r q1, echo=FALSE}
+question(
+  "What type of model should I use?",
+  answer("Supervised", correct = TRUE, message = "That's right! Since we have values for a response variable that we can use to build the model and calculate a loss/error, we would use supervised learning."),
+  answer("Unsupervised", message = "Not quite. Unsupervised learning does not involve a response variable."),
+  allow_retry = TRUE,
+  post_message = "There are two main types of supervised Learning: regression and classification. Do you remember when to use each?"
+)
+```
+
+```{r q2, echo=FALSE}
+question(
+  "More specifically, which model should I use?",
+  answer("KNN",  message = "Not quite. KNN (K Nearest Neighbors) is a classification algorithm which does not allow us to model continuous response variables."),
+  answer("Simple linear regression", message = "Very close! Simple linear regression allows us to model a continuous response variable. But, it only allows us to use one predictor and I want to investigate more than one..."),
+  answer("Multiple linear regression", correct = TRUE, message = "Correct! Multiple linear regresison will allow us to model a continuous response variable using multiple features."),
+  answer("Logistic regression", message = "Not quite. Even though regression is in the name, logistic regression is a classification algorithm which does not allow us to model continuous response variables."),
+  answer("K-Means", message = "Not quite. K-Means is a method of clustering which is an unsupervised learning algorithm."),
+  allow_retry = TRUE
+)
+```
+
+Now, that we've narrowed down the type of model we want to build, we need to check that our data meets the model assumptions. Remember that MLR assumes the response variable is normally distributed. Use the next cell to check this assumption:
+
+```{python sleep_hist, exercise=TRUE, exercise.eval = TRUE, message = FALSE}
+(p9.ggplot(msleep, p9.aes(x = ___)) +
+  p9.geom_histogram(bins = 24))
+```
+
+```{python sleep_hist-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(msleep, p9.aes(x = sleep_total)) +
+  p9.geom_histogram(bins = 24))
+```
+
+```{r sleep_hist-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q3, echo=FALSE}
+question(
+  "Does the data meet this assumption?",
+  answer("Yes!",  message = ""),
+  answer("No...", message = ""),
+  allow_retry = TRUE
+)
+```
+
+Now, we need to choose which variables to include in our model. Before you do any additional analysis, are there any variables you would be concerned about including in the model based on the descriptions?  
+
+```{r q3, echo=FALSE}
+question_checkbox(
+  "Select the variables that you are concerned about including in the model. ",
+  answer("name"),
+  answer("genus"),
+  answer("vore"),
+  answer("order"),
+  answer("conservation"),
+  answer("sleep_rem"),
+  answer("sleep_cycle"),
+  answer("awake"),
+  answer("brain_wt"),
+  answer("bodywt"),
+  answer_fn(function(value) {
+    correct("There are multiple correct answers to this question, but the variables I found concerning were name (unique for every animal) and sleep_rem, sleep_cycle, and awake (these should be highly related with sleep_total but might not help us learn much about what contributes to how much an animal sleeps). bodywt and brainwt might also be very similar to each other which could be an issue...")
+  }),
+  allow_retry = TRUE
+)
+```
+
+Generate a correlation matrix for each potential numeric predictor variable.
+
+```{python cormat, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+round(msleep[[ ___ ]].corr(), 3)
+```
+
+```{python cormat-solution, message = FALSE, warning = FALSE, echo = FALSE}
+round(msleep[['sleep_rem','sleep_cycle','awake','brain_wt','bodywt']].corr(), 3)
+```
+
+```{r cormat-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now, let's one-hot-encode our categorical variables. Don't forget you need a reference level!
+
+```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup="setup2_5"}
+msleep = pd.get_dummies(___, columns = ___, dtype = float, ___)
+```
+
+```{python dummy_drop-solution, message = FALSE, warning = FALSE, echo = FALSE}
+msleep = pd.get_dummies(msleep, columns = ['genus', 'vore', 'order', 'conservation'], dtype = float, drop_first=True)
+```
+
+```{r dummy_drop-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{python setup1, message = FALSE, warning = FALSE, echo = FALSE}
+msleep = pd.get_dummies(msleep, columns = ['genus', 'vore', 'order', 'conservation'], dtype = float, drop_first=True)
+```
+
+We still need to do one more thing to help us decide which variables to use - calculate the VIF. Calculate the VIF for all potential predictor variables (don't include `name` or the response variable).
+
+```{python vif, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE}
+VIF_msleep = [variance_inflation_factor(msleep.drop(___).values, i) for i in range(len(___.columns))]
+VIF_msleep_df = pd.DataFrame({"feature": ___.columns, "VIF": ___})
+VIF_msleep_df
+```
+
+```{python vif-solution, message = FALSE, warning = FALSE, echo = FALSE}
+VIF_msleep = [variance_inflation_factor(msleep.drop(columns=['name','sleep_total']).values, i) for i in range(len(msleep.drop(columns=['name','sleep_total']).columns))]
+VIF_msleep_df = pd.DataFrame({"feature": msleep.drop(columns=['name','sleep_total']).columns, "VIF": VIF_msleep})
+VIF_msleep_df
+```
+
+```{r vif-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q3, echo=FALSE}
+question_checkbox(
+  "After looking at your correlation matrix and VIFs, select the variables that you are concerned about including in the model. ",
+  answer("genus"),
+  answer("vore"),
+  answer("order"),
+  answer("conservation"),
+  answer("sleep_rem"),
+  answer("sleep_cycle"),
+  answer("awake"),
+  answer("brain_wt"),
+  answer("bodywt"),
+  answer_fn(function(value) {
+    correct("There are multiple correct answers to this question, but the variables I found concerning were ")
+  }),
+  allow_retry = TRUE
+)
+```
+
+Let's prepare our data to fit a regression model. Split the data into `X` and `y` where `X` contains the variables ABCDS and `y` contains the response variable. Then, use `train_test_split()` to create a training set with 70% of the data and a testing set with the remaining 30% of the data. Lastly, fit a `StandardScaler()` on the training set and us it to scale both the training and the testing sets. Make sure that you are only scaling the numeric variables.
+
+```{python pp, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
+from sklearn import linear_model
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X = ___
+y = ___
+
+X_train, X_test, y_train, y_test = train_test_split(___, random_state = 314)
+                                                       
+scaler = StandardScaler()
+
+X_train_pp = X_train.copy()
+X_test_pp = X_test.copy()
+
+col_names = [___]
+scaler.fit(___)
+X_train_pp[col_names] = scaler.transform(___)
+
+X_test_pp[col_names] = scaler.transform(___)
+```
+
+```{python pp-solution, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
+from sklearn import linear_model
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X = msleep[[]]
+y = msleep['sleep_total']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
+                                                       
+scaler = StandardScaler()
+
+X_train_pp = X_train.copy()
+X_test_pp = X_test.copy()
+
+col_names = []
+scaler.fit(X_train_pp[col_names])
+X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
+
+X_test_pp[col_names] = scaler.transform(X_test_pp[col_names])
+```
+
+```{r solution-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{python setup2, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
+from sklearn import linear_model
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X = msleep[[]]
+y = msleep['sleep_total']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
+                                                       
+scaler = StandardScaler()
+
+X_train_pp = X_train.copy()
+X_test_pp = X_test.copy()
+
+col_names = []
+scaler.fit(X_train_pp[col_names])
+X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
+
+X_test_pp[col_names] = scaler.transform(X_test_pp[col_names])
+```
+
+Now that our data is pre-processed and ready to go, let's build a few models! First, build a multiple linear regression model without any regularization. Calculate the training and testing MSE.
+
+Next, I want to see if regularization works well on this dataset. Use 5-fold cross validation to choose the best value of $\alpha$ for LASSO and Ridge Regression. What is the overall training and testing MSE for each model? Which of these 3 models would you choose?
+
+### Modeling `conservation`
+
+```{r q1, echo=FALSE}
+question(
+  "What type of model should I use?",
+  answer("Supervised", correct = TRUE, message = "That's right! Since we have values for a response variable that we can use to build the model and calculate a loss/error, we would use supervised learning."),
+  answer("Unsupervised", message = "Not quite. Unsupervised learning does not involve a response variable."),
+  allow_retry = TRUE
+)
+```
+
+```{r q2, echo=FALSE}
+question_checkbox(
+  "More specifically, which model(s) should I use?",
+  answer("KNN",correct = TRUE,  message = "Correct! KNN (K Nearest Neighbors) is a classification algorithm which allows us to model binary response variables."),
+  answer("Simple linear regression", message = "Not quite. Simple linear regression allows us to model a continuous response variable, not a binary response variable"),
+  answer("Multiple linear regression", message = "Not quite. Multiple linear regresison will allow us to model a continuous response variable using multiple features, but our repsonse variable is binary."),
+  answer("Logistic regression", correct = TRUE, message = "Correct! Logistic regression is a classification algorithm which allows us to model binary response variables."),
+  answer("K-Means", message = "Not quite. K-Means is a method of clustering which is an unsupervised learning algorithm."),
+  allow_retry = TRUE
+)
+```
 
 ### Clustering
-- different data out of sql
-- what model
 
-```{r q11a, echo=FALSE}
-question(
-  "How many rows are there in `locations`?",
-  answer("1000"),
-  answer("51755"), 
-  answer("120775", correct = TRUE),
-  allow_retry = TRUE,
-  post_message = "The way our labs are set up does not allow us to view more than 1000 rows! But there are 51,755 distinct titles and 120,775 entries in the table--experiment with `COUNT()` and `DISTINCT()` to see if you can recreate these numbers."
-)
-```
 
-```{r q11b, echo=FALSE}
-question_numeric(
-  "How many variables are there in `locations`?",
-  answer(2, correct = TRUE),
-  allow_retry = TRUE,
-  min = 0,
-  max = 10,
-  step = 1,
-  post_message = "Congratulations! You have found the fourth secret word: TRUNK."
-)
-```
-
-1.  Read through the columns to try and get a sense of what each variable means. Then, write a query that will return a table with the counts of Professor Nussbaum's books taking place in each continent.
-
-```{sql goodreads12, exercise = TRUE, connection = "db_con"}
-
-```
-
-```{sql goodreads12-solution, message = FALSE, warning = FALSE, echo = FALSE}
-SELECT location, COUNT(location)
-FROM locations
-WHERE location IN ("africa", "antarctica", "asia", "europe", "north-america", "oceania", "latin-america")
-GROUP BY location;
-```
-
-```{r goodreads12-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-```{r q12, echo=FALSE}
-question(
-  "Which continent has the most titles associated with it?",
-  answer("`africa`"),
-  answer("`antarctica`"),
-  answer("`asia`"),  
-  answer("`europe`", correct = TRUE),
-  answer("`latin-america`"),  
-  answer("`north-america`"),  
-  answer("`oceania`"),  
-  allow_retry = TRUE
-)
-```
-
-Oddly, there is no Central or South America on this list. It uses Latin America instead–even though I’m not 100% sure those are direct analogs. The locations are open to interpretation, which means something like creating a map, the original task Professor Nussbaum was trying to carry out with this dataset, can be very subjective.
-
-13. Write a query that will return a count of all of the books that are in both `goodread_nussbaum` and `locations`. It may help to abbreviate the tables in your query.
-
-```{sql goodreads13, exercise = TRUE, connection = "db_con"}
-SELECT ...
-FROM ... as A
-JOIN ... as B ON ...;
-```
-
-```{sql goodreads13-solution, message = FALSE, warning = FALSE, echo = FALSE}
-SELECT COUNT(DISTINCT(A.title))
-FROM goodreads_nussbaum as A
-JOIN locations as B ON A.title = B.title;
-```
-
-```{r goodreads13-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-```{r q13a, echo=FALSE}
-question(
-  "What type of join should we be using to determine how many titles `goodreads_nussbaum` and `locations` have in common?",
-  answer("Inner", correct = TRUE),
-  answer("Outer"),
-  answer("Right"),
-  answer("Left"),
-  allow_retry = TRUE
-)
-```
-
-```{r q13b, echo=FALSE}
-question_numeric(
-  "How many titles occur in both lists?",
-  answer(166, correct = TRUE),
-  min = 0,
-  max = 200,
-  step = 1,  allow_retry = TRUE
-)
-```
-
-14. Write a query that will join Professor Nussbaum's books with the `locations` object. It may help to create a new table (call it `both`).
-
-```{sql goodreads14, exercise = TRUE, connection = "db_con"}
-...
-SELECT *
-FROM ... as a
-JOIN ... as b ON a.title = b.title;
-```
-
-```{sql goodreads14-solution, message = FALSE, warning = FALSE, echo = FALSE}
-CREATE TABLE both AS
-SELECT *
-FROM goodreads_nussbaum as a
-JOIN locations as b ON a.title = b.title;
-```
-
-```{r goodreads14-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-15. Using `both`, write a query that will return which of Professor Nussbaum’s books take place in Illinois. 
-
-```{sql setup1, exercise = FALSE, echo=FALSE, message = FALSE}
-CREATE TABLE both AS
-SELECT *
-FROM goodreads_nussbaum as a
-JOIN locations as b ON a.title = b.title;
-```
-
-```{sql goodreads15, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
-
-```
-
-```{sql goodreads15-solution, message = FALSE, warning = FALSE, echo = FALSE}
-SELECT title, location, exclusive_shelf
-FROM both
-WHERE exclusive_shelf = "read" and location = "us-illinois";
-```
-
-```{r goodreads15-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-```{r q15, echo=FALSE}
-question_numeric(
-  "How many of Professor Nussbaum's books take place in Illinois?",
-  answer(4, correct = TRUE),
-  min = 0, 
-  max = 10, 
-  step = 1,
-  allow_retry = TRUE
-)
-```
-
-16. Write a query that will return Professor Nussbaum's most-liked books that have taken place in England. 
-
-```{sql goodreads16, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
-
-```
-
-```{sql goodreads16-solution, message = FALSE, warning = FALSE, echo = FALSE}
-SELECT title, my_rating, location, exclusive_shelf
-FROM both
-WHERE exclusive_shelf = "read" and location = "uk-england" AND my_rating = 5;
-```
-
-```{r goodreads16-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-```{r q16, echo=FALSE}
-question(
-  "What is one of the books Professor Nussbaum liked best that took place in England?",
-  answer("Matilda", correct = TRUE),
-  answer("Persuasion"),
-  answer("The Girl on the Train"),
-  answer("The Weight of Ink"),
-  allow_retry = TRUE, 
-  post_message = "Congratulations! You have found the fifth and final secret word: DEPUTY."
-)
-```
-
-17. Adapt your query to return Professor Nussbaum's least-liked books that have taken place in England.
-
-```{sql goodreads17, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
-
-```
-
-```{sql goodreads17-solution, message = FALSE, warning = FALSE, echo = FALSE}
-SELECT title, my_rating, locations, exclusive_shelf
-FROM both
-WHERE exclusive_shelf = "read" and locations = "uk-england" AND my_rating = 2;
-```
-
-```{r goodreads17-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-```{r q17, echo=FALSE}
-question(
-  "What is one of the books Professor Nussbaum liked least that took place in England?",
-  answer("Mansfield Park"),
-  answer("The Mists of Avalon", correct = TRUE),
-  answer("The Princess Diarist"),
-  answer("Treasure Island"),
-  allow_retry = TRUE
-)
-```
-
-18. What is the most highly rated book that takes place in each of Argentina, France, Germany, Japan, Italy, and Switzerland?
-
-```{sql goodreads18, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
-
-```
-
-```{sql goodreads18-solution, message = FALSE, warning = FALSE, echo = FALSE}
-SELECT title, MAX(average_rating), location
-FROM both
-WHERE location IN ("argentina", "france", "germany", "japan", "italy", "switzerland")
-GROUP BY location;
-```
-
-```{r goodreads18-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-```{r q18, echo=FALSE}
-question(
-  "According to this table, where does the book *Pachinko* take place?",
-  answer("Argentina"),
-  answer("France"),
-  answer("Germany"),
-  answer("Japan", correct = TRUE),
-  answer("Italy"),
-  answer("Switzerland"),
-  allow_retry = TRUE
-)
-```
-
-19. When you have finished, use the cell below to write a query that you think answers an interesting question about this dataset. You can also use the cell to [explore more keywords in SQLite](https://www.sqlite.org/lang_keywords.html). Post the question in the thread on Ed so that your classmates can get more practice!
-
-```{sql goodreads19, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
-
-```
 
