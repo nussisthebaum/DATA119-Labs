@@ -12,7 +12,6 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 
 library(shiny)
 library(ggplot2)
-library(glmnet)
 library(dplyr)
 library(tidyr)
 #library(DBI)
@@ -65,6 +64,8 @@ In the next few sections, you will review what we learned in class by using a fe
 Use the widget below to review what we learned about multiple linear regression:
 
 <!--```{r regression_app, echo = FALSE}
+library(glmnet)
+
 # Generate synthetic data
 set.seed(123)
 n <- 200
