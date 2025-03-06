@@ -246,17 +246,17 @@ round(msleep[['sleep_rem','sleep_cycle','awake','brainwt','bodywt']].corr(), 3)
 grade_this_code()
 ```
 
-Now, let's one-hot-encode our categorical variables. Don't forget you need a reference level! The columns `name` and potentially even `genus` may be too granular to be of use, so we will drop those. We can also drop any rows with missing values.
+Now, let's one-hot-encode our categorical variables. Don't forget you need a reference level! The columns `name` and potentially even `genus` and `order` may be too granular to be of use, so we will drop those. We can also drop any rows with missing values.
 
 ```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup = "setup-packages"}
-msleep = msleep.drop(columns = ['genus','name'])
+msleep = msleep.drop(columns = ['genus','name','order'])
 msleep = pd.get_dummies(___, columns = ___, dtype = float, dummy_NA = True, ___)
 mleep = msleep.dropna()
 ```
 
 ```{python dummy_drop-solution, message = FALSE, warning = FALSE, echo = FALSE}
-msleep = msleep.drop(columns = ['genus','name'])
-msleep = pd.get_dummies(msleep, columns = ['vore', 'order', 'conservation'], dtype = float, dummy_na = True, drop_first=True)
+msleep = msleep.drop(columns = ['genus','name','order'])
+msleep = pd.get_dummies(msleep, columns = ['vore','conservation'], dtype = float, dummy_na = True, drop_first=True)
 msleep = msleep.dropna()
 ```
 
@@ -265,12 +265,12 @@ grade_this_code()
 ```
 
 ```{python setup1, exercise = FALSE, echo = FALSE, exercise.setup = "setup-packages"}
-msleep = msleep.drop(columns = ['genus','name'])
-msleep = pd.get_dummies(msleep, columns = ['vore', 'order', 'conservation'], dtype = float, dummy_na = True, drop_first=True)
+msleep = msleep.drop(columns = ['genus','name','order'])
+msleep = pd.get_dummies(msleep, columns = ['vore', 'conservation'], dtype = float, dummy_na = True, drop_first=True)
 msleep = msleep.dropna()
 ```
 
-We still need to do one more thing to help us decide which variables to use - calculate the VIF. Calculate the VIF for all potential predictor variables.
+We still need to do one more thing to help us decide which variables to use - calculate the VIF. We already saw from the correlation matrix that `bodywt` and `brainwt` are highly correlated so we will drop `bodywt` for now. Calculate the VIF for all remaining predictor variables.
 
 ```{python vif, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE, exercise.setup = "setup1"}
 from statsmodels.stats.outliers_influence import variance_inflation_factor
@@ -283,8 +283,8 @@ VIF_msleep_df
 ```{python vif-solution, message = FALSE, warning = FALSE, echo = FALSE}
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
-VIF_msleep = [variance_inflation_factor(msleep.drop(columns=['sleep_total']).values, i) for i in range(len(msleep.drop(columns=['sleep_total']).columns))]
-VIF_msleep_df = pd.DataFrame({"feature": msleep.drop(columns=['sleep_total']).columns, "VIF": VIF_msleep})
+VIF_msleep = [variance_inflation_factor(msleep.drop(columns=['sleep_total','bodywt']).values, i) for i in range(len(msleep.drop(columns=['sleep_total','bodywt']).columns))]
+VIF_msleep_df = pd.DataFrame({"feature": msleep.drop(columns=['sleep_total','bodywt']).columns, "VIF": VIF_msleep})
 VIF_msleep_df
 ```
 
@@ -296,7 +296,6 @@ grade_this_code()
 question_checkbox(
   "After looking at your correlation matrix and VIFs, select the variables that you are concerned about including in the model. ",
   answer("vore"),
-  answer("order"),
   answer("conservation"),
   answer("sleep_rem"),
   answer("sleep_cycle"),
