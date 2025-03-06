@@ -1395,7 +1395,7 @@ dendrogram(link, no_labels = False, above_threshold_color='k')
 
 Use this cell to print and view the clusters:
 
-```{python clust_view, exercise = TRUE, exercise.eval= False, message = FALSE, exercise.setup = "setup8"}
+```{python clust_view, exercise = TRUE, exercise.eval= FALSE, message = FALSE, exercise.setup = "setup8"}
 clust_hier = fcluster(link, t=0.9, criterion='distance')
 msleep[clust_hier == ___]
 ```
