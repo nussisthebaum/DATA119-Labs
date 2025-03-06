@@ -256,18 +256,18 @@ mleep = msleep.dropna()
 
 ```{python dummy_drop-solution, message = FALSE, warning = FALSE, echo = FALSE}
 msleep = msleep.drop(columns = ['genus','name'])
-msleep = pd.get_dummies(msleep, columns = ['vore', 'order', 'conservation'], dtype = float, dummy_NA = True, drop_first=True)
-mleep = msleep.dropna()
+msleep = pd.get_dummies(msleep, columns = ['vore', 'order', 'conservation'], dtype = float, dummy_na = True, drop_first=True)
+msleep = msleep.dropna()
 ```
 
 ```{r dummy_drop-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-```{python setup1, message = FALSE, warning = FALSE, echo = FALSE, exercise.setup = "setup-packages"}
+```{python setup1, exercise = FALSE, echo = FALSE, exercise.setup = "setup-packages"}
 msleep = msleep.drop(columns = ['genus','name'])
-msleep = pd.get_dummies(msleep, columns = ['vore', 'order', 'conservation'], dtype = float, dummy_NA = True, drop_first=True)
-mleep = msleep.dropna()
+msleep = pd.get_dummies(msleep, columns = ['vore', 'order', 'conservation'], dtype = float, dummy_na = True, drop_first=True)
+msleep = msleep.dropna()
 ```
 
 We still need to do one more thing to help us decide which variables to use - calculate the VIF. Calculate the VIF for all potential predictor variables.
