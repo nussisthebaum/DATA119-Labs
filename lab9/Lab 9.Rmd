@@ -22,12 +22,9 @@ library(shiny)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-#library(DBI)
 library(gradethis)
 library(learnr)
 library(reticulate)
-#library(RSQLite)
-
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
@@ -1011,7 +1008,7 @@ msleep = pd.read_csv("./data/msleep.csv")
 msleep = pd.get_dummies(msleep, columns = ['genus', 'order', 'conservation'], dtype = float, drop_first=True)
 
 X = msleep[[]]
-y = msleep['vore']
+y = (msleep['vore'] == "herbi").apply(int)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
                                                        
@@ -1354,7 +1351,7 @@ msleep[clust.labels_ == 0.0]
 
 Use this cell to print and view the clusters:
 
-```{python clust_view1, exercise = TRUE, exercise.eval= False, message = FALSE, exercise.setup = "setup7"}
+```{python clust_view1, exercise = TRUE, exercise.eval= FALSE, message = FALSE, exercise.setup = "setup7"}
 msleep[clust.labels_ == ___]
 ```
 
