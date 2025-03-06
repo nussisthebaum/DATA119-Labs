@@ -586,6 +586,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 msleep = pd.get_dummies(msleep, columns = ['conservation'], dtype = float, dummy_na = True, drop_first=True)
+msleep = msleep.dropna()
 
 X = msleep.drop(columns=["vore","order","genus","name","bodywt"])
 y = (msleep['vore'] == "herbi").apply(int)
@@ -607,7 +608,7 @@ X_test_pp[col_names] = scaler.transform(X_test_pp[col_names])
 Try running KNN with different numbers of neighbors. Plot the training and the testing accuracy across different values of K.
 
 ```{python loop, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
-from sklearn.neighbors import KneighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier
 
 metric_train = []
 metric_test = []
@@ -618,8 +619,8 @@ for k in range(1, 16):
   tempknn_preds_test = tempknn.predict(___) 
   tempknn_cm_train = pd.crosstab(tempknn_preds_train.tolist(), ___)
   tempknn_cm_test = pd.crosstab(tempknn_preds_train.tolist(), ___)
-  metric_train.append((tempknn_cm_train.iloc[0,0] + tempknn_cm_train.[1,1])/X_train.shape[0])
-  metric_test.append((tempknn_cm_test.iloc[0,0] + tempknn_cm_test.[1,1])/X_test.shape[0])
+  metric_train.append((tempknn_cm_train.iloc[0,0] + tempknn_cm_train.iloc[1,1])/X_train.shape[0])
+  metric_test.append((tempknn_cm_test.iloc[0,0] + tempknn_cm_test.iloc[1,1])/X_test.shape[0])
   
 d_kNN = {'k': [range(1, 16), range(1,16)], 'Accuracy': [metric_train, metric_test], 'Data': (['Train']*15).append(['Test']*15)}
 kNN_plot = pd.DataFrame(data = d_kNN)  
@@ -628,12 +629,12 @@ print(p9.ggplot(___, p9.aes(x = ___, y = ___, c = ___)) +
        p9.geom_line() +
        p9.geom_vline(xintercept = k) + 
        p9.scale_x_continuous(name = "$k$") + 
-       p9.scale_y_continuous(name = "Accuracy")
+       p9.scale_y_continuous(name = "Accuracy"))
 
 ```
 
 ```{python loop-solution, exercise = FALSE, message = FALSE, warning = FALSE, echo = FALSE}
-from sklearn.neighbors import KneighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier
 
 metric_train = []
 metric_test = []
@@ -644,8 +645,8 @@ for k in range(1, 16):
   tempknn_preds_test = tempknn.predict(X_test_pp) 
   tempknn_cm_train = pd.crosstab(tempknn_preds_train.tolist(), y_train)
   tempknn_cm_test = pd.crosstab(tempknn_preds_train.tolist(), y_test)
-  metric_train.append((tempknn_cm_train.iloc[0,0] + tempknn_cm_train.[1,1])/X_train.shape[0])
-  metric_test.append((tempknn_cm_test.iloc[0,0] + tempknn_cm_test.[1,1])/X_test.shape[0])
+  metric_train.append((tempknn_cm_train.iloc[0,0] + tempknn_cm_train.iloc[1,1])/X_train.shape[0])
+  metric_test.append((tempknn_cm_test.iloc[0,0] + tempknn_cm_test.iloc[1,1])/X_test.shape[0])
   
 d_kNN = {'k': [range(1, 16), range(1,16)], 'Accuracy': [metric_train, metric_test], 'Data': (['Train']*15).append(['Test']*15)}
 kNN_plot = pd.DataFrame(data = d_kNN)  
@@ -654,7 +655,7 @@ print(p9.ggplot(kNN_plot, p9.aes(x = "k", y = "Accurracy", c = "Data")) +
        p9.geom_line() +
        p9.geom_vline(xintercept = k) + 
        p9.scale_x_continuous(name = "$k$") + 
-       p9.scale_y_continuous(name = "Accuracy")
+       p9.scale_y_continuous(name = "Accuracy"))
 ```
 
 ```{r loop-code-check, message = FALSE, warning = FALSE}
