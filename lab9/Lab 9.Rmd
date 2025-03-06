@@ -599,7 +599,7 @@ scaler = StandardScaler()
 X_train_pp = X_train.copy()
 X_test_pp = X_test.copy()
 
-col_names = ["sleep_rem","sleep_cycle","awake","brainwt"]
+col_names = ["sleep_rem","sleep_cycle","awake","brainwt","sleep_total"]
 scaler.fit(X_train_pp[col_names])
 X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
 
@@ -853,18 +853,15 @@ First, let's use K-Means to cluster the data. We need to prepare our data for cl
 
 Remember, that we don't need to split data into training and testing for unsupervised learning!
 
-```{python setup6, exercise = TRUE, exercise.eval = FALSE, message = FALSE}
+```{python setup6, exercise = TRUE, exercise.eval = FALSE, message = FALSE, }
 from sklearn.cluster import KMeans
-msleep = pd.read_csv("./data/msleep.csv", index_col = "name")
+msleep = pd.read_csv("./data/msleep.csv", index_col = "name").drop(columns = ['rownames'])
 
 msleep = pd.get_dummies(msleep, columns = ['vore', 'conservation'], drop_first = True)
 
 scaler = StandardScaler()
 
-X_train_pp = X_train.copy()
-X_test_pp = X_test.copy()
-
-col_names = []
+col_names = ["sleep_rem","sleep_cycle","awake","brainwt","sleep_total","bodywt"]
 msleep[col_names] = scaler.fit_transform(msleep[col_names])
 msleep = msleep.dropnaa()
 ```
