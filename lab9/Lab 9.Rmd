@@ -57,9 +57,9 @@ In the next few sections, you will review what we learned in class by using a fe
 
 Use the widget below to review what we learned about multiple linear regression:
 
-<!--```{r, echo = FALSE}
+```{r, echo = FALSE}
 knitr::include_app("https://posit.ds.uchicago.edu/content/bddc4809-79b1-4883-bfe8-bfb73f425453", height = "500px")
-```-->
+```
 
 :::: {.discussionbox}
 ::: {.center}
