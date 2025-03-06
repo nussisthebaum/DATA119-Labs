@@ -134,7 +134,7 @@ import sklearn
 
 # To download this file go to https://posit.ds.uchicago.edu/data119-lab9/www/msleep.csv
 
-msleep = pd.read_csv("./data/msleep.csv")
+msleep = pd.read_csv("./data/msleep.csv").drop(columns = ['rownames'])
 msleep.head()
 ```
 
@@ -187,13 +187,13 @@ question(
 
 Now, that we've narrowed down the type of model we want to build, we need to check that our data meets the model assumptions. Remember that MLR assumes the response variable is normally distributed. Use the next cell to check this assumption:
 
-```{python sleep_hist, exercise=TRUE, exercise.eval = TRUE, message = FALSE, exercise.setup = "setup-packages"}
+```{python sleep_hist, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 (p9.ggplot(msleep, p9.aes(x = ___)) +
   p9.geom_histogram(bins = 24))
 ```
 
 ```{python sleep_hist-solution, message = FALSE, warning = FALSE, echo = FALSE}
-(p9.ggplot(msleep, p9.aes(x = sleep_total)) +
+(p9.ggplot(msleep, p9.aes(x = "sleep_total")) +
   p9.geom_histogram(bins = 24))
 ```
 
@@ -223,7 +223,7 @@ question_checkbox(
   answer("sleep_rem"),
   answer("sleep_cycle"),
   answer("awake"),
-  answer("brain_wt"),
+  answer("brainwt"),
   answer("bodywt"),
   answer_fn(function(value) {
     correct("There are multiple correct answers to this question, but the variables I found concerning were name (unique for every animal) and sleep_rem, sleep_cycle, and awake (these should be highly related with sleep_total but might not help us learn much about what contributes to how much an animal sleeps). bodywt and brainwt might also be very similar to each other which could be an issue...")
@@ -239,21 +239,25 @@ round(msleep[[ ___ ]].corr(), 3)
 ```
 
 ```{python cormat-solution, message = FALSE, warning = FALSE, echo = FALSE}
-round(msleep[['sleep_rem','sleep_cycle','awake','brain_wt','bodywt']].corr(), 3)
+round(msleep[['sleep_rem','sleep_cycle','awake','brainwt','bodywt']].corr(), 3)
 ```
 
 ```{r cormat-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-Now, let's one-hot-encode our categorical variables. Don't forget you need a reference level!
+Now, let's one-hot-encode our categorical variables. Don't forget you need a reference level! The columns `name` and potentially even `genus` may be too granular to be of use, so we will drop those. We can also drop any rows with missing values.
 
 ```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup = "setup-packages"}
-msleep = pd.get_dummies(___, columns = ___, dtype = float, ___)
+msleep = msleep.drop(columns = ['genus','name'])
+msleep = pd.get_dummies(___, columns = ___, dtype = float, dummy_NA = True, ___)
+mleep = msleep.dropna()
 ```
 
 ```{python dummy_drop-solution, message = FALSE, warning = FALSE, echo = FALSE}
-msleep = pd.get_dummies(msleep, columns = ['genus', 'vore', 'order', 'conservation'], dtype = float, drop_first=True)
+msleep = msleep.drop(columns = ['genus','name'])
+msleep = pd.get_dummies(msleep, columns = ['vore', 'order', 'conservation'], dtype = float, dummy_NA = True, drop_first=True)
+mleep = msleep.dropna()
 ```
 
 ```{r dummy_drop-code-check, message = FALSE, warning = FALSE}
@@ -261,20 +265,26 @@ grade_this_code()
 ```
 
 ```{python setup1, message = FALSE, warning = FALSE, echo = FALSE, exercise.setup = "setup-packages"}
-msleep = pd.get_dummies(msleep, columns = ['genus', 'vore', 'order', 'conservation'], dtype = float, drop_first=True)
+msleep = msleep.drop(columns = ['genus','name'])
+msleep = pd.get_dummies(msleep, columns = ['vore', 'order', 'conservation'], dtype = float, dummy_NA = True, drop_first=True)
+mleep = msleep.dropna()
 ```
 
-We still need to do one more thing to help us decide which variables to use - calculate the VIF. Calculate the VIF for all potential predictor variables (don't include `name` or the response variable).
+We still need to do one more thing to help us decide which variables to use - calculate the VIF. Calculate the VIF for all potential predictor variables.
 
 ```{python vif, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE, exercise.setup = "setup1"}
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
 VIF_msleep = [variance_inflation_factor(msleep.drop(___).values, i) for i in range(len(___.columns))]
 VIF_msleep_df = pd.DataFrame({"feature": ___.columns, "VIF": ___})
 VIF_msleep_df
 ```
 
 ```{python vif-solution, message = FALSE, warning = FALSE, echo = FALSE}
-VIF_msleep = [variance_inflation_factor(msleep.drop(columns=['name','sleep_total']).values, i) for i in range(len(msleep.drop(columns=['name','sleep_total']).columns))]
-VIF_msleep_df = pd.DataFrame({"feature": msleep.drop(columns=['name','sleep_total']).columns, "VIF": VIF_msleep})
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+VIF_msleep = [variance_inflation_factor(msleep.drop(columns=['sleep_total']).values, i) for i in range(len(msleep.drop(columns=['sleep_total']).columns))]
+VIF_msleep_df = pd.DataFrame({"feature": msleep.drop(columns=['sleep_total']).columns, "VIF": VIF_msleep})
 VIF_msleep_df
 ```
 
@@ -285,7 +295,6 @@ grade_this_code()
 ```{r q5, echo=FALSE}
 question_checkbox(
   "After looking at your correlation matrix and VIFs, select the variables that you are concerned about including in the model. ",
-  answer("genus"),
   answer("vore"),
   answer("order"),
   answer("conservation"),
