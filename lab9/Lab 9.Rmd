@@ -613,28 +613,37 @@ from sklearn.neighbors import KNeighborsClassifier
 metric_train = []
 metric_test = []
 
+labels = [0, 1]
+
 for k in range(1, 16):
-  tempknn = KNeighborsClassifier(___).fit(___)
-  tempknn_preds_train = tempknn.predict(___) 
-  tempknn_preds_test = tempknn.predict(___) 
-  tempknn_cm_train = pd.crosstab(tempknn_preds_train.tolist(), ___)
-  tempknn_cm_test = pd.crosstab(tempknn_preds_train.tolist(), ___)
-  metric_train.append((tempknn_cm_train.iloc[0,0] + tempknn_cm_train.iloc[1,1])/X_train.shape[0])
-  metric_test.append((tempknn_cm_test.iloc[0,0] + tempknn_cm_test.iloc[1,1])/X_test.shape[0])
-  
+    tempknn = KNeighborsClassifier(___).fit(___)
+    tempknn_preds_train = tempknn.predict(___)
+    tempknn_preds_test = tempknn.predict(___)
+
+    tempknn_cm_train = pd.crosstab(tempknn_preds_train, y_train).reindex(index=labels, columns=labels, fill_value=0)
+    tempknn_cm_test = pd.crosstab(tempknn_preds_test, y_test).reindex(index=labels, columns=labels, fill_value=0)
+
+    train_acc = tempknn_cm_train.values.diagonal().sum() / X_train.shape[0]
+    test_acc = tempknn_cm_test.values.diagonal().sum() / X_test.shape[0]
+
+    metric_train.append(train_acc)
+    metric_test.append(test_acc)
+
 d_kNN = {
-    'k': list(range(1, 16)) * 2,  # Expands range into a list and duplicates for both Train & Test
+    'k': list(range(1, 16)) * 2,  # Expands range into a list and duplicates for Train & Test
     'Accuracy': metric_train + metric_test,  # Concatenates both lists
     'Data': ['Train'] * 15 + ['Test'] * 15  # Creates a single correct list
 }
-kNN_plot = pd.DataFrame(data = d_kNN)  
 
-print(p9.ggplot(___, p9.aes(x = ___, y = ___, c = ___)) +
-       p9.geom_line() +
-       p9.geom_vline(xintercept = k) + 
-       p9.scale_x_continuous(name = "$k$") + 
-       p9.scale_y_continuous(name = "Accuracy"))
+kNN_plot = pd.DataFrame(d_kNN)
 
+print(
+    p9.ggplot(kNN_plot, p9.aes(x=___, y=___, color=___)) +
+    p9.geom_line() +
+    p9.geom_vline(xintercept=5, linetype="dashed") + 
+    p9.scale_x_continuous(name="$k$") +
+    p9.scale_y_continuous(name="Accuracy")
+)
 ```
 
 ```{python loop-solution, exercise = FALSE, message = FALSE, warning = FALSE, echo = FALSE}
@@ -643,27 +652,38 @@ from sklearn.neighbors import KNeighborsClassifier
 metric_train = []
 metric_test = []
 
+labels = [0, 1]
+
 for k in range(1, 16):
-  tempknn = KNeighborsClassifier(n_neighbors = k).fit(X_train_pp,y_train)
-  tempknn_preds_train = tempknn.predict(X_train_pp) 
-  tempknn_preds_test = tempknn.predict(X_test_pp) 
-  tempknn_cm_train = pd.crosstab(tempknn_preds_train.tolist(), y_train)
-  tempknn_cm_test = pd.crosstab(tempknn_preds_train.tolist(), y_test)
-  metric_train.append((tempknn_cm_train.iloc[0,0] + tempknn_cm_train.iloc[1,1])/X_train.shape[0])
-  metric_test.append((tempknn_cm_test.iloc[0,0] + tempknn_cm_test.iloc[1,1])/X_test.shape[0])
-  
+    tempknn = KNeighborsClassifier(n_neighbors=k).fit(X_train_pp, y_train)
+    tempknn_preds_train = tempknn.predict(X_train_pp)
+    tempknn_preds_test = tempknn.predict(X_test_pp)
+
+    tempknn_cm_train = pd.crosstab(tempknn_preds_train, y_train).reindex(index=labels, columns=labels, fill_value=0)
+    tempknn_cm_test = pd.crosstab(tempknn_preds_test, y_test).reindex(index=labels, columns=labels, fill_value=0)
+
+    train_acc = tempknn_cm_train.values.diagonal().sum() / X_train.shape[0]
+    test_acc = tempknn_cm_test.values.diagonal().sum() / X_test.shape[0]
+
+    metric_train.append(train_acc)
+    metric_test.append(test_acc)
+
 d_kNN = {
-    'k': list(range(1, 16)) * 2,  # Expands range into a list and duplicates for both Train & Test
+    'k': list(range(1, 16)) * 2,  # Expands range into a list and duplicates for Train & Test
     'Accuracy': metric_train + metric_test,  # Concatenates both lists
     'Data': ['Train'] * 15 + ['Test'] * 15  # Creates a single correct list
 }
-kNN_plot = pd.DataFrame(data = d_kNN)  
 
-print(p9.ggplot(kNN_plot, p9.aes(x = "k", y = "Accurracy", c = "Data")) +
-       p9.geom_line() +
-       p9.geom_vline(xintercept = k) + 
-       p9.scale_x_continuous(name = "$k$") + 
-       p9.scale_y_continuous(name = "Accuracy"))
+kNN_plot = pd.DataFrame(d_kNN)
+
+print(
+    p9.ggplot(kNN_plot, p9.aes(x="k", y="Accuracy", color="Data")) +
+    p9.geom_line() +
+    p9.geom_vline(xintercept=5, linetype="dashed") + 
+    p9.scale_x_continuous(name="$k$") +
+    p9.scale_y_continuous(name="Accuracy")
+)
+
 ```
 
 ```{r loop-code-check, message = FALSE, warning = FALSE}
