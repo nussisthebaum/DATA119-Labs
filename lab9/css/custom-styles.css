@@ -100,4 +100,14 @@ a:hover {
     border-radius: 5px; /* Rounded corners */
 }
 
+.discussionbox {
+    background-color: #ddd;  /* Light red/pink background */
+    border-left: 6px solid #800000; /* Dark red border */
+    padding: 10px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
 
+.discussionbox .center {
+    text-align: center;
+}

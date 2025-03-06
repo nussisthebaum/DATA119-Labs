@@ -161,9 +161,9 @@ This dataset has 83 rows and 11 variables and contains information about sleep t
 - `brainwt`: brain weight in kilograms
 - `bodywt`: body weight in kilograms
 
-You can use the following cell to explore the data>
+You can use the following cell to explore the data:
 
-```{python explore, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python explore, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 
 ```
 
@@ -177,7 +177,7 @@ question(
   answer("Supervised", correct = TRUE, message = "That's right! Since we have values for a response variable that we can use to build the model and calculate a loss/error, we would use supervised learning."),
   answer("Unsupervised", message = "Not quite. Unsupervised learning does not involve a response variable."),
   allow_retry = TRUE,
-  post_message = "There are two main types of supervised Learning: regression and classification. Do you remember when to use each?"
+  post_message = "There are two main types of supervised learning: regression and classification. Do you remember when to use each?"
 )
 ```
 
@@ -189,13 +189,14 @@ question(
   answer("Multiple linear regression", correct = TRUE, message = "Correct! Multiple linear regresison will allow us to model a continuous response variable using multiple features."),
   answer("Logistic regression", message = "Not quite. Even though regression is in the name, logistic regression is a classification algorithm which does not allow us to model continuous response variables."),
   answer("K-Means", message = "Not quite. K-Means is a method of clustering which is an unsupervised learning algorithm."),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the first secret word: LOCAL."
 )
 ```
 
 Now, that we've narrowed down the type of model we want to build, we need to check that our data meets the model assumptions. Remember that MLR assumes the response variable is normally distributed. Use the next cell to check this assumption:
 
-```{python sleep_hist, exercise=TRUE, exercise.eval = TRUE, message = FALSE}
+```{python sleep_hist, exercise=TRUE, exercise.eval = TRUE, message = FALSE, exercise.setup = "setup-packages"}
 (p9.ggplot(msleep, p9.aes(x = ___)) +
   p9.geom_histogram(bins = 24))
 ```
@@ -205,7 +206,7 @@ Now, that we've narrowed down the type of model we want to build, we need to che
   p9.geom_histogram(bins = 24))
 ```
 
-```{r sleep_hist-code-check, message = FALSE, warning = FALSE}
+```{r sleep_hist-code-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -242,7 +243,7 @@ question_checkbox(
 
 Generate a correlation matrix for each potential numeric predictor variable.
 
-```{python cormat, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python cormat, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 round(msleep[[ ___ ]].corr(), 3)
 ```
 
@@ -256,7 +257,7 @@ grade_this_code()
 
 Now, let's one-hot-encode our categorical variables. Don't forget you need a reference level!
 
-```{python dummy_drop, exercise = TRUE, message = FALSE}
+```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup = "setup-packages"}
 msleep = pd.get_dummies(___, columns = ___, dtype = float, ___)
 ```
 
@@ -268,7 +269,7 @@ msleep = pd.get_dummies(msleep, columns = ['genus', 'vore', 'order', 'conservati
 grade_this_code()
 ```
 
-```{python setup1, message = FALSE, warning = FALSE, echo = FALSE}
+```{python setup1, message = FALSE, warning = FALSE, echo = FALSE, exercise.setup = "setup-packages"}
 msleep = pd.get_dummies(msleep, columns = ['genus', 'vore', 'order', 'conservation'], dtype = float, drop_first=True)
 ```
 
@@ -305,7 +306,8 @@ question_checkbox(
   answer_fn(function(value) {
     correct("There are multiple correct answers to this question, but the variables I found concerning were ")
   }),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: KIN."
 )
 ```
 
@@ -682,7 +684,7 @@ question_numeric("What $k$? would you choose?",
            }
          }),
          allow_retry = TRUE, 
-         post_message = "Congratulations! You have found the fifth and final secret word: SOUP."
+         post_message = "Congratulations! You have found the third secret word: FRAME."
 )
 ```
 
@@ -757,7 +759,7 @@ question("True or False: The test set AUC for this model represents an improveme
          answer("True", correct=TRUE),
          answer("False", message = "Don't forget, we want AUC to be above 0.5!"),
          allow_retry = TRUE, 
-         post_message = "Congratulations! You have found the fifth and final secret word: PRINCIPLE."
+         post_message = "Congratulations! You have found the fourth secret word: PRINCE."
 )
 ```
 
@@ -798,7 +800,8 @@ question(
   "What type of model should I use to answer this question?",
   answer("Supervised", message = "Not quite. Since we are looking for groups with similar featuers, we want to use a clustering method. In clustering, there is no response variable."),
   answer("Unsupervised",correct = TRUE, message = "Correct!"),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the fifth and final secret word: PLANT."
 )
 ```
 
