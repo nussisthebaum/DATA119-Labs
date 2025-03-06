@@ -977,9 +977,9 @@ grade_this_code()
 Which of these 3 models would you choose? Why?
 ::::
 
-### Modeling `conservation`
+### Modeling `vore`
 
-Let's switch gears and look at a different variable. Does an animal's sleeping habits affect whether or not it is endangered? Perhaps animals that are asleep for longer periods of time are more vulnerable to poaching or predation...
+Let's switch gears and look at a different variable. Are an animal's sleeping habits related to what they eat? Perhaps animals that are herbivores tend to sleep more, because they don't spend as much time hunting...
 
 
 ```{r q7, echo=FALSE}
@@ -1003,8 +1003,29 @@ question_checkbox(
 )
 ```
 
-Data prep here
+Let's get our data in the right format to run our models.
 
+```{python setup4, exercise = TRUE, message = FALSE}
+
+msleep = pd.read_csv("./data/msleep.csv")
+msleep = pd.get_dummies(msleep, columns = ['genus', 'order', 'conservation'], dtype = float, drop_first=True)
+
+X = msleep[[]]
+y = msleep['vore']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
+                                                       
+scaler = StandardScaler()
+
+X_train_pp = X_train.copy()
+X_test_pp = X_test.copy()
+
+col_names = []
+scaler.fit(X_train_pp[col_names])
+X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
+
+X_test_pp[col_names] = scaler.transform(X_test_pp[col_names])
+```
 
 Try running KNN with different numbers of neighbors. Plot the training and the testing accuracy across different values of K.
 
