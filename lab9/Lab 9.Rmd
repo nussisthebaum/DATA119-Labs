@@ -131,6 +131,7 @@ import pandas as pd
 import plotnine as p9
 import scipy
 import sklearn
+import matplotlib.pyplot as plt
 
 # To download this file go to https://posit.ds.uchicago.edu/data119-lab9/www/msleep.csv
 
@@ -632,7 +633,7 @@ for k in range(1, 16):
 d_kNN = {
     'k': list(range(1, 16)) * 2,  # Expands range into a list and duplicates for Train & Test
     'Accuracy': metric_train + metric_test,  # Concatenates both lists
-    'Data': ['Train'] * 15 + ['Test'] * 15  # Creates a single correct list
+    'Data': ['Train'] * 15 + ['Test'] * 15  
 }
 
 kNN_plot = pd.DataFrame(d_kNN)
@@ -671,7 +672,7 @@ for k in range(1, 16):
 d_kNN = {
     'k': list(range(1, 16)) * 2,  # Expands range into a list and duplicates for Train & Test
     'Accuracy': metric_train + metric_test,  # Concatenates both lists
-    'Data': ['Train'] * 15 + ['Test'] * 15  # Creates a single correct list
+    'Data': ['Train'] * 15 + ['Test'] * 15  
 }
 
 kNN_plot = pd.DataFrame(d_kNN)
@@ -679,7 +680,6 @@ kNN_plot = pd.DataFrame(d_kNN)
 print(
     p9.ggplot(kNN_plot, p9.aes(x="k", y="Accuracy", color="Data")) +
     p9.geom_line() +
-    p9.geom_vline(xintercept=5, linetype="dashed") + 
     p9.scale_x_continuous(name="$k$") +
     p9.scale_y_continuous(name="Accuracy")
 )
@@ -704,7 +704,7 @@ grade_this_code()
 ```{r q9, echo=FALSE}
 question_numeric("What $k$? would you choose?",
          answer_fn(function(value){
-           if (value %in% c()){
+           if (value %in% c(3,5)){
              correct("Good choice!")
            }
            else{
@@ -720,6 +720,7 @@ Let's see if we can get better accuracy with logistic regression.
 
 ```{python logit, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
 logit_model = ___
 logit_model.fit(___)
@@ -727,20 +728,20 @@ logit_model.fit(___)
 test_preds = logit_model.predict(___)
 
 logit_cm = pd.crosstab(___)
-print("Testing accuracy: ",(logit_cm.iloc[___] + logit_cm.iloc[___])/X_train.shape[0])
+print("Testing accuracy: ",___)
 
 ```
 
 ```{python logit-solution, message = FALSE}
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
 logit_model = LogisticRegression()
 logit_model.fit(X_train_pp, y_train)
 
 test_preds = logit_model.predict(X_test_pp)
 
-logit_cm = pd.crosstab(test_preds.tolist(), y_test)
-print("Testing accuracy: ",(logit_cm.iloc[0,0] + logit_cm.iloc[1,1])/X_train.shape[0])
+print("Testing accuracy: ",accuracy_score(y_test, test_preds))
 
 ```
 
@@ -750,14 +751,14 @@ grade_this_code()
 
 ```{python setup5, exercise = FALSE, echo = FALSE, message = FALSE, exercise.setup="setup4"}
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
 logit_model = LogisticRegression()
 logit_model.fit(X_train_pp, y_train)
 
 test_preds = logit_model.predict(X_test_pp)
 
-logit_cm = pd.crosstab(test_preds.tolist(), y_test)
-print("Testing accuracy: ",(logit_cm.iloc[0,0] + logit_cm.iloc[1,1])/X_train.shape[0])
+print("Testing accuracy: ",accuracy_score(y_test, test_preds))
 
 ```
 
@@ -765,17 +766,17 @@ print("Testing accuracy: ",(logit_cm.iloc[0,0] + logit_cm.iloc[1,1])/X_train.sha
 Now, print the AUC on the test set. How well does the model perform?
 
 ```{python auc, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
-from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_curve, auc
 
 fpr, tpr, thresholds = metrics.roc_curve(___)
-metrics.auc(___, ___)
+auc(___, ___)
 ```
 
 ```{python auc-solution, message = FALSE, warning = FALSE, echo = FALSE}
-from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_curve, auc
 
 fpr, tpr, thresholds = roc_curve(y_test, test_preds, pos_label=1)
-metrics.auc(fpr, tpr)
+auc(fpr, tpr)
 ```
 
 ```{r auc-code-check, message = FALSE, warning = FALSE}
@@ -784,8 +785,8 @@ grade_this_code()
 
 ```{r q10, echo=FALSE}
 question("True or False: The test set AUC for this model represents an improvement over random chance.",
-         answer("True", correct=TRUE),
-         answer("False", message = "Don't forget, we want AUC to be above 0.5!"),
+         answer("True", message = "Don't forget, we want AUC to be above 0.5!"),
+         answer("False", correct = TRUE),
          allow_retry = TRUE, 
          post_message = "Congratulations! You have found the fourth secret word: PRINCE."
 )
@@ -814,8 +815,9 @@ Using the cell below to explore the model further...
 **Discuss with a neighbor (or on Ed):**
 :::
 
-* Which variables are most related to conservation? 
-* Interpret the coefficients of the model.
+* How would you attempt to improve the model?
+* Taking the model as is, which variables are most related to `vore`? 
+* Practice interpreting the coefficients of the model.
 
 ::::
 
