@@ -300,7 +300,7 @@ question_checkbox(
   answer("sleep_rem"),
   answer("sleep_cycle"),
   answer("awake"),
-  answer("brain_wt"),
+  answer("brainwt"),
   answer_fn(function(value) {
     correct("There are multiple correct answers to this question, but the variable I found concerning was conservation. Some of the levels had high VIF. For the purposes of our model, we will keep it in for now.")
   }),
@@ -348,7 +348,7 @@ scaler = StandardScaler()
 X_train_pp = X_train.copy()
 X_test_pp = X_test.copy()
 
-col_names = ["sleep_rem","sleep_cycle","awake","brain_wt"]
+col_names = ["sleep_rem","sleep_cycle","awake","brainwt"]
 scaler.fit(X_train_pp[col_names])
 X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
 
@@ -584,9 +584,9 @@ Let's get our data in the right format to run our models.
 ```{python setup4, exercise = TRUE, exercise.eval = FALSE, message = FALSE}
 
 msleep = pd.read_csv("./data/msleep.csv")
-msleep = pd.get_dummies(msleep, columns = ['genus', 'order', 'conservation'], dtype = float, drop_first=True)
+msleep = pd.get_dummies(msleep, columns = ['conservation'], dtype = float, dummy_na = True, drop drop_first=True)
 
-X = msleep[[]]
+X = msleep.drop(columns=["vore","order","genus","name","rownames","bodywt"])
 y = (msleep['vore'] == "herbi").apply(int)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
@@ -596,7 +596,7 @@ scaler = StandardScaler()
 X_train_pp = X_train.copy()
 X_test_pp = X_test.copy()
 
-col_names = []
+col_names = ["sleep_rem","sleep_cycle","awake","brainwt"]
 scaler.fit(X_train_pp[col_names])
 X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
 
@@ -631,7 +631,7 @@ print(p9.ggplot(___, p9.aes(x = ___, y = ___, c = ___)) +
 
 ```
 
-```{python loop-solution, message = FALSE, warning = FALSE, echo = FALSE}
+```{python loop-solution, exercise = FALSE, message = FALSE, warning = FALSE, echo = FALSE}
 from sklearn.neighbors import KneighborsClassifier
 
 metric_train = []
@@ -834,6 +834,7 @@ X_test_pp = X_test.copy()
 
 col_names = []
 msleep[col_names] = scaler.fit_transform(msleep[col_names])
+msleep = msleep.dropnaa()
 ```
 
 :::: {.discussionbox data-latex=""}
@@ -976,7 +977,7 @@ dendrogram(link, no_labels = False, above_threshold_color='k')
 Use this cell to print and view the clusters:
 
 ```{python clust_view, exercise = TRUE, exercise.eval= FALSE, message = FALSE, exercise.setup = "setup8"}
-clust_hier = fcluster(link, t=0.9, criterion='distance')
+clust_hier = fcluster(link, t=___, criterion='distance')
 msleep[clust_hier == ___]
 ```
 
