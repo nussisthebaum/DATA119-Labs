@@ -81,9 +81,12 @@ knitr::include_app("https://posit.ds.uchicago.edu/content/bddc4809-79b1-4883-bfe
 
 Use the widget below to review what we learned about classification:
 
-```{r, echo = FALSE}
+<iframe style="border: 0; width:100%; height: 500px; overflow: auto;" src="https://posit.ds.uchicago.edu/content/daa86c7c-2206-4c63-8b2d-15b3e377883a"></iframe>
+
+
+<!--```{r, echo = FALSE}
 knitr::include_app("https://posit.ds.uchicago.edu/content/daa86c7c-2206-4c63-8b2d-15b3e377883a", height = "500px")
-```
+```-->
 
 :::: {.discussionbox data-latex=""}
 ::: {.center data-latex=""}
@@ -100,9 +103,11 @@ knitr::include_app("https://posit.ds.uchicago.edu/content/daa86c7c-2206-4c63-8b2
 
 Use the widget below to review what we learned about clustering:
 
-```{r, echo = FALSE}
+<iframe style="border: 0; width:100%; height: 500px; overflow: auto;" src="https://posit.ds.uchicago.edu/content/ba3dec83-7bc4-4670-9dfb-4f5957148a9e"></iframe>
+
+<!--```{r, echo = FALSE}
 knitr::include_app("https://posit.ds.uchicago.edu/content/ba3dec83-7bc4-4670-9dfb-4f5957148a9e", height = "500px")
-```
+```-->
 
 :::: {.discussionbox data-latex=""}
 ::: {.center data-latex=""}
