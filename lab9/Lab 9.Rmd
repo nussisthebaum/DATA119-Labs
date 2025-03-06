@@ -301,16 +301,15 @@ question_checkbox(
   answer("sleep_cycle"),
   answer("awake"),
   answer("brain_wt"),
-  answer("bodywt"),
   answer_fn(function(value) {
-    correct("There are multiple correct answers to this question, but the variables I found concerning were ")
+    correct("There are multiple correct answers to this question, but the variable I found concerning was conservation. Some of the levels had high VIF. For the purposes of our model, we will keep it in for now.")
   }),
   allow_retry = TRUE,
   post_message = "Congratulations! You have found the second secret word: KIN."
 )
 ```
 
-Let's prepare our data to fit a regression model. Split the data into `X` and `y` where `X` contains the variables ABCDS and `y` contains the response variable. Then, use `train_test_split()` to create a training set with 70% of the data and a testing set with the remaining 30% of the data. Lastly, fit a `StandardScaler()` on the training set and us it to scale both the training and the testing sets. Make sure that you are only scaling the numeric variables.
+Let's prepare our data to fit a regression model. Split the data into `X` and `y` where `X` contains the predictor variables and `y` contains the response variable. Then, use `train_test_split()` to create a training set with 70% of the data and a testing set with the remaining 30% of the data. Lastly, fit a `StandardScaler()` on the training set and us it to scale both the training and the testing sets. Make sure that you are only scaling the numeric variables.
 
 ```{python pp, exercise = TRUE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
 from sklearn import linear_model
@@ -339,7 +338,7 @@ from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-X = msleep[[]]
+X = msleep.drop(columns = ['sleep_total','bodywt'])
 y = msleep['sleep_total']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
@@ -349,7 +348,7 @@ scaler = StandardScaler()
 X_train_pp = X_train.copy()
 X_test_pp = X_test.copy()
 
-col_names = []
+col_names = ["sleep_rem","sleep_cycle","awake","brain_wt"]
 scaler.fit(X_train_pp[col_names])
 X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
 
@@ -364,7 +363,7 @@ grade_this_code()
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-X = msleep[[]]
+X = msleep.drop(columns = ['sleep_total','bodywt'])
 y = msleep['sleep_total']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
@@ -374,7 +373,7 @@ scaler = StandardScaler()
 X_train_pp = X_train.copy()
 X_test_pp = X_test.copy()
 
-col_names = []
+col_names = ["sleep_rem","sleep_cycle","awake","brain_wt"]
 scaler.fit(X_train_pp[col_names])
 X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
 
