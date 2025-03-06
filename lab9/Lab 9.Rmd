@@ -446,7 +446,7 @@ model_df = pd.DataFrame({'Fitted': ___, 'Residuals': ___})
    p9.xlab("Residuals"))
 ```
 
-```{python diagplots-solution, message = FALSE, warning = FALSE"}
+```{python diagplots-solution, message = FALSE, warning = FALSE}
 model_df = pd.DataFrame({'Fitted': test_preds, 'Residuals': (y_test - test_preds)})
 
 (p9.ggplot(model_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
