@@ -943,11 +943,11 @@ clust = kmeans.fit(___)
 
 ```{python kmeans-solution, message = FALSE, warning = FALSE}
 kmeans = KMeans(n_clusters = 3, n_init = 5, random_state = 314)
-clust = kmeans.fit(msleep)
+clust = kmeans.fit(msleep.drop(columns=['genus','order']))
 
-print(msleep[clust.labels_ == 0.0])
-print(msleep[clust.labels_ == 1.0])
-print(msleep[clust.labels_ == 2.0])
+print(msleep[clust.labels_ == 0.0][['genus','order']])
+print(msleep[clust.labels_ == 1.0][['genus','order']])
+print(msleep[clust.labels_ == 2.0][['genus','order']])
 ```
 
 ```{r kmeans-code-check, message = FALSE, warning = FALSE}
@@ -956,7 +956,7 @@ grade_this_code()
 
 ```{python setup7, exercise = FALSE, message = FALSE, echo = FALSE, exercise.setup = "setup6"}
 kmeans = KMeans(n_clusters = 3, n_init = 5, random_state = 314)
-clust = kmeans.fit(msleep)
+clust = kmeans.fit(msleep.drop(columns=['genus','order']))
 ```
 
 For each resulting cluster print the animals as well as their order and genus. 
@@ -964,7 +964,7 @@ For each resulting cluster print the animals as well as their order and genus.
 Use this cell to print and view the clusters:
 
 ```{python clust_view1, exercise = TRUE, exercise.eval= FALSE, message = FALSE, exercise.setup = "setup7"}
-msleep[clust.labels_ == ___]
+msleep[clust.labels_ == ___][['genus','order']]
 ```
 
 :::: {.discussionbox data-latex=""}
@@ -990,7 +990,7 @@ dendrogram(link, no_labels = False, above_threshold_color='k')
 ```{python hier-solution, message = FALSE, warning = FALSE}
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 
-link = linkage(msleep, method='complete')
+link = linkage(msleep.drop(columns=['genus','order']), method='complete')
 dendrogram(link, no_labels = False, above_threshold_color='k')
 ```
 
@@ -1001,7 +1001,7 @@ grade_this_code()
 ```{python setup8, exercise = FALSE, message = FALSE, echo = FALSE, exercise.setup = "setup7"}
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 
-link = linkage(msleep, method='complete')
+link = linkage(msleep.drop(columns=['genus','order']), method='complete')
 dendrogram(link, no_labels = False, above_threshold_color='k')
 ```
 
@@ -1009,7 +1009,7 @@ Use this cell to print and view the clusters:
 
 ```{python clust_view, exercise = TRUE, exercise.eval= FALSE, message = FALSE, exercise.setup = "setup8"}
 clust_hier = fcluster(link, t=___, criterion='distance')
-msleep[clust_hier == ___]
+msleep[clust_hier == ___][['genus','order']]
 ```
 
 :::: {.discussionbox data-latex=""}
