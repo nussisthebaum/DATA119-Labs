@@ -3,15 +3,16 @@ title: "Data119 - Lab 9"
 output: 
    learnr::tutorial:
       css: css/custom-styles.css
-runtime: shiny_prerendered
-header-includes:
-  -"\usepackage{tcolorbox}"
-  -"\newtcolorbox{discussionbox}{
-  colback=#ddd,
-  colframe=#800000,
-  coltext=black,
-  boxsep=5pt,
-  arc=4pt}"
+runtime: shiny
+include-in-header: 
+  text: |
+    \usepackage{tcolorbox}
+    \newtcolorbox{discussionbox}{
+    colback=#ddd,
+    colframe=#800000,
+    coltext=black,
+    boxsep=5pt,
+    arc=4pt}
 ---
 
 ```{r setup, include=FALSE}
@@ -64,7 +65,7 @@ The goal of this lab is to help you review topics we've covered this quarter.
 
 In the next few sections, you will review what we learned in class by using a few interactive widgets. Investigate the best choices of models, variables, transformations, and hyperparameters and then answer the questions that follow.
 
-### Reviewing Regression
+## Reviewing Regression
 
 Use the widget below to review what we learned about multiple linear regression:
 
@@ -254,11 +255,11 @@ shinyApp(ui = ui, server = server)
 6. Overall, what combination of choices gets you the best performance? Write the metrics for your best model on the board next to your group number. Can you outperform other groups?
 ::::
 
-### Reviewing Classification
+## Reviewing Classification
 
 Use the widget below to review what we learned about classification:
 
-```{r classification_app, echo=FALSE}
+```{r classification_app, echo=FALSE, message=FALSE, warning=FALSE}
 library(shiny)
 library(ggplot2)
 library(caret)
@@ -403,7 +404,7 @@ shinyApp(ui = ui, server = server)
 4. Are there changes we could make to our KNN algorithm that would allow us to get a probability so that we can choose a threshold?
 ::::
 
-### Reviewing Clustering
+## Reviewing Clustering
 
 Use the widget below to review what we learned about clustering:
 
@@ -551,7 +552,7 @@ shinyApp(ui = ui, server = server)
 
 Now that we've reminded ourselves of the concepts we learned this quarter, let's implement some of them in Python.
 
-### Setup
+## Setup
 
 For this lab we will be using `plotnine`, `pandas`, `numpy`, `scikit-learn`, `scipy`, and the dataset `msleep`.
 
@@ -588,7 +589,7 @@ You can use the following cell to explore the data>
 
 ```
 
-### Modeling `sleep_total`
+## Modeling `sleep_total`
 
 We want to learn if there are certain variables that we can use to help predict how long a mammal will sleep.
 
@@ -974,7 +975,7 @@ grade_this_code()
 Which of these 3 models would you choose? Why?
 ::::
 
-### Modeling `vore`
+## Modeling `vore`
 
 Let's switch gears and look at a different variable. Are an animal's sleeping habits related to what they eat? Perhaps animals that are herbivores tend to sleep more, because they don't spend as much time hunting...
 
@@ -1210,7 +1211,7 @@ Using the cell below to explore the model further...
 
 ::::
 
-### Clustering
+## Clustering
 
 Lastly, I'm curious if there are groups of animals who have similar features and whether or not these clusters are reflective of the greater taxonomy (using `genus` and `order`).
 
