@@ -4,15 +4,6 @@ output:
    learnr::tutorial:
       css: css/custom-styles.css
 runtime: shiny_prerendered
-include-in-header: 
-  text: |
-    \usepackage{tcolorbox}
-    \newtcolorbox{discussionbox}{
-    colback=#ddd,
-    colframe=#800000,
-    coltext=black,
-    boxsep=5pt,
-    arc=4pt}
 ---
 
 ```{r setup, include=FALSE}
@@ -69,12 +60,12 @@ In the next few sections, you will review what we learned in class by using a fe
 
 Use the widget below to review what we learned about multiple linear regression:
 
-<!--```{r}
+<!--```{r, echo = FALSE}
 knitr::include_app("https://posit.ds.uchicago.edu/content/bddc4809-79b1-4883-bfe8-bfb73f425453", height = "500px")
 ```-->
 
-:::: {.discussionbox data-latex=""}
-::: {.center data-latex=""}
+:::: {.discussionbox}
+::: {.center}
 **Discuss with a neighbor (or on Ed):**
 :::
 
@@ -90,7 +81,7 @@ knitr::include_app("https://posit.ds.uchicago.edu/content/bddc4809-79b1-4883-bfe
 
 Use the widget below to review what we learned about classification:
 
-```{r}
+```{r, echo = FALSE}
 knitr::include_app("https://posit.ds.uchicago.edu/content/daa86c7c-2206-4c63-8b2d-15b3e377883a", height = "500px")
 ```
 
@@ -109,7 +100,7 @@ knitr::include_app("https://posit.ds.uchicago.edu/content/daa86c7c-2206-4c63-8b2
 
 Use the widget below to review what we learned about clustering:
 
-```{r}
+```{r, echo = FALSE}
 knitr::include_app("https://posit.ds.uchicago.edu/content/ba3dec83-7bc4-4670-9dfb-4f5957148a9e", height = "500px")
 ```
 
@@ -213,8 +204,8 @@ grade_this_code()
 ```{r q3, echo=FALSE}
 question(
   "Does the data meet this assumption?",
-  answer("Yes!",  message = ""),
-  answer("No...", message = ""),
+  answer("Yes!",  correct = TRUE, message = "Correct! It seems relatively symmetric and bell-shaped"),
+  answer("No...", message = "Though it is not a perfect normal distribution, the data does seem relatively symmetric and bell-shaped"),
   allow_retry = TRUE
 )
 ```
@@ -313,7 +304,7 @@ question_checkbox(
 
 Let's prepare our data to fit a regression model. Split the data into `X` and `y` where `X` contains the variables ABCDS and `y` contains the response variable. Then, use `train_test_split()` to create a training set with 70% of the data and a testing set with the remaining 30% of the data. Lastly, fit a `StandardScaler()` on the training set and us it to scale both the training and the testing sets. Make sure that you are only scaling the numeric variables.
 
-```{python pp, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
+```{python pp, exercise = TRUE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -455,7 +446,7 @@ model_df = pd.DataFrame({'Fitted': ___, 'Residuals': ___})
    p9.xlab("Residuals"))
 ```
 
-```{python diagplots-solution, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
+```{python diagplots-solution, message = FALSE, warning = FALSE"}
 model_df = pd.DataFrame({'Fitted': test_preds, 'Residuals': (y_test - test_preds)})
 
 (p9.ggplot(model_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
@@ -583,7 +574,7 @@ question_checkbox(
 
 Let's get our data in the right format to run our models.
 
-```{python setup4, exercise = TRUE, message = FALSE}
+```{python setup4, exercise = TRUE, exercise.eval = FALSE, message = FALSE}
 
 msleep = pd.read_csv("./data/msleep.csv")
 msleep = pd.get_dummies(msleep, columns = ['genus', 'order', 'conservation'], dtype = float, drop_first=True)
@@ -703,7 +694,7 @@ print("Testing accuracy: ",(logit_cm.iloc[___] + logit_cm.iloc[___])/X_train.sha
 
 ```
 
-```{python logit-solution, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python logit-solution, message = FALSE}
 from sklearn.linear_model import LogisticRegression
 
 logit_model = LogisticRegression()
@@ -720,7 +711,7 @@ print("Testing accuracy: ",(logit_cm.iloc[0,0] + logit_cm.iloc[1,1])/X_train.sha
 grade_this_code()
 ```
 
-```{python setup5, exercise = FALSE, message = FALSE, exercise.setup="setup4"}
+```{python setup5, exercise = FALSE, echo = FALSE, message = FALSE, exercise.setup="setup4"}
 from sklearn.linear_model import LogisticRegression
 
 logit_model = LogisticRegression()
@@ -913,7 +904,7 @@ clust = kmeans.fit(___)
 msleep[clust.labels_ == 0.0]
 ```
 
-```{python kmeans-solution, exercise = TRUE, message = FALSE, exercise.setup = "setup6"}
+```{python kmeans-solution, message = FALSE, warning = FALSE}
 kmeans = KMeans(n_clusters = ___, n_init = 5, random_state = 314)
 clust = kmeans.fit(msleep)
 
@@ -957,7 +948,7 @@ link = linkage(___)
 dendrogram(link, no_labels = False, above_threshold_color='k')
 ```
 
-```{python hier-solution, exercise = TRUE, message = FALSE, exercise.setup = "setup7"}
+```{python hier-solution, message = FALSE, warning = FALSE}
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 
 link = linkage(msleep, method='complete')
@@ -968,7 +959,7 @@ dendrogram(link, no_labels = False, above_threshold_color='k')
 grade_this_code()
 ```
 
-```{python setup8, message = FALSE, echo = FALSE, exercise.setup = "setup7"}
+```{python setup8, exercise = FALSE, message = FALSE, echo = FALSE, exercise.setup = "setup7"}
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 
 link = linkage(msleep, method='complete')
