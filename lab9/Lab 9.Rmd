@@ -855,6 +855,8 @@ Remember, that we don't need to split data into training and testing for unsuper
 
 ```{python setup6, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup ="setup-packages"}
 from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
 msleep = pd.read_csv("./data/msleep.csv", index_col = "name").drop(columns = ['rownames'])
 
 msleep = pd.get_dummies(msleep, columns = ['vore', 'conservation'], drop_first = True)
@@ -900,7 +902,7 @@ inertias = []
 
 for i in range(1,16):
     kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 314)
-    kmeans.fit(epi)
+    kmeans.fit(msleep.drop(columns=['genus','order']))
     inertias.append(kmeans.inertia_)
     
 chooseK = {'K': range(1, 16), 'Inertia': inertias}
@@ -920,7 +922,7 @@ grade_this_code()
 ```{r q12, echo=FALSE}
 question_numeric("What $k$? would you choose?",
          answer_fn(function(value){
-           if (value %in% c()){
+           if (value %in% c(2,3,4)){
              correct("Good choice!")
            }
            else{
@@ -932,32 +934,32 @@ question_numeric("What $k$? would you choose?",
 )
 ```
 
-Rerun the clustering using this value of $k$. (Note that the solution may use a different value of k from what you chose - if your $k$ passed the question above, it was still a good choice of $k$!) For each resulting cluster print the animals as well as their order and genus.
+Rerun the clustering using this value of $k$. (Note that the solution may use a different value of k from what you chose - if your $k$ passed the question above, it was still a good choice of $k$!) 
 
 ```{python kmeans, exercise = TRUE, message = FALSE, exercise.setup = "setup6"}
 kmeans = KMeans(n_clusters = ___, n_init = 5, random_state = 314)
 clust = kmeans.fit(___)
-
-msleep[clust.labels_ == 0.0]
 ```
 
 ```{python kmeans-solution, message = FALSE, warning = FALSE}
-kmeans = KMeans(n_clusters = ___, n_init = 5, random_state = 314)
+kmeans = KMeans(n_clusters = 3, n_init = 5, random_state = 314)
 clust = kmeans.fit(msleep)
 
-msleep[clust.labels_ == 0.0]
+print(msleep[clust.labels_ == 0.0])
+print(msleep[clust.labels_ == 1.0])
+print(msleep[clust.labels_ == 2.0])
 ```
 
 ```{r kmeans-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-```{python setup7, message = FALSE, echo = FALSE, exercise.setup = "setup6"}
-kmeans = KMeans(n_clusters = ___, n_init = 5, random_state = 314)
+```{python setup7, exercise = FALSE, message = FALSE, echo = FALSE, exercise.setup = "setup6"}
+kmeans = KMeans(n_clusters = 3, n_init = 5, random_state = 314)
 clust = kmeans.fit(msleep)
-
-msleep[clust.labels_ == 0.0]
 ```
+
+For each resulting cluster print the animals as well as their order and genus. 
 
 Use this cell to print and view the clusters:
 
