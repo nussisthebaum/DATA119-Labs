@@ -680,7 +680,7 @@ grade_this_code()
 
 Now, let's one-hot-encode our categorical variables. Don't forget you need a reference level!
 
-```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup="setup2_5"}
+```{python dummy_drop, exercise = TRUE, message = FALSE}
 msleep = pd.get_dummies(___, columns = ___, dtype = float, ___)
 ```
 
@@ -698,7 +698,7 @@ msleep = pd.get_dummies(msleep, columns = ['genus', 'vore', 'order', 'conservati
 
 We still need to do one more thing to help us decide which variables to use - calculate the VIF. Calculate the VIF for all potential predictor variables (don't include `name` or the response variable).
 
-```{python vif, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE}
+```{python vif, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE, exercise.setup = "setup1"}
 VIF_msleep = [variance_inflation_factor(msleep.drop(___).values, i) for i in range(len(___.columns))]
 VIF_msleep_df = pd.DataFrame({"feature": ___.columns, "VIF": ___})
 VIF_msleep_df
