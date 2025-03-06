@@ -53,7 +53,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("$K$-Means and Hierarchical Clustering", class = "pageTitle")
+    tags$h1("K-Means and Hierarchical Clustering", class = "pageTitle")
   )
 )
 ```
@@ -107,6 +107,7 @@ ggplot(data = little_XY, aes(x = X, y = Y)) +
   geom_text(hjust = -0.9, vjust = 0.5, color = "black", label = little_XY$Label) + 
   scale_x_continuous(name = TeX(r"($X_1$)"), limits = c(1, 13.5), minor_breaks = seq(from = 1, to = 13, by = 1)) +
   scale_y_continuous(name = TeX(r"($X_2$)"), minor_breaks = seq(from = 1, to = 12, by = 1))
+
 ```
 
 Use the following calculations to help find the maximal intercluster dissimilarity using Manhattan distance.
@@ -804,7 +805,7 @@ question("33. Which cluster(s) contain mostly vegetarian recipes?",
          answer("`9.0`", correct = TRUE), 
          answer("`10.0`"), 
          allow_retry = TRUE, 
-         post_message = "Congratulations! You have found the fifth and final secret word: SOLVE.")
+         post_message = "Congratulations! You have found the fifth and final secret word: SOLVE. ")
 ```
 
 There are some patterns--for example, it looks like cluster `9.0` might be side-dishes (lots of rice, potatoes, and salads). There might be other tags that we aren't thinking of (like all of the location or special occasion tags), but not all of the clusters have nice interpretations (which is not uncommon). 
@@ -888,16 +889,13 @@ from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import dendrogram
 
 def plot_dendrogram(model, **kwargs):
-    # Create linkage matrix and then plot the dendrogram
-
-    # create the counts of samples under each node
     counts = np.zeros(model.children_.shape[0])
     n_samples = len(model.labels_)
     for i, merge in enumerate(model.children_):
         current_count = 0
         for child_idx in merge:
             if child_idx < n_samples:
-                current_count += 1  # leaf node
+                current_count += 1 
             else:
                 current_count += counts[child_idx - n_samples]
         counts[i] = current_count
