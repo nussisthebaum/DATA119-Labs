@@ -1,0 +1,1031 @@
+---
+title: "Data119 - Lab 9"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(shiny)
+library(gradethis)
+library(learnr)
+library(reticulate)
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Data 119 Review", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goal of this lab is to help you review topics we've covered this quarter.
+
+## Concept Review
+
+In the next few sections, you will review what we learned in class by using a few interactive widgets. Investigate the best choices of models, variables, transformations, and hyperparameters and then answer the questions that follow.
+
+## Reviewing Regression
+
+Use the widget below to review what we learned about multiple linear regression:
+
+<iframe style="border: 0; width:100%; height: 500px; overflow: auto;" src="https://posit.ds.uchicago.edu/content/bddc4809-79b1-4883-bfe8-bfb73f425453"></iframe>
+
+
+<!--```{r, echo = FALSE}
+knitr::include_app("https://posit.ds.uchicago.edu/content/bddc4809-79b1-4883-bfe8-bfb73f425453", height = "500px")
+```-->
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+1. Which transformation, if any, would you choose for this dataset?
+2. What degree of polynomial features would you choose?
+3. Does regularization improve performance?
+4. Which produces better results LASSO or Ridge Regression?
+5. What value of the regularization penalty produces the best results for LASSO? For Ridge Regression?
+6. Overall, what combination of choices gets you the best performance? Write the metrics for your best model on the board next to your group number. Can you outperform other groups?
+::::
+
+## Reviewing Classification
+
+Use the widget below to review what we learned about classification:
+
+<iframe style="border: 0; width:100%; height: 500px; overflow: auto;" src="https://posit.ds.uchicago.edu/content/daa86c7c-2206-4c63-8b2d-15b3e377883a"></iframe>
+
+
+<!--```{r, echo = FALSE}
+knitr::include_app("https://posit.ds.uchicago.edu/content/daa86c7c-2206-4c63-8b2d-15b3e377883a", height = "500px")
+```-->
+
+:::: {.discussionbox data-latex=""}
+::: {.center data-latex=""}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+1. As the threshold changes, how does this affect model performance?
+2. What threshold gets you the highest accuracy? sensitivity? specificity?
+3. Why did we use Logistic Regression instead of KNN to illustrate this?
+4. Are there changes we could make to our KNN algorithm that would allow us to get a probability so that we can choose a threshold?
+::::
+
+## Reviewing Clustering
+
+Use the widget below to review what we learned about clustering:
+
+<iframe style="border: 0; width:100%; height: 500px; overflow: auto;" src="https://posit.ds.uchicago.edu/content/ba3dec83-7bc4-4670-9dfb-4f5957148a9e"></iframe>
+
+<!--```{r, echo = FALSE}
+knitr::include_app("https://posit.ds.uchicago.edu/content/ba3dec83-7bc4-4670-9dfb-4f5957148a9e", height = "500px")
+```-->
+
+:::: {.discussionbox data-latex=""}
+::: {.center data-latex=""}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+1. What value of K would you choose for K-Means clustering? Why? Does your answer change depending on the distance metric you choose?
+2. What happens when you use single linkage for hierarchical clustering? Does changing the distance/dissimilarity metric help?
+3. What happens when you use centroid linkage for hierarchical clustering? Does changing the distance/dissimilarity metric help?
+4. Which linkage and dissimilary pair seems to produce the most balanced dendrogram?
+5. Where would you cut this dendrogram to create the same number of clusters you chose for K-Means?
+6. Based on the dendrogram, would you choose the same number of clusters as you used for K-Means? Why or why not?
+::::
+
+## Implementation Review
+
+Now that we've reminded ourselves of the concepts we learned this quarter, let's implement some of them in Python.
+
+## Setup
+
+For this lab we will be using `plotnine`, `pandas`, `numpy`, `scikit-learn`, `scipy`, and the dataset `msleep`.
+
+```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy
+import sklearn
+import matplotlib.pyplot as plt
+
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab9/www/msleep.csv
+
+msleep = pd.read_csv("./data/msleep.csv").drop(columns = ['rownames'])
+msleep.head()
+```
+
+This dataset has 83 rows and 11 variables and contains information about sleep times for various mammals taken from V. M. Savage and G. B. West. *A quantitative, theoretical framework for understanding mammalian sleep.* Proceedings of the National Academy of Sciences, 104 (3):1051-1056, 2007. The variables and their descriptions are listed below:
+
+- `name`: common name
+- `genus`
+- `vore`: carnivore, omnivore or herbivore?
+- `order`
+- `conservation`: the conservation status of the animal
+- `sleep_total`: total amount of sleep, in hours
+- `sleep_rem`: rem sleep, in hours
+- `sleep_cycle`: length of sleep cycle, in hours
+- `awake`: amount of time spent awake, in hours
+- `brainwt`: brain weight in kilograms
+- `bodywt`: body weight in kilograms
+
+You can use the following cell to explore the data:
+
+```{python explore, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+
+```
+
+## Modeling `sleep_total`
+
+We want to learn if there are certain variables that we can use to help predict how long a mammal will sleep.
+
+```{r q1, echo=FALSE}
+question(
+  "What type of model should I use?",
+  answer("Supervised", correct = TRUE, message = "That's right! Since we have values for a response variable that we can use to build the model and calculate a loss/error, we would use supervised learning."),
+  answer("Unsupervised", message = "Not quite. Unsupervised learning does not involve a response variable."),
+  allow_retry = TRUE,
+  post_message = "There are two main types of supervised learning: regression and classification. Do you remember when to use each?"
+)
+```
+
+```{r q2, echo=FALSE}
+question(
+  "More specifically, which model should I use?",
+  answer("KNN",  message = "Not quite. KNN (K Nearest Neighbors) is a classification algorithm which does not allow us to model continuous response variables."),
+  answer("Simple linear regression", message = "Very close! Simple linear regression allows us to model a continuous response variable. But, it only allows us to use one predictor and I want to investigate more than one..."),
+  answer("Multiple linear regression", correct = TRUE, message = "Correct! Multiple linear regresison will allow us to model a continuous response variable using multiple features."),
+  answer("Logistic regression", message = "Not quite. Even though regression is in the name, logistic regression is a classification algorithm which does not allow us to model continuous response variables."),
+  answer("K-Means", message = "Not quite. K-Means is a method of clustering which is an unsupervised learning algorithm."),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the first secret word: LOCAL."
+)
+```
+
+Now, that we've narrowed down the type of model we want to build, we need to check that our data meets the model assumptions. Remember that MLR assumes the response variable is normally distributed. Use the next cell to check this assumption:
+
+```{python sleep_hist, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+(p9.ggplot(msleep, p9.aes(x = ___)) +
+  p9.geom_histogram(bins = 24))
+```
+
+```{python sleep_hist-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(msleep, p9.aes(x = "sleep_total")) +
+  p9.geom_histogram(bins = 24))
+```
+
+```{r sleep_hist-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+```{r q3, echo=FALSE}
+question(
+  "Does the data meet this assumption?",
+  answer("Yes!",  correct = TRUE, message = "Correct! It seems relatively symmetric and bell-shaped"),
+  answer("No...", message = "Though it is not a perfect normal distribution, the data does seem relatively symmetric and bell-shaped"),
+  allow_retry = TRUE
+)
+```
+
+Now, we need to choose which variables to include in our model. Before you do any additional analysis, are there any variables you would be concerned about including in the model based on the descriptions?  
+
+```{r q4, echo=FALSE}
+question_checkbox(
+  "Select the variables that you are concerned about including in the model. ",
+  answer("name"),
+  answer("genus"),
+  answer("vore"),
+  answer("order"),
+  answer("conservation"),
+  answer("sleep_rem"),
+  answer("sleep_cycle"),
+  answer("awake"),
+  answer("brainwt"),
+  answer("bodywt"),
+  answer_fn(function(value) {
+    correct("There are multiple correct answers to this question, but the variables I found concerning were name (unique for every animal) and sleep_rem, sleep_cycle, and awake (these should be highly related with sleep_total but might not help us learn much about what contributes to how much an animal sleeps). bodywt and brainwt might also be very similar to each other which could be an issue...")
+  }),
+  allow_retry = TRUE
+)
+```
+
+Generate a correlation matrix for each potential numeric predictor variable.
+
+```{python cormat, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+round(msleep[[ ___ ]].corr(), 3)
+```
+
+```{python cormat-solution, message = FALSE, warning = FALSE, echo = FALSE}
+round(msleep[['sleep_rem','sleep_cycle','awake','brainwt','bodywt']].corr(), 3)
+```
+
+```{r cormat-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now, let's one-hot-encode our categorical variables. Don't forget you need a reference level! The columns `name` and potentially even `genus` and `order` may be too granular to be of use, so we will drop those. We can also drop any rows with missing values.
+
+```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup = "setup-packages"}
+msleep = msleep.drop(columns = ['genus','name','order'])
+msleep = pd.get_dummies(___, columns = ___, dtype = float, dummy_NA = True, ___)
+mleep = msleep.dropna()
+```
+
+```{python dummy_drop-solution, message = FALSE, warning = FALSE, echo = FALSE}
+msleep = msleep.drop(columns = ['genus','name','order'])
+msleep = pd.get_dummies(msleep, columns = ['vore','conservation'], dtype = float, dummy_na = True, drop_first=True)
+msleep = msleep.dropna()
+```
+
+```{r dummy_drop-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{python setup1, exercise = FALSE, echo = FALSE, exercise.setup = "setup-packages"}
+msleep = msleep.drop(columns = ['genus','name','order'])
+msleep = pd.get_dummies(msleep, columns = ['vore', 'conservation'], dtype = float, dummy_na = True, drop_first=True)
+msleep = msleep.dropna()
+```
+
+We still need to do one more thing to help us decide which variables to use - calculate the VIF. We already saw from the correlation matrix that `bodywt` and `brainwt` are highly correlated so we will drop `bodywt` for now. Calculate the VIF for all remaining predictor variables.
+
+```{python vif, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE, exercise.setup = "setup1"}
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+VIF_msleep = [variance_inflation_factor(msleep.drop(___).values, i) for i in range(len(___.columns))]
+VIF_msleep_df = pd.DataFrame({"feature": ___.columns, "VIF": ___})
+VIF_msleep_df
+```
+
+```{python vif-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+VIF_msleep = [variance_inflation_factor(msleep.drop(columns=['sleep_total','bodywt']).values, i) for i in range(len(msleep.drop(columns=['sleep_total','bodywt']).columns))]
+VIF_msleep_df = pd.DataFrame({"feature": msleep.drop(columns=['sleep_total','bodywt']).columns, "VIF": VIF_msleep})
+VIF_msleep_df
+```
+
+```{r vif-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q5, echo=FALSE}
+question_checkbox(
+  "After looking at your correlation matrix and VIFs, select the variables that you are concerned about including in the model. ",
+  answer("vore"),
+  answer("conservation"),
+  answer("sleep_rem"),
+  answer("sleep_cycle"),
+  answer("awake"),
+  answer("brainwt"),
+  answer_fn(function(value) {
+    correct("There are multiple correct answers to this question, but the variable I found concerning was conservation. Some of the levels had high VIF. For the purposes of our model, we will keep it in for now.")
+  }),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: KIN."
+)
+```
+
+Let's prepare our data to fit a regression model. Split the data into `X` and `y` where `X` contains the predictor variables and `y` contains the response variable. Then, use `train_test_split()` to create a training set with 70% of the data and a testing set with the remaining 30% of the data. Lastly, fit a `StandardScaler()` on the training set and us it to scale both the training and the testing sets. Make sure that you are only scaling the numeric variables.
+
+```{python pp, exercise = TRUE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
+from sklearn import linear_model
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X = ___
+y = ___
+
+X_train, X_test, y_train, y_test = train_test_split(___, random_state = 314)
+                                                       
+scaler = StandardScaler()
+
+X_train_pp = X_train.copy()
+X_test_pp = X_test.copy()
+
+col_names = [___]
+scaler.fit(___)
+X_train_pp[col_names] = scaler.transform(___)
+
+X_test_pp[col_names] = scaler.transform(___)
+```
+
+```{python pp-solution, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
+from sklearn import linear_model
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X = msleep.drop(columns = ['sleep_total','bodywt'])
+y = msleep['sleep_total']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
+                                                       
+scaler = StandardScaler()
+
+X_train_pp = X_train.copy()
+X_test_pp = X_test.copy()
+
+col_names = ["sleep_rem","sleep_cycle","awake","brainwt"]
+scaler.fit(X_train_pp[col_names])
+X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
+
+X_test_pp[col_names] = scaler.transform(X_test_pp[col_names])
+```
+
+```{r solution-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{python setup2, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup1"}
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X = msleep.drop(columns = ['sleep_total','bodywt'])
+y = msleep['sleep_total']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
+                                                       
+scaler = StandardScaler()
+
+X_train_pp = X_train.copy()
+X_test_pp = X_test.copy()
+
+col_names = ["sleep_rem","sleep_cycle","awake","brain_wt"]
+scaler.fit(X_train_pp[col_names])
+X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
+
+X_test_pp[col_names] = scaler.transform(X_test_pp[col_names])
+```
+
+Now that our data is pre-processed and ready to go, let's build a few models! First, build a multiple linear regression model without any regularization. Calculate the training and testing MSE.
+
+```{python model, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+model_ols = ___
+model_ols.fit(___)
+print("Coefficients: ", ___)
+print("Intercept: ", ___)
+
+train_preds = ___
+test_preds = ___
+
+train_mse = ___
+test_mse = ___
+
+print("MSE on training set: ", ___)
+print("MSE on testing set: ", ___)
+```
+
+```{python model-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+model_ols = LinearRegression()
+model_ols.fit(X_train_pp, y_train)
+print("Coefficients: ", model_ols.coef_)
+print("Intercept: ", model_ols.intercept_)
+
+train_preds = model_ols.predict(X_train_pp)
+test_preds = model_ols.predict(X_test_pp)
+
+train_mse = mean_squared_error(y_train,train_preds)
+test_mse = mean_squared_error(y_test,test_preds)
+
+print("MSE on training set: ", train_mse)
+print("MSE on testing set: ", test_mse)
+```
+
+```{r model-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{python setup3, exercise = FALSE, message = FALSE, warning = FALSE, echo = FALSE, exercise.setup="setup2"}
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+model_ols = LinearRegression()
+model_ols.fit(X_train_pp, y_train)
+
+train_preds = model_ols.predict(X_train_pp)
+test_preds = model_ols.predict(X_test_pp)
+
+train_mse = mean_squared_error(y_train,train_preds)
+test_mse = mean_squared_error(y_test,test_preds)
+```
+
+Let's test the remaining MLR assumptions by making diagnostic plots of the residuals.
+
+```{python diagplots, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
+model_df = pd.DataFrame({'Fitted': ___, 'Residuals': ___})
+
+(p9.ggplot(model_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
+ p9.geom_point() +
+ p9.xlab("Predicted Price") +
+ p9.ylab("Residuals"))
+
+(p9.ggplot(model_df, p9.aes(x = 'Residuals')) +
+   p9.geom_histogram(bins = 24) +
+   p9.xlab("Residuals"))
+```
+
+```{python diagplots-solution, message = FALSE, warning = FALSE}
+model_df = pd.DataFrame({'Fitted': test_preds, 'Residuals': (y_test - test_preds)})
+
+(p9.ggplot(model_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
+ p9.geom_point() +
+ p9.xlab("Predicted Price") +
+ p9.ylab("Residuals"))
+
+(p9.ggplot(model_df, p9.aes(x = 'Residuals')) +
+   p9.geom_histogram(bins = 24) +
+   p9.xlab("Residuals"))
+```
+
+```{r diagplots-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q6, echo=FALSE}
+question("True or False: The linear model is appropriate for this dataset.",
+         answer("True"),
+         answer("False", correct=TRUE),
+         allow_retry = TRUE)
+```
+
+Next, I want to see if regularization works well on this dataset. Use 5-fold cross validation to choose the best value of $\alpha$ for LASSO and Ridge Regression. What is the overall training and testing MSE for each model? 
+
+```{python model2, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+from sklearn.linear_model import LassoCV, RidgeCV
+
+model_lasso = ___
+model_ridge = ___
+
+model_lasso.fit(___)
+print("Best Alpha for LASSO: ", ___)
+
+model_ridge.fit(___)
+print("Best Alpha for Ridge Regression: ", ___)
+
+train_preds_lasso = ___
+test_preds_lasso = ___
+
+train_mse_lasso = ___
+test_mse_lasso = ___
+
+print("LASSO - MSE on training set: ", ___)
+print("LASSO - MSE on testing set: ", ___)
+
+train_preds_ridge = ___
+test_preds_ridge = ___
+
+train_mse_ridge = ___
+test_mse_ridge = ___
+
+print("Ridge - MSE on training set: ", ___)
+print("Ridge - MSE on testing set: ", ___)
+```
+
+```{python model2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from sklearn.linear_model import LassoCV, RidgeCV
+
+model_lasso = LassoCV(cv=5)
+model_ridge = RidgeCV(cv=5)
+
+model_lasso.fit(X_train_pp, y_train)
+print("Best Alpha for LASSO: ", model_lasso.alpha_)
+
+model_ridge.fit(X_train_pp, y_train)
+print("Best Alpha for Ridge Regression: ", model_ridge.alpha_)
+
+train_preds_lasso = model_lasso.predict(X_train_pp)
+test_preds_lasso = model_lasso.predict(X_test_pp)
+
+train_mse_lasso = mean_squared_error(y_train,train_preds_lasso)
+test_mse_lasso = mean_squared_error(y_test,test_preds_lasso)
+
+print("LASSO - MSE on training set: ", train_mse_lasso)
+print("LASSO - MSE on testing set: ", test_mse_lasso)
+
+train_preds_ridge = model_ridge.predict(X_train_pp)
+test_preds_ridge = model_ridge.predict(X_test_pp)
+
+train_mse_ridge = mean_squared_error(y_train,train_preds_ridge)
+test_mse_ridge = mean_squared_error(y_test,test_preds_ridge)
+
+print("Ridge - MSE on training set: ", train_mse_ridge)
+print("Ridge - MSE on testing set: ", test_mse_ridge)
+```
+
+```{r model2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+:::: {.discussionbox data-latex=""}
+::: {.center data-latex=""}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Which of these 3 models would you choose? Why?
+::::
+
+## Modeling `vore`
+
+Let's switch gears and look at a different variable. Are an animal's sleeping habits related to what they eat? Perhaps animals that are herbivores tend to sleep more, because they don't spend as much time hunting...
+
+
+```{r q7, echo=FALSE}
+question(
+  "What type of model should I use to answer this question?",
+  answer("Supervised", correct = TRUE, message = "That's right! Since we have values for a response variable that we can use to build the model and calculate a loss/error, we would use supervised learning."),
+  answer("Unsupervised", message = "Not quite. Unsupervised learning does not involve a response variable."),
+  allow_retry = TRUE
+)
+```
+
+```{r q8, echo=FALSE}
+question_checkbox(
+  "More specifically, which model(s) could I use?",
+  answer("KNN",correct = TRUE,  message = "Correct! KNN (K Nearest Neighbors) is a classification algorithm which allows us to model binary response variables."),
+  answer("Simple linear regression", message = "Not quite. Simple linear regression allows us to model a continuous response variable, not a binary response variable"),
+  answer("Multiple linear regression", message = "Not quite. Multiple linear regresison will allow us to model a continuous response variable using multiple features, but our repsonse variable is binary."),
+  answer("Logistic regression", correct = TRUE, message = "Correct! Logistic regression is a classification algorithm which allows us to model binary response variables."),
+  answer("K-Means", message = "Not quite. K-Means is a method of clustering which is an unsupervised learning algorithm."),
+  allow_retry = TRUE
+)
+```
+
+Let's get our data in the right format to run our models.
+
+```{python setup4, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+msleep = pd.get_dummies(msleep, columns = ['conservation'], dtype = float, dummy_na = True, drop_first=True)
+msleep = msleep.dropna()
+
+X = msleep.drop(columns=["vore","order","genus","name","bodywt"])
+y = (msleep['vore'] == "herbi").apply(int)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
+                                                       
+scaler = StandardScaler()
+
+X_train_pp = X_train.copy()
+X_test_pp = X_test.copy()
+
+col_names = ["sleep_rem","sleep_cycle","awake","brainwt","sleep_total"]
+scaler.fit(X_train_pp[col_names])
+X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
+
+X_test_pp[col_names] = scaler.transform(X_test_pp[col_names])
+```
+
+Try running KNN with different numbers of neighbors. Plot the training and the testing accuracy across different values of K.
+
+```{python loop, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+from sklearn.neighbors import KNeighborsClassifier
+
+metric_train = []
+metric_test = []
+
+labels = [0, 1]
+
+for k in range(1, 16):
+    tempknn = KNeighborsClassifier(___).fit(___)
+    tempknn_preds_train = tempknn.predict(___)
+    tempknn_preds_test = tempknn.predict(___)
+
+    tempknn_cm_train = pd.crosstab(tempknn_preds_train, y_train).reindex(index=labels, columns=labels, fill_value=0)
+    tempknn_cm_test = pd.crosstab(tempknn_preds_test, y_test).reindex(index=labels, columns=labels, fill_value=0)
+
+    train_acc = tempknn_cm_train.values.diagonal().sum() / X_train.shape[0]
+    test_acc = tempknn_cm_test.values.diagonal().sum() / X_test.shape[0]
+
+    metric_train.append(train_acc)
+    metric_test.append(test_acc)
+
+d_kNN = {
+    'k': list(range(1, 16)) * 2,  # Expands range into a list and duplicates for Train & Test
+    'Accuracy': metric_train + metric_test,  # Concatenates both lists
+    'Data': ['Train'] * 15 + ['Test'] * 15  
+}
+
+kNN_plot = pd.DataFrame(d_kNN)
+
+print(
+    p9.ggplot(kNN_plot, p9.aes(x=___, y=___, color=___)) +
+    p9.geom_line() +
+    p9.geom_vline(xintercept=5, linetype="dashed") + 
+    p9.scale_x_continuous(name="$k$") +
+    p9.scale_y_continuous(name="Accuracy")
+)
+```
+
+```{python loop-solution, exercise = FALSE, message = FALSE, warning = FALSE, echo = FALSE}
+from sklearn.neighbors import KNeighborsClassifier
+
+metric_train = []
+metric_test = []
+
+labels = [0, 1]
+
+for k in range(1, 16):
+    tempknn = KNeighborsClassifier(n_neighbors=k).fit(X_train_pp, y_train)
+    tempknn_preds_train = tempknn.predict(X_train_pp)
+    tempknn_preds_test = tempknn.predict(X_test_pp)
+
+    tempknn_cm_train = pd.crosstab(tempknn_preds_train, y_train).reindex(index=labels, columns=labels, fill_value=0)
+    tempknn_cm_test = pd.crosstab(tempknn_preds_test, y_test).reindex(index=labels, columns=labels, fill_value=0)
+
+    train_acc = tempknn_cm_train.values.diagonal().sum() / X_train.shape[0]
+    test_acc = tempknn_cm_test.values.diagonal().sum() / X_test.shape[0]
+
+    metric_train.append(train_acc)
+    metric_test.append(test_acc)
+
+d_kNN = {
+    'k': list(range(1, 16)) * 2,  # Expands range into a list and duplicates for Train & Test
+    'Accuracy': metric_train + metric_test,  # Concatenates both lists
+    'Data': ['Train'] * 15 + ['Test'] * 15  
+}
+
+kNN_plot = pd.DataFrame(d_kNN)
+
+print(
+    p9.ggplot(kNN_plot, p9.aes(x="k", y="Accuracy", color="Data")) +
+    p9.geom_line() +
+    p9.scale_x_continuous(name="$k$") +
+    p9.scale_y_continuous(name="Accuracy")
+)
+
+```
+
+```{r loop-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+:::: {.discussionbox data-latex=""}
+::: {.center data-latex=""}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+* What value of K would you choose? Why?
+* For which values of K does the model underfit? Overfit?
+
+::::
+
+
+```{r q9, echo=FALSE}
+question_numeric("What $k$? would you choose?",
+         answer_fn(function(value){
+           if (value %in% c(3,5)){
+             correct("Good choice!")
+           }
+           else{
+             incorrect("Not quite. Remember we want testing error to be low (or, equivalently, testing accuracy to be high).")
+           }
+         }),
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the third secret word: FRAME."
+)
+```
+
+Let's see if we can get better accuracy with logistic regression.
+
+```{python logit, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+logit_model = ___
+logit_model.fit(___)
+
+test_preds = logit_model.predict(___)
+
+logit_cm = pd.crosstab(___)
+print("Testing accuracy: ",___)
+
+```
+
+```{python logit-solution, message = FALSE}
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+logit_model = LogisticRegression()
+logit_model.fit(X_train_pp, y_train)
+
+test_preds = logit_model.predict(X_test_pp)
+
+print("Testing accuracy: ",accuracy_score(y_test, test_preds))
+
+```
+
+```{r logit-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{python setup5, exercise = FALSE, echo = FALSE, message = FALSE, exercise.setup="setup4"}
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+logit_model = LogisticRegression()
+logit_model.fit(X_train_pp, y_train)
+
+test_preds = logit_model.predict(X_test_pp)
+
+print("Testing accuracy: ",accuracy_score(y_test, test_preds))
+
+```
+
+
+Now, print the AUC on the test set. How well does the model perform?
+
+```{python auc, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+from sklearn.metrics import roc_curve, auc
+
+fpr, tpr, thresholds = metrics.roc_curve(___)
+auc(___, ___)
+```
+
+```{python auc-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from sklearn.metrics import roc_curve, auc
+
+fpr, tpr, thresholds = roc_curve(y_test, test_preds, pos_label=1)
+auc(fpr, tpr)
+```
+
+```{r auc-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q10, echo=FALSE}
+question("True or False: The test set AUC for this model represents an improvement over random chance.",
+         answer("True", message = "Don't forget, we want AUC to be above 0.5!"),
+         answer("False", correct = TRUE),
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the fourth secret word: PRINCE."
+)
+```
+
+Now, let's plot the ROC curve. In a previous lab, we did this by hand, but `sklearn` has a function that will generate this plot for us. Run the code below to see the ROC curve,
+
+```{python roc_curve, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup5"}
+from sklearn.metrics import RocCurveDisplay
+
+fpr, tpr, thresholds = roc_curve(y_test, test_preds, pos_label=1)
+roc_display = RocCurveDisplay(fpr=fpr, tpr=tpr).plot()
+plt.show()
+
+```
+
+Using the cell below to explore the model further...
+
+```{python logit_play, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup5"}
+
+
+```
+
+:::: {.discussionbox data-latex=""}
+::: {.center data-latex=""}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+* How would you attempt to improve the model?
+* Taking the model as is, which variables are most related to `vore`? 
+* Practice interpreting the coefficients of the model.
+
+::::
+
+## Clustering
+
+Lastly, I'm curious if there are groups of animals who have similar features and whether or not these clusters are reflective of the greater taxonomy (using `genus` and `order`).
+
+```{r q11, echo=FALSE}
+question(
+  "What type of model should I use to answer this question?",
+  answer("Supervised", message = "Not quite. Since we are looking for groups with similar featuers, we want to use a clustering method. In clustering, there is no response variable."),
+  answer("Unsupervised",correct = TRUE, message = "Correct!"),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the fifth and final secret word: PLANT."
+)
+```
+
+In class, we learned about 2 clustering methods K-Means and Hierarchical clustering. 
+
+:::: {.discussionbox data-latex=""}
+::: {.center data-latex=""}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Which clustering method do you think makes the most sense for this dataset?
+
+::::
+
+First, let's use K-Means to cluster the data. We need to prepare our data for clustering.
+- Read in the data with `name` as the index
+- Create dummy variables for the categorical variables 
+- Standardize the numeric variables
+
+Remember, that we don't need to split data into training and testing for unsupervised learning!
+
+```{python setup6, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup ="setup-packages"}
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+msleep = pd.read_csv("./data/msleep.csv", index_col = "name").drop(columns = ['rownames'])
+
+msleep = pd.get_dummies(msleep, columns = ['vore', 'conservation'], drop_first = True)
+
+scaler = StandardScaler()
+
+col_names = ["sleep_rem","sleep_cycle","awake","brainwt","sleep_total","bodywt"]
+msleep[col_names] = scaler.fit_transform(msleep[col_names])
+msleep = msleep.dropna()
+```
+
+:::: {.discussionbox data-latex=""}
+::: {.center data-latex=""}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Why do we need to standardize our numeric variables before we use our clustering algorithms?
+
+::::
+
+Next, create an elbow plot to help us choose the best value for K.
+
+```{python looped, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+inertias = []
+
+for i in range(1,16):
+    kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 314)
+    kmeans.fit(___)
+    inertias.append(...)
+    
+chooseK = {'K': ___, 'Inertia': ___}
+chooseK_df = pd.DataFrame(data = ___)
+
+print(p9.ggplot(___, p9.aes(x = ___, y = ___)) +
+       p9.geom_line() +
+       p9.scale_x_continuous(name = "$K$") + 
+       p9.scale_y_continuous(name = "Inertia") +
+       p9.theme(legend_position = "none", figure_size = [6, 3.5]))
+```
+
+```{python looped-solution, message = FALSE, warning = FALSE, echo = FALSE}
+inertias = []
+
+for i in range(1,16):
+    kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 314)
+    kmeans.fit(msleep.drop(columns=['genus','order']))
+    inertias.append(kmeans.inertia_)
+    
+chooseK = {'K': range(1, 16), 'Inertia': inertias}
+chooseK_df = pd.DataFrame(data = chooseK)
+
+print(p9.ggplot(chooseK_df, p9.aes(x = 'K', y = 'Inertia')) +
+       p9.geom_line() +
+       p9.scale_x_continuous(name = "$K$") + 
+       p9.scale_y_continuous(name = "Inertia") +
+       p9.theme(legend_position = "none", figure_size = [6, 3.5]))
+```
+
+```{r looped-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q12, echo=FALSE}
+question_numeric("What $k$? would you choose?",
+         answer_fn(function(value){
+           if (value %in% c(2,3,4)){
+             correct("Good choice!")
+           }
+           else{
+             incorrect("Not quite. Remember we are looking for the point of diminshing returns.")
+           }
+         }),
+         allow_retry = TRUE, 
+         post_message = "Congratulations! You have found the fifth and final secret word: SOUP."
+)
+```
+
+Rerun the clustering using this value of $k$. (Note that the solution may use a different value of k from what you chose - if your $k$ passed the question above, it was still a good choice of $k$!) 
+
+```{python kmeans, exercise = TRUE, message = FALSE, exercise.setup = "setup6"}
+kmeans = KMeans(n_clusters = ___, n_init = 5, random_state = 314)
+clust = kmeans.fit(___)
+```
+
+```{python kmeans-solution, message = FALSE, warning = FALSE}
+kmeans = KMeans(n_clusters = 3, n_init = 5, random_state = 314)
+clust = kmeans.fit(msleep.drop(columns=['genus','order']))
+
+print(msleep[clust.labels_ == 0.0][['genus','order']])
+print(msleep[clust.labels_ == 1.0][['genus','order']])
+print(msleep[clust.labels_ == 2.0][['genus','order']])
+```
+
+```{r kmeans-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{python setup7, exercise = FALSE, message = FALSE, echo = FALSE, exercise.setup = "setup6"}
+kmeans = KMeans(n_clusters = 3, n_init = 5, random_state = 314)
+clust = kmeans.fit(msleep.drop(columns=['genus','order']))
+```
+
+For each resulting cluster print the animals as well as their order and genus. 
+
+Use this cell to print and view the clusters:
+
+```{python clust_view1, exercise = TRUE, exercise.eval= FALSE, message = FALSE, exercise.setup = "setup7"}
+msleep[clust.labels_ == ___][['genus','order']]
+```
+
+:::: {.discussionbox data-latex=""}
+::: {.center data-latex=""}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Do you notice a pattern between clusters and the `order` and `genus` values?
+
+::::
+
+Now, let's use hierarchical clustering. Try a few different linkage and dissimilarity metrics and choose the one that creates the most balanced dendrogram. (The solution for this cell is just one of may potential choices. What we want you to do here is explore multiple choices and choose your favorite.)
+
+For each cluster print the animals as well as their order and genus. 
+
+```{python hier, exercise = TRUE, message = FALSE, exercise.setup = "setup7"}
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+
+link = linkage(___)
+dendrogram(link, no_labels = False, above_threshold_color='k')
+```
+
+```{python hier-solution, message = FALSE, warning = FALSE}
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+
+link = linkage(msleep.drop(columns=['genus','order']), method='complete')
+dendrogram(link, no_labels = False, above_threshold_color='k')
+```
+
+```{r hier-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{python setup8, exercise = FALSE, message = FALSE, echo = FALSE, exercise.setup = "setup7"}
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+
+link = linkage(msleep.drop(columns=['genus','order']), method='complete')
+dendrogram(link, no_labels = False, above_threshold_color='k')
+```
+
+Use this cell to print and view the clusters:
+
+```{python clust_view, exercise = TRUE, exercise.eval= FALSE, message = FALSE, exercise.setup = "setup8"}
+clust_hier = fcluster(link, t=___, criterion='distance')
+msleep[clust_hier == ___][['genus','order']]
+```
+
+:::: {.discussionbox data-latex=""}
+::: {.center data-latex=""}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+* How about now? Do you notice a pattern between clusters and the `order` and `genus` values?
+* Which clustering method do you feel produced the best clustering?
+* Which clustering method produced a clustering that best separated the animals based on their order and genus?
+
+::::
+
+

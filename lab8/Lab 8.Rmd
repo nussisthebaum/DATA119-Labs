@@ -16,7 +16,6 @@ library(learnr)
 library(reticulate)
 library(RSQLite)
 
-#goodreads_nussbaum <- read.csv("goodreads_nussbaum.csv")
 goodreads_nussbaum <- read.csv("./data/goodreads_nussbaum.csv")
 colnames(goodreads_nussbaum) <- c("book_id", "title", "author", "author_lf", 
                                   "additional_authors", "isbn", "isbn13",
@@ -29,8 +28,7 @@ colnames(goodreads_nussbaum) <- c("book_id", "title", "author", "author_lf",
                                   "exclusive_shelf", "my_review", "spoilers",
                                   "private_notes", "read_count",
                                   "owned_copies")
-
-#goodreads_jotte <- read.csv("goodreads_jotte.csv")
+                                  
 goodreads_jotte <- read.csv("./data/goodreads_jotte.csv")
 colnames(goodreads_jotte) <- c("book_id", "title", "author", "author_lf", 
                                   "additional_authors", "isbn", "isbn13",
@@ -44,7 +42,6 @@ colnames(goodreads_jotte) <- c("book_id", "title", "author", "author_lf",
                                   "private_notes", "read_count",
                                   "owned_copies")
 
-#locations <- read.csv("/Users/amynussbaum/Documents/U of C/Courses/119/2023 Spring/Week 8/Lab/locations.csv", row.names = 1)
 locations <- read.csv("./data/locations.csv", row.names = 1)
 colnames(locations) <- c("location", "title")
 
