@@ -581,12 +581,10 @@ question_checkbox(
 
 Let's get our data in the right format to run our models.
 
-```{python setup4, exercise = TRUE, exercise.eval = FALSE, message = FALSE}
+```{python setup4, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+msleep = pd.get_dummies(msleep, columns = ['conservation'], dtype = float, dummy_na = True, drop_first=True)
 
-msleep = pd.read_csv("./data/msleep.csv")
-msleep = pd.get_dummies(msleep, columns = ['conservation'], dtype = float, dummy_na = True, drop drop_first=True)
-
-X = msleep.drop(columns=["vore","order","genus","name","rownames","bodywt"])
+X = msleep.drop(columns=["vore","order","genus","name","bodywt"])
 y = (msleep['vore'] == "herbi").apply(int)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 314)
