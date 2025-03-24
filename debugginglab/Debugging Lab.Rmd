@@ -45,6 +45,11 @@ tags$div(
 )
 ```
 
+```{python setup-packages, echo = FALSE}
+import numpy as np
+import math
+```    
+
 # Goals
 
 The goal of this lab is to learn about common error messages and practice debugging your code.
@@ -309,7 +314,7 @@ No peaking at the answers!!
 
 1. Debug this combination of shapes and colors.
 
-```{python q1, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE}
+```{python q1, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 shapes = ["circle", "square", "rectangle", "triangle", "rhombus",]
 colors = ["red", "green", "blue"]
 for i in range(5):
