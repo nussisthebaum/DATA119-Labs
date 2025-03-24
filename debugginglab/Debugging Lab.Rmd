@@ -40,7 +40,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Data 119 Debugging", class = "pageTitle")
+    tags$h1("Data 119 - Debugging Your Code", class = "pageTitle")
   )
 )
 ```
