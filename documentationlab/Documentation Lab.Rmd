@@ -46,7 +46,7 @@ tags$div(
 ```
 
 
-```{python setup-packages, echo = FALSE}
+```{python setup-packages, echo = FALSE, message = FALSE, warning = FALSE}
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -244,10 +244,12 @@ grade_this_code()
 
 4. Create a scatterplot of $y = e^{-x}*sin(x)$ where the range of x is from 9 degrees to 359 degrees. Space the x-axis tick marks every 25 degrees starting at 9. Space the y-axis tick marks every 0.05. Highlight the data points where the function value is negative by using connecting those points using a brown dashdotted line. All point markers should be green pentagons filled only on the bottom half. The x-axis should be in degrees and not radians. Display a legend in the right center of the plot. Add appropriate axis labels and title.
 
-```{python}
-#| hideCode: true
-#| slideshow: {slide_type: skip}
-#Your code here
+```{python q4, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+
+
+```
+
+```{python q4-solution, message = FALSE, warning = FALSE, echo = FALSE}
 # Generate x values from 9 to 359 degrees with a spacing of 5 degrees
 x_values = np.arange(9, 360, 5)
 x_radians = np.deg2rad(x_values)
@@ -277,6 +279,9 @@ plt.title('Scatterplot of $y = e^{-x} \cdot \sin(x)$')
 plt.legend(loc = "center right");
 ```
 
+```{r q4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
 
 
 
