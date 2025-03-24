@@ -1842,8 +1842,8 @@
     "images/dsi_logo.png": {
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
-    "www/AirBnB_mini.csv": {
-      "checksum": "1efe3594d17acb42245b97573a8cbdeb"
+    "requirements.txt": {
+      "checksum": "c9e550794b8d1407f30b7201aa05f46b"
     }
   },
   "users": null
