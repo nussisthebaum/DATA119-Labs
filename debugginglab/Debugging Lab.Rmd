@@ -197,11 +197,11 @@ These all come from base Python, but imported modules can have their own error t
 - common when the object you're working with does not actually have that attribute
 - can happen if you forget parentheses on a method
 
-```{python lookup3, exercise=TRUE, exercise.eval = FALSE, setup.chunk = 'lookup2'}
+```{python lookup3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'lookup2'}
 my_list.size
 ```
 
-```{python lookup4, exercise=TRUE, exercise.eval = FALSE, setup.chunk = 'lookup2'}
+```{python lookup4, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'lookup2'}
 my_list.mean
 ```
 
@@ -237,7 +237,7 @@ def my_min(my_array):
 my_min(np.array([6,3,2,5]))
 ```
 
-```{python logical2, exercise=TRUE, exercise.eval = FALSE, setup.chunk = 'logical1'}
+```{python logical2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'logical1'}
 my_min(np.array([23,47,13,78]))
 ```
 
@@ -309,7 +309,7 @@ No peaking at the answers!!
 
 1. Debug this combination of shapes and colors.
 
-```{python q1, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+```{python q1, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE}
 shapes = ["circle", "square", "rectangle", "triangle", "rhombus",]
 colors = ["red", "green", "blue"]
 for i in range(5):
