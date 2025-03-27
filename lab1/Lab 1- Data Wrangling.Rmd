@@ -222,7 +222,7 @@ question_numeric(text = "What percent of `protein` is missing?",
          random_answer_order = TRUE,
          min = 0, 
          max = 8,
-         step = 0.1
+         step = 0.1,
          post_message = "Congratulations! You have found the first secret word: AGREEMENT.")
 ```
 
