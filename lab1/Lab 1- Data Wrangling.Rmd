@@ -199,11 +199,11 @@ grade_this_code(
 
 ```
 
-#```{python missing-solution, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
-#sum(epicurious_num['protein'].isna())/len(epicurious_num['protein'])
-#```
+```{python missing-solution, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+sum(epicurious_num['protein'].isna())/len(epicurious_num['protein'])
+```
 
-#```{r missing-code-check, message = FALSE, warning = FALSE, eval = FALSE}
+```{r missing-code-check, message = FALSE, warning = FALSE, eval = FALSE}
 #grade_this({
 #  if (identical(round(.result,2), 0.18)) {
 #    pass("things")
@@ -213,7 +213,7 @@ grade_this_code(
 #  }
 #  fail()
 #})
-#```
+```
 
 ```{r missingquestion, echo=FALSE}
 question_numeric(text = "What percent of `protein` is missing?",
