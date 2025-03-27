@@ -203,18 +203,6 @@ grade_this_code(
 sum(epicurious_num['protein'].isna())/len(epicurious_num['protein'])
 ```
 
-```{r missing-code-check, message = FALSE, warning = FALSE, eval = FALSE}
-#grade_this({
-#  if (identical(round(.result,2), 0.18)) {
-#    pass("things")
-#  }
-#  if (identical(.result, 7)) {
-#    fail("This is a common mistake. Try xyz.")
-#  }
-#  fail()
-#})
-```
-
 ```{r missingquestion, echo=FALSE}
 question_numeric(text = "What percent of `protein` is missing?",
          answer("18.5%", correct = TRUE),
