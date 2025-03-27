@@ -219,7 +219,6 @@ grade_this_code(
 question_numeric(text = "What percent of `protein` is missing?",
          answer("18.5%", correct = TRUE),
          allow_retry = TRUE,
-         random_answer_order = TRUE,
          min = 0, 
          max = 8,
          step = 0.1,
