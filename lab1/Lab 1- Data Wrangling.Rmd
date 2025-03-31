@@ -150,7 +150,7 @@ grade_this_code(
 )
 ```
 
-3. Since many of the variables are binary variables indicating different facts about the recipes, let's discard most of them for now and focus on the numeric variables. Identify which of the variables are numeric (if you get stuck, check out the [data dictionary](https://www.kaggle.com/datasets/hugodarwood/epirecipes)). Save a version of the dataset with only those variables as `epicurious_num`. Also include the recipe titles to use later.
+3. Since many of the variables are binary variables indicating different facts about the recipes, let's discard most of them for now and focus on the numeric variables. Identify which of the variables are numeric (if you get stuck, check out the [data dictionary](https://www.kaggle.com/datasets/hugodarwood/epirecipes)). Remember from Data 118 that a variable can have numbers as data but not be numeric (eg 0, 1 to mean no, yes). Save a version of the dataset with only those variables as `epicurious_num`. Also include the recipe titles to use later.
 
 ```{python filter, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 
@@ -205,7 +205,7 @@ sum(epicurious_num['protein'].isna())/len(epicurious_num['protein'])
 
 ```{r missingquestion, echo=FALSE}
 question_numeric(text = "What percent of `protein` is missing?",
-         answer("18.5%", correct = TRUE),
+         answer("18.5", correct = TRUE),
          allow_retry = TRUE,
          min = 0, 
          max = 100,
@@ -271,7 +271,7 @@ Below is a sample line of code for investigating the average ratings of the diff
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')))
 ```
 
-If you run this chunk, a big, nearly blank box appears--there is no actual graph, but we can see that the `height` variable is now located on the $x$-axis .There's nothing there because we haven't added a `geom` yet. A `geom` is a command representing the type of plot we want. To add a histogram, we use + `geom_histogram()` from `plotnine.`
+If you run this chunk, a big, nearly blank box appears--there is no actual graph, but we can see that the `rating` variable is now located on the $x$-axis .There's nothing there because we haven't added a `geom` yet. A `geom` is a command representing the type of plot we want. To add a histogram, we use + `geom_histogram()` from `plotnine.`
 
 ```{python hist, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="plot-setup"}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
