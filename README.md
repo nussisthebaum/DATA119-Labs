@@ -21,6 +21,15 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA1
 * Lab 3.5: Categorical Variables and VIF
   + Check for multicollinearity issues using the variance inflation factor. 
   + Learn to incorporate categorical variables in multiple linear regression.
+* Lab 4
+* Lab 5
+* Lab 6
+* Lab 7
+* Lab 8
+* Lab 9
+* Lab 10: Hypothesis Testing Review
+  + Review hypothesis testing, complete with an example of a $t$-test. 
+    
  
 ## Lab Creation Workflow:
 
