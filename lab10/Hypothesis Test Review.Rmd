@@ -1,0 +1,551 @@
+---
+title: "Hypothesis Test Review"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(gradethis)
+library(learnr)
+library(reticulate)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Hypothesis Test Review", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goal of this lab is to review hypothesis testing, complete with an example of a $t$-test. 
+
+## Setup
+
+This lab will use `numpy` and `scipy.stats`. Run this cell to load the packages and DataFrame.
+
+```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import numpy as np 
+import scipy.stats as st 
+```
+
+## Parameters and Statistics
+
+Hypothesis tests are a form of statistical inference, but before we review the specifics, let's take a step back. 
+
+Remember that a **population** is a complete group of all cases, subjects, or observations of interest. Examples of populations include
+
+* All adults living in the United States,
+* All tubes of toothpaste produced at a specific factory, or 
+* All students enrolled in at least one course at the University of Chicago. 
+
+Summaries of various numerical characteristics of a population are known as **parameters**. Examples of parameters corresponding to our population examples could be 
+
+* The average height of adults living in the United States, 
+* The average weight of a tube of toothpaste, or 
+* The average grade point average of a student at the University of Chicago. 
+
+For various reasons, we can't always gather information on an entire population (known as a census). For example, it is extremely costly to count or even find every adult living in the United States, and by the time we identified every adult, we might have lost some adults (due to emigration) and gained some adults (due to immigration or even aging into the category). 
+
+If we were to weigh every tube of toothpaste, we would significantly slow down the manufacturing process, and in some cases, taking a measurement involves destroying the product (leaving nothing left to sell). 
+
+Finally, it can be difficult for researchers to collect student data due to laws like the Family Educational Rights and Privacy Act (FERPA), which dictate what information can and cannot be shared. 
+
+There are lots of reasons why we wouldn't be able to access an entire population, but the bottom line is that it is hard or even impossible to gather every single measurement. 
+
+To circumvent this issue, we usually work with a **sample** of data, where a sample is defined as a subset of the cases, subjects, or observations in a given population. We prefer our samples to be randomly selected, but sometimes, we use convenience samples--for example, using this class as a sample of all students at the University of Chicago. 
+
+Once you have acquired a sample, you can calculate a **statistic**. A statistic describes a numerical characteristic of a sample, and the intent is to use them to estimate the population parameter. Notation-wise, it is traditional to use Greek letters ($\mu, \sigma, \beta$) to indicate a parameter, and Latin letters ($\bar{x}, s, b$) to indicate statistics. So, we would use $\bar{x}$, the sample mean, to estimate $\mu$, the population mean. Specifically, we might take a poll of every student in our class (the sample), asking everyone what their GPA is and averaging them ($\bar{x}$), and use that information to estimate the average GPA ($\mu$) for the entire university (the population).
+
+A table of parameters you might encounter appears below:
+
+```{r, echo = FALSE}
+mean <- c("$\\mu$", "$\\bar{x}$")
+stddev <- c("$\\sigma$", "$s$")
+proportion <- c("$\\pi/p$", "$p/\\hat{p}$")
+correlation <- c("$\\rho$", "$R/r$")
+intercept <- c("$\\beta_0$", "$b_0$")
+slope <- c("$\\beta_1$", "$b_1$")
+
+notation_table <- rbind(mean, stddev, proportion, 
+                        correlation, intercept, slope)
+rownames(notation_table) <- c("Mean", "Standard Deviation", "Proportion", "Correlation", "Intercept", "Slope")
+colnames(notation_table) <- c("Parameter", "Statistic")
+
+library(kableExtra)
+kable(notation_table, booktabs = TRUE, escape = FALSE)
+```
+
+
+## Hypothesis Test Framework
+
+In general--what is a hypothesis? In a more casual setting, we might use the word "hypothesis" synonymously with the words idea, theory, conjecture, or speculation. A slightly more formal definition from [Merriam-Webster's Dictionary](https://www.merriam-webster.com/dictionary/hypothesis) defines a hypothesis as "an assumption, an idea that is proposed for the sake of argument so that it can be tested to see if it might be true".
+
+### Null and Alternative Hypotheses
+
+Statistically speaking, we often talk about a pair of **hypotheses**: a set of competing ideas to be tested. Within the pair, we have a **null hypothesis**, represented by $H_0$.The **null hypothesis** represents a claim to be tested. Sometimes, we think about the null hypothesis as the conventional or traditional belief. However, in general, we treat the null hypothesis skeptically--we assume it to be true, but we are willing to change our minds if something better comes along. 
+    
+That something better is the other hypothesis, called the **alternative hypothesis** and represented by $H_A$ (sometimes you might also see $H_1$). The alternative hypothesis represents an alternative claim under consideration.
+
+When we carry out a hypothesis test, we are always using hypothesis tests about parameters (like the population mean $\mu$). Again, we very rarely know what these parameters are, which is why we need to test them! However, we might have data to calculate a statistic (like the sample average $\bar{x}$). **Hypotheses are always statements about parameters**--there is no need to test the statistics, as we know exactly what values those take on. So, more technically, the alternative hypothesis can be thought of as a new range of plausible parameter values. 
+
+```{r q0, echo=FALSE}
+question(
+  "Which of the following is an appropriate pair of hypotheses?",
+  answer("$H_0: \\mu = 0$ vs. $H_A: \\mu \\neq 0$", correct = TRUE), 
+  answer("$H_0: \\bar{x} = 0$ vs. $H_A: \\bar{x} \\neq 0$"),
+  allow_retry = TRUE)
+```
+
+The hypothesis testing framework is a very general tool, and we often use it without a second thought. If a person makes a somewhat unbelievable claim, we are initially skeptical. However, if there is sufficient evidence that supports the claim, we set aside our skepticism and reject the null hypothesis in favor of the alternative. 
+
+A criminal trial in the United States (among other countries) can be thought of as a hypothesis test. Someone charged with a crime is either innocent (did not commit the crime) or guilty (did commit the crime). An important legal principle is *the presumption of innocence*--anyone accused of a crime is considered until proven guilty. A jury must examine the evidence to see whether it convincingly shows a defendant is guilty. 
+
+```{r q1, echo=FALSE}
+question(
+  "In this scenario, what are the null and alternative hypotheses?",
+  answer("$H_0$: The defendant is innocent. vs. $H_A$: The defendant is guilty.", correct = TRUE), 
+  answer("$H_0$: The defendant is guilty. vs. $H_A$: The defendant is innocent."),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the first secret word: FAST."
+)
+```
+
+Even if the jurors leave *unconvinced of guilt beyond a reasonable doubt*, this does not mean they believe the defendant is innocent. This is also the case with hypothesis testing! *Even if we fail to reject the null hypothesis, we typically do not accept the null hypothesis as true.*
+
+### Decision Errors
+
+There are two possible outcomes of a hypothesis test. Either we reject the null hypothesis in favor of the alternative hypothesis, or we fail to reject the null hypothesis (Please note--double negatives can occur in statistics! For instance, we might say that the null hypothesis is not implausible. AGAIN, we do NOT say that we accept the null hypothesis). 
+
+If there are two initial states (the null hypothesis is true or it is not) and two outcomes (reject or fail to reject), then one of the four options in the table below must have occurred:
+  
+Decision | $H_0$ True | $H_0$ False 
+------------- | ------------- | -------------
+Reject | Wrong! | Correct
+Fail to Reject | Correct | Wrong! 
+
+Notice here that there are two different ways that someone can be wrong after a hypothesis test has been carried out. Because these errors are different, we give them different names:
+
+Decision | $H_0$ True | $H_0$ False 
+------------- | ------------- | -------------
+Reject | Type I | Correct
+Fail to Reject | Correct | Type II 
+
+Here, 
+  * A **Type I Error** occurs when we reject the null hypothesis when it is actually true (Type I: Jump the gun!). 
+  * A **Type II Error** occurs when we fail to reject the null hypothesis when the alternative is actually true (Type II: Avoid the new). 
+
+We have the ability to control how frequently we make Type I errors! If the null hypothesis is actually true, the **significance level**, represented by $\alpha$, indicates how often the data lead us to incorrectly reject $H_0$. The traditional $\alpha$ is equal to 0.05; however, we may select a level that is smaller ($\alpha$ = 0.01) or larger ($\alpha$ = 0.10) than 0.05, depending on the consequences of the test's conclusion. 
+
+If making a Type I error is dangerous or costly, we choose a small $\alpha$. If making a Type 2 error is relatively more dangerous or costly, we might choose a higher $\alpha$. It should not be entirely up to you to select an $\alpha$, you should be conferring with subject matter experts when you make your choice.
+  
+### Sampling Distributions
+
+One way to quantify the strength of evidence against the null hypothesis and in favor of the alternative hypothesis is a **p-value**. Formally, the **p-value** is the probability of observing a statistic as or more extreme than the current value, given that the null hypothesis is true. 
+
+Probabilities, including p-values, are often associated with random variables. It turns out that a statistic is just a combination of random variables--which means a statistic is also a random variable! To calculate a probability, such as the p-value, you need to assume a distribution for a statistic, known as a sampling distribution. 
+
+The sampling distribution tells you what values the statistic will take and how often they occur. Why do we need a sampling distribution? Remember--we are calculating the statistic from a (hopefully random) sample. However, different samples will result in different statistics, so we are expecting some variability. The sampling distribution gives us a mathematical way to describe that variability. 
+
+The sampling distribution under the null hypothesis is known as the **null distribution**. In traditional hypothesis testing for a mean, we get the sampling distribution from the Central Limit Theorem! The Central Limit Theorem states that when observations are independent and the sample size $n$ is sufficiently large, the sample average $\bar{x}$ will tend to follow a normal distribution with mean 
+
+$$\mu_{\bar{x}} = \mu_X$$
+
+and standard error
+
+$$SE_{\bar{x}} = \frac{\sigma_X}{\sqrt{n}}$$
+
+In other words, the sample mean has the following distribution:
+
+$$N\bigg(\mu_X, \frac{\sigma_X}{\sqrt{n}}\bigg)$$
+
+In practice, we base this distribution on the **null value**, often denoted $\mu_0$, or the value of the parameter given in the null hypothesis. This is because a hypothesis test is always carried out assuming the null is true!
+
+However, if we do not know the mean $\mu_X$ for a variable, we are not very likely to know the variables standard deviation, $\sigma_X$. Often, we have to estimate $\sigma_X$ with the sample standard deviation, $s$. Because of the extra uncertainty, we usually use what is called a $t$-distribution instead of the normal distribution. The $t$-distribution has slightly thicker tails than a normal distribution, which helps us account for the extra uncertainty we introduced by using $s$ to estimate $\sigma_X$--you can see a few different $t$-distributions in the image below:
+
+```{r, echo = FALSE}
+library(ggplot2)
+library(latex2exp)
+
+ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1), aes(color = "line1")) + 
+  stat_function(fun = dt, n = 101, args = list(df = 1), aes(color = "line2")) + 
+  stat_function(fun = dt, n = 101, args = list(df = 2), aes(color = "line3")) + 
+  stat_function(fun = dt, n = 101, args = list(df = 4), aes(color = "line4")) + 
+  stat_function(fun = dt, n = 101, args = list(df = 8), aes(color = "line5")) + 
+  xlab("") + 
+  ylab("") +
+  scale_y_continuous(breaks = NULL) + 
+  scale_color_manual(values = c("black", "red", "green", "blue", "purple"), labels = unname(TeX(c("Normal", "$t_1$", "$t_2$", "$t_4$", "$t_8$")))) +
+  theme(legend.position = "bottom", legend.title = element_blank())
+```
+
+### Test Statistics and p-Values
+
+Again, the **p-value** is the probability of observing a statistic as or more extreme than the current value, given that the null hypothesis is true. This probability is calculated using the sampling distribution, but we also need a **test statistic**, which helps define the "as or more extreme than the current value" portion of the definition. The test statistic for a one-sample hypothesis test for a mean is 
+
+$$t = \frac{\bar{x}- \mu_0}{\frac{s}{\sqrt{n}}}$$
+
+
+Then, we can use software to calculate the associated p-value. 
+
+### Making Decisions
+
+The next step is to compare the p-value to the significance level, $\alpha$. If the p-value is greater than $\alpha$, we fail to reject the null hypothesis. We would report that we do not have sufficient evidence to reject the null hypothesis. If the p-value is less than $\alpha$, we reject the null hypothesis. We would report that the data provide strong evidence supporting the alternative hypothesis. 
+
+```{r q2, echo=FALSE}
+question(
+  "Say you have a p-value of 0.814. What decision would you make using a significance level of $\\alpha = 0.05$?",
+  answer("Fail to reject the null, as the p-value is less than the significance level."), 
+  answer("Fail to reject the null, as the p-value is greater than the significance level.", correct = TRUE),
+  answer("Reject the null, as the p-value is less than the significance level."), 
+  answer("Reject the null, as the p-value is greater than the significance level."),
+  allow_retry = TRUE
+)
+```
+
+```{r q3, echo=FALSE}
+question(
+  "Say you have a p-value of 0.079. What decision would you make using a significance level of $\alpha = 0.10$?",
+  answer("Fail to reject the null, as the p-value is less than the significance level."), 
+  answer("Fail to reject the null, as the p-value is greater than the significance level."),
+  answer("Reject the null, as the p-value is less than the significance level.", correct = TRUE), 
+  answer("Reject the null, as the p-value is greater than the significance level."),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: OPPONENT."
+)
+```
+
+<!-- ### Hypothesis Tests and Confidence Intervals -->
+
+<!-- In general, the results of a hypothesis test using a significance level of $\alpha$ should be consistent with a $100(1-\alpha)$ confidence interval based on the same dataset.  -->
+<!--   * A hypothesis test at $\alpha$ = 0.01 should support a 99\% confidence interval.  -->
+<!--   * A hypothesis test at $\alpha$ = 0.05 should support a 95\% confidence interval.  -->
+<!--   * A hypothesis test at $\alpha$ = 0.10 should support a 90\% confidence interval.  -->
+
+<!-- Thus, the following statements are equivalent: -->
+
+<!-- * If we build a $100(1-\alpha)$ confidence interval for $p$, based on $\hat{p}$, and $p_0$ is included... -->
+<!-- * $p_0$ is a reasonable value for $p$.  -->
+<!-- * The p-value associated with $\hat{p}$ will be greater than $\alpha$.  -->
+<!-- * We would fail to reject the null hypothesis, $p = p_0$.  -->
+
+<!-- Similarly,  -->
+
+<!-- * If we build a $100(1-\alpha)$ confidence interval for $p$, based on $\hat{p}$, and $p_0$ is not included... -->
+<!-- * $p_0$ is not a reasonable value for $p$.  -->
+<!-- * The p-value associated with $\hat{p}$ will be less than $\alpha$.  -->
+<!-- * We would reject the null hypothesis, $p = p_0$.  -->
+
+### Steps for Hypothesis Testing
+
+Once you've determined a hypothesis test is the correct procedure, there are four steps to completing the test:
+
+1. **Prepare**. Identify the parameter of interest, list hypotheses, identify the significance level, and identify relevant sample statistics. 
+
+2. **Check**. Verify conditions to ensure a hypothesis test can be used. These conditions will depend on the exact procedure, but at minimum, we are assuming that the observations are independent.
+
+3. **Calculate**. If the conditions hold, compute the standard error, the test statistic, and the p-value.
+
+4. **Conclude**.Evaluate the hypothesis test by comparing the p-value to $\alpha$, and *provide a conclusion in the context of the problem*. 
+
+This last step is super important!! We want to make sure that we can communicate the results to a general audience, and not just people that have statistical training. Make sure you include this whenever you write up a hypothesis test. 
+
+## Hypothesis Test Example
+
+In April 2020, McDonald's [transitioned to a limited menu to simplify tasks for restaurant workers and safely serve customers during the coronavirus public health crisis](https://www.washingtonpost.com/business/2020/06/19/mcdonalds-coronavirus-menu/). By transitioning to a limited menu and simplifying tasks, the company hoped that interaction times between customers and staff would be shorter, giving the virus less time to move between hosts.
+
+A McDonald's franchise owner wished to take a data-driven approach to business, and came to you with a sample of data from the drive-through trips at their location. They specifically wanted to know if their average drive-through wait time (in seconds) has decreased from the average from 2019, [284 seconds](https://www.businessinsider.com/mcdonalds-drive-thru-times-speed-up-years-of-longer-waits-2019-10).
+
+```{r q4, echo=FALSE}
+question(
+  "What should our hypotheses be about?",
+  answer("$\\mu$, the mean drive-through wait time for all McDonald's in the US", correct = TRUE), 
+  answer("$\\bar{x}$, the mean drive-through wait time from our sample of trips", message = "Don't forget! The hypotheses should be about a parameter, not a statistic."), 
+  answer("$p$, the proportion of drive-through wait times that decreased", message = "Don't forget! Our hypothesis is about a mean, not a proportion."),
+answer("$\\hat{p}$, the proportion of drive-through wait times that decreased in our sample"),
+  random_answer_order = TRUE,
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the third secret word: BARRIER."
+)
+```
+
+### **Prepare**
+
+#### Writing the Hypotheses
+
+So far, we have only considered a scenario where $\mu$ is **different from** (either above or below) some null value $\mu_0$. This is called a **two-sided hypothesis test**. As in the McDonald's example, we might care about $\mu$ being only above or only below $\mu_0$. 
+
+* Is the population parameter $\mu$ less than $\mu_0$?
+* Is the population parameter $\mu$ more than $\mu_0$?
+
+This is called a **one-sided** hypothesis test. In a one-sided test, the hypotheses are set up slightly differently and the p-value is calculated slightly differently--everything else is the same.
+
+```{r q5, echo=FALSE}
+question(
+  "What should our alternative hypothesis be?",
+  answer("$H_A: \\mu < 284$", correct = TRUE), 
+  answer("$H_A: \\mu > 284$"), 
+  answer("$H_A: \\mu \\neq 284$"), 
+  random_answer_order = TRUE,
+  allow_retry = TRUE
+)
+```
+
+Remember, we want to demonstrate the alternative hypothesis is true, so the claim that we want to test belongs in the alternative!
+
+#### Summary Statistics
+
+Part of the **Check** step involves computing the summary statistics. The drive-through wait times in seconds from the sample of trips appears below--use it to answer the following questions
+
+```{python setup2, exercise = TRUE, exercise.setup="packages"}
+mcds = [293, 174, 100, 272, 207, 145, 148, 495, 
+        348, 325, 330, 281, 257, 178, 140, 246, 
+        381, 242, 195, 115, 288, 162, 261, 291, 
+        397,  59, 251, 313, 175, 187, 297, 189, 
+        297, 207, 251, 284, 211, 153, 271,  89,
+        320, 244, 201,  89, 163, 262, 181, 229, 
+        307, 221, 237, 217, 319, 237, 286, 256, 
+        293, 139, 187, 190, 279, 225, 409, 157]
+```
+
+What is the mean of the dataset? Hint: look up the relevant `numpy` functions for mean and standard deviation.
+
+```{python mean, exercise = TRUE, exercise.setup = "setup2"}
+
+```
+
+```{python mean-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.mean(mcds)
+```
+
+```{r mean-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+What is the sample standard deviation of the dataset?
+
+```{python sd, exercise = TRUE, exercise.setup = "setup2"}
+
+```
+
+```{python sd-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.std(mcds)
+```
+
+```{r sd-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Finally, what is the sample size?
+
+```{python n, exercise = TRUE, exercise.setup = "setup2"}
+
+```
+
+```{python n-solution, message = FALSE, warning = FALSE, echo = FALSE}
+len(mcds)
+```
+
+```{r n-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+### Check
+
+The next step is to check. For a "traditional" piece of inference like a $t$-test for the mean, we tend to check two things:
+
+1. First, we check to see if the distribution of the sample mean is normal. The best way to do this is to check the distribution of the original data, using a histogram--if the original distribution is normal, the Central Limit Theorem will kick in faster, and we can safely assume the sampling distribution is normal as well. 
+
+Create a histogram using the sample. 
+
+```{python histogram, exercise = TRUE, exercise.setup = "setup2"}
+
+```
+
+```{r q6, echo=FALSE}
+question(
+  "Check all options that apply to the shape of this histogram.",
+  answer("Uniform"), 
+  answer("Unimodal", correct = TRUE), 
+  answer("Bimodal"), 
+  answer("Multimodal"), 
+  answer("Symmetric", correct = TRUE), 
+  answer("Right-Skewed"), 
+  answer("Left-Skewed"), 
+  allow_retry = TRUE
+)
+```
+
+Normal distributions are symmetric and unimodal (also often called "bell-shaped")--this data is normal, and therefore, we are safe in assuming that the sampling distribution is also normal. 
+
+2. Next, we assume the data are independent from each other, that is, no one observation gives us any information about the others. There is no good way to check independence other than to look at the context of the data. In this case, the franchise owner has assured us the sample is random, and therefore, we are again safe in assuming the data is independent.
+
+### Calculate
+
+Now, we use our formulas to calculate the standard error, test statistic, and p-value. Remember, the formula for the standard error in a $t$-test for the mean is 
+
+$$\frac{s}{\sqrt{n}}$$
+
+Implement this formula in the cell below, and save the standard error as `se_mcds`.
+
+```{python se, exercise = TRUE, exercise.setup = "setup2"}
+
+```
+
+```{python se-solution, message = FALSE, warning = FALSE, echo = FALSE}
+se_mcds = np.std(mcds)/np.sqrt(len(mcds))
+```
+
+```{r se-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now, calculate the $t$-statistic. Remember, the formula for the $t$-statistic is 
+
+$$t = \frac{\bar{x} - \mu_0}{\frac{s}{\sqrt{n}}}$$
+
+```{r q7, echo=FALSE}
+question(
+  "What is the appropriate null value, $\\mu_0$?",
+  answer("236.76"), 
+  answer("284", correct = TRUE), 
+  answer("10.21"), 
+  answer("64"), 
+  random_answer_order = TRUE,
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the fourth secret word: USE."
+)
+```
+
+Remember, the null value is the value we would like to compare against! And in this case, we are interested in comparing the new, unknown mean $\mu$ to the old, "conventional" value, 284 seconds. 
+
+Use the null value, `se_mcds`, and the equation for $t$ in the cell below. Save it as `t_mcds`.
+
+```{python t, exercise = TRUE, exercise.setup = "se"}
+
+```
+
+```{python t-solution, message = FALSE, warning = FALSE, echo = FALSE}
+t_mcds = (np.mean(mcds) - 284)/se_mcds
+```
+
+```{r t-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Remember that the $t$-distribution is similar to the normal. Would a value such as `t_mcds` seem large or small in the normal distribution? How do you know?
+
+Now, we can use Python to find the p-value. One last time, remember that the p-value is the probability of observing a statistic as or more extreme than the current value, given that the null hypothesis is true. The probability is calculated using the $t$-distribution (which can be found using the `t.cdf()` formula from `scipy.stats`). The current value is summarized using the $t$-score. We do have to think carefully about what "as or more extreme" means--in the case of a lower-tailed hypothesis, this is everything less than `t_mcds`.
+
+```{r echo = F}
+ggplot(NULL, aes(c(-5,5))) +
+  geom_area(stat = "function", fun = dnorm, fill = "lightgray", xlim = c(-4.62557, 3)) + 
+  geom_area(stat = "function", fun = dnorm, fill = "#2C83C0", xlim = c(-3, -4.62557)) +
+  xlab(label = unname(TeX("$t$"))) + 
+  ylab(label = unname(TeX("$P(t)$")))
+```
+
+The p-value is highlighted on the graph below, and feels very small! The last step is to calculate the p-value, which can be done using the cell below (you don't need to know the specifics).
+
+```{python p_value, exercise = TRUE, exercise.setup = "t"}
+st.t.cdf(t_mcds, 63)
+```
+
+### Conclude
+
+Now, we can wrap things up. For simplicity, let's use the conventional significance level of 5\%. 
+
+```{r q8, echo=FALSE}
+question(
+  "Based on this p-value, what would you do with the null hypothesis?",
+  answer("Accept", message = "We never say accept!"), 
+  answer("Fail to Reject"), 
+  answer("Reject", correct = TRUE), 
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the fifth and final secret word: CHEESE."
+)
+```
+
+Take a minute to make sure you can write a conclusion in the context of this problem, so you can give it to the franchise owner! Then, they can use the results to make decisions about their franchise moving forward. 
+
+### Using `scipy.stats` Functions
+
+There is a faster way to run the $t$-test, and, if you are not comfortable with the math, it can also be more user-friendly. Look up the [documentation for `ttest_1samp`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ttest_1samp.html).
+
+
+```{r q9, echo=FALSE}
+question(
+  "What argument in `ttest_1samp` dictates the null value of the hypothesis test?",
+  answer("`a`"), 
+  answer("`popmean`", correct = TRUE), 
+  answer("`axis`"), 
+  answer("`nan_policy`"), 
+  answer("`alternative`"), 
+  answer("`keepdims`"), 
+  allow_retry = TRUE
+)
+```
+
+```{r q10, echo=FALSE}
+question(
+  "What argument in `ttest_1samp` dictates the alternative hypothesis of the hypothesis test?",
+  answer("`a`", message = "We never say accept!"), 
+  answer("`popmean`"), 
+  answer("`axis`"), 
+  answer("`nan_policy`"), 
+  answer("`alternative`", correct = TRUE), 
+  answer("`keepdims`"), 
+  allow_retry = TRUE
+)
+```
+
+Now, plug in the right values for all of the arguments. Do you reach the same conclusion as you found by hand?
+
+```{python ttest, exercise = TRUE, exercise.setup = "setup2"}
+st.ttest_1samp( )
+```
+
+```{python ttest-solution, message = FALSE, warning = FALSE, echo = FALSE}
+st.ttest_1samp(mcds, 284, alternative = 'less')
+```
+
+```{r ttest-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+There are lots of different hypothesis tests ([see some examples on Wikipedia](https://en.wikipedia.org/wiki/Category:Statistical_tests)). The details of each test, including what parameter is being tested, how we format the null and alternative hypotheses, the assumptions of each test, and the formulas for the test statistic and p-value may be different, but the overall framework is the same. You can always look up the details, but it is very helpful to be familiar with the general process. If you have any questions, we are happy to discuss!
