@@ -591,7 +591,7 @@
       "description": {
         "Package": "glue",
         "Title": "Interpreted String Literals",
-        "Version": "1.7.0",
+        "Version": "1.8.0",
         "Authors@R": "c(\n    person(\"Jim\", \"Hester\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-2739-7082\")),\n    person(\"Jennifer\", \"Bryan\", , \"jenny@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-6983-2759\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "An implementation of interpreted string literals, inspired by\n    Python's Literal String Interpolation\n    <https://www.python.org/dev/peps/pep-0498/> and Docstrings\n    <https://www.python.org/dev/peps/pep-0257/> and Julia's Triple-Quoted\n    String Literals\n    <https://docs.julialang.org/en/v1.3/manual/strings/#Triple-Quoted-String-Literals-1>.",
         "License": "MIT + file LICENSE",
@@ -599,20 +599,20 @@
         "BugReports": "https://github.com/tidyverse/glue/issues",
         "Depends": "R (>= 3.6)",
         "Imports": "methods",
-        "Suggests": "crayon, DBI (>= 1.2.0), dplyr, knitr, magrittr, rlang,\nrmarkdown, RSQLite, testthat (>= 3.2.0), vctrs (>= 0.3.0),\nwaldo (>= 0.3.0), withr",
+        "Suggests": "crayon, DBI (>= 1.2.0), dplyr, knitr, magrittr, rlang,\nrmarkdown, RSQLite, testthat (>= 3.2.0), vctrs (>= 0.3.0),\nwaldo (>= 0.5.3), withr",
         "VignetteBuilder": "knitr",
         "ByteCompile": "true",
         "Config/Needs/website": "bench, forcats, ggbeeswarm, ggplot2, R.utils,\nrprintf, tidyr, tidyverse/tidytemplate",
         "Config/testthat/edition": "3",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.2.3.9000",
+        "RoxygenNote": "7.3.2",
         "NeedsCompilation": "yes",
-        "Packaged": "2024-01-08 16:10:57 UTC; jenny",
+        "Packaged": "2024-09-27 16:00:45 UTC; jenny",
         "Author": "Jim Hester [aut] (<https://orcid.org/0000-0002-2739-7082>),\n  Jennifer Bryan [aut, cre] (<https://orcid.org/0000-0002-6983-2759>),\n  Posit Software, PBC [cph, fnd]",
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2024-01-09 23:13:08 UTC",
-        "Built": "R 4.4.0; aarch64-apple-darwin20; 2024-04-05 15:00:02 UTC; unix",
+        "Date/Publication": "2024-09-30 22:30:01 UTC",
+        "Built": "R 4.4.1; aarch64-apple-darwin20; 2025-02-01 04:45:00 UTC; unix",
         "Archs": "glue.so.dSYM"
       }
     },
@@ -1836,17 +1836,44 @@
     "css/custom-styles.css": {
       "checksum": "53026cc16d8d96879dd8a4eaa065e763"
     },
+    "data/eagles.csv": {
+      "checksum": "4d29fd34b7a59de7ea45c01dfd4eeede"
+    },
+    "data/epi_mini_clean.csv": {
+      "checksum": "235df25209772997a380ef45053f0214"
+    },
+    "data/epi_mini.csv": {
+      "checksum": "e5d043b34dff4380546e4eb4dc6fede9"
+    },
+    "data/gasprice.csv": {
+      "checksum": "a59133570d390f57c20393040d04947d"
+    },
+    "data/mtcars.csv": {
+      "checksum": "6463474bfe6973a81dc7cbc4a71e8dd1"
+    },
     "images/dsi_logo.png": {
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
     "Lab 2 - Correlation and Simple Linear Regression.Rmd": {
-      "checksum": "d3115720eb64ffd38efbe26a061dfc98"
+      "checksum": "8e5df6b420cf3cdb4f9d0fa57a88fb90"
     },
     "README.md": {
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
     },
     "requirements.txt": {
       "checksum": "c9e550794b8d1407f30b7201aa05f46b"
+    },
+    "www/eagles.csv": {
+      "checksum": "4d29fd34b7a59de7ea45c01dfd4eeede"
+    },
+    "www/epi_mini.csv": {
+      "checksum": "e5d043b34dff4380546e4eb4dc6fede9"
+    },
+    "www/gasprice.csv": {
+      "checksum": "a59133570d390f57c20393040d04947d"
+    },
+    "www/mtcars.csv": {
+      "checksum": "6463474bfe6973a81dc7cbc4a71e8dd1"
     }
   },
   "users": null
