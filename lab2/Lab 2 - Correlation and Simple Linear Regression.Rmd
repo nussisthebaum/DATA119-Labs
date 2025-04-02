@@ -30,7 +30,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
+tutorial_options(exercise.completion = FALSE, exercise.timelimit = 30)
 ```
 
 ```{r header, echo=FALSE}
@@ -45,7 +45,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Categorical Variables and Multiple Linear Regression", class = "pageTitle")
+    tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
   )
 )
 ```
@@ -53,7 +53,7 @@ tags$div(
 ## Goals
 
 * To continue practicing making data visualizations.
-* To familiarize yourself with Pearson's correlation coefficient $R$.
+* To familiarize yourself with Pearson's correlation coefficient $r$.
 * To practice writing functions.
 * To practice calculating linear regression estimates.
 
@@ -61,7 +61,7 @@ tags$div(
 
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE}
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
@@ -114,7 +114,7 @@ grade_this_code()
 
 Note that this added line includes something called standard error bars, which we will not be covering in this class. If you would like to turn them off to make things visually cleaner, you can use the argument `se = False`, like so:
 
-```{python lm_no_se, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python lm_no_se, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup1"}
 (p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
   p9.geom_point() + 
   p9.geom_smooth(method = "lm", se = False))
@@ -124,9 +124,9 @@ Note that this added line includes something called standard error bars, which w
 question("3. Is a linear relationship appropriate for describing the relationship between weight and displacement? If not, what type of relationship might be more appropriate?",
          answer("Linear", message = "There is not an even distribution of points above and below the line, look closely at the middle of the graph."),
          answer("Quadratic", correct = TRUE),
-         answer("Exponential"), 
-         allow_retry = TRUE, 
-         random_answer_order = TRUE, 
+         answer("Exponential"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
          post_message = "Congratulations! You have found the first secret word: SUPPRESS.")
 ```
 
@@ -153,8 +153,8 @@ grade_this_code()
 ```{r q5, echo=FALSE}
 question("5. Is a linear relationship appropriate for describing the relationship between time and price? If not, what type of relationship might be more appropriate?",
          answer("True", message = "This is an example of a time series, which should not be analyzed using linear regression."),
-         answer("False", correct = TRUE), 
-         allow_retry = TRUE, 
+         answer("False", correct = TRUE),
+         allow_retry = TRUE,
          post_message = "This is an example of a time series, which should not be analyzed using linear regression. Also, congratulations! You have found the second secret word: COMMISSION.")
 ```
 
@@ -183,13 +183,13 @@ grade_this_code()
 question("7. Is a linear relationship appropriate for describing the relationship between `Year` and `Pairs`? If not, what type of relationship might be more appropriate?",
          answer("Linear", message = "Look closely at the graph, all of the points below the line are clustered together, and all of the points above the line are clustered together."),
          answer("Quadratic"),
-         answer("Exponential", correct = TRUE, 
-         allow_retry = TRUE, 
-         random_answer_order = TRUE, 
+         answer("Exponential", correct = TRUE,
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
          post_message = "This is an example of an exponential curve, which are often used to model growth and decay.Also, congratulations! You have found the third secret word: MOON."))
 ```
 
-Now to confirm the value of the correlation between `Year` and `Pairs` you can use `.corr()`. Run this cell to get the value of $R$.
+Now to confirm the value of the correlation between `Year` and `Pairs` you can use `.corr()`. Run this cell to get the value of $r$.
 
 ```{python corr, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup1"}
 Year = eagles['Year']
@@ -199,12 +199,11 @@ Year.corr(Pairs)
 ```
 
 ```{r q8, echo=FALSE}
-question("8. Would you describe this as weak, moderate, or strong based on $R$?",
+question("8. Would you describe this as weak, moderate, or strong based on $r$?",
          answer("Weak"),
          answer("Moderate"),
-         answer("Strong", correct=TRUE, message = "This is a great example of why you need to look at the correlation and the scatterplot! Even though this relationship is not linear, it appears to be a strong linear relationship based on $R$."), 
+         answer("Strong", correct=TRUE, message = "This is a great example of why you need to look at the correlation and the scatterplot! Even though this relationship is not linear, it appears to be a strong linear relationship based on $r$."), 
          allow_retry = TRUE)
-         #post_message = "Congratulations! You have found the first secret word: SUPPRESS.")
 ```
 
 ## Describing Relationships with `epicurious_nd`
@@ -229,7 +228,7 @@ grade_this_code()
 question("10. Is a linear relationship appropriate for describing the relationship between fat and calories? If not, what type of relationship might be more appropriate?",
          answer("Linear", correct=TRUE, message = "There are a few unusual values, but this is a good example of a linear relationship!"),
          answer("Quadratic"),
-         answer("Exponential"), 
+         answer("Exponential"),
          allow_retry = TRUE
 )
 ```
@@ -338,8 +337,8 @@ grade_this_code()
 ```{r q15, echo=FALSE}
 question("15. Fill in the blank: for every additional ___, we should expect 12.73 additional ___",
          answer("gram of fat; calories", correct=TRUE),
-         answer("calorie; grams of fat", message = "Consider what the independent and dependent variables are."), 
-         allow_retry = TRUE, 
+         answer("calorie; grams of fat", message = "Consider what the independent and dependent variables are."),
+         allow_retry = TRUE,
          post_message = "Congratulations! You have found the fourth secret word: ASTONISHING.")
 ```
 
@@ -397,7 +396,7 @@ grade_this_code()
 question("18. Fill in the blank: if the recipe has 0 ___ then we should expect it to have 132.86 ___",
          answer("calories; grams of fat"),
          answer("grams of fat; calories", correct=TRUE),
-         allow_retry = TRUE, 
+         allow_retry = TRUE,
          post_message = "Congratulations! You have found the fifth secret word: ARCHITECT.")
 
 ```
@@ -532,7 +531,7 @@ grade_this_code()
 
 The loss function for simple linear regression is the sum of the squared residuals (also known as the sum of squared errors, or SSE). Below is an example of what an SSE function can look like.
 
-```{python sse, exercise=FALSE, exercise.setup="setup5"}
+```{python sse, exercise=TRUE, exercise.eval = FALSE, exercise.setup="setup5"}
 def calc_SSE(x, y):  
     resids = calc_res(x, y)
     resids2 = resids**2
@@ -544,7 +543,7 @@ We are lucky to have equations (more formally known as closed form estimators) t
 
 Minimizing a loss function is a special case of optimization. To optimize, we will need the `scipy`. From `scipy.optimize`, we specifically need `minimize`.
 
-```{python scipy, exercise=FALSE, exercise.setup="sse"}
+```{python scipy, exercise=TRUE, exercise.eval = FALSE, exercise.setup="sse"}
 import scipy
 from scipy.optimize import minimize
 ```
@@ -608,13 +607,13 @@ You should find that these estimates are very close to the numbers that we calcu
 
 In addition to writing your own functions, either to directly estimate parameters or to minimize the loss function, there are a lot of pre-packaged methods in Python to use for linear regression. You may be familiar with `scikit-learn` already, but I want to introduce another module, `statsmodels`. Both modules work similarly, but `statsmodels` has some functionality that will help us out in future weeks. 
 
-```{python stats, exercise = TRUE, message = FALSE, exercise.setup="min"}
+```{python stats, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="min"}
 import statsmodels.api as sm
 ```
 
 To fit a linear regression model with `statsmodels`, we first have to separately save our $X$ and $Y$ variables. Technically, we've already done that with `fat` and `calories`, but review the code below--it's good practice to get into this type of syntax. I've used `X1` since this is our first (and only) variable. 
 
-```{python stats1, exercise = TRUE, message = FALSE, exercise.setup="stats"}
+```{python stats1, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats"}
 X1 = epicurious_nd["fat"]
 Y = epicurious_nd["calories"]
 ```
@@ -623,13 +622,13 @@ Note that we've only saved one explanatory variable here, but you could save mor
 
 By saving `"fat"` inside `X1`, we're letting Python know that we want a slope for fat, but we also need to specify that we would like an intercept as well. We do that by using the following code:
 
-```{python stats2, exercise = TRUE, message = FALSE, exercise.setup="stats1"}
+```{python stats2, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats1"}
 X1 = sm.add_constant(X1)
 ```
 
 Now, we can actually fit the model. We do this with the following line of code (again, I've saved an object called `model1` since this is the first model we are fitting. Also, the only model for this lab, but it's good practice to get into the habit of giving different models different names so you don't write over anything and lose track of what you were doing. 
 
-```{python stats3, exercise = TRUE, message = FALSE, exercise.setup="stats2"}
+```{python stats3, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats2"}
 model1 = sm.OLS(Y, X1).fit()
 ```
 
@@ -651,6 +650,6 @@ grade_this_code()
 
 25. As I mentioned, there is a lot! For now, we just want to use the `.summary()` method. Investigate the output below to see if you can locate where in the table the slope and intercept are located. Are they the same as the values calculated from the other two methods we've seen?
 
-```{python summary, exercise = TRUE, message = FALSE, exercise.setup="stats3"}
+```{python summary, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats3"}
 model1.summary()
 ```
