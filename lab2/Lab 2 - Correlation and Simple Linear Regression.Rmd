@@ -620,11 +620,17 @@ Y = epicurious_nd["calories"]
 
 Note that we've only saved one explanatory variable here, but you could save more than one to use with multiple linear regression. 
 
-By saving `"fat"` inside `X1`, we're letting Python know that we want a slope for fat, but we also need to specify that we would like an intercept as well. We do that by using the following code:
+By saving `"fat"` inside `X1`, we're letting Python know that we want a slope for fat just like when we create our X variable for `sklearn`. However, unlike in `sklearn`, `statsmodels` won't automatically assume we want to fit an intercept too. but we also need to specify that we would like an intercept as well. 
+
+If we fit our model with `X1` and `Y` like they are now, we will only get an estimate for the slope - the intercept will be 0. This forces our regression like to go through the origin which may or may not make sense depending on our data... Most of the time, it is useful to add an intercept to our model to avoid this.
+
+We do that by using the following code:
 
 ```{python stats2, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats1"}
 X1 = sm.add_constant(X1)
 ```
+
+The `add_constant` function adds a column of 1's to `X1`. Finding the slope for a column of 1's is equivalent to finding an intercept (if x is always 1,  b*x = b).
 
 Now, we can actually fit the model. We do this with the following line of code (again, I've saved an object called `model1` since this is the first model we are fitting. Also, the only model for this lab, but it's good practice to get into the habit of giving different models different names so you don't write over anything and lose track of what you were doing. 
 
@@ -634,7 +640,7 @@ model1 = sm.OLS(Y, X1).fit()
 
 `statsmodels` knows that people using linear regression are generally going to be performing similar calculations, so there is a lot packed into `model1`. 
 
-24. Apply the `dir()` function to `model1`, and see if you can identify any of the parts packed into the object. 
+1.  Apply the `dir()` function to `model1`, and see if you can identify any of the parts packed into the object. 
 
 ```{python dir, exercise = TRUE, message = FALSE, exercise.setup="stats3"}
 
