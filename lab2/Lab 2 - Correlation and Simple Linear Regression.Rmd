@@ -30,7 +30,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.timelimit = 30)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
 ```
 
 ```{r header, echo=FALSE}
@@ -61,7 +61,7 @@ tags$div(
 
 For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE}
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
