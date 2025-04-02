@@ -1,0 +1,287 @@
+---
+title: "Documentation Lab"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(shiny)
+library(gradethis)
+library(learnr)
+library(reticulate)
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Data 119 - Reading Documentation", class = "pageTitle")
+  )
+)
+```
+
+
+```{python setup-packages, echo = FALSE, message = FALSE, warning = FALSE}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+```
+
+## Goals
+
+The goal of this lab is to practice reading documentation (and play around with visualization while we are at it).
+
+## Python Documentation
+
+Python and its libraries have pages of documentation that serve as a reference guide for functions, methods, objects, and many other features.
+
+Being able to navigate and understand this documentation is an essential data science skill!
+
+Documentation typically includes:
+- the function/method/class name
+- a description of what it does
+- any arguments that it takes in
+- anything it returns
+- data types of inputs and outputs
+- examples and use-cases
+
+There is so much that you can do with Python, and we won't be able to show you everything you might need.
+
+Documentation can help you learn how to use features and functions that we might not talk about during these first two weeks.
+
+### Read through some documentation:
+
+Here is some documentation for specific functions. As you read, notice the different sections and when they may be useful. Notice the commonalities between the pandas and matplotlib documentation.
+
+- First, one that we've seen. [pivot_table](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html)
+
+- Next, something new. [dropna](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html)
+
+- An example from matplotlib [imshow](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html)
+
+
+### Links to some useful documentation 
+
+[Python Standard Library Manual](https://docs.python.org/3/library/index.html)
+
+[Python math Docs](https://docs.python.org/3/library/math.html)
+
+[Numpy Docs](https://numpy.org/doc/stable/reference/)
+
+[Pandas Docs](https://pandas.pydata.org/docs/reference/index.html#api)
+
+[Matplotlib Docs](https://matplotlib.org/stable/api/index.html)
+
+
+## Reading Documentation Practice
+
+For each of the tasks below, use Google and documentation to find the correct function or method for your task as well as the correct arguments to that function or method. There are more than one potential solution to each task, so don't get to caught up on the 'correctness' of your solution.
+
+Note: We are aware that you can use ChatGPT for this, but that would defeat the purpose of the activity which is less about figuring out small visualization details and more about sifting through the documentation and learning how to use Google effectively.
+
+1. Create a graph of y = arctan(x) where the range of x is from 12 degrees to 147 degrees. Space the x-axis tick marks every 8 degrees. Space the y-axis tick marks every 7 degrees. Make sure the plot is depicted with a dashed pink line that has arrows on each end. Both axes should be in degrees and not radians. Add appropriate axis labels and title.
+
+```{python q1, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+
+
+```
+
+```{python q1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+# Convert degrees to radians
+x_degrees = np.arange(12, 148, 1)  # Range from 12 to 147 degrees
+x_radians = np.deg2rad(x_degrees)  # Convert degrees to radians
+
+# Compute y values in radians and then convert to degrees
+y_radians = np.arctan(x_radians)
+y_degrees = np.rad2deg(y_radians)
+
+# Plot the graph
+plt.figure(figsize=(10, 6))
+plt.plot(x_degrees, y_degrees, 'm--')  # 'm--' means dashed pink line
+
+# Add arrows
+plt.scatter([x_degrees[0]], [y_degrees[0]], color='m', s=100, marker=(3, 0, 270))  
+plt.scatter([x_degrees[-1]], [y_degrees[-1]], color='m', s=100, marker=(3, 0, 270)) # or marker = ">"
+
+# Set x-axis and y-axis tick marks
+plt.xticks(np.arange(10, 150, 8))
+plt.yticks(np.arange(0, max(y_degrees) + 7, 7))
+
+# Add labels and title
+plt.xlabel('x (degrees)')
+plt.ylabel('y = arctan(x) (degrees)')
+plt.title('Graph of y = arctan(x)');
+```
+
+```{r q1-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+2. Create a bar chart to visualize the average monthly temperature of a city. The data for the temperatures is provided in a list. The x-axis should represent the months (from January to December) and the y-axis should represent the average temperature in degrees Celsius. The x-axis tick marks should display the 3-letter abreviated month names. The y-axis tick marks should start at 1 and be spaced every 2 degrees. Ensure that the bars are colored in a gradient from blue (for the coldest month) to red (for the hottest month). Add appropriate axis labels and title.
+
+```{python q2, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+temperatures = [2, 3, 6, 10, 15, 20, 25, 24, 20, 14, 8, 4]
+
+
+```
+
+```{python q2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+temperatures = [2, 3, 6, 10, 15, 20, 25, 24, 20, 14, 8, 4]
+
+import matplotlib.cm as cm
+
+# Temperature data
+temperatures = [2, 3, 6, 10, 15, 20, 25, 24, 20, 14, 8, 4]
+months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+# Create a DataFrame
+temp_data = pd.DataFrame({
+    'Month': months,
+    'Temperature': temperatures
+})
+
+# Create a color gradient based on temperature values
+norm = plt.Normalize(temp_data['Temperature'].min(), temp_data['Temperature'].max())
+colors = cm.coolwarm(norm(temp_data['Temperature']))
+
+# Create the bar chart
+plt.figure(figsize=(12, 6))
+bars = plt.bar(temp_data['Month'], temp_data['Temperature'], color=colors)
+
+# Set the y-axis tick marks
+plt.yticks(np.arange(1, max(temperatures) + 1, 2))
+
+# Add labels and title
+plt.xlabel('Month')
+plt.ylabel('Average Temperature (°C)')
+plt.title('Average Monthly Temperature');
+```
+
+```{r q2-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+3. Create a scatter plot to visualize the relationship between the number of hours studied and the exam scores of a group of students. The data for the number of hours studied and exam scores is provided in a DataFrame. The x-axis should represent the number of hours studied with tick marks every 2 hours, and the y-axis should represent the exam scores starting at 60 and going up to 96, with tick marks every 6 points. Calculate the average exam score for students who studied between 4 and 7 hours. Highlight the data points of students who scored above the average exam score for the 4-7 hour study group by making their markers large orange stars. Make the other points smaller dark blue triangles. Display a legend in the bottom center of the plot to differentiate between the regular and highlighted data points. Add a dotted (not dashed) purple horizontal line to the plot representing the average exam score for the 4-7 hour study group. Add appropriate axis labels and title.
+
+```{python q3, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+exam_data = pd.DataFrame({
+    'Hours Studied': [2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'Exam Scores': [65, 70, 75, 80, 85, 90, 95, 82, 88]
+})
+
+
+```
+
+```{python q3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+exam_data = pd.DataFrame({
+    'Hours Studied': [2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'Exam Scores': [65, 70, 75, 80, 85, 90, 95, 82, 88]
+})
+
+# Calculate average exam score for students who studied between 4 and 7 hours
+study_group_avg = exam_data.loc[(exam_data['Hours Studied'] >= 4) & (exam_data['Hours Studied'] <= 7), 'Exam Scores'].mean()
+
+# Filter the DataFrame for students who studied between 4 and 7 hours
+study_group_df = exam_data.loc[(exam_data['Hours Studied'] >= 4) & (exam_data['Hours Studied'] <= 7)]
+
+# Highlight the data points of students who scored above the average exam score for the 4-7 hour study group
+above_avg_scores = study_group_df.loc[study_group_df['Exam Scores'] > study_group_avg]
+
+# Create scatter plot
+plt.figure(figsize=(10, 6))
+
+# Regular data points
+plt.scatter(exam_data['Hours Studied'], exam_data['Exam Scores'], color='darkblue', marker='^', s=50, label='Regular Data')
+
+# Highlighted data points
+plt.scatter(above_avg_scores['Hours Studied'], above_avg_scores['Exam Scores'], color='orange', marker='*', s=500, label='Above Average')
+
+# Add dotted line for average exam score
+plt.axhline(y=study_group_avg, color='purple', linestyle=':', label='Average for 4-7 Hours Studied')
+
+# Set x-axis and y-axis ticks
+plt.xticks(np.arange(2, 11, 2))
+plt.yticks(np.arange(60, 97, 6))
+
+# Add labels and title
+plt.xlabel('Hours Studied')
+plt.ylabel('Exam Scores')
+plt.title('Relationship Between Hours Studied and Exam Scores')
+
+# Add legend
+plt.legend(loc='lower center');
+```
+
+```{r q3-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+4. Create a scatterplot of $y = e^{-x}*sin(x)$ where the range of x is from 9 degrees to 359 degrees. Space the x-axis tick marks every 25 degrees starting at 9. Space the y-axis tick marks every 0.05. Highlight the data points where the function value is negative by using connecting those points using a brown dashdotted line. All point markers should be green pentagons filled only on the bottom half. The x-axis should be in degrees and not radians. Display a legend in the right center of the plot. Add appropriate axis labels and title.
+
+```{python q4, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
+
+
+```
+
+```{python q4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+# Generate x values from 9 to 359 degrees with a spacing of 5 degrees
+x_values = np.arange(9, 360, 5)
+x_radians = np.deg2rad(x_values)
+
+# Calculate y values using the custom function
+y_values = np.exp(-1*x_radians) * np.sin(x_radians)
+
+# Highlight the data points where the function value is negative
+negative_indices = np.where(y_values < 0)[0]
+
+# Create the scatter plot
+plt.figure(figsize=(10, 6))
+plt.scatter(x_values, y_values, marker='p', color='green', facecolors='none', label='Data Points')
+
+# Connect data points where the function value is negative with a brown dashdotted line
+plt.plot(x_values[negative_indices], y_values[negative_indices], color='brown', linestyle='-.', label='Negative Values')
+
+# Set x-axis and y-axis tick marks
+plt.xticks(np.arange(9, 360, 25))
+plt.yticks(np.arange(min(y_values), max(y_values)+0.05, 0.05))
+
+# Add labels and title
+plt.xlabel('Angle (Degrees)')
+plt.ylabel('Function Value')
+plt.title('Scatterplot of $y = e^{-x} \cdot \sin(x)$')
+
+plt.legend(loc = "center right");
+```
+
+```{r q4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+
+
