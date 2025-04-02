@@ -50,6 +50,10 @@ tags$div(
 )
 ```
 
+```{python empty, echo=FALSE}
+
+```
+
 ## Goals
 
 * To continue practicing making data visualizations.
