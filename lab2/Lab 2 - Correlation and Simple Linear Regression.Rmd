@@ -151,7 +151,7 @@ grade_this_code()
 
 
 ```{r q5, echo=FALSE}
-question("5. Is a linear relationship appropriate for describing the relationship between time and price? If not, what type of relationship might be more appropriate?",
+question("5. Is a linear relationship appropriate for describing the relationship between time and price? Why or why not?",
          answer("True", message = "This is an example of a time series, which should not be analyzed using linear regression."),
          answer("False", correct = TRUE),
          allow_retry = TRUE,
@@ -597,8 +597,7 @@ cal = epicurious_nd['calories']
 
 
 ```{python min, exercise = TRUE, message = FALSE, exercise.setup="minset"}
-init = [0]*2
-minimize(calc_SSE, x0 = init, args = (fat, cal), method = "BFGS").x
+minimize(calc_SSE, x0 = [0]*2, args = (fat, cal), method = "BFGS").x
 ```
 
 You should find that these estimates are very close to the numbers that we calculated using the equations above.
