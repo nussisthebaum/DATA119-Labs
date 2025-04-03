@@ -193,7 +193,7 @@ grade_this_code(
 )
 ```
 
-5. It is also helpful to discuss how many missing values the dataset has. Identify the percentage of missing values in each column.
+5. It is also helpful to discuss how many missing values the dataset has. Identify the percentage of missing values in the `protein` column.
 
 ```{python missing, exercise = TRUE, message = FALSE, exercise.eval = FALSE, exercise.setup="describe-setup"}
 
@@ -222,6 +222,8 @@ question("6. Is it appropriate to drop the missing data?",
   random_answer_order = FALSE,
   post_message = "Congratulations! You have found the second secret word: SAY.")
 ```
+
+A general rule of thumb is that if the observations are missing at random (i.e., the reason that they are missing is not tied to any other confounding variable) and less than 10% of the values are missing, you can simply discard the values. From the last question we learned that about **20%** of the values for `protein` are missing (the other variables are similar)--however, we won't learn tools for dealing with missing values until later. So, even though it's not the best idea, we are going to drop the rows with missing values.
 
 7. Drop the rows with missing values and save the remaining values in a new data frame called `epicurious_num_nd`.
 
