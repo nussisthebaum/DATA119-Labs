@@ -110,7 +110,7 @@ import pandas as pd
 
 # To download this file go to https://posit.ds.uchicago.edu/data119-lab1/www/epi_mini.csv
 
-epicurious = pd.read_csv("./data/epi_mini.csv")
+epicurious = pd.read_csv("./data/epi_mini.csv", index_col = 0)
 ```
 
 
@@ -150,19 +150,19 @@ grade_this_code(
 )
 ```
 
-3. Since many of the variables are binary variables indicating different facts about the recipes, let's discard most of them for now and focus on the numeric variables. Identify which of the variables are numeric (if you get stuck, check out the [data dictionary](https://www.kaggle.com/datasets/hugodarwood/epirecipes)). Remember from Data 118 that a variable can have numbers as data but not be numeric (eg 0, 1 to mean no, yes). Save a version of the dataset with only those variables as `epicurious_num`. Also include the recipe titles to use later.
+3. Remember from Data 118 that a variable can have numbers as data but not be numeric (eg 0, 1 to mean no, yes). We call these variables "binary". Since many of the variables are binary variables indicating different facts about the recipes, let's discard most of them for now and focus on the numeric variables. Identify which of the variables are numeric (if you get stuck, check out the [data dictionary](https://www.kaggle.com/datasets/hugodarwood/epirecipes)).  Save a version of the dataset with only those variables as `epicurious_num`. 
 
 ```{python filter, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 
 ```
 
 ```{python filter-solution, message = FALSE, warning = FALSE, echo = FALSE}
-epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
+epicurious_num = epicurious[['rating', 'calories', 'protein', 'fat', 'sodium']]
 ```
 
 ```{r filter-code-check, message = FALSE, warning = FALSE}
 grade_this({
-  if (identical(epicurious_num, epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']])) {
+  if (identical(epicurious_num, epicurious[['rating', 'calories', 'protein', 'fat', 'sodium']])) {
     pass("Secrets")
   }
   fail()
