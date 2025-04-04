@@ -45,14 +45,18 @@ tags$div(
 )
 ```
 
-```{python setup-packages, echo = FALSE}
-import numpy as np
-import math
-```    
-
 ## Goals
 
 The goal of this lab is to learn about common error messages and practice debugging your code.
+
+## Setup
+
+For this lab, we will be using the `numpy` and `math` modules.
+
+```{python setup-packages, exercise=TRUE, exercise.eval = FALSE}
+import numpy as np
+import math
+```
 
 ## What is a bug?
 
@@ -140,9 +144,11 @@ Typically includes:
 - a brief explanation
 - **traceback** - the context in which the exception occurred 
     - usually in the form of a few lines of code
-    - more common when you start to write functions (tomorrow!)
+    - more common when you write functions
 
-The exception type should give you clues as to what went wrong.
+The exception type should give you clues as to what went wrong. 
+
+Note: Because we are working in a Shiny environment there is also a line that says "Run reticulate::py_last_error() for details." You may ignore this, it is not relevant to you.
 
 ```{python exception1, exercise=TRUE, exercise.eval = FALSE}
 print(my_string)
@@ -172,6 +178,10 @@ We've already seen `NameError` and `TypeError`
 Can be useful to use functions like `type()` or `dtype()`
 - `type()` gives you the data type but, if used on a collection of data, will only give you the type of container (ie array, series, ...)
 - `dtype()` gives you the data type of the *elements* inside the container
+
+```{python types, exercise=TRUE, exercise.eval=FALSE}
+print(type("2016"), type(np.array([1, 2, 3])), np.array([1, 2, 3]).dtype)
+```
 
 ### Lookup Errors
 
@@ -278,9 +288,7 @@ def my_min(my_array):
             print("I made it into the if-statement")
             smallest = number
     return smallest
-```
 
-```{python logical4, exercise=TRUE, exercise.eval = FALSE}
 my_min(np.array([23,47,13,78]))
 ```
 
@@ -383,6 +391,7 @@ for num in numbers:
     if num % 2 == 0:
         even_sum = even_sum + num
 
+print(f"The sum of all even numbers in the list is: {even_sum}")
 ```
 
 ```{r q3-code-check, message = FALSE, warning = FALSE, echo = FALSE}
