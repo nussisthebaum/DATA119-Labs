@@ -46,15 +46,26 @@ tags$div(
 ```
 
 
+## Goals
+
+The goal of this lab is to practice reading documentation (and play around with visualization while we are at it).
+
+## Setup
+
+For this lab, we will be using the modules `numpy`, `pandas`, and `matplotlib`. 
+
+:::: {.notebox}
+::: {.center}
+**Note:**
+:::
+We tend to use the `pyplot` portion of `matplotlib` often, so I specifically import that section and give it the abbreviation `plt`. But, you should be aware that you do not have to load `matplotlib` in this way. You could also run `import matplotlib` or `import matplotlib as mpl` etc.
+:::
+
 ```{python setup-packages, echo = FALSE, message = FALSE, warning = FALSE}
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 ```
-
-## Goals
-
-The goal of this lab is to practice reading documentation (and play around with visualization while we are at it).
 
 ## Python Documentation
 
