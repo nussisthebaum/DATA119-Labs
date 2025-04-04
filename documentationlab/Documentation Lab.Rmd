@@ -58,7 +58,7 @@ For this lab, we will be using the modules `numpy`, `pandas`, and `matplotlib`.
 **Note:**
 :::
 We tend to use the `pyplot` portion of `matplotlib` often, so I specifically import that section and give it the abbreviation `plt`. But, you should be aware that you do not have to load `matplotlib` in this way. You could also run `import matplotlib` or `import matplotlib as mpl` etc. You can also import from different parts of `matplotlib` (which may be useful for this lab!).
-:::
+::::
 
 ```{python setup-packages, echo = FALSE, message = FALSE, warning = FALSE}
 import numpy as np
@@ -117,7 +117,7 @@ For each of the tasks below, use Google and documentation to find the correct fu
 **Note:**
 :::
 We are aware that you can use ChatGPT for this, but that would defeat the purpose of the activity which is less about figuring out small visualization details and more about sifting through the documentation and learning how to use Google effectively.
-:::
+::::
 
 1. Create a graph of y = arctan(x) where the range of x is from 12 degrees to 147 degrees. Space the x-axis tick marks every 8 degrees. Space the y-axis tick marks every 7 degrees. Make sure the plot is depicted with a dashed pink line that has arrows on each end. Both axes should be in degrees and not radians. Add appropriate axis labels and title.
 

@@ -101,7 +101,7 @@ a:hover {
 }
 
 .discussionbox {
-    background-color: #D6D6CE;  /* Light grey background */
+    background-color: #ddd;  /* Light red/pink background */
     border-left: 6px solid #800000; /* Dark red border */
     padding: 10px;
     margin: 20px 0;
@@ -120,6 +120,6 @@ a:hover {
     border-radius: 5px;
 }
 
-.notebox.center {
+.notebox .center {
     text-align: center;
 }

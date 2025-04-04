@@ -52,6 +52,8 @@ The goal of this lab is review some of what you've learned about coding in Pytho
 - Lists
 - Arrays
 - Dictionaries
+- Sets
+- Tuples
 
 # Storing Data in Python
 
@@ -74,7 +76,7 @@ In general you should use the simplest one that meets your needs...
 
 Sequences are a basic type of structure to group data. You don't need to import any additional libraries to use them.
 
-We will focus mostly on one type of sequence: **lists**! (**sets** and **tuples** are other useful types of sequences that you may want to investigate on your own)
+We will focus mostly on one type of sequence: **lists**! (**sets** and **tuples** are other useful types of sequences)
 
 A **list** is an ordered sequence of values that can be changed.
 
@@ -249,12 +251,13 @@ How do we do this? By using methods.
 
 *Methods* are particular built-in functions that work on objects in python. There are specific methods that work for all *list* objects!
 
-Methods take the form
+Methods take the form:
+
 ```python
 list.method()
 ```
 
-Built-in functions can also be applied to objects in python. Recall they take the form
+Built-in functions can also be applied to objects in python. Recall they take the form:
 
 ```python
 function_name(list)
@@ -290,8 +293,7 @@ School_location_og
 4. Append the number 2023 to our list and then view the list. Note even though the list contains only strings, I can append an integer as lists accept any data type.
 
 ```{python append4, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'append2'}
-School_locations.append(2023)
-School_locations
+
 ```
 
 ```{python append4-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -313,7 +315,7 @@ School_location_og
 
 Use online [documentation](https://docs.python.org/3/tutorial/datastructures.html)!
 
-Or use the built-in function ```dir()```   
+Or use the built-in function ```dir()```.
 
 ```{python dir, exercise=TRUE, exercise.eval = FALSE}
 print(dir(School_locations))
