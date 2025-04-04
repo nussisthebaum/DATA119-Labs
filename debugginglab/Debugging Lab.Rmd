@@ -153,7 +153,7 @@ The exception type should give you clues as to what went wrong.
 **Note:**
 :::
 Because we are working in a Shiny environment there is also a line that says "Run reticulate::py_last_error() for details." You may ignore this, it is not relevant to you.
-:::
+::::
 
 ```{python exception1, exercise=TRUE, exercise.eval = FALSE}
 print(my_string)
