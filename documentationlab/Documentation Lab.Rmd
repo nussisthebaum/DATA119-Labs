@@ -45,7 +45,6 @@ tags$div(
 )
 ```
 
-
 ## Goals
 
 The goal of this lab is to practice reading documentation (and play around with visualization while we are at it).
@@ -58,7 +57,7 @@ For this lab, we will be using the modules `numpy`, `pandas`, and `matplotlib`.
 ::: {.center}
 **Note:**
 :::
-We tend to use the `pyplot` portion of `matplotlib` often, so I specifically import that section and give it the abbreviation `plt`. But, you should be aware that you do not have to load `matplotlib` in this way. You could also run `import matplotlib` or `import matplotlib as mpl` etc.
+We tend to use the `pyplot` portion of `matplotlib` often, so I specifically import that section and give it the abbreviation `plt`. But, you should be aware that you do not have to load `matplotlib` in this way. You could also run `import matplotlib` or `import matplotlib as mpl` etc. You can also import from different parts of `matplotlib` (which may be useful for this lab!).
 :::
 
 ```{python setup-packages, echo = FALSE, message = FALSE, warning = FALSE}
@@ -113,7 +112,12 @@ Here is some documentation for specific functions. As you read, notice the diffe
 
 For each of the tasks below, use Google and documentation to find the correct function or method for your task as well as the correct arguments to that function or method. There are more than one potential solution to each task, so don't get to caught up on the 'correctness' of your solution.
 
-Note: We are aware that you can use ChatGPT for this, but that would defeat the purpose of the activity which is less about figuring out small visualization details and more about sifting through the documentation and learning how to use Google effectively.
+:::: {.notebox}
+::: {.center}
+**Note:**
+:::
+We are aware that you can use ChatGPT for this, but that would defeat the purpose of the activity which is less about figuring out small visualization details and more about sifting through the documentation and learning how to use Google effectively.
+:::
 
 1. Create a graph of y = arctan(x) where the range of x is from 12 degrees to 147 degrees. Space the x-axis tick marks every 8 degrees. Space the y-axis tick marks every 7 degrees. Make sure the plot is depicted with a dashed pink line that has arrows on each end. Both axes should be in degrees and not radians. Add appropriate axis labels and title.
 
@@ -132,20 +136,20 @@ y_radians = np.arctan(x_radians)
 y_degrees = np.rad2deg(y_radians)
 
 # Plot the graph
-plt.figure(figsize=(10, 6))
-plt.plot(x_degrees, y_degrees, 'm--')  # 'm--' means dashed pink line
+plt.figure(figsize=(10, 6));
+plt.plot(x_degrees, y_degrees, 'm--');  # 'm--' means dashed pink line
 
 # Add arrows
-plt.scatter([x_degrees[0]], [y_degrees[0]], color='m', s=100, marker=(3, 0, 270))  
-plt.scatter([x_degrees[-1]], [y_degrees[-1]], color='m', s=100, marker=(3, 0, 270)) # or marker = ">"
+plt.scatter([x_degrees[0]], [y_degrees[0]], color='m', s=100, marker=(3, 0, 270));  
+plt.scatter([x_degrees[-1]], [y_degrees[-1]], color='m', s=100, marker=(3, 0, 270)); # or marker = ">"
 
 # Set x-axis and y-axis tick marks
-plt.xticks(np.arange(10, 150, 8))
-plt.yticks(np.arange(0, max(y_degrees) + 7, 7))
+plt.xticks(np.arange(10, 150, 8));
+plt.yticks(np.arange(0, max(y_degrees) + 7, 7));
 
 # Add labels and title
-plt.xlabel('x (degrees)')
-plt.ylabel('y = arctan(x) (degrees)')
+plt.xlabel('x (degrees)');
+plt.ylabel('y = arctan(x) (degrees)');
 plt.title('Graph of y = arctan(x)');
 ```
 
@@ -182,15 +186,15 @@ norm = plt.Normalize(temp_data['Temperature'].min(), temp_data['Temperature'].ma
 colors = cm.coolwarm(norm(temp_data['Temperature']))
 
 # Create the bar chart
-plt.figure(figsize=(12, 6))
+plt.figure(figsize=(12, 6));
 bars = plt.bar(temp_data['Month'], temp_data['Temperature'], color=colors)
 
 # Set the y-axis tick marks
-plt.yticks(np.arange(1, max(temperatures) + 1, 2))
+plt.yticks(np.arange(1, max(temperatures) + 1, 2));
 
 # Add labels and title
-plt.xlabel('Month')
-plt.ylabel('Average Temperature (°C)')
+plt.xlabel('Month');
+plt.ylabel('Average Temperature (°C)');
 plt.title('Average Monthly Temperature');
 ```
 
@@ -198,7 +202,7 @@ plt.title('Average Monthly Temperature');
 grade_this_code()
 ```
 
-3. Create a scatter plot to visualize the relationship between the number of hours studied and the exam scores of a group of students. The data for the number of hours studied and exam scores is provided in a DataFrame. The x-axis should represent the number of hours studied with tick marks every 2 hours, and the y-axis should represent the exam scores starting at 60 and going up to 96, with tick marks every 6 points. Calculate the average exam score for students who studied between 4 and 7 hours. Highlight the data points of students who scored above the average exam score for the 4-7 hour study group by making their markers large orange stars. Make the other points smaller dark blue triangles. Display a legend in the bottom center of the plot to differentiate between the regular and highlighted data points. Add a dotted (not dashed) purple horizontal line to the plot representing the average exam score for the 4-7 hour study group. Add appropriate axis labels and title.
+3. Create a scatter plot to visualize the relationship between the number of hours studied and the exam scores of a group of students. The data for the number of hours studied and exam scores is provided in a DataFrame. The x-axis should represent the number of hours studied with tick marks every 2 hours, and the y-axis should represent the exam scores starting at 60 and going up to 96, with tick marks every 6 points. Calculate the average exam score for students who studied between 4 and 7 hours. Highlight the data points of students in the 4-7 hours group who scored above the average exam score for their group by making their markers large orange stars. Make the other points smaller dark blue triangles. Display a legend in the bottom center of the plot to differentiate between the regular and highlighted data points. Add a dotted (not dashed) purple horizontal line to the plot representing the average exam score for the 4-7 hour study group. Add appropriate axis labels and title.
 
 ```{python q3, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 exam_data = pd.DataFrame({
@@ -225,24 +229,24 @@ study_group_df = exam_data.loc[(exam_data['Hours Studied'] >= 4) & (exam_data['H
 above_avg_scores = study_group_df.loc[study_group_df['Exam Scores'] > study_group_avg]
 
 # Create scatter plot
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(10, 6));
 
 # Regular data points
-plt.scatter(exam_data['Hours Studied'], exam_data['Exam Scores'], color='darkblue', marker='^', s=50, label='Regular Data')
+plt.scatter(exam_data['Hours Studied'], exam_data['Exam Scores'], color='darkblue', marker='^', s=50, label='Regular Data');
 
 # Highlighted data points
-plt.scatter(above_avg_scores['Hours Studied'], above_avg_scores['Exam Scores'], color='orange', marker='*', s=500, label='Above Average')
+plt.scatter(above_avg_scores['Hours Studied'], above_avg_scores['Exam Scores'], color='orange', marker='*', s=500, label='Above Average');
 
 # Add dotted line for average exam score
-plt.axhline(y=study_group_avg, color='purple', linestyle=':', label='Average for 4-7 Hours Studied')
+plt.axhline(y=study_group_avg, color='purple', linestyle=':', label='Average for 4-7 Hours Studied');
 
 # Set x-axis and y-axis ticks
-plt.xticks(np.arange(2, 11, 2))
-plt.yticks(np.arange(60, 97, 6))
+plt.xticks(np.arange(2, 11, 2));
+plt.yticks(np.arange(60, 97, 6));
 
 # Add labels and title
-plt.xlabel('Hours Studied')
-plt.ylabel('Exam Scores')
+plt.xlabel('Hours Studied');
+plt.ylabel('Exam Scores');
 plt.title('Relationship Between Hours Studied and Exam Scores')
 
 # Add legend
