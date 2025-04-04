@@ -147,8 +147,8 @@ y_arrests = [...]
 ```
 
 ```{python sep-solution, message = FALSE, warning = FALSE, echo = FALSE}
-X_arrests = arrests['released_Yes']
-y_arrests = arrests[['year', 'age', 'checks', 'race_White', 'sex_Male', 'employed_Yes', 'citizen_Yes']]
+X_arrests = arrests[['year', 'age', 'checks', 'race_White', 'sex_Male', 'employed_Yes', 'citizen_Yes']]
+y_arrests = arrests['released_Yes']
 ```
 
 ```{r sep-code-check, message = FALSE, warning = FALSE}
@@ -158,8 +158,8 @@ grade_this_code()
 6. Now that you have familiarized yourself with the data, split the data into a 70% training set and a 30% training set using the [`train_test_split()` function from `sklearn`](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html). Read through the options in the documentation to find the argument that allows a 70/30 split. Note that when you use this function, you should be saving four things at the same time--the explanatory variables for the training and test sets, and the response variables for the training and test sets. When you're done, calculate summary statistics for the the explanatory variables for the training and test sets using `.describe()`. 
 
 ```{python setup3, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup2"}
-X_arrests = arrests['released_Yes']
-y_arrests = arrests[['year', 'age', 'checks', 'race_White', 'sex_Male', 'employed_Yes', 'citizen_Yes']]
+X_arrests = arrests[['year', 'age', 'checks', 'race_White', 'sex_Male', 'employed_Yes', 'citizen_Yes']]
+y_arrests = arrests['released_Yes']
 ```
 
 ```{python split, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
@@ -171,7 +171,7 @@ X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(___, ___, ___)
 ```{python split-solution, message = FALSE, warning = FALSE, echo = FALSE}
 import sklearn.model_selection
 
-X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(y_arrests, X_arrests, test_size = 0.3)
+X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(X_arrests, y_arrests, test_size = 0.3)
 
 X_tr.describe()
 X_ts.describe()
@@ -186,13 +186,13 @@ grade_this_code()
 ```{python split2, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
 import sklearn.model_selection
 
-X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(y_arrests, X_arrests, test_size = 0.3, random_state = 1040)
+X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(X_arrests, y_arrests, test_size = 0.3, random_state = 1040)
 ```
 
 8. Now, using your training set, fit a logistic regression model. You will be using the `Logit()` function from `statsmodels`--you can review the [documentation here](https://www.statsmodels.org/stable/examples/notebooks/generated/discrete_choice_overview.html#Logit-Model), but the syntax will be almost identical to what we used with linear regression. Fit a model predicting whether an individual is released with a summons using all of the explanatory variables. 
 
 ```{python setup4, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup3"}
-X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(y_arrests, X_arrests, test_size = 0.3, random_state = 1040)
+X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(X_arrests, y_arrests, test_size = 0.3, random_state = 1040)
 ```
 
 ```{python mod1, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
@@ -216,6 +216,7 @@ grade_this_code()
 ```{python setup5, exercise = FALSE, message = TRUE, echo=TRUE, exercise.setup="setup4"}
 X_tr = sm.add_constant(X_tr)
 model1 = sm.Logit(y_tr, X_tr).fit()
+cm1 = model1.pred_table()
 ```
 
 ```{python sum, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
@@ -593,6 +594,3 @@ grade_this_code()
   p9.geom_line() + 
   p9.scale_x_reverse())
 ```
-
-
-
