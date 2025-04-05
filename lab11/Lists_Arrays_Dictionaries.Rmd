@@ -771,13 +771,13 @@ We can create a dictionary with curly brackets "{}"
 
 Entries of a dictionary are of the form "key: value"
 
-```{python}
+```{python likert, exercise=TRUE, exercise.eval = FALSE}
 survey_dict = {0: "Strongly Disagree", 1: "Disagree", 2: "No opinion", 3: "Agree", 4: "Strongly Agree"}
 ```
 
 We can access values of a dictionary by their key. (This is why all keys must be unique!)
 
-```{python}
+```{python keys, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert"}
 survey_dict[1]
 ```
 
@@ -789,98 +789,110 @@ A few useful operations with dictionaries:
 
  - Delete an entry
 
-Add and delete pairs!
+We can delete pairs:
 
-```{python}
+```{python delkeys, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert"}
 del survey_dict[1]
-```
-
-```{python}
 survey_dict
 ```
 
-```{python}
-#this adds a key-value pair
+Or add new pairs:
+
+```{python addkeys, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "delkeys"}
 survey_dict['new_key'] = 'new value'
-```
-
-```{python}
 survey_dict
 ```
 
-Note we can also determine if keys are contained in the dictionary
+We can also determine if keys are contained in the dictionary
 
-```{python}
+```{python findkeys1, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "addkeys"}
 3 in survey_dict
 ```
 
-```{python}
+```{python findkeys2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "addkeys"}
 "Disagree" in survey_dict
 ```
 
-```{python}
+```{python findkeys3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "addkeys"}
 'new_key' in survey_dict
 ```
 
-Keep in mind, keys do not all need to be the same type..although it may make more sense to keep them that way.
+Keep in mind, keys do not all need to be the same type...although it may make more sense to keep them that way.
 
-```{python}
+```{python likert2, exercise=TRUE, exercise.eval = FALSE}
 survey_dict_2 = {"Strongly Disagree": 0 , "Disagree": 1 , 2: "No opinion", 3: "Agree", 4: "Strongly Agree"}
 ```
 
-```{python}
+```{python likert3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert2"}
 survey_dict_2["Disagree"]
 ```
 
-```{python}
+```{python likert4, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert2"}
 list(survey_dict_2)
 ```
 
 ### Dictionary Methods
 
-There are methods that you can use on dictionaries, just like with lists and arrays. Here are a few.
+There are methods that you can use on dictionaries, just like with lists and arrays. Here are a few:
 
-```{python}
+```{python methods, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert2"}
 print(dir(survey_dict_2))
 ```
 
-```{python}
+```{python methods2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert2"}
 survey_dict.keys()
 ```
 
-```{python}
-survey_dict
+```{python methods3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert2"}
+survey_dict.items()
 ```
 
-## ✏ <mark style="background-color: Thistle">Working with Dictionaries: Short Exercise</mark>
+## Working with Dictionaries
 
 Below is a dictionary containing total number of homicides in the United States in 2021, by state. (Published by Statista Research Department, Oct 14, 2022). Note Washington D.C. is included as 'District of Columbia'.
 
-1. Pick a few states of interest and find their homicide number (use code here...do not just manually search the dictionary!)
-
-
-2. Find the number of keys in the dictionary. Does this imply all 50 states are included here?
-
-
-3. What are some limitations to this data?
-
-```{python}
+```{python homdict, exercise=TRUE, exercise.eval = FALSE}
 homicide_dict = {'Texas': 2064, 'North Carolina': 928, 'Ohio': 824, 'Michigan': 747, 'Georgia': 728, 'Tennessee': 672, 'Missouri': 593, 'Virginia': 562, 'South Carolina': 548, 'Illinois': 514, 'Pennsylvania': 510, 'Louisiana': 447, 'Indiana': 438, 'Alabama': 370, 'Kentucky': 365, 'Colorado': 358, 'Washington': 325, 'Arkansas': 321, 'Wisconsin': 315, 'Oklahoma': 284, 'Nevada': 232, 'Minnesota': 203, 'Arizona': 190, 'Oregon': 188, 'New Mexico': 169, 'Mississippi': 149, 'Connecticut': 148, 'Maryland': 138, 'New Jersey': 137, 'Massachusetts': 132, 'New York': 124, 'California': 123, 'District of Columbia': 109, 'West Virginia': 95, 'Delaware': 94, 'Kansas': 87, 'Utah': 85, 'Iowa': 70, 'Rhode Island': 38, 'Idaho': 36, 'Montana': 31, 'South Dakota': 26, 'Nebraska': 25, 'Alaska': 18, 'Maine': 18, 'Wyoming': 17, 'New Hampshire': 14, 'North Dakota': 14, 'Vermont': 8, 'Hawaii': 6}
 ```
 
-```{python}
-#code here
+Pick a few states of interest and find their homicide number (use code here...do not just manually search the dictionary!)
+
+```{python homdict2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "homdict"}
+
 ```
+
+20.  Find the number of keys in the dictionary. Does this imply all 50 states are included here?
+
+```{python dict, exercise=TRUE, exercise.eval = FALSE, exercise.setup='homdict'}
+
+```
+
+```{python dict-solution, message = FALSE, warning = FALSE, echo = FALSE}
+len(homicide_dict.keys())
+```
+
+```{r dict-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+What are some limitations to this data?
+::::
+
 
 ## Grouping Data with DataFrames
 
-One of the most commonly used collections of data in data science is the DataFrame. DataFrames come from the pandas library which we will talk in more detail about when you get to campus! For now, here is a quick introduction.
+One of the most commonly used collections of data in data science is the DataFrame. DataFrames come from the `pandas` library which we will talk in more detail in later labs! For now, here is a quick introduction.
 
 ### Different objects for different goals
 
 There are different collections of data in Python because each works well in different contexts. We've already talked about lists and arrays:
 
-Method 1: (Using lists from python (no import numpy needed))
+Method 1: (Using lists from python (no import `numpy` needed))
 - list of lists
 - Hard to manipulate
 
@@ -892,11 +904,18 @@ Method 2: (Using np.array)
 
 DataFrames are useful if we have multiple observations of data of different types.
 
-Imagine you are conducting a survey. On this survey you ask about a person's height in inches, favorite fruit, and whether they own a dog. Each of these pieces of information would be stored in Python using a different data type (✏ As an exercise, what data type would you use for each?)
+Imagine you are conducting a survey. On this survey you ask about a person's height in inches, favorite fruit, and whether they own a dog. Each of these pieces of information would be stored in Python using a different data type.
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+As an exercise, what data type would you use for each?
+::::
 
 Each person that you survey provides a different 'observation' of those 3 pieces of information. Picture a DataFrame as a table with rows and columns. Each row corresponds to a different person being surveyed and each column corresponds to their answer to a particular question. Each column contains the same data type within that column but individual columns can be of different data types. Here are some useful elements of DataFrames:
 
-Method 3: (Using pandas DataFrames)
+Method 3: (Using `pandas` DataFrames)
 - Different columns can have different types
 - Easy to manipulate by name
 - row and column names built in!
@@ -909,7 +928,7 @@ Suppose we take a survey of student ID, favorite number, and favorite food.
 
 We can store this data as a list of lists, a 2-dimensional array, or a DataFrame.
 
-```{python}
+```{python lofl, exercise=TRUE, exercise.eval = FALSE}
 list_of_lists=[['Pizza','Pierogi','Ramen'],  #fav food
                [0,22,-3.1415],  #fav number
                [1234, 4456, 5882]]   #Student ID
@@ -917,14 +936,13 @@ list_of_lists=[['Pizza','Pierogi','Ramen'],  #fav food
 list_of_lists
 ```
 
-```{python}
-#This is a 2D array
+```{python ar2d, exercise=TRUE, exercise.eval = FALSE}
 np.array([['Pizza','Pierogi','Ramen'],  #fav food
                [0,22,-3.1415],  #fav number
                [1234, 4456, 5882]]) #student id
 ```
 
-```{python}
+```{python datfram, exercise=TRUE, exercise.eval = FALSE}
 #ignore this code for now!
 import pandas as pd
 df = pd.DataFrame(
