@@ -1,5 +1,5 @@
 ---
-title: "Data 119: Sequences of Data"
+title: "Data 118: LabX"
 output: 
    learnr::tutorial:
       css: css/custom-styles.css
@@ -40,12 +40,12 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Python Data Storage Review", class = "pageTitle")
+    tags$h1("Python Data Storage", class = "pageTitle")
   )
 )
 ```
 
-# Goals
+## Goals
 
 The goal of this lab is review some of what you've learned about coding in Python. We will cover:
 
@@ -55,7 +55,7 @@ The goal of this lab is review some of what you've learned about coding in Pytho
 - Sets
 - Tuples
 
-# Storing Data in Python
+## Storing Data in Python
 
 Python and its libraries provide many ways to group data together.   Some important ones:
 
@@ -78,25 +78,28 @@ Sequences are a basic type of structure to group data. You don't need to import 
 
 We will focus mostly on one type of sequence: **lists**! (**sets** and **tuples** are other useful types of sequences)
 
+
+### Lists
+
 A **list** is an ordered sequence of values that can be changed.
 
 You can create a list by using square brackets "[]". Each element is separated by commas.
 
-### Let's create a list!
+#### Let's create a list!
 
 ```{python list1, exercise=TRUE, exercise.eval = FALSE}
 School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
 School_locations
 ```
 
-#### Lists can have different data types!
+##### Lists can have different data types!
 
 ```{python list2, exercise=TRUE, exercise.eval = FALSE}
 Random_stuff = ["California", 38, 3.14159] #A string, int, float
 Random_stuff
 ```
 
-### Built-in Functions
+#### Built-in Functions
 
 Recall Python has built-in functions of the form `function_name()`
 A very common one is the `print()` function!
@@ -119,7 +122,7 @@ len(Random_stuff)
 ```
 
 
-## Accessing values from a list
+#### Accessing values from a list
 
 
 Each element of a sequence is assigned an index corresponding to its position where **indices start at 0**. We can access an element by calling the sequence or list and putting in square brackets the element we want!
@@ -161,7 +164,7 @@ question(
 ```
 
 
-### List Slicing
+#### List Slicing
 
 We can also extract a "slice" of a list.
 
@@ -203,7 +206,7 @@ question(
 ```
 
 
-### Default Settings: List slicing
+#### Default Settings: List slicing
 
 It might be useful to take out every even index from a list.
 
@@ -236,7 +239,7 @@ question(
 )
 ```
 
-### Operations and manipulation on lists
+#### Operations and manipulation on lists
 
 We can: 
 - Insert items into lists!
@@ -261,7 +264,7 @@ Built-in functions can also be applied to objects in python. Recall they take th
 function_name(list)
 ```
 
-### Appending to a list
+#### Appending to a list
 
 You can append an item to the end of a list:
 
@@ -309,7 +312,7 @@ This does not change our copy of the list!
 School_location_og
 ```
 
-### How do we find methods?
+#### How do we find methods?
 
 Use online [documentation](https://docs.python.org/3/tutorial/datastructures.html)!
 
@@ -321,7 +324,7 @@ print(dir(School_locations))
 print(dir(list))
 ```
 
-### Let's play with lists!
+#### Let's play with lists!
 
 Create a list with at least 4 items. (Recall items can be a string, int, float.) Name the list `my_list`.
 
@@ -382,7 +385,7 @@ question(
 )
 ```
 
-1. Given list ```number_list = [1,2,3,4,5,6,7]```, create a new list ```new_list = [6,4,2]``` in 2 lines of code. 
+9. Given list ```number_list = [1,2,3,4,5,6,7]```, create a new list ```new_list = [6,4,2]``` in 2 lines of code. 
 
 ```{python ex5, exercise=TRUE, exercise.eval = TRUE}
 number_list = [1,2,3,4,5,6,7]
@@ -548,7 +551,7 @@ We can sum arrays, but we cannot always sum a list because a list can have diffe
 print(prime50_array.sum())
 ```
 
-## Numpy also has many useful built-in functions to use on arrays!
+### Numpy also has many useful built-in functions to use on arrays!
 
 Notice there is often more than one way to do a common operation!
 
@@ -565,7 +568,7 @@ print(np.mean(prime50_array)) #mean function
 ```
 
 
-### We can easily create arrays by specifying a range.
+#### We can easily create arrays by specifying a range.
 
 Calling ```np.arange()``` creates a half-closed interval \[start,end) - the end value is not included
 
@@ -585,7 +588,7 @@ We can specify a step size we want to increment by. If we leave out the step, th
 print(np.arange(1,31,2))
 ```
 
-## Another reason why arrays are useful!
+### Another reason why arrays are useful!
 
 Element-wise operations!
 
@@ -684,7 +687,7 @@ arr_2d[:,2] #all of the rows, column at index 2
 arr_2d[0,1] #element with row index 0 and column index 1
 ```
 
-## Working with Arrays:
+### Let's Play with Arrays!
 
 Use the array below to answer the following questions:
 
@@ -847,7 +850,7 @@ survey_dict.keys()
 survey_dict.items()
 ```
 
-## Working with Dictionaries
+### Working with Dictionaries
 
 Below is a dictionary containing total number of homicides in the United States in 2021, by state. (Published by Statista Research Department, Oct 14, 2022). Note Washington D.C. is included as 'District of Columbia'.
 
@@ -861,7 +864,7 @@ Pick a few states of interest and find their homicide number (use code here...do
 
 ```
 
-1.   Find the number of keys in the dictionary.
+20.   Find the number of keys in the dictionary.
 
 ```{python dict, exercise=TRUE, exercise.eval = FALSE, exercise.setup='homdict'}
 
