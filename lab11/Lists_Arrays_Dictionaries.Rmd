@@ -861,7 +861,7 @@ Pick a few states of interest and find their homicide number (use code here...do
 
 ```
 
-20.  Find the number of keys in the dictionary. Does this imply all 50 states are included here?
+1.   Find the number of keys in the dictionary.
 
 ```{python dict, exercise=TRUE, exercise.eval = FALSE, exercise.setup='homdict'}
 
@@ -880,7 +880,8 @@ grade_this_code()
 ::: {.center}
 **Discuss with a neighbor (or on Ed):**
 :::
-What are some limitations to this data?
+1. Does this imply all 50 states are included here?
+2. What are some limitations to this data?
 ::::
 
 
