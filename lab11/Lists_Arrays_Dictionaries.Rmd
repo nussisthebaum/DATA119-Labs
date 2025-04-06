@@ -373,7 +373,7 @@ grade_this_code()
 
 8. 
 
-```{r q3, echo=FALSE}
+```{r q4, echo=FALSE}
 question(
   "Did your above operations change your original list, or create a copy?",
   answer("Change Original", correct = TRUE),
