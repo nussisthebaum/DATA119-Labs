@@ -1,5 +1,5 @@
 ---
-title: "Lists, Arrays, and Dictionaries Lab"
+title: "Data 119: Sequences of Data"
 output: 
    learnr::tutorial:
       css: css/custom-styles.css
@@ -40,7 +40,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Data 119 - Python Data Storage Review", class = "pageTitle")
+    tags$h1("Python Data Storage Review", class = "pageTitle")
   )
 )
 ```
