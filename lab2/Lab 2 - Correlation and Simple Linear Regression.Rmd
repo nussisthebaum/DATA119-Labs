@@ -187,10 +187,10 @@ grade_this_code()
 question("7. Is a linear relationship appropriate for describing the relationship between `Year` and `Pairs`? If not, what type of relationship might be more appropriate?",
          answer("Linear", message = "Look closely at the graph, all of the points below the line are clustered together, and all of the points above the line are clustered together."),
          answer("Quadratic"),
-         answer("Exponential", correct = TRUE,
+         answer("Exponential", correct = TRUE),
          allow_retry = TRUE,
          random_answer_order = TRUE,
-         post_message = "This is an example of an exponential curve, which are often used to model growth and decay.Also, congratulations! You have found the third secret word: MOON."))
+         post_message = "This is an example of an exponential curve, which are often used to model growth and decay.Also, congratulations! You have found the third secret word: MOON.")
 ```
 
 Now to confirm the value of the correlation between `Year` and `Pairs` you can use `.corr()`. Run this cell to get the value of $r$.
