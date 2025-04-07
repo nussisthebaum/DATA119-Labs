@@ -58,5 +58,5 @@ rsconnect/
 *.ds_Store
 
 ## Temporary Shiny Files
-*_files/*
+*_files/
 *.html
