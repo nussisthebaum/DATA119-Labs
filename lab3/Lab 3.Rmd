@@ -46,7 +46,8 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Assumption Checking and Multiple Linear Regression", class = "pageTitle")
+    tags$h1("Assumption Checking and Multiple Linear Regression",
+    class = "pageTitle")
   )
 )
 ```
@@ -145,7 +146,7 @@ question("4. Which object do you think contains the residuals for this model?",
          answer("`fittedvalues`", message = "We do need the predicted values to calculate the residuals, but we also need the observed values as well."),
          answer("`resid_pearson`", message = "Close! `resid_pearson` is actually a slightly different kind of residual, which you may learn more about in DATA213."),
          answer("`df_resid`", message = "You might think `df_resid` stands for DataFrame of residuals, but it is actually a different quantity called the degrees of freedom of the residuals."), 
-         allow_retry = TRUE, 
+         allow_retry = TRUE,
          random_answer_order = TRUE)
 ```
 
@@ -188,7 +189,7 @@ model1_df['Residuals'] = model1.resid
 grade_this_code()
 ```
 
-6. Now, using `model1_df`, edit the cell to produce the diagnostic plots (a scatterplot of residuals against the predicted values, and a histogram of the residuals).
+6. Now, using `model1_df`, edit the cell to produce the diagnostic plots (a scatterplot of residuals against the predicted (aka fitted) values, and a histogram of the residuals).
 
 ```{python setup2_5, exercise=FALSE, echo=FALSE, exercise.setup="setup2"}
 model1_df = model1.fittedvalues.to_frame(name = 'Fitted')
@@ -226,7 +227,7 @@ question("7. Describe the distribution of the residuals.",
          answer("Symmetric"),
          answer("Right skewed", correct=TRUE, message="The linear regression assumption of symmetric residuals is violated."),
          answer("Left skewed", message = "The distribution is skewed, but look at the direction of the tail."), 
-         allow_retry = TRUE, 
+         allow_retry = TRUE,
          random_answer_order = TRUE,
          post_message = "Congratulations! You have found the second secret word: SEPARATE.")
 ```
@@ -253,7 +254,7 @@ AirBnB_prices['logRealSum'] = np.log(AirBnB_prices['realSum'])
 grade_this_code()
 ```
 
-This distribution is far less skewed! The center and spread have also changed since we are working on a new scale, but is the shape that we are primarily concerned with. There are still a handful of extreme values, but nothing quite as bad as before.
+This distribution is far less skewed! The center and spread have also changed since we are working on a new scale, but it is the shape that we are primarily concerned with. There are still a handful of extreme values, but nothing quite as bad as before.
 
 9. Now, edit this cell to fit a new model predicting `logRealSum` from `dist`. Make a note of the $R^2$. Examine the diagnostic plots from the new model, which you should call `model2`.
 
@@ -300,9 +301,9 @@ grade_this_code()
 ```
 
 ```{r q10, echo=FALSE}
-question("10. True or False: A linear model is more appropriate for these two variables.",
-         answer("True", correct=TRUE),
-         answer("False"), 
+question("10. True or False: A linear model is more appropriate for these two variables than the previous variables.",
+         answer("True", correct = TRUE),
+         answer("False"),
          allow_retry = TRUE)
 ```
 
@@ -317,9 +318,9 @@ Transforming the response variable is one common technique for addressing violat
 ```{r q11, echo=FALSE}
 question("Given $H_0: \\beta_{dist} = 0$, what is an appropriate alternative hypothesis?",
          answer("$H_A: \\beta_{dist} > 0$"),
-         answer("$H_A: \\beta_{dist} \\neq 0$", correct=TRUE),
-         answer("$H_A: \\beta_{dist} < 0$"), 
-         allow_retry = TRUE, 
+         answer("$H_A: \\beta_{dist} \\neq 0$", correct = TRUE),
+         answer("$H_A: \\beta_{dist} < 0$"),
+         allow_retry = TRUE,
          post_message = "Congratulations! You have found the third secret word: BACKGROUND.")
 ```
 
@@ -362,13 +363,13 @@ AirBnB_prices.columns
 ```
 
 ```{r q14, echo=FALSE}
-question("Some variables are likely collinear--can you identify any pairs that might give you trouble later on? Select ALL that apply.",
-         answer("`attr_index` and `attr_index_norm`", correct=TRUE),
-         answer("`rest_index` and `rest_index_norm`", correct=TRUE),
-         answer("`person_capacity` and `bedrooms`", correct=TRUE),
-       answer("`cleanliness_rating` and `guest_satisfaction_overall`", correct=TRUE),
+question_checkbox("Some variables are likely collinear--can you identify any pairs that might give you trouble later on? Select ALL that apply.",
+         answer("`attr_index` and `attr_index_norm`", correct = TRUE),
+         answer("`rest_index` and `rest_index_norm`", correct = TRUE),
+         answer("`person_capacity` and `bedrooms`", correct = TRUE),
+         answer("`cleanliness_rating` and `guest_satisfaction_overall`", correct = TRUE),
          answer("`dist` and `metro_dist`"),
-         answer("`lng` and `lat`"),         
+         answer("`lng` and `lat`"),
          allow_retry = TRUE,
          random_answer_order = TRUE)
 ```
@@ -387,7 +388,7 @@ round(AirBnB_prices[['logRealSum', 'person_capacity', 'cleanliness_rating', 'gue
 grade_this_code()
 ```
 
-Take a closer look at the correlation matrix--are the results consistent with your answer to question 14? You may have located even more problematic pairings (anything over 0.8 is concerning), but based on the documentation, you should have found that `attr_index` and `attr_index_norm`, as well as `rest_index` and `rest_index_norm`, are just normalized versions of each other. To avoid collinearity issues, we should only include one version. 
+Take a closer look at the correlation matrix--are the results consistent with your answer to question 14? You may have located even more problematic pairings (anything over 0.8 is concerning), but based on the documentation, you should have found that `attr_index` and `attr_index_norm`, as well as `rest_index` and `rest_index_norm`, are just normalized versions of each other. To avoid collinearity issues, we should only include one version of each. 
 
 We are not covering multicollinearity in this lab (instead, see Lab 3.5), but it is important to know that you can address it by considering the context of your variables before you even select the model! So, be careful with your data dictionaries and pay attention to the variables that you are working with. 
 
@@ -402,13 +403,21 @@ model3.summary()
 ```
 
 ```{r q16, echo=FALSE}
-question("What is the adjusted $R^2$?",
-         answer("0.141", message = "That is the $R^2$! Don't forget to look for the adjusted $R^2$."),
-         answer("0.125", correct=TRUE),
-         answer("1.34e-13"),
-         answer("1.76e+03"),
-         allow_retry = TRUE,
-         random_answer_order = TRUE)
+question_numeric(
+  "What is the adjusted $R^2$? Round to 3 decimal places",
+  answer_fn(function(value) {
+    if (value == 0.141) {
+      incorrect("That is the $R^2$! Don't forget to look for the adjusted $R^2$.")
+    } else if (value == 0.125) {
+      correct("Great job!")
+    }
+    else {
+      incorrect("Not quite, try again! Remember your answer should be as a decimal, not a percent, and have 3 decimal places.")
+    }
+  }),
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
 17. Run this cell to look at the diagnostic plots of this model.
@@ -430,28 +439,34 @@ model3_df['Residuals'] = model3.resid
 ```{r q18, echo=FALSE}
 question("18. True or False: The linear model is appropriate for this dataset.",
          answer("True"),
-         answer("False", correct=TRUE),
+         answer("False", correct = TRUE),
          allow_retry = TRUE)
 ```
 
-19. Don't forget that that the transformed response had much better diagnostic plots for the simple linear regression! Run the cell below to predict `logRealSum`.
+18.  Don't forget that the transformed response had much better diagnostic plots for the simple linear regression! Run the cell below to predict `logRealSum`.
 
 ```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup4"}
 model4 = sm.OLS(Y2, X3).fit()
 model4.summary()
 ```
 
-```{r q20, echo=FALSE}
-question("20. What is the adjusted $R^2$?",
-         answer("0.453"),
-         answer("0.443", correct=TRUE),
-         answer("0.510"),
-         answer("0.629"),
-         allow_retry = TRUE,
-         random_answer_order = TRUE)
+```{r q19, echo=FALSE}
+question_numeric(
+  "What is the adjusted $R^2$? Round to 3 decimal places",
+  answer_fn(function(value) {
+    if (value == 0.443) {
+      correct("Great job!")
+    }
+    else {
+      incorrect("Not quite, try again! Remember your answer should be as a decimal, not a percent, and have 3 decimal places.")
+    }
+  }),
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
-21. Redo the diagnostic plots (use the code above as a reference if you need!).
+19. Redo the diagnostic plots (use the code above as a reference if you need!).
 
 ```{python diagnostic_plots_log, exercise=TRUE, message = FALSE, exercise.setup="setup5"}
 
@@ -475,9 +490,9 @@ model4_df['Residuals'] = model4.resid
 grade_this_code()
 ```
 
-```{r q22, echo=FALSE}
-question("22. True or False: A linear model is more appropriate for this data set.",
-         answer("True", correct=TRUE),
+```{r q20, echo=FALSE}
+question("20. True or False: A linear model is more appropriate for this data set.",
+         answer("True", correct = TRUE),
          answer("False"),
          allow_retry = TRUE,
          post_message = "Congratulations! You have found the fourth secret word: SAMPLE.")
@@ -493,8 +508,8 @@ Use the summary of the multiple linear regression model to answer the following 
 model4.summary()
 ```
 
-```{r q23, echo=FALSE}
-question("23. Which of the variables are significant at the 5% level? Select ALL that apply.",
+```{r q21, echo=FALSE}
+question_checkbox("21. Which of the variables are significant at the 5% level? Select ALL that apply.",
          answer("`const`", correct = TRUE),
          answer("`person_capacity`", correct = TRUE),
          answer("`cleanliness_rating`"),
@@ -510,14 +525,13 @@ question("23. Which of the variables are significant at the 5% level? Select ALL
          post_message = "Congratulations! You have found the fifth and final secret word: SHAPE.")
 ```
 
-```{r q24, echo=FALSE}
-question("24. For every one bedroom increase, log price is expected to  ",
+```{r q22, echo=FALSE}
+question("22. For every one bedroom increase, log price is expected to  ",
          answer("increase by 0.4324.", correct = TRUE),
          answer("decrease by 0.4324.", message = "Be careful of the sign!"),
          answer("increase by 0.058.", message = "That's the standard error!"),
          answer("decrease by 0.058."),
          allow_retry = TRUE,
-         random_answer_order = TRUE
-         )
+         random_answer_order = TRUE)
 ```
 
