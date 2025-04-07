@@ -514,7 +514,7 @@ model3 = sm.OLS(Y, X3).fit()
 model3.summary()
 ```
 
-```{r q18, echo=FALSE}
+```{r q20, echo=FALSE}
 question_numeric(
   "What is the adjusted $R^2$? Round to 3 decimal places",
   answer_fn(function(value) {
