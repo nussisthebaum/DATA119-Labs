@@ -183,10 +183,10 @@ question(
     "Non-Normal Residuals" = "non_normal"
   ),
   list(
-    good = htmltools::HTML('<img src="good_fit_residual_plot.png" height="100">'),
-    nonlinear = htmltools::HTML('<img src="non-linearity_residual_plot.png" height="100">'),
-    hetero = htmltools::HTML('<img src="heteroscedasticity_residual_plot.png" height="100">'),
-    non_normal = htmltools::HTML('<img src="non-normal_residuals_residual_plot.png" height="100">')
+    answer("Good Fit", value = "good", label = HTML('<img src="./images/good_fit_residual_plot.png" height="100">')),
+    answer("Non-Linearity", value = "nonlinear", label = HTML('<img src="./images/non-linearity_residual_plot.png" height="100">')),
+    answer("Heteroscedasticity", value = "hetero", label = HTML('<img src="./images/heteroscedasticity_residual_plot.png" height="100">')),
+    answer("Non-Normal", value = "non_normal", label = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="100">'))
   ),
   correct = TRUE,
   allow_retry = TRUE,
@@ -196,7 +196,7 @@ question(
 
 ```{r q6, echo = FALSE}
 question(
-  "Match the type of outlier to its corresponding plot:",
+  "6. Match the type of outlier to its corresponding plot:",
   type = "matching",
   list(
     "High Leverage Points" = "leverage",
@@ -205,10 +205,10 @@ question(
     "Clustered Outliers" = "cluster"
   ),
   list(
-    leverage = htmltools::HTML('<img src="high_leverage_points_residual_plot.png" height="100">'),
-    residuals = htmltools::HTML('<img src="large_residuals_residual_plot.png" height="100">'),
-    both = htmltools::HTML('<img src="both_high_leverage_&_large_residuals_residual_plot.png" height="100">'),
-    cluster = htmltools::HTML('<img src="clustered_outliers_residual_plot.png" height="100">')
+    answer("High Leverage", value = "leverage", label = HTML('<img src="./images/high_leverage_points_residual_plot.png" height="100">')),
+    answer("Large Residuals", value = "residuals", label = HTML('<img src="./images/large_residuals_residual_plot.png" height="100">')),
+    answer("Both", value = "both", label = HTML('<img src="./images/both_high_leverage_&_large_residuals_residual_plot.png" height="100">')),
+    answer("Clustered", value = "cluster", label = HTML('<img src="./images/clustered_outliers_residual_plot.png" height="100">'))
   ),
   correct = TRUE,
   allow_retry = TRUE,
@@ -221,9 +221,8 @@ question(
 question_checkbox(
   HTML("
     7. Which issues are present in the residual plot shown?<br><br>
-    <img src='non_normal_large_outliers_residual_plot.png' height='200px'>
+    <img src='./images/non_normal_large_outliers_residual_plot.png' height='200px'>
   "),
-  type = "multiple",
   answer("Non-Normal Residuals", correct = TRUE),
   answer("Large Residuals", correct = TRUE),
   answer("Heteroscedasticity"),
@@ -238,7 +237,7 @@ question_checkbox(
 ```{r q8, echo = FALSE}
 question_checkbox(
   HTML("8. Which issues are present in this residual plot shown?<br><br>
-    <img src='exponential_combo_residual_plot.png' height='200px'>"),
+    <img src='./images/exponential_combo_residual_plot.png' height='200px'>"),
   answer("Non-Linearity", correct = TRUE),
   answer("Heteroscedasticity", correct = TRUE),
   answer("Non-Normal Residuals"),
