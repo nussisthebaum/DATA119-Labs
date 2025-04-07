@@ -177,30 +177,75 @@ Before we create our own diagnostic plots, let's review the linear regression as
 Practice looking for these issues in diagnostic plots by answering the following questions:
 
 ```{r q5, echo = FALSE}
+htmltools::tagList(
+  htmltools::tags$div(
+    style = "display: flex; gap: 20px;",
+    htmltools::tags$figure(
+      htmltools::tags$img(src = "./images/good_fit_residual_plot.png", height = "100"),
+      htmltools::tags$figcaption("Plot A")
+    ),
+    htmltools::tags$figure(
+      htmltools::tags$img(src = "./images/non-linearity_residual_plot.png", height = "100"),
+      htmltools::tags$figcaption("Plot B")
+    ),
+    htmltools::tags$figure(
+      htmltools::tags$img(src = "./images/heteroscedasticity_residual_plot.png", height = "100"),
+      htmltools::tags$figcaption("Plot C")
+    ),
+    htmltools::tags$figure(
+      htmltools::tags$img(src = "./images/non-normal_residuals_residual_plot.png", height = "100"),
+      htmltools::tags$figcaption("Plot D")
+    )
+  )
+)
+
 question(
-  "5. Match each residual plot to the issue it demonstrates:",
+  "5. Match each plot to the regression issue it most clearly illustrates:",
   type = "matching",
   list(
-    htmltools::HTML('<img src="./images/good_fit_residual_plot.png" height="100">') = "Good Fit (no violations)",
-    htmltools::HTML('<img src="./images/non-linearity_residual_plot.png" height="100">') = "Non-Linearity",
-    htmltools::HTML('<img src="./images/heteroscedasticity_residual_plot.png" height="100">') = "Heteroscedasticity",
-    htmltools::HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="100">') = "Non-Normal Residuals"
+    "Plot A" = "Good Fit (no violations)",
+    "Plot B" = "Non-Linearity",
+    "Plot C" = "Heteroscedasticity",
+    "Plot D" = "Non-Normal Residuals"
   ),
   correct = TRUE,
   allow_retry = TRUE,
   random_answer_order = TRUE
 )
+
 ```
 
 ```{r q6, echo = FALSE}
+htmltools::tagList(
+  htmltools::tags$div(
+    style = "display: flex; gap: 20px;",
+    htmltools::tags$figure(
+      htmltools::tags$img(src = "./images/high_leverage_points_residual_plot.png", height = "100"),
+      htmltools::tags$figcaption("Plot A")
+    ),
+    htmltools::tags$figure(
+      htmltools::tags$img(src = "./images/large_residuals_residual_plot.png", height = "100"),
+      htmltools::tags$figcaption("Plot B")
+    ),
+    htmltools::tags$figure(
+      htmltools::tags$img(src = "./images/both_high_leverage_&_large_residuals_residual_plot.png", height = "100"),
+      htmltools::tags$figcaption("Plot C")
+    ),
+    htmltools::tags$figure(
+      htmltools::tags$img(src = "./images/clustered_outliers_residual_plot.png", height = "100"),
+      htmltools::tags$figcaption("Plot D")
+    )
+  )
+)
+
 question(
-  "6. Match each residual plot to the type of outlier it represents:",
+  "6. Match each residual plot to the type of outlier it demonstrates:",
   type = "matching",
   list(
-    htmltools::HTML('<img src="./images/high_leverage_points_residual_plot.png" height="100">') = "High Leverage Points",
-    htmltools::HTML('<img src="./images/large_residuals_residual_plot.png" height="100">') = "Large Residuals",
-    htmltools::HTML('<img src="./images/both_high_leverage_&_large_residuals_residual_plot.png" height="100">') = "High Leverage + Large Residuals",
-    htmltools::HTML('<img src="./images/clustered_outliers_residual_plot.png" height="100">') = "Clustered Outliers"
+    "Plot A" = "High Leverage Points",
+    "Plot B" = "Large Residuals",
+    "Plot C" = "High Leverage + Large Residuals",
+    "Plot D" = "Clustered Outliers"
   ),
   correct = TRUE,
   allow_retry = TRUE,
