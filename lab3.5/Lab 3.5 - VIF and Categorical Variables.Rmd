@@ -158,7 +158,7 @@ question("3. If the VIF for `guest_satisfaction_overall` is 2, what is $R^2_{gue
          answer("0.25"),
          answer("$\\sqrt{0.5}$"),
          random_answer_order = TRUE,
-         allow_retry = TRUE, 
+         allow_retry = TRUE,
          post_message = "Congratulations! You have found the first secret word: TUNE."
 )
 ```
@@ -196,31 +196,31 @@ Now that you know where the VIF comes from and how to calculate it, let's interp
 
 ```{r q5, echo=FALSE}
 question("5. If the VIF is equal to 10, what percent of variation can be explained by the other predictors?",
-         answer("90.0%", correct=TRUE),
-         answer("10.0%"),
-         answer("1.0%"),
-         answer("31.6%"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE, 
-         post_message = "Congratulations! You have found the second secret word: HOTDOG."
+  answer("90.0%", correct = TRUE),
+  answer("10.0%"),
+  answer("1.0%"),
+  answer("31.6%"),
+  random_answer_order = TRUE,
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: HOTDOG."
 )
 ```
 
 ```{r q6, echo=FALSE}
 question("6. Using the rule of thumb that a VIF over 10 is worrisome, should we be worried about any of the variables?",
-         answer("`const`", correct=TRUE),
-         answer("`person_capacity`"),
-         answer("`cleanliness_rating`"),
-         answer("`guest_satisfaction_overall`"),
-         answer("`bedrooms`"),
-         answer("`dist`"),
-         answer("`metro_dist`"),
-         answer("`attr_index_norm`"),
-         answer("`rest_index_norm`"),
-         answer("`lng`"),
-         answer("`lat`"),
-         allow_retry = TRUE, 
-         post_message = "Congratulations! You have found the third secret word: SERMON."
+  answer("`const`", correct = TRUE),
+  answer("`person_capacity`"),
+  answer("`cleanliness_rating`"),
+  answer("`guest_satisfaction_overall`"),
+  answer("`bedrooms`"),
+  answer("`dist`"),
+  answer("`metro_dist`"),
+  answer("`attr_index_norm`"),
+  answer("`rest_index_norm`"),
+  answer("`lng`"),
+  answer("`lat`"),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the third secret word: SERMON."
 )
 ```
 
@@ -411,6 +411,7 @@ question("13. Do we have reason to be concerned about any of the `city` variable
          answer("No.", correct = TRUE),
          allow_retry = TRUE)
 ```
+
 
 So, the moral of the story is that `pd.get_dummies()` will GIVE you $k$ columns, but you only need to use $k-1$. If you use all $k$, your math will not work out correctly.
 
