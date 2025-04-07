@@ -320,8 +320,8 @@ model1_df['Residuals'] = model1.resid
 grade_this_code()
 ```
 
-```{r q7, echo=FALSE}
-question("7. Describe the distribution of the residuals.",
+```{r q11, echo=FALSE}
+question("11. Describe the distribution of the residuals.",
          answer("Symmetric"),
          answer("Right skewed", correct=TRUE, message="The linear regression assumption of symmetric residuals is violated."),
          answer("Left skewed", message = "The distribution is skewed, but look at the direction of the tail."), 
@@ -330,7 +330,7 @@ question("7. Describe the distribution of the residuals.",
          post_message = "Congratulations! You have found the second secret word: SEPARATE.")
 ```
 
-11. Sometimes when the response variable is particularly skewed, we can easily address failed assumptions by applying a mathematical transformation to the different variables. Money-related distributions are almost always skewed, but this one is particularly bad in part due to a few very extreme values (specifically, a 1,854,545 euro per night one bedroom home in Athens). 
+12. Sometimes when the response variable is particularly skewed, we can easily address failed assumptions by applying a mathematical transformation to the different variables. Money-related distributions are almost always skewed, but this one is particularly bad in part due to a few very extreme values (specifically, a 1,854,545 euro per night one bedroom home in Athens). 
 
 To address the skewness, apply the log (base $e$) transformation to `realSum`. Save the transformed values as a new column in your data frame (name it `logRealSum`). Plot the distribution of the transformed variable and re-examine the histogram.
 
@@ -354,7 +354,7 @@ grade_this_code()
 
 This distribution is far less skewed! The center and spread have also changed since we are working on a new scale, but it is the shape that we are primarily concerned with. There are still a handful of extreme values, but nothing quite as bad as before.
 
-12. Now, edit this cell to fit a new model predicting `logRealSum` from `dist`. Make a note of the $R^2$. Examine the diagnostic plots from the new model, which you should call `model2`.
+13. Now, edit this cell to fit a new model predicting `logRealSum` from `dist`. Make a note of the $R^2$. Examine the diagnostic plots from the new model, which you should call `model2`.
 
 ```{python log_diag, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2_5"}
 Y2 = AirBnB_prices["logRealSum"]
@@ -398,8 +398,8 @@ model2_df['Residuals'] = model2.resid
 grade_this_code()
 ```
 
-```{r q10, echo=FALSE}
-question("10. True or False: A linear model is more appropriate for these two variables than the previous variables.",
+```{r q14, echo=FALSE}
+question("14. True or False: A linear model is more appropriate for these two variables than the previous variables.",
          answer("True", correct = TRUE),
          answer("False"),
          allow_retry = TRUE)
@@ -411,9 +411,9 @@ Transforming the response variable is one common technique for addressing violat
 
 ## Significance Testing with Simple Linear Regression
 
-13. The $R^2$ for both models is fairly low, so we already have some idea of whether `dist` is a helpful predictor. Let's practice formally finding significant features in the model.
+15. The $R^2$ for both models is fairly low, so we already have some idea of whether `dist` is a helpful predictor. Let's practice formally finding significant features in the model.
 
-```{r q11, echo=FALSE}
+```{r q15, echo=FALSE}
 question("Given $H_0: \\beta_{dist} = 0$, what is an appropriate alternative hypothesis?",
          answer("$H_A: \\beta_{dist} > 0$"),
          answer("$H_A: \\beta_{dist} \\neq 0$", correct = TRUE),
@@ -429,7 +429,7 @@ question("Given $H_0: \\beta_{dist} = 0$, what is an appropriate alternative hyp
 Each of our hypotheses is written in terms of $\beta_{dist}$, the **parameter** NOT $b_{dist}$, the **statistic**! Recall, statistics are based on individual samples. We are wanting to make a claim about the *true* value of the coefficient for the whole population. We already know whether or not our statistic is equal to 0. We can directly calculate it.
 ::::
 
-14. Print the summary output from `model2`.
+16. Print the summary output from `model2`.
 
 ```{python setup3, exercise=FALSE, echo=FALSE, exercise.setup="setup2_5"}
 Y2 = AirBnB_prices["logRealSum"]
@@ -452,8 +452,8 @@ model2.summary()
 grade_this_code()
 ```
 
-```{r q15, echo=FALSE}
-question("15. Would you reject or fail to reject a formal hypothesis test investigating whether or not the coefficient is zero?",
+```{r q17, echo=FALSE}
+question("17. Would you reject or fail to reject a formal hypothesis test investigating whether or not the coefficient is zero?",
          answer("Reject"),
          answer("Fail to reject", correct=TRUE, message = "A conclusion of this test in context would be that there is not enought evidence to say that distance is a significant predictor of log AirBnB price per night in ten major European cities."), 
          allow_retry = TRUE)
@@ -468,13 +468,13 @@ We did not provide "Accept" as an answer choice. We never accept the null hypoth
 
 ## Multiple Linear Regression
 
-16. `dist` may be significant, but as we can see from the adjusted $R$-squared, it doesn't predict `logRealSum` very well. Let's try adding more variables! Run this cell to take a look at `AirBnB_prices` and use it to answer the following question--again, check out the [Kaggle documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities) if you need.
+18. `dist` may be significant, but as we can see from the adjusted $R$-squared, it doesn't predict `logRealSum` very well. Let's try adding more variables! Run this cell to take a look at `AirBnB_prices` and use it to answer the following question--again, check out the [Kaggle documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities) if you need.
 
 ```{python col, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
 AirBnB_prices.columns
 ```
 
-```{r q16, echo=FALSE}
+```{r q18, echo=FALSE}
 question_checkbox("Some variables are likely collinear--can you identify any pairs that might give you trouble later on? Select ALL that apply.",
          answer("`attr_index` and `attr_index_norm`", correct = TRUE),
          answer("`rest_index` and `rest_index_norm`", correct = TRUE),
@@ -486,7 +486,7 @@ question_checkbox("Some variables are likely collinear--can you identify any pai
          random_answer_order = TRUE)
 ```
 
-17. To confirm assumptions, edit the code so that it will calculate the correlation matrix for the numeric variables (we can ignore indicators for Lab 3). For easier reading, I've rounded to three decimals. 
+19. To confirm assumptions, edit the code so that it will calculate the correlation matrix for the numeric variables (we can ignore indicators for Lab 3). For easier reading, I've rounded to three decimals. 
 
 ```{python cormat, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
 round(AirBnB_prices[[ ___ ]].corr(), 3)
@@ -504,7 +504,7 @@ Take a closer look at the correlation matrix--are the results consistent with yo
 
 We are not covering multicollinearity (AKA the 4th assumption in our earlier list) in this lab (instead, see Lab 3.5), but it is important to know that you can address it by considering the context of your variables before you even select the model! So, be careful with your data dictionaries and pay attention to the variables that you are working with. 
 
-18. Now let's try multiple linear regression. Run the cell below to fit a model predicting `realSum` with the numeric variables--be careful to use only one set of the `attr` and `rest` variables.
+20. Now let's try multiple linear regression. Run the cell below to fit a model predicting `realSum` with the numeric variables--be careful to use only one set of the `attr` and `rest` variables.
 
 ```{python setup4, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
 X3 = AirBnB_prices[['person_capacity', 'cleanliness_rating', 'guest_satisfaction_overall', 'bedrooms', 'dist', 'metro_dist', 'attr_index_norm', 'rest_index_norm', 'lng', 'lat']]
@@ -532,7 +532,7 @@ question_numeric(
 )
 ```
 
-19. Run this cell to look at the diagnostic plots of this model.
+21. Run this cell to look at the diagnostic plots of this model.
 
 ```{python diagplots, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup4"}
 model3_df = model3.fittedvalues.to_frame(name = 'Fitted')
@@ -548,21 +548,21 @@ model3_df['Residuals'] = model3.resid
    p9.xlab("Residuals"))
 ```
 
-```{r q18, echo=FALSE}
-question("18. True or False: The linear model is appropriate for this dataset.",
+```{r q22, echo=FALSE}
+question("22. True or False: The linear model is appropriate for this dataset.",
          answer("True"),
          answer("False", correct = TRUE),
          allow_retry = TRUE)
 ```
 
-20.  Don't forget that the transformed response had much better diagnostic plots for the simple linear regression! Run the cell below to predict `logRealSum`.
+23.  Don't forget that the transformed response had much better diagnostic plots for the simple linear regression! Run the cell below to predict `logRealSum`.
 
 ```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup4"}
 model4 = sm.OLS(Y2, X3).fit()
 model4.summary()
 ```
 
-```{r q19, echo=FALSE}
+```{r q23, echo=FALSE}
 question_numeric(
   "What is the adjusted $R^2$? Round to 3 decimal places",
   answer_fn(function(value) {
@@ -578,7 +578,7 @@ question_numeric(
 )
 ```
 
-21. Redo the diagnostic plots (use the code above as a reference if you need!).
+24. Redo the diagnostic plots (use the code above as a reference if you need!).
 
 ```{python diagnostic_plots_log, exercise=TRUE, message = FALSE, exercise.setup="setup5"}
 
@@ -602,8 +602,8 @@ model4_df['Residuals'] = model4.resid
 grade_this_code()
 ```
 
-```{r q20, echo=FALSE}
-question("20. True or False: A linear model is more appropriate for this data set.",
+```{r q25, echo=FALSE}
+question("25. True or False: A linear model is more appropriate for this data set.",
          answer("True", correct = TRUE),
          answer("False"),
          allow_retry = TRUE,
@@ -625,8 +625,8 @@ Use the summary of the multiple linear regression model to answer the following 
 model4.summary()
 ```
 
-```{r q22, echo=FALSE}
-question_checkbox("22. Which of the variables are significant at the 5% level? Select ALL that apply.",
+```{r q26, echo=FALSE}
+question_checkbox("26. Which of the variables are significant at the 5% level? Select ALL that apply.",
          answer("`const`", correct = TRUE),
          answer("`person_capacity`", correct = TRUE),
          answer("`cleanliness_rating`"),
@@ -642,8 +642,8 @@ question_checkbox("22. Which of the variables are significant at the 5% level? S
          post_message = "Congratulations! You have found the fifth and final secret word: SHAPE.")
 ```
 
-```{r q23, echo=FALSE}
-question("23. For every one bedroom increase, log price is expected to  ",
+```{r q27, echo=FALSE}
+question("27. For every one bedroom increase, log price is expected to  ",
          answer("increase by 0.4324.", correct = TRUE),
          answer("decrease by 0.4324.", message = "Be careful of the sign!"),
          answer("increase by 0.058.", message = "That's the standard error!"),
