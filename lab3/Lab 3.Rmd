@@ -178,19 +178,13 @@ Practice looking for these issues in diagnostic plots by answering the following
 
 ```{r q5, echo = FALSE}
 question(
-  "5. Match each regression diagnostic pattern to the issue it represents:",
+  "5. Match each residual plot to the issue it demonstrates:",
   type = "matching",
   list(
-    "Good Fit (no violations)" = "good",
-    "Non-Linearity" = "nonlinear",
-    "Heteroscedasticity" = "hetero",
-    "Non-Normal Residuals" = "non_normal"
-  ),
-  list(
-    answer("Good Fit", value = "good", label = HTML('<img src="./images/good_fit_residual_plot.png" height="100">')),
-    answer("Non-Linearity", value = "nonlinear", label = HTML('<img src="./images/non-linearity_residual_plot.png" height="100">')),
-    answer("Heteroscedasticity", value = "hetero", label = HTML('<img src="./images/heteroscedasticity_residual_plot.png" height="100">')),
-    answer("Non-Normal", value = "non_normal", label = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="100">'))
+    htmltools::HTML('<img src="./images/good_fit_residual_plot.png" height="100">') = "Good Fit (no violations)",
+    htmltools::HTML('<img src="./images/non-linearity_residual_plot.png" height="100">') = "Non-Linearity",
+    htmltools::HTML('<img src="./images/heteroscedasticity_residual_plot.png" height="100">') = "Heteroscedasticity",
+    htmltools::HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="100">') = "Non-Normal Residuals"
   ),
   correct = TRUE,
   allow_retry = TRUE,
@@ -200,19 +194,13 @@ question(
 
 ```{r q6, echo = FALSE}
 question(
-  "6. Match the type of outlier to its corresponding plot:",
+  "6. Match each residual plot to the type of outlier it represents:",
   type = "matching",
   list(
-    "High Leverage Points" = "leverage",
-    "Large Residuals" = "residuals",
-    "High Leverage + Large Residuals" = "both",
-    "Clustered Outliers" = "cluster"
-  ),
-  list(
-    answer("High Leverage", value = "leverage", label = HTML('<img src="./images/high_leverage_points_residual_plot.png" height="100">')),
-    answer("Large Residuals", value = "residuals", label = HTML('<img src="./images/large_residuals_residual_plot.png" height="100">')),
-    answer("Both", value = "both", label = HTML('<img src="./images/both_high_leverage_&_large_residuals_residual_plot.png" height="100">')),
-    answer("Clustered", value = "cluster", label = HTML('<img src="./images/clustered_outliers_residual_plot.png" height="100">'))
+    htmltools::HTML('<img src="./images/high_leverage_points_residual_plot.png" height="100">') = "High Leverage Points",
+    htmltools::HTML('<img src="./images/large_residuals_residual_plot.png" height="100">') = "Large Residuals",
+    htmltools::HTML('<img src="./images/both_high_leverage_&_large_residuals_residual_plot.png" height="100">') = "High Leverage + Large Residuals",
+    htmltools::HTML('<img src="./images/clustered_outliers_residual_plot.png" height="100">') = "Clustered Outliers"
   ),
   correct = TRUE,
   allow_retry = TRUE,
