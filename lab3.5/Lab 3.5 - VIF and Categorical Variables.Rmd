@@ -93,7 +93,7 @@ model_num = sm.OLS(Y_log, X_num).fit()
 
 2. Now, investigate the summary. 
 
-```{python mlr_num, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python mlr_num, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
 
 ```
 
