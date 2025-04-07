@@ -179,24 +179,38 @@ Practice looking for these issues in diagnostic plots by answering the following
 ```{r q5, echo = FALSE}
 htmltools::tagList(
   htmltools::tags$div(
-    style = "display: flex; gap: 20px;",
+    style = "display: flex; gap: 20px; margin-bottom: 10px;",
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/good_fit_residual_plot.png", height = "100"),
+      htmltools::tags$img(src = "./images/good_fit_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot A")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/non-linearity_residual_plot.png", height = "100"),
+      htmltools::tags$img(src = "./images/non-linearity_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot B")
-    ),
+    )
+  ),
+  htmltools::tags$div(
+    style = "display: flex; gap: 20px;",
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/heteroscedasticity_residual_plot.png", height = "100"),
+      htmltools::tags$img(src = "./images/heteroscedasticity_residual_plot_updated.png", height = "120"),
       htmltools::tags$figcaption("Plot C")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/non-normal_residuals_residual_plot.png", height = "100"),
+      htmltools::tags$img(src = "./images/non-normal_residuals_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot D")
     )
   )
+)
+
+question(
+  "Match each letter to its position in the alphabet:",
+  type = "matching",
+  list(
+    "A" = "1",
+    "B" = "2",
+    "C" = "3"
+  ),
+  correct = TRUE
 )
 
 question(
@@ -218,21 +232,24 @@ question(
 ```{r q6, echo = FALSE}
 htmltools::tagList(
   htmltools::tags$div(
-    style = "display: flex; gap: 20px;",
+    style = "display: flex; gap: 20px; margin-bottom: 10px;",
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/high_leverage_points_residual_plot.png", height = "100"),
+      htmltools::tags$img(src = "./images/high_leverage_points_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot A")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/large_residuals_residual_plot.png", height = "100"),
+      htmltools::tags$img(src = "./images/large_residuals_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot B")
-    ),
+    )
+  ),
+  htmltools::tags$div(
+    style = "display: flex; gap: 20px;",
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/both_high_leverage_&_large_residuals_residual_plot.png", height = "100"),
+      htmltools::tags$img(src = "./images/both_high_leverage_&_large_residuals_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot C")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/clustered_outliers_residual_plot.png", height = "100"),
+      htmltools::tags$img(src = "./images/clustered_outliers_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot D")
     )
   )
