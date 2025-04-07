@@ -52,6 +52,10 @@ tags$div(
 )
 ```
 
+```{python empty, echo=FALSE}
+# removing the internal error with an empty python chunk
+```
+
 ## Goals
 
 -   Address failed assumptions in linear regression.
