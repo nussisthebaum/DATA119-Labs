@@ -152,9 +152,107 @@ question("4. Which object do you think contains the residuals for this model?",
 
 There are many other useful things to unpack from a `statsmodels` object, but for now, let's focus on using `fittedvalues` and `resid` to create diagnostic plots.
 
+## Assumptions of Linear Regression
+
+Before we create our own diagnostic plots, let's review the linear regression assumptions:
+
+1. **Linearity** - x and y have a linear relationship
+2. **Constant variance** (homoscedasticity) - the variance does not change for different values of x
+3. **Symmetric, unimodal residuals** - residuals should have an approximately normal distribution
+4. **Independence of predictors** (we will talk about this more in Lab 3.5)
+5. **Independence of errors** (this we usually assume to be true)
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+1. What would a diagnostic plot that fits all assumptions look like?
+2. What would you look for in a diagnostic plot to test for each assumption?
+::::
+
+Practice looking for these issues in diagnostic plots by answering the following questions:
+
+```{r q5, echo = FALSE}
+question(
+  "5. Match each regression diagnostic pattern to the issue it represents:",
+  type = "matching",
+  list(
+    "Good Fit (no violations)" = "good",
+    "Non-Linearity" = "nonlinear",
+    "Heteroscedasticity" = "hetero",
+    "Non-Normal Residuals" = "non_normal"
+  ),
+  list(
+    "good" = '<img src="good_fit_residual_plot.png" height="100">',
+    "nonlinear" = '<img src="non-linearity_residual_plot.png" height="100">',
+    "hetero" = '<img src="heteroscedasticity_residual_plot.png" height="100">',
+    "non_normal" = '<img src="non-normal_residuals_residual_plot.png" height="100">'
+  ),
+  correct = TRUE,
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+```{r q6, echo = FALSE}
+question(
+  "Match the type of outlier to its corresponding plot:",
+  type = "matching",
+  list(
+    "High Leverage Points" = "leverage",
+    "Large Residuals" = "residuals",
+    "High Leverage + Large Residuals" = "both",
+    "Clustered Outliers" = "cluster"
+  ),
+  list(
+    "leverage" = '<img src="high_leverage_points_residual_plot.png" height="100">',
+    "residuals" = '<img src="large_residuals_residual_plot.png" height="100">',
+    "both" = '<img src="both_high_leverage_&_large_residuals_residual_plot.png" height="100">',
+    "cluster" = '<img src="clustered_outliers_residual_plot.png" height="100">'
+  ),
+  correct = TRUE,
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+
+```
+
+```{r q7, echo = FALSE}
+question(
+  "7. Which issues are present in the residual plot shown?",
+  type = "multiple",
+  answer("Non-Normal Residuals", correct = TRUE),
+  answer("Large Residuals", correct = TRUE),
+  answer("Heteroscedasticity"),
+  answer("Non-Linearity"),
+  answer("High Leverage Points"),
+  message = "The residuals show a skewed distribution and several extreme values, indicating non-normality and large outliers.",
+  img = "non_normal_large_outliers_residual_plot.png",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+```{r q8, echo = FALSE}
+question_checkbox(
+  "8. Which issues are present in this residual plot?",
+  answer("Non-Linearity", correct = TRUE),
+  answer("Heteroscedasticity", correct = TRUE),
+  answer("Non-Normal Residuals"),
+  answer("High Leverage Points"),
+  answer("Normally Distributed Residuals"),
+  message = "The residuals increase in spread and follow a curved pattern — suggesting both heteroscedasticity and non-linearity.",
+  img = "exponential_combo_residual_plot.png",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+
+```
+
+
 ## Diagnostic Plots
 
-5. Edit the cell below to extract the predicted values and the residuals and turns them into a DataFrame (which we need to use for `plotnine`).
+9. Edit the cell below to extract the predicted values and the residuals and turns them into a DataFrame (which we need to use for `plotnine`).
 
 ```{python setup2, exercise=FALSE, echo=FALSE, exercise.setup="setup1_5"}
 X1 = AirBnB_prices["dist"]
@@ -189,7 +287,7 @@ model1_df['Residuals'] = model1.resid
 grade_this_code()
 ```
 
-6. Now, using `model1_df`, edit the cell to produce the diagnostic plots (a scatterplot of residuals against the predicted (aka fitted) values, and a histogram of the residuals).
+10. Now, using `model1_df`, edit the cell to produce the diagnostic plots (a scatterplot of residuals against the predicted (aka fitted) values, and a histogram of the residuals).
 
 ```{python setup2_5, exercise=FALSE, echo=FALSE, exercise.setup="setup2"}
 model1_df = model1.fittedvalues.to_frame(name = 'Fitted')
@@ -232,7 +330,7 @@ question("7. Describe the distribution of the residuals.",
          post_message = "Congratulations! You have found the second secret word: SEPARATE.")
 ```
 
-8. Sometimes when the response variable is particularly skewed, we can easily address failed assumptions by applying a mathematical transformation to the different variables. Money-related distributions are almost always skewed, but this one is particularly bad in part due to a few very extreme values (specifically, a 1,854,545 euro per night one bedroom home in Athens). 
+11. Sometimes when the response variable is particularly skewed, we can easily address failed assumptions by applying a mathematical transformation to the different variables. Money-related distributions are almost always skewed, but this one is particularly bad in part due to a few very extreme values (specifically, a 1,854,545 euro per night one bedroom home in Athens). 
 
 To address the skewness, apply the log (base $e$) transformation to `realSum`. Save the transformed values as a new column in your data frame (name it `logRealSum`). Plot the distribution of the transformed variable and re-examine the histogram.
 
@@ -256,7 +354,7 @@ grade_this_code()
 
 This distribution is far less skewed! The center and spread have also changed since we are working on a new scale, but it is the shape that we are primarily concerned with. There are still a handful of extreme values, but nothing quite as bad as before.
 
-9. Now, edit this cell to fit a new model predicting `logRealSum` from `dist`. Make a note of the $R^2$. Examine the diagnostic plots from the new model, which you should call `model2`.
+12. Now, edit this cell to fit a new model predicting `logRealSum` from `dist`. Make a note of the $R^2$. Examine the diagnostic plots from the new model, which you should call `model2`.
 
 ```{python log_diag, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2_5"}
 Y2 = AirBnB_prices["logRealSum"]
@@ -313,7 +411,7 @@ Transforming the response variable is one common technique for addressing violat
 
 ## Significance Testing with Simple Linear Regression
 
-11. The $R^2$ for both models is fairly low, so we already have some idea of whether `dist` is a helpful predictor. Let's practice formally finding significant features in the model.
+13. The $R^2$ for both models is fairly low, so we already have some idea of whether `dist` is a helpful predictor. Let's practice formally finding significant features in the model.
 
 ```{r q11, echo=FALSE}
 question("Given $H_0: \\beta_{dist} = 0$, what is an appropriate alternative hypothesis?",
@@ -324,7 +422,14 @@ question("Given $H_0: \\beta_{dist} = 0$, what is an appropriate alternative hyp
          post_message = "Congratulations! You have found the third secret word: BACKGROUND.")
 ```
 
-12. Print the summary output from `model2`.
+:::: {.notebox}
+::: {.center}
+**Note:**
+:::
+Each of our hypotheses is written in terms of $\beta_{dist}$, the **parameter** NOT $b_{dist}$, the **statistic**! Recall, statistics are based on individual samples. We are wanting to make a claim about the *true* value of the coefficient for the whole population. We already know whether or not our statistic is equal to 0. We can directly calculate it.
+::::
+
+14. Print the summary output from `model2`.
 
 ```{python setup3, exercise=FALSE, echo=FALSE, exercise.setup="setup2_5"}
 Y2 = AirBnB_prices["logRealSum"]
@@ -347,22 +452,29 @@ model2.summary()
 grade_this_code()
 ```
 
-```{r q13, echo=FALSE}
-question("13. Would you reject or fail to reject a formal hypothesis test investigating whether or not the coefficient is zero?",
+```{r q15, echo=FALSE}
+question("15. Would you reject or fail to reject a formal hypothesis test investigating whether or not the coefficient is zero?",
          answer("Reject"),
          answer("Fail to reject", correct=TRUE, message = "A conclusion of this test in context would be that there is not enought evidence to say that distance is a significant predictor of log AirBnB price per night in ten major European cities."), 
          allow_retry = TRUE)
 ```
 
+:::: {.notebox}
+::: {.center}
+**Note:**
+:::
+We did not provide "Accept" as an answer choice. We never accept the null hypothesis, only fail to reject it.  Failing to find strong evidence against isn’t the same as proving something. The data might just be inconclusive, noisy, or underpowered.
+::::
+
 ## Multiple Linear Regression
 
-14. `dist` may be significant, but as we can see from the adjusted $R$-squared, it doesn't predict `logRealSum` very well. Let's try adding more variables! Run this cell to take a look at `AirBnB_prices` and use it to answer the following question--again, check out the [Kaggle documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities) if you need.
+16. `dist` may be significant, but as we can see from the adjusted $R$-squared, it doesn't predict `logRealSum` very well. Let's try adding more variables! Run this cell to take a look at `AirBnB_prices` and use it to answer the following question--again, check out the [Kaggle documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities) if you need.
 
 ```{python col, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
 AirBnB_prices.columns
 ```
 
-```{r q14, echo=FALSE}
+```{r q16, echo=FALSE}
 question_checkbox("Some variables are likely collinear--can you identify any pairs that might give you trouble later on? Select ALL that apply.",
          answer("`attr_index` and `attr_index_norm`", correct = TRUE),
          answer("`rest_index` and `rest_index_norm`", correct = TRUE),
@@ -374,7 +486,7 @@ question_checkbox("Some variables are likely collinear--can you identify any pai
          random_answer_order = TRUE)
 ```
 
-15. To confirm assumptions, edit the code so that it will calculate the correlation matrix for the numeric variables (we can ignore indicators for Lab 3). For easier reading, I've rounded to three decimals. 
+17. To confirm assumptions, edit the code so that it will calculate the correlation matrix for the numeric variables (we can ignore indicators for Lab 3). For easier reading, I've rounded to three decimals. 
 
 ```{python cormat, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
 round(AirBnB_prices[[ ___ ]].corr(), 3)
@@ -388,11 +500,11 @@ round(AirBnB_prices[['logRealSum', 'person_capacity', 'cleanliness_rating', 'gue
 grade_this_code()
 ```
 
-Take a closer look at the correlation matrix--are the results consistent with your answer to question 14? You may have located even more problematic pairings (anything over 0.8 is concerning), but based on the documentation, you should have found that `attr_index` and `attr_index_norm`, as well as `rest_index` and `rest_index_norm`, are just normalized versions of each other. To avoid collinearity issues, we should only include one version of each. 
+Take a closer look at the correlation matrix--are the results consistent with your answer to question 16? You may have located even more problematic pairings (anything over 0.8 is concerning), but based on the documentation, you should have found that `attr_index` and `attr_index_norm`, as well as `rest_index` and `rest_index_norm`, are just normalized versions of each other. To avoid collinearity issues, we should only include one version of each. 
 
-We are not covering multicollinearity in this lab (instead, see Lab 3.5), but it is important to know that you can address it by considering the context of your variables before you even select the model! So, be careful with your data dictionaries and pay attention to the variables that you are working with. 
+We are not covering multicollinearity (AKA the 4th assumption in our earlier list) in this lab (instead, see Lab 3.5), but it is important to know that you can address it by considering the context of your variables before you even select the model! So, be careful with your data dictionaries and pay attention to the variables that you are working with. 
 
-16. Now let's try multiple linear regression. Run the cell below to fit a model predicting `realSum` with the numeric variables--be careful to use only one set of the `attr` and `rest` variables.
+18. Now let's try multiple linear regression. Run the cell below to fit a model predicting `realSum` with the numeric variables--be careful to use only one set of the `attr` and `rest` variables.
 
 ```{python setup4, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
 X3 = AirBnB_prices[['person_capacity', 'cleanliness_rating', 'guest_satisfaction_overall', 'bedrooms', 'dist', 'metro_dist', 'attr_index_norm', 'rest_index_norm', 'lng', 'lat']]
@@ -402,7 +514,7 @@ model3 = sm.OLS(Y, X3).fit()
 model3.summary()
 ```
 
-```{r q16, echo=FALSE}
+```{r q18, echo=FALSE}
 question_numeric(
   "What is the adjusted $R^2$? Round to 3 decimal places",
   answer_fn(function(value) {
@@ -420,7 +532,7 @@ question_numeric(
 )
 ```
 
-17. Run this cell to look at the diagnostic plots of this model.
+19. Run this cell to look at the diagnostic plots of this model.
 
 ```{python diagplots, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup4"}
 model3_df = model3.fittedvalues.to_frame(name = 'Fitted')
@@ -443,7 +555,7 @@ question("18. True or False: The linear model is appropriate for this dataset.",
          allow_retry = TRUE)
 ```
 
-18.  Don't forget that the transformed response had much better diagnostic plots for the simple linear regression! Run the cell below to predict `logRealSum`.
+20.  Don't forget that the transformed response had much better diagnostic plots for the simple linear regression! Run the cell below to predict `logRealSum`.
 
 ```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup4"}
 model4 = sm.OLS(Y2, X3).fit()
@@ -466,7 +578,7 @@ question_numeric(
 )
 ```
 
-19. Redo the diagnostic plots (use the code above as a reference if you need!).
+21. Redo the diagnostic plots (use the code above as a reference if you need!).
 
 ```{python diagnostic_plots_log, exercise=TRUE, message = FALSE, exercise.setup="setup5"}
 
@@ -498,7 +610,12 @@ question("20. True or False: A linear model is more appropriate for this data se
          post_message = "Congratulations! You have found the fourth secret word: SAMPLE.")
 ```
 
-Note that in the summary there was a warning about a large condition number. This warning has to do with multicollinearity, and tells us that we need to eliminate some of the variables. For more on multicollinearity, check out Lab 3.5.
+:::: {.notebox}
+::: {.center}
+**Note:**
+:::
+In the summary there was a warning about a large condition number. This warning has to do with multicollinearity, and tells us that we need to eliminate some of the variables. For more on multicollinearity, check out Lab 3.5.
+::::
 
 ## Significance Testing with Multiple Linear Regression
 
@@ -508,8 +625,8 @@ Use the summary of the multiple linear regression model to answer the following 
 model4.summary()
 ```
 
-```{r q21, echo=FALSE}
-question_checkbox("21. Which of the variables are significant at the 5% level? Select ALL that apply.",
+```{r q22, echo=FALSE}
+question_checkbox("22. Which of the variables are significant at the 5% level? Select ALL that apply.",
          answer("`const`", correct = TRUE),
          answer("`person_capacity`", correct = TRUE),
          answer("`cleanliness_rating`"),
@@ -525,8 +642,8 @@ question_checkbox("21. Which of the variables are significant at the 5% level? S
          post_message = "Congratulations! You have found the fifth and final secret word: SHAPE.")
 ```
 
-```{r q22, echo=FALSE}
-question("22. For every one bedroom increase, log price is expected to  ",
+```{r q23, echo=FALSE}
+question("23. For every one bedroom increase, log price is expected to  ",
          answer("increase by 0.4324.", correct = TRUE),
          answer("decrease by 0.4324.", message = "Be careful of the sign!"),
          answer("increase by 0.058.", message = "That's the standard error!"),
