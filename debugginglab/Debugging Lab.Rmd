@@ -319,6 +319,224 @@ def my_min(my_array):
 my_min(np.array([23,47,13,78]))
 ```
 
+## Error Types Activity
+
+Each of the code chunks below has code that would raise an error. Choose the name of the error that would be raised in the chunk. Discuss with your neighbors why these errors might appear! Then, select a possible fix. 
+
+For example,
+
+```{python, echo = TRUE, eval = FALSE}
+15/0
+```
+
+The code in this chunk would raise a `ZeroDivision` error because you cannot divide by zero. To fix it, you might replace the zero with some other integer or float value. 
+
+1. 
+
+```{python, echo = TRUE, eval = FALSE}
+state_capitals = {"Illinois": "Springfield", 
+                  "Massachusetts": "Boston",
+                  "Texas": "Austin", 
+                  "Virginia": "Richmond"}
+
+state_capitals["Washington"]
+```
+
+```{r q1a, echo=FALSE}
+question(
+  "What kind of error will be raised in the code chunk above?",
+  answer("`AttributeError`"), 
+  answer("`IndexError`"), 
+  answer("`KeyError`", correct = TRUE), 
+  answer("`NameError`"), 
+  answer("`SyntaxError`"), 
+  answer("`TypeError`"),
+  answer("`ValueError`"), 
+  answer("`ZeroDivisionError`"), 
+  allow_retry = TRUE)
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Why does this code raise that kind of error?
+::::
+
+```{r q1b, echo=FALSE}
+# conditionalPanel(
+#   condition = TRUE,
+#   question("How would you fix this error?",
+#     answer("Add a key/value pair for `Washington` and `Olympia` to the dictionary.", correct = TRUE),
+#     answer("Replace the square brackets (`[]`) with parentheses (`()`)."),
+#     answer("Replace `Washington` with `washington` because the keys in the dictionary should all be in lowercase."),
+#     answer("Add `.loc` after `state_capitals`, because it really should be stored as a DataFrame."),
+#     random_answer_order = TRUE)
+# )
+
+question("How would you fix this error?",
+  answer("Add a key/value pair for `Washington` and `Olympia` to the dictionary.", correct = TRUE),
+  answer("Replace the square brackets (`[]`) with parentheses (`()`)."),
+  answer("Replace `Washington` with `washington` because the keys in the dictionary should all be in lowercase."),
+  answer("Add `.loc` after `state_capitals`, because it really should be stored as a DataFrame."),
+  random_answer_order = TRUE)
+```
+
+2. 
+
+```{python, echo = TRUE, eval = FALSE}
+state_capitals["Virginia"]]
+```
+
+```{r q2a, echo=FALSE}
+question(
+  "What kind of error will be raised in the code chunk above?",
+  answer("`AttributeError`"), 
+  answer("`IndexError`"), 
+  answer("`KeyError`"), 
+  answer("`NameError`"), 
+  answer("`SyntaxError`", correct = TRUE), 
+  answer("`TypeError`"),
+  answer("`ValueError`"), 
+  answer("`ZeroDivisionError`"), 
+  allow_retry = TRUE)
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Why does this code raise that kind of error?
+::::
+
+```{r q2b, echo=FALSE}
+question("How would you fix this error?",
+  answer("Remove the second close bracket (`]`).", correct = TRUE),
+  answer("Add a second open bracket (`[`)."),
+  answer("Replace the brackets with parentheses (`()`), because `state_capitals` should be a function."),
+  answer("Add a comma after `Virginia`, because we are indexing by rows."),
+  random_answer_order = TRUE)
+```
+
+3. 
+
+```{python, echo = TRUE, eval = FALSE}
+states = 50
+print("There are " + states + " in the US.")
+```
+
+```{r q3a, echo=FALSE}
+question(
+  "What kind of error will be raised in the code chunk above?",
+  answer("`AttributeError`"), 
+  answer("`IndexError`"), 
+  answer("`KeyError`"), 
+  answer("`NameError`"), 
+  answer("`SyntaxError`"), 
+  answer("`TypeError`", correct = TRUE),
+  answer("`ValueError`"), 
+  answer("`ZeroDivisionError`"), 
+  allow_retry = TRUE)
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Why does this code raise that kind of error?
+::::
+
+```{r q3b, echo=FALSE}
+question("How would you fix this error?",
+  answer("Convert `states` to a string using `str()`.", correct = TRUE),
+  answer("Use an operator other than the plus sign (`+`) for correct string/integer concatenation."),
+  answer("Rewrite the entire phrase as a string, there is no need to concatenate three separate pieces.", message = "While this would work in this specific situation, it would not work in others where the sentence depends on the output of other code in your script. Therefore, it isn't the best solution!"),
+  answer("Convert `There are` and ` in the US` to be integers using `int()`."),
+  random_answer_order = TRUE)
+```
+
+4. 
+
+```{python, echo = TRUE, eval = FALSE}
+capitals_data = {'Capital': ["Springfield", "Boston", "Austin", "Richmond"]}
+capitals_df = pd.DataFrame.from_dict(capitals_data)
+capitals_df.index = ["Illinois", "Massachusetts", "Texas", "Virginia"]
+
+capitals_df.iloc[50,]
+```
+
+```{r q4a, echo=FALSE}
+question(
+  "What kind of error will be raised in the code chunk above?",
+  answer("`AttributeError`"), 
+  answer("`IndexError`", correct = TRUE), 
+  answer("`KeyError`"), 
+  answer("`NameError`"), 
+  answer("`SyntaxError`"), 
+  answer("`TypeError`"),
+  answer("`ValueError`"), 
+  answer("`ZeroDivisionError`"), 
+  allow_retry = TRUE)
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Why does this code raise that kind of error?
+::::
+
+```{r q4b, echo=FALSE}
+question("How would you fix this error?",
+  answer("Change the index (`50`) to one of `0`, `1`, `2`, or `3`.", correct = TRUE),
+  answer("Change the index, `50`, to `49`, because Python uses zero-based indexing."),
+  answer("Change `.iloc` to `.loc`."),
+  answer("Use `orient = index` in `to_dict()`."),
+  random_answer_order = TRUE)
+```
+
+5. 
+
+```{python, echo = TRUE, eval = FALSE}
+capitals_df.len()
+```
+
+```{r q5a, echo=FALSE}
+question(
+  "What kind of error will be raised in the code chunk above?",
+  answer("`AttributeError`", correct = TRUE), 
+  answer("`IndexError`"), 
+  answer("`KeyError`"), 
+  answer("`NameError`"), 
+  answer("`SyntaxError`"), 
+  answer("`TypeError`"),
+  answer("`ValueError`"), 
+  answer("`ZeroDivisionError`"), 
+  allow_retry = TRUE)
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Why does this code raise that kind of error?
+::::
+
+```{r q5b, echo=FALSE}
+question("How would you fix this error?",
+  answer("Use `capitals_df.shape`, because `.shape` is the attribute of the DataFrame that contains the dimensions.", correct = TRUE),
+  answer("Use `capitals_df.shape()`, because `.shape()` is the method for a DataFrame that will calculate the dimensions.", message = "Careful! `.shape` is an attribute; there is no such `.shape()` method."),
+  answer("Use `len(capitals_df)`, because `len()` is a function and not a method."),
+  answer("Use `capitals_df.length()`, because `.len()` is not the right method name."),
+  random_answer_order = TRUE)
+```
+
+
 ## Debugging Activity
 
 Now, you try! Find and fix the syntax errors, exceptions, and logical errors in the code blocks below.
