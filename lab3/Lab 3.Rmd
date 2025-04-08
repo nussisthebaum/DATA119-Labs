@@ -662,7 +662,7 @@ question("27. For every one bedroom increase, log price is expected to  ",
 # UI for residual matching
 output$residual_bucket_ui <- renderUI({
   bucket_list(
-    header = "Drag each residual plot to the issue it illustrates:",
+    header = "5. Drag each residual plot to the issue it illustrates:",
     group_name = "residuals",
     orientation = "horizontal",
     add_rank_list(
@@ -704,7 +704,7 @@ observeEvent(input$submit_resid, {
 
 output$outlier_bucket_ui <- renderUI({
   bucket_list(
-    header = "Drag each residual plot to the type of outlier it shows:",
+    header = "6. Drag each residual plot to the type of outlier it shows:",
     group_name = "outliers",
     orientation = "horizontal",
     add_rank_list(
