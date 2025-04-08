@@ -34,11 +34,19 @@ plot_labels_resid <- list(
 
 # Correct answers for outlier plot matching
 correct_answers_outlier <- list(
-  leverage = HTML('<img src="./images/high_leverage_points_residual_plot.png" height="150">'),
-  residuals = HTML('<img src="./images/large_residuals_residual_plot.png" height="150">'),
-  both = HTML('<img src="./images/both_high_leverage_&_large_residuals_residual_plot.png" height="150">'),
-  cluster = HTML('<img src="./images/clustered_outliers_residual_plot.png" height="150">')
+  leverage = "Plot A",
+  residuals = "Plot B",
+  both = "Plot C",
+  cluster = "Plot D"
 )
+
+plot_labels_outlier <- list(
+  "Plot A" = HTML('<img src="./images/high_leverage_points_residual_plot.png" height="150">'),
+  "Plot B" = HTML('<img src="./images/large_residuals_residual_plot.png" height="150">'),
+  "Plot C" = HTML('<img src="./images/both_high_leverage_&_large_residuals_residual_plot.png" height="150">'),
+  "Plot D" = HTML('<img src="./images/clustered_outliers_residual_plot.png" height="150">')
+)
+
 
 # Set the path to the existing Python environment
 #reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
@@ -658,10 +666,10 @@ output$residual_bucket_ui <- renderUI({
   bucket_list(
     header = "Drag each residual plot to the issue it illustrates:",
     group_name = "residuals",
-    orientation = "vertical",
+    orientation = "horizontal",
     add_rank_list(
       text = "Plots:",
-      labels = plot_labels_resid,
+      labels = plot_labels_resid[sample(names(plot_labels_resid))], 
       input_id = "unsorted_resid"
     ),
     add_rank_list("Good Fit (no violations)", labels = NULL, input_id = "good"),
@@ -672,7 +680,6 @@ output$residual_bucket_ui <- renderUI({
 })
 
 observeEvent(input$submit_resid, {
-  # Default to empty list if any input is NULL
   inputs <- list(
     good = input$good %||% character(0),
     nonlinear = input$nonlinear %||% character(0),
@@ -680,7 +687,6 @@ observeEvent(input$submit_resid, {
     non_normal = input$non_normal %||% character(0)
   )
 
-  # Check whether each bucket has the expected plot label as the first item
   result <- all(
     length(inputs$good) == 1 && inputs$good[1] == correct_answers_resid$good,
     length(inputs$nonlinear) == 1 && inputs$nonlinear[1] == correct_answers_resid$nonlinear,
@@ -698,15 +704,14 @@ observeEvent(input$submit_resid, {
 })
 
 
-# UI for outlier matching
 output$outlier_bucket_ui <- renderUI({
   bucket_list(
-    header = "6. Drag each residual plot to the type of outlier it shows:",
+    header = "Drag each residual plot to the type of outlier it shows:",
     group_name = "outliers",
     orientation = "horizontal",
     add_rank_list(
       text = "Plots:",
-      labels = unname(correct_answers_outlier),
+      labels = plot_labels_outlier[sample(names(plot_labels_outlier))], 
       input_id = "unsorted_outlier"
     ),
     add_rank_list("High Leverage Points", labels = NULL, input_id = "leverage"),
@@ -716,36 +721,38 @@ output$outlier_bucket_ui <- renderUI({
   )
 })
 
+
 observeEvent(input$submit_outlier, {
-  result <- all(
-    identical(input$leverage, list(correct_answers_outlier$leverage)),
-    identical(input$residuals, list(correct_answers_outlier$residuals)),
-    identical(input$both, list(correct_answers_outlier$both)),
-    identical(input$cluster, list(correct_answers_outlier$cluster))
+  # Expected labels
+  correct_answers_outlier_labels <- list(
+    leverage = "Plot A",
+    residuals = "Plot B",
+    both = "Plot C",
+    cluster = "Plot D"
   )
+
+  inputs <- list(
+    leverage = input$leverage %||% character(0),
+    residuals = input$residuals %||% character(0),
+    both = input$both %||% character(0),
+    cluster = input$cluster %||% character(0)
+  )
+
+  result <- all(
+    length(inputs$leverage) == 1 && inputs$leverage[1] == correct_answers_outlier_labels$leverage,
+    length(inputs$residuals) == 1 && inputs$residuals[1] == correct_answers_outlier_labels$residuals,
+    length(inputs$both) == 1 && inputs$both[1] == correct_answers_outlier_labels$both,
+    length(inputs$cluster) == 1 && inputs$cluster[1] == correct_answers_outlier_labels$cluster
+  )
+
   output$result_outlier <- renderText({
-    if (result) "✅ Correct! Well done."
-    else "❌ Some matches are incorrect. Try again!"
+    if (result) {
+      "✅ Correct! Well done."
+    } else {
+      "❌ Some matches are incorrect. Try again!"
+    }
   })
 })
-
-# observeEvent(input$reset_resid, {
-#   updateRankListInput(session, "unsorted_resid", labels = unname(correct_answers_resid))
-#   updateRankListInput(session, "good", labels = NULL)
-#   updateRankListInput(session, "nonlinear", labels = NULL)
-#   updateRankListInput(session, "hetero", labels = NULL)
-#   updateRankListInput(session, "non_normal", labels = NULL)
-#   output$result_resid <- renderText({ "" })  # Clear feedback
-# })
-
-# observeEvent(input$reset_outlier, {
-#   updateRankListInput(session, "unsorted_outlier", labels = unname(correct_answers_outlier))
-#   updateRankListInput(session, "leverage", labels = NULL)
-#   updateRankListInput(session, "residuals", labels = NULL)
-#   updateRankListInput(session, "both", labels = NULL)
-#   updateRankListInput(session, "cluster", labels = NULL)
-#   output$result_outlier <- renderText({ "" })
-# })
 
 ```
 
