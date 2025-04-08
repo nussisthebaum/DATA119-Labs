@@ -110,7 +110,6 @@ library(kableExtra)
 kable(notation_table, booktabs = TRUE, escape = FALSE)
 ```
 
-
 Statistical inference is the idea of **making inferences or drawing conclusions** about the parameters based on our samples of data, which we summarize with statistics (i.e., the sample mean, a sample proportion, etc.). There are two "flavors" of statistical inference, that you might be familiar with:
 
 * **Confidence Intervals** provide a range of reasonable values for a parameter given a dataset. 
