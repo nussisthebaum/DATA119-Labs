@@ -176,47 +176,63 @@ Before we create our own diagnostic plots, let's review the linear regression as
 
 Practice looking for these issues in diagnostic plots by answering the following questions:
 
-5. Match each plot to the regression issue it most clearly illustrates:
-
 ```{r q5, echo = FALSE}
-htmltools::tags$div(
-    style = "display: flex; flex-wrap: wrap; gap: 20px;",
-    htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/heteroscedasticity_residual_plot_updated.png", height = "200"),
-      htmltools::tags$figcaption("Plot A")
+bucket_list_ui <- bucket_list(
+  header = "5. Match each plot to the regression issue it most clearly illustrates:",
+  group_name = "residuals",
+  orientation = "vertical",
+  add_rank_list(
+    text = "Plots:",
+    labels = list(
+      HTML('<img src="./images/good_fit_residual_plot.png" height="80">'),
+      HTML('<img src="./images/non-linearity_residual_plot.png" height="80">'),
+      HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="80">'),
+      HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="80">')
     ),
-    htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/non-linearity_residual_plot.png", height = "200"),
-      htmltools::tags$figcaption("Plot B")
-    ),
-    htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/good_fit_residual_plot.png", height = "200"),
-      htmltools::tags$figcaption("Plot C")
-    ),
-    htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/non-normal_residuals_residual_plot.png", height = "200"),
-      htmltools::tags$figcaption("Plot D")
+    input_id = "unsorted"
+  ),
+  add_rank_list("Good Fit (no violations)", labels = NULL, input_id = "good"),
+  add_rank_list("Non-Linearity", labels = NULL, input_id = "nonlinear"),
+  add_rank_list("Heteroscedasticity", labels = NULL, input_id = "hetero"),
+  add_rank_list("Non-Normal Residuals", labels = NULL, input_id = "non_normal")
+)
+
+# Correct answers as HTML strings
+correct_answers <- list(
+  good = HTML('<img src="./images/good_fit_residual_plot.png" height="80">'),
+  nonlinear = HTML('<img src="./images/non-linearity_residual_plot.png" height="80">'),
+  hetero = HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="80">'),
+  non_normal = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="80">')
+)
+
+# UI wrapper
+ui <- fluidPage(
+  bucket_list_ui,
+  actionButton("submit", "Submit"),
+  verbatimTextOutput("result")
+)
+
+# Server logic
+server <- function(input, output, session) {
+  observeEvent(input$submit, {
+    result <- all(
+      identical(input$good, list(correct_answers$good)),
+      identical(input$nonlinear, list(correct_answers$nonlinear)),
+      identical(input$hetero, list(correct_answers$hetero)),
+      identical(input$non_normal, list(correct_answers$non_normal))
     )
-)
-  
-question_match(
-    prompt = c("Plot A", "Plot B", "Plot C", "Plot D"),
-    answer = c(
-      "Good Fit (no violations)",
-      "Non-Linearity",
-      "Heteroscedasticity",
-      "Non-Normal Residuals"
-    ),
-    correct = list(
-      "Plot C" = "Good Fit (no violations)",
-      "Plot B" = "Non-Linearity",
-      "Plot A" = "Heteroscedasticity",
-      "Plot D" = "Non-Normal Residuals"
-    ),
-    feedback = "Refer to each residual pattern's shape and spread.",
-    shuffle = TRUE,
-    allow_retry = TRUE
-)
+    output$result <- renderText({
+      if (result) {
+        "✅ Correct! Well done."
+      } else {
+        "❌ Some matches are incorrect. Try again!"
+      }
+    })
+  })
+}
+
+# Render app inline in tutorial
+shinyApp(ui, server)
 ```
 
 ```{r q6, echo = FALSE}
