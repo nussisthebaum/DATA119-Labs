@@ -179,8 +179,7 @@ Practice looking for these issues in diagnostic plots by answering the following
 5. Match each plot to the regression issue it most clearly illustrates:
 
 ```{r q5, echo = FALSE}
-htmltools::tagList(
-  htmltools::tags$div(
+htmltools::tags$div(
     style = "display: flex; flex-wrap: wrap; gap: 20px;",
     htmltools::tags$figure(
       htmltools::tags$img(src = "./images/good_fit_residual_plot.png", height = "120"),
@@ -198,9 +197,9 @@ htmltools::tagList(
       htmltools::tags$img(src = "./images/non-normal_residuals_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot D")
     )
-  ),
+)
   
-  gradethis::question_match(
+question_match(
     prompt = c("Plot A", "Plot B", "Plot C", "Plot D"),
     answer = c(
       "Good Fit (no violations)",
@@ -217,7 +216,6 @@ htmltools::tagList(
     feedback = "Refer to each residual pattern's shape and spread.",
     shuffle = TRUE,
     allow_retry = TRUE
-  )
 )
 ```
 
