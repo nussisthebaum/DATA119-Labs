@@ -21,7 +21,7 @@ correct_answers_resid <- list(
   hetero = "Plot A",
   non_normal = "Plot B",
   good = "Plot C",
-  nonlinear = "Plot D",
+  nonlinear = "Plot D"
 )
 
 plot_labels_resid <- list(
