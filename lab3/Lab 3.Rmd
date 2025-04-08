@@ -18,11 +18,19 @@ library(sortable)
 
 # Correct answers for residual plot matching
 correct_answers_resid <- list(
-  good = HTML('<img src="./images/good_fit_residual_plot.png" height="150">'),
-  nonlinear = HTML('<img src="./images/non-linearity_residual_plot.png" height="150">'),
-  hetero = HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="150">'),
-  non_normal = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="150">')
+  good = "Plot A",
+  nonlinear = "Plot B",
+  hetero = "Plot C",
+  non_normal = "Plot D"
 )
+
+plot_labels_resid <- list(
+  "Plot A" = HTML('<img src="./images/good_fit_residual_plot.png" height="150">'),
+  "Plot B" = HTML('<img src="./images/non-linearity_residual_plot.png" height="150">'),
+  "Plot C" = HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="150">'),
+  "Plot D" = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="150">')
+)
+
 
 # Correct answers for outlier plot matching
 correct_answers_outlier <- list(
@@ -648,12 +656,12 @@ question("27. For every one bedroom increase, log price is expected to  ",
 # UI for residual matching
 output$residual_bucket_ui <- renderUI({
   bucket_list(
-    header = "5. Drag each residual plot to the issue it illustrates:",
+    header = "Drag each residual plot to the issue it illustrates:",
     group_name = "residuals",
-    orientation = "horizontal",
+    orientation = "vertical",
     add_rank_list(
       text = "Plots:",
-      labels = unname(correct_answers_resid),
+      labels = plot_labels_resid,
       input_id = "unsorted_resid"
     ),
     add_rank_list("Good Fit (no violations)", labels = NULL, input_id = "good"),
@@ -664,17 +672,11 @@ output$residual_bucket_ui <- renderUI({
 })
 
 observeEvent(input$submit_resid, {
-  good_input <- input$good %||% list()
-  nonlinear_input <- input$nonlinear %||% list()
-  hetero_input <- input$hetero %||% list()
-  non_normal_input <- input$non_normal %||% list()
-
-  # Convert all values to plain strings for comparison
   result <- all(
-    identical(as.character(good_input), as.character(list(as.character(correct_answers_resid$good)))),
-    identical(as.character(nonlinear_input), as.character(list(as.character(correct_answers_resid$nonlinear)))),
-    identical(as.character(hetero_input), as.character(list(as.character(correct_answers_resid$hetero)))),
-    identical(as.character(non_normal_input), as.character(list(as.character(correct_answers_resid$non_normal))))
+    identical(input$good, list(correct_answers_resid$good)),
+    identical(input$nonlinear, list(correct_answers_resid$nonlinear)),
+    identical(input$hetero, list(correct_answers_resid$hetero)),
+    identical(input$non_normal, list(correct_answers_resid$non_normal))
   )
 
   output$result_resid <- renderText({
