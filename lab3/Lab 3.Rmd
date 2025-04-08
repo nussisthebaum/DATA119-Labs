@@ -228,14 +228,13 @@ verbatimTextOutput("result_outlier")
 question_checkbox(
   HTML("
     7. Which issues are present in the residual plot shown?<br><br>
-    <img src='./images/non_normal_large_outliers_residual_plot.png' height='200px'>
+    <img src='./images/non_normal_nonlinear_high_leverage_residual_plot.png' height='200px'>
   "),
-  answer("Non-Normal Residuals", correct = TRUE),
-  answer("Large Residuals", correct = TRUE),
+  answer("Non-Linearity", correct = TRUE),
   answer("Heteroscedasticity"),
-  answer("Non-Linearity"),
-  answer("High Leverage Points"),
-  message = "The residuals show a skewed distribution and several extreme values, indicating non-normality and large outliers.",
+  answer("Non-Normal Residuals", correct = TRUE),
+  answer("High Leverage Points", correct = TRUE),
+  message = "The residuals show a nonlinear trend with a skewed distribution and several extreme values, indicating non-linearity, non-normality, and large outliers.",
   allow_retry = TRUE,
   random_answer_order = TRUE
 )
@@ -249,7 +248,6 @@ question_checkbox(
   answer("Heteroscedasticity", correct = TRUE),
   answer("Non-Normal Residuals"),
   answer("High Leverage Points"),
-  answer("Normally Distributed Residuals"),
   message = "The residuals increase in spread and follow a curved pattern — suggesting both heteroscedasticity and non-linearity.",
   allow_retry = TRUE,
   random_answer_order = TRUE
