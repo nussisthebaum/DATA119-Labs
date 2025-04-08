@@ -593,7 +593,7 @@
     },
     "gradethis": {
       "Source": "github",
-      "Repository": null,
+      "Repository": "rstudio/gradethis",
       "description": {
         "Type": "Package",
         "Package": "gradethis",
