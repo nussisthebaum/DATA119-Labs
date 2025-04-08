@@ -182,19 +182,19 @@ Practice looking for these issues in diagnostic plots by answering the following
 htmltools::tags$div(
     style = "display: flex; flex-wrap: wrap; gap: 20px;",
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/good_fit_residual_plot.png", height = "120"),
+      htmltools::tags$img(src = "./images/heteroscedasticity_residual_plot_updated.png", height = "150"),
       htmltools::tags$figcaption("Plot A")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/non-linearity_residual_plot.png", height = "120"),
+      htmltools::tags$img(src = "./images/non-linearity_residual_plot.png", height = "150"),
       htmltools::tags$figcaption("Plot B")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/heteroscedasticity_residual_plot_updated.png", height = "120"),
+      htmltools::tags$img(src = "./images/good_fit_residual_plot.png", height = "150"),
       htmltools::tags$figcaption("Plot C")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/non-normal_residuals_residual_plot.png", height = "120"),
+      htmltools::tags$img(src = "./images/non-normal_residuals_residual_plot.png", height = "150"),
       htmltools::tags$figcaption("Plot D")
     )
 )
@@ -208,9 +208,9 @@ question_match(
       "Non-Normal Residuals"
     ),
     correct = list(
-      "Plot A" = "Good Fit (no violations)",
+      "Plot C" = "Good Fit (no violations)",
       "Plot B" = "Non-Linearity",
-      "Plot C" = "Heteroscedasticity",
+      "Plot A" = "Heteroscedasticity",
       "Plot D" = "Non-Normal Residuals"
     ),
     feedback = "Refer to each residual pattern's shape and spread.",
@@ -220,28 +220,27 @@ question_match(
 ```
 
 ```{r q6, echo = FALSE}
-htmltools::tagList(
-  htmltools::tags$div(
+htmltools::tags$div(
     style = "display: flex; flex-wrap: wrap; gap: 20px;",
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/high_leverage_points_residual_plot.png", height = "120"),
+      htmltools::tags$img(src = "./images/high_leverage_points_residual_plot.png", height = "150"),
       htmltools::tags$figcaption("Plot A")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/large_residuals_residual_plot.png", height = "120"),
+      htmltools::tags$img(src = "./images/large_residuals_residual_plot.png", height = "150"),
       htmltools::tags$figcaption("Plot B")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/both_high_leverage_&_large_residuals_residual_plot.png", height = "120"),
+      htmltools::tags$img(src = "./images/both_high_leverage_&_large_residuals_residual_plot.png", height = "150"),
       htmltools::tags$figcaption("Plot C")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/clustered_outliers_residual_plot.png", height = "120"),
+      htmltools::tags$img(src = "./images/clustered_outliers_residual_plot.png", height = "150"),
       htmltools::tags$figcaption("Plot D")
     )
-  ),
-  
-  gradethis::question_match(
+)
+
+gradethis::question_match(
     prompt = c("Plot A", "Plot B", "Plot C", "Plot D"),
     answer = c(
       "High Leverage Points",
@@ -258,8 +257,8 @@ htmltools::tagList(
     feedback = "Pay attention to extreme values and where they occur.",
     shuffle = TRUE,
     allow_retry = TRUE
-  )
 )
+
 ```
 
 ```{r q7, echo = FALSE}
