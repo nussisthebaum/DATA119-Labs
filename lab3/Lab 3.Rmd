@@ -18,17 +18,17 @@ library(sortable)
 
 # Correct answers for residual plot matching
 correct_answers_resid <- list(
+  hetero = "Plot A",
+  non_normal = "Plot B",
   good = "Plot C",
   nonlinear = "Plot D",
-  hetero = "Plot A",
-  non_normal = "Plot B"
 )
 
 plot_labels_resid <- list(
-  "Plot C" = HTML('<img src="./images/good_fit_residual_plot.png" height="150">'),
-  "Plot D" = HTML('<img src="./images/non-linearity_residual_plot.png" height="150">'),
   "Plot A" = HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="150">'),
-  "Plot B" = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="150">')
+  "Plot B" = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="150">'),
+  "Plot C" = HTML('<img src="./images/good_fit_residual_plot.png" height="150">'),
+  "Plot D" = HTML('<img src="./images/non-linearity_residual_plot.png" height="150">')
 )
 
 
