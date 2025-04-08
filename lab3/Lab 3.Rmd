@@ -15,6 +15,23 @@ library(gradethis)
 library(reticulate)
 library(sortable)
 
+
+# Correct answers for residual plot matching
+correct_answers_resid <- list(
+  good = HTML('<img src="./images/good_fit_residual_plot.png" height="80">'),
+  nonlinear = HTML('<img src="./images/non-linearity_residual_plot.png" height="80">'),
+  hetero = HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="80">'),
+  non_normal = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="80">')
+)
+
+# Correct answers for outlier plot matching
+correct_answers_outlier <- list(
+  leverage = HTML('<img src="./images/high_leverage_points_residual_plot.png" height="80">'),
+  residuals = HTML('<img src="./images/large_residuals_residual_plot.png" height="80">'),
+  both = HTML('<img src="./images/both_high_leverage_&_large_residuals_residual_plot.png" height="80">'),
+  cluster = HTML('<img src="./images/clustered_outliers_residual_plot.png" height="80">')
+)
+
 # Set the path to the existing Python environment
 #reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
@@ -178,104 +195,15 @@ Before we create our own diagnostic plots, let's review the linear regression as
 Practice looking for these issues in diagnostic plots by answering the following questions:
 
 ```{r q5, echo = FALSE}
-bucket_list_ui <- bucket_list(
-  header = "5. Match each plot to the regression issue it most clearly illustrates:",
-  group_name = "residuals",
-  orientation = "vertical",
-  add_rank_list(
-    text = "Plots:",
-    labels = list(
-      HTML('<img src="./images/good_fit_residual_plot.png" height="80">'),
-      HTML('<img src="./images/non-linearity_residual_plot.png" height="80">'),
-      HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="80">'),
-      HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="80">')
-    ),
-    input_id = "unsorted"
-  ),
-  add_rank_list("Good Fit (no violations)", labels = NULL, input_id = "good"),
-  add_rank_list("Non-Linearity", labels = NULL, input_id = "nonlinear"),
-  add_rank_list("Heteroscedasticity", labels = NULL, input_id = "hetero"),
-  add_rank_list("Non-Normal Residuals", labels = NULL, input_id = "non_normal")
-)
-
-# Correct answers as HTML strings
-correct_answers <- list(
-  good = HTML('<img src="./images/good_fit_residual_plot.png" height="80">'),
-  nonlinear = HTML('<img src="./images/non-linearity_residual_plot.png" height="80">'),
-  hetero = HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="80">'),
-  non_normal = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="80">')
-)
-
-# UI wrapper
-ui <- fluidPage(
-  bucket_list_ui,
-  actionButton("submit", "Submit"),
-  verbatimTextOutput("result")
-)
-
-# Server logic
-server <- function(input, output, session) {
-  observeEvent(input$submit, {
-    result <- all(
-      identical(input$good, list(correct_answers$good)),
-      identical(input$nonlinear, list(correct_answers$nonlinear)),
-      identical(input$hetero, list(correct_answers$hetero)),
-      identical(input$non_normal, list(correct_answers$non_normal))
-    )
-    output$result <- renderText({
-      if (result) {
-        "✅ Correct! Well done."
-      } else {
-        "❌ Some matches are incorrect. Try again!"
-      }
-    })
-  })
-}
-
-# Render app inline in tutorial
-shinyApp(ui, server)
+uiOutput("residual_bucket_ui")
+actionButton("submit_resid", "Submit")
+verbatimTextOutput("result_resid")
 ```
 
 ```{r q6, echo = FALSE}
-htmltools::tags$div(
-    style = "display: flex; flex-wrap: wrap; gap: 20px;",
-    htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/high_leverage_points_residual_plot.png", height = "200"),
-      htmltools::tags$figcaption("Plot A")
-    ),
-    htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/large_residuals_residual_plot.png", height = "200"),
-      htmltools::tags$figcaption("Plot B")
-    ),
-    htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/both_high_leverage_&_large_residuals_residual_plot.png", height = "200"),
-      htmltools::tags$figcaption("Plot C")
-    ),
-    htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/clustered_outliers_residual_plot.png", height = "200"),
-      htmltools::tags$figcaption("Plot D")
-    )
-)
-
-gradethis::question_match(
-    prompt = c("Plot A", "Plot B", "Plot C", "Plot D"),
-    answer = c(
-      "High Leverage Points",
-      "Large Residuals",
-      "High Leverage + Large Residuals",
-      "Clustered Outliers"
-    ),
-    correct = list(
-      "Plot A" = "High Leverage Points",
-      "Plot B" = "Large Residuals",
-      "Plot C" = "High Leverage + Large Residuals",
-      "Plot D" = "Clustered Outliers"
-    ),
-    feedback = "Pay attention to extreme values and where they occur.",
-    shuffle = TRUE,
-    allow_retry = TRUE
-)
-
+uiOutput("outlier_bucket_ui")
+actionButton("submit_outlier", "Submit")
+verbatimTextOutput("result_outlier")
 ```
 
 ```{r q7, echo = FALSE}
@@ -712,5 +640,70 @@ question("27. For every one bedroom increase, log price is expected to  ",
          answer("decrease by 0.058."),
          allow_retry = TRUE,
          random_answer_order = TRUE)
+```
+
+```{r serverstuff, echo = FALSE, context = "server"}
+# UI for residual matching
+output$residual_bucket_ui <- renderUI({
+  bucket_list(
+    header = "5. Drag each residual plot to the issue it illustrates:",
+    group_name = "residuals",
+    orientation = "horizontal",
+    add_rank_list(
+      text = "Plots:",
+      labels = unname(correct_answers_resid),
+      input_id = "unsorted_resid"
+    ),
+    add_rank_list("Good Fit (no violations)", labels = NULL, input_id = "good"),
+    add_rank_list("Non-Linearity", labels = NULL, input_id = "nonlinear"),
+    add_rank_list("Heteroscedasticity", labels = NULL, input_id = "hetero"),
+    add_rank_list("Non-Normal Residuals", labels = NULL, input_id = "non_normal")
+  )
+})
+
+observeEvent(input$submit_resid, {
+  result <- all(
+    identical(input$good, list(correct_answers_resid$good)),
+    identical(input$nonlinear, list(correct_answers_resid$nonlinear)),
+    identical(input$hetero, list(correct_answers_resid$hetero)),
+    identical(input$non_normal, list(correct_answers_resid$non_normal))
+  )
+  output$result_resid <- renderText({
+    if (result) "✅ Correct! Well done."
+    else "❌ Some matches are incorrect. Try again!"
+  })
+})
+
+# UI for outlier matching
+output$outlier_bucket_ui <- renderUI({
+  bucket_list(
+    header = "6. Drag each residual plot to the type of outlier it shows:",
+    group_name = "outliers",
+    orientation = "horizontal",
+    add_rank_list(
+      text = "Plots:",
+      labels = unname(correct_answers_outlier),
+      input_id = "unsorted_outlier"
+    ),
+    add_rank_list("High Leverage Points", labels = NULL, input_id = "leverage"),
+    add_rank_list("Large Residuals", labels = NULL, input_id = "residuals"),
+    add_rank_list("High Leverage + Large Residuals", labels = NULL, input_id = "both"),
+    add_rank_list("Clustered Outliers", labels = NULL, input_id = "cluster")
+  )
+})
+
+observeEvent(input$submit_outlier, {
+  result <- all(
+    identical(input$leverage, list(correct_answers_outlier$leverage)),
+    identical(input$residuals, list(correct_answers_outlier$residuals)),
+    identical(input$both, list(correct_answers_outlier$both)),
+    identical(input$cluster, list(correct_answers_outlier$cluster))
+  )
+  output$result_outlier <- renderText({
+    if (result) "✅ Correct! Well done."
+    else "❌ Some matches are incorrect. Try again!"
+  })
+})
+
 ```
 
