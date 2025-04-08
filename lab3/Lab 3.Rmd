@@ -18,18 +18,18 @@ library(sortable)
 
 # Correct answers for residual plot matching
 correct_answers_resid <- list(
-  good = HTML('<img src="./images/good_fit_residual_plot.png" height="80">'),
-  nonlinear = HTML('<img src="./images/non-linearity_residual_plot.png" height="80">'),
-  hetero = HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="80">'),
-  non_normal = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="80">')
+  good = HTML('<img src="./images/good_fit_residual_plot.png" height="150">'),
+  nonlinear = HTML('<img src="./images/non-linearity_residual_plot.png" height="150">'),
+  hetero = HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="150">'),
+  non_normal = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="150">')
 )
 
 # Correct answers for outlier plot matching
 correct_answers_outlier <- list(
-  leverage = HTML('<img src="./images/high_leverage_points_residual_plot.png" height="80">'),
-  residuals = HTML('<img src="./images/large_residuals_residual_plot.png" height="80">'),
-  both = HTML('<img src="./images/both_high_leverage_&_large_residuals_residual_plot.png" height="80">'),
-  cluster = HTML('<img src="./images/clustered_outliers_residual_plot.png" height="80">')
+  leverage = HTML('<img src="./images/high_leverage_points_residual_plot.png" height="150">'),
+  residuals = HTML('<img src="./images/large_residuals_residual_plot.png" height="150">'),
+  both = HTML('<img src="./images/both_high_leverage_&_large_residuals_residual_plot.png" height="150">'),
+  cluster = HTML('<img src="./images/clustered_outliers_residual_plot.png" height="150">')
 )
 
 # Set the path to the existing Python environment
@@ -197,12 +197,14 @@ Practice looking for these issues in diagnostic plots by answering the following
 ```{r q5, echo = FALSE}
 uiOutput("residual_bucket_ui")
 actionButton("submit_resid", "Submit")
+actionButton("reset_resid", "Try Again")
 verbatimTextOutput("result_resid")
 ```
 
 ```{r q6, echo = FALSE}
 uiOutput("outlier_bucket_ui")
 actionButton("submit_outlier", "Submit")
+actionButton("reset_outlier", "Try Again")
 verbatimTextOutput("result_outlier")
 ```
 
@@ -703,6 +705,24 @@ observeEvent(input$submit_outlier, {
     if (result) "✅ Correct! Well done."
     else "❌ Some matches are incorrect. Try again!"
   })
+})
+
+observeEvent(input$reset_resid, {
+  updateRankListInput(session, "unsorted_resid", labels = unname(correct_answers_resid))
+  updateRankListInput(session, "good", labels = NULL)
+  updateRankListInput(session, "nonlinear", labels = NULL)
+  updateRankListInput(session, "hetero", labels = NULL)
+  updateRankListInput(session, "non_normal", labels = NULL)
+  output$result_resid <- renderText({ "" })  # Clear feedback
+})
+
+observeEvent(input$reset_outlier, {
+  updateRankListInput(session, "unsorted_outlier", labels = unname(correct_answers_outlier))
+  updateRankListInput(session, "leverage", labels = NULL)
+  updateRankListInput(session, "residuals", labels = NULL)
+  updateRankListInput(session, "both", labels = NULL)
+  updateRankListInput(session, "cluster", labels = NULL)
+  output$result_outlier <- renderText({ "" })
 })
 
 ```
