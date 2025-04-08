@@ -18,17 +18,17 @@ library(sortable)
 
 # Correct answers for residual plot matching
 correct_answers_resid <- list(
-  good = "Plot A",
-  nonlinear = "Plot B",
-  hetero = "Plot C",
-  non_normal = "Plot D"
+  good = "Plot C",
+  nonlinear = "Plot D",
+  hetero = "Plot A",
+  non_normal = "Plot B"
 )
 
 plot_labels_resid <- list(
-  "Plot A" = HTML('<img src="./images/good_fit_residual_plot.png" height="150">'),
-  "Plot B" = HTML('<img src="./images/non-linearity_residual_plot.png" height="150">'),
-  "Plot C" = HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="150">'),
-  "Plot D" = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="150">')
+  "Plot C" = HTML('<img src="./images/good_fit_residual_plot.png" height="150">'),
+  "Plot D" = HTML('<img src="./images/non-linearity_residual_plot.png" height="150">'),
+  "Plot A" = HTML('<img src="./images/heteroscedasticity_residual_plot_updated.png" height="150">'),
+  "Plot B" = HTML('<img src="./images/non-normal_residuals_residual_plot.png" height="150">')
 )
 
 
@@ -672,11 +672,20 @@ output$residual_bucket_ui <- renderUI({
 })
 
 observeEvent(input$submit_resid, {
+  # Default to empty list if any input is NULL
+  inputs <- list(
+    good = input$good %||% character(0),
+    nonlinear = input$nonlinear %||% character(0),
+    hetero = input$hetero %||% character(0),
+    non_normal = input$non_normal %||% character(0)
+  )
+
+  # Check whether each bucket has the expected plot label as the first item
   result <- all(
-    identical(input$good, list(correct_answers_resid$good)),
-    identical(input$nonlinear, list(correct_answers_resid$nonlinear)),
-    identical(input$hetero, list(correct_answers_resid$hetero)),
-    identical(input$non_normal, list(correct_answers_resid$non_normal))
+    length(inputs$good) == 1 && inputs$good[1] == correct_answers_resid$good,
+    length(inputs$nonlinear) == 1 && inputs$nonlinear[1] == correct_answers_resid$nonlinear,
+    length(inputs$hetero) == 1 && inputs$hetero[1] == correct_answers_resid$hetero,
+    length(inputs$non_normal) == 1 && inputs$non_normal[1] == correct_answers_resid$non_normal
   )
 
   output$result_resid <- renderText({
