@@ -197,14 +197,14 @@ Practice looking for these issues in diagnostic plots by answering the following
 ```{r q5, echo = FALSE}
 uiOutput("residual_bucket_ui")
 actionButton("submit_resid", "Submit")
-actionButton("reset_resid", "Try Again")
+#actionButton("reset_resid", "Try Again")
 verbatimTextOutput("result_resid")
 ```
 
 ```{r q6, echo = FALSE}
 uiOutput("outlier_bucket_ui")
 actionButton("submit_outlier", "Submit")
-actionButton("reset_outlier", "Try Again")
+#actionButton("reset_outlier", "Try Again")
 verbatimTextOutput("result_outlier")
 ```
 
@@ -664,17 +664,28 @@ output$residual_bucket_ui <- renderUI({
 })
 
 observeEvent(input$submit_resid, {
+  good_input <- input$good %||% list()
+  nonlinear_input <- input$nonlinear %||% list()
+  hetero_input <- input$hetero %||% list()
+  non_normal_input <- input$non_normal %||% list()
+
+  # Convert all values to plain strings for comparison
   result <- all(
-    identical(input$good, list(correct_answers_resid$good)),
-    identical(input$nonlinear, list(correct_answers_resid$nonlinear)),
-    identical(input$hetero, list(correct_answers_resid$hetero)),
-    identical(input$non_normal, list(correct_answers_resid$non_normal))
+    identical(as.character(good_input), as.character(list(as.character(correct_answers_resid$good)))),
+    identical(as.character(nonlinear_input), as.character(list(as.character(correct_answers_resid$nonlinear)))),
+    identical(as.character(hetero_input), as.character(list(as.character(correct_answers_resid$hetero)))),
+    identical(as.character(non_normal_input), as.character(list(as.character(correct_answers_resid$non_normal))))
   )
+
   output$result_resid <- renderText({
-    if (result) "✅ Correct! Well done."
-    else "❌ Some matches are incorrect. Try again!"
+    if (result) {
+      "✅ Correct! Well done."
+    } else {
+      "❌ Some matches are incorrect. Try again!"
+    }
   })
 })
+
 
 # UI for outlier matching
 output$outlier_bucket_ui <- renderUI({
@@ -707,23 +718,23 @@ observeEvent(input$submit_outlier, {
   })
 })
 
-observeEvent(input$reset_resid, {
-  updateRankListInput(session, "unsorted_resid", labels = unname(correct_answers_resid))
-  updateRankListInput(session, "good", labels = NULL)
-  updateRankListInput(session, "nonlinear", labels = NULL)
-  updateRankListInput(session, "hetero", labels = NULL)
-  updateRankListInput(session, "non_normal", labels = NULL)
-  output$result_resid <- renderText({ "" })  # Clear feedback
-})
+# observeEvent(input$reset_resid, {
+#   updateRankListInput(session, "unsorted_resid", labels = unname(correct_answers_resid))
+#   updateRankListInput(session, "good", labels = NULL)
+#   updateRankListInput(session, "nonlinear", labels = NULL)
+#   updateRankListInput(session, "hetero", labels = NULL)
+#   updateRankListInput(session, "non_normal", labels = NULL)
+#   output$result_resid <- renderText({ "" })  # Clear feedback
+# })
 
-observeEvent(input$reset_outlier, {
-  updateRankListInput(session, "unsorted_outlier", labels = unname(correct_answers_outlier))
-  updateRankListInput(session, "leverage", labels = NULL)
-  updateRankListInput(session, "residuals", labels = NULL)
-  updateRankListInput(session, "both", labels = NULL)
-  updateRankListInput(session, "cluster", labels = NULL)
-  output$result_outlier <- renderText({ "" })
-})
+# observeEvent(input$reset_outlier, {
+#   updateRankListInput(session, "unsorted_outlier", labels = unname(correct_answers_outlier))
+#   updateRankListInput(session, "leverage", labels = NULL)
+#   updateRankListInput(session, "residuals", labels = NULL)
+#   updateRankListInput(session, "both", labels = NULL)
+#   updateRankListInput(session, "cluster", labels = NULL)
+#   output$result_outlier <- renderText({ "" })
+# })
 
 ```
 
