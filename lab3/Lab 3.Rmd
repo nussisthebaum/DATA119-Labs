@@ -182,19 +182,19 @@ Practice looking for these issues in diagnostic plots by answering the following
 htmltools::tags$div(
     style = "display: flex; flex-wrap: wrap; gap: 20px;",
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/heteroscedasticity_residual_plot_updated.png", height = "150"),
+      htmltools::tags$img(src = "./images/heteroscedasticity_residual_plot_updated.png", height = "200"),
       htmltools::tags$figcaption("Plot A")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/non-linearity_residual_plot.png", height = "150"),
+      htmltools::tags$img(src = "./images/non-linearity_residual_plot.png", height = "200"),
       htmltools::tags$figcaption("Plot B")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/good_fit_residual_plot.png", height = "150"),
+      htmltools::tags$img(src = "./images/good_fit_residual_plot.png", height = "200"),
       htmltools::tags$figcaption("Plot C")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/non-normal_residuals_residual_plot.png", height = "150"),
+      htmltools::tags$img(src = "./images/non-normal_residuals_residual_plot.png", height = "200"),
       htmltools::tags$figcaption("Plot D")
     )
 )
@@ -223,19 +223,19 @@ question_match(
 htmltools::tags$div(
     style = "display: flex; flex-wrap: wrap; gap: 20px;",
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/high_leverage_points_residual_plot.png", height = "150"),
+      htmltools::tags$img(src = "./images/high_leverage_points_residual_plot.png", height = "200"),
       htmltools::tags$figcaption("Plot A")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/large_residuals_residual_plot.png", height = "150"),
+      htmltools::tags$img(src = "./images/large_residuals_residual_plot.png", height = "200"),
       htmltools::tags$figcaption("Plot B")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/both_high_leverage_&_large_residuals_residual_plot.png", height = "150"),
+      htmltools::tags$img(src = "./images/both_high_leverage_&_large_residuals_residual_plot.png", height = "200"),
       htmltools::tags$figcaption("Plot C")
     ),
     htmltools::tags$figure(
-      htmltools::tags$img(src = "./images/clustered_outliers_residual_plot.png", height = "150"),
+      htmltools::tags$img(src = "./images/clustered_outliers_residual_plot.png", height = "200"),
       htmltools::tags$figcaption("Plot D")
     )
 )
