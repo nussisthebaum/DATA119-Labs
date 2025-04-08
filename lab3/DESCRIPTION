@@ -1,0 +1,10 @@
+Package: lab3
+Title: Assumption Checking and Multiple Linear Regression
+Version: 0.0.2
+Description: A tutorial using gradethis::question_match from the development version of gradethis.
+Remotes:
+    rstudio/gradethis
+Depends:
+    R (>= 4.0),
+    learnr,
+    gradethis
