@@ -176,10 +176,12 @@ Before we create our own diagnostic plots, let's review the linear regression as
 
 Practice looking for these issues in diagnostic plots by answering the following questions:
 
+5. Match each plot to the regression issue it most clearly illustrates:
+
 ```{r q5, echo = FALSE}
 htmltools::tagList(
   htmltools::tags$div(
-    style = "display: flex; gap: 20px; margin-bottom: 10px;",
+    style = "display: flex; flex-wrap: wrap; gap: 20px;",
     htmltools::tags$figure(
       htmltools::tags$img(src = "./images/good_fit_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot A")
@@ -187,10 +189,7 @@ htmltools::tagList(
     htmltools::tags$figure(
       htmltools::tags$img(src = "./images/non-linearity_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot B")
-    )
-  ),
-  htmltools::tags$div(
-    style = "display: flex; gap: 20px;",
+    ),
     htmltools::tags$figure(
       htmltools::tags$img(src = "./images/heteroscedasticity_residual_plot_updated.png", height = "120"),
       htmltools::tags$figcaption("Plot C")
@@ -199,40 +198,33 @@ htmltools::tagList(
       htmltools::tags$img(src = "./images/non-normal_residuals_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot D")
     )
+  ),
+  
+  gradethis::question_match(
+    prompt = c("Plot A", "Plot B", "Plot C", "Plot D"),
+    answer = c(
+      "Good Fit (no violations)",
+      "Non-Linearity",
+      "Heteroscedasticity",
+      "Non-Normal Residuals"
+    ),
+    correct = list(
+      "Plot A" = "Good Fit (no violations)",
+      "Plot B" = "Non-Linearity",
+      "Plot C" = "Heteroscedasticity",
+      "Plot D" = "Non-Normal Residuals"
+    ),
+    feedback = "Refer to each residual pattern's shape and spread.",
+    shuffle = TRUE,
+    allow_retry = TRUE
   )
 )
-
-question(
-  "Match each letter to its position in the alphabet:",
-  type = "matching",
-  list(
-    "A" = "1",
-    "B" = "2",
-    "C" = "3"
-  ),
-  correct = TRUE
-)
-
-question(
-  "5. Match each plot to the regression issue it most clearly illustrates:",
-  type = "matching",
-  list(
-    "Plot A" = "Good Fit (no violations)",
-    "Plot B" = "Non-Linearity",
-    "Plot C" = "Heteroscedasticity",
-    "Plot D" = "Non-Normal Residuals"
-  ),
-  correct = TRUE,
-  allow_retry = TRUE,
-  random_answer_order = TRUE
-)
-
 ```
 
 ```{r q6, echo = FALSE}
 htmltools::tagList(
   htmltools::tags$div(
-    style = "display: flex; gap: 20px; margin-bottom: 10px;",
+    style = "display: flex; flex-wrap: wrap; gap: 20px;",
     htmltools::tags$figure(
       htmltools::tags$img(src = "./images/high_leverage_points_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot A")
@@ -240,10 +232,7 @@ htmltools::tagList(
     htmltools::tags$figure(
       htmltools::tags$img(src = "./images/large_residuals_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot B")
-    )
-  ),
-  htmltools::tags$div(
-    style = "display: flex; gap: 20px;",
+    ),
     htmltools::tags$figure(
       htmltools::tags$img(src = "./images/both_high_leverage_&_large_residuals_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot C")
@@ -252,23 +241,27 @@ htmltools::tagList(
       htmltools::tags$img(src = "./images/clustered_outliers_residual_plot.png", height = "120"),
       htmltools::tags$figcaption("Plot D")
     )
+  ),
+  
+  gradethis::question_match(
+    prompt = c("Plot A", "Plot B", "Plot C", "Plot D"),
+    answer = c(
+      "High Leverage Points",
+      "Large Residuals",
+      "High Leverage + Large Residuals",
+      "Clustered Outliers"
+    ),
+    correct = list(
+      "Plot A" = "High Leverage Points",
+      "Plot B" = "Large Residuals",
+      "Plot C" = "High Leverage + Large Residuals",
+      "Plot D" = "Clustered Outliers"
+    ),
+    feedback = "Pay attention to extreme values and where they occur.",
+    shuffle = TRUE,
+    allow_retry = TRUE
   )
 )
-
-question(
-  "6. Match each residual plot to the type of outlier it demonstrates:",
-  type = "matching",
-  list(
-    "Plot A" = "High Leverage Points",
-    "Plot B" = "Large Residuals",
-    "Plot C" = "High Leverage + Large Residuals",
-    "Plot D" = "Clustered Outliers"
-  ),
-  correct = TRUE,
-  allow_retry = TRUE,
-  random_answer_order = TRUE
-)
-
 ```
 
 ```{r q7, echo = FALSE}
@@ -291,7 +284,7 @@ question_checkbox(
 ```{r q8, echo = FALSE}
 question_checkbox(
   HTML("8. Which issues are present in this residual plot shown?<br><br>
-    <img src='./images/exponential_combo_residual_plot.png' height='200px'>"),
+    <img src='./images/exponential_combo_residual_plot_updated.png' height='200px'>"),
   answer("Non-Linearity", correct = TRUE),
   answer("Heteroscedasticity", correct = TRUE),
   answer("Non-Normal Residuals"),
