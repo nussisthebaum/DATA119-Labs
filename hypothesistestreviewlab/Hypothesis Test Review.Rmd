@@ -56,11 +56,15 @@ The goal of this lab is to review hypothesis testing, complete with an example o
 
 ## Setup
 
-This lab will use `numpy` and `scipy.stats`. Run this cell to load the packages and DataFrame.
+This lab will use `numpy` and `scipy.stats`. You may also want to use your favorite graphics packages (`matplotlib`, `seaborn`, or `plotnine`). Run this cell to load the packages. 
 
 ```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 import numpy as np 
 import scipy.stats as st 
+
+import matplotlib as plt
+import seaborn
+import plotnine as p9
 ```
 
 ## Parameters and Statistics
@@ -124,7 +128,7 @@ In general--what is a hypothesis? In a more casual setting, we might use the wor
 
 ### Null and Alternative Hypotheses
 
-Statistically speaking, we often talk about a pair of **hypotheses**: a set of competing ideas to be tested. Within the pair, we have a **null hypothesis**, represented by $H_0$.The **null hypothesis** represents a claim to be tested. Sometimes, we think about the null hypothesis as the conventional or traditional belief. However, in general, we treat the null hypothesis skeptically--we assume it to be true, but we are willing to change our minds if something better comes along. 
+Statistically speaking, we often talk about a pair of **hypotheses**: a set of competing ideas to be tested. Within the pair, we have a **null hypothesis**, represented by $H_0$. The **null hypothesis** represents a claim to be tested. Sometimes, we think about the null hypothesis as the conventional or traditional belief. However, in general, we treat the null hypothesis skeptically--we assume it to be true, but we are willing to change our minds if something better comes along. 
     
 That something better is the other hypothesis, called the **alternative hypothesis** and represented by $H_A$ (sometimes you might also see $H_1$). The alternative hypothesis represents an alternative claim under consideration.
 
@@ -134,7 +138,7 @@ When we carry out a hypothesis test, we are always using hypothesis tests about 
 question(
   "Which of the following is an appropriate pair of hypotheses?",
   answer("$H_0: \\mu = 0$ vs. $H_A: \\mu \\neq 0$", correct = TRUE), 
-  answer("$H_0: \\bar{x} = 0$ vs. $H_A: \\bar{x} \\neq 0$"),
+  answer("$H_0: \\bar{x} = 0$ vs. $H_A: \\bar{x} \\neq 0$", message = "Hypothesis tests are always statements about parameters, not statistics!"),
   allow_retry = TRUE)
 ```
 
@@ -173,8 +177,9 @@ Reject | Type I | Correct
 Fail to Reject | Correct | Type II 
 
 Here, 
-  * A **Type I Error** occurs when we reject the null hypothesis when it is actually true (Type I: Jump the gun!). 
-  * A **Type II Error** occurs when we fail to reject the null hypothesis when the alternative is actually true (Type II: Avoid the new). 
+
+* A **Type I Error** occurs when we reject the null hypothesis when it is actually true (Type I: Jump the gun!). 
+* A **Type II Error** occurs when we fail to reject the null hypothesis when the alternative is actually true (Type II: Avoid the new). 
 
 We have the ability to control how frequently we make Type I errors! If the null hypothesis is actually true, the **significance level**, represented by $\alpha$, indicates how often the data lead us to incorrectly reject $H_0$. The traditional $\alpha$ is equal to 0.05; however, we may select a level that is smaller ($\alpha$ = 0.01) or larger ($\alpha$ = 0.10) than 0.05, depending on the consequences of the test's conclusion. 
 
@@ -184,7 +189,7 @@ If making a Type I error is dangerous or costly, we choose a small $\alpha$. If 
 
 One way to quantify the strength of evidence against the null hypothesis and in favor of the alternative hypothesis is a **p-value**. Formally, the **p-value** is the probability of observing a statistic as or more extreme than the current value, given that the null hypothesis is true. 
 
-Probabilities, including p-values, are often associated with random variables. It turns out that a statistic is just a combination of random variables--which means a statistic is also a random variable! To calculate a probability, such as the p-value, you need to assume a distribution for a statistic, known as a sampling distribution. 
+Probabilities, including p-values, are often associated with random variables. It turns out that a statistic is just a function of random variables--which means a statistic is also a random variable! To calculate a probability, such as the p-value, you need to assume a distribution for a statistic, known as a sampling distribution. 
 
 The sampling distribution tells you what values the statistic will take and how often they occur. Why do we need a sampling distribution? Remember--we are calculating the statistic from a (hopefully random) sample. However, different samples will result in different statistics, so we are expecting some variability. The sampling distribution gives us a mathematical way to describe that variability. 
 
@@ -204,7 +209,7 @@ In practice, we base this distribution on the **null value**, often denoted $\mu
 
 However, if we do not know the mean $\mu_X$ for a variable, we are not very likely to know the variables standard deviation, $\sigma_X$. Often, we have to estimate $\sigma_X$ with the sample standard deviation, $s$. Because of the extra uncertainty, we usually use what is called a $t$-distribution instead of the normal distribution. The $t$-distribution has slightly thicker tails than a normal distribution, which helps us account for the extra uncertainty we introduced by using $s$ to estimate $\sigma_X$--you can see a few different $t$-distributions in the image below:
 
-```{r, echo = FALSE, fig.width=6}
+```{r, echo = FALSE, fig.width=4.5}
 library(ggplot2)
 library(latex2exp)
 
@@ -225,7 +230,7 @@ ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
 
 ### Test Statistics and p-Values
 
-Again, the **p-value** is the probability of observing a statistic as or more extreme than the current value, given that the null hypothesis is true. This probability is calculated using the sampling distribution, but we also need a **test statistic**, which helps define the "as or more extreme than the current value" portion of the definition. The test statistic for a one-sample hypothesis test for a mean is 
+Again, the **p-value** is the probability of observing a statistic as or more extreme than the current value, given that the null hypothesis is true. This probability is calculated using the sampling distribution, but we also need a **test statistic**, which helps define the "as or more extreme than the current value" portion of the definition. The test statistic for a one-sample $t$-test for a mean is 
 
 $$t = \frac{\bar{x}- \mu_0}{\frac{s}{\sqrt{n}}}$$
 
@@ -249,7 +254,7 @@ question(
 
 ```{r q3, echo=FALSE}
 question(
-  "Say you have a p-value of 0.079. What decision would you make using a significance level of $\alpha = 0.10$?",
+  "Say you have a p-value of 0.079. What decision would you make using a significance level of $\\alpha = 0.10$?",
   answer("Fail to reject the null, as the p-value is less than the significance level."), 
   answer("Fail to reject the null, as the p-value is greater than the significance level."),
   answer("Reject the null, as the p-value is less than the significance level.", correct = TRUE), 
@@ -452,10 +457,10 @@ $$t = \frac{\bar{x} - \mu_0}{\frac{s}{\sqrt{n}}}$$
 ```{r q7, echo=FALSE}
 question(
   "What is the appropriate null value, $\\mu_0$?",
-  answer("236.76"), 
+  answer("236.76", message = "This is the sample mean, not the null value."), 
   answer("284", correct = TRUE), 
-  answer("10.21"), 
-  answer("64"), 
+  answer("10.21", message = "This is the standard error, not the null value."), 
+  answer("64", message = "This is the sample size, not the null value."), 
   random_answer_order = TRUE,
   allow_retry = TRUE, 
   post_message = "Congratulations! You have found the fourth secret word: USE."
@@ -484,8 +489,8 @@ Now, we can use Python to find the p-value. One last time, remember that the p-v
 
 ```{r, echo = FALSE, fig.width=6}
 ggplot(NULL, aes(c(-5,5))) +
-  geom_area(stat = "function", fun = dnorm, fill = "lightgray", xlim = c(-4.62557, 3)) + 
-  geom_area(stat = "function", fun = dnorm, fill = "#800000", xlim = c(-3, -4.62557)) +
+  geom_area(stat = "function", fun = dt, args = list(df = 63), fill = "lightgray", xlim = c(-4.62557, 3)) + 
+  geom_area(stat = "function", fun = dt, args = list(df = 63), fill = "#800000", xlim = c(-3, -4.62557)) +
   xlab(label = unname(TeX("$t$"))) + 
   ylab(label = unname(TeX("$P(t)$")))
 ```
@@ -493,7 +498,7 @@ ggplot(NULL, aes(c(-5,5))) +
 The p-value is highlighted on the graph below, and feels very small! The last step is to calculate the p-value, which can be done using the cell below (you don't need to know the specifics).
 
 ```{python p_value, exercise = TRUE, exercise.setup = "t"}
-st.t.cdf(t_mcds, 63)
+st.t.cdf(t_mcds, df = 63)
 ```
 
 ### Conclude
