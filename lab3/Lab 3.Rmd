@@ -67,7 +67,6 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
 ```
 
-
 ```{r header, echo = FALSE}
 library(htmltools)
 
