@@ -56,7 +56,7 @@ The goal of this lab is to review hypothesis testing, complete with an example o
 
 ## Setup
 
-This lab will use `numpy` and `scipy.stats`. You may also want to use your favorite graphics packages (`matplotlib`, `seaborn`, or `plotnine`). Run this cell to load the packages. 
+This lab will use `numpy` and `scipy.stats`. You may also want to use your favorite graphics packages (`matplotlib`, `seaborn`, or `plotnine`, which also requires `pandas`). Run this cell to load the packages. 
 
 ```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 import numpy as np 
@@ -64,6 +64,7 @@ import scipy.stats as st
 
 import matplotlib as plt
 import seaborn
+import pandas as pd
 import plotnine as p9
 ```
 
