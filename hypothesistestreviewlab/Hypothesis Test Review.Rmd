@@ -472,15 +472,19 @@ Remember, the null value is the value we would like to compare against! And in t
 
 Use the null value, `se_mcds`, and the equation for $t$ in the cell below. Save it as `t_mcds`.
 
-```{python t, exercise = TRUE, exercise.setup = "se"}
+```{python setup_se, exercise = FALSE, echo = FALSE, exercise.setup = "setup2"}
+se_mcds = np.std(mcds)/np.sqrt(len(mcds))
+```
+
+```{python t_value, exercise = TRUE, exercise.setup = "se"}
 
 ```
 
-```{python t-solution, message = FALSE, warning = FALSE, echo = FALSE}
+```{python t_value-solution, message = FALSE, warning = FALSE, echo = FALSE}
 t_mcds = (np.mean(mcds) - 284)/se_mcds
 ```
 
-```{r t-code-check, message = FALSE, warning = FALSE}
+```{r t_value-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
@@ -498,7 +502,11 @@ ggplot(NULL, aes(c(-5,5))) +
 
 The p-value is highlighted on the graph below, and feels very small! The last step is to calculate the p-value, which can be done using the cell below (you don't need to know the specifics).
 
-```{python p_value, exercise = TRUE, exercise.setup = "t"}
+```{python setup_t, exercise = FALSE, echo = FALSE, exercise.setup = "setup_se"}
+t_mcds = (np.mean(mcds) - 284)/se_mcds
+```
+
+```{python p_value, exercise = TRUE, exercise.setup = "setup_t"}
 st.t.cdf(t_mcds, df = 63)
 ```
 
