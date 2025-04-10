@@ -105,7 +105,11 @@ model_num.summary()
 grade_this_code()
 ```
 
-You should see an error that says "The condition number is large, 1.73e+03. This might indicate that there are strong multicollinearity or other numerical problems." Recall that:
+You should see an error that says "The condition number is large, 1.73e+03. This might indicate that there are strong multicollinearity or other numerical problems." 
+
+Recall from Lab 3 that one of the assumptions of linear regression is **Independence of Predictors**. Our X variables are referred to as *independent* variables for a reason. We don't want the values of any of our X's covary-ing with each other. This causes something called *unidentifiability* which make it difficult for us to interpret our coefficients in any meaningful way.  
+
+In class we said:
 
 * Two predictors being highly correlated are referred to as "collinear".
 * A predictor being highly correlated to more than one other predictor is referred to as multicollinear. 
@@ -116,7 +120,14 @@ The VIF is defined as
 
 $$VIF = \frac{1}{(1- R^2_X)}$$
 
-where $R^2_X$ is the proportion of variation in $X$ that can be explained by its linear relationship to the other explanatory variables in the model. Notice that the response variable, $y$, is nowhere in this equation! That is because we only care about the relationships between the predictors. 
+where $R^2_X$ is the proportion of variation in $X$ that can be explained by its linear relationship to the other explanatory variables in the model. 
+
+:::: {.notebox}
+::: {.center}
+**Note:**
+:::
+The response variable, $y$, is nowhere in this equation! That is because we only care about the relationships between the predictors. 
+::::
 
 Let's investigate further. Here is how to calculate VIF using the `statsmodels` module (although it's buried very deep!!) and something called a list comprehension. Essentially, the `variance_inflation_factor()` function accepts [two arguments](https://www.statsmodels.org/dev/generated/statsmodels.stats.outliers_influence.variance_inflation_factor.html):
 
@@ -150,20 +161,21 @@ vif_model_num
 Let's consider the VIF for `guest_satisfaction_overall`, which is almost exactly two. 
 
 ```{r q3, echo=FALSE}
-question("3. If the VIF for `guest_satisfaction_overall` is 2, what is $R^2_{guest \\; satisfaction \\; overall}?$ ",
-         answer("2"),
-         answer("4"),
-         answer("$\\sqrt{2}$"),
-         answer("0.5", correct=TRUE),
-         answer("0.25"),
-         answer("$\\sqrt{0.5}$"),
-         random_answer_order = TRUE,
-         allow_retry = TRUE,
-         post_message = "Congratulations! You have found the first secret word: TUNE."
+question_numeric("3. If the VIF for `guest_satisfaction_overall` is 2, what is $R^2_{guest \\; satisfaction \\; overall}?$ ",
+  answer_fn(function(value) {
+    if (value == 0.5) {
+      correct()
+    } else {
+      incorrect()
+    }
+  },
+  step = 0.1),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the first secret word: TUNE."
 )
 ```
 
-4. We can confirm this answer! Fit a new model predicting `guest_satisfaction_overall` from  `person_capacity`, `cleanliness_rating`, `bedrooms`, `dist`, `metro_dist`, `attr_index_norm`, `rest_index_norm`, `lng`, and `lat`. Then, extract the $r^2$. 
+4. We can confirm this answer! Fit a new model predicting `guest_satisfaction_overall` from  `person_capacity`, `cleanliness_rating`, `bedrooms`, `dist`, `metro_dist`, `attr_index_norm`, `rest_index_norm`, `lng`, and `lat`. Then, extract the $R^2$. 
 
 ```{python VIF3, exercise = TRUE, message = FALSE, exercise.setup="setup2_5"}
 X_gso = AirBnB_prices[[___]]
@@ -195,11 +207,15 @@ Almost exactly what we would have expected, after accounting for rounding error!
 Now that you know where the VIF comes from and how to calculate it, let's interpret the output. When a predictor $X$ is well explained by the other variables, a.k.a., multicollinearity, VIF is very high. There are different rules of thumb, but in this class, over 10 is worrisome. 
 
 ```{r q5, echo=FALSE}
-question("5. If the VIF is equal to 10, what percent of variation can be explained by the other predictors?",
-  answer("90.0%", correct = TRUE),
-  answer("10.0%"),
-  answer("1.0%"),
-  answer("31.6%"),
+question_numeric("5. If the VIF is equal to 10, what percent of variation can be explained by the other predictors? Write this as a  percentage, rounded to one decimal place, without a % at the end.",
+  answer_fn(function(value) {
+    if (value == 90.0) {
+      correct()
+    } else {
+      incorrect()
+    }
+  },
+  step = 0.1),
   random_answer_order = TRUE,
   allow_retry = TRUE,
   post_message = "Congratulations! You have found the second secret word: HOTDOG."
@@ -207,7 +223,7 @@ question("5. If the VIF is equal to 10, what percent of variation can be explain
 ```
 
 ```{r q6, echo=FALSE}
-question("6. Using the rule of thumb that a VIF over 10 is worrisome, should we be worried about any of the variables?",
+question_checkbox("6. Using the rule of thumb that a VIF over 10 is worrisome, should we be worried about any of the variables?",
   answer("`const`", correct = TRUE),
   answer("`person_capacity`"),
   answer("`cleanliness_rating`"),
@@ -237,30 +253,30 @@ AirBnB_prices.columns
 ```
 
 ```{r q7, echo=FALSE}
-question("7. Which variables are categorical (regardless of how they have been stored)?",
-         answer("`realSum`"),
-         answer("`room_type`", correct=TRUE),
-         answer("`room_shared`", correct=TRUE),
-         answer("`room_private`", correct=TRUE),
-         answer("`person_capacity`"),
-         answer("`host_is_superhost`", correct=TRUE),
-         answer("`multi`", correct=TRUE),
-         answer("`biz`", correct=TRUE),
-         answer("`cleanliness_rating`"),
-         answer("`guest_satisfaction_overall`"),
-         answer("`bedrooms`"),
-         answer("`dist`"),
-         answer("`metro_dist`"),
-         answer("`attr_index`"),
-         answer("`attr_index_norm`"),
-         answer("`rest_index`"),
-         answer("`rest_index_norm`"),
-         answer("`lng`"),
-         answer("`lat`"),
-         answer("`city`", correct=TRUE),
-         answer("`dayTypes`", correct=TRUE),
-         allow_retry = TRUE,
-         post_message = "Congratulations! You have found the fourth secret word: BROTHER.")
+question_checkbox("7. Which variables are categorical (regardless of how they have been stored)?",
+                  answer("`realSum`"),
+                  answer("`room_type`", correct = TRUE),
+                  answer("`room_shared`", correct = TRUE),
+                  answer("`room_private`", correct = TRUE),
+                  answer("`person_capacity`"),
+                  answer("`host_is_superhost`", correct = TRUE),
+                  answer("`multi`", correct = TRUE),
+                  answer("`biz`", correct = TRUE),
+                  answer("`cleanliness_rating`"),
+                  answer("`guest_satisfaction_overall`"),
+                  answer("`bedrooms`"),
+                  answer("`dist`"),
+                  answer("`metro_dist`"),
+                  answer("`attr_index`"),
+                  answer("`attr_index_norm`"),
+                  answer("`rest_index`"),
+                  answer("`rest_index_norm`"),
+                  answer("`lng`"),
+                  answer("`lat`"),
+                  answer("`city`", correct = TRUE),
+                  answer("`dayTypes`", correct = TRUE),
+                  allow_retry = TRUE,
+                  post_message = "Congratulations! You have found the fourth secret word: BROTHER.")
 ```
 
 8. `multi` and `biz` are already stored as 0's and 1's. `room_type`, `room_shared`, `room_private`, `host_is_superhost`, `city`, and `dayType` are not and need to be converted to dummy variables. Let's use the methods from `pandas`--the specific function is [`get_dummies()`](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html). The first argument is the DataFrame and the second is a list of categorical variables--try it now.
@@ -277,7 +293,7 @@ pd.get_dummies(AirBnB_prices, columns = ['room_type', 'room_shared', 'room_priva
 grade_this_code()
 ```
 
-Look closely at `room_type`-- you should see that there are already dummy variables for `room_type`, `room_shared` and `room_private`! WARNING! If you put two columns that have identical information into a linear regression model, the math will not work. **You need to be careful when examining the documentation to see that you do not put shared information into your model, but that also happens if we put the wrong number of categorical variables in.**
+Look closely at `room_type`-- you should see that there are already dummy variables for `room_type`, `room_shared` and `room_private`! WARNING!!!! If you put two columns that have identical information into a linear regression model, the math will not work. **You need to be careful when examining the documentation to see that you do not put shared information into your model, but that also happens if we put the wrong number of categorical variables in.**
 
 ```{r q9, echo=FALSE}
 question("9. How are the results of `pd.get_dummies()` stored?",
