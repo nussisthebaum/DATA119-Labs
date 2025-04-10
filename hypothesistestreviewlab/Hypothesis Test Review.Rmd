@@ -476,7 +476,7 @@ Use the null value, `se_mcds`, and the equation for $t$ in the cell below. Save 
 se_mcds = np.std(mcds)/np.sqrt(len(mcds))
 ```
 
-```{python t_value, exercise = TRUE, exercise.setup = "se"}
+```{python t_value, exercise = TRUE, exercise.setup = "setup_se"}
 
 ```
 
