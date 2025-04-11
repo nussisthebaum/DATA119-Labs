@@ -414,7 +414,6 @@ grocery_list = ['apple', 'apple', 'milk', 'cheese', 'egg', 'egg', 'egg']
 ```
 
 The best way to do this with a list is to write a loop or list comprehension. However, there is a better way to carry out tasks like this using a different data type: a **set**. 
-
 A **set** is an unordered sequence of unique values that can be changed. 
 
 You can create a set by using the curly braces (`{}`). Each element is separated by commas. Alternatively, you can use the built-in function `set()` to convert a list to a set. 
@@ -520,7 +519,7 @@ Random_set
 
 #### `type()`
 
- Remember that we can call `type()` on an object, including sets, to see type it is!
+Remember that we can call `type()` on an object, including sets, to see type it is!
 
 ```{python set7, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set2'}
 print(type(Random_set))
@@ -678,6 +677,136 @@ grade_this_code()
 ```
 
 ### Tuples
+
+Like lists, a **tuple** is an ordered sequence of values. However, unlike lists, tuples cannot be changed (including adding and removing elements) after they are created--this is known as being **immutable**.
+
+Tuples can be helpful when data are structured like Cartesian coordinates, but can be also generalized to a greater number of dimensions. These objects often can be stored together, but are somewhat nonsensical to store as a list.
+
+Consider a list of universities with the following information:
+ 
+* Name
+* City 
+* State 
+
+It might make more sense to bundle this information as a tuple (also called "packing").
+
+You can create a tuple by using parentheses (`()`). Each element in the tuple should be separated by commas.
+
+#### Let's create a tuple!
+
+Let's create a tuple representing the University of Chicago and its city and state.
+
+```{python tuple1, exercise=TRUE, exercise.eval = FALSE}
+uc = ("University of Chicago", "Chicago", "Illinois")
+uc
+```
+
+##### Tuples can have different data types!
+
+Let's say that we want to add an element to the tuple for the University's undergraduate enrollment (which requires an integer type, not a string). Remember, you can't change a tuple after it has been made because it is immutable! This includes adding or removing elements. You would have to overwrite the tuple or create a new one. 
+
+```{python tuple2, exercise=TRUE, exercise.eval = FALSE}
+uc_enrollment = ("University of Chicago", "Chicago", "Illinois", 7653)
+uc_enrollment
+```
+
+#### `type()`
+
+Remember that we can call `type()` on an object, including sets, to see type it is!
+
+```{python tuple3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+type(uc_enrollment)
+```
+
+We can also find the length of a tuple:
+
+```{python tuple4, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+len(uc_enrollment)
+```
+
+
+#### Accessing values from a tuple
+
+Because tuples are ordered, each element of the tuple is assigned an index corresponding to its position where **indices start at 0**. We can access an element by calling the tuple and putting in square brackets the element we want!
+
+```{python tuple5, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+uc_enrollment[1]
+```
+
+Just like lists, negative indexes count from the end of the tuple.
+
+```{python tuple6, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+uc_enrollment[-1]
+```
+
+9. What will be the result of running the following code? Answer in the box below.
+
+```python
+stanford_enrollment = ("Stanford University", "Stanford", "California", 7554)
+stanford_enrollment[2]
+```
+
+```{r q9, echo=FALSE}
+question(
+  "What will be the result of running the code above?",
+  answer("Stanford University"),
+  answer("Stanford"),
+  answer("California", correct = TRUE),
+  answer("7554"),
+  allow_retry = TRUE
+)
+```
+
+#### Tuple methods
+
+Python only has two built-in methods for tuples!
+
+* `count()`: Returns the number of times a specified value occurs in a tuple.
+* `index()`: Searches the tuple for a specified value and returns the position of where it was found 
+
+Write a line of code to count how many times `'Illinois'` occurs in `uc_enrollment`.
+
+```{python tuple7, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+
+```
+
+```{python tuple7-solution, message = FALSE, warning = FALSE, echo = FALSE}
+uc_enrollment.count("Illinois")
+```
+
+```{r tuple7-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+Write a line of code to find which index represents `'Illinois'` in `uc_enrollment`.
+
+```{python tuple8, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+
+```
+
+```{python tuple8-solution, message = FALSE, warning = FALSE, echo = FALSE}
+uc_enrollment.index("Illinois")
+```
+
+```{r tuple8-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+<!-- #### Let's play with tuples! -->
+
+<!-- Create a new tuple, `northwestern_enrollment`, knowing that Northwestern University is located in Evanston, Illinois, and has an undergraduate enrollment of 8,709. -->
+
+<!-- ```{python tuple_ex1, exercise=TRUE, exercise.eval = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{python tuple_ex1-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+<!-- northwestern_enrollment = ("Northwestern University", "Evanston", "IL", 8709) -->
+<!-- ``` -->
+
+<!-- ```{r tuple_ex1-code-check, message = FALSE, warning = FALSE, echo = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
 
 ## Grouping Data using Arrays
 
