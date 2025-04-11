@@ -132,13 +132,13 @@ School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgi
 School_locations[1]
 ```
 
-Negative indexes count from the end of the sequence
+Negative indexes count from the end of the sequence.
 
 ```{python listvals2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'listvals1'}
 School_locations[-1]
 ```
 
-If our list is long or we want the first or second from end this is useful!
+If our list is long or we want the first or second from end, this is useful!
 
 
 1. What will be the result of running the following code? Answer in the box below.
@@ -206,7 +206,7 @@ question(
 ```
 
 
-#### Default Settings: List slicing
+#### Default Settings: List Slicing
 
 It might be useful to take out every even index from a list.
 
@@ -346,7 +346,7 @@ del my_list[1:2]
 grade_this_code()
 ```
 
-6. Append your 316 to the end of the list
+6. Append your 316 to the end of the list.
 
 ```{python ex3, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'ex2'}
 
@@ -360,7 +360,7 @@ my_list.append(316)
 grade_this_code()
 ```
 
-7. Insert the string "Math is fun" at index 2
+7. Insert the string "Math is fun" at index 2.
 
 ```{python ex4, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'ex3'}
 
@@ -403,6 +403,281 @@ new_list
 ```{r ex5-code-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
+
+
+### Sets
+
+Let's say that you want to find all unique elements in the following list:
+
+```{python set0, exercise=TRUE, exercise.eval = FALSE}
+grocery_list = ['apple', 'apple', 'milk', 'cheese', 'egg', 'egg', 'egg']
+```
+
+The best way to do this with a list is to write a loop or list comprehension. However, there is a better way to carry out tasks like this using a different data type: a **set**. 
+
+A **set** is an unordered sequence of unique values that can be changed. 
+
+You can create a set by using the curly braces (`{}`). Each element is separated by commas. Alternatively, you can use the built-in function `set()` to convert a list to a set. 
+
+#### Let's create a set!
+
+First, let's try using the curly braces:
+
+```{python set1a, exercise=TRUE, exercise.eval = FALSE}
+grocery_set = {'apple', 'apple', 'milk', 'cheese', 'egg', 'egg', 'egg'}
+grocery_set
+```
+
+Now, let's see what using `set()` looks like:
+
+```{python set1b, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set0'}
+grocery_set = set(grocery_list)
+grocery_set
+```
+
+Count how many times each item appears in `grocery_list`, and then how many times each item appears in `grocery_set`. Notice that the duplicate values are removed, and you are left with only unique values. This is one of the advantages of sets!
+
+#### Properties of Sets
+
+Sets borrow mathematical concepts as a way to maintain information on different things and possibly counts. 
+
+##### `in`
+
+One of the most helpful things you can use on sets are logical operators, like `in`, which will tell you if an item is included in the set:
+
+```{python set2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set1b'}
+'cheese' in grocery_set
+'bread' in grocery_set
+```
+
+##### Intersect
+
+You can also find all of the elements that two sets have in common. This is known as finding the intersection of two sets, and uses the `&`:
+
+```{python set3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set1b'}
+fruits_set = {'apple', 'grape', 'kiwi', 'pear', 'strawberry'}
+fruits_set & grocery_set
+```
+
+```{r q5, echo=FALSE}
+question(
+  "If we create a third set, `dairy_set = {'milk', 'cheese', 'cream'}`, what will the intersection of `groceries_set` and `dairy_set` be?",
+  answer("`None`"),
+  answer("`{'cream'}`"),
+  answer("`{'milk', 'cheese'}`", correct = TRUE),
+  answer("`{'cream', 'cheese', 'apple', 'milk', 'egg'}`"),
+  allow_retry = TRUE
+)
+```
+
+##### Union
+
+You can also find all of the elements that two sets have in total, even if the item only belongs to one set. This is known as finding the union of two sets, and uses the `|`:
+
+```{python set4, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set3'}
+fruits_set | grocery_set
+```
+
+```{r q6, echo=FALSE}
+question(
+  "Again, let `dairy_set = {'milk', 'cheese', 'cream'}`. What will the union of `groceries_set` and `dairy_set` be?",
+  answer("`None`"),
+  answer("`{'cream'}`"),
+  answer("`{'milk', 'cheese'}`"),
+  answer("`{'cream', 'cheese', 'apple', 'milk', 'egg'}`", correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+##### Difference
+
+Finally, you can find all of the elements in one set, but not the other. This is known as finding the difference between two sets, and uses the `-`:
+
+```{python set5, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set3'}
+fruits_set - grocery_set
+grocery_set - fruits_set
+```
+
+```{r q7, echo=FALSE}
+question(
+  "Again, let `dairy_set = {'milk', 'cheese', 'cream'}`. What will union of `dairy_set - grocery_set` be?",
+  answer("`None`"),
+  answer("`{'cream'}`", correct = TRUE),
+  answer("`{'milk', 'cheese'}`"),
+  answer("`{'cream', 'cheese', 'apple', 'milk', 'egg'}`"),
+  allow_retry = TRUE
+)
+```
+
+##### Sets can have different data types!
+
+Just like lists!
+
+```{python set6, exercise=TRUE, exercise.eval = FALSE}
+Random_set = {"California", 38, 3.14159} #A string, int, float
+Random_set
+```
+
+#### `type()`
+
+ Remember that we can call `type()` on an object, including sets, to see type it is!
+
+```{python set7, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set2'}
+print(type(Random_set))
+```
+
+We can also find the size of a set:
+
+```{python set8, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set2'}
+len(Random_set)
+```
+
+#### Accessing values from a set
+
+Remember, sets are unordered. Therefore, elements of a set are not assigned any indices. This means that you cannot access an element in a set! 
+
+#### Operations and manipulation on sets
+
+We can: 
+ 
+* Insert items into sets!
+* Remove items from sets!
+
+How do we do this? By using the built-in set methods. 
+
+#### Adding to a set
+
+You can add an item to a set with the `.add()` method:
+
+```{python set9, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set3'}
+grocery_set.add('bread')
+grocery_set
+```
+
+Note we didn't assign the results to `grocery_set`. Just like lists, the output was automatically changed.
+
+Your turn! Try adding `'butter'` to `grocery_set`.
+
+```{python set10, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set9'}
+```
+
+```{python set10-solution, message = FALSE, warning = FALSE, echo = FALSE}
+grocery_set.add('butter')
+```
+
+```{r set10-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+#### Removing from a set
+
+You can remove an item from a set with the `.discard()` method:
+
+```{python setup_discard, exercise = FALSE, echo = FALSE, exercise.setup = "set10"}
+grocery_set.add('butter')
+```
+
+```{python set11, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'setup_discard'}
+grocery_set.discard('egg')
+grocery_set
+```
+
+#### Subsets
+
+A set of where all of the elements belong to a larger set is known as a subset. You can check to see if one set is a subset of another using the method `.issubset()`. 
+
+```{python setup_subset, exercise = FALSE, echo = FALSE, exercise.setup = "set10"}
+grocery_set.discard('egg')
+```
+
+```{python set12, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'setup_subset'}
+toast_set = {'bread', 'butter'}
+toast_set.issubset(grocery_set)
+
+toast_set.add('cinnamon')
+toast_set.add('sugar')
+toast_set.issubset(grocery_set)
+```
+
+#### How do we find methods?
+
+Use the built-in function ```dir()```.
+
+```{python dir2, exercise=TRUE, exercise.eval = FALSE}
+print(dir(grocery_set))
+```
+
+#### Let's play with sets!
+
+1. Create a set with at least 4 fruits. Name the set `my_set_1`.
+
+```{python set_ex1, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+2. Create another set with at least 4 distinct fruits. Name the set `my_set_2`.
+
+```{python set_ex2, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set_ex1'}
+
+```
+
+3. Confirm that these sets have no elements in common, i.e., are *disjoint*. You may want to look up a new method!
+
+```{python set_ex3, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set_ex2'}
+
+```
+
+```{python set_ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+my_set_1.isdisjoint(my_set_2)
+```
+
+```{r set_ex3-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+4. Create a new set that contains all of the elements in `my_set_1` and `my_set_2`. Call this set `my_big_set`. 
+
+```{python set_ex4, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set_ex2'}
+
+```
+
+```{python set_ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+my_big_set = my_set_1 | my_set_2
+```
+
+```{r set_ex4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+5. Confirm that `my_set_1` is a subset of `my_big_set`. 
+
+```{python set_ex5, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set_ex4'}
+
+```
+
+```{python set_ex5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+my_set_1.issubset(my_big_set)
+```
+
+```{r set_ex5-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+6. Write a line of code to see if `'plum'` is in `my_big_set`.
+
+```{python set_ex6, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set_ex4'}
+
+```
+
+```{python set_ex6-solution, message = FALSE, warning = FALSE, echo = FALSE}
+'plum' in my_big_set
+```
+
+```{r set_ex6-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+### Tuples
 
 ## Grouping Data using Arrays
 
