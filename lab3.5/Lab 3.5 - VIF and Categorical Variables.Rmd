@@ -216,7 +216,6 @@ question_numeric("5. If the VIF is equal to 10, what percent of variation can be
     }
   }),
   step = 0.1,
-  random_answer_order = TRUE,
   allow_retry = TRUE,
   post_message = "Congratulations! You have found the second secret word: HOTDOG."
 )
