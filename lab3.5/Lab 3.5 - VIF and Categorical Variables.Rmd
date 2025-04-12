@@ -168,8 +168,8 @@ question_numeric("3. If the VIF for `guest_satisfaction_overall` is 2, what is $
     } else {
       incorrect()
     }
-  },
-  step = 0.1),
+  }),
+  step = 0.1,
   allow_retry = TRUE,
   post_message = "Congratulations! You have found the first secret word: TUNE."
 )
@@ -214,8 +214,8 @@ question_numeric("5. If the VIF is equal to 10, what percent of variation can be
     } else {
       incorrect()
     }
-  },
-  step = 0.1),
+  }),
+  step = 0.1,
   random_answer_order = TRUE,
   allow_retry = TRUE,
   post_message = "Congratulations! You have found the second secret word: HOTDOG."
