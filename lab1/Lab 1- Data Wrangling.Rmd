@@ -96,7 +96,9 @@ A quick review of the errors you might see:
 * `SyntaxError`: A `SyntaxError` occurs when you have used improper syntax, i.e., misplaced punctuation like parentheses and periods, misspelled words, etc. Unfortunately, a `SyntaxError` does not usually explain what is wrong.
 * `TypeError`: A `TypeError` occurs when you try to use an operation on an object that is not defined for the type (`int`, `float`, `string`, etc.) of your object.
 * `ValueError`: A `ValueError` occurs when you try to use a value of the correct `Type`, but with an invalid `Value`. 
-* `ZeroDivisionError`: A `ZeroDivisionError` is returned when you try to divide by 0, e.g., `0/0`. Note that this can occur when the denominator is so small that it is rounded to 0, you do not explicitly have to use `0`. 
+* `ZeroDivisionError`: A `ZeroDivisionError` is returned when you try to divide by 0, e.g., `0/0`. Note that this can occur when the denominator is so small that it is rounded to 0, you do not explicitly have to use `0`.
+
+For practice understanding and debugging these errors check out the [Debugging Lab](https://posit.ds.uchicago.edu/debugging/) which will work through examples on how to solve some of them.
 
 If you see an error that you can't figure out, especially a `NameError` or `ModuleNotFoundError`, it might be an issue with the lab itself and not the code you wrote. If you think that's the case--please let us know on the lab assignment!
 
