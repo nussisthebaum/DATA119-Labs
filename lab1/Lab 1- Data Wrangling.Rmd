@@ -390,7 +390,23 @@ grade_this_code(
 
 ```
 
-```{python skew-hint}
+```{python skew-hint-1}
+# we can use .nlargest along with index to get the relevant indices
+# here is an example for top 10 recipes by calories
+maxcal = epicurious_num_nd['calories'].nlargest(n=10).index
+# now you need to figure out how to get those that are in the top 10 for each
+```
+
+```{python skew-hint-2}
+# given two sets of numbers l1 and l2 we can use set.union(l1, l2) to get all numbers in either l1 or l2
+# how can we use this to get every recipe in the top 10 across all the categories
+# run the following code to see how it works
+l1 = [1, 2, 3]
+l2 = [2, 4, 6]
+set.union(l1, l2)
+```
+
+```{python skew-hint-3}
 maxcal = epicurious_num_nd['calories'].nlargest(n=10).index
 maxpro = epicurious_num_nd['protein'].nlargest(n=10).index
 maxfat = epicurious_num_nd['fat'].nlargest(n=10).index
@@ -404,7 +420,7 @@ epicurious_num_nd.loc[list(maxvals),]
 ```{r skewq, echo=FALSE}
 question("Select all true statements using the DataFrame you just created.",
          answer("Pear-Cranberry Mincemeat Lattice Pie has the most calories", correct = TRUE),
-         answer("Whole Branzino Roasted in Salt is included because of it's high fat content"),
+         answer("Whole Branzino Roasted in Salt is included because of it's high fat content", message="Is Whole Branzino's fat content in the top 10?"),
          answer("Grilled Lamb Chops with Porcini Mustard is a duplicate entry", correct = TRUE),
          answer("There are 10 recipes in this dataframe", message="There should be 14"),
          answer("Of the rows in this dataframe, 6 have a rating of 5.0", correct=TRUE), 
