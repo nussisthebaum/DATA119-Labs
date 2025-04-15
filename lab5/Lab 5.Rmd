@@ -70,7 +70,7 @@ We will be using a new dataset containing information on womens' participation i
 
 Run this chunk to set up the environment.
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python setup1, context = "data", exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
@@ -131,7 +131,7 @@ grade_this_code()
 
 4.Take some time to really explore this dataset. Look at summary statistics and distributions of each of the variables.  
 
-```{python setup2, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup1"}
+```{python setup2, context = "data", exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup1"}
 Workinghours = Workinghours[Workinghours['hours'] > 0]
 ```
 
@@ -174,7 +174,7 @@ grade_this_code()
 
 You may remember that in Python, the convention is to work with your predictors and response separately, so first, store your `X` and `y`.
 
-```{python setup24, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup2"}
+```{python setup24, context = "data", exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup2"}
 Workinghours = pd.get_dummies(Workinghours, columns = ['occupation'], drop_first = True, dtype = float)
 
 ```
@@ -206,7 +206,7 @@ The final argument that we supply, `random_state`, is definitely something we ha
 
 Run the chunk. Then, change the `random_state` to a different integer and run it again. See how the values from `.describe()` change? That's why we set the seed!
 
-```{python setup25, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup24"}
+```{python setup25, context = "data", exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup24"}
 from sklearn import linear_model
 
 X = Workinghours[['income', 'age', 'education', 'child5', 'child13',
@@ -215,7 +215,7 @@ X = Workinghours[['income', 'age', 'education', 'child5', 'child13',
 y = Workinghours['hours']
 ```
 
-```{python setup3, exercise = TRUE, message = FALSE, exercise.setup="setup25"}
+```{python setup3, context = "data", exercise = TRUE, message = FALSE, exercise.setup="setup25"}
 from sklearn.model_selection import train_test_split
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3,
@@ -234,7 +234,7 @@ Now, we can actually apply the scaler using `.transform()`. I'm wrapping this in
 
 Note: we could have also used `.fit_transform()` to do both the fitting and the transformation in one step.
 
-```{python setup4, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+```{python setup4, context = "data", exercise = TRUE, message = FALSE, exercise.setup="setup3"}
 from sklearn.preprocessing import StandardScaler
 
 scaler = StandardScaler()
@@ -248,7 +248,7 @@ X_train_pp = pd.DataFrame(scaler.transform(X_train), columns = ['income',
 
 9.  It's important to note that you want to "pretend" that your training data is all that you have and your testing data is brand new. The testing data should not be accounted for when you are scaling the data! However, it does also need to be scaled using the means and standard deviations from the **training** data. See the code below for an example.
 
-```{python setup5, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python setup5, context = "data", exercise = TRUE, message = FALSE, exercise.setup="setup4"}
 X_test_pp = pd.DataFrame(scaler.transform(X_test), columns = ['income', 'age', 
                               'education', 'child5', 'child13',
                              'child17', 'nonwhite', 'owned', 'mortgage', 'unemp', 
@@ -281,7 +281,7 @@ grade_this_code()
 
 11.  Now use `.predict()` to get the predicted values for the test set (save them as `preds_ols`).
 
-```{python setup6, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup5"}
+```{python setup6, context = "data", exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup5"}
 model_ols = sklearn.linear_model.LinearRegression().fit(X_train_pp, y_train)
 print("Coefficients: ", model_ols.coef_)
 print("Intercept: ", model_ols.intercept_)
@@ -301,7 +301,7 @@ grade_this_code()
 
 12. Remember that for cross validation, we want to get the errors for each observation and then "aggregate" them somehow. "Aggregate" in this context just means combine in a meaningful way--for cross validation with a numeric response, this often just means taking the sum or average of the squared errors (a.k.a., the loss function for ordinary least squares). Practice calculating this quantity with your existing model.
 
-```{python setup7, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup6"}
+```{python setup7, context = "data", exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup6"}
 preds_ols = model_ols.predict(X_test_pp)
 ```
 
@@ -350,12 +350,12 @@ Be careful to double, *triple*, **quadruple** check the `sklearn` documentation 
 
 14. In the case of `.Ridge()`, we will be using `alpha` where `alpha = 0` is equivalent to least squares regression and large values of `alpha` lead to more regularization. Adapt the code below to change the value of `alpha`, just to test the function.
 
-```{python setup8, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup7"}
+```{python setup8, context = "data", exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup7"}
 model = sklearn.linear_model.Ridge(alpha=0.5)
 modelRidge = model.fit(X_train, y_train)
 ```
 
-```{python setup81, exercise = TRUE, message = FALSE, exercise.setup="setup8"}
+```{python setup81, context = "data", exercise = TRUE, message = FALSE, exercise.setup="setup8"}
 model = sklearn.linear_model.Ridge(alpha = 0.5)
 modelRidge = model.fit(X_train_pp, y_train)
 ```
@@ -388,14 +388,14 @@ Inspect the code below.
     -   The actual value of `alpha` that is the best, and
     -   The coefficients from the model using that value of `alpha`.
     
-```{python setup9, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup81"}
+```{python setup9, context = "data", exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup81"}
 import numpy as np
 
 alphas = np.arange(-2, 6, 0.1)
 alphas = np.power(10, alphas)
 ```
 
-```{python cv, exercise = TRUE, message = FALSE, exercise.setup="setup81"}
+```{python cv, context = "data", exercise = TRUE, message = FALSE, exercise.setup="setup81"}
 from sklearn.linear_model import RidgeCV
 
 model_ridge = sklearn.linear_model.RidgeCV(alphas = alphas).fit(X_train_pp, y_train)
@@ -448,7 +448,7 @@ question("18. What percent of the data is in each test fold if you perform 5-fol
 
 First, create objects to store the coefficients (we'll use the `alphas` we created previously, no need to save them). I found it most helpful to use an empty dataframe with the column names from the dataset for the plots later--the cell below creates one.
 
-```{python store, exercise = TRUE, message = FALSE, exercise.setup="cv"}
+```{python store, context = "data", exercise = TRUE, message = FALSE, exercise.setup="cv"}
 coefs_ridge = pd.DataFrame(data = None, columns = ['income', 'age', 
                              'education', 'child5', 'child13',
                              'child17', 'nonwhite', 'owned', 'mortgage', 'unemp', 
@@ -498,13 +498,13 @@ grade_this_code()
 
 22. In order to create plots with `plotnine` we need our data to be in a dataframe. You already have one with the coefficients, but you'll want to add a column with the `alphas`. The cell below does this. I'm adding the log version back in to "undo" the exponentiation we did earlier. Again, this is to make the plot nice. 
 
-```{python storex, exercise = FALSE, message = FALSE, exercise.setup="store"}
+```{python storex, context = "data", exercise = FALSE, message = FALSE, exercise.setup="store"}
 for i in range(0, len(alphas)):
   temp_model = sklearn.linear_model.RidgeCV(alphas = alphas[i]).fit(X_train_pp, y_train)
   coefs_ridge.loc[i] = temp_model.coef_
 ```
 
-```{python storea, exercise = TRUE, message = FALSE, exercise.setup="storex"}
+```{python storea, context = "data", exercise = TRUE, message = FALSE, exercise.setup="storex"}
 coefs_ridge['alphas'] = np.log10(alphas)
 ```
 
@@ -532,7 +532,7 @@ grade_this_code()
 
 Print out the dataset so you can see what happened.
 
-```{python melt, exercise = TRUE, message = FALSE, exercise.setup="storea"}
+```{python melt, context = "data", exercise = TRUE, message = FALSE, exercise.setup="storea"}
 coefs_ridge_melt = pd.melt(coefs_ridge, id_vars = 'alphas',
                            var_name = 'Variable', value_name = 'Coefficient')
                            
@@ -678,7 +678,7 @@ question("29. Which of the variables still remain in the model at the chosen val
 
 30.  To compare the models we will calculate the sum of squared errors for each model. Adapt the code used below that calculates the sum of squared errors for linear regression and apply it to the ridge regression and LASSO models.
 
-```{python melty, exercise = FALSE, message = FALSE, exercise.setup="melt"}
+```{python melty, context = "data", exercise = FALSE, message = FALSE, exercise.setup="melt"}
 model_lasso = sklearn.linear_model.LassoCV(alphas = alphas).fit(X_train_pp, y_train)
 ```
 
