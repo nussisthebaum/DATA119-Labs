@@ -44,7 +44,7 @@ tags$div(
 )
 ```
 
-```{python setup_py, context='setup', echo = FALSE, message = FALSE, warning = FALSE}
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
@@ -64,7 +64,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3,
                                                        random_state = 1033)
 
 scaler = StandardScaler()
-scaler.fit(X_train)
+scaler.fit(X_train);
 
 X_train_pp = pd.DataFrame(scaler.transform(X_train), columns = ['income', 
                              'age', 'education', 'child5', 'child13',
