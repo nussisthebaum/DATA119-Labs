@@ -494,14 +494,14 @@ The next step is to create a range of `alphas`. If you are in Dr. Nussbaum's sec
 -   When you are writing a loop, it is helpful to test the iterations before you run them repeatedly... use the first value of your `alphas_r` list as a test index.
 -   One of the things that I struggled with the most when I started writing loops was making sure I properly saved my calculations. Again, it's helpful to test the iteration and examine the output before you run them repeatedly! I used `.loc[]` with the same index as the `alphas_r` list.
 
-```{python onei, exercise = TRUE, message = FALSE}
+```{python onei, exercise = TRUE, message = FALSE, exercise.setup = "store"}
 temp_model = ...
 
 coefs_ridge.loc[0] = ...
 ```
 
 ```{python onei-solution, message = FALSE, warning = FALSE, echo = FALSE}
-temp_model = sklearn.linear_model.RidgeCV(alphas = [alphas_r[0]]).fit(X_train_pp, y_train)
+temp_model = sklearn.linear_model.Ridge(alpha = alphas_r[0]).fit(X_train_pp, y_train)
 
 coefs_ridge.loc[0] = temp_model.coef_
 ```
@@ -512,7 +512,7 @@ grade_this_code()
 
 21. Now, make your code from 20 into a loop by adding a `for` statement. I found it most helpful to loop over a range of integers because of `.loc[]`.
 
-```{python looped, exercise = TRUE, message = FALSE}
+```{python looped, exercise = TRUE, message = FALSE, exercise.setup = "store"}
 for i in range(0, len(alphas_r)):
   temp_model = ...
   coefs_ridge.loc[i] = ...
@@ -520,7 +520,7 @@ for i in range(0, len(alphas_r)):
 
 ```{python looped-solution, message = FALSE, warning = FALSE, echo = FALSE}
 for i in range(0, len(alphas_r)):
-  temp_model = sklearn.linear_model.RidgeCV(alphas = [alphas_r[i]]).fit(X_train_pp, y_train)
+  temp_model = sklearn.linear_model.Ridge(alpha = alphas_r[i]).fit(X_train_pp, y_train)
   coefs_ridge.loc[i] = temp_model.coef_
 ```
 
@@ -663,7 +663,7 @@ coefs_LASSO = pd.DataFrame(data = None, columns = ['income', 'age',
                              'occupation_mp', 'occupation_other', 'occupation_swcc'])
                                 
 for i in range(0, len(alphas_l)):
-  temp_model = sklearn.linear_model.LassoCV(alphas = [alphas_l[i]]).fit(X_train_pp, y_train)
+  temp_model = sklearn.linear_model.Lasso(alpha = alphas_l[i]).fit(X_train_pp, y_train)
   coefs_LASSO.loc[i] = temp_model.coef_
 
 coefs_LASSO['alphas'] = np.log10(alphas_l)
