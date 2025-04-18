@@ -44,14 +44,14 @@ tags$div(
 )
 ```
 
-```{python setup_py, context='setup', echo = FALSE}
+```{python setup_py, context='setup', echo = FALSE, message = FALSE, warning = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
 import sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-import sklearn.linear_model import LinearRegression, Ridge, RidgeCV, Lasso, LassoCV
+from sklearn.linear_model import LinearRegression, Ridge, RidgeCV, Lasso, LassoCV
 
 Workinghours = pd.read_csv("./data/Workinghours_mini.csv", index_col = 0)
 Workinghours_nz = Workinghours[Workinghours['hours'] > 0]
@@ -139,7 +139,7 @@ We will be using a new dataset containing information on womens' participation i
 
 Run this chunk to set up the environment.
 
-```{python setup1, context = "data", exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
