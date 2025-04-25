@@ -750,5 +750,6 @@ grade_this_code()
 question("31. Based on the SSE from our three models, which one do you think is the best model?",
          answer("OLS"),
          answer("Ridge Regression"),
-         answer("LASSO", message = "Congratulations! You found the fifth and final secret word: LANTERN.", correct=TRUE))
+         answer("LASSO", correct = TRUE),
+         allow_retry = TRUE, post_message = "Congratulations! You found the fifth and final secret word: LANTERN.")
 ```
