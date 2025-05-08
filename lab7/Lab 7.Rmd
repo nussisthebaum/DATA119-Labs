@@ -41,6 +41,58 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
+```{python setup, include=FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy
+import sklearn
+
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab7/www/epi_mini2.csv
+
+epi = pd.read_csv("./data/epi_mini2.csv", index_col = 0)
+
+epi = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
+
+epi = epi.iloc[:, 6:680]
+
+from sklearn.cluster import KMeans
+
+kmeans1 = KMeans(n_clusters = 6, n_init = 5, random_state = 1145)
+clust_1 = kmeans1.fit(epi)
+
+inertias = []
+
+for i in range(1,16):
+    kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 1145)
+    kmeans.fit(epi)
+    inertias.append(kmeans.inertia_)
+    
+chooseK = {'K': range(1, 16), 'Inertia': inertias}
+chooseK_df = pd.DataFrame(data = chooseK)    
+
+kmeans2 = KMeans(n_clusters = 11, n_init = 5, random_state = 1145)
+clust_2 = kmeans2.fit(epi)
+
+from sklearn.cluster import AgglomerativeClustering
+
+clust_3 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'complete').fit(epi)
+
+clust_4 = AgglomerativeClustering(distance_threshold = None, n_clusters = 11, linkage = 'ward').fit(epi)
+epi.index[clust_4.labels_ == 0.0].tolist()
+
+epi_tiny = epi.sample(50, random_state = 524)
+
+clust_5 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'complete').fit(epi_tiny)
+
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+
+epi_tiny = epi.sample(50, random_state = 524)
+
+l_epi = linkage(epi_tiny, method='complete')
+```
+
+
 ```{r header, echo = FALSE}
 library(htmltools)
 
