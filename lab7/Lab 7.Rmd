@@ -636,11 +636,11 @@ Obviously, `n_clusters` is the number of clusters. `n_init` is the number of tim
 
 22. The following lines of code create 12 clusters using 10 random starts. Can you edit them so that they create 6 clusters with 5 random starts? Save the object as `clust_1` so we can see what outputs are possible in the next few questions.
 
-```{python setup3, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup2"}
+```{python setup3, exercise = FALSE, echo=FALSE, message = FALSE, eval = FALSE}
 epi = epi.iloc[:, 6:680]
 ```
 
-```{python clust1, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+```{python clust1, exercise = TRUE, message = FALSE}
 from sklearn.cluster import KMeans
 
 kmeans1 = KMeans(n_clusters = 12, n_init = 10, random_state = 1145)
@@ -673,14 +673,14 @@ question("23. Which of the attributes of a `KMeans` object measures the within c
 
 24. Once you find it, print it in the cell below.
 
-```{python setup4, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
+```{python setup4, exercise = FALSE, echo=FALSE, message = FALSE, eval = FALSE}
 from sklearn.cluster import KMeans
 
 kmeans1 = KMeans(n_clusters = 6, n_init = 5, random_state = 1145)
 clust_1 = kmeans1.fit(epi)
 ```
 
-```{python iner, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python iner, exercise = TRUE, message = FALSE}
 
 ```
 
@@ -696,7 +696,7 @@ Note that this number doesn't really have a scale! We have no idea if it is good
 
 25. We used $K=6$ arbitrarily, but of course we need to choose it. As I mentioned in class, we will need to write a loop and create the elbow plot to justify the choice of $K$. Fill in the loop below to get the inertia for values of $K$ from 1 to 15 (I'm picking a large number because the data is so large, in smaller datasets you may not need to go so far). Please note that since it is a loop with a lot of repeated calculations, this cell in particular WILL take a long time to run! As will 26 and 27 since they are related. 
 
-```{python looped, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python looped, exercise = TRUE, message = FALSE}
 inertias = []
 
 for i in range(1,16):
@@ -720,7 +720,7 @@ grade_this_code()
 
 26. Now, let's create the elbow plot. First, create a data frame with two columns--one for the value of $K$ and one for the inertia. 
 
-```{python setup5, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup4"}
+```{python setup5, exercise = FALSE, echo=FALSE, message = FALSE, eval = FALSE}
 inertias = []
 
 for i in range(1,16):
@@ -729,7 +729,7 @@ for i in range(1,16):
     inertias.append(kmeans.inertia_)
 ```
 
-```{python elbow, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+```{python elbow, exercise = TRUE, message = FALSE}
 chooseK = {'K': range(1, 16), 'Inertia': inertias}
 chooseK_df = pd.DataFrame(data = ...)
 ```
@@ -745,12 +745,12 @@ grade_this_code()
 
 27. Now, run this cell to create a plot with $K$ on the $x$-axis and inertia on the $y$.
 
-```{python setup6, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup5"}
+```{python setup6, exercise = FALSE, echo=FALSE, message = FALSE, eval = FALSE}
 chooseK = {'K': range(1, 16), 'Inertia': inertias}
 chooseK_df = pd.DataFrame(data = chooseK)
 ```
 
-```{python elbowp, exercise=TRUE, message = FALSE, exercise.setup="setup6"}
+```{python elbowp, exercise=TRUE, message = FALSE}
 import plotnine as p9
 
 print(p9.ggplot(chooseK_df, p9.aes(x = 'K', y = 'Inertia')) +
@@ -767,7 +767,7 @@ Note: There does not appear to be a very clear "elbow" in the plot (although it'
 
 28. Create an object `clust_2` on the `epi` dataset with 11 clusters.
 
-```{python label, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+```{python label, exercise = TRUE, message = FALSE}
 kmeans2 = KMeans(n_clusters = ..., n_init = 5)
 clust_2 = kmeans2.fit(epi)
 ```
@@ -783,14 +783,14 @@ grade_this_code()
 
 29. Now comes the fun part! We can try to interpret each cluster. You might learn more advanced methods for visualizing the clusters in later classes, but in this class, the best we can do is just printing out the "names" of the points in the clusters to try and see if there's a pattern. Adapt the code below to print out the names of the points in Cluster 1, 2, etc. Try and give each one a name--this might depend on context clues, you will really have to think about what they all have in common!
 
-```{python setup7, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
+```{python setup7, exercise = FALSE, echo=FALSE, message = FALSE, eval = FALSE}
 from sklearn.cluster import KMeans
 
 kmeans2 = KMeans(n_clusters = 11, n_init = 5, random_state = 1145)
 clust_2 = kmeans2.fit(epi)
 ```
 
-```{python labels, exercise=TRUE, message = FALSE, exercise.setup="setup7"}
+```{python labels, exercise=TRUE, message = FALSE}
 epi.index[clust_2.labels_ == 0.0]
 ```
 
