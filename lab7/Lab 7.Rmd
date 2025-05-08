@@ -92,7 +92,6 @@ epi_tiny = epi.sample(50, random_state = 524)
 l_epi = linkage(epi_tiny, method='complete')
 ```
 
-
 ```{r header, echo = FALSE}
 library(htmltools)
 
@@ -1032,11 +1031,11 @@ Do you see any patterns that were present in the $K$-means clustering?
 
 If you want to use simpler code than `sklearn`, you can try `scipy`! The first step in clustering this data using hierarchical clustering is to import the necessary functions.
 
-```{python scipy, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+```{python scipy, exercise = TRUE, message = FALSE}
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 ```
 
-```{python setup10, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
+```{python setup10, exercise = FALSE, echo=FALSE, message = FALSE}
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 
 epi_tiny = epi.sample(50, random_state = 524)
@@ -1065,7 +1064,7 @@ You can also change the distance metric used by using the argument method (the d
 
 39. In the code chunk below, apply `linkage()` to the `epi_tiny` dataset. Save the object as `l_epi` for use later.
 
-```{python sp_linkage, exercise = TRUE, message = FALSE, exercise.setup="setup10"}
+```{python sp_linkage, exercise = TRUE, message = FALSE}
 
 ```
 
