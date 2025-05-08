@@ -1081,11 +1081,11 @@ Now, we can use the `dendrogram()` (which we borrowed above) method to depict ou
 
 40. The function takes in a linkage matrix (which conveniently is the output of `linkage()`). The argument `no_labels` can be set to `True` to keep row labels from being printed at the leaves of the dendrogram. To avoid unnecessary clutter on our plot, change the argument. Lastly, I am setting the argument `above_threshold_color` equal to `k` to make the top of the dendrogram appear black so that it contrasts well with the colored clusters.
 
-```{python setup11, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup10"}
+```{python setup11, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup10", eval = FALSE}
 l_epi = linkage(epi_tiny, method='complete')
 ```
 
-```{python sp_dendro1, exercise = TRUE, message = FALSE, exercise.setup="setup11"}
+```{python sp_dendro1, exercise = TRUE, message = FALSE}
 dendrogram(..., ..., above_threshold_color='k')
 ```
 
@@ -1099,7 +1099,7 @@ grade_this_code()
 
 41. We can also try to change the orientation to make it easier to read! Run the following cell. 
 
-```{python sp_dendro2, exercise = TRUE, message = FALSE, exercise.setup="setup11"}
+```{python sp_dendro2, exercise = TRUE, message = FALSE}
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(8, 16))
