@@ -873,7 +873,7 @@ Now let's move on to hierarchical clustering. Remember in class that I mentioned
 
 34. The following line of code creates clusters using `ward` linkage. Can you edit it so that it creates clusters with `complete` linkage? Save the object as `clust_3` so we can see what outputs are possible in the next few questions.
 
-```{python complete, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+```{python complete, exercise = TRUE, message = FALSE}
 from sklearn.cluster import AgglomerativeClustering
 
 clust_3 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'ward').fit(epi)
@@ -893,13 +893,13 @@ grade_this_code()
 
 One thing you can do is copy and paste the function `plot_dendrogram` they have written in the tutorial, and apply that function to your own analysis. I've done that for you in the code chunk below--can you plot the dendrogram from the previous question?
 
-```{python setup8, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
+```{python setup8, exercise = FALSE, echo=FALSE, message = FALSE}
 from sklearn.cluster import AgglomerativeClustering
 
 clust_3 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'complete').fit(epi)
 ```
 
-```{python dendo, exercise = TRUE, message = FALSE, exercise.setup="setup8"}
+```{python dendo, exercise = TRUE, message = FALSE}
 from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import dendrogram
 
@@ -976,14 +976,14 @@ Unfortunately, this dendrogram isn't very helpful because there are so many obse
 
 36. If you did want to get the labels out programmatically, you would have to give a number of clusters. Let's use the same number, 11. 
 
-```{python labels2, exercise = TRUE, message = FALSE, exercise.setup="setup8"}
+```{python labels2, exercise = TRUE, message = FALSE}
 clust_4 = AgglomerativeClustering(distance_threshold = None, n_clusters = 11, linkage = 'ward').fit(epi)
 epi.index[clust_4.labels_ == 0.0].tolist()
 ```
 
 37. Another option would be to take a smaller random sample of the observations. Note that I've added a new line of code to give larger margins in line 10--it is not perfect, but it is good enough for now.
 
-```{python setup9, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup8"}
+```{python setup9, exercise = FALSE, echo=FALSE, message = FALSE, eval = FALSE}
 from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import dendrogram
 
@@ -1010,7 +1010,7 @@ def plot_dendrogram(model, **kwargs):
     dendrogram(linkage_matrix, **kwargs)
 ```
 
-```{python, smalldendro, exercise = TRUE, message = FALSE, exercise.setup="setup9"}
+```{python, smalldendro, exercise = TRUE, message = FALSE}
 epi_tiny = epi.sample(50, random_state = 524)
 
 clust_5 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'complete').fit(epi_tiny)
@@ -1035,7 +1035,7 @@ If you want to use simpler code than `sklearn`, you can try `scipy`! The first s
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 ```
 
-```{python setup10, exercise = FALSE, echo=FALSE, message = FALSE}
+```{python setup10, exercise = FALSE, echo=FALSE, message = FALSE, eval = FALSE}
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 
 epi_tiny = epi.sample(50, random_state = 524)
