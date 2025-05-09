@@ -496,7 +496,7 @@ grade_this_code()
 16. We've kind of ignored these type of variables so far--that is, variables that are ID numbers or names. They are technically a type of categorical variable and haven't really been useful to us so far. However, they can be very valuable much later in a clustering analysis, when we try to interpret the clusters. They are the most helpful when they are the row names rather than a separate variable column. Edit the line of code below to "re-import" the data with recipe titles as row names, and remember this trick for later!
 
 ```{python imp, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
-epi = pd.read_csv("./data/epi_mini2.csv", index_col = ...)
+epi = pd.read_csv("./data/epi_mini2.csv", index_col = ___)
 epi.head()
 ```
 
@@ -702,7 +702,7 @@ inertias = []
 for i in range(1,16):
     kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 1145)
     kmeans.fit(epi)
-    inertias.append(...)
+    inertias.append(___)
 ```
 
 ```{python looped-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -731,7 +731,7 @@ grade_this_code()
 
 ```{python elbow, exercise = TRUE, message = FALSE}
 chooseK = {'K': range(1, 16), 'Inertia': inertias}
-chooseK_df = pd.DataFrame(data = ...)
+chooseK_df = pd.DataFrame(data = ___)
 ```
 
 ```{python elbow-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -768,7 +768,7 @@ Note: There does not appear to be a very clear "elbow" in the plot (although it'
 28. Create an object `clust_2` on the `epi` dataset with 11 clusters.
 
 ```{python label, exercise = TRUE, message = FALSE}
-kmeans2 = KMeans(n_clusters = ..., n_init = 5)
+kmeans2 = KMeans(n_clusters = ___, n_init = 5)
 clust_2 = kmeans2.fit(epi)
 ```
 
@@ -927,7 +927,7 @@ def plot_dendrogram(model, **kwargs):
     
 ## PLOT:
 
-plot_dendrogram(..., truncate_mode = "level", p = 12,
+plot_dendrogram(___, truncate_mode = "level", p = 12,
                 labels = epi.index)
 plt.title("Hierarchical Clustering Dendrogram with Complete Linkage")
 plt.xlabel("")
@@ -1085,7 +1085,7 @@ Now, we can use the `dendrogram()` (which we borrowed above) method to depict ou
 <!-- ``` -->
 
 ```{python sp_dendro1, exercise = TRUE, message = FALSE}
-dendrogram(..., ..., above_threshold_color='k')
+dendrogram(___, ___, above_threshold_color='k')
 ```
 
 ```{python sp_dendro1-solution, message = FALSE, warning = FALSE, echo = FALSE}
