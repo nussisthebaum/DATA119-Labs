@@ -90,6 +90,29 @@ from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 epi_tiny = epi.sample(50, random_state = 524)
 
 l_epi = linkage(epi_tiny, method='complete')
+
+def plot_dendrogram(model, **kwargs):
+    # Create linkage matrix and then plot the dendrogram
+
+    # create the counts of samples under each node
+    counts = np.zeros(model.children_.shape[0])
+    n_samples = len(model.labels_)
+    for i, merge in enumerate(model.children_):
+        current_count = 0
+        for child_idx in merge:
+            if child_idx < n_samples:
+                current_count += 1  # leaf node
+            else:
+                current_count += counts[child_idx - n_samples]
+        counts[i] = current_count
+
+    linkage_matrix = np.column_stack(
+        [model.children_, model.distances_, counts]
+    ).astype(float)
+
+    # Plot the corresponding dendrogram
+    dendrogram(linkage_matrix, **kwargs)
+
 ```
 
 ```{r header, echo = FALSE}
@@ -223,9 +246,15 @@ question_numeric(
 )
 ```
 
-Your answers from Question 7 can be fed into the following table (in red):
+```{r q7check, echo = FALSE}
+q7_correct <- tutorial_question_state("q7")$correct
+```
 
-```{r, echo = FALSE, eval = TRUE}
+```{r table_intro_text, echo=FALSE, results='asis', eval=q7_correct}
+cat("Your answers from Question 7 can be fed into the following table (in red):")
+```
+
+```{r conditional_table, echo=FALSE, eval=q7_correct}
 library(kableExtra)
 
 man_D <- function(point1, point2){
@@ -318,9 +347,9 @@ kable(sim_table, format = "html", escape = FALSE, booktabs = TRUE,
 
 ```{r q8, echo=FALSE}
 question(
-  "8. Based on this table, will Clusters 1 and 2 be merged at the next step of the algorithm?",
-  answer("True", correct = TRUE),
-  answer("False"),
+  "8. Based on the table that appears when you solve Q7, could Clusters 2 and 3 be merged at the next step of the algorithm?",
+  answer("Yes", correct = TRUE),
+  answer("No"),
   allow_retry = TRUE
 )
 ```
@@ -795,7 +824,7 @@ epi.index[clust_2.labels_ == 0.0]
 ```
 
 ```{r q30, echo=FALSE}
-question("30. Which cluster(s) contain mostly fish/meat recipes?",
+question("30. Which 2 cluster(s) contain mostly fish/meat recipes?",
          answer("`0.0`"),
          answer("`1.0`", correct = TRUE),
          answer("`2.0`"),
