@@ -39,6 +39,9 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+
+q7_correct <- FALSE
+
 ```
 
 ```{python setup_py, include=FALSE}
