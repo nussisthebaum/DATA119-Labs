@@ -1150,9 +1150,13 @@ plt.show()
 Do you see any similarities with the clusters from the previous section?
 
 ```{r servercode, context="server"}
+q7_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$questions$q7$correct,
+  valueFunc = function() get_tutorial_state()$questions$q7$correct
+)
+
 output$q7_table_output <- renderUI({
-  q7_state <- get_tutorial_state()
-  if (isTRUE(q7_state$questions$q7$correct)) {
+  if (isTRUE(q7_correct_poll())) {
     tagList(
       p("Your answers from Question 7 can be fed into the following table (in red):"),
       HTML(
@@ -1165,7 +1169,7 @@ output$q7_table_output <- renderUI({
     )
   } else {
     tagList(
-      p("✅ Answer Question 7 correctly to reveal the intercluster dissimilarity table.")
+      p("Answer Question 7 correctly to reveal the intercluster dissimilarity table.")
     )
   }
 })
