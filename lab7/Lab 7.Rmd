@@ -60,6 +60,19 @@ max_sim <- function(df1, df2){
 
   return(max(man_Ds))}
 
+Cluster <- c(1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 7, 7, 7, 5, 5, 5, 5, 5, 6, 6) 
+X <- c(2, 2, 3, 3, 4, 3, 4, 4, 6, 7, 6, 7, 7, 8, 8, 9, 9, 10, 11, 12, 12, 12, 13, 4, 4)
+Y <- c(1, 2, 2, 3, 2, 6, 5, 6, 7, 8, 3, 3, 4, 3, 4, 2, 1, 1, 7, 8, 9, 10, 9, 10, 11)
+
+cluster_XY <- data.frame(X = X, Y = Y)
+rownames(cluster_XY) = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+                         "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y")
+
+cluster_XY$Label <- rownames(cluster_XY)
+
+little_XY <- cluster_XY %>%
+  filter(Label %in% c("F", "G", "H", "I", "J"))
+
 cluster_XY_2 <- cluster_XY
 cluster_XY_2$Cluster <- Cluster
 
