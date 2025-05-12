@@ -342,13 +342,8 @@ question_numeric(
 )
 ```
 
-```{r q7check, echo = FALSE}
-q7_correct <- get_tutorial_state("q7")$correct
-```
-
-```{r conditional_atble, echo=FALSE, eval=TRUE}
+```{r conditional_table, echo=FALSE, eval=TRUE}
 uiOutput("q7_table_output")
-
 ```
 
 ```{r q8, echo=FALSE}
@@ -1156,6 +1151,7 @@ q7_correct_poll <- reactivePoll(500, session,
 )
 
 output$q7_table_output <- renderUI({
+  print(get_tutorial_state())
   if (isTRUE(q7_correct_poll())) {
     tagList(
       p("Your answers from Question 7 can be fed into the following table (in red):"),
