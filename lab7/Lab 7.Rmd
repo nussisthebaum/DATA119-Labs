@@ -40,8 +40,6 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 
-q7_correct <- FALSE
-
 ```
 
 ```{python setup_py, include=FALSE}
@@ -243,14 +241,14 @@ question_numeric(
 question_numeric(
   "7. Using your answers from Questions 1-6, what is the maximal intercluster dissimilarity between Clusters 2 and 3 using Manhattan distance?",
   answer(6, correct = TRUE),
-  allow_retry = TRUE, 
+  allow_retry = TRUE,
   min = 2,
   max = 8
 )
 ```
 
 ```{r q7check, echo = FALSE}
-q7_correct <- tutorial_question_state("q7")$correct
+q7_correct <- get_tutorial_state("q7")$correct
 ```
 
 ```{r table_intro_text, echo=FALSE, results='asis', eval=TRUE}
