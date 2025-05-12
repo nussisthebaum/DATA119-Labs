@@ -1146,8 +1146,8 @@ Do you see any similarities with the clusters from the previous section?
 
 ```{r servercode, context="server"}
 q7_correct_poll <- reactivePoll(500, session,
-  checkFunc = function() get_tutorial_state()$questions$q7$correct,
-  valueFunc = function() get_tutorial_state()$questions$q7$correct
+  checkFunc = function() get_tutorial_state()$q7$correct,
+  valueFunc = function() get_tutorial_state()$q7$correct
 )
 
 output$q7_table_output <- renderUI({
