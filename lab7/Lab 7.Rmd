@@ -40,6 +40,88 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 
+library(kableExtra)
+
+man_D <- function(point1, point2){
+  man_dist = abs(point1[1] - point2[1]) + abs(point1[2] - point2[2])
+return(man_dist)}
+
+max_sim <- function(df1, df2){
+  M <- dim(df1)[1]
+  N <- dim(df2)[1]
+
+  man_Ds <- c()
+
+  for (m in 1:M){
+    for (n in 1:N){
+      man_Ds <- c(man_Ds, man_D(c(df1$X[m], df1$Y[m]), c(df2$X[n], df2$Y[n])))
+    }
+  }
+
+  return(max(man_Ds))}
+
+cluster_XY_2 <- cluster_XY
+cluster_XY_2$Cluster <- Cluster
+
+Cluster1 <- cluster_XY_2 %>%
+  filter(Cluster == 1)
+
+Cluster2 <- cluster_XY_2 %>%
+  filter(Cluster == 2)
+
+Cluster3 <- cluster_XY_2 %>%
+  filter(Cluster == 3)
+
+Cluster4 <- cluster_XY_2 %>%
+  filter(Cluster == 4)
+
+Cluster5 <- cluster_XY_2 %>%
+  filter(Cluster == 5)
+
+Cluster6 <- cluster_XY_2 %>%
+  filter(Cluster == 6)
+
+Cluster7 <- cluster_XY_2 %>%
+  filter(Cluster == 7)
+
+max_sim_12 <- max_sim(Cluster1, Cluster2)
+max_sim_13 <- max_sim(Cluster1, Cluster3)
+max_sim_14 <- max_sim(Cluster1, Cluster4)
+max_sim_15 <- max_sim(Cluster1, Cluster5)
+max_sim_16 <- max_sim(Cluster1, Cluster6)
+max_sim_17 <- max_sim(Cluster1, Cluster7)
+
+max_sim_23 <- max_sim(Cluster2, Cluster3)
+max_sim_24 <- max_sim(Cluster2, Cluster4)
+max_sim_25 <- max_sim(Cluster2, Cluster5)
+max_sim_26 <- max_sim(Cluster2, Cluster6)
+max_sim_27 <- max_sim(Cluster2, Cluster7)
+
+max_sim_34 <- max_sim(Cluster3, Cluster4)
+max_sim_35 <- max_sim(Cluster3, Cluster5)
+max_sim_36 <- max_sim(Cluster3, Cluster6)
+max_sim_37 <- max_sim(Cluster3, Cluster7)
+
+max_sim_45 <- max_sim(Cluster4, Cluster5)
+max_sim_46 <- max_sim(Cluster4, Cluster6)
+max_sim_47 <- max_sim(Cluster4, Cluster7)
+
+max_sim_56 <- max_sim(Cluster5, Cluster6)
+max_sim_57 <- max_sim(Cluster5, Cluster7)
+
+max_sim_67 <- max_sim(Cluster6, Cluster7)
+
+r1 <- c(max_sim_12, max_sim_13, max_sim_14, max_sim_15, max_sim_16, max_sim_17)
+r2 <- c("", max_sim_23, max_sim_24, max_sim_25, max_sim_26, max_sim_27)
+r3 <- c("", "", max_sim_34, max_sim_35, max_sim_36, max_sim_37)
+r4 <- c("", "", "", max_sim_45, max_sim_46, max_sim_47)
+r5 <- c("", "", "", "", max_sim_56, max_sim_57)
+r6 <- c("", "", "", "", "", max_sim_67)
+
+sim_table <- rbind(r1, r2, r3, r4, r5, r6)
+
+colnames(sim_table) <- c("Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6", "Cluster 7")
+rownames(sim_table) <- c("Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6")
 ```
 
 ```{python setup_py, include=FALSE}
@@ -251,99 +333,9 @@ question_numeric(
 q7_correct <- get_tutorial_state("q7")$correct
 ```
 
-```{r table_intro_text, echo=FALSE, results='asis', eval=TRUE}
-cat("Your answers from Question 7 can be fed into the following table (in red):")
-```
+```{r conditional_atble, echo=FALSE, eval=TRUE}
+uiOutput("q7_table_output")
 
-```{r conditional_table, echo=FALSE, eval=TRUE}
-library(kableExtra)
-
-man_D <- function(point1, point2){
-  man_dist = abs(point1[1] - point2[1]) + abs(point1[2] - point2[2])
-return(man_dist)}
-
-max_sim <- function(df1, df2){
-  M <- dim(df1)[1]
-  N <- dim(df2)[1]
-
-  man_Ds <- c()
-
-  for (m in 1:M){
-    for (n in 1:N){
-      man_Ds <- c(man_Ds, man_D(c(df1$X[m], df1$Y[m]), c(df2$X[n], df2$Y[n])))
-    }
-  }
-
-  return(max(man_Ds))}
-
-cluster_XY_2 <- cluster_XY
-cluster_XY_2$Cluster <- Cluster
-
-Cluster1 <- cluster_XY_2 %>%
-  filter(Cluster == 1)
-
-Cluster2 <- cluster_XY_2 %>%
-  filter(Cluster == 2)
-
-Cluster3 <- cluster_XY_2 %>%
-  filter(Cluster == 3)
-
-Cluster4 <- cluster_XY_2 %>%
-  filter(Cluster == 4)
-
-Cluster5 <- cluster_XY_2 %>%
-  filter(Cluster == 5)
-
-Cluster6 <- cluster_XY_2 %>%
-  filter(Cluster == 6)
-
-Cluster7 <- cluster_XY_2 %>%
-  filter(Cluster == 7)
-
-max_sim_12 <- max_sim(Cluster1, Cluster2)
-max_sim_13 <- max_sim(Cluster1, Cluster3)
-max_sim_14 <- max_sim(Cluster1, Cluster4)
-max_sim_15 <- max_sim(Cluster1, Cluster5)
-max_sim_16 <- max_sim(Cluster1, Cluster6)
-max_sim_17 <- max_sim(Cluster1, Cluster7)
-
-max_sim_23 <- max_sim(Cluster2, Cluster3)
-max_sim_24 <- max_sim(Cluster2, Cluster4)
-max_sim_25 <- max_sim(Cluster2, Cluster5)
-max_sim_26 <- max_sim(Cluster2, Cluster6)
-max_sim_27 <- max_sim(Cluster2, Cluster7)
-
-max_sim_34 <- max_sim(Cluster3, Cluster4)
-max_sim_35 <- max_sim(Cluster3, Cluster5)
-max_sim_36 <- max_sim(Cluster3, Cluster6)
-max_sim_37 <- max_sim(Cluster3, Cluster7)
-
-max_sim_45 <- max_sim(Cluster4, Cluster5)
-max_sim_46 <- max_sim(Cluster4, Cluster6)
-max_sim_47 <- max_sim(Cluster4, Cluster7)
-
-max_sim_56 <- max_sim(Cluster5, Cluster6)
-max_sim_57 <- max_sim(Cluster5, Cluster7)
-
-max_sim_67 <- max_sim(Cluster6, Cluster7)
-
-r1 <- c(max_sim_12, max_sim_13, max_sim_14, max_sim_15, max_sim_16, max_sim_17)
-r2 <- c("", max_sim_23, max_sim_24, max_sim_25, max_sim_26, max_sim_27)
-r3 <- c("", "", max_sim_34, max_sim_35, max_sim_36, max_sim_37)
-r4 <- c("", "", "", max_sim_45, max_sim_46, max_sim_47)
-r5 <- c("", "", "", "", max_sim_56, max_sim_57)
-r6 <- c("", "", "", "", "", max_sim_67)
-
-sim_table <- rbind(r1, r2, r3, r4, r5, r6)
-
-colnames(sim_table) <- c("Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6", "Cluster 7")
-rownames(sim_table) <- c("Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6")
-
-kable(sim_table, format = "html", escape = FALSE, booktabs = TRUE,
-      caption = "Maximal Intercluster Similarity", align = "c", linesep = "") %>%
-  kable_styling(position = "center") %>%
-  column_spec(3, color = "#FF0000") %>%
-  row_spec(1, color = "black")
 ```
 
 ```{r q8, echo=FALSE}
@@ -1143,3 +1135,25 @@ plt.show()
 ```
 
 Do you see any similarities with the clusters from the previous section?
+
+```{r servercode, context="server"}
+output$q7_table_output <- renderUI({
+  q7_state <- get_tutorial_state()
+  if (isTRUE(q7_state$questions$q7$correct)) {
+    tagList(
+      p("Your answers from Question 7 can be fed into the following table (in red):"),
+      HTML(
+        kable(sim_table, format = "html", escape = FALSE, booktabs = TRUE,
+              caption = "Maximal Intercluster Similarity", align = "c", linesep = "") %>%
+          kable_styling(position = "center") %>%
+          column_spec(3, color = "#FF0000") %>%
+          row_spec(1, color = "black")
+      )
+    )
+  } else {
+    tagList(
+      p("✅ Answer Question 7 correctly to reveal the intercluster dissimilarity table.")
+    )
+  }
+})
+```
