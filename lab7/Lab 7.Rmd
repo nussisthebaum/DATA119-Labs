@@ -250,11 +250,11 @@ question_numeric(
 q7_correct <- tutorial_question_state("q7")$correct
 ```
 
-```{r table_intro_text, echo=FALSE, results='asis', eval=q7_correct}
+```{r table_intro_text, echo=FALSE, results='asis', eval=TRUE}
 cat("Your answers from Question 7 can be fed into the following table (in red):")
 ```
 
-```{r conditional_table, echo=FALSE, eval=q7_correct}
+```{r conditional_table, echo=FALSE, eval=TRUE}
 library(kableExtra)
 
 man_D <- function(point1, point2){
