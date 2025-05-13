@@ -38,7 +38,103 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 180)
+
+library(kableExtra)
+
+man_D <- function(point1, point2){
+  man_dist = abs(point1[1] - point2[1]) + abs(point1[2] - point2[2])
+return(man_dist)}
+
+max_sim <- function(df1, df2){
+  M <- dim(df1)[1]
+  N <- dim(df2)[1]
+
+  man_Ds <- c()
+
+  for (m in 1:M){
+    for (n in 1:N){
+      man_Ds <- c(man_Ds, man_D(c(df1$X[m], df1$Y[m]), c(df2$X[n], df2$Y[n])))
+    }
+  }
+
+  return(max(man_Ds))}
+
+Cluster <- c(1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 7, 7, 7, 5, 5, 5, 5, 5, 6, 6) 
+X <- c(2, 2, 3, 3, 4, 3, 4, 4, 6, 7, 6, 7, 7, 8, 8, 9, 9, 10, 11, 12, 12, 12, 13, 4, 4)
+Y <- c(1, 2, 2, 3, 2, 6, 5, 6, 7, 8, 3, 3, 4, 3, 4, 2, 1, 1, 7, 8, 9, 10, 9, 10, 11)
+
+cluster_XY <- data.frame(X = X, Y = Y)
+rownames(cluster_XY) = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+                         "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y")
+
+cluster_XY$Label <- rownames(cluster_XY)
+
+little_XY <- cluster_XY %>%
+  filter(Label %in% c("F", "G", "H", "I", "J"))
+
+cluster_XY_2 <- cluster_XY
+cluster_XY_2$Cluster <- Cluster
+
+Cluster1 <- cluster_XY_2 %>%
+  filter(Cluster == 1)
+
+Cluster2 <- cluster_XY_2 %>%
+  filter(Cluster == 2)
+
+Cluster3 <- cluster_XY_2 %>%
+  filter(Cluster == 3)
+
+Cluster4 <- cluster_XY_2 %>%
+  filter(Cluster == 4)
+
+Cluster5 <- cluster_XY_2 %>%
+  filter(Cluster == 5)
+
+Cluster6 <- cluster_XY_2 %>%
+  filter(Cluster == 6)
+
+Cluster7 <- cluster_XY_2 %>%
+  filter(Cluster == 7)
+
+max_sim_12 <- max_sim(Cluster1, Cluster2)
+max_sim_13 <- max_sim(Cluster1, Cluster3)
+max_sim_14 <- max_sim(Cluster1, Cluster4)
+max_sim_15 <- max_sim(Cluster1, Cluster5)
+max_sim_16 <- max_sim(Cluster1, Cluster6)
+max_sim_17 <- max_sim(Cluster1, Cluster7)
+
+max_sim_23 <- max_sim(Cluster2, Cluster3)
+max_sim_24 <- max_sim(Cluster2, Cluster4)
+max_sim_25 <- max_sim(Cluster2, Cluster5)
+max_sim_26 <- max_sim(Cluster2, Cluster6)
+max_sim_27 <- max_sim(Cluster2, Cluster7)
+
+max_sim_34 <- max_sim(Cluster3, Cluster4)
+max_sim_35 <- max_sim(Cluster3, Cluster5)
+max_sim_36 <- max_sim(Cluster3, Cluster6)
+max_sim_37 <- max_sim(Cluster3, Cluster7)
+
+max_sim_45 <- max_sim(Cluster4, Cluster5)
+max_sim_46 <- max_sim(Cluster4, Cluster6)
+max_sim_47 <- max_sim(Cluster4, Cluster7)
+
+max_sim_56 <- max_sim(Cluster5, Cluster6)
+max_sim_57 <- max_sim(Cluster5, Cluster7)
+
+max_sim_67 <- max_sim(Cluster6, Cluster7)
+
+r1 <- c(max_sim_12, max_sim_13, max_sim_14, max_sim_15, max_sim_16, max_sim_17)
+r2 <- c("", max_sim_23, max_sim_24, max_sim_25, max_sim_26, max_sim_27)
+r3 <- c("", "", max_sim_34, max_sim_35, max_sim_36, max_sim_37)
+r4 <- c("", "", "", max_sim_45, max_sim_46, max_sim_47)
+r5 <- c("", "", "", "", max_sim_56, max_sim_57)
+r6 <- c("", "", "", "", "", max_sim_67)
+
+sim_table <- rbind(r1, r2, r3, r4, r5, r6)
+
+colnames(sim_table) <- c("Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6", "Cluster 7")
+rownames(sim_table) <- c("Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6")
 ```
 
 ```{python setup_py, include=FALSE}
@@ -90,6 +186,29 @@ from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 epi_tiny = epi.sample(50, random_state = 524)
 
 l_epi = linkage(epi_tiny, method='complete')
+
+def plot_dendrogram(model, **kwargs):
+    # Create linkage matrix and then plot the dendrogram
+
+    # create the counts of samples under each node
+    counts = np.zeros(model.children_.shape[0])
+    n_samples = len(model.labels_)
+    for i, merge in enumerate(model.children_):
+        current_count = 0
+        for child_idx in merge:
+            if child_idx < n_samples:
+                current_count += 1  # leaf node
+            else:
+                current_count += counts[child_idx - n_samples]
+        counts[i] = current_count
+
+    linkage_matrix = np.column_stack(
+        [model.children_, model.distances_, counts]
+    ).astype(float)
+
+    # Plot the corresponding dendrogram
+    dendrogram(linkage_matrix, **kwargs)
+
 ```
 
 ```{r header, echo = FALSE}
@@ -217,110 +336,21 @@ question_numeric(
 question_numeric(
   "7. Using your answers from Questions 1-6, what is the maximal intercluster dissimilarity between Clusters 2 and 3 using Manhattan distance?",
   answer(6, correct = TRUE),
-  allow_retry = TRUE, 
+  allow_retry = TRUE,
   min = 2,
   max = 8
 )
 ```
 
-Your answers from Question 7 can be fed into the following table (in red):
-
-```{r, echo = FALSE, eval = TRUE}
-library(kableExtra)
-
-man_D <- function(point1, point2){
-  man_dist = abs(point1[1] - point2[1]) + abs(point1[2] - point2[2])
-return(man_dist)}
-
-max_sim <- function(df1, df2){
-  M <- dim(df1)[1]
-  N <- dim(df2)[1]
-
-  man_Ds <- c()
-
-  for (m in 1:M){
-    for (n in 1:N){
-      man_Ds <- c(man_Ds, man_D(c(df1$X[m], df1$Y[m]), c(df2$X[n], df2$Y[n])))
-    }
-  }
-
-  return(max(man_Ds))}
-
-cluster_XY_2 <- cluster_XY
-cluster_XY_2$Cluster <- Cluster
-
-Cluster1 <- cluster_XY_2 %>%
-  filter(Cluster == 1)
-
-Cluster2 <- cluster_XY_2 %>%
-  filter(Cluster == 2)
-
-Cluster3 <- cluster_XY_2 %>%
-  filter(Cluster == 3)
-
-Cluster4 <- cluster_XY_2 %>%
-  filter(Cluster == 4)
-
-Cluster5 <- cluster_XY_2 %>%
-  filter(Cluster == 5)
-
-Cluster6 <- cluster_XY_2 %>%
-  filter(Cluster == 6)
-
-Cluster7 <- cluster_XY_2 %>%
-  filter(Cluster == 7)
-
-max_sim_12 <- max_sim(Cluster1, Cluster2)
-max_sim_13 <- max_sim(Cluster1, Cluster3)
-max_sim_14 <- max_sim(Cluster1, Cluster4)
-max_sim_15 <- max_sim(Cluster1, Cluster5)
-max_sim_16 <- max_sim(Cluster1, Cluster6)
-max_sim_17 <- max_sim(Cluster1, Cluster7)
-
-max_sim_23 <- max_sim(Cluster2, Cluster3)
-max_sim_24 <- max_sim(Cluster2, Cluster4)
-max_sim_25 <- max_sim(Cluster2, Cluster5)
-max_sim_26 <- max_sim(Cluster2, Cluster6)
-max_sim_27 <- max_sim(Cluster2, Cluster7)
-
-max_sim_34 <- max_sim(Cluster3, Cluster4)
-max_sim_35 <- max_sim(Cluster3, Cluster5)
-max_sim_36 <- max_sim(Cluster3, Cluster6)
-max_sim_37 <- max_sim(Cluster3, Cluster7)
-
-max_sim_45 <- max_sim(Cluster4, Cluster5)
-max_sim_46 <- max_sim(Cluster4, Cluster6)
-max_sim_47 <- max_sim(Cluster4, Cluster7)
-
-max_sim_56 <- max_sim(Cluster5, Cluster6)
-max_sim_57 <- max_sim(Cluster5, Cluster7)
-
-max_sim_67 <- max_sim(Cluster6, Cluster7)
-
-r1 <- c(max_sim_12, max_sim_13, max_sim_14, max_sim_15, max_sim_16, max_sim_17)
-r2 <- c("", max_sim_23, max_sim_24, max_sim_25, max_sim_26, max_sim_27)
-r3 <- c("", "", max_sim_34, max_sim_35, max_sim_36, max_sim_37)
-r4 <- c("", "", "", max_sim_45, max_sim_46, max_sim_47)
-r5 <- c("", "", "", "", max_sim_56, max_sim_57)
-r6 <- c("", "", "", "", "", max_sim_67)
-
-sim_table <- rbind(r1, r2, r3, r4, r5, r6)
-
-colnames(sim_table) <- c("Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6", "Cluster 7")
-rownames(sim_table) <- c("Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6")
-
-kable(sim_table, format = "html", escape = FALSE, booktabs = TRUE,
-      caption = "Maximal Intercluster Similarity", align = "c", linesep = "") %>%
-  kable_styling(position = "center") %>%
-  column_spec(3, color = "#FF0000") %>%
-  row_spec(1, color = "black")
+```{r conditional_table, echo=FALSE, eval=TRUE}
+uiOutput("q7_table_output")
 ```
 
 ```{r q8, echo=FALSE}
 question(
-  "8. Based on this table, will Clusters 1 and 2 be merged at the next step of the algorithm?",
-  answer("True", correct = TRUE),
-  answer("False"),
+  "8. Based on the table that appears when you solve Q7, could Clusters 2 and 3 be merged at the next step of the algorithm?",
+  answer("Yes", correct = TRUE),
+  answer("No"),
   allow_retry = TRUE
 )
 ```
@@ -496,7 +526,7 @@ grade_this_code()
 16. We've kind of ignored these type of variables so far--that is, variables that are ID numbers or names. They are technically a type of categorical variable and haven't really been useful to us so far. However, they can be very valuable much later in a clustering analysis, when we try to interpret the clusters. They are the most helpful when they are the row names rather than a separate variable column. Edit the line of code below to "re-import" the data with recipe titles as row names, and remember this trick for later!
 
 ```{python imp, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
-epi = pd.read_csv("./data/epi_mini2.csv", index_col = ...)
+epi = pd.read_csv("./data/epi_mini2.csv", index_col = ___)
 epi.head()
 ```
 
@@ -702,7 +732,7 @@ inertias = []
 for i in range(1,16):
     kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 1145)
     kmeans.fit(epi)
-    inertias.append(...)
+    inertias.append(___)
 ```
 
 ```{python looped-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -731,7 +761,7 @@ grade_this_code()
 
 ```{python elbow, exercise = TRUE, message = FALSE}
 chooseK = {'K': range(1, 16), 'Inertia': inertias}
-chooseK_df = pd.DataFrame(data = ...)
+chooseK_df = pd.DataFrame(data = ___)
 ```
 
 ```{python elbow-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -768,7 +798,7 @@ Note: There does not appear to be a very clear "elbow" in the plot (although it'
 28. Create an object `clust_2` on the `epi` dataset with 11 clusters.
 
 ```{python label, exercise = TRUE, message = FALSE}
-kmeans2 = KMeans(n_clusters = ..., n_init = 5)
+kmeans2 = KMeans(n_clusters = ___, n_init = 5)
 clust_2 = kmeans2.fit(epi)
 ```
 
@@ -795,7 +825,7 @@ epi.index[clust_2.labels_ == 0.0]
 ```
 
 ```{r q30, echo=FALSE}
-question("30. Which cluster(s) contain mostly fish/meat recipes?",
+question("30. Which 2 cluster(s) contain mostly fish/meat recipes?",
          answer("`0.0`"),
          answer("`1.0`", correct = TRUE),
          answer("`2.0`"),
@@ -927,7 +957,7 @@ def plot_dendrogram(model, **kwargs):
     
 ## PLOT:
 
-plot_dendrogram(..., truncate_mode = "level", p = 12,
+plot_dendrogram(___, truncate_mode = "level", p = 12,
                 labels = epi.index)
 plt.title("Hierarchical Clustering Dendrogram with Complete Linkage")
 plt.xlabel("")
@@ -1085,7 +1115,7 @@ Now, we can use the `dendrogram()` (which we borrowed above) method to depict ou
 <!-- ``` -->
 
 ```{python sp_dendro1, exercise = TRUE, message = FALSE}
-dendrogram(..., ..., above_threshold_color='k')
+dendrogram(___, ___, above_threshold_color='k')
 ```
 
 ```{python sp_dendro1-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -1113,3 +1143,30 @@ plt.show()
 ```
 
 Do you see any similarities with the clusters from the previous section?
+
+```{r servercode, context="server"}
+q7_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$q7$correct,
+  valueFunc = function() get_tutorial_state()$q7$correct
+)
+
+output$q7_table_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q7_correct_poll())) {
+    tagList(
+      p("Your answers from Question 7 can be fed into the following table (in red):"),
+      HTML(
+        kable(sim_table, format = "html", escape = FALSE, booktabs = TRUE,
+              caption = "Maximal Intercluster Similarity", align = "c", linesep = "") %>%
+          kable_styling(position = "center") %>%
+          column_spec(3, color = "#FF0000") %>%
+          row_spec(1, color = "black")
+      )
+    )
+  } else {
+    tagList(
+      p("Answer Question 7 correctly to reveal the intercluster dissimilarity table.")
+    )
+  }
+})
+```
