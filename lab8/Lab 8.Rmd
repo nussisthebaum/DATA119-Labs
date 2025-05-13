@@ -50,6 +50,25 @@ goodreads_nussbaum <- DBI::dbWriteTable(db_con, "goodreads_nussbaum", goodreads_
 goodreads_jotte <- DBI::dbWriteTable(db_con, "goodreads_jotte", goodreads_jotte)
 locations <- DBI::dbWriteTable(db_con, "locations", locations)
 
+both <- db_con %>%
+     dplyr::tbl("goodreads_nussbaum") %>%
+     dplyr::left_join(
+         .,
+         db_con %>%
+             dplyr::tbl("locations"),
+         by = "title")
+
+## Homework Setup
+
+plots <- read.csv("./data/plots.csv")
+plots <- DBI::dbWriteTable(db_con, "plots", plots)
+
+species <- read.csv("./data/species.csv")
+species <- DBI::dbWriteTable(db_con, "species", species)
+
+surveys <- read.csv("./data/surveys.csv")
+surveys <- DBI::dbWriteTable(db_con, "surveys", surveys)
+
 # Set the path to the existing Python environment
 #reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
@@ -848,18 +867,7 @@ grade_this_code()
 
 If you'd like to use our Posit server to do your homework, rather than trying to find an online SQL interpreter, you can use the chunk below. The database objects are `plots`, `species`, and `surveys`. 
 
-```{r setup_homework, exercise = FALSE, echo=FALSE, message = FALSE}
-plots <- read.csv("./data/plots.csv")
-plots <- DBI::dbWriteTable(db_con, "plots", plots)
-
-species <- read.csv("./data/species.csv")
-species <- DBI::dbWriteTable(db_con, "species", species)
-
-surveys <- read.csv("./data/surveys.csv")
-surveys <- DBI::dbWriteTable(db_con, "surveys", surveys)
-```
-
-```{sql homework, exercise = TRUE, connection = "db_con", exercise.setup = "setup_homework"}
+```{sql homework, exercise = TRUE, connection = "db_con"}
 
 ```
 
