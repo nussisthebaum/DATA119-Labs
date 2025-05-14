@@ -11,6 +11,7 @@ knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
 library(DBI)
+library(dplyr)
 library(gradethis)
 library(learnr)
 library(reticulate)
