@@ -495,7 +495,11 @@
         "Archs": "digest.so.dSYM"
       }
     },
+<<<<<<< HEAD
     "dplyr": {
+=======
+  "dplyr": {
+>>>>>>> 4a69602acdb593e94cdd6a2ae56837adb0ebf734
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
       "description": {
