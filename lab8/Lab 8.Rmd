@@ -15,6 +15,8 @@ library(gradethis)
 library(learnr)
 library(reticulate)
 library(RSQLite)
+library(tidyverse)
+
 
 goodreads_nussbaum <- read.csv("./data/goodreads_nussbaum.csv")
 colnames(goodreads_nussbaum) <- c("book_id", "title", "author", "author_lf", 
@@ -576,14 +578,14 @@ grade_this_code()
 
 15. Using `both`, write a query that will return which of Professor Nussbaum’s books take place in Illinois. 
 
-```{sql setup1, exercise = FALSE, echo=FALSE, message = FALSE}
-CREATE TABLE both AS
-SELECT *
-FROM goodreads_nussbaum as a
-JOIN locations as b ON a.title = b.title;
-```
+<!-- ```{sql setup1, exercise = FALSE, echo=FALSE, message = FALSE} -->
+<!-- CREATE TABLE both AS -->
+<!-- SELECT * -->
+<!-- FROM goodreads_nussbaum as a -->
+<!-- JOIN locations as b ON a.title = b.title; -->
+<!-- ``` -->
 
-```{sql goodreads15, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+```{sql goodreads15, exercise = TRUE, connection = "db_con"}
 
 ```
 
@@ -610,7 +612,7 @@ question_numeric(
 
 16. Write a query that will return Professor Nussbaum's most-liked books that have taken place in England. 
 
-```{sql goodreads16, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+```{sql goodreads16, exercise = TRUE, connection = "db_con"}
 
 ```
 
@@ -638,7 +640,7 @@ question(
 
 17. Adapt your query to return Professor Nussbaum's least-liked books that have taken place in England.
 
-```{sql goodreads17, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+```{sql goodreads17, exercise = TRUE, connection = "db_con"}
 
 ```
 
@@ -665,7 +667,7 @@ question(
 
 18. What is the most highly rated book that takes place in each of Argentina, France, Germany, Japan, Italy, and Switzerland?
 
-```{sql goodreads18, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+```{sql goodreads18, exercise = TRUE, connection = "db_con"}
 
 ```
 
@@ -704,7 +706,7 @@ question(
 <!-- JOIN locations as b ON a.title = b.title; -->
 <!-- ``` -->
 
-```{sql goodreads19, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+```{sql goodreads19, exercise = TRUE, connection = "db_con"}
 
 ```
 
@@ -858,7 +860,7 @@ grade_this_code()
 
 25. When you have finished, use the cell below to write a query that you think answers an interesting question about these datasets. You can also use the cell to [explore more keywords in SQLite](https://www.sqlite.org/lang_keywords.html). Post the question in the thread on Ed so that your classmates can get more practice!
 
-```{sql goodreadsfinal, exercise = TRUE, connection = "db_con", exercise.setup = "setup1"}
+```{sql goodreadsfinal, exercise = TRUE, connection = "db_con"}
 
 ```
 
