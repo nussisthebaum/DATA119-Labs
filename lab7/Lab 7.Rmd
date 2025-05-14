@@ -40,8 +40,6 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 180)
 
-library(kableExtra)
-
 man_D <- function(point1, point2){
   man_dist = abs(point1[1] - point2[1]) + abs(point1[2] - point2[2])
 return(man_dist)}
