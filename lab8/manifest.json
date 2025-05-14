@@ -3712,7 +3712,11 @@
     },
     "README.md": {
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+<<<<<<< HEAD
     }
+=======
+    },
+>>>>>>> b23bad2d6a4f0e6e594d208810917e3c07c3a3fe
   },
   "users": null
 }
