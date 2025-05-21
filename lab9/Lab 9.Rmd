@@ -195,12 +195,12 @@ Now, that we've narrowed down the type of model we want to build, we need to che
 
 ```{python sleep_hist, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 (p9.ggplot(msleep, p9.aes(x = ___)) +
-  p9.geom_histogram(bins = 24))
+  p9.geom_histogram(bins = 10))
 ```
 
 ```{python sleep_hist-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(msleep, p9.aes(x = "sleep_total")) +
-  p9.geom_histogram(bins = 24))
+  p9.geom_histogram(bins = 10))
 ```
 
 ```{r sleep_hist-code-check, message = FALSE, warning = FALSE, echo = FALSE}
@@ -361,7 +361,7 @@ X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
 X_test_pp[col_names] = scaler.transform(X_test_pp[col_names])
 ```
 
-```{r solution-code-check, message = FALSE, warning = FALSE}
+```{r pp-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
@@ -451,11 +451,11 @@ model_df = pd.DataFrame({'Fitted': ___, 'Residuals': ___})
 
 (p9.ggplot(model_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
- p9.xlab("Predicted Price") +
+ p9.xlab("Fitted Values") +
  p9.ylab("Residuals"))
 
 (p9.ggplot(model_df, p9.aes(x = 'Residuals')) +
-   p9.geom_histogram(bins = 24) +
+   p9.geom_histogram(b) +
    p9.xlab("Residuals"))
 ```
 
@@ -464,11 +464,11 @@ model_df = pd.DataFrame({'Fitted': test_preds, 'Residuals': (y_test - test_preds
 
 (p9.ggplot(model_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
- p9.xlab("Predicted Price") +
+ p9.xlab("Fitted Values") +
  p9.ylab("Residuals"))
 
 (p9.ggplot(model_df, p9.aes(x = 'Residuals')) +
-   p9.geom_histogram(bins = 24) +
+   p9.geom_histogram() +
    p9.xlab("Residuals"))
 ```
 
@@ -716,7 +716,7 @@ question_numeric("What $k$? would you choose?",
              incorrect("Not quite. Remember we want testing error to be low (or, equivalently, testing accuracy to be high).")
            }
          }),
-         allow_retry = TRUE, 
+         allow_retry = TRUE,
          post_message = "Congratulations! You have found the third secret word: FRAME."
 )
 ```
@@ -800,7 +800,7 @@ question("True or False: The test set AUC for this model represents an improveme
 Now, let's plot the ROC curve. In a previous lab, we did this by hand, but `sklearn` has a function that will generate this plot for us. Run the code below to see the ROC curve,
 
 ```{python roc_curve, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup5"}
-from sklearn.metrics import RocCurveDisplay
+from sklearn.metrics import roc_curve, RocCurveDisplay
 
 fpr, tpr, thresholds = roc_curve(y_test, test_preds, pos_label=1)
 roc_display = RocCurveDisplay(fpr=fpr, tpr=tpr).plot()
@@ -835,8 +835,7 @@ question(
   "What type of model should I use to answer this question?",
   answer("Supervised", message = "Not quite. Since we are looking for groups with similar featuers, we want to use a clustering method. In clustering, there is no response variable."),
   answer("Unsupervised",correct = TRUE, message = "Correct!"),
-  allow_retry = TRUE,
-  post_message = "Congratulations! You have found the fifth and final secret word: PLANT."
+  allow_retry = TRUE
 )
 ```
 
@@ -852,6 +851,7 @@ Which clustering method do you think makes the most sense for this dataset?
 ::::
 
 First, let's use K-Means to cluster the data. We need to prepare our data for clustering.
+
 - Read in the data with `name` as the index
 - Create dummy variables for the categorical variables 
 - Standardize the numeric variables
@@ -927,7 +927,7 @@ grade_this_code()
 ```{r q12, echo=FALSE}
 question_numeric("What $k$? would you choose?",
          answer_fn(function(value){
-           if (value %in% c(2,3,4)){
+           if (value %in% c(3,4,5,6)){
              correct("Good choice!")
            }
            else{
