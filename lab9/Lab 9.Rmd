@@ -773,7 +773,7 @@ Now, print the AUC on the test set. How well does the model perform?
 ```{python auc, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
 from sklearn.metrics import roc_curve, auc
 
-fpr, tpr, thresholds = metrics.roc_curve(___)
+fpr, tpr, thresholds = roc_curve(___)
 auc(___, ___)
 ```
 
