@@ -374,7 +374,7 @@ grade_this_code()
 
 ```{r q7, echo=FALSE}
 question(
-  "What is the longest book Professor Nussbaum has read?",
+  "What is the shortest book Professor Nussbaum has read?",
   answer("The Hobbit And The Lord Of The Rings: Deluxe Pocket Boxed Set"), 
   answer("Spitting Gold"),
   answer("A Storm of Swords", correct = TRUE),
