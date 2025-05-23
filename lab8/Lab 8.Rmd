@@ -59,6 +59,7 @@ both <- db_con %>%
          db_con %>%
              dplyr::tbl("locations"),
          by = "title")
+both <- DBI::dbWriteTable(db_con, "both", both)
 
 ## Homework Setup
 
