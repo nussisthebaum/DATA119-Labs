@@ -256,7 +256,7 @@ Now, let's one-hot-encode our categorical variables. Don't forget you need a ref
 
 ```{python dummy_drop, exercise = TRUE, message = FALSE, exercise.setup = "setup-packages"}
 msleep = msleep.drop(columns = ['genus','name','order'])
-msleep = pd.get_dummies(___, columns = ___, dtype = float, dummy_NA = True, ___)
+msleep = pd.get_dummies(___, columns = ___, dtype = float, dummy_na = True, ___)
 mleep = msleep.dropna()
 ```
 
