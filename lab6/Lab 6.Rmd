@@ -291,9 +291,9 @@ $$TPR = \frac{TP}{TP + FN}$$
 ```{r q10, echo=FALSE}
 question("10. Based off of your confusion matrix, what is the training set sensitivity of the classifier?",
          answer("4/13"),
-         answer("5/9", correct=TRUE),
+         answer("5/7", correct=TRUE),
          answer("9/13"),
-         answer("7/9"),
+         answer("2/7"),
          answer("7/13"), 
          allow_retry = TRUE 
 )
