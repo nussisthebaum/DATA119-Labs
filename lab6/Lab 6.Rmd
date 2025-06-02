@@ -213,16 +213,16 @@ n3 <- c("${B}$", "${L}$", "",
         "${M}$", "${J}$", "${K}$", 
         "${B}$", "${J}$", "${J}$",
         "${G}$")
-preds <- c("${1}$", "${1}$", "",
-           "${2}$", "${2}$", "${2}$", 
-           "${2}$", "${2}$", "${1}$", 
-           "${2}$", "${1}$", "${2}$", 
-           "${2}$")
-truth <- c("${2}$", "${2}$", "",
-           "${2}$", "${2}$", "${2}$", 
-           "${2}$", "${1}$", "${1}$", 
+preds <- c("${2}$", "${2}$", "",
            "${1}$", "${1}$", "${1}$", 
+           "${1}$", "${1}$", "${2}$", 
+           "${1}$", "${2}$", "${1}$", 
            "${1}$")
+truth <- c("${1}$", "${1}$", "",
+           "${1}$", "${1}$", "${1}$", 
+           "${1}$", "${2}$", "${2}$", 
+           "${2}$", "${2}$", "${2}$", 
+           "${2}$")
 
 knn_table <- data.frame(point = point, "Neighbor 1" = n1, n2 = n2, n3 = n3, preds = preds, truth = truth)
 knn_table <- t(knn_table)
@@ -236,10 +236,10 @@ kable(knn_table, escape = FALSE) %>%
 
 ```{r q6, echo=FALSE}
 question("Select the correct series of values for column C.",
-         answer("D, E, M, 2, 2", correct=TRUE),
-         answer("D, E, L, 2, 2"),
-         answer("D, E, L, 1, 2"),
-         answer("D, E, M, 2, 1"), 
+         answer("D, E, M, 1, 1", correct=TRUE),
+         answer("D, E, L, 1, 1"),
+         answer("D, E, L, 2, 1"),
+         answer("D, E, M, 1, 2"), 
          allow_retry = TRUE)
 ```
 
@@ -250,7 +250,7 @@ question("Select the correct series of values for column C.",
 
 ```{r echo=FALSE}
 # Create the confusion matrix data
-confusion_matrix <- matrix(c(2, 2, 4, 5), nrow = 2, byrow = TRUE)
+confusion_matrix <- matrix(c(4, 5, 2, 2), nrow = 2, byrow = TRUE)
 rownames(confusion_matrix) <- c("True Class 1", "True Class 2")
 colnames(confusion_matrix) <- c("Predicted Class 1", "Predicted Class 2")
 
