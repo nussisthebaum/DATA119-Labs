@@ -441,7 +441,7 @@ model_right2 = sm.OLS(Y_log, X_right2).fit()
 model_right2.summary()
 ```
 
-Now, we can see that `city_amsterdam` is back in the model, but `city_london` is not. All of my interpretations are changed--for example, `city_lisbon` is now the expected difference in price for AirBnBs in Lisbon relative to those in London rather than those in Amsterdam. We can say that we would expect the difference to be about 202 Euros a night, again, RELATIVE TO LONDON. It doesn't really matter what you pick the reference level to be, but:
+Now, we can see that `city_amsterdam` is back in the model, but `city_london` is not. All of my interpretations are changed--for example, `city_lisbon` is now the expected difference in price for AirBnBs in Lisbon relative to those in London rather than those in Amsterdam. We can say that we would expect the difference in log price to be about -1.1227, again, RELATIVE TO LONDON. It doesn't really matter what you pick the reference level to be, but:
 
 1. You do have to pick something, and
 2. You do have to make the interpretation relative to the reference level.
