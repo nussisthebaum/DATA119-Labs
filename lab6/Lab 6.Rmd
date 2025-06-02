@@ -250,7 +250,7 @@ question("Select the correct series of values for column C.",
 
 ```{r echo=FALSE}
 # Create the confusion matrix data
-confusion_matrix <- matrix(c(4, 5, 2, 2), nrow = 2, byrow = TRUE)
+confusion_matrix <- matrix(c(5, 2, 4, 2), nrow = 2, byrow = TRUE)
 rownames(confusion_matrix) <- c("True Class 1", "True Class 2")
 colnames(confusion_matrix) <- c("Predicted Class 1", "Predicted Class 2")
 
