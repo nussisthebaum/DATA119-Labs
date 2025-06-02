@@ -175,18 +175,18 @@ question("3. What are the 3 nearest neighbors for point J? You may use Euclidean
 
 ```{r q4, echo=FALSE}
 question("4. Predict the class for point J, based on its three nearest neighbors.",
-         answer("Red Circle (Class 1)"),
-         answer("Blue Triangle (Class 2)", correct=TRUE, message="Point H is Class 1 (red circles), but points A and B are Class 2 (blue triangles). Since two of the three neighboring points are Class 2, we would predict point J to also be Class 2."), 
+         answer("Blue Triangle (Class 1)", correct=TRUE, message="Point H is Class 2, but points A and B are Class 1 (blue triangles). Since two of the three neighboring points are Class 2, we would predict point J to also be Class 2."), 
+         answer("Red Circle (Class 2)"),
          allow_retry = TRUE
 )
 ```
 
 
 ```{r q5, echo=FALSE}
-question("5. Let Class 1 be the absence of some event, and Class 2 be the presence of some event. If we are predicting point J to be Class 2, is Point J a true positive, true negative, false positive, or false negative?",
+question("5. Let Class 1 be the presence of some event, and Class 2 be the absence of some event. If we are predicting point J to be Class 1, is Point J a true positive, true negative, false positive, or false negative?",
          answer("True Positive"),
          answer("True Negative"),
-         answer("False Positive", correct=TRUE, message="If we are predicting point J to be Class 2, we are predicting the presence of some event. In reality, point J is Class 1, which means the event did not really happen. Thus, point J is a false positive."),
+         answer("False Positive", correct=TRUE, message="If we are predicting point J to be Class 1, we are predicting the presence of some event. In reality, point J is Class 2, which means the event did not really happen. Thus, point J is a false positive."),
          answer("False Negative"), 
          allow_retry = TRUE, 
          post_message = "Congratulations! You have found the third secret word: DRIVE."
@@ -270,7 +270,6 @@ confusion_table
 ```
 
 Remember the formula for accuracy is:
-
 
 $$Accuracy = \frac{TP + TN}{n}$$
 
