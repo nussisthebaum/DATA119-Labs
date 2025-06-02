@@ -397,7 +397,7 @@ model = sklearn.linear_model.Ridge(alpha = 0.5)
 modelRidge = model.fit(X_train_pp, y_train)
 ```
 
-15. Now, we are ready to use cross validation to try and select the best `alpha` for our dataset. Usually, we are looking over a range of numbers--let's go ahead and create one now using `np.arange()` (`range()` is just for floats). Edit the code below to create a range of numbers to use for `alpha` from -6 to 2 in increments of 0.1.
+15. Now, we are ready to use cross validation to try and select the best `alpha` for our dataset. Usually, we are looking over a range of numbers--let's go ahead and create one now using `np.arange()` (`range()` is just for floats). Edit the code below to create a range of numbers to use for `alpha` from -2 to 6 in increments of 0.1.
 
 Note: The second line takes 10 and raises it to the power of each value, specifically to make the plots nicer. This is a trick you can use in your plots as well.
 
