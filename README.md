@@ -57,6 +57,11 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA 
  
 ## Lab Creation Workflow:
 
+1. Duplicate lab0, which contains the relevant css, images, data, and www directories.
+2. Create a new .Rmd file with relevant YAML header, R setup chunk, and (empty) Python setup chunk.
+3. Add Goals heading.
+4. Add Setup heading. 
+
 ## Lab Publishing Workflow:
 
 1. Make sure all necessary files are in the folder with the designated lab number including a `requirements.txt` file, a folder named `css` containing the css file, a folder named `images` with any image files, and a folder named `www` with any data files etc. 
