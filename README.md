@@ -95,8 +95,37 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA1
 
 ## Common Errors and their Fixes
 
-* "Expected a python object, received a NULL" (commonly received while rendering):
-* "An internal error occurred while setting up the exercise. Please try again or contact the tutorial author." (commonly received while running code chunks):
+* "Expected a python object, received a NULL" (commonly received while rendering): Create an empty Python 'setup' chunk at the beginning of the lab
+* "An internal error occurred while setting up the exercise. Please try again or contact the tutorial author." (commonly received while running code chunks at the beginning of the lab): We still have not learned why this occurs but it does not seem to break anything.
+* "An error has occured. Application Failed to Start. Exit Status 1" (commonly received if students refresh the lab too many times in a row): Make a small change to the lab (adding spacing etc) and then update the lab on Posit. It will reload and the error should go away.
+* "NameError: name ___ is not defined. Run `reticulate::py_last_error()` for details" (occurs when students run cells that are not properly chained): Check to make sure your cell is referring to the correct setup chunk that creates that object.
+
+### Sample Ed Note for Students about Errors:
+    If you are running into an issue on a lab. First please check the list of common errors below. If you do not find your answer or you are told to contact us, please post the issue here. Make sure you include which lab you are working on, what the problem is, and where in the lab we can find that problem.
+    ---
+    Common Lab Errors and What to Do
+    
+    1. If you see this:
+    
+    ![image](https://github.com/user-attachments/assets/71513187-7ffa-478b-803d-b34770d7621c)
+
+    
+        Do not panic, this means nothing useful. You can continue with the lab as normal.
+    
+    2. If you see this:
+    
+    ![image](https://github.com/user-attachments/assets/df396828-720c-46bf-800c-da61957d4b34)
+
+    
+         Someone likely refreshed the lab too many times too quickly. Tell us immediately so that we can redeploy the lab!! Also, please avoid refreshing multiple times in a row.
+    
+    
+    3. If you see this but you are sure you just created the variable in the previous code cell:
+    
+    ![image](https://github.com/user-attachments/assets/86f171d6-fcd3-4c06-98ee-2f101437e26e)
+    
+    
+         That code chunk has been specified incorrectly on our end. Tell us right away so that we can fix it!
 
 ## Extra Resources:
 
@@ -104,3 +133,4 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA1
 * [`learnr` Index](https://rstudio.github.io/learnr/index.html)
 * [`learnr` Question Types](https://rstudio.github.io/learnr/reference/quiz.html)
 * [Random Word Generator for secret words](https://randomwordgenerator.com/)
+* [Updating Posit Settings](https://docs.posit.co/connect/cookbook/content/updating-content-git-repository-settings/)
