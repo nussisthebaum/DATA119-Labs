@@ -37,11 +37,11 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA1
     -   Plotting the coefficients,
     -   Selecting variables useful for prediction, and
     -   Assessing model fit.
-* Lab 6: $k$NN Classification
+* Lab 6: $k$ NN Classification
   + Practice calculating different distance metrics. 
-  + Define a $k$NN classifier on a small dataset by hand. 
+  + Define a $k$ NN classifier on a small dataset by hand. 
   + Practice calculations on confusion matrices.
-  + Implement $k$NN classification and regression. 
+  + Implement $k$ NN classification and regression. 
   + Create a graph illustrating the effects of choosing $k$ on training and test set accuracy. 
 * Lab 7: $K$-Means and Hierarchical Clustering
   + To practice basic data cleaning, such as removing columns, dropping rows with missing values, and accessing row names of a dataframe.
