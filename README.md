@@ -21,12 +21,36 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA1
 * Lab 3.5: Categorical Variables and VIF
   + Check for multicollinearity issues using the variance inflation factor. 
   + Learn to incorporate categorical variables in multiple linear regression.
-* Lab 4
-* Lab 5
-* Lab 6
-* Lab 7
-* Lab 8
-* Lab 9
+* Lab 4: Logistic Regression and Confusion Matrices
+  + To practice fitting logistic regression models.
+  + To calculate model fit statistics.
+  + To calculate confusion matrices.
+  + To apply LASSO to datasets used for linear and logistic regression.
+* Lab 5: Cross Validation and Regularization
+  + To implement leave-one-out and $K$-fold cross validation in a regression setting.
+  + To carry out ridge regression on a dataset, including:
+    - Choosing a tuning parameter,
+    - Plotting the coefficients, and
+    - Assessing model fit.
+  + To carry out LASSO on the same dataset, including:
+    -   Choosing a tuning parameter,
+    -   Plotting the coefficients,
+    -   Selecting variables useful for prediction, and
+    -   Assessing model fit.
+* Lab 6: $k$NN Classification
+  + Practice calculating different distance metrics. 
+  + Define a $k$NN classifier on a small dataset by hand. 
+  + Practice calculations on confusion matrices.
+  + Implement $k$NN classification and regression. 
+  + Create a graph illustrating the effects of choosing $k$ on training and test set accuracy. 
+* Lab 7: $K$-Means and Hierarchical Clustering
+  + To practice basic data cleaning, such as removing columns, dropping rows with missing values, and accessing row names of a dataframe.
+  + To implement $K$-means clustering, including selecting an appropriate value for $K$ and interpreting the cluster output.
+  + To implement hierarchical clustering, including creation of dendrograms.
+* Lab 8: SQL
+  + The goal of this lab is to practice SQL, including with joins.
+* Lab 9: DATA119 Review Lab
+  + The goal of this lab is to help you review topics we've covered this quarter.
 * Lab 10: Hypothesis Testing Review
   + Review hypothesis testing, complete with an example of a $t$-test. 
     
