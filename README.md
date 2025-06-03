@@ -1,6 +1,6 @@
 # DATA119 Labs
 
-This repo contains data and .Rmd files for interactive Shiny labs to teach DATA119 concepts. 
+This repo contains data and .Rmd files for interactive Shiny labs to teach DATA 118, 119, and 120 concepts. 
 
 ## Lab Goals:
 
