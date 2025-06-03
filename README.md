@@ -106,7 +106,8 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA 
 * "NameError: name ___ is not defined. Run `reticulate::py_last_error()` for details" (occurs when students run cells that are not properly chained): Check to make sure your cell is referring to the correct setup chunk that creates that object.
 
 ### Sample Ed Note for Students about Errors:
-  If you are running into an issue on a lab. First please check the list of common errors below. If you do not find your answer or you are told to contact us, please post the issue here. Make sure you include which lab you are working on, what the problem is, and where in the lab we can find that problem.
+If you are running into an issue on a lab. First please check the list of common errors below. If you do not find your answer or you are told to contact us, please post the issue here. Make sure you include which lab you are working on, what the problem is, and where in the lab we can find that problem.
+
   ---
   Common Lab Errors and What to Do
   
