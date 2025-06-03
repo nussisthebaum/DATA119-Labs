@@ -119,7 +119,7 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA 
   
   2. If you see this:
   
-  ![image](https://github.com/user-attachments/assets/df396828-720c-46bf-800c-da61957d4b34)
+  <img width="564" alt="image" src="https://github.com/user-attachments/assets/97d96021-ba88-489b-810f-d9322dcb6b75" />
 
   
        Someone likely refreshed the lab too many times too quickly. Tell us immediately so that we can redeploy the lab!! Also, please avoid refreshing multiple times in a row.
