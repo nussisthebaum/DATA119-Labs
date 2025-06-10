@@ -140,3 +140,4 @@ If you are running into an issue on a lab. First please check the list of common
 * [`learnr` Question Types](https://rstudio.github.io/learnr/reference/quiz.html)
 * [Random Word Generator for secret words](https://randomwordgenerator.com/)
 * [Updating Posit Settings](https://docs.posit.co/connect/cookbook/content/updating-content-git-repository-settings/)
+* [UC DS Textbook](https://amandakube.github.io/textbook-datascience-1/intro.html)
