@@ -1,0 +1,37 @@
+Start with the rocker/shiny-verse:4.4.1  image
+You'll expect to add R packages, install Python, and python packages.
+
+
+grep Package\":  $(find . -name manifest.json) | cut -f 3 -d : | sort | uniq > packages.list
+
+cat $(find . -name requirements.txt) | sort | uniq > docker/requirements.txt
+
+
+docker build -t shiny118  .   
+
+Problem with quoting the include.packages line in Dockerfile... fixed..
+
+docker run -p 3838:3838 shiny118
+# Welcome to Shiny Server! 
+
+http://localhost:3838/debugginglab/
+
+http://localhost:3838/lab1
+
+added COPY statement to invest image with content
+
+docker run -it shiny118 -w /srv/shiny-server/debugginglab/ /bin/bash
+docker run -w /srv/shiny-server/debugginglab/ -it shiny118 /bin/bash
+cd /srv/shiny-server/debugginglab/
+R -e "Sys.setenv(RMARKDOWN_RUN_PRERENDER_FORCE=TRUE); rmarkdown::run('Debugging Lab.Rmd')"
+
+Started server, found a package that requires install from github, found that
+libpython3.x-dev is needed.
+
+Takes an hour to build dockerfile each time.  
+
+# Use the rocker/shiny-verse image with R 4.4.1
+FROM rocker/shiny-verse:4.4.1
+
+Added Makefile just with  docker build and docker run targets
+
