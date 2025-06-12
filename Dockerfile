@@ -1,16 +1,12 @@
-# Use the rocker/shiny-verse image with R 4.4.1
+# Use the rocker/shiny-verse image with R 4.4.1.  This is a shiny server
 FROM rocker/shiny-verse:4.4.1
 
 # Install system dependencies needed for R packages (refer to your manifest.json for hints)
-# Example: For 'curl', 'libssl-dev', 'libxml2-dev' if your R packages need them
-# You might need to add other -dev packages based on your R dependencies.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.10 \
     python3.10-venv \
     python3-pip \
     libpython3.10-dev \
-    # Add any other system dependencies here, e.g., libcurl4-openssl-dev, libxml2-dev
-    # For example, if you have packages like 'xml2', 'curl', 'openssl', 'httr', etc.
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
@@ -30,12 +26,11 @@ RUN echo "RETICULATE_PYTHON=/usr/bin/python3" >> /usr/local/lib/R/etc/Renviron
 RUN R -e "install.packages(\"remotes\", repos='https://cran.rstudio.com/', lib = \"/usr/local/lib/R/site-library\", Ncpus=as.integer(Sys.getenv('NCPUS')))"
 
 # Now, install gradethis and learnr from GitHub, preventing interactive prompts
+# These are the two packages that (June 2025) can't be installed from CRAN
 RUN R -e 'remotes::install_github("rstudio/learnr", upgrade = "never", lib = "/usr/local/lib/R/site-library")' && \
     R -e 'remotes::install_github("rstudio/gradethis", upgrade = "never", lib = "/usr/local/lib/R/site-library")'
 
 # Install R packages from your manifest.json
-# It's best to use install.packages() for CRAN packages
-# And devtools/remotes for GitHub packages if any
 RUN R -e 'install.packages(c("Matrix", "R6", "Rcpp", "RcppTOML", \
     "backports", "base64enc", "bslib", "cachem", "checkmate", \
     "cli", "commonmark", "crayon", "diffobj", "digest", \
@@ -44,33 +39,23 @@ RUN R -e 'install.packages(c("Matrix", "R6", "Rcpp", "RcppTOML", \
     lib = "/usr/local/lib/R/site-library", \
     repos="https://cran.rstudio.com/")'
 
-
-# If you have packages from GitHub, use remotes:
-# RUN R -e "install.packages('remotes', repos='https://cran.rstudio.com/')" && \
-#     R -e "remotes::install_github('some/repo')"
+# Remove the rocker default index.html, which is a "Welcome to Shiny" page
+RUN rm -f /srv/shiny-server/index.html
 
 # Copy your Shiny app files into the container
-# Shiny Server typically expects apps in /srv/shiny-server/
-# Create the base directory for Shiny Server applications
-# This is Shiny Server's default apps directory
-RUN mkdir -p /srv/shiny-server/
 
-# Copy all your project content into the Shiny Server directory
-# The '.' refers to the current build context (where your Dockerfile is located)
-# The '/srv/shiny-server/' is the destination inside the container.
+RUN mkdir -p /srv/shiny-server/
 COPY . /srv/shiny-server/
 
 # Set ownership and permissions for the shiny user
-# The 'shiny' user is created by the rocker/shiny-verse image.
-# We give ownership of the app directory to 'shiny' and allow write access.
-
 RUN chown -R shiny:shiny /srv/shiny-server/ && \
     chmod -R 755 /srv/shiny-server/
 
+# Help reticulate find ptyhon
 ENV LD_LIBRARY_PATH="/usr/lib/python3.10/config-3.10-x86_64-linux-gnu/"
 
 # Expose Shiny Server's default port
 EXPOSE 3838
 
-# Command to run Shiny Server (this is usually the default for rocker/shiny images)
+# Start the Shiny Server 
 CMD ["/usr/bin/shiny-server"]

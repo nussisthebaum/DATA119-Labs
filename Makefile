@@ -7,4 +7,4 @@ build:
 	docker build -t shiny119labs  .
 
 shell:
-	docker run --rm -it shiny119labs -w /srv/shiny-server/  /bin/bash
+	docker run --rm  -w /srv/shiny-server/ -it shiny119labs /bin/bash
