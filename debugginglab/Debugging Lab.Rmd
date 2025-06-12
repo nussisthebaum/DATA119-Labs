@@ -8,7 +8,7 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(error = TRUE)
-knitr::knit_engines$set(python = reticulate::eng_python)
+#knitr::knit_engines$set(python = reticulate::eng_python)
 
 library(shiny)
 library(gradethis)
