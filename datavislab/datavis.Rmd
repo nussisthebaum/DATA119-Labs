@@ -61,16 +61,23 @@ The goals of this lab are:
 * To get exposure to seaborn, plotnine, plotly, and altair as alternative graphing packages to matplotlib
 
 ## Visualization Theory
+A clear graphic can convey the results of data science work quicker and more effectively than nearly any other approach. How to design and implement the optimal graphic for each scenario has been and is continuously studied today. Every element of visualizations from the color palette to the type of graph you choose and everything in between has an important impact on the ability of a graph to convey the point you want to make.
 
 ### Overview
 
+In this lab you'll be introduced to two of the main frameworks for visualization used in Python. First, to the object oriented approach used by `Matplotlib` and later the Grammar of Graphics approach used by libraries like `plotnine` and `altair`. We'll also briefly look at `seaborn` which is a hybrid of the two frameworks.
+
 ### Matplotlib Paradigm
+Matplotlib takes an object oriented approach that is akin to a painter. First you choose the size of your (virtual) canvas, then you choose what specific points, lines, and polygons to draw on the canvas, and finally you add finishing touches like titles, labels, legends, and styling. To simplify things for common graphs there are methods so you can simply ask for a bar chart to be made with the data you provide and all the bars will be drawn rather than you having to draw each one one by one. An advantage of Matplotlib is it gives you fine grained control if you did ever want to draw bars one by one though the downside of this is all data has to be preprocessed before being used for graphing.
+
+Matplotlib is one of the most commonly used packages for creating visualizations with python in academia and will be the package we focus on in this lab.
 
 ### Grammar of Graphics Paradigm
+By contrast, the Grammar of Graphics approach is more like ordering a painting from an artist. You tell it the data set to use, what type of graph you'd like, any particular coloring and scaling, and then the implementation of the grammar of graphics you're using such as `plotnine` or `altair` will take care of the rest. An advantage of the grammar of graphics is the clarity that is enforced by it's clear structure; however, you lose some of the fine grained control available in object oriented approaches like `Matplotlib`. This approach is based on the visualization theory developed by Leland Wilkerson and implemented popularly in R with ggplot2 by Hadley Wickham.
 
 ## Setup
 
-This lab will use both `pandas` and `python`. For graphing we'll primarily use `matplotlib`. 
+This lab will use both `pandas` and `python`. For graphing we'll primarily use `matplotlib`. We'll also see some `seaborn`, `altair`, and `plotnine`
 **Add Dataset here**
 We will also be using a dataset scraped from the website [Epicurious](https://www.epicurious.com/), which curates different recipes. Run this cell to load the packages and DataFrame.
 
