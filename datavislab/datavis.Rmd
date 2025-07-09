@@ -1,0 +1,518 @@
+---
+title: "DATA119 - Data Visualization"
+output: 
+  learnr::tutorial:
+    css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+#reticulate::py_install(c('numpy', 'pandas', 'plotnine', 'seaborn', 'altair', 'matplotlib'))
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Data Visualization", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goals of this lab are:
+
+* To understand the basic theory underpinning the field of data visualization.
+* To learn which visualizations are best suited to which use cases
+* To practice using matplotlib to make visualizations
+* To get exposure to seaborn, plotnine, plotly, and altair as alternative graphing packages to matplotlib
+
+## Visualization Theory
+
+### Overview
+
+### Matplotlib Paradigm
+
+### Grammar of Graphics Paradigm
+
+## Setup
+
+This lab will use both `pandas` and `python`. For graphing we'll primarily use `matplotlib`. 
+**Add Dataset here**
+We will also be using a dataset scraped from the website [Epicurious](https://www.epicurious.com/), which curates different recipes. Run this cell to load the packages and DataFrame.
+
+```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+# data manipulation
+import numpy as np
+import pandas as pd
+# graphing
+import matplotlib.pyplot as plt
+import altair
+import seaborn
+import plotnine
+
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab1/www/epi_mini.csv
+
+epicurious = pd.read_csv("./data/epi_mini.csv", index_col = 0)
+```
+
+
+## Graphing with Matplotlib
+
+### Choosing your canvas: Figures and Axes
+
+### Common Graphs
+
+#### Bar Chart
+
+#### Histogram
+
+#### Scatterplot
+
+#### Line Chart
+
+### Finishing Touches: Labels, Legends, and Tick marks
+
+## Building on Matplotlib: Pandas and Seaborn
+
+## Grammar of Graphics Approach
+
+1. Find the dimensions of the `epicurious` dataset. How many observations are there? How many variables are there?
+
+```{python size, exercise = TRUE, message = FALSE, exercise.setup="packages"}
+
+```
+
+```{python size-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epicurious.shape
+```
+
+```{r size-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Secret word",
+)
+```
+
+2. View the head of the dataset. What kinds of variables do you see?
+
+```{python head, exercise = TRUE, message = FALSE, exercise.setup="packages"}
+
+```
+
+
+```{python head-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epicurious.head()
+```
+
+
+```{r head-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Secret word",
+)
+```
+
+3. Remember from Data 118 that a variable can have numbers as data but not be numeric (eg 0, 1 to mean no, yes). We call these variables "binary". Since many of the variables are binary variables indicating different facts about the recipes, let's discard most of them for now and focus on the numeric variables. Identify which of the variables are numeric (if you get stuck, check out the [data dictionary](https://www.kaggle.com/datasets/hugodarwood/epirecipes)).  Save a version of the dataset with only those variables as `epicurious_num`. 
+
+```{python filter, exercise = TRUE, message = FALSE, exercise.setup="packages"}
+
+```
+
+```{python filter-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epicurious_num = epicurious[['rating', 'calories', 'protein', 'fat', 'sodium']]
+```
+
+```{r filter-code-check, message = FALSE, warning = FALSE}
+grade_this({
+  if (identical(epicurious_num, epicurious[['rating', 'calories', 'protein', 'fat', 'sodium']])) {
+    pass("Secrets")
+  }
+  fail()
+})
+```
+
+4. Compute a table of summary statistics for these variables, including the minimum, first quartile, median, third quartile, maximum, mean, and standard deviation. Look at these numbers, and think about any red flags you see (we will come back to this).
+
+```{python describe-setup}
+import numpy as np
+import pandas as pd
+
+epicurious = pd.read_csv("./www/epi_mini.csv")
+epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
+```
+
+```{python describe, exercise = TRUE, message = FALSE, exercise.setup="describe-setup"}
+
+```
+
+```{python describe-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epicurious_num.describe()
+```
+
+```{r describe-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "stuff"
+)
+```
+
+5. It is also helpful to discuss how many missing values the dataset has. Identify the percentage of missing values in the `protein` column.
+
+```{python missing, exercise = TRUE, message = FALSE, exercise.eval = FALSE, exercise.setup="describe-setup"}
+
+```
+
+```{python missing-solution, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+sum(epicurious_num['protein'].isna())/len(epicurious_num['protein'])
+```
+
+```{r missingquestion, echo=FALSE}
+question_numeric(text = "What percent of `protein` is missing? (Round to 1 decimal place.)",
+         answer("18.5", correct = TRUE),
+         allow_retry = TRUE,
+         min = 0, 
+         max = 100,
+         step = 0.1,
+         post_message = "Congratulations! You have found the first secret word: AGREEMENT.")
+```
+
+
+```{r approp, echo=FALSE}
+question("6. Is it appropriate to drop the missing data?",
+  answer("Yes", message = "A general rule of thumb is that if the observations are missing at random (i.e., the reason that they are missing is not tied to any other confounding variable) and less than 10% of the values are missing, you can simply discard the values. From the last question we learned that about **20%** of the values for `calories`, `protein`, `sodium`, and `fat` are missing."),
+  answer("No", correct = TRUE),
+  allow_retry = TRUE,
+  random_answer_order = FALSE,
+  post_message = "Congratulations! You have found the second secret word: SAY.")
+```
+
+A general rule of thumb is that if the observations are missing at random (i.e., the reason that they are missing is not tied to any other confounding variable) and less than 10% of the values are missing, you can simply discard the values. From the last question we learned that about **20%** of the values for `protein` are missing (the other variables are similar)--however, we won't learn tools for dealing with missing values until later. So, even though it's not the best idea, we are going to drop the rows with missing values.
+
+7. Drop the rows with missing values and save the remaining values in a new data frame called `epicurious_num_nd`.
+
+```{python drop, exercise = TRUE, message = FALSE, exercise.setup="describe-setup"}
+
+```
+
+```{python drop-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epicurious_num_nd = epicurious_num.dropna()
+```
+
+```{r drop-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Things and stuff",
+  incorrect = "Stuff and things"
+)
+```
+
+## Making Plots
+
+In DATA 11800 you likely used `matplotlib` and/or `seaborn` to create visualizations. There are many different python packages out there to create interesting data visuals. The package we are going to explore in this lab is `plotnine`. Run the following code chunk.
+
+```{python packages2, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="describe-setup"}
+import plotnine as p9
+```
+
+```{python plot-setup, echo = FALSE, exercise.eval = FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+
+epicurious = pd.read_csv("http://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/epi_mini.csv")
+epicurious_num = epicurious[['title', 'rating', 'calories', 'protein', 'fat', 'sodium']]
+epicurious_num_nd = epicurious_num.dropna()
+```
+
+
+`plotnine` is based off `ggplot2` from R and has a similar aesthetic. Here is the basic idea: You, as the user, tell `plotnine` what data to use, how to map the variables to the different aesthetics (encoding channels) of the graph, and what type of graph you need-- `plotnine` takes care of the rest!
+
+### Histograms
+
+First, we start by providing the data and mapping the variables to the graph's aesthetics. This means that we are defining things like what's on the $x$-axis or what color the graph is, among many others.
+
+Below is a sample line of code for investigating the average ratings of the different recipes. Note that the functions `ggplot()` and `aes()` come from `plotnine`-- the data frame comes first, then the aesthetics of the graph are defined with `aes()`. You can view [plotnine syntax here](https://plotnine.readthedocs.io/en/stable/).
+
+```{python badplot, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="plot-setup"}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')))
+```
+
+If you run this chunk, a big, nearly blank box appears--there is no actual graph, but we can see that the `rating` variable is now located on the $x$-axis .There's nothing there because we haven't added a `geom` yet. A `geom` is a command representing the type of plot we want. To add a histogram, we use + `geom_histogram()` from `plotnine.`
+
+```{python hist, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="plot-setup"}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
+ + p9.geom_histogram())
+```
+
+8. Do you see a warning message saying `"Pick better value with 'binwidth'"`? This error is unique to `geom_histogram()`. To fix the warning, you can change the number of bins by adding a new argument, `bins = 10`, into the `geom_histogram()` function.
+
+```{python bins, exercise=TRUE, message = FALSE, exercise.setup="plot-setup"}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
++ p9.geom_histogram(bins = ___))
+```
+
+```{python bins-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
++ p9.geom_histogram(bins = 10))
+```
+
+```{r bins-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "stuffnthings",
+  incorrect = "thingsnstuff"
+)
+```
+
+```{r impact, echo=FALSE}
+question("9. What happens to the histogram? Are there any differences? CHECK ALL THAT APPLY",
+         answer("Nothing Happens"),
+         answer("The bins are wider", correct=TRUE),
+         answer("The bins are narrower"),
+         answer("The trend changes"),
+         answer("The trend stays the same", correct=TRUE),
+         answer("There is less blank space", correct=TRUE), 
+        allow_retry = TRUE,
+  random_answer_order = TRUE,
+  post_message = "Congratulations! You have found the third secret word: HALF.")
+
+```
+
+You can also avoid the message by specifying the `binwidth` instead of `bins`. There is a direct relationship between the bin width and the number of bins, so setting one also fixes the other. In general, increasing the number of bins leads to narrower wins, and decreasing the number of bins leads to wider bins.
+
+10. Instead of creating a histogram with 10 bins, create a histogram where the bin width is 0.5.
+
+```{python binwidth, exercise=TRUE, message = FALSE, exercise.setup="plot-setup"}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
++ p9.geom_histogram(binwidth = ___))
+```
+
+```{python binwidth-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
++ p9.geom_histogram(binwidth = 0.5))
+```
+
+```{r binwidth-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "yep",
+  incorrect = "Nope"
+)
+```
+
+Notice that on the $y$-axis we are displaying the counts of the observations in each bin. We can change this to instead display the proportion by adding another argument to `ggplot()`.
+
+```{python proportion, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="plot-setup"}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating', y=p9.after_stat('density'))) 
+ + p9.geom_histogram(binwidth = 0.5))
+```
+
+11. Look at the `plotnine` syntax and add a command that will add a smooth density estimate to the plot.
+
+```{python density, exercise=TRUE, message = FALSE, exercise.setup="plot-setup"}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating', y=p9.after_stat('density'))) 
+ + p9.geom_histogram(binwidth = 0.5) 
+ + ___ )
+```
+
+```{python density-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) +
+  p9.geom_histogram(binwidth = 0.5) +
+  p9.geom_density())
+```
+
+```{r density-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "yep",
+  incorrect = "Nope"
+)
+```
+
+12. Now, let's look at `calories` instead of `rating`.
+
+```{python calorie, exercise=TRUE, message = FALSE, exercise.setup="plot-setup"}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = ___ , y=p9.after_stat('density'))) 
+ + p9.geom_histogram(bins = 30) 
+ + p9.geom_density())
+```
+
+```{python calorie-solution, message=FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'calories', y=p9.after_stat('density'))) 
+ + p9.geom_histogram(bins = 30) 
+ + p9.geom_density())
+```
+
+```{r calorie-code-check, message=FALSE, warning=FALSE}
+grade_this_code(
+  correct = "words of praise",
+  incorrect = "words of encouragement}"
+)
+```
+
+
+13. We can also see in the `calories` plot that the distributions are skewed by a handful of extreme values (which we also saw earlier. Find the top ten largest values for `calories`, `protein`, `fat`, and `sodium` (Hint: some of the top ten might be repeated for different variables). Which recipes do they correspond to? Create a DataFrame that will help you solve the next question
+
+```{python skew, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="plot-setup"}
+
+```
+
+```{python skew-hint-1}
+# we can use .nlargest along with index to get the relevant indices
+# here is an example for top 10 recipes by calories
+maxcal = epicurious_num_nd['calories'].nlargest(n=10).index
+# now you need to figure out how to get those that are in the top 10 for each
+```
+
+```{python skew-hint-2}
+# given two sets of numbers l1 and l2 we can use set.union(l1, l2) to get all numbers in either l1 or l2
+# how can we use this to get every recipe in the top 10 across all the categories
+# run the following code to see how it works
+l1 = [1, 2, 3]
+l2 = [2, 4, 6]
+set.union(l1, l2)
+```
+
+```{python skew-hint-3}
+maxcal = epicurious_num_nd['calories'].nlargest(n=10).index
+maxpro = epicurious_num_nd['protein'].nlargest(n=10).index
+maxfat = epicurious_num_nd['fat'].nlargest(n=10).index
+maxsod = epicurious_num_nd['sodium'].nlargest(n=10).index
+
+maxvals = set().union(maxcal, maxpro, maxfat, maxsod)
+
+epicurious_num_nd.loc[list(maxvals),]
+```
+
+```{r skewq, echo=FALSE}
+question("Select all true statements using the DataFrame you just created.",
+         answer("Pear-Cranberry Mincemeat Lattice Pie has the most calories", correct = TRUE),
+         answer("Whole Branzino Roasted in Salt is included because of it's high fat content", message="Is Whole Branzino's fat content in the top 10?"),
+         answer("Grilled Lamb Chops with Porcini Mustard is a duplicate entry", correct = TRUE),
+         answer("There are 10 recipes in this dataframe", message="There should be 14"),
+         answer("Of the rows in this dataframe, 6 have a rating of 5.0", correct=TRUE), 
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         post_message = "Congratulations! You have found the fourth secret word: SUITCASE.")
+```
+
+
+This cell will remove the rows containing those values, drop duplicate values, and save the remaining values in a new DataFrame called `epicurious_num_clean`. 
+
+```{python clean, exercise=TRUE, exercise.eval=FALSE, message=FALSE, exercise.setup="plot-setup"}
+maxcal = epicurious_num_nd['calories'].nlargest(n=10).index
+maxpro = epicurious_num_nd['protein'].nlargest(n=10).index
+maxfat = epicurious_num_nd['fat'].nlargest(n=10).index
+maxsod = epicurious_num_nd['sodium'].nlargest(n=10).index
+
+maxvals = set().union(maxcal, maxpro, maxfat, maxsod)
+
+epicurious_num_clean = epicurious_num_nd.drop(labels = maxvals, axis=0).drop_duplicates()
+```
+
+14. Adjust the code used to create the `calories` graph to use the new filtered data.
+
+```{python calorieclean, exercise=TRUE, message = FALSE, exercise.setup="clean"}
+(p9.ggplot(___, p9.aes(x = 'calories', y=p9.after_stat('density'))) 
+ + p9.geom_histogram(bins = 30) 
+ + p9.geom_density())
+```
+
+```{python calorieclean-solution, message=FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(epicurious_num_clean, p9.aes(x = 'calories', y=p9.after_stat('density'))) 
+ + p9.geom_histogram(bins = 30) 
+ + p9.geom_density())
+```
+
+```{r calorieclean-code-check, message=FALSE, warning=FALSE}
+grade_this_code(
+  correct = "things",
+  incorrect = "stuff"
+)
+```
+
+
+### Scatterplots
+
+15. Let's continue to the last type of graph we will review for this lab, the scatterplot. Use the `plotnine` syntax once again to look up the appropriate `geom` you need. Create a plot displaying the relationship between `calories` and `fat`. Notice that unlike the other plots we have created, such as histograms and densities, you have to supply an $x$ and a $y$ aesthetic. Remember that $x$ is traditionally the explanatory variable and $y$ is traditionally the response--which one makes sense to use as the explanatory variable here?
+
+```{python scatter, exercise=TRUE, message = FALSE, exercise.setup="clean"}
+(p9.ggplot(epicurious_num_clean, p9.aes(x = '____' , y = '___' )) 
+ + ___)
+
+```
+
+```{python scatter-solution, message=FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(epicurious_num_clean, p9.aes(x = 'fat', y = 'calories')) 
+ + p9.geom_point())
+
+```
+
+```{r scatter-code-check, message=FALSE, warning=FALSE}
+grade_this_code(
+  correct = "stuff",
+  incorrect = "things"
+)
+```
+
+```{r scatterq, echo=FALSE}
+question("16. Select all true statements about the association pictured in the graph above.",
+         answer("Positive", correct=TRUE),
+         answer("Negative"),
+         answer("Linear", correct=TRUE),
+         answer("Non-linear"),
+         answer("Weak"),
+         answer("Strong", correct=TRUE), 
+         allow_retry = TRUE,
+  random_answer_order = TRUE,
+  post_message = "Congratulations! You have found the fifth and final secret word: QUARTER.")
+```
+
+17. You can change the color of the point by adding a `color` argument to `geom_point()`. Try adding your favorite color to the cell below.
+
+```{python scattercolor, exercise=TRUE, exercise.eval=FALSE, message=FALSE, exercise.setup="clean"}
+(p9.ggplot(epicurious_num_clean, p9.aes(x = 'fat', y = 'calories')) 
+ + p9.geom_point(color = ___))
+```
+
+In addition to coloring the points a single color, color can also be used to encode data. The following chunk is an example of how to color the points by `rating`.
+
+```{python colorcode, exercise=TRUE, exercise.eval=FALSE, message=FALSE, exercise.setup="clean"}
+(p9.ggplot(epicurious_num_clean, p9.aes(x = 'fat', y = 'calories', color = 'rating')) 
+ + p9.geom_point())
+```
+
+
+18. Using the tools you've learned in this lab, create a plot of two or three variables that you find interesting. This is not checked and has no correct answer, use your imagination.
+
+```{python free, exercise=TRUE, exercise.eval=FALSE, message=FALSE, exercise.setup="clean"}
+
+```
+
