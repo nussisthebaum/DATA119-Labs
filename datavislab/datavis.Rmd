@@ -103,12 +103,45 @@ beach.head()
 
 ## Graphing with Matplotlib
 
+Below you will be walked through the key components of Matplotlib. As you explore it may be useful to check out [Matplotlib's quick start guide](https://matplotlib.org/stable/users/explain/quick_start.html) or other parts of it's documentation for more details.
+
 ### Choosing your canvas: Figures and Axes
-In Matplotlib the **axes** are how we specify where on our figure we want our drawing to happen and our **figure** is the core element which will keep track of our different axes on the figure. The figure will also determine the overall size of our visualization. Often it is enough to let Matplotlib figure out the optimal figure and axes by default but below you'll see a quick example of setting up the figure and axes before making a bar chart.
+In Matplotlib the **figure** is the core element which sets the overall size of our canvas and also keeps track of everything being added to the canvas. Our **axes** are how we specify where on our figure we want our visualization to happen.   
+
+Below you'll see a quick example of setting up the figure and axes before making a scatterplot. Feel free to experiment with the figure and axes by changing the `width`, `height`, `left_start`, `bottom_start`, `width_start`, and `height_start` variables.
+
+```{python figure, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
+width = 12
+height = 6
+left_start, bottom_start, width_start, height_start = (0.5, 0.5, .5, 0.5)
+# do not edit below here
+fig = plt.figure(figsize=(width, height))
+ax = fig.add_axes((left_start, bottom_start, width_start, height_start), frame_on=True)
+ax.scatter([1,2,3], [1,2,3])
+plt.show()
+```
+Often we'll just let Matplotlib use the default figure with an axes spanning the entire figure size. Here's an example of that below using `subplots`
+```{python subplots, exercise = TRUE, message = FALSE,exercise.eval=FALSE, exercise.setup="packages"}
+fig, ax = plt.subplots()
+ax.scatter([1,2,3], [1,2,3])
+plt.show()
+```
+Alternatively we can just create a plot without explicitly setting a figure or axes though Matplotlib will be making one in the background automatically!
+```{python no-figure, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
+plt.scatter([1,2,3], [1,2,3]) 
+# note how we have to do plt not ax.scatter
+# this is because the axes hasn't been created when we call .scatter
+plt.show()
+```
+Throughout the rest of this notebook we'll let Matplotlib handle making the figures and axes by default but knowing they exist and how to manipulate them can be useful as you explore more complicated graphing techniques. Checkout this [part of the documentation](https://matplotlib.org/stable/users/explain/axes/index.html) if you want to learn more about figures and axes!
+
 
 ### Common Graphs
 
+As Data Scientists it is important we choose the right graph for the right data. As you practice making the different graphs below make sure to keep track of which graphs are best with which types of data.
+
 #### Bar Chart
+A Bar Chart is useful for displaying summaries of categorical information. 
 
 #### Histogram
 
