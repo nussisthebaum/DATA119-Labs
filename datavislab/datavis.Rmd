@@ -141,9 +141,73 @@ Throughout the rest of this notebook we'll let Matplotlib handle making the figu
 As Data Scientists it is important we choose the right graph for the right data. As you practice making the different graphs below make sure to keep track of which graphs are best with which types of data.
 
 #### Bar Chart
-A Bar Chart is useful for displaying summaries of categorical information. 
+A Bar Chart is useful for displaying summaries or distributions of categorical information. It often has the individual categories on the x-axis with the height on the y-axis of each bar indicating the summary information for each category. In Matplotlib the simplest way to make a bar chart is by using `plt.bar` and providing a collection of labels as the first argument (`x`) and a collection of summary information as the second argument (`height`). Here is an example to see how it works looking at a made up grade distribution.
+
+```{python basic-bar, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
+grade_categories = ["A", "B", "C", "D","F"]
+students_per_category = [14, 10, 5, 2, 1]
+plt.bar(x=grade_categories, height=students_per_category)
+```
+
+1. We have stored the names of the Beach Weather stations in `stations` and their average wind reading for 2024 in `wind_avg`. Make a bar chart displaying the average wind recorded at each weather station in 2024.
+```{python beach-avg-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
+beach_year_avg = beach.drop(columns=['Month', 'Hour', 'Day of Year']).groupby("Station Name").mean().reset_index()
+stations = beach_year_avg['Station Name']
+wind_avg = beach_year_avg['Wind Speed']
+```
+```{python beach-avg-wind-bar, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-avg-setup"}
+
+```
+```{python beach-avg-wind-bar-solution, message = FALSE, warning = FALSE, echo = FALSE}
+plt.bar(stations, wind_avg)
+```
+
+```{r beach-avg-wind-bar-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Great Bars",
+)
+```
+
+Bar Charts can help us quickly compare between different categories. Checkout the [Matplotlib Bar Chart Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html) to see more ways to customize your bar charts.
 
 #### Histogram
+Histograms are useful when we want to look at the distribution of 1-dimensional numerical data. By breaking numbers into bins then plotting the count or percentage of data in each bin they make it easy to see an entire distribution at a glance. In Matplotlib the simplest way to make a histogram is with `plt.hist(x, bins, density)` where x is the data to be plotted, bins is the number of bins or a list with the start and stop points for all the bins, and density is False for counts and True to see densities. Play around with the bins and density arguments below to see how they effect the histogram. 
+
+```{python basic-hist, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
+np.random.seed(42) # for consistent samples
+numbers = np.random.choice(np.arange(100), size=50) # a random sample of numbers
+plt.hist(x=numbers, bins=10, density=False) # making the graph
+```
+
+```{r bins-impact, echo=FALSE}
+question("2. As you increase the number of bins what is the impact on the histogram? CHECK ALL THAT APPLY",
+         answer("Nothing happens"),
+         answer("The bins are wider"),
+         answer("The bins are narrower", correct=TRUE),
+         answer("There is less blank space"),
+         answer("There is more blank space", correct=TRUE), 
+        allow_retry = TRUE,
+  random_answer_order = TRUE)
+```
+3. Make your own count histogram with x bins using the maximum wind readings from 63rd street beach which have been stored for you in the variable `max_wind`.
+```{python beach-hist-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
+max_wind = beach[beach['Maximum Wind Speed'] < 100]['Maximum Wind Speed']
+```
+```{python beach-max-wind-hist, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-hist-setup"}
+max_wind
+# your graph here
+```
+```{python beach-max-wind-hist-solution, message = FALSE, warning = FALSE, echo = FALSE}
+plt.hist(max_wind, bins=10)
+```
+
+```{r beach-max-wind-hist-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Histogram :)"
+)
+```
+
+As you've seen histograms are a powerful tool to quickly summarize numerical data. Checkout the [Matplotlib histogram documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html) to see more ways to fine tune your histograms.
 
 #### Scatterplot
 
