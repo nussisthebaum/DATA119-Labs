@@ -241,6 +241,40 @@ grade_this_code(
 Scatterplots can help us quickly identify relationships (or the lack thereof) between different variables in a dataset. Checkout the [Matplotlib Scatterplot Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html) to see more ways to customize your scatterplots (i.e. coloring, resizing, or changing the shape of your points).
 
 #### Line Chart
+Line charts are also used when we want to look at the relationship between two dimensions (variables) of our data. However, unlike a Scatterplot lineplots always have the x-axis convey some measure of sequential data and therefore a line plot is useful for quickly seeing relationships over time. A Scatterplot is made up of points connected by lines to their closest neighboring point where each point (x,y) is the (temporal) x value and y value for a particular record in our dataset. In Matplotlib the simplest way to make a line plot is by using `plt.plot(x,y)` and providing a collection of data as the first argument and a collection of different data for the same records in the same order as the second argument. Note you can also plot single points this way by making x and y both single numbers. Here is an example to see how it works looking at a graph of the sine function.
+
+```{python basic-line, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
+np.random.seed(42) # for consistency
+# generating random samples
+x = np.arange(-4, 4, 0.2)
+y = np.sin(x)
+# drawing the line plot
+plt.plot(x, y)
+```
+
+5. We have stored the 2024 daily rain readings for the Oak Street beach in `daily_rain` and the day of the year in `day`. Make a line chart displaying the daily rain readings at that beach throughout 2024.
+```{python beach-line-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
+beach_month_avg = beach[beach['Station Name'] == 'Oak Street '][['Day of Year', 'Total Rain']].groupby("Day of Year").max().reset_index()
+day = beach_month_avg['Day of Year']
+daily_rain = beach_month_avg['Total Rain']
+```
+
+```{python beach-rain-line, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-line-setup"}
+
+```
+
+```{python beach-rain-line-solution, message = FALSE, warning = FALSE, echo = FALSE}
+plt.plot(day, daily_rain)
+```
+
+```{r beach-rain-line-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Great Points!",
+)
+```
+
+Line Plots can help us quickly identify temporal relationships (or the lack thereof) between different variables in a dataset. Checkout the [Matplotlib Line Plot Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html) to see more ways to customize your line plots (i.e. coloring, resizing, or changing the style of your lines).
+
 
 ### Finishing Touches: Labels, Legends, and Tick marks
 
