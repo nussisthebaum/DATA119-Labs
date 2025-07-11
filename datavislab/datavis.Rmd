@@ -126,7 +126,7 @@ fig, ax = plt.subplots()
 ax.scatter([1,2,3], [1,2,3])
 plt.show()
 ```
-Alternatively we can just create a plot without explicitly setting a figure or axes though Matplotlib will be making one in the background automatically!
+Alternatively we can just create a plot without explicitly setting a figure or axes though Matplotlib will be making them in the background automatically!
 ```{python no-figure, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
 plt.scatter([1,2,3], [1,2,3]) 
 # note how we have to do plt not ax.scatter
@@ -189,9 +189,11 @@ question("2. As you increase the number of bins what is the impact on the histog
         allow_retry = TRUE,
   random_answer_order = TRUE)
 ```
-3. Make your own count histogram with x bins using the maximum wind readings from 63rd street beach which have been stored for you in the variable `max_wind`.
+3. Make your own count histogram with 10 bins using the maximum wind readings from 63rd street beach which have been stored for you in the variable `max_wind`.
 ```{python beach-hist-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
-max_wind = beach[beach['Maximum Wind Speed'] < 100]['Maximum Wind Speed']
+max_wind = beach[beach['Maximum Wind Speed'] < 100]['Maximum Wind Speed'] # dealing with weird outliers
+hourly_wind = beach[beach['Maximum Wind Speed'] < 100]['Wind Speed']
+
 ```
 ```{python beach-max-wind-hist, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-hist-setup"}
 max_wind
@@ -207,9 +209,36 @@ grade_this_code(
 )
 ```
 
-As you've seen histograms are a powerful tool to quickly summarize numerical data. Checkout the [Matplotlib histogram documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html) to see more ways to fine tune your histograms.
+As you've seen histograms are a powerful tool to quickly summarize 1-D numerical data. Checkout the [Matplotlib histogram documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html) to see more ways to fine tune your histograms.
 
 #### Scatterplot
+So far we have looked at single dimensional data. However, sometimes we may want to look at the relationship between two dimensions (variables) of our data. A Scatterplot is useful for quickly seeing that relationship. A Scatterplot is made up of points where each point (x,y) is the x value and y value for a particular record in our dataset. In Matplotlib the simplest way to make a scatterplot is by using `plt.scatter(x,y)` and providing a collection of data as the first argument (`x`) and a collection of different data for the same records in the same order as the second argument (`y`). Here is an example to see how it works looking at two randomly generated samples.
+
+```{python basic-scatter, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
+np.random.seed(42) # for consistency
+# generating random samples
+x = np.random.choice(np.arange(100), size=200)
+y = np.random.choice(np.arange(100), size=200)
+# drawing the scatterplot
+plt.scatter(x=x, y=y)
+```
+
+4. We have stored the hourly wind speeds in `hourly_wind` and the maximum for each hour in `max_wind`. Make a scatterplot chart displaying the relationship between the hourly and maximum wind recorded at the weather stations in 2024. Let the x-axis contain the hourly wind readings.
+```{python beach-wind-scatter, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-hist-setup"}
+
+```
+
+```{python beach-wind-scatter-solution, message = FALSE, warning = FALSE, echo = FALSE}
+plt.scatter(hourly_wind, max_wind)
+```
+
+```{r beach-wind-scatter-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Great Points!",
+)
+```
+
+Scatterplots can help us quickly identify relationships (or the lack thereof) between different variables in a dataset. Checkout the [Matplotlib Scatterplot Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html) to see more ways to customize your scatterplots (i.e. coloring, resizing, or changing the shape of your points).
 
 #### Line Chart
 
