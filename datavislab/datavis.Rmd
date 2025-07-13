@@ -189,7 +189,7 @@ question("2. As you increase the number of bins what is the impact on the histog
         allow_retry = TRUE,
   random_answer_order = TRUE)
 ```
-3. Make your own count histogram with 10 bins using the maximum wind readings from 63rd street beach which have been stored for you in the variable `max_wind`.
+3. Make your own count histogram with 10 bins using the hourly maximum wind readings which have been stored for you in the variable `max_wind`.
 ```{python beach-hist-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
 max_wind = beach[beach['Maximum Wind Speed'] < 100]['Maximum Wind Speed'] # dealing with weird outliers
 hourly_wind = beach[beach['Maximum Wind Speed'] < 100]['Wind Speed']
@@ -252,22 +252,25 @@ y = np.sin(x)
 plt.plot(x, y)
 ```
 
-5. We have stored the 2024 daily rain readings for the Oak Street beach in `daily_rain` and the day of the year in `day`. Make a line chart displaying the daily rain readings at that beach throughout 2024.
+#TODO switch from rain to temperature
+
+5. We have stored the daily temperature high readings for the Oak Street beach in `daily_temp` and the day of the year in `day`. Make a line chart displaying the daily temperature high readings at that beach throughout 2024.
 ```{python beach-line-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
-beach_month_avg = beach[beach['Station Name'] == 'Oak Street '][['Day of Year', 'Total Rain']].groupby("Day of Year").max().reset_index()
-day = beach_month_avg['Day of Year']
-daily_rain = beach_month_avg['Total Rain']
+beach_day_max = beach[beach['Station Name'] == 'Oak Street'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
+
+day = beach_day_max['Day of Year']
+daily_temp = beach_day_max['Air Temperature']
 ```
 
-```{python beach-rain-line, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-line-setup"}
+```{python beach-temp-line, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-line-setup"}
 
 ```
 
-```{python beach-rain-line-solution, message = FALSE, warning = FALSE, echo = FALSE}
-plt.plot(day, daily_rain)
+```{python beach-temp-line-solution, message = FALSE, warning = FALSE, echo = FALSE}
+plt.plot(day, daily_temp)
 ```
 
-```{r beach-rain-line-code-check, message = FALSE, warning = FALSE}
+```{r beach-temp-line-code-check, message = FALSE, warning = FALSE}
 grade_this_code(
   correct = "Great Points!",
 )
@@ -277,6 +280,57 @@ Line Plots can help us quickly identify temporal relationships (or the lack ther
 
 
 ### Finishing Touches: Labels, Legends, and Tick marks
+So far we have focused on simply making the graphs; however, no visualization is complete without an informative title and labels. At times it can also be useful to customize your tick marks, add a legend or other changes around the graph itself to ensure the graphs conveys the right message.
+
+There are too many different ways to customize graphs in Matplotlib to show here but below you'll practice how to add axis labels, a title, and a legend as well as how to modify tick marks. To see more customization options check out **add here**
+
+After we've made a figure or one has been generated automatically through making a graph we can add an x-axis label with `plt.xlabel('text')`, a y-axis label with `plt.ylabel('text')`. To add a title we can do `plt.title('text')`.
+
+6. Add the title `Average Wind by Beach in 2024`, and the y-axis label as `Avg Wind` and the x-axis label as `Beach Name`.
+
+```{python beach-avg-wind-bar-labeled, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-avg-setup"}
+
+```
+
+```{python beach-avg-wind-bar-labeled-solution, message = FALSE, warning = FALSE, echo = FALSE}
+plt.bar(stations, wind_avg)
+plt.xlabel("Beach Name")
+plt.ylabel("Avg Wind")
+plt.title("Average Wind by Beach in 2024")
+```
+
+```{r beach-avg-wind-bar-labeled-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Great Bars",
+)
+```
+
+Sometimes when we have more encodings on a single plot it can be useful to include a legend to explain what is what. To do so we often have to add a label argument to each individual plot.
+
+7. Edit the code below so that the first line plot receives the label of 'Oak Street Beach' and the second of 'Foster Beach' in a new legend located in the lower center of the graph. If you're stuck check out the [Legend documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html).
+
+## look into how chained eval works
+## currently not seeing beach_day_max_foster where needed
+
+```{python beach-line-overlaid-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="beach-line-setup"}
+beach_day_max_foster = beach[beach['Station Name'] == 'Foster'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
+
+day = beach_day_max['Day of Year']
+daily_temp_oak = beach_day_max['Air Temperature']
+daily_temp_foster = beach_day_max_foster['Air Temperature]
+```
+
+```{python beach-temp-overlaid-line, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-line-overlaid-setup"}
+plt.plot(day, daily_temp_oak, label=...)
+plt.plot(day, daily_temp_foster, label=...)
+...
+```
+
+```{python beach-temp-overlaid-line-solution, message = FALSE, warning = FALSE, echo = FALSE}
+plt.plot(day, daily_temp)
+```
+
+
 
 ## Building on Matplotlib: Pandas and Seaborn
 
