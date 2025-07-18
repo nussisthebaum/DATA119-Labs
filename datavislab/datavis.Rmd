@@ -252,7 +252,6 @@ y = np.sin(x)
 plt.plot(x, y)
 ```
 
-#TODO switch from rain to temperature
 
 5. We have stored the daily temperature high readings for the Oak Street beach in `daily_temp` and the day of the year in `day`. Make a line chart displaying the daily temperature high readings at that beach throughout 2024.
 ```{python beach-line-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
@@ -333,6 +332,19 @@ plt.plot(day, daily_temp)
 
 
 ## Building on Matplotlib: Pandas and Seaborn
+
+Because making visualizations is such a key part of the data science workflow `pandas` has methods for data frames that call the `matplotlib` package behind the scene simplifying the graphing process. Since the `pandas` graphing methods are built on top of `matplotlib` all the customization you just saw earlier still works. 
+
+All of the graphs we've discussed can be made from a data frame using `df.plot.graph_name(**args)`. Below you'll recreate some of the graphs from earlier to see how we can harness the power of combining pandas and matplotlib.
+
+#TODO
+Repeat questions 1-7 and add maybe another. Explain how they'll have to manipulate a df prior to calling .plot sometimes.
+
+8. Recreate the bar chart displaying the average wind recorded at each weather station in 2024. 
+
+
+Notice the need to manipulate the data frame prior to graphing.
+
 
 ## Grammar of Graphics Approach
 
