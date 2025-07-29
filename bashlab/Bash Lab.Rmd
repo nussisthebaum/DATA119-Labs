@@ -1,0 +1,95 @@
+---
+title: "Introduction to BASH"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+#knitr::knit_engines$set(python = reticulate::eng_python)
+
+## Directory Requirements
+
+setwd("~/Documents/U of C/Courses/DATA119-Labs/bashlab/sandbox")
+
+## Package Requirements for Lab
+
+library(gradethis)
+library(learnr)
+library(tidyverse)
+
+## Package Requirements  for Content
+
+## Requirements for Answer Checking
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Bash", class = "pageTitle")
+  )
+)
+```
+
+
+## Goals
+
+The goal of this lab is to practice basic BASH commands.
+
+## Setup
+
+```{bash ex1, exercise = TRUE, eval = FALSE}
+
+```
+
+```{bash ex1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+
+```
+
+```{r ex1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q1, echo=FALSE}
+question(
+  "What kind of binding occurs most frequently among Professor Nussbaum's books?",
+  answer("Audible Audio"),
+  answer("Audio CD"),
+  answer("Audiobook"),
+  answer("Board book"),
+  answer("Hardcover", correct = TRUE),
+  answer("Kindle Edition"),
+  answer("Library Binding"),
+  answer("Mass Market Paperback"),
+  answer("Paperback"),
+  answer("Preloaded Digital Audio Player"),
+  answer("Unknown Binding"),
+  answer("ebook"),
+  allow_retry = TRUE
+)
+```
+
+## Resources
