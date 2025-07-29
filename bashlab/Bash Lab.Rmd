@@ -12,7 +12,7 @@ knitr::opts_chunk$set(error = TRUE)
 
 ## Directory Requirements
 
-setwd("~/Documents/U of C/Courses/DATA119-Labs/bashlab/sandbox")
+setwd("~/sandbox")
 
 ## Package Requirements for Lab
 
