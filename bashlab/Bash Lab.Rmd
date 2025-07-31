@@ -37,7 +37,7 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
-```{bash setup}
+```{bash setupbash}
 cd data
 ```
 
@@ -61,7 +61,7 @@ tags$div(
 
 ## Goals
 
-The goal of this lab is to practice basic BASH commands using the command line interface.
+The goal of this lab is to practice basic BASH commands using the command line interface. Please note that this lab borrows HEAVILY from the [Command Line Murder Mystery](https://github.com/veltman/clmystery) by Noah Veltman--once you have worked through the basic commands, you can either solve the murder mystery on the Shiny Server OR download the file and practice using the command line interface on your own machine!
 
 ## Setup
 
