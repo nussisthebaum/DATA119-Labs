@@ -65,28 +65,6 @@ The goal of this lab is to practice basic BASH commands using the command line i
 
 ## Setup
 
-
-
-
-<!-- ```{r q1, echo=FALSE} -->
-<!-- question( -->
-<!--   "What kind of binding occurs most frequently among Professor Nussbaum's books?", -->
-<!--   answer("Audible Audio"), -->
-<!--   answer("Audio CD"), -->
-<!--   answer("Audiobook"), -->
-<!--   answer("Board book"), -->
-<!--   answer("Hardcover", correct = TRUE), -->
-<!--   answer("Kindle Edition"), -->
-<!--   answer("Library Binding"), -->
-<!--   answer("Mass Market Paperback"), -->
-<!--   answer("Paperback"), -->
-<!--   answer("Preloaded Digital Audio Player"), -->
-<!--   answer("Unknown Binding"), -->
-<!--   answer("ebook"), -->
-<!--   allow_retry = TRUE -->
-<!-- ) -->
-<!-- ``` -->
-
 ## Command Line Interface and BASH
 
 ### What is the command line interface?
@@ -142,11 +120,11 @@ Specifying a file or directory as a relative path means you are specifying where
 /files/videos$
 ```
 
-If you execute a command like `touch newfile.txt`, it will create `newfile.txt` inside the current directory. Relative paths don't start with a slash.
+Any commands you want to use need to go after the dollar sign, `$`. If you execute a command like `touch newfile.txt`, it will create `newfile.txt` inside the current directory. Relative paths don't start with a slash.
 
 #### Absolute Paths
 
-Specifying a file or directory as an absolute path means you are specifying where it sits *on the computer in absolute terms*, starting from the top level. For example, let's say you're in the `videos` subdirectory of the `files` directory again.
+Specifying a file or directory as an absolute path means you are specifying where it sits *on the computer in absolute terms*, starting from the top level. For example, let's say you're in the `videos` subdirectory of the `files` directory again. 
 
 ```{bash example4, echo = TRUE, eval = FALSE}
 /files/videos$
@@ -186,11 +164,14 @@ This will delete the file from the `/files/videos/ directory`, even though it is
 
 ## Basic BASH Commands
 
+You have already seen `touch`, but let's learn some other useful commands. 
+
+### Print Working Directory
+
 If you're ever unsure of what directory you're in, you can use the `pwd` (`p`rint `w`orking `d`irectory) command to get the absolute path of the current directory.
 
 ```{bash example7, echo = TRUE, eval = FALSE}
-~$ pwd
-/Users/amynussbaum
+pwd
 ```
 
 In the cell below, print your current working directory. 
@@ -209,16 +190,202 @@ grade_this_code()
 
 Because we are on the server, you have a temporary directory with a complicated name--but you can navigate just as if you were working on your computer with permanent directories.
 
-* `cd`
-  + Into a specific directory
-  + Down one directory
-  + Up one directory
-* `ls`
-* `cp`
-* `mv`
-* `rm`
-* `mkdir`
-* `grep`
+### Deleting Files
+
+If you want to delete a file, you can use the `rm` (I think of it as `r`e`m`ove) command. Note that this file works in conjunction with relative and absolute paths. 
+Say we have a specific file in our working directory named `specific_file.txt`. Removing this specific file looks like 
+
+```{bash example7, echo = TRUE, eval = FALSE}
+rm specific_file.txt
+```
+
+### File Patterns
+
+In most cases when you have to specify a file name or directory name, you can also specify a general pattern that might match multiple files. There are lots of ins and outs with this, but the most basic version is using the asterisk (`*`), which matches anything. It's also known as a wildcard.
+
+To delete any file in your current directory, run
+
+```{bash example8, echo = TRUE, eval = FALSE}
+rm *
+```
+
+To delete any text file (a file ending with the `.txt` extension), run
+
+```{bash example9, echo = TRUE, eval = FALSE}
+rm *.txt
+```
+
+To delete any file with a name starting with `data`, run
+
+```{bash example9, echo = TRUE, eval = FALSE}
+rm data*
+```
+
+Obviously, you can change the phrase or extension you are looking for! However, note that deleting files using the wildcard may remove something you actually wanted to keep, so be careful!
+
+```{r q1, echo=FALSE}
+question(
+  "How would you delete all PDFs in your working directory?",
+  answer("`rm *`"),
+  answer("`rm *.txt`"),
+  answer("`rm *.pdf`", correct = TRUE),
+  answer("`rm pdf*`"),
+  answer("Delete one specific `.pdf` file at a time until everything is gone.")
+  allow_retry = TRUE
+)
+```
+
+### Navigating
+
+The two core commands for navigating what directory the prompt is in are `cd` and `ls`.
+
+#### Changing Directories
+
+`cd` is a command to change the current directory, and must be followed by a directory you want to change to. You can supply an absolute or relative path.
+
+For example, to move from `files` to `files/videos`, run
+
+```{bash example10, echo = TRUE, eval = FALSE}
+cd videos
+```
+
+Note that when you change a directory on your computer, you will notice that the directory listed before the dollar sign, `$`, will change!
+
+Once you change into a subdirectory, you can keep going. For example, to move to `videos` and then to `vines`, 
+
+```{bash example11, echo = TRUE, eval = FALSE}
+cd /videos
+cd vines
+```
+
+You can jump multiple levels at once if you want.
+
+```{bash example12, echo = TRUE, eval = FALSE}
+cd /videos/short
+```
+
+Make sure to type the name of the directory exactly, otherwise you will get a message like 
+
+```{bash example13, echo = TRUE, eval = FALSE}
+cd: no such file or directory:
+```
+
+This can also happen when you supply the absolute file name but forget a subdirectory. There are a couple of habits you should establish to make sure this doesn't happen:
+
+1. Be careful when typing (obvious, but harder than you think when you get very complicated names!!) 
+2. Copy and paste the path/filename--on a Mac, right click on the file or directory you are interested in using Finder and then click on "Get Info". On a PC, right click on the file or directory and then click on "Properties."
+3. Use the "Tab" key for autocompletion. This will feel weird at first but can dramatically speed up your work!
+4. Use the up arrow key to find previous commands--if you visit a directory a lot, you'll probably find it again!
+
+You can also move up a directory, using
+
+```{bash example14, echo = TRUE, eval = FALSE}
+cd ..
+```
+
+#### Listing Files
+
+`ls` will `l`i`s`t the files in the current directory. It's helpful for figuring out where you are, what files exist, and what subfolders exist.
+
+```{bash example15, echo = TRUE, eval = FALSE}
+ls
+```
+
+Using `ls -l` will print the list vertically, with lots of other extra information about the file size, permissions, and last modified date--the command line interface isn't always very readable, so it's helpful to use tips like this when you can. 
+
+### `head`
+
+The head command will print out the first 10 lines of a file:
+/files$ head names.txt
+You can also specify a different number of lines. This will print out the first 15 lines of a file:
+/files$ head -n 15 names.txt
+Or, if you want to print all the file but leave out the LAST 15 lines, you can give a negative number:
+/files$ head -n -15 names.txt
+One of the nice uses of head is to quickly peek inside a large text file to see what's in it without having to wait for a text editor to
+load it. This becomes a big deal when you're talking about a 1 GB file!
+
+### `tail`
+
+The tail command is the reverse of head. It will print out the last 10 lines of a file:
+/files$ tail names.txt
+This will print out the last 15 lines of a file:
+/files$ tail -n 15 names.txt
+Or, if you want to print all the file but leave out the FIRST 15 lines, you can add a plus sign:
+/files$ tail -n +16 names.txt
+This is helpful if you want to, say, remove a header row from a CSV file:
+/files$ tail -n +2 names.txt > names-no-header.txt
+
+### grep
+
+The grep your search.
+command will let you search a file (or multiple files) for a phrase. By default, it will print out each line that matches
+Print out lines that contain the word "darkwing":
+/files$ grep "darkwing" famousducks.txt
+
+Same as above, but the search is case-insensitive:
+/files$ grep -i "darkwing" famousducks.txt
+Find matches for the exact word "Donald" in a file - words that contain "Donald," like "McDonald," won't count:
+grep -w "Donald" famousducks.txt
+Find matches for "McDuck" in every file in the current directory:
+grep "McDuck" *
+Find matches for "McDuck" in every file in the current directory AND every subdirectory, all the way down:
+grep -r "McDuck" *
+For each match of "Howard", print out that line AND the 4 lines after it (5 lines total):
+grep -A 4 "Howard" famousducks.txt
+For each match of "Howard", print out that line AND the 4 lines before it (5 lines total):
+grep -B 4 "Howard" famousducks.txt
+For each match of "Howard", print out that line AND the 4 lines before it AND the 4 lines after it (9 lines total):
+grep -C 4 "Howard" famousducks.txt
+Instead of printing out the matching lines themselves, print out the filenames that match your search:
+grep -l "Daffy" *
+Just get the number of matches:
+grep -c "Daffy" *
+Show line numbers along with the matching lines:
+grep -n "Daffy" famousducks.txt
+
+### pipe
+
+You can send the output to another command using the pipe symbol (|). The grep command searches through some text for
+matches (more on this later), so you could do this to get the first 10 lines of a file, and then search for "Steve" within those 10
+lines:
+/files$ head names.txt | grep "Steve"
+This is basically the same as doing this:
+/files$ head names.txt > temporaryfile.txt
+/files$ grep "Steve" temporaryfile.txt
+But instead of first sending the output to a file and then running the second command on that file, you pipe the output directly
+from the first command into the second. You can chain as many of these together as you want:
+/files$ grep "United States" addresses.csv | grep "California" | head
+This would search the file addresses.csv for lines that contain the phrase "United States", then search the results for lines that
+contain the word "California", and then print out the first 10 of those matches.
+
+### cat
+
+The cat command will combine multiple files together. This will print three files in a row, as if they were one file:
+cat turkey.txt duck.txt chicken.txt
+Remember that this will just print the output into your terminal.
+
+### Regular Expressions
+
+When using something like grep to search, you can search for a simple term with only letters, numbers, and spaces. But if you
+want to search for a pattern, you can use what's called a regular expression. Regular expressions use special characters to
+represent patterns, like "any number," "any letter," "X or Y," "at least three lowercase letters," and so on.
+We won't worry about the ins and outs for now, but one useful operator is the period (.). In regular expression-ese, this means
+"One of any character." So you can search for something like:
+/files$ grep -i "car.s" dictionary.txt
+This would match words like cards , carts , cares , and so on. It would also match the middle of the phrase "scar story" (CAR
+S) because "any character" means ANY character, including a space or a punctuation mark.
+One more example:
+/files$ grep -i ".e.st" dictionary.txt
+This would match things like least , beast , and heist .
+
+### Command List
+
+So, for reference, here are all the commands we've covered:
+
+* `touch`: Creates a new file
+* `pwd`: Prints your working directory. 
+* `cd`: Changes your working directory. 
+* `ls`: Lists the files in your working directory. 
 
 ## Murder Mystery
 
