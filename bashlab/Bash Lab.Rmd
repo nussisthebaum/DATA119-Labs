@@ -146,7 +146,7 @@ If you execute a command like `touch newfile.txt`, it will create `newfile.txt` 
 
 #### Absolute Paths
 
-Specifying a file or directory as an absolute path means you are specifying where it sits on the computer in absolute terms, starting from the top level. For example, let's say you're in the `videos` subdirectory of the `files` directory again.
+Specifying a file or directory as an absolute path means you are specifying where it sits *on the computer in absolute terms*, starting from the top level. For example, let's say you're in the `videos` subdirectory of the `files` directory again.
 
 ```{bash example4, echo = TRUE, eval = FALSE}
 /files/videos$
@@ -158,25 +158,33 @@ If you use an absolute path, the command will do the same thing no matter what d
 
 ```{bash example5, echo = TRUE, eval = FALSE}
 /files/videos$ rm video.mp4
-(This will delete the file `video.mp4` from the current directory)
-/files/videos$ rm /files/videos/video.mp4
-(This will delete `video.mp4` from the /files/videos/ directory, which happens to be the current directory)
 ```
+
+This will delete the file `video.mp4` from the current directory.
+
+```{bash example5_5, echo = TRUE, eval = FALSE}
+/files/videos$ rm /files/videos/video.mp4
+```
+
+This will delete `video.mp4` from the `/files/videos/` directory, which happens to be the current directory.
 
 The same two commands will not have the same result if you are in a different directory:
 
 ```{bash example6, echo = TRUE, eval = FALSE}
 /files/text$ rm video.mp4
-(This will try to delete the file video.mp4 from the 'text' subdirectory instead, because that's the current directory)
-/files/text$ rm /files/videos/video.mp4
-(This will delete the file from the /files/videos/ directory, even though it isn't the current directory)
 ```
 
+This will try to delete the file `video.mp4` from the `text` subdirectory instead, because that's the current directory.
 
-Remember:
-Starting a path with a slash means you want to give the entire path and ignore what directory you're currently in. Not starting a path with a slash means you want to give the path starting from the directory you're in.
+```{bash example6_5, echo = TRUE, eval = FALSE}
+/files/text$ rm /files/videos/video.mp4
+```
 
-## Basic Commands
+This will delete the file from the `/files/videos/ directory`, even though it isn't the current directory).
+
+**Remember: Starting a path with a slash means you want to give the entire path and ignore what directory you're currently in. Not starting a path with a slash means you want to give the path starting from the directory you're in.**
+
+## Basic BASH Commands
 
 If you're ever unsure of what directory you're in, you can use the `pwd` (`p`rint `w`orking `d`irectory) command to get the absolute path of the current directory.
 
@@ -198,6 +206,8 @@ pwd
 ```{r ex1-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
+
+Because we are on the server, you have a temporary directory with a complicated name--but you can navigate just as if you were working on your computer with permanent directories.
 
 * `cd`
   + Into a specific directory
