@@ -37,6 +37,10 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
+```{bash setup}
+cd data
+```
+
 ```{r header, echo = FALSE}
 library(htmltools)
 
@@ -57,39 +61,160 @@ tags$div(
 
 ## Goals
 
-The goal of this lab is to practice basic BASH commands.
+The goal of this lab is to practice basic BASH commands using the command line interface.
 
 ## Setup
+
+
+
+
+<!-- ```{r q1, echo=FALSE} -->
+<!-- question( -->
+<!--   "What kind of binding occurs most frequently among Professor Nussbaum's books?", -->
+<!--   answer("Audible Audio"), -->
+<!--   answer("Audio CD"), -->
+<!--   answer("Audiobook"), -->
+<!--   answer("Board book"), -->
+<!--   answer("Hardcover", correct = TRUE), -->
+<!--   answer("Kindle Edition"), -->
+<!--   answer("Library Binding"), -->
+<!--   answer("Mass Market Paperback"), -->
+<!--   answer("Paperback"), -->
+<!--   answer("Preloaded Digital Audio Player"), -->
+<!--   answer("Unknown Binding"), -->
+<!--   answer("ebook"), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+## Command Line Interface and BASH
+
+### What is the command line interface?
+
+The command line (also known as the command line interface, or CLI, or sometimes the terminal), is a **plain text-based interface** for executing commands on a computer. If you've ever seen a movie about hackers from the 1980s, like WarGames, where they stare at a prompt on a black screen and type in commands one at a time, it's basically that.
+
+You have a prompt, and you can type in a command and hit 'Enter' to execute it. An example command would be:
+
+```{bash example1, echo = TRUE, eval = FALSE}
+touch newfile.txt
+```
+
+This command will create a file called `newfile.txt`.
+
+### How do we access the command line?
+
+You can open the command line differently according to different operating systems:
+
+#### Mac OS X
+
+Go to "/Applications/Utilities" and click on "Terminal" or search for "Terminal" in Spotlight (the magnifying glass at the top right corner of your screen).
+
+#### Windows
+
+Windows is a bit of a special case. If you go to the Start Menu and click "Run", and then type "cmd" and hit enter, it will open the Windows version of the command line. Unfortunately, the Windows version of the command line kind of has its own
+system, so for the purposes of following these examples, you'll want to install [Cygwin](http://www.cygwin.com/), which will allow you to mimic a Linux-style
+command line.
+
+#### Desktop Linux
+
+You can search for the "Terminal" application from the Dash. Let's be honest, though, if you're running Linux, you probably don't need this tutorial.
+
+### BASH Syntax
+
+BASH is one of the most commonly used languages used in the command line interface. BASH commands generally take the format:
+
+```{bash example2, echo = TRUE, eval = FALSE}
+[name of the command] [option] [option] [option] ...
+```
+
+Note that this is similar to specifying arguments inside a Python function or method.
+
+### Directories and Paths
+
+The prompt will also show what directory (folder) you're currently sitting in. Whenever you execute a command, you do it from a particular directory. This matters because when you execute a command that involves a filename or a directory name, you can
+specify it one of two ways.
+
+#### Relative Paths
+
+Specifying a file or directory as a relative path means you are specifying where it sits *relative to the directory you're in* . For example, let's say you're in the `videos` subdirectory of the `files` directory. You'll see this prompt:
+
+```{bash example3, echo = TRUE, eval = FALSE}
+/files/videos$
+```
+
+If you execute a command like `touch newfile.txt`, it will create `newfile.txt` inside the current directory. Relative paths don't start with a slash.
+
+#### Absolute Paths
+
+Specifying a file or directory as an absolute path means you are specifying where it sits on the computer in absolute terms, starting from the top level. For example, let's say you're in the `videos` subdirectory of the `files` directory again.
+
+```{bash example4, echo = TRUE, eval = FALSE}
+/files/videos$
+```
+
+If you execute a command like `touch /files/music/newfile.txt`, it will create `newfile.txt` inside a different folder, the `music` subfolder of the `files` folder. Absolute paths start with a slash.
+
+If you use an absolute path, the command will do the same thing no matter what directory you execute it from. So these two commands will have the same result from the `/files/videos` directory:
+
+```{bash example5, echo = TRUE, eval = FALSE}
+/files/videos$ rm video.mp4
+(This will delete the file `video.mp4` from the current directory)
+/files/videos$ rm /files/videos/video.mp4
+(This will delete `video.mp4` from the /files/videos/ directory, which happens to be the current directory)
+```
+
+The same two commands will not have the same result if you are in a different directory:
+
+```{bash example6, echo = TRUE, eval = FALSE}
+/files/text$ rm video.mp4
+(This will try to delete the file video.mp4 from the 'text' subdirectory instead, because that's the current directory)
+/files/text$ rm /files/videos/video.mp4
+(This will delete the file from the /files/videos/ directory, even though it isn't the current directory)
+```
+
+
+Remember:
+Starting a path with a slash means you want to give the entire path and ignore what directory you're currently in. Not starting a path with a slash means you want to give the path starting from the directory you're in.
+
+## Basic Commands
+
+If you're ever unsure of what directory you're in, you can use the `pwd` (`p`rint `w`orking `d`irectory) command to get the absolute path of the current directory.
+
+```{bash example7, echo = TRUE, eval = FALSE}
+~$ pwd
+/Users/amynussbaum
+```
+
+In the cell below, print your current working directory. 
 
 ```{bash ex1, exercise = TRUE, eval = FALSE}
 
 ```
 
 ```{bash ex1-solution, message = FALSE, warning = FALSE, echo = FALSE}
-ls
+pwd
 ```
 
 ```{r ex1-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-```{r q1, echo=FALSE}
-question(
-  "What kind of binding occurs most frequently among Professor Nussbaum's books?",
-  answer("Audible Audio"),
-  answer("Audio CD"),
-  answer("Audiobook"),
-  answer("Board book"),
-  answer("Hardcover", correct = TRUE),
-  answer("Kindle Edition"),
-  answer("Library Binding"),
-  answer("Mass Market Paperback"),
-  answer("Paperback"),
-  answer("Preloaded Digital Audio Player"),
-  answer("Unknown Binding"),
-  answer("ebook"),
-  allow_retry = TRUE
-)
-```
+* `cd`
+  + Into a specific directory
+  + Down one directory
+  + Up one directory
+* `ls`
+* `cp`
+* `mv`
+* `rm`
+* `mkdir`
+* `grep`
+
+## Murder Mystery
+
+## Python Specific Tasks
+
+* installing packages
+* running scripts
 
 ## Resources
