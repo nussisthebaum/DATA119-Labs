@@ -295,88 +295,202 @@ Using `ls -l` will print the list vertically, with lots of other extra informati
 
 ### `head`
 
-The head command will print out the first 10 lines of a file:
-/files$ head names.txt
-You can also specify a different number of lines. This will print out the first 15 lines of a file:
-/files$ head -n 15 names.txt
+The `head` command will print out the first 10 lines of a file named `names.txt`:
+
+```{bash example16, echo = TRUE, eval = FALSE}
+head names.txt
+```
+
+You can also specify a different number of lines. This will print out the first 15 lines of the file:
+
+```{bash example17, echo = TRUE, eval = FALSE}
+head -n 15 names.txt
+```
+
 Or, if you want to print all the file but leave out the LAST 15 lines, you can give a negative number:
-/files$ head -n -15 names.txt
-One of the nice uses of head is to quickly peek inside a large text file to see what's in it without having to wait for a text editor to
-load it. This becomes a big deal when you're talking about a 1 GB file!
+
+```{bash example18, echo = TRUE, eval = FALSE}
+head -n -15 names.txt
+```
+
+One of the nice uses of `head` is to quickly peek inside a large text file to see what's in it without having to wait for a text editor to load it. This becomes a big deal when you're talking about a 1 GB file!
 
 ### `tail`
 
-The tail command is the reverse of head. It will print out the last 10 lines of a file:
-/files$ tail names.txt
+The `tail` command is the reverse of `head`. It will print out the last 10 lines of a file:
+
+```{bash example19, echo = TRUE, eval = FALSE}
+tail names.txt
+```
+
 This will print out the last 15 lines of a file:
-/files$ tail -n 15 names.txt
+
+```{bash example20, echo = TRUE, eval = FALSE}
+tail -n 15 names.txt
+```
+
 Or, if you want to print all the file but leave out the FIRST 15 lines, you can add a plus sign:
-/files$ tail -n +16 names.txt
-This is helpful if you want to, say, remove a header row from a CSV file:
-/files$ tail -n +2 names.txt > names-no-header.txt
 
-### grep
+```{bash example21, echo = TRUE, eval = FALSE}
+tail -n +16 names.txt
+```
 
-The grep your search.
-command will let you search a file (or multiple files) for a phrase. By default, it will print out each line that matches
-Print out lines that contain the word "darkwing":
-/files$ grep "darkwing" famousducks.txt
+This is helpful if you want to, say, remove a header row from a .csv file:
 
-Same as above, but the search is case-insensitive:
-/files$ grep -i "darkwing" famousducks.txt
-Find matches for the exact word "Donald" in a file - words that contain "Donald," like "McDonald," won't count:
+```{bash example22, echo = TRUE, eval = FALSE}
+tail -n +2 names.txt > names-no-header.txt
+```
+
+### `grep`
+
+The `grep` command  will let you search a file (or multiple files) for a phrase. By default, it will print out each line that matches your search.
+
+For example, to print out lines that contain the word "darkwing":
+
+```{bash example23, echo = TRUE, eval = FALSE}
+grep "darkwing" famousducks.txt
+```
+
+Notice that `grep` is followed by the phrase you are searching for in quotes, which is followed by the filename. `grep` by itself will only look for specific phrases, but has options to make it much more powerful. 
+
+This command will return the same as above, but *the search is now case-insensitive*:
+
+```{bash example24, echo = TRUE, eval = FALSE}
+grep -i "darkwing" famousducks.txt
+```
+
+This command will find matches *for the exact word* "Donald" in a file - words that contain "Donald," like "McDonald," won't count:
+
+```{bash example25, echo = TRUE, eval = FALSE}
 grep -w "Donald" famousducks.txt
-Find matches for "McDuck" in every file in the current directory:
+```
+
+This command will find matches for "McDuck" *in every file* in the current directory:
+
+```{bash example26, echo = TRUE, eval = FALSE}
 grep "McDuck" *
-Find matches for "McDuck" in every file in the current directory AND every subdirectory, all the way down:
+```
+
+This command will find matches for "McDuck" *in every file in the current directory AND every subdirectory*, all the way down:
+
+```{bash example27, echo = TRUE, eval = FALSE}
 grep -r "McDuck" *
-For each match of "Howard", print out that line AND the 4 lines after it (5 lines total):
+```
+
+This command will print out *that line AND the 4 lines after it* (5 lines total) for each match of "Howard":
+
+```{bash example28, echo = TRUE, eval = FALSE}
 grep -A 4 "Howard" famousducks.txt
-For each match of "Howard", print out that line AND the 4 lines before it (5 lines total):
+```
+
+This command will print out *that line AND the 4 lines before it* (5 lines total) for each match of "Howard":
+
+```{bash example29, echo = TRUE, eval = FALSE}
 grep -B 4 "Howard" famousducks.txt
-For each match of "Howard", print out that line AND the 4 lines before it AND the 4 lines after it (9 lines total):
+```
+
+This command will print out *that line AND the 4 lines before it AND the 4 lines after it* (9 lines total) for each match of "Howard":
+
+```{bash example30, echo = TRUE, eval = FALSE}
 grep -C 4 "Howard" famousducks.txt
-Instead of printing out the matching lines themselves, print out the filenames that match your search:
+```
+
+You might be interested in printing filenames that match your search rather than the matching lines themselves: 
+
+```{bash example31, echo = TRUE, eval = FALSE}
 grep -l "Daffy" *
-Just get the number of matches:
+```
+
+Alternatively, sometimes we are just interested in the number of matches:
+
+```{bash example32, echo = TRUE, eval = FALSE}
 grep -c "Daffy" *
-Show line numbers along with the matching lines:
+```
+
+Finally, we can ask to show line numbers along with the matching lines:
+
+```{bash example33, echo = TRUE, eval = FALSE}
 grep -n "Daffy" famousducks.txt
+```
 
-### pipe
+### The Pipe Operator
 
-You can send the output to another command using the pipe symbol (|). The grep command searches through some text for
-matches (more on this later), so you could do this to get the first 10 lines of a file, and then search for "Steve" within those 10
-lines:
-/files$ head names.txt | grep "Steve"
-This is basically the same as doing this:
-/files$ head names.txt > temporaryfile.txt
-/files$ grep "Steve" temporaryfile.txt
-But instead of first sending the output to a file and then running the second command on that file, you pipe the output directly
-from the first command into the second. You can chain as many of these together as you want:
-/files$ grep "United States" addresses.csv | grep "California" | head
-This would search the file addresses.csv for lines that contain the phrase "United States", then search the results for lines that
-contain the word "California", and then print out the first 10 of those matches.
+You can send the output to another command using the pipe symbol, `|`. For example, now that we know that `grep` command searches through some text for matches, you can chain two commands together to get the first 10 lines of a file, and then search for "Steve" within those 10 lines:
 
-### cat
+```{bash example34, echo = TRUE, eval = FALSE}
+head names.txt | grep "Steve"
+```
 
-The cat command will combine multiple files together. This will print three files in a row, as if they were one file:
+```{r q2, echo=FALSE}
+question(
+  "Which part of the command finds the first 10 lines of the file?",
+  answer("`head`", correct = TRUE),
+  answer("`names.txt`"),
+  answer("`|`"),
+  answer("`grep`"),
+  answer("Steve")
+  allow_retry = TRUE
+)
+```
+
+```{r q3, echo=FALSE}
+question(
+  "Which part of the command finds lines matching the phrase 'Steve'?",
+  answer("`head`"),
+  answer("`names.txt`"),
+  answer("`|`"),
+  answer("`grep`", correct = TRUE),
+  answer("Steve")
+  allow_retry = TRUE
+)
+```
+
+Note that the `>` symbol sends the output of a command to a file. So, the previous command is basically the same as doing this:
+
+```{bash example35, echo = TRUE, eval = FALSE}
+head names.txt > temporaryfile.txt
+grep "Steve" temporaryfile.txt
+```
+
+But instead of first sending the output to a file and then running the second command on that file, you pipe the output directly from the first command into the second. 
+
+You can chain as many commands together as you want:
+
+```{bash example36, echo = TRUE, eval = FALSE}
+grep "United States" addresses.csv | grep "California" | head
+```
+
+This would search the file `addresses.csv` for lines that contain the phrase "United States", then search the results for lines that contain the word "California", and then print out the first 10 of those matches.
+
+### `cat`
+
+The `cat` (short for "con`cat`enate") command will combine multiple files together. This will print three files in a row, as if they were one file:
+
+```{bash example37, echo = TRUE, eval = FALSE}
 cat turkey.txt duck.txt chicken.txt
-Remember that this will just print the output into your terminal.
+```
+
+Remember that this will just print the output into your terminal. If there is a lot of output, it might be better to use `grep` and find something specific!
 
 ### Regular Expressions
 
-When using something like grep to search, you can search for a simple term with only letters, numbers, and spaces. But if you
-want to search for a pattern, you can use what's called a regular expression. Regular expressions use special characters to
-represent patterns, like "any number," "any letter," "X or Y," "at least three lowercase letters," and so on.
-We won't worry about the ins and outs for now, but one useful operator is the period (.). In regular expression-ese, this means
-"One of any character." So you can search for something like:
-/files$ grep -i "car.s" dictionary.txt
-This would match words like cards , carts , cares , and so on. It would also match the middle of the phrase "scar story" (CAR
-S) because "any character" means ANY character, including a space or a punctuation mark.
+When using something like `grep` to search, you can search for a simple term with only letters, numbers, and spaces. But if you want to search for a pattern, you can use what's called a regular expression. Regular expressions use special characters to represent patterns, like "any number," "any letter," "X or Y," "at least three lowercase letters," and so on.
+
+We won't worry about the ins and outs for now, but one useful operator is the period, `.`. In regular expression-ese, this means "One of any character." So you can search for something like:
+
+```{bash example38, echo = TRUE, eval = FALSE}
+grep -i "car.s" dictionary.txt
+```
+
+This would match words like "cards", "carts", "cares", and so on. It would also match the middle of the phrase "scar story" (*s*CAR S*tory*) because "any character" means ANY character, including a space or a punctuation mark.
+
 One more example:
-/files$ grep -i ".e.st" dictionary.txt
-This would match things like least , beast , and heist .
+
+```{bash example39, echo = TRUE, eval = FALSE}
+grep -i ".e.st" dictionary.txt
+```
+
+This would match things like "least", "beast", and "heist".
 
 ### Command List
 
@@ -386,6 +500,10 @@ So, for reference, here are all the commands we've covered:
 * `pwd`: Prints your working directory. 
 * `cd`: Changes your working directory. 
 * `ls`: Lists the files in your working directory. 
+* `head -n N`: Shows the first `N` lines of a file. 
+* `tail -n N`: Shows the last `N` lines of a file. 
+* `grep`: Helps find instances of exact phrases or variations on exact phrases within a text file. 
+* `cat`: prints output into the terminal.
 
 ## Murder Mystery
 
