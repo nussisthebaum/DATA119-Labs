@@ -1,4 +1,3 @@
-# Lab 0
+# Bash Lab
 
-This repo contains a template for creating new Shiny/learnr labs for data science concepts. DO NOT EDIT!
-
+The goals of this lab are to practice basic BASH commands using the command line interface.
