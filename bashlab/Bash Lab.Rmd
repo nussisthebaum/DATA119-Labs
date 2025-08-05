@@ -529,7 +529,7 @@ grade_this_code()
 Now, show the `instructions` file. 
 
 ```{bash setup-directory, eval = TRUE}
-cd ./data
+cd ../data
 
 ```
 
