@@ -71,7 +71,11 @@ Please note that this lab borrows HEAVILY from the [Command Line Murder Mystery]
 
 The command line (also known as the command line interface, or CLI, or sometimes the terminal), is a **plain text-based interface** for executing commands on a computer. If you've ever seen a movie about hackers from the 1980s, like WarGames, where they stare at a prompt on a black screen and type in commands one at a time, it's basically that.
 
-You have a prompt, and you can type in a command and hit 'Enter' to execute it. An example command would be:
+You will always be working in a specific directory on your laptop. Usually, this directory comes before either the dollar sign (`$`) or the percent sign (`%`). Check on your machine to see which one you should be looking for! On my machine, the command line looks like this:
+
+![](images/CLI.png)
+
+A symbol (like `$` or `%`) that lets you know that the command line is ready to receive input is known as a prompt. Once you see the prompt, you can type in a command and hit 'Enter' to execute it. An example command would be:
 
 ```{bash example1, echo = TRUE, eval = FALSE}
 touch newfile.txt
@@ -120,7 +124,7 @@ Specifying a file or directory as a relative path means you are specifying where
 /files/videos$
 ```
 
-Any commands you want to use need to go after the dollar sign, `$`. If you execute a command like `touch newfile.txt`, it will create `newfile.txt` inside the current directory. Relative paths don't start with a slash.
+Any commands you want to use need to go after the prompt. If you execute a command like `touch newfile.txt`, it will create `newfile.txt` inside the current directory. Relative paths don't start with a slash.
 
 #### Absolute Paths
 
@@ -249,7 +253,7 @@ For example, to move from `files` to `files/videos`, run
 cd videos
 ```
 
-Note that when you change a directory on your computer, you will notice that the directory listed before the dollar sign, `$`, will change!
+Note that when you change a directory on your computer, you will notice that the directory listed before the prompt will change!
 
 Once you change into a subdirectory, you can keep going. For example, to move to `videos` and then to `vines`, 
 
@@ -428,7 +432,7 @@ question(
   answer("`names.txt`"),
   answer("`|`"),
   answer("`grep`"),
-  answer("Steve")
+  answer("Steve"),
   allow_retry = TRUE
 )
 ```
@@ -440,7 +444,7 @@ question(
   answer("`names.txt`"),
   answer("`|`"),
   answer("`grep`", correct = TRUE),
-  answer("Steve")
+  answer("Steve"),
   allow_retry = TRUE
 )
 ```
@@ -577,7 +581,101 @@ Once you are done with the murder mystery, remember that you can download the fi
 
 ## Python Specific Tasks
 
-* installing packages
-* running scripts
+Eventually you might want to be able to run Python from the terminal! To do so, simply use the command `python`:
 
+```{bash example42, echo = TRUE, eval = FALSE}
+python
+```
+
+Using this command results in something like
+
+```{bash example43, echo = TRUE, eval = FALSE}
+(base) amynussbaum@Amys-MacBook-Pro ~ % python
+Python 3.11.5 (main, Sep 11 2023, 08:31:25) [Clang 14.0.6 ] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+```
+
+
+![](images/CLI_python.png)
+
+Note that once you are running Python, the prompt changes. 
+
+```{r q4, echo=FALSE}
+question(
+  "According to the screenshot, what is the prompt for Python?",
+  answer("`$`",),
+  answer("`%`"),
+  answer(">>>", correct = TRUE),
+  answer("`help`"),
+  answer("`copyright"), 
+  answer("`license"), 
+  allow_retry = TRUE
+)
+```
+
+You can also run a single line of Python code using the `-c` option! Edit the following line of code to use Python to find the sum of 8 and 7. 
+
+```{bash ex8, exercise = TRUE}
+python -c 2+2
+```
+
+```{bash ex8-solution, message = FALSE, warning = FALSE, echo = FALSE}
+python -c 8+7
+```
+
+```{r ex8-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+
+Several single lines of code listed one right after the other can be saved as a Python script. You may be used to working only with notebooks so far, but a document containing only Python commands (no plain text or explanations) usually has a `.py` extension. To run the script, you just type the name after `python`, like:
+
+```{bash example44, echo = TRUE, eval = FALSE}
+python example_script.py
+```
+
+This will execute everything inside `example_script.py` linearly (each command after the one before it). Note that you either have to be working inside the directory where the script is saved (check with `pwd`) or change to the directory before you try to run it. 
+
+You will also want to install Python packages and modules from the command line. You can do this using `pip`, which stands for `P`ip `I`nstalls `P`ackages, or `P`ip `I`nstalls `P`ython, depending on who you ask. `pip` is a program typically included with most Python installations. Once you specify that you would like to use `pip`, you also need to include a command--in this case, `install`. Finally, you need the name of the package. For example, say you want to install the package `numpy`:
+
+```{bash example45, echo = TRUE, eval = FALSE}
+pip install numpy
+```
+
+Please note that if you use Anaconda, `pip` will not work for you! Instead, use `conda`:
+
+```{bash example46, echo = TRUE, eval = FALSE}
+conda install numpy
+```
+
+If you are not sure which to use, try `pip` first--don't be afraid to test it out, the worst that will happen is an error message, and then you can move on to `conda`.
+
+There are also other `pip` commands, like `uninstall`, `inspect`, `list`, `show`, and `check`. Use the [`pip` documentation](https://pip.pypa.io/en/stable/cli/) to answer the following questions?
+
+```{r q5, echo=FALSE}
+question(
+  "Which `pip` command will tell you which Python packages are installed?",
+  answer("`uninstall`",),
+  answer("`inspect`"),
+  answer("list", correct = TRUE),
+  answer("`show`"),
+  answer("`check"), 
+  allow_retry = TRUE
+)
+```
+
+```{r q6, echo=FALSE}
+question(
+  "Which `pip` command will verify that the installed packages have compatible dependencies?",
+  answer("`uninstall`",),
+  answer("`inspect`"),
+  answer("list"),
+  answer("`show`"),
+  answer("`check", correct = TRUE), 
+  allow_retry = TRUE
+)
+```
+
+ 
 ## Resources
