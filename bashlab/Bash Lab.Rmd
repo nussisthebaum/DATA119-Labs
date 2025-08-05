@@ -530,7 +530,7 @@ Now, show the `instructions` file.
 
 ```{bash setup-directory, eval = TRUE}
 cd data
-print("test")
+ls
 ```
 
 ```{bash ex3, exercise = TRUE, exercise.setup = "setup-directory"}
