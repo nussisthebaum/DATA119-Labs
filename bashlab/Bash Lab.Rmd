@@ -597,7 +597,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 
-![](images/CLI_python.png)
+<!-- ![](images/CLI_python.png) -->
 
 Note that once you are running Python, the prompt changes. 
 
@@ -606,22 +606,22 @@ question(
   "According to the screenshot, what is the prompt for Python?",
   answer("`$`",),
   answer("`%`"),
-  answer(">>>", correct = TRUE),
+  answer("`>>>`", correct = TRUE),
   answer("`help`"),
-  answer("`copyright"), 
-  answer("`license"), 
+  answer("`copyright`"), 
+  answer("`license`"), 
   allow_retry = TRUE
 )
 ```
 
-You can also run a single line of Python code using the `-c` option! Edit the following line of code to use Python to find the sum of 8 and 7. 
+You can also run a single line of Python code using the `-c` option! Note that you will have to use the `print()` command, as well as quotation marks, to actually return the results of any calculations. Edit the following line of code to use Python to find the sum of 8 and 7. 
 
 ```{bash ex8, exercise = TRUE}
-python -c 2+2
+python -c "print(2+2)"
 ```
 
 ```{bash ex8-solution, message = FALSE, warning = FALSE, echo = FALSE}
-python -c 8+7
+python -c "print(8+7)" 
 ```
 
 ```{r ex8-code-check, message = FALSE, warning = FALSE}
@@ -658,9 +658,9 @@ question(
   "Which `pip` command will tell you which Python packages are installed?",
   answer("`uninstall`",),
   answer("`inspect`"),
-  answer("list", correct = TRUE),
+  answer("`list`", correct = TRUE),
   answer("`show`"),
-  answer("`check"), 
+  answer("`check`"), 
   allow_retry = TRUE
 )
 ```
@@ -670,12 +670,20 @@ question(
   "Which `pip` command will verify that the installed packages have compatible dependencies?",
   answer("`uninstall`",),
   answer("`inspect`"),
-  answer("list"),
+  answer("`list`"),
   answer("`show`"),
-  answer("`check", correct = TRUE), 
+  answer("`check`", correct = TRUE), 
   allow_retry = TRUE
 )
 ```
 
- 
 ## Resources
+
+For quick references, check out:
+
+* [Command Line Murder Mystery](https://github.com/veltman/clmystery)
+* [Command Line Cheatsheet](https://github.com/veltman/clmystery/blob/master/cheatsheet.pdf)
+* [`pip` Documentation](https://pip.pypa.io/en/stable/cli/)
+
+In addition, if you find a resource that you think is very helpful, let us know!
+
