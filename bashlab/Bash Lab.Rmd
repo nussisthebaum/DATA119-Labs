@@ -195,7 +195,7 @@ Because we are on the server, you have a temporary directory with a complicated 
 If you want to delete a file, you can use the `rm` (I think of it as `r`e`m`ove) command. Note that this file works in conjunction with relative and absolute paths. 
 Say we have a specific file in our working directory named `specific_file.txt`. Removing this specific file looks like 
 
-```{bash example7, echo = TRUE, eval = FALSE}
+```{bash example8, echo = TRUE, eval = FALSE}
 rm specific_file.txt
 ```
 
@@ -205,19 +205,19 @@ In most cases when you have to specify a file name or directory name, you can al
 
 To delete any file in your current directory, run
 
-```{bash example8, echo = TRUE, eval = FALSE}
+```{bash example9, echo = TRUE, eval = FALSE}
 rm *
 ```
 
 To delete any text file (a file ending with the `.txt` extension), run
 
-```{bash example9, echo = TRUE, eval = FALSE}
+```{bash example10, echo = TRUE, eval = FALSE}
 rm *.txt
 ```
 
 To delete any file with a name starting with `data`, run
 
-```{bash example9, echo = TRUE, eval = FALSE}
+```{bash example11, echo = TRUE, eval = FALSE}
 rm data*
 ```
 
@@ -245,7 +245,7 @@ The two core commands for navigating what directory the prompt is in are `cd` an
 
 For example, to move from `files` to `files/videos`, run
 
-```{bash example10, echo = TRUE, eval = FALSE}
+```{bash example12, echo = TRUE, eval = FALSE}
 cd videos
 ```
 
@@ -253,20 +253,20 @@ Note that when you change a directory on your computer, you will notice that the
 
 Once you change into a subdirectory, you can keep going. For example, to move to `videos` and then to `vines`, 
 
-```{bash example11, echo = TRUE, eval = FALSE}
+```{bash example13, echo = TRUE, eval = FALSE}
 cd /videos
 cd vines
 ```
 
 You can jump multiple levels at once if you want.
 
-```{bash example12, echo = TRUE, eval = FALSE}
+```{bash example14, echo = TRUE, eval = FALSE}
 cd /videos/short
 ```
 
 Make sure to type the name of the directory exactly, otherwise you will get a message like 
 
-```{bash example13, echo = TRUE, eval = FALSE}
+```{bash example15, echo = TRUE, eval = FALSE}
 cd: no such file or directory:
 ```
 
@@ -279,7 +279,7 @@ This can also happen when you supply the absolute file name but forget a subdire
 
 You can also move up a directory, using
 
-```{bash example14, echo = TRUE, eval = FALSE}
+```{bash example16, echo = TRUE, eval = FALSE}
 cd ..
 ```
 
@@ -287,7 +287,7 @@ cd ..
 
 `ls` will `l`i`s`t the files in the current directory. It's helpful for figuring out where you are, what files exist, and what subfolders exist.
 
-```{bash example15, echo = TRUE, eval = FALSE}
+```{bash example17, echo = TRUE, eval = FALSE}
 ls
 ```
 
@@ -297,19 +297,19 @@ Using `ls -l` will print the list vertically, with lots of other extra informati
 
 The `head` command will print out the first 10 lines of a file named `names.txt`:
 
-```{bash example16, echo = TRUE, eval = FALSE}
+```{bash example18, echo = TRUE, eval = FALSE}
 head names.txt
 ```
 
 You can also specify a different number of lines. This will print out the first 15 lines of the file:
 
-```{bash example17, echo = TRUE, eval = FALSE}
+```{bash example19, echo = TRUE, eval = FALSE}
 head -n 15 names.txt
 ```
 
 Or, if you want to print all the file but leave out the LAST 15 lines, you can give a negative number:
 
-```{bash example18, echo = TRUE, eval = FALSE}
+```{bash example20, echo = TRUE, eval = FALSE}
 head -n -15 names.txt
 ```
 
@@ -319,25 +319,25 @@ One of the nice uses of `head` is to quickly peek inside a large text file to se
 
 The `tail` command is the reverse of `head`. It will print out the last 10 lines of a file:
 
-```{bash example19, echo = TRUE, eval = FALSE}
+```{bash example21, echo = TRUE, eval = FALSE}
 tail names.txt
 ```
 
 This will print out the last 15 lines of a file:
 
-```{bash example20, echo = TRUE, eval = FALSE}
+```{bash example22, echo = TRUE, eval = FALSE}
 tail -n 15 names.txt
 ```
 
 Or, if you want to print all the file but leave out the FIRST 15 lines, you can add a plus sign:
 
-```{bash example21, echo = TRUE, eval = FALSE}
+```{bash example23, echo = TRUE, eval = FALSE}
 tail -n +16 names.txt
 ```
 
 This is helpful if you want to, say, remove a header row from a .csv file:
 
-```{bash example22, echo = TRUE, eval = FALSE}
+```{bash example24, echo = TRUE, eval = FALSE}
 tail -n +2 names.txt > names-no-header.txt
 ```
 
@@ -347,7 +347,7 @@ The `grep` command  will let you search a file (or multiple files) for a phrase.
 
 For example, to print out lines that contain the word "darkwing":
 
-```{bash example23, echo = TRUE, eval = FALSE}
+```{bash example25, echo = TRUE, eval = FALSE}
 grep "darkwing" famousducks.txt
 ```
 
@@ -355,61 +355,61 @@ Notice that `grep` is followed by the phrase you are searching for in quotes, wh
 
 This command will return the same as above, but *the search is now case-insensitive*:
 
-```{bash example24, echo = TRUE, eval = FALSE}
+```{bash example26, echo = TRUE, eval = FALSE}
 grep -i "darkwing" famousducks.txt
 ```
 
 This command will find matches *for the exact word* "Donald" in a file - words that contain "Donald," like "McDonald," won't count:
 
-```{bash example25, echo = TRUE, eval = FALSE}
+```{bash example27, echo = TRUE, eval = FALSE}
 grep -w "Donald" famousducks.txt
 ```
 
 This command will find matches for "McDuck" *in every file* in the current directory:
 
-```{bash example26, echo = TRUE, eval = FALSE}
+```{bash example28, echo = TRUE, eval = FALSE}
 grep "McDuck" *
 ```
 
 This command will find matches for "McDuck" *in every file in the current directory AND every subdirectory*, all the way down:
 
-```{bash example27, echo = TRUE, eval = FALSE}
+```{bash example29, echo = TRUE, eval = FALSE}
 grep -r "McDuck" *
 ```
 
 This command will print out *that line AND the 4 lines after it* (5 lines total) for each match of "Howard":
 
-```{bash example28, echo = TRUE, eval = FALSE}
+```{bash example30, echo = TRUE, eval = FALSE}
 grep -A 4 "Howard" famousducks.txt
 ```
 
 This command will print out *that line AND the 4 lines before it* (5 lines total) for each match of "Howard":
 
-```{bash example29, echo = TRUE, eval = FALSE}
+```{bash example31, echo = TRUE, eval = FALSE}
 grep -B 4 "Howard" famousducks.txt
 ```
 
 This command will print out *that line AND the 4 lines before it AND the 4 lines after it* (9 lines total) for each match of "Howard":
 
-```{bash example30, echo = TRUE, eval = FALSE}
+```{bash example32, echo = TRUE, eval = FALSE}
 grep -C 4 "Howard" famousducks.txt
 ```
 
 You might be interested in printing filenames that match your search rather than the matching lines themselves: 
 
-```{bash example31, echo = TRUE, eval = FALSE}
+```{bash example33, echo = TRUE, eval = FALSE}
 grep -l "Daffy" *
 ```
 
 Alternatively, sometimes we are just interested in the number of matches:
 
-```{bash example32, echo = TRUE, eval = FALSE}
+```{bash example34, echo = TRUE, eval = FALSE}
 grep -c "Daffy" *
 ```
 
 Finally, we can ask to show line numbers along with the matching lines:
 
-```{bash example33, echo = TRUE, eval = FALSE}
+```{bash example35, echo = TRUE, eval = FALSE}
 grep -n "Daffy" famousducks.txt
 ```
 
@@ -417,7 +417,7 @@ grep -n "Daffy" famousducks.txt
 
 You can send the output to another command using the pipe symbol, `|`. For example, now that we know that `grep` command searches through some text for matches, you can chain two commands together to get the first 10 lines of a file, and then search for "Steve" within those 10 lines:
 
-```{bash example34, echo = TRUE, eval = FALSE}
+```{bash example36, echo = TRUE, eval = FALSE}
 head names.txt | grep "Steve"
 ```
 
@@ -447,7 +447,7 @@ question(
 
 Note that the `>` symbol sends the output of a command to a file. So, the previous command is basically the same as doing this:
 
-```{bash example35, echo = TRUE, eval = FALSE}
+```{bash example37, echo = TRUE, eval = FALSE}
 head names.txt > temporaryfile.txt
 grep "Steve" temporaryfile.txt
 ```
@@ -456,7 +456,7 @@ But instead of first sending the output to a file and then running the second co
 
 You can chain as many commands together as you want:
 
-```{bash example36, echo = TRUE, eval = FALSE}
+```{bash example38, echo = TRUE, eval = FALSE}
 grep "United States" addresses.csv | grep "California" | head
 ```
 
@@ -466,7 +466,7 @@ This would search the file `addresses.csv` for lines that contain the phrase "Un
 
 The `cat` (short for "con`cat`enate") command will combine multiple files together. This will print three files in a row, as if they were one file:
 
-```{bash example37, echo = TRUE, eval = FALSE}
+```{bash example39, echo = TRUE, eval = FALSE}
 cat turkey.txt duck.txt chicken.txt
 ```
 
@@ -478,7 +478,7 @@ When using something like `grep` to search, you can search for a simple term wit
 
 We won't worry about the ins and outs for now, but one useful operator is the period, `.`. In regular expression-ese, this means "One of any character." So you can search for something like:
 
-```{bash example38, echo = TRUE, eval = FALSE}
+```{bash example40, echo = TRUE, eval = FALSE}
 grep -i "car.s" dictionary.txt
 ```
 
@@ -486,7 +486,7 @@ This would match words like "cards", "carts", "cares", and so on. It would also 
 
 One more example:
 
-```{bash example39, echo = TRUE, eval = FALSE}
+```{bash example41, echo = TRUE, eval = FALSE}
 grep -i ".e.st" dictionary.txt
 ```
 
