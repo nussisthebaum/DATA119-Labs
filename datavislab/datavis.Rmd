@@ -311,7 +311,7 @@ Sometimes when we have more encodings on a single plot it can be useful to inclu
 ## look into how chained eval works
 ## currently not seeing beach_day_max_foster where needed
 
-```{python beach-line-overlaid-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="beach-line-setup"}
+```{python beach-line-overlaid-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="beach-temp-line-setup"}
 beach_day_max_foster = beach[beach['Station Name'] == 'Foster'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
 
 day = beach_day_max['Day of Year']
