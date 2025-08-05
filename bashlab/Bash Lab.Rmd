@@ -8,12 +8,9 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(error = TRUE)
-Sys.setenv(BASH_ENV="~/data")
 #knitr::knit_engines$set(python = reticulate::eng_python)
 
-## Directory Requirements
-
-#setwd("~/sandbox")
+## Directory Requirements ??
 
 ## Package Requirements for Lab
 
@@ -529,9 +526,8 @@ grade_this_code()
 
 Now, show the `instructions` file. 
 
-```{bash setup-directory, eval = TRUE}
-cd ../data
-
+```{bash setup-directory, eval = TRUE, engine.opts='-l'}
+cd data
 ```
 
 ```{bash ex3, exercise = TRUE, exercise.setup = "setup-directory"}
