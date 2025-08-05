@@ -529,8 +529,8 @@ grade_this_code()
 Now, show the `instructions` file. 
 
 ```{bash setup-directory, eval = TRUE}
-cd data
-ls
+cd ./data
+
 ```
 
 ```{bash ex3, exercise = TRUE, exercise.setup = "setup-directory"}
