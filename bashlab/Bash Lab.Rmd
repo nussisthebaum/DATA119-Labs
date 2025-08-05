@@ -524,17 +524,20 @@ ls
 grade_this_code()
 ```
 
-Now, show the `instructions` file. 
+You should see a list of files, including many that you will need to solve the murder mystery. 
+
+Please note that due to how our server is set up, you will have to change the directory to `data` at the beginning of each chunk. Now, show the `instructions` file. 
 
 ```{bash setup-directory, eval = TRUE, engine.opts='-l'}
 cd data
 ```
 
 ```{bash ex3, exercise = TRUE, exercise.setup = "setup-directory"}
-
+cd data
 ```
 
 ```{bash ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+cd data
 cat instructions
 ```
 
@@ -545,14 +548,17 @@ grade_this_code()
 In the chunk(s) below, use the commands you know to solve the mystery--we have given you three spaces to work so that you can cross-reference the outputs, but you only have to use one if you want. We recommend that you use each of `cat`, `cd`, `grep`, `head`, and `ls`at least once. Just remember that if a command does not work as you expect or you want to rewrite a command to give more readable output, go ahead and retry! 
 
 ```{bash ex4, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
 
 ```
 
 ```{bash ex5, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
 
 ```
 
 ```{bash ex6, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
 
 ```
 
@@ -563,6 +569,7 @@ cd data/mystery
 ```
 
 ```{bash ex7, exercise = TRUE, exercise.setup = "setup-directory2"}
+cd data/mystery
 echo "John Doe" | $(command -v md5 || command -v md5sum) | grep -qif /dev/stdin encoded && echo CORRECT\! GREAT WORK, GUMSHOE. || echo SORRY, TRY AGAIN.
 ```
 
