@@ -37,9 +37,9 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
-```{bash setupbash}
-cd data
-```
+<!-- ```{bash setup} -->
+<!-- cd data -->
+<!-- ``` -->
 
 ```{r header, echo = FALSE}
 library(htmltools)
@@ -61,11 +61,13 @@ tags$div(
 
 ## Goals
 
-The goal of this lab is to practice basic BASH commands using the command line interface. Please note that this lab borrows HEAVILY from the [Command Line Murder Mystery](https://github.com/veltman/clmystery) by Noah Veltman--once you have worked through the basic commands, you can either solve the murder mystery on the Shiny Server OR download the file and practice using the command line interface on your own machine!
+The goal of this lab is to practice basic BASH commands using the command line interface. 
+
+Please note that this lab borrows HEAVILY from the [Command Line Murder Mystery](https://github.com/veltman/clmystery) by Noah Veltman--once you have worked through the basic commands, you can either solve the murder mystery on the Shiny Server OR download the file and practice using the command line interface on your own machine!
 
 ## Setup
 
-## Command Line Interface and BASH
+## Command Line Interface, BASH, and Directories
 
 ### What is the command line interface?
 
@@ -230,7 +232,7 @@ question(
   answer("`rm *.txt`"),
   answer("`rm *.pdf`", correct = TRUE),
   answer("`rm pdf*`"),
-  answer("Delete one specific `.pdf` file at a time until everything is gone.")
+  answer("Delete one specific `.pdf` file at a time until everything is gone."),
   allow_retry = TRUE
 )
 ```
@@ -526,7 +528,7 @@ grade_this_code()
 
 Now, show the `instructions` file. 
 
-```{bash setup-directory}
+```{bash setup-directory, eval = TRUE}
 cd data
 ```
 
@@ -566,7 +568,7 @@ cd data/mystery
 echo "John Doe" | $(command -v md5 || command -v md5sum) | grep -qif /dev/stdin encoded && echo CORRECT\! GREAT WORK, GUMSHOE. || echo SORRY, TRY AGAIN.
 ```
 
-Once you are done with the murder mystery, remember that you can download the files for yourself and "resolve" on your own computer to get used to the command line interface!
+Once you are done with the murder mystery, remember that you can download the files for yourself and "re-solve" on your own computer to get used to the command line interface (maybe try using different strategies). Visit [Command Line Murder Mystery](https://github.com/veltman/clmystery) to get the files. 
 
 ## Python Specific Tasks
 
