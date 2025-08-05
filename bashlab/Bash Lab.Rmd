@@ -507,6 +507,67 @@ So, for reference, here are all the commands we've covered:
 
 ## Murder Mystery
 
+There's been a murder in Terminal City, and TCPD needs your help! You can solve this mystery using the commands covered in the previous section of this lab, including `cat`, `cd`, `grep`, `head`, and `ls`. 
+
+First, navigate to the `data` directory and print the files within. 
+
+```{bash ex2, exercise = TRUE}
+
+```
+
+```{bash ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+cd data
+ls
+```
+
+```{r ex2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now, show the `instructions` file. 
+
+```{bash setup-directory}
+cd data
+```
+
+```{bash ex3, exercise = TRUE, exercise.setup = "setup-directory"}
+
+```
+
+```{bash ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+cat instructions
+```
+
+```{r ex3-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+In the chunk(s) below, use the commands you know to solve the mystery--we have given you three spaces to work so that you can cross-reference the outputs, but you only have to use one if you want. We recommend that you use each of `cat`, `cd`, `grep`, `head`, and `ls`at least once. Just remember that if a command does not work as you expect or you want to rewrite a command to give more readable output, go ahead and retry! 
+
+```{bash ex4, exercise = TRUE, exercise.setup = "setup-directory"}
+
+```
+
+```{bash ex5, exercise = TRUE, exercise.setup = "setup-directory"}
+
+```
+
+```{bash ex6, exercise = TRUE, exercise.setup = "setup-directory"}
+
+```
+
+Once you think you have solved the mystery, replace `John Doe` below with the name of the suspect and run the code!
+
+```{bash setup-directory2}
+cd data/mystery
+```
+
+```{bash ex4, exercise = TRUE, exercise.setup = "setup-directory2"}
+echo "John Doe" | $(command -v md5 || command -v md5sum) | grep -qif /dev/stdin encoded && echo CORRECT\! GREAT WORK, GUMSHOE. || echo SORRY, TRY AGAIN.
+```
+
+Once you are done with the murder mystery, remember that you can download the files for yourself and "resolve" on your own computer to get used to the command line interface!
+
 ## Python Specific Tasks
 
 * installing packages
