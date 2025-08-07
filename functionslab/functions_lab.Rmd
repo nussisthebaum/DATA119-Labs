@@ -159,7 +159,7 @@ grade_this_code()
 
 ### Introducing Variables
 
-As a capitalist, the movie theater owner wants to know: **Can we make more by changing the price?** Define a discount as the difference between the base price, `5`, and the lower price attendees are actually paying. From previous experience, assume we know that for every ten cents we lower the price, an additional 15 people will come. 
+As a capitalist, the movie theater owner wants to know: **Can we make more by changing the price?** Define a discount as the difference between the base price, `5`, and the lower price attendees are actually paying. From previous experience, assume we know that for every ten cent discount, an additional 15 people will come. 
  
  
 $$\text{price}*(120 + 15 * (5 - \text{price})/0.1) - 180 - 0.04*\text{attendees}$$
@@ -214,7 +214,7 @@ If we combine all this information into one chunk, we would get:
 BASE_PRICE = 5 #named constant
 discount = 1
 price = BASE_PRICE - discount
-attendees = 120 + 15*price/0.1
+attendees = 120 + 15*discount/0.1
 revenue = price*attendees
 cost = 180 + 0.04*attendees
 profit = revenue - cost
@@ -231,7 +231,7 @@ There are two problems with how we've written our code:
 BASE_PRICE = 5 #named constant
 discount = 1
 price = BASE_PRICE - discount
-attendees = 120 + 15*price/0.1
+attendees = 120 + 15*discount/0.1
 revenue = price*attendees
 cost = 180 + 0.04*attendees
 profit = revenue - cost
