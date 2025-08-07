@@ -51,7 +51,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Bash", class = "pageTitle")
+    tags$h1("Command Line Interface and Bash", class = "pageTitle")
   )
 )
 ```
