@@ -33,7 +33,7 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
-```{python setup, include = FALSE}
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
 BASE_PRICE = 5
 
 def attendees(price):
