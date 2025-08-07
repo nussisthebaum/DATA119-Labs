@@ -1,0 +1,675 @@
+---
+title: "Functions"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+#knitr::knit_engines$set(python = reticulate::eng_python)
+
+## Package Requirements for Lab
+
+library(gradethis)
+library(learnr)
+library(tidyverse)
+
+## Package Requirements for Content
+
+## Requirements for Answer Checking
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{python setup, include = FALSE}
+BASE_PRICE = 5
+
+def attendees(price):
+    return 120 + 15 * (BASE_PRICE - price)/0.1
+
+def cost(price):
+    return 180 + 0.04*attendees(price)
+  
+def revenue(price):
+    return price*attendees(price)  
+  
+def profit(price):
+  return revenue(price) - cost(price) 
+
+def is_leap_year(year):
+    if year % 400 == 0:
+        return True
+    elif year % 100 == 0:
+        return False
+    elif year % 4 == 0:
+        return True
+    else:
+       return False
+     
+THIRTY_DAYS = [4, 6, 9, 11]
+
+def days_in_month(month, year):
+  if month == 2:
+    if is_leap_year(year):
+      return 29
+    return 28
+  if month in THIRTY_DAYS:
+    return 30
+  return 31       
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Functions and Error Messages", class = "pageTitle")
+  )
+)
+```
+
+
+## Goals
+
+The goals of this lab are to:
+
+* Understand when and why to write functions. 
+* Understand how to write functions. 
+
+## Setup
+
+For this lab, we do not need any additional packages or modules.
+
+## Motivation 
+
+Hopefully by now you have come to realize that writing code is a form of communication--you are both communicating with a computer to tell it what to do, as well as communicating with other humans to tell them what the computer is supposed to be doing (other humans, including your future self!)
+
+Consider another form of communication: writing an academic paper. Typically, academic papers can be broken down into parts: the abstract, the introduction, a methods section, a results section, a discussion of results, a conclusion, references, and acknowledgments. Each of these parts serves a specific purpose, and most people know how to navigate to a specific section to find what they are looking for. 
+
+The abstract, introduction, etc. can be broken down into even smaller pieces: paragraphs, which can be broken down into sentences, which can be broken down into words and punctuation. We organize our writing like this for more effective communication with other people--most know what to expect and where to look. This organization makes it easier to actually understand the content of the paper. 
+
+Just like when we are writing a paper, we have to organize our thinking while writing code. The code should reflect the structure of what we are trying to do. Specifically, we organize the structure of our code as it gets more and more complicated to help people make sense of what we are trying to do.
+
+### Motivating Example
+
+Consider the following example on movie theater finances:
+
+* Profit: defined as revenue (money from ticket sales) - cost (studio fees)
+* Revenue: calculated from ticket price multiplied by the number of attendees
+* Cost: $\$180$ studio fee plus four cents for every attendee
+
+So, if tickets cost $5 and we have 120 attendees, we can calculate the profit. Translate the information above into Python code in the following chunk:
+
+```{python ex1, exercise = TRUE}
+revenue = ...
+cost = ... 
+profit = revenue - cost
+profit
+```
+
+```{python ex1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+revenue = 5*120
+cost = 180 + 0.04*120
+profit = revenue - cost
+profit
+```
+
+```{r ex1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+### Named Constants
+
+Notice that the information from our motivating example depends on two variables: the price (currently set at `5`) and the number of attendees (currently set at `120`). If we changed these values, the `revenue` and `cost` would obviously change, further changing the `profit`. In our code, however, we would have to scroll through the entire script and change the values `5` and `120` everywhere we see them--in a long script (hundreds or thousands of lines of code), this could be tedious, to say the least! So, let's treat `PRICE` and `ATTENDEES` as named constants. Remember that according to the [style guide](https://uchicago-cs.github.io/student-resource-guide/style-guide/python.html), we write named constants in all capital letters, so it's easy to find them and understand what they are when reading code. 
+
+In the following chunk, set the `PRICE` and `ATTENDEES` equal to `5` and `120`, respectively. 
+
+```{python ex2, exercise = TRUE}
+PRICE = 
+ATTENDEES = 
+```
+
+```{python ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+PRICE = 5
+ATTENDEES = 120
+```
+
+```{r ex2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+### Introducing Variables
+
+As a capitalist, the movie theater owner wants to know: **Can we make more by changing the price?** Define a discount as the difference between the base price, `5`, and the lower price attendees are actually paying. From previous experience, assume we know that for every ten cents we lower the price, an additional 15 people will come. 
+ 
+ 
+$$\text{price}*(120 + 15 * (5 - \text{price})/0.1) - 180 - 0.04*\text{attendees}$$
+
+Since `PRICE` and `ATTENDEES` are now changing depending on the base price, they are no longer constants--instead, they are variables! In the chunk below, set a new named constant, `BASE_PRICE`, equal to `5`, and then create two new variables for price and attendees according to the above equation. Price should depend on another variable, `discount`--you can set the discount equal to one dollar, for now. Make sure to follow style guide conventions!
+
+```{python ex3, exercise = TRUE}
+BASE_PRICE = 
+...
+...
+...
+```
+
+```{python ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+BASE_PRICE = 5
+discount = 1
+price = BASE_PRICE - discount
+attendees = 120 + 15*discount/0.1
+```
+
+```{r ex3-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Remember that the cost can be calculated as a $\$180$ studio fee plus four cents for every attendee. Re-write the calculation of `cost` below.
+
+```{python ex4, exercise = TRUE}
+cost = 
+
+
+```
+
+```{python ex4-hint, message = FALSE, warning = FALSE, echo = FALSE}
+## If you wanted to be super fancy, you could set up a named constant, STUDIO_FEE. 
+## For now, you can just use 180 and 0.04 as is. 
+
+```
+
+```{python ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+cost = 180 + 0.04*attendees
+
+
+```
+
+```{r ex4-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+If we combine all this information into one chunk, we would get:
+
+```{python example1, exercise = FALSE, echo = TRUE, eval = TRUE}
+BASE_PRICE = 5 #named constant
+discount = 1
+price = BASE_PRICE - discount
+attendees = 120 + 15*price/0.1
+revenue = price*attendees
+cost = 180 + 0.04*attendees
+profit = revenue - cost
+profit
+```
+
+Obviously, make sure to define all quantities/variables in the correct order when you are writing your own scripts, otherwise, the code will not execute correctly!
+
+## Writing Functions
+
+There are two problems with how we've written our code:
+
+```{python ex5, exercise = TRUE}
+BASE_PRICE = 5 #named constant
+discount = 1
+price = BASE_PRICE - discount
+attendees = 120 + 15*price/0.1
+revenue = price*attendees
+cost = 180 + 0.04*attendees
+profit = revenue - cost
+profit
+```
+
+First, the movie theater might be interested in intermediate quantities (perhaps `attendees`, so they know how many staff to have on hand, how much popcorn they will need, etc. ). Second, they may want to repeat this calculation many times--for example, once for a 25 cent discount, once for a 50 cent discount, once for a dollar discount, etc.
+
+To solve these problems, we want to use functions. In fact, whenever we want to repeat a set of code many times, it makes sense to write a function. Then, we don't have to copy multiple lines of code multiple times and we don't have to worry about the order we've defined things in (or at least, not as much). 
+
+If you want to write a function, you always start with something like:
+
+```{python example2, exercise = FALSE, echo = TRUE, eval = FALSE}
+def function_name(argument)
+```
+
+* Functions begin with a special Python keyword, `def`, as in `def`ine. Functions must have names--similar to how you would name variables in Python code. In the code above, my function name is `function_name`.
+
+* Your function name should follow [snake case](https://en.wikipedia.org/wiki/Snake_case), just like variables. 
+* The function name referably includes a verb to demonstrate what it actually does!
+
+Immediately after the name, we open up a set of parentheses and list the arguments (like the $x$ in $f(x)$). 
+
+* Arguments basically have variable names that will take on whatever specific value is passed into the function. 
+* You can have one or more argument. If more than one argument, put commas in a space between their names, like
+  
+```{python example3, exercise = FALSE, echo = TRUE, eval = FALSE}
+def function_name(argument1, argument2, argument3, ...)
+```
+
+At the end of the first line, we put a colon (`:`). Then, we return and indent four spaces into the new line (it helps to show spaces in your IDE to avoid indentation errors). Everything here is called the **body** of the function. 
+
+```{python example4, exercise = FALSE, echo = TRUE, eval = TRUE}
+def function_name(argument):
+    action
+```
+
+We can have multiple actions, as long as the actions are all at the same level of indentation! Fix the spaces below so that the indentation is correct (please note this code will not actually run actions 1, 2, and 3).
+
+```{python ex6, exercise = TRUE}
+def function_name(argument):
+    action1
+   action2
+     action3
+```
+
+```{python ex6-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def function_name(argument):
+    action1
+    action2
+    action3
+```
+
+```{r ex6-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+As long as the actions are on the same level of indentation, they will all be run whenever the function is called. 
+
+If the function is meant to to calculate something based on the arguments and provide it back to the function that calls it, then use have the keyword `return`. 
+
+```{python example5, exercise = FALSE, echo = TRUE, eval = TRUE}
+def function_name(argument):
+    return something
+```
+
+When should you use a function? Look for things that belong together, things that have names, and things you might want to do a lot. For example, we have already considered that we might want to calculate the number of attendees as a function of `price`. Fill in the right equation below so that we have a new function, `attendees()`.
+
+```{python ex7, exercise = TRUE}
+def attendees(price):
+    return ...
+```
+
+```{python ex7-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def attendees(price):
+    return 120 + 15 * (BASE_PRICE - price)/0.1
+```
+
+```{r ex7-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Functions can use other functions! In the chunk below, edit the code for the function `cost()` so that it depends on `attendees()`.
+
+```{python ex8, exercise = TRUE}
+def cost(...):
+    return ...
+```
+
+```{python ex8-hint, message = FALSE, warning = FALSE, echo = FALSE}
+## Remember that attendees() depends on price, and therefore, that cost() should also depend on price.
+
+```
+
+```{python ex8-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def cost(price):
+    return 180 + 0.04*attendees(price)
+```
+
+```{r ex8-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now, write a function for `revenue()` using the code below. 
+
+```{python ex9, exercise = TRUE}
+def ...
+    ...
+```
+
+```{python ex9-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def revenue(price):
+    return price*attendees(price)
+```
+
+```{r ex9-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Finally, write a function `profit()` in the chunk below. 
+
+```{python ex10, exercise = TRUE}
+
+```
+
+```{python ex10-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def profit(price):
+  return revenue(price) - cost(price)
+```
+
+```{r ex10-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+## More Practice with Functions
+
+When writing functions, aim for bite size pieces! Writing a very large program is an intimidating and daunting task, but if you break it up into smaller pieces and figure out how to solve each of those pieces separately, it is much easier. 
+
+Let's write a function to determine how many days there are in a month. 
+
+```{python ex11, exercise = TRUE}
+def days_in_month(month):
+    if (month in ...:
+        days = 31
+    if (month in ...):
+        days = 30
+    if (month == ...):
+        days = 28
+  return(days)
+```
+
+```{python ex11-hint-1, message = FALSE, warning = FALSE, echo = FALSE}
+## Using 1 for January, 2 for February, 3 for March, etc., write a list
+## or value for all the months that have 31 days, 30 days, and 28 days. 
+```
+
+```{python ex11-hint-2, message = FALSE, warning = FALSE, echo = FALSE}
+## You should have lists that looks like [1, 3, 5, 7, 8, 10, 12] and 
+## [4, 6, 9, 11]. You can use in to see if the month number is
+## included in the list. 
+```
+
+```{python ex11-hint-3, message = FALSE, warning = FALSE, echo = FALSE}
+## How many months have 28 days? You can use == to see if the month
+## number is exactly equal to the number that has 28 days.
+```
+
+```{python ex11-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def days_in_month(month):
+    if (month in [1, 3, 5, 7, 8, 10, 12]):
+        days = 31
+    if (month in [4, 6, 9, 11]):
+        days = 30
+    if (month == 2):
+        days = 28
+  return(days)
+```
+
+```{r ex11-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Astute observers will point out that February does not always have 28 days. If it is a leap year, February has an extra day! Edit your code from before so that it depends on a new function, `is_leap_year(year)`.
+
+```{python ex12, exercise = TRUE}
+def days_in_month(...):
+    if (month in [1, 3, 5, 7, 8, 10, 12]):
+        days = 31
+    if (month in [4, 6, 9, 11]):
+        days = 30
+    if (month == 2):
+        ...
+    return(days)
+```
+
+```{python ex12-hint-1, message = FALSE, warning = FALSE, echo = FALSE}
+## is_leap_year() has a different argument, year. So days_in_month()
+## should have two arguments!
+```
+
+```{python ex12-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def days_in_month(month, year):
+    if (month in [1, 3, 5, 7, 8, 10, 12]):
+        days = 31
+    if (month in [4, 6, 9, 11]):
+        days = 30
+    if (month == 2):
+       if is_leap_year(year):
+           days = 29
+       else:
+           days = 28
+    return(days)
+```
+
+```{r ex12-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Of course, we also have to define `is_leap_year()`. There are a few rules:
+
+* Generally, if the year is divisible by 4, it is a leap year, and otherwise, it is not. 
+* However, if the year is divisible by 100, it is not a leap year (e.g., 1700, 1800, 1900, etc.)
+* However HOWEVER, if the year is divisible by 400, it is a leap year (e.g., 2000). 
+
+```{r q1, echo=FALSE}
+question(
+  "What symbol represents the modulus operator, which finds the remainder of `m` a division by `n`?",
+  answer("`m $ n`"),
+  answer("`m % n`", correct = TRUE),
+  answer("`m ^ n`"),
+  answer("`m & n`"),
+  answer("`m * n`"),
+  allow_retry = TRUE
+)
+```
+
+```{r q2, echo=FALSE}
+question(
+  "If a `year` is divisible by `4`, what will the remainder be equal to?",
+  answer("`0`", correct = TRUE),
+  answer("`1`"),
+  answer("`2`"),
+  answer("`3`"),
+  answer("`4`"),
+  allow_retry = TRUE
+)
+```
+
+Use the code below to return `TRUE` if a year is divisible by 4 or 400, but not by 100. If the year is not divisible by any of 4, 100, or 400, it should return `FALSE`. 
+
+```{python ex13, exercise = TRUE}
+def is_leap_year(year):
+    if year % ... == ...:
+        return ...
+    elif year % ... == ...:
+        return ...
+    elif year % ... == ...:
+        return ...
+    else:
+       return ...
+```
+
+```{python ex13-hint, message = FALSE, warning = FALSE, echo = FALSE}
+## If you check to see if a number is divisible by 4 first, the function
+## will return TRUE for numbers that are also divisible by 100!
+```
+
+```{python ex13-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def is_leap_year(year):
+    if year % 400 == 0:
+        return True
+    elif year % 100 == 0:
+        return False
+    elif year % 4 == 0:
+        return True
+    else:
+       return False
+```
+
+```{r ex13-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+`return` statements exit the functions immediately, so we can remove all of the `else` statements above to make this less visually crowded!
+
+```{python ex14, exercise = TRUE}
+def is_leap_year(year):
+    if year % 400 == 0:
+        return True
+    elif year % 100 == 0:
+        return False
+    elif year % 4 == 0:
+        return True
+    else:
+       return False
+```
+
+```{python ex14-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def is_leap_year(year):
+    if year % 400 == 0:
+        return True
+    if year % 100 == 0:
+        return False
+    if year % 4 == 0:
+        return True
+    return False     
+```
+
+```{r ex14-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now, use everything you have learned to make a more efficient version of `days_in_month()`. In the code below, create a named constant called `THIRTY_DAYS` containing the numbers of the months that have 30 days. Then, write the function `days_in_month()`. 
+
+```{python ex15, exercise = TRUE}
+THIRTY_DAYS = ...
+
+def days_in_month(month, year):
+    if ...:
+        ....
+            ....
+        ...
+    if ...:
+        ...
+    ...
+```
+
+```{python ex15-hint, message = FALSE, warning = FALSE, echo = FALSE}
+## You do not have to "use == True" or "== False".
+```
+
+```{python ex15-solution, message = FALSE, warning = FALSE, echo = FALSE}
+THIRTY_DAYS = [4, 6, 9, 11]
+
+def days_in_month(month, year):
+  if month == 2:
+    if is_leap_year(year):
+      return 29
+    return 28
+  if month in THIRTY_DAYS:
+    return 30
+  return 31  
+```
+
+```{r ex15-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Why don't I have to write `is_leap_year(year) == True`? 1Using the implicit `True` is a tiny bit faster, and using the implicit `False` adheres to the style guide. Overall there is much less visual clutter!
+
+## Raising Error Messages
+
+When writing `days_in_month()`, we have been assuming users are acting in good faith and giving a month that actually exists. What happens with 0? 15? Run the code below to find out, and feel free to experiment with other values. 
+
+```{python ex16, exercise = TRUE}
+days_in_month(0, 2025)
+```
+
+What about if someone supplies a valid month and year, but in the opposite order?
+
+```{python ex17, exercise = TRUE}
+days_in_month(2025, 1)
+```
+
+Anything that is not a valid month year PAIR constitutes an error! And based on the way we have written a function, we wouldn't know--it will return `31` for any entry. 
+
+### Catalog of Errors
+
+You may have encountered the following errors, among others: 
+
+* `ZeroDivisionError`
+* `NameError`
+* `KeyError`
+* `TypeError`
+* `AttributeError`
+* `IndexError`
+* `SynaxError`
+
+We are used to being frustrated when we encounter errors. Errors are not necessarily a bad thing, as they sometimes give us information about how we are wrong. This means that we may want to be able to raise errors when we are writing our own functions! Remember that our code looks like:
+
+```{python, echo = TRUE}
+def days_in_month(month, year):
+  if month == 2:
+    if is_leap_year(year):
+      return 29
+    return 28
+  if month in THIRTY_DAYS:
+    return 30
+  return 31
+```
+
+What should the function do if you put in a month like 2022 or 2023? We want it to at least check if we've done it correctly, but also, **return something that one way or the other makes us think about how to proceed**. You should never just give a bogus answer! Similarly--if you're writing a function to calculate the mean, but the mean for whatever reason does not exist, do return something like zero! Use `None` instead.
+
+The syntax for raising an error looks like this:
+
+```{python, echo = TRUE, eval = FALSE}
+raise ValueError("days_in_month: invalid month")
+```
+
+Just like we define functions with the Python keyword `def`, we raise errors with the Python keyword `raise`. Then, we have to consider the correct type of error:
+
+* If we are using incorrect inputs, we raise `ValueError`s.
+* If we are using the incorrect type of inputs (e.g., `days_in_month("banana)`), we raise `TypeError`s.
+
+Then, we include open/close parentheses surrounding an error statement, written as a string.
+
+Edit the code below to return the correct type of error message:
+
+```{python ex18, exercise = TRUE}
+def days_in_month(month, year):
+  if month < 1 or month > 12:
+      ...
+  if month == 2:
+    if leap_year(year):
+      return 28
+    elif month in THIRTY_DAYS:
+      return 30
+    else:
+      return 31
+```
+
+```{python ex18-hint, message = FALSE, warning = FALSE, echo = FALSE}
+## Your message should read "days_in_month: invalid month".
+```
+
+```{python ex18-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def days_in_month(month, year):
+  if month < 1 or month > 12:
+      raise ValueError("days_in_month: invalid month")
+  if month == 2:
+    if leap_year(year):
+      return 28
+    elif month in THIRTY_DAYS:
+      return 30
+    else:
+      return 31
+```
+
+```{r ex18-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
