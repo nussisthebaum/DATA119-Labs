@@ -36,17 +36,17 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
 BASE_PRICE = 5.0
 
-def attendees(price):
+def calc_attendees(price):
     return 120.0 + 15.0 * (BASE_PRICE - price)/0.1
 
-def cost(price):
-    return 180.0 + 0.04*attendees(price)
+def calc_cost(price):
+    return 180.0 + 0.04*calc_attendees(price)
   
-def revenue(price):
-    return price*attendees(price)  
+def calc_revenue(price):
+    return price*calc_attendees(price)  
   
-def profit(price):
-  return revenue(price) - cost(price) 
+def calc_profit(price):
+  return calc_revenue(price) - calc_cost(price) 
 
 def is_leap_year(year):
     if year % 400 == 0:
@@ -301,12 +301,12 @@ def function_name(argument):
 When should you use a function? Look for things that belong together, things that have names, and things you might want to do a lot. For example, we have already considered that we might want to calculate the number of attendees as a function of `price`. Fill in the right equation below so that we have a new function, `attendees()`.
 
 ```{python ex7, exercise = TRUE}
-def attendees(price):
+def calc_attendees(price):
     return ...
 ```
 
 ```{python ex7-solution, message = FALSE, warning = FALSE, echo = FALSE}
-def attendees(price):
+def calc_attendees(price):
     return 120 + 15 * (BASE_PRICE - price)/0.1
 ```
 
@@ -314,28 +314,28 @@ def attendees(price):
 grade_this_code()
 ```
 
-Functions can use other functions! In the chunk below, edit the code for the function `cost()` so that it depends on `attendees()`.
+Functions can use other functions! In the chunk below, edit the code for the function `calc_cost()` so that it depends on `calc_attendees()`.
 
 ```{python ex8, exercise = TRUE}
-def cost(...):
+def calc_cost(...):
     return ...
 ```
 
 ```{python ex8-hint, message = FALSE, warning = FALSE, echo = FALSE}
-## Remember that attendees() depends on price, and therefore, that cost() should also depend on price.
+## Remember that calc_attendees() depends on price, and therefore, that calc_cost() should also depend on price.
 
 ```
 
 ```{python ex8-solution, message = FALSE, warning = FALSE, echo = FALSE}
-def cost(price):
-    return 180 + 0.04*attendees(price)
+def calc_cost(price):
+    return 180 + 0.04*calc_attendees(price)
 ```
 
 ```{r ex8-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-Now, write a function for `revenue()` using the code below. 
+Now, write a function for `calc_revenue()` using the code below. 
 
 ```{python ex9, exercise = TRUE}
 def ...
@@ -343,23 +343,23 @@ def ...
 ```
 
 ```{python ex9-solution, message = FALSE, warning = FALSE, echo = FALSE}
-def revenue(price):
-    return price*attendees(price)
+def calc_revenue(price):
+    return price*calc_attendees(price)
 ```
 
 ```{r ex9-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-Finally, write a function `profit()` in the chunk below. 
+Finally, write a function `calc_profit()` in the chunk below. 
 
 ```{python ex10, exercise = TRUE}
 
 ```
 
 ```{python ex10-solution, message = FALSE, warning = FALSE, echo = FALSE}
-def profit(price):
-  return revenue(price) - cost(price)
+def calc_profit(price):
+  return calc_revenue(price) - calc_cost(price)
 ```
 
 ```{r ex10-code-check, message = FALSE, warning = FALSE}
