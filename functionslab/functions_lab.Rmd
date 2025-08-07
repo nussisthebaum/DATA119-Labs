@@ -34,13 +34,13 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
 
 ```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
-BASE_PRICE = 5
+BASE_PRICE = 5.0
 
 def attendees(price):
-    return 120 + 15 * (BASE_PRICE - price)/0.1
+    return 120.0 + 15.0 * (BASE_PRICE - price)/0.1
 
 def cost(price):
-    return 180 + 0.04*attendees(price)
+    return 180.0 + 0.04*attendees(price)
   
 def revenue(price):
     return price*attendees(price)  
@@ -162,7 +162,7 @@ grade_this_code()
 As a capitalist, the movie theater owner wants to know: **Can we make more by changing the price?** Define a discount as the difference between the base price, `5`, and the lower price attendees are actually paying. From previous experience, assume we know that for every ten cent discount, an additional 15 people will come. 
  
  
-$$\text{price}*(120 + 15 * (5 - \text{price})/0.1) - 180 - 0.04*\text{attendees}$$
+$$\text{price}*(120 + 15 * (5 - \text{discount})/0.1) - 180 - 0.04*\text{attendees}$$
 
 Since `PRICE` and `ATTENDEES` are now changing depending on the base price, they are no longer constants--instead, they are variables! In the chunk below, set a new named constant, `BASE_PRICE`, equal to `5`, and then create two new variables for price and attendees according to the above equation. Price should depend on another variable, `discount`--you can set the discount equal to one dollar, for now. Make sure to follow style guide conventions!
 
