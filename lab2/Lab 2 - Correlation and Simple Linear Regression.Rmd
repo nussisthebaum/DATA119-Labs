@@ -10,12 +10,61 @@ runtime: shiny_prerendered
 knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
+## Package Requirements for Lab
+
 library(learnr)
 library(gradethis)
 library(reticulate)
 
-# Set the path to the existing Python environment
-#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+## Package Requirements for Content
+
+library(ggplot2)
+
+## Calculations for Lab
+
+mtcars <- read.csv("./data/mtcars.csv")
+mtcars_model <- lm(disp ~ wt, data = mtcars)
+mtcars_residuals <- data.frame(cbind(mtcars_model$fitted.values, mtcars_model$residuals))
+colnames(mtcars_residuals) <- c("fitted.values", "residuals")
+mtcars_residual_plot <- ggplot(data = mtcars_residuals, aes(x = fitted.values, y = residuals)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  geom_hline(yintercept = 0, color = "red") + 
+  scale_x_continuous(name = "Predicted Values") + 
+  scale_y_continuous(name = "Residuals")
+
+gasprice <- read.csv("./data/gasprice.csv")
+gasprice_model <- lm(value ~ time, data = gasprice)
+gasprice_residuals <- data.frame(cbind(gasprice_model$fitted.values, gasprice_model$residuals))
+colnames(gasprice_residuals) <- c("fitted.values", "residuals")
+gasprice_residual_plot <- ggplot(data = gasprice_residuals, aes(x = fitted.values, y = residuals)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  geom_hline(yintercept = 0, color = "red") + 
+  scale_x_continuous(name = "Predicted Values") + 
+  scale_y_continuous(name = "Residuals")
+
+eagles <- read.csv("./data/eagles.csv")
+eagles_model <- lm(Pairs ~ Year, data = eagles)
+eagles_residuals <- data.frame(cbind(eagles_model$fitted.values, eagles_model$residuals))
+colnames(eagles_residuals) <- c("fitted.values", "residuals")
+eagles_residual_plot <- ggplot(data = eagles_residuals, aes(x = fitted.values, y = residuals)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  geom_hline(yintercept = 0, color = "red") + 
+  scale_x_continuous(name = "Predicted Values") + 
+  scale_y_continuous(name = "Residuals")
+
+epi_mini <- read.csv("./data/epi_mini_clean.csv")
+epi_mini_model <- lm(calories ~ fat, data = epi_mini)
+epi_mini_residuals <- data.frame(cbind(epi_mini_model$fitted.values, epi_mini_model$residuals))
+colnames(epi_mini_residuals) <- c("fitted.values", "residuals")
+epi_mini_residual_plot <- ggplot(data = epi_mini_residuals, aes(x = fitted.values, y = residuals)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  geom_hline(yintercept = 0, color = "red") + 
+  scale_x_continuous(name = "Predicted Values") + 
+  scale_y_continuous(name = "Residuals")
 
 # Optional: Install necessary Python packages if not already installed
 #system("/opt/python/3.9.21/bin/python -m pip install numpy pandas plotnine")
@@ -132,6 +181,32 @@ question("3. Is a linear relationship appropriate for describing the relationshi
          allow_retry = TRUE,
          random_answer_order = TRUE,
          post_message = "Congratulations! You have found the first secret word: SUPPRESS.")
+```
+
+```{r q3_residuals, context="server"}
+q3_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$q3$correct,
+  valueFunc = function() get_tutorial_state()$q3$correct
+)
+
+output$q3_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q3_correct_poll())) {
+    tagList(
+      p("Now check out the residual plot below--what do you see that supports your answer?."),
+      mtcars_residual_plot,
+      HTML(
+        "<details><summary> What should I be looking for? </summary
+        Remember that sometimes points near the ends of the $x$-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red $y = 0$ line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend!
+        </details>"
+      )
+    )
+  } else {
+    tagList(
+      p("Answer Question 3 correctly to reveal the residual plot for the `mtcars` model.")
+    )
+  }
+})
 ```
 
 ## Describing Relationships with `gasprice`
