@@ -162,7 +162,7 @@ grade_this_code()
 
 2. Note that `plotnine` has a tool for us to easily add the line of best fit to a plot--it is the function `geom_smooth()`. We need to specify that geom_smooth should be using linear regression, which we can do with the argument `method = "lm"`. Add this argument to the previous graph
 
-```{python lm, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python lm, exercise = TRUE, message = FALSE}
 (p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
   p9.geom_point())
 ```
@@ -179,7 +179,7 @@ grade_this_code()
 
 Note that this added line includes something called standard error bars, which we will not be covering in this class. If you would like to turn them off to make things visually cleaner, you can use the argument `se = False`, like so:
 
-```{python lm_no_se, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup1"}
+```{python lm_no_se, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 (p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
   p9.geom_point() + 
   p9.geom_smooth(method = "lm", se = False))
@@ -228,7 +228,7 @@ uiOutput("q3_plot_output")
 
 4. The `gasprice` dataset includes the average price of gas in the US for every week from February 1990 to June 2003 (check out the [`gasprice` documentation here](https://vincentarelbundock.github.io/Rdatasets/doc/quantreg/gasprice.html)). Using `plotnine`, create a scatterplot displaying the relationship between `time` and `value` (the price of gas). Add the line of best fit to help you describe the plot.
 
-```{python gas, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python gas, exercise = TRUE, message = FALSE}
 (p9.ggplot(___, ___) +
   p9.geom____())
 ```
@@ -286,7 +286,7 @@ The `eagles` dataset contains information on the number of mating pairs of bald 
 
 6. Create a scatterplot displaying the relationship between time (`Year`) and the number of mating pairs (`Pairs`). Add the line of best fit to help you describe the plot.
 
-```{python eagles, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python eagles, exercise = TRUE, message = FALSE}
 (p9.ggplot(___, ___) + 
   ___ ...)
 ```
@@ -342,7 +342,7 @@ uiOutput("q7_plot_output")
 
 Now to confirm the value of the correlation between `Year` and `Pairs` you can use `.corr()`. Run this cell to get the value of $r$.
 
-```{python corr, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup1"}
+```{python corr, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 Year = eagles['Year']
 Pairs = eagles['Pairs']
 
@@ -361,7 +361,7 @@ question("8. Would you describe this as weak, moderate, or strong based on $r$?"
 
 9. For the remaining exercises, we will use the `epicurious_nd` dataset, treating `fat` as an explanatory variable and `calories` as the response variable. Create a scatterplot displaying the relationship between `fat` and `calories.` Be sure to put the variables on the appropriate axes.
 
-```{python fat, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python fat, exercise = TRUE, message = FALSE}
 
 ```
 
@@ -415,7 +415,7 @@ uiOutput("q10_plot_output")
 
 11. Now, define lists `fat` and `cal`, and calculate the correlation between fat and calories.
 
-```{python fatcor, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python fatcor, exercise = TRUE, message = FALSE}
 fat = 
 cal = 
 ```
@@ -433,7 +433,7 @@ grade_this_code()
 
 12. There are 28.346 grams of fat in an ounce. Create a new list called `fat_oz` containing the amount fat in the recipe in ounces. Now, calculate the correlation between `fat_oz` and `calories`. 
 
-```{python fatoz, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python fatoz, exercise = TRUE, message = FALSE}
 fat_oz = 
 cal = epicurious_nd['calories']
 
@@ -465,7 +465,7 @@ Occasionally we want to perform calculations and repeat them over and over again
 
 13. Using the equation $b_1 = r \times \frac{s_y}{s_x}$, fill out the function below called `calc_slope` that will calculate the estimate of the slope, $b_1$, given the correlation between two variables, the standard deviation of the explanatory variable, and the standard deviation of the response. 
 
-```{python slope, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python slope, exercise = TRUE, message = FALSE}
 def calc_slope(r_xy, s_x, s_y):
     b1 = 
     return(b1)
@@ -484,7 +484,7 @@ grade_this_code()
 
 14.  Now, apply your function to the `epicurious_nd` data. You will need the correlation and standard deviations--save the correlation as `r_fatcal` and the standard deviations as `s_fat` and `s_cal`.
 
-```{python setup2, exercise=FALSE, echo=FALSE, exercise.setup="setup1"}
+```{python setup2, exercise=FALSE, echo=FALSE}
 fat = epicurious_nd['fat']
 cal = epicurious_nd['calories']
 
