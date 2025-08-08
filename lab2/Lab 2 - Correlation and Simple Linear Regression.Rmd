@@ -193,14 +193,9 @@ output$q3_plot_output <- renderUI({
   print(get_tutorial_state())
   if (isTRUE(q3_correct_poll())) {
     tagList(
-      p("Now check out the residual plot below--what do you see that supports your answer?."),
-      mtcars_residual_plot,
-      HTML(
-        "<details><summary> What should I be looking for? </summary
-        Remember that sometimes points near the ends of the $x$-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red $y = 0$ line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend!
-        </details>"
-      )
-    )
+      p("Now check out the residual plot below--what do you see that supports your answer?"),
+      renderPlot(mtcars_residual_plot)
+     )
   } else {
     tagList(
       p("Answer Question 3 correctly to reveal the residual plot for the `mtcars` model.")
@@ -208,6 +203,14 @@ output$q3_plot_output <- renderUI({
   }
 })
 ```
+
+```{r q3_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("q3_plot_output")
+```
+
+<!-- <div id="q3_conditional-hint"> -->
+<!-- What should I be looking for? Remember that sometimes points near the ends of the $x$-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red $y = 0$ line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend! -->
+<!-- </div> -->
 
 ## Describing Relationships with `gasprice`
 
@@ -228,7 +231,6 @@ output$q3_plot_output <- renderUI({
 grade_this_code()
 ```
 
-
 ```{r q5, echo=FALSE}
 question("5. Is a linear relationship appropriate for describing the relationship between time and price? Why or why not?",
          answer("True", message = "This is an example of a time series, which should not be analyzed using linear regression."),
@@ -236,6 +238,35 @@ question("5. Is a linear relationship appropriate for describing the relationshi
          allow_retry = TRUE,
          post_message = "This is an example of a time series, which should not be analyzed using linear regression. Also, congratulations! You have found the second secret word: COMMISSION.")
 ```
+
+```{r q5_residuals, context="server"}
+q5_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$q5$correct,
+  valueFunc = function() get_tutorial_state()$q5$correct
+)
+
+output$q5_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q5_correct_poll())) {
+    tagList(
+      p("Now check out the residual plot below--what do you see that supports your answer?"),
+      renderPlot(gasprice_residual_plot)
+     )
+  } else {
+    tagList(
+      p("Answer Question 5 correctly to reveal the residual plot for the `gasprice` model.")
+    )
+  }
+})
+```
+
+```{r q5_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("q5_plot_output")
+```
+
+<!-- <div id="q5_conditional-hint"> -->
+<!-- What should I be looking for? Some of the same things that are present in the original plot! You can see that the points from one month to the next are clustered very closely, but honestly, it is more helpful to investigate the context of the plot and note that it is collected at very regular intervals. This helps to tip us off that we are working with time series data. You can also look at something called autocorrelation, but that is beyond the scope of this class.-->
+<!-- </div> -->
 
 ## Describing Relationships with `eagles`
 
@@ -265,8 +296,37 @@ question("7. Is a linear relationship appropriate for describing the relationshi
          answer("Exponential", correct = TRUE),
          allow_retry = TRUE,
          random_answer_order = TRUE,
-         post_message = "This is an example of an exponential curve, which are often used to model growth and decay.Also, congratulations! You have found the third secret word: MOON.")
+         post_message = "This is an example of an exponential curve, which are often used to model growth and decay. Also, congratulations! You have found the third secret word: MOON.")
 ```
+
+```{r q7_residuals, context="server"}
+q7_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$q7$correct,
+  valueFunc = function() get_tutorial_state()$q7$correct
+)
+
+output$q7_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q7_correct_poll())) {
+    tagList(
+      p("Now check out the residual plot below--what do you see that supports your answer?"),
+      renderPlot(eagles_residual_plot)
+     )
+  } else {
+    tagList(
+      p("Answer Question 7 correctly to reveal the residual plot for the `eagles` model.")
+    )
+  }
+})
+```
+
+```{r q7_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("q7_plot_output")
+```
+
+<!-- <div id="q7_conditional-hint"> -->
+<!-- What should I be looking for? Sometimes it can be hard to tell if a plot is half of a quadratic or exponential. We see some of the same things as the `mtcars` residual plot, like the fact that all of the points above the red $y = 0$ line are at the beginning and end of the plot and all of the points below are in the middle. However, this is another case where it is useful to consider the context--very often, exponential models are used to describe patterns of growth and decay, like the growth of the eagle population! So in this case, that is the best choice to use. -->
+<!-- </div> -->
 
 Now to confirm the value of the correlation between `Year` and `Pairs` you can use `.corr()`. Run this cell to get the value of $r$.
 
@@ -311,6 +371,35 @@ question("10. Is a linear relationship appropriate for describing the relationsh
          allow_retry = TRUE
 )
 ```
+
+```{r q10_residuals, context="server"}
+q10_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$q10$correct,
+  valueFunc = function() get_tutorial_state()$q10$correct
+)
+
+output$q10_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q10_correct_poll())) {
+    tagList(
+      p("Now check out the residual plot below--what do you see that supports your answer?"),
+      renderPlot(epi_mini_residual_plot)
+     )
+  } else {
+    tagList(
+      p("Answer Question 10 correctly to reveal the residual plot for the `epi_mini` model.")
+    )
+  }
+})
+```
+
+```{r q10_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("q10_plot_output")
+```
+
+<!-- <div id="q10_conditional-hint"> -->
+<!-- What should I be looking for? It is very hard to see what is going on here, due to the large outlier on the righthand side of the plot. However, if we ignore some of the points, we can see that there does not appear to be a pattern--the points are roughly scattered. I might remove the outliers or investigate the log scale to be sure, but this is as close to appropriate as we have seen so far. This makes sense based on the context, as it is a known fact that there are nine calories per gram of fat in a food item. -->
+<!-- </div> -->
 
 11. Now, define lists `fat` and `cal`, and calculate the correlation between fat and calories.
 
