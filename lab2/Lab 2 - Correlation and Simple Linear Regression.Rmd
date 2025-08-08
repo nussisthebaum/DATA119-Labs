@@ -112,8 +112,6 @@ epicurious_nd = pd.read_csv("./data/epi_mini_clean.csv")
 
 fat_oz = epicurious_nd['fat']/28.346
 cal = epicurious_nd['calories']
-
-fat_oz.corr(cal)
 ```
 
 
@@ -148,7 +146,7 @@ epicurious_nd = pd.read_csv("./data/epi_mini_clean.csv")
 
 1. The `mtcars` dataset includes data on various aspects of 32 different cars, extracted from the 1974 US issue of *Motor Trend* magazine (check out the [`mtcars` documentation here](https://vincentarelbundock.github.io/Rdatasets/doc/datasets/mtcars.html)). Using `plotnine`, create a scatterplot displaying the relationship between `weight` and `displacement` in `mtcars`. Remember that you should be supplying an `x` and a `y` aesthetic, and that `x` is traditionally the explanatory variable and `y` is traditionally the response.
 
-```{python scatter, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python scatter, exercise = TRUE, message = FALSE}
 (p9.ggplot(mtcars, p9.aes(x = ___, y = ___)) +
   p9.geom_point())
 ```
