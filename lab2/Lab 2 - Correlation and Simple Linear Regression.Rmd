@@ -99,9 +99,19 @@ tags$div(
 )
 ```
 
-```{python empty, echo=FALSE}
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
+mtcars = pd.read_csv("./data/mtcars.csv")
+gasprice = pd.read_csv("./data/gasprice.csv")
+eagles = pd.read_csv("./data/eagles.csv")
 
+epicurious_nd = pd.read_csv("./data/epi_mini_clean.csv")
+
+fat_oz = epicurious_nd['fat']/28.346
+cal = epicurious_nd['calories']
+
+fat_oz.corr(cal)
 ```
+
 
 ## Goals
 
@@ -440,7 +450,7 @@ grade_this_code()
 
 You should have found that the correlations that you just calculated are identical. This is because correlation is **unitless**--it does not depend on the units of either of the variables. Similarly, the order doesn't matter. Run the cell below to confirm.
 
-```{python switch, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="fatoz"}
+```{python switch, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 cal.corr(fat)
 ```
 
@@ -480,7 +490,6 @@ def calc_slope(r_xy, s_x, s_y):
     b1 = r_xy*s_y/s_x 
     return(b1)
 ```
-
 
 ```{python slopec, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
 r_fatcal = 
