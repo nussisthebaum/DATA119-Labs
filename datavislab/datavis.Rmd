@@ -101,6 +101,25 @@ beach.head()
 ```
 
 
+```{python main-setup, exercise=TRUE, include=FALSE, message=FALSE, exercise.setup="packages"}
+beach_year_avg = beach.drop(columns=['Month', 'Hour', 'Day of Year']).groupby("Station Name").mean().reset_index()
+stations = beach_year_avg['Station Name']
+wind_avg = beach_year_avg['Wind Speed']
+max_wind = beach[beach['Maximum Wind Speed'] < 100]['Maximum Wind Speed'] 
+# dealing with weird outliers
+hourly_wind = beach[beach['Maximum Wind Speed'] < 100]['Wind Speed']
+
+beach_day_max = beach[beach['Station Name'] == 'Oak Street'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
+
+day = beach_day_max['Day of Year']
+daily_temp = beach_day_max['Air Temperature']
+
+beach_day_max_foster = beach[beach['Station Name'] == 'Foster'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
+
+daily_temp_oak = beach_day_max['Air Temperature']
+daily_temp_foster = beach_day_max_foster['Air Temperature]
+```
+
 ## Graphing with Matplotlib
 
 Below you will be walked through the key components of Matplotlib. As you explore it may be useful to check out [Matplotlib's quick start guide](https://matplotlib.org/stable/users/explain/quick_start.html) or other parts of it's documentation for more details.
@@ -196,8 +215,7 @@ hourly_wind = beach[beach['Maximum Wind Speed'] < 100]['Wind Speed']
 
 ```
 ```{python beach-max-wind-hist, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-hist-setup"}
-max_wind
-# your graph here
+
 ```
 ```{python beach-max-wind-hist-solution, message = FALSE, warning = FALSE, echo = FALSE}
 plt.hist(max_wind, bins=10)
@@ -238,14 +256,12 @@ grade_this_code(
 )
 ```
 
-Scatterplots can help us quickly identify relationships (or the lack thereof) between different variables in a dataset. Checkout the [Matplotlib Scatterplot Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html) to see more ways to customize your scatterplots (i.e. coloring, resizing, or changing the shape of your points).
+Scatterplots can help us quickly identify relationships (or the lack thereof) between different variables in a dataset. They are also a useful tool for exploratory data analysis as we can see above with the plot revealing a point which was erroneously collected. Checkout the [Matplotlib Scatterplot Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html) to see more ways to customize your scatterplots (i.e. coloring, resizing, or changing the shape of your points).
 
 #### Line Chart
 Line charts are also used when we want to look at the relationship between two dimensions (variables) of our data. However, unlike a Scatterplot lineplots always have the x-axis convey some measure of sequential data and therefore a line plot is useful for quickly seeing relationships over time. A Scatterplot is made up of points connected by lines to their closest neighboring point where each point (x,y) is the (temporal) x value and y value for a particular record in our dataset. In Matplotlib the simplest way to make a line plot is by using `plt.plot(x,y)` and providing a collection of data as the first argument and a collection of different data for the same records in the same order as the second argument. Note you can also plot single points this way by making x and y both single numbers. Here is an example to see how it works looking at a graph of the sine function.
 
 ```{python basic-line, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
-np.random.seed(42) # for consistency
-# generating random samples
 x = np.arange(-4, 4, 0.2)
 y = np.sin(x)
 # drawing the line plot
@@ -254,14 +270,14 @@ plt.plot(x, y)
 
 
 5. We have stored the daily temperature high readings for the Oak Street beach in `daily_temp` and the day of the year in `day`. Make a line chart displaying the daily temperature high readings at that beach throughout 2024.
-```{python beach-line-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
+```{python beach-temp-line-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
 beach_day_max = beach[beach['Station Name'] == 'Oak Street'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
 
 day = beach_day_max['Day of Year']
 daily_temp = beach_day_max['Air Temperature']
 ```
 
-```{python beach-temp-line, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-line-setup"}
+```{python beach-temp-line, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-temp-line-setup"}
 
 ```
 
@@ -285,10 +301,13 @@ There are too many different ways to customize graphs in Matplotlib to show here
 
 After we've made a figure or one has been generated automatically through making a graph we can add an x-axis label with `plt.xlabel('text')`, a y-axis label with `plt.ylabel('text')`. To add a title we can do `plt.title('text')`.
 
-6. Add the title `Average Wind by Beach in 2024`, and the y-axis label as `Avg Wind` and the x-axis label as `Beach Name`.
+6. Add the title `Average Wind by Beach in 2024`, and the y-axis label as `Avg Wind` and the x-axis label as `Beach Name` to the bar chart we made earlier.
 
-```{python beach-avg-wind-bar-labeled, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-avg-setup"}
-
+```{python beach-avg-wind-bar-labeled, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="main-setup"}
+...
+...
+...
+...
 ```
 
 ```{python beach-avg-wind-bar-labeled-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -308,15 +327,12 @@ Sometimes when we have more encodings on a single plot it can be useful to inclu
 
 7. Edit the code below so that the first line plot receives the label of 'Oak Street Beach' and the second of 'Foster Beach' in a new legend located in the lower center of the graph. If you're stuck check out the [Legend documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html).
 
-## look into how chained eval works
-## currently not seeing beach_day_max_foster where needed
-
 ```{python beach-line-overlaid-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="beach-temp-line-setup"}
 beach_day_max_foster = beach[beach['Station Name'] == 'Foster'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
 
 day = beach_day_max['Day of Year']
 daily_temp_oak = beach_day_max['Air Temperature']
-daily_temp_foster = beach_day_max_foster['Air Temperature]
+daily_temp_foster = beach_day_max_foster['Air Temperature']
 ```
 
 ```{python beach-temp-overlaid-line, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-line-overlaid-setup"}
@@ -326,7 +342,9 @@ plt.plot(day, daily_temp_foster, label=...)
 ```
 
 ```{python beach-temp-overlaid-line-solution, message = FALSE, warning = FALSE, echo = FALSE}
-plt.plot(day, daily_temp)
+plt.plot(day, daily_temp, label="Oak Street")
+plt.plot(day, daily_temp_foster, label="Foster")
+plt.legend(loc='lower center')
 ```
 
 
@@ -335,10 +353,22 @@ plt.plot(day, daily_temp)
 
 Because making visualizations is such a key part of the data science workflow `pandas` has methods for data frames that call the `matplotlib` package behind the scene simplifying the graphing process. Since the `pandas` graphing methods are built on top of `matplotlib` all the customization you just saw earlier still works. 
 
-All of the graphs we've discussed can be made from a data frame using `df.plot.graph_name(**args)`. Below you'll recreate some of the graphs from earlier to see how we can harness the power of combining pandas and matplotlib.
+All of the graphs we've discussed can be made from a data frame using `df.plot.graph_name(**args)`. If you're not sure how to implement a particular graph check out the **Plotting** section of the [pandas cheatsheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf) or the [pandas plotting documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html). Below you'll recreate some of the graphs from earlier to see how we can harness the power of combining pandas and matplotlib.
 
 #TODO
 Repeat questions 1-7 and add maybe another. Explain how they'll have to manipulate a df prior to calling .plot sometimes.
+
+Before you start on the remaining exercises here is an example to see how `pandas` implements a basic bar chart differently than `matplotlib`. Note the need to create a series or DataFrame first.
+
+```{python pandas-basic-bar, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
+grade_categories = ["A", "B", "C", "D","F"]
+students_per_category = [14, 10, 5, 2, 1]
+grades = pd.DataFrame({"Grades" : grade_categories, "# Students" : students_per_category})
+grades.plot.bar("Grades", students_per_category)
+```
+
+As you can see for data that is already stored in a list it may be easier to just use `matplotlib` directly. However, using pandas also automatically added a x-axis label, a legend label, and allowed us to just reference columns from a dataframe directly making for a much smoother process when our data is already in a dataframe. 
+
 
 8. Recreate the bar chart displaying the average wind recorded at each weather station in 2024. 
 
@@ -467,11 +497,21 @@ A general rule of thumb is that if the observations are missing at random (i.e.,
 epicurious_num_nd = epicurious_num.dropna()
 ```
 
-```{r drop-code-check, message = FALSE, warning = FALSE}
-grade_this_code(
-  correct = "Things and stuff",
-  incorrect = "Stuff and things"
-)
+```{r drop-code-check, message = TRUE, warning = FALSE}
+# grade_this_code(
+#   correct = "Things and stuff",
+#   incorrect = "Stuff and things"
+# )
+grade_this({
+  if(identical(.result, .solution)){
+    print(.result)
+    pass("made it")
+  }
+  else{
+    fail("didn't make it")
+  }
+})
+
 ```
 
 ## Making Plots
