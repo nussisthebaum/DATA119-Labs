@@ -49,33 +49,39 @@ a:hover {
     width: 100%;              /* Full width of .bandContent */
     background-color: #800000; /* Maroon background */
     color: white;             /* White text */
-    padding: 20px;            /* Add padding for spacing */
+    font-family:'EB Garamond', serif;
+    padding: 12px 20px;            /* Add padding for spacing */
     box-sizing: border-box;   /* Ensure padding doesn't exceed width */
     margin-bottom: 20px;      /* Add spacing below the header */
 }
 
-/* Flexbox layout for logo and title */
+/* Header layout: logo left, title centered in remaining space */
 .logoAndTitle {
-    display: flex;
-    align-items: center;      /* Vertically align items */
-    justify-content: space-around; /* Space between logo and text */
-    gap: 5px;                /* Space between the logo and the title */
+  display: grid;
+  grid-template-columns: auto 1fr; /* logo | remaining space for title */
+  align-items: center;
+  gap: 16px;
 }
 
-/* Logo styling */
+/* Logo pinned left */
 .topLogo {
-    max-height: 90px;         /* Restrict logo height */
-    width: auto;              /* Maintain aspect ratio */
+  grid-column: 1;
+  justify-self: start;
+  max-height: 70px;
+  width: auto;
+  display: block;
 }
 
-/* Title styling */
+/* Title centered within the remaining space (column 2) */
 .pageTitle {
-    font-size: 4rem;        /* Larger font size */
-    margin: 0;
-    text-align: center;        
-    color: white;
-    font-family: 'EB Garamond', serif; /* Primary font */
-    font-weight: bold;
+  grid-column: 2;            /* <-- don't span all columns */
+  justify-self: center;      /* center horizontally in column 2 */
+  text-align: center;
+  font-family: 'EB Garamond', serif;  /* ensure correct font */
+  font-size: 3.5rem;
+  line-height: 1.1;
+  margin: 0;
+  color: white;
 }
 
 /* Style the output area for exercises */
@@ -109,5 +115,17 @@ a:hover {
 }
 
 .discussionbox .center {
+    text-align: center;
+}
+
+.notebox {
+    background-color: #ddd;  /* Light greyish green background */
+    border-left: 6px solid #800000; /* Dark red border */
+    padding: 10px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.notebox .center {
     text-align: center;
 }
