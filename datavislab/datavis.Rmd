@@ -340,11 +340,15 @@ plt.plot(day, daily_temp_oak, label=...)
 plt.plot(day, daily_temp_foster, label=...)
 ...
 ```
-
 ```{python beach-temp-overlaid-line-solution, message = FALSE, warning = FALSE, echo = FALSE}
 plt.plot(day, daily_temp, label="Oak Street")
 plt.plot(day, daily_temp_foster, label="Foster")
 plt.legend(loc='lower center')
+```
+```{r beach-temp-overlaid-line-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "What an absolute legend!",
+)
 ```
 
 
