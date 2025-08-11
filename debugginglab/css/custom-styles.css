@@ -62,6 +62,7 @@ a:hover {
   align-items: center;
   gap: 16px;
   position: relative;
+    font-family:'EB Garamond', serif;
 }
 
 /* Logo stays on the far left */
