@@ -1,4 +1,4 @@
-# Lists, Arrays, and Dictionaries Lab
+# Debugging Lab
 ## Goals:
 
 Secret Words: 
