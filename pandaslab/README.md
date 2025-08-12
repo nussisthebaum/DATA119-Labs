@@ -1,4 +1,10 @@
-# Lab 0
+# Pandas Lab
+## Goals:
 
-This repo contains a template for creating new Shiny/learnr labs for data science concepts. DO NOT EDIT!
+Secret Words: 
+
+## Uses:
+
+## Link:
+
 

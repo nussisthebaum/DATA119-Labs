@@ -1,4 +1,4 @@
-# Lists, Arrays, and Dictionaries Lab
+# Reading Documentation Lab
 ## Goals:
 
 Secret Words: 
