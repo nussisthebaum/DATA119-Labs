@@ -6,7 +6,7 @@
 + Implement $k$ NN classification and regression. 
 + Create a graph illustrating the effects of choosing $k$ on training and test set accuracy. 
 
-Secret Words: 
+Secret Words: INTENSIFY, WILDERNESS, DRIVE, MARBLE, SOUP
 
 ## Uses:
 - Data 119 Lab 6

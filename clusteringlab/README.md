@@ -4,7 +4,7 @@
 + To implement $K$-means clustering, including selecting an appropriate value for $K$ and interpreting the cluster output.
 + To implement hierarchical clustering, including creation of dendrograms.
 
-Secret Words: 
+Secret Words: SUPERINTENDENT, QUIET, HISTORY, FLAVOR, SOLVE
 
 ## Uses:
 - Data 119 Lab 7
