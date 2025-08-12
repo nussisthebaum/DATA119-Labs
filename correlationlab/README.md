@@ -5,7 +5,7 @@
 - To practice writing functions.
 - To practice calculating linear regression estimates.
 
-Secret Words:
+Secret Words: SUPPRESS, COMMISSION, MOON, ASTONISHING, ARCHITECT
 
 ## Uses:
 - Data 119 Lab 2

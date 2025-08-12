@@ -5,7 +5,10 @@
 - To practice calculating summary statistics.
 - To practice making data visualizations, such as histograms and scatterplots.
 
+Secret Words: AGREEMENT, SAY, HALF, SUITCASE, QUARTER
+
 ## Uses:
 - Data 119 Lab 1
 
 ## Link:
+(https://posit.ds.uchicago.edu/datawranglinglab/)

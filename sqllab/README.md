@@ -2,7 +2,7 @@
 ## Goals:
 + The goal of this lab is to practice SQL, including with joins.
 
-Secret Words: 
+Secret Words: REPLACE, AFFECT, MASS, TRUNK, DEPUTY
 
 ## Uses:
 - Data 119 Lab 8

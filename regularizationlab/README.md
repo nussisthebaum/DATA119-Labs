@@ -11,7 +11,7 @@
 -   Selecting variables useful for prediction, and
 -   Assessing model fit.
 
-Secret Words: 
+Secret Words: CHOCOLATE, PEBBLE, IGNITE, MAYOR, LANTERN
 
 ## Uses:
 - Data 119 Lab 5

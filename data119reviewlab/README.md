@@ -2,7 +2,7 @@
 ## Goals:
 + The goal of this lab is to help you review topics we've covered this quarter.
 
-Secret Words: 
+Secret Words: LOCAL, KIN, FRAME, PRINCE, SOUP
 
 ## Uses:
 - Data 119 Lab 9
