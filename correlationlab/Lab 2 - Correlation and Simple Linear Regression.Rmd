@@ -15,10 +15,14 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 library(learnr)
 library(gradethis)
 library(reticulate)
+library(shinyjs)
 
 ## Package Requirements for Content
 
 library(ggplot2)
+
+## Reactivity Requirements
+useShinyjs()
 
 ## Calculations for Lab
 
@@ -202,24 +206,44 @@ q3_correct_poll <- reactivePoll(500, session,
   valueFunc = function() get_tutorial_state()$q3$correct
 )
 
+q3_hint_visible <- reactiveVal(FALSE)
+
 output$q3_plot_output <- renderUI({
   print(get_tutorial_state())
   if (isTRUE(q3_correct_poll())) {
     tagList(
       p("Now check out the residual plot below--what do you see that supports your answer?"),
-      renderPlot(mtcars_residual_plot)
-     )
+      renderPlot(mtcars_residual_plot),
+      actionButton("q3_show_hint_btn", "💡 Show hint"),
+      tags$div(
+        id = "q3_hint_box",
+        style = paste(
+          if (!q3_hint_visible()) "display:none;" else "",
+          "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+        ),
+        "What should I be looking for? Remember that sometimes points near the ends of the x-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red y = 0 line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend!")
+      )
   } else {
     tagList(
       p("Answer Question 3 correctly to reveal the residual plot for the `mtcars` model.")
     )
   }
 })
+
+observeEvent(input$q3_show_hint_btn, {
+  shinyjs::toggle(id = "q3_hint_box", anim = TRUE, time = 0.2)
+  q3_hint_visible(!q3_hint_visible())
+  updateActionButton(
+    session, "q3_show_hint_btn",
+    label = if (q3_hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+  )
+})
 ```
 
 ```{r q3_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
 uiOutput("q3_plot_output")
 ```
+
 
 <!-- <div id="q3_conditional-hint"> -->
 <!-- What should I be looking for? Remember that sometimes points near the ends of the $x$-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red $y = 0$ line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend! -->
@@ -271,6 +295,18 @@ output$q5_plot_output <- renderUI({
     )
   }
 })
+
+hint_visible <- reactiveVal(FALSE)
+
+observeEvent(input$q3_show_hint_btn, {
+  shinyjs::toggle(id = "hint_box", anim = TRUE, time = 0.2)
+  hint_visible(!hint_visible())
+  updateActionButton(
+    session, "show_hint_btn",
+    label = if (hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+  )
+})
+
 ```
 
 ```{r q5_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
