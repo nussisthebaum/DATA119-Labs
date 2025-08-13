@@ -88,8 +88,8 @@ import pandas as pd
 # graphing
 import matplotlib.pyplot as plt
 import altair
-import seaborn
-import plotnine
+import seaborn as sns
+import plotnine as p9
 
 # so we can see all columns
 pd.options.display.max_columns = 10
@@ -297,7 +297,7 @@ Line Plots can help us quickly identify temporal relationships (or the lack ther
 ### Finishing Touches: Labels, Legends, and Tick marks
 So far we have focused on simply making the graphs; however, no visualization is complete without an informative title and labels. At times it can also be useful to customize your tick marks, add a legend or other changes around the graph itself to ensure the graphs conveys the right message.
 
-There are too many different ways to customize graphs in Matplotlib to show here but below you'll practice how to add axis labels, a title, and a legend as well as how to modify tick marks. To see more customization options check out **add here**
+There are too many different ways to customize graphs in Matplotlib to show here but below you'll practice how to add axis labels, a title, and a legend as well as how to modify tick marks. To see more customization options check out [this section of the quickstart guide](https://matplotlib.org/stable/users/explain/quick_start.html#styling-artists)
 
 After we've made a figure or one has been generated automatically through making a graph we can add an x-axis label with `plt.xlabel('text')`, a y-axis label with `plt.ylabel('text')`. To add a title we can do `plt.title('text')`.
 
@@ -345,7 +345,7 @@ plt.plot(day, daily_temp, label="Oak Street")
 plt.plot(day, daily_temp_foster, label="Foster")
 plt.legend(loc='lower center')
 ```
-```{r beach-temp-overlaid-line-code-check, message = FALSE, warning = FALSE}
+```{r beach-temp-overlaid-line-code-check, message = TRUE, warning = FALSE}
 grade_this_code(
   correct = "What an absolute legend!",
 )
@@ -361,6 +361,7 @@ All of the graphs we've discussed can be made from a data frame using `df.plot.g
 
 #TODO
 Repeat questions 1-7 and add maybe another. Explain how they'll have to manipulate a df prior to calling .plot sometimes.
+Still need to add a scatterplot and the overlaid line chart. Then add seaborn. After add grammar of graphics
 
 Before you start on the remaining exercises here is an example to see how `pandas` implements a basic bar chart differently than `matplotlib`. Note the need to create a series or DataFrame first.
 
@@ -368,16 +369,116 @@ Before you start on the remaining exercises here is an example to see how `panda
 grade_categories = ["A", "B", "C", "D","F"]
 students_per_category = [14, 10, 5, 2, 1]
 grades = pd.DataFrame({"Grades" : grade_categories, "# Students" : students_per_category})
-grades.plot.bar("Grades", students_per_category)
+grades.plot.bar("Grades", '# Students')
 ```
 
 As you can see for data that is already stored in a list it may be easier to just use `matplotlib` directly. However, using pandas also automatically added a x-axis label, a legend label, and allowed us to just reference columns from a dataframe directly making for a much smoother process when our data is already in a dataframe. 
 
+8. Recreate the bar chart displaying the average wind recorded at each weather station in 2024 using the dataframe created for you below. Make sure it has the same labels as question 6. As a challenge do it all in one line with the xaxis tick marks rotated to 0 degrees for clearer visibility.
 
-8. Recreate the bar chart displaying the average wind recorded at each weather station in 2024. 
+
+```{python beach-avg-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
+beach_year_avg = beach.drop(columns=['Month', 'Hour', 'Day of Year']).groupby("Station Name").mean().reset_index()
+```
+```{python beach-avg-wind-bar-pandas, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-avg-pandas-setup"}
+...
+...
+...
+...
+```
+```{python beach-avg-wind-bar-pandas-solution, message = FALSE,warning = FALSE, echo = FALSE}
+beach_year_avg.plot.bar("Station Name", "Wind Speed", xlabel="Beach Name", ylabel="Avg Wind", title="Average Wind by Beach in 2024", rot=0)
+```
+
+```{python beach-avg-wind-bar-pandas-hint-1, message = FALSE,warning = FALSE, echo = FALSE}
+checkout the df.plot documentation to see how we can supply the axis labels and title directly
+```
+
+```{python beach-avg-wind-bar-pandas-hint-2, message = FALSE,warning = FALSE, echo = FALSE}
+checkout the rot argument of df.plot.bar for help rotating the xticks labels
+```
+
+```{r beach-avg-wind-bar-pandas-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Great Bars",
+)
+```
+
+Notice how while we still needed to manipulate the dataframe prior to graphing. Once our dataframe was ready we didn't need to extract the data as series like previously and could plot directly.
+
+Let's keep practicing this time with histograms. 
+
+9. Reproduce the histogram from question 3 with the updated title and labels. This time change the color to `"green"`.
+
+```{python beach-max-wind-hist-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
+no_outlier_wind = beach[beach['Maximum Wind Speed'] < 100][['Maximum Wind Speed']] # dealing with weird outliers
+```
+```{python beach-max-wind-hist-pandas, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-max-wind-hist-pandas-setup"}
+...
+plt.title("Distribution of Max Winds")
+plt.xlabel("Max Wind in MPH")
+plt.ylabel("Count")
+```
+```{python beach-max-wind-hist-pandas-solution, message = FALSE, warning = FALSE, echo = FALSE}
+no_outlier_wind.plot.hist(color="green", bins=10)
+plt.title("Distribution of Max Winds")
+plt.xlabel("Max Wind in MPH")
+plt.ylabel("Count")
+```
+
+```{r beach-max-wind-hist-pandas-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Histogram :)"
+)
+```
+
+Notice how we didn't even have to pass any data to `.hist`! As long as your data is univariate calling df.hist will be enough because by default the plotting methods within pandas attempt to plot every variable in the dataframe where possible. Let's put this to our advantage to make a overlaid histogram.
+
+10. Make an overlaid histogram of both the maximum and hourly wind distributions. Let `Matplotlib` generate the colors automatically and use 10 bins.
 
 
-Notice the need to manipulate the data frame prior to graphing.
+```{python beach-overlaid-wind-hist-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
+no_outlier_wind = beach[beach['Maximum Wind Speed'] < 100][['Wind Speed', 'Maximum Wind Speed']] # dealing with weird outliers
+```
+```{python beach-overlaid-wind-hist-pandas, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-overlaid-wind-hist-pandas-setup"}
+...
+plt.title("Distribution of Max Winds")
+plt.xlabel("Max Wind in MPH")
+plt.ylabel("Count")
+```
+```{python beach-overlaid-wind-hist-pandas-solution, message = FALSE, warning = FALSE, echo = FALSE}
+no_outlier_wind.plot.hist(bins=10)
+plt.title("Distribution of Max Winds")
+plt.xlabel("Max Wind in MPH")
+plt.ylabel("Count")
+```
+
+```{r beach-overlaid-wind-hist-pandas-code-check, message = FALSE, warning = FALSE}
+grade_this_code(
+  correct = "Histogram :)"
+)
+```
+
+While it's easy to overlay histograms and bar charts in `pandas` it can be more challenging to do so with line plots. That's where packages like `seaborn` which further build on `matplotlib` and `pandas` can be helpful. Check out the [seaborn documentation](https://seaborn.pydata.org/generated/seaborn.lineplot.html)
+
+11. Recreate the overlaid line plot from question 7 using seaborn. Let the legend go where ever seaborn thinks is best.
+
+```{python beach-line-overlaid-seaborn-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
+beach_day_max = beach[beach['Station Name'] != '63rd Street'][['Day of Year', 'Air Temperature', 'Station Name']].groupby(['Day of Year', 'Station Name']).max().reset_index().sort_values('Day of Year')
+```
+
+```{python beach-line-overlaid-seaborn, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-line-overlaid-seaborn-setup"}
+
+```
+```{python beach-line-overlaid-seaborn-solution, message = FALSE, warning = FALSE, echo = FALSE}
+sns.lineplot(beach_day_max, x="Day of Year", y="Air Temperature", hue="Station Name")
+```
+```{r beach-line-overlaid-seaborn-code-check, message = TRUE, warning = FALSE}
+grade_this_code(
+  correct = "Great job with Seaborn!",
+)
+```
+
 
 
 ## Grammar of Graphics Approach
