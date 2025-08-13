@@ -101,7 +101,7 @@ beach.head()
 ```
 
 
-```{python main-setup, exercise=TRUE, include=FALSE, message=FALSE, exercise.setup="packages"}
+```{python main-setup, exercise=FALSE, include=FALSE, message=FALSE, exercise.setup="packages"}
 beach_year_avg = beach.drop(columns=['Month', 'Hour', 'Day of Year']).groupby("Station Name").mean().reset_index()
 stations = beach_year_avg['Station Name']
 wind_avg = beach_year_avg['Wind Speed']
@@ -408,7 +408,7 @@ Notice how while we still needed to manipulate the dataframe prior to graphing. 
 
 Let's keep practicing this time with histograms. 
 
-9. Reproduce the histogram from question 3 with the updated title and labels. This time change the color to `"green"`.
+9. Reproduce the histogram from question 3 with the updated title and labels. This time change the color to `"green"`. Use the dataframe prepared for you below.
 
 ```{python beach-max-wind-hist-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 no_outlier_wind = beach[beach['Maximum Wind Speed'] < 100][['Maximum Wind Speed']] # dealing with weird outliers
@@ -432,9 +432,9 @@ grade_this_code(
 )
 ```
 
-Notice how we didn't even have to pass any data to `.hist`! As long as your data is univariate calling df.hist will be enough because by default the plotting methods within pandas attempt to plot every variable in the dataframe where possible. Let's put this to our advantage to make a overlaid histogram.
+Notice how we didn't even have to pass any data to `.hist`! As long as you want to plot every column in the dataframe calling `df.hist` will be enough because by default the plotting methods within pandas attempt to plot every variable in the dataframe where possible. Let's put this to our advantage to make a overlaid histogram.
 
-10. Make an overlaid histogram of both the maximum and hourly wind distributions. Let `Matplotlib` generate the colors automatically and use 10 bins.
+10. Make an overlaid histogram of both the maximum and hourly wind distributions. Let `Matplotlib` generate the colors automatically and use 10 bins. Use the updated `no_outlier_wind` data frame created below.
 
 
 ```{python beach-overlaid-wind-hist-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
@@ -459,7 +459,7 @@ grade_this_code(
 )
 ```
 
-While it's easy to overlay histograms and bar charts in `pandas` it can be more challenging to do so with line plots. That's where packages like `seaborn` which further build on `matplotlib` and `pandas` can be helpful. Check out the [seaborn documentation](https://seaborn.pydata.org/generated/seaborn.lineplot.html)
+While it's easy to overlay histograms and bar charts in `pandas` it can be more challenging to do so with line plots. That's where packages like `seaborn` which further build on `matplotlib` and `pandas` can be helpful. Check out the [seaborn documentation](https://seaborn.pydata.org/generated/seaborn.lineplot.html) then try the following question.
 
 11. Recreate the overlaid line plot from question 7 using seaborn. Let the legend go where ever seaborn thinks is best.
 
@@ -479,9 +479,36 @@ grade_this_code(
 )
 ```
 
+For one last challenge with seaborn we'll take a look at scatterplots. Checkout the [relevant documentation](https://seaborn.pydata.org/generated/scatterplot.html) if you want a hint.
+
+12. Create a scatterplot to visualize the relationship between wind speed and air temperature with different shape points by beach.
+
+```{python beach-scatter-overlaid-seaborn, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
+sns._____(data=beach, ______)
+```
+```{python beach-scatter-overlaid-seaborn-solution, message = FALSE, warning = FALSE, echo = FALSE}
+sns.scatterplot(beach, x="Air Temperature", y="Wind Speed", style="Station Name")
+```
+```{python beach-scatter-overlaid-seaborn-hint, message = FALSE, warning = FALSE, echo = FALSE}
+checkout the `style` argument of sns.scatterplot
+```
+
+```{r beach-scatter-overlaid-seaborn-code-check, message = TRUE, warning = FALSE}
+grade_this_code(
+  correct = "Great job with Seaborn!",
+)
+```
+
+As we can see from this there is a clear error with the readings being done at Foster beach last year. Doing these sort of quick summative graphs early in the data exploration process can make it simpler to identify issues with data quality before conducting more analysis.
 
 
 ## Grammar of Graphics Approach
+
+So far we have used `Matplotlib`, `Pandas`, and `Seaborn` to create graphs with varying degrees of control over the image being created. You should hopefully now be familiar with the different methods used to create **bar charts**, **line charts**, **scatter plots**, and **histograms** as well as basic customization. Now we are going to shift towards utilizing the grammar of graphics and packages like `altair` and `plotnine` to create graphs. 
+
+Below we'll reproduce some of the graphs below so you can get some exposure to how to so using the grammar of graphics. Before we do that though let's discuss what makes the **grammar of graphics** approach different.
+
+
 
 1. Find the dimensions of the `epicurious` dataset. How many observations are there? How many variables are there?
 
