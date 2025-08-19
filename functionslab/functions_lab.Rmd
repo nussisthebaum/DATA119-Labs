@@ -298,7 +298,7 @@ def function_name(argument):
     return something
 ```
 
-When should you use a function? Look for things that belong together, things that have names, and things you might want to do a lot. For example, we have already considered that we might want to calculate the number of attendees as a function of `price`. Fill in the right equation below so that we have a new function, `attendees()`.
+When should you use a function? Look for things that belong together, things that have names, and things you might want to do a lot. For example, we have already considered that we might want to calculate the number of attendees as a function of `price`. Fill in the right equation below so that we have a new function, `calc_attendees()`.
 
 ```{python ex7, exercise = TRUE}
 def calc_attendees(price):
@@ -380,7 +380,7 @@ def days_in_month(month):
         days = 30
     if (month == ...):
         days = 28
-  return(days)
+    return(days)
 ```
 
 ```{python ex11-hint-1, message = FALSE, warning = FALSE, echo = FALSE}
@@ -407,7 +407,7 @@ def days_in_month(month):
         days = 30
     if (month == 2):
         days = 28
-  return(days)
+    return(days)
 ```
 
 ```{r ex11-code-check, message = FALSE, warning = FALSE}
@@ -580,7 +580,7 @@ def days_in_month(month, year):
 grade_this_code()
 ```
 
-Why don't I have to write `is_leap_year(year) == True`? 1Using the implicit `True` is a tiny bit faster, and using the implicit `False` adheres to the style guide. Overall there is much less visual clutter!
+Why don't I have to write `is_leap_year(year) == True`? Using the implicit `True` is a tiny bit faster, and using the implicit `False` adheres to the style guide. Overall there is much less visual clutter!
 
 ## Raising Error Messages
 
@@ -596,7 +596,7 @@ What about if someone supplies a valid month and year, but in the opposite order
 days_in_month(2025, 1)
 ```
 
-Anything that is not a valid month year PAIR constitutes an error! And based on the way we have written a function, we wouldn't know--it will return `31` for any entry. 
+Anything that is not a valid month year PAIR constitutes an error! And based on the way we have written a function, we wouldn't know--it will return `31` for any non-valid entry as well as whatever valid entries where it should be returning 31. 
 
 ### Catalog of Errors
 

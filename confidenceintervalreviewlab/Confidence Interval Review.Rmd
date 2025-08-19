@@ -1,0 +1,533 @@
+---
+title: "Confidence Interval Review"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(gradethis)
+library(learnr)
+library(reticulate)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Confidence Interval Review", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goal of this lab is to review confidence intervals, complete with an example of a $t$-interval. 
+
+## Setup
+
+This lab will use `numpy` and `scipy.stats`. You may also want to use your favorite graphics packages (`matplotlib`, `seaborn`, or `plotnine`, which also requires `pandas`). Run this cell to load the packages. 
+
+```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import numpy as np 
+import scipy.stats as st 
+
+import matplotlib as plt
+import seaborn
+import pandas as pd
+import plotnine as p9
+```
+
+## Parameters and Statistics
+
+Hypothesis tests are a form of statistical inference, but before we review the specifics, let's take a step back. 
+
+Remember that a **population** is a complete group of all cases, subjects, or observations of interest. Examples of populations include
+
+* All adults living in the United States,
+* All tubes of toothpaste produced at a specific factory, or 
+* All students enrolled in at least one course at the University of Chicago. 
+
+Summaries of various numerical characteristics of a population are known as **parameters**. Examples of parameters corresponding to our population examples could be 
+
+* The average height of adults living in the United States, 
+* The average weight of a tube of toothpaste, or 
+* The average grade point average of a student at the University of Chicago. 
+
+For various reasons, we can't always gather information on an entire population (known as a census). For example, it is extremely costly to count or even find every adult living in the United States, and by the time we identified every adult, we might have lost some adults (due to emigration) and gained some adults (due to immigration or even aging into the category). 
+
+If we were to weigh every tube of toothpaste, we would significantly slow down the manufacturing process, and in some cases, taking a measurement involves destroying the product (leaving nothing left to sell). 
+
+Finally, it can be difficult for researchers to collect student data due to laws like the Family Educational Rights and Privacy Act (FERPA), which dictate what information can and cannot be shared. 
+There are lots of reasons why we wouldn't be able to access an entire population, but the bottom line is that it is hard or even impossible to gather every single measurement. 
+
+To circumvent this issue, we usually work with a **sample** of data, where a sample is defined as a subset of the cases, subjects, or observations in a given population. We prefer our samples to be randomly selected, but sometimes, we use convenience samples--for example, using this class as a sample of all students at the University of Chicago. 
+
+Once you have acquired a sample, you can calculate a **statistic**. A statistic describes a numerical characteristic of a sample, and the intent is to use them to estimate the population parameter. Notation-wise, it is traditional to use Greek letters ($\mu, \sigma, \beta$) to indicate a parameter, and Latin letters ($\bar{x}, s, b$) to indicate statistics. So, we would use $\bar{x}$, the sample mean, to estimate $\mu$, the population mean. Specifically, we might take a poll of every student in our class (the sample), asking everyone what their GPA is and averaging them ($\bar{x}$), and use that information to estimate the average GPA ($\mu$) for the entire university (the population).
+
+A table of parameters you might encounter appears below:
+
+```{r, echo = FALSE}
+mean <- c("$\\mu$", "$\\bar{x}$")
+stddev <- c("$\\sigma$", "$s$")
+proportion <- c("$\\pi/p$", "$p/\\hat{p}$")
+correlation <- c("$\\rho$", "$R/r$")
+intercept <- c("$\\beta_0$", "$b_0$")
+slope <- c("$\\beta_1$", "$b_1$")
+
+notation_table <- rbind(mean, stddev, proportion, 
+                        correlation, intercept, slope)
+rownames(notation_table) <- c("Mean", "Standard Deviation", "Proportion", "Correlation", "Intercept", "Slope")
+colnames(notation_table) <- c("Parameter", "Statistic")
+
+library(kableExtra)
+kable(notation_table, booktabs = TRUE, escape = FALSE)
+```
+
+Statistical inference is the idea of **making inferences or drawing conclusions** about the parameters based on our samples of data, which we summarize with statistics (i.e., the sample mean, a sample proportion, etc.). There are two "flavors" of statistical inference, that you might be familiar with:
+
+* **Confidence Intervals** provide a range of reasonable values for a parameter given a dataset. 
+* **Hypothesis Tests** check to see if a dataset is consistent with a previously held belief or a given value for the population parameter.
+
+These two flavors are related (see the "Confidence Interval and Hypothesis Test Equivalencies" section), but this lab focuses on confidence intervals. 
+
+
+## Confidence Interval Framework
+
+We have already said that statistical inference is the idea of making or drawing conclusions about  parameters based on samples of data. Again, we very rarely know what these parameters are, which is why we need to test them! However, we might have data to calculate a statistic (like the sample average $\bar{x}$). 
+
+That being said, a statistic like $\bar{x}$ is called a **point estimate**--it is a single value. We are very unlikely to capture the exact value for the parameter (theoretically, the probability is zero). Many statisticians then prefer to use an **interval estimate**, which provides a range of values and is therefore more likely to capture the parameter of interest. Imagine that you are looking for a single red marble in an infinite sea of blue marbles. If you take one single marble, it is almost impossible to choose the red one.  If you take a large group of marbles, you are more likely to find the red one, even if you have many extra blue marbles. 
+
+In addition, an interval estimate gives us information about the variability of a statistic--that is, how much change we can expect in the statistic if we take a new sample. When we construct a confidence interval (a type of interval estimate), we are making statements about parameters (like the population mean $\mu$) that incorporate information about the **sampling variability**.  **Confidence intervals are always statements about parameters**--there is no need to build an interval for a statistic, as we know exactly what values those take on. So, more technically, a confidence interval can be thought of as a range of reasonable values for a parameter based on the sample statistics.  
+
+
+<!-- ```{r q1, echo=FALSE} -->
+<!-- question( -->
+<!--   "In this scenario, what are the null and alternative hypotheses?", -->
+<!--   answer("$H_0$: The defendant is innocent. vs. $H_A$: The defendant is guilty.", correct = TRUE),  -->
+<!--   answer("$H_0$: The defendant is guilty. vs. $H_A$: The defendant is innocent."), -->
+<!--   allow_retry = TRUE, -->
+<!--   post_message = "Congratulations! You have found the first secret word: FAST." -->
+<!-- ) -->
+<!-- ``` -->
+
+### Sampling Distributions
+
+To build our confidence interval, we will need something called the **sampling distribution**. The sampling distribution tells you what values the statistic will take and how often they occur. Why do we need a sampling distribution? Remember--we are calculating the statistic from a (hopefully random) sample. However, different samples will result in different statistics, so we are expecting some variability. The sampling distribution gives us a mathematical way to describe that variability. 
+
+We rely heavily on the Central Limit Theorem to find a sampling distribution. For a mean, the Central Limit Theorem states that when observations are independent and the sample size $n$ is sufficiently large, the sample average $\bar{x}$ will tend to follow a normal distribution with mean 
+
+$$\mu_{\bar{x}} = \mu_X$$
+
+and standard error
+
+$$SE_{\bar{x}} = \frac{\sigma_X}{\sqrt{n}}$$
+
+In other words, the sample mean has the following distribution:
+
+$$N\bigg(\mu_X, \frac{\sigma_X}{\sqrt{n}}\bigg)$$
+
+However, if we do not know the mean $\mu_X$ for a variable, we are not very likely to know the variables standard deviation, $\sigma_X$. Often, we have to estimate $\sigma_X$ with the sample standard deviation, $s$. Because of the extra uncertainty, we usually use what is called a $t$-distribution instead of the normal distribution. The $t$-distribution has slightly thicker tails than a normal distribution, which helps us account for the extra uncertainty we introduced by using $s$ to estimate $\sigma_X$--you can see a few different $t$-distributions in the image below:
+
+```{r, echo = FALSE, fig.width=4.5}
+library(ggplot2)
+library(latex2exp)
+
+ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1), aes(color = "line1")) + 
+  stat_function(fun = dt, n = 101, args = list(df = 1), aes(color = "line2")) + 
+  stat_function(fun = dt, n = 101, args = list(df = 2), aes(color = "line3")) + 
+  stat_function(fun = dt, n = 101, args = list(df = 4), aes(color = "line4")) + 
+  stat_function(fun = dt, n = 101, args = list(df = 8), aes(color = "line5")) + 
+  stat_function(fun = dt, n = 101, args = list(df = 16), aes(color = "line6")) + 
+  stat_function(fun = dt, n = 101, args = list(df = 24), aes(color = "line7")) + 
+  xlab("") + 
+  ylab("") +
+  scale_y_continuous(breaks = NULL) + 
+  scale_color_manual(values = c("#A4343A", "#DE7C00", "#EAAA00", "#789D4A", "#275D38", "#007396", "#59315F"), labels = unname(TeX(c("Normal", "$t_1$", "$t_2$", "$t_4$", "$t_8$", "$t_{16}$", "$t_{24}$", "$t_{32}$")))) +
+  theme(legend.position = "bottom", legend.title = element_blank())
+```
+
+
+
+<!-- ```{r q2, echo=FALSE} -->
+<!-- question( -->
+<!--   "Say you have a p-value of 0.814. What decision would you make using a significance level of $\\alpha = 0.05$?", -->
+<!--   answer("Fail to reject the null, as the p-value is less than the significance level."),  -->
+<!--   answer("Fail to reject the null, as the p-value is greater than the significance level.", correct = TRUE), -->
+<!--   answer("Reject the null, as the p-value is less than the significance level."),  -->
+<!--   answer("Reject the null, as the p-value is greater than the significance level."), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{r q3, echo=FALSE} -->
+<!-- question( -->
+<!--   "Say you have a p-value of 0.079. What decision would you make using a significance level of $\\alpha = 0.10$?", -->
+<!--   answer("Fail to reject the null, as the p-value is less than the significance level."),  -->
+<!--   answer("Fail to reject the null, as the p-value is greater than the significance level."), -->
+<!--   answer("Reject the null, as the p-value is less than the significance level.", correct = TRUE),  -->
+<!--   answer("Reject the null, as the p-value is greater than the significance level."), -->
+<!--   allow_retry = TRUE, -->
+<!--   post_message = "Congratulations! You have found the second secret word: OPPONENT." -->
+<!-- ) -->
+<!-- ``` -->
+
+### CONFIDENCE INTERVAL THEORY
+
+Percentiles
+
+Area on both sides
+
+Margin of Error
+
+### Confidence Interval and Hypothesis Test Equivalencies
+
+In general, the results of a hypothesis test using a significance level of $\alpha$ should be consistent with a $100(1-\alpha)$ confidence interval based on the same dataset.
+
+* A hypothesis test at $\alpha$ = 0.01 should support a 99\% confidence interval.
+* A hypothesis test at $\alpha$ = 0.05 should support a 95\% confidence interval.
+* A hypothesis test at $\alpha$ = 0.10 should support a 90\% confidence interval.
+
+Thus, the following statements are equivalent:
+
+* If we build a $100(1-\alpha)$ confidence interval for a parameter (e.g., $\mu$) based on a statistic (e.g., $\bar{x}$), and the null value (e.g., $\mu_0$) is included...
+* The null value ($\mu_0$) is a reasonable value for the parameter ($\mu$).
+* The p-value associated with the statistic ($\bar{x}$) will be greater than $\alpha$.
+* We would fail to reject the null hypothesis ($\mu = \mu_0$).
+
+Similarly,
+
+* If we build a $100(1-\alpha)$ confidence interval for the parameter ($\mu$), based on a statistic (e.g., $\bar{x}$), and the null value (e.g., $\mu_0$) is not included...
+* The null value ($\mu_0$) is not a reasonable value for the parameter ($\mu$).
+* The p-value associated with the statistic ($\bar{x}$) will be less than $\alpha$.
+* We would reject the null hypothesis ($\mu = \mu_0$).
+
+### Steps for Confidence Intervals
+
+Once you've determined a confidence interval is the correct procedure, there are four steps to completing the test:
+
+1. **Prepare**. Identify the parameter of interest, identify the confidence level, and identify relevant sample statistics. 
+
+2. **Check**. Verify conditions to ensure a confidence interval can be used. These conditions will depend on the exact procedure, but at minimum, we are assuming that the observations are independent.
+
+3. **Calculate**. If the conditions hold, compute the standard error, the margin of error, and the resulting interval.
+
+4. **Conclude**.Evaluate the hypothesis test by comparing the p-value to $\alpha$, and *provide a conclusion in the context of the problem*. 
+
+This last step is super important!! We want to make sure that we can communicate the results to a general audience, and not just people that have statistical training. Make sure you include this whenever you write up a hypothesis test. 
+
+## Confidence Interval Example
+
+In April 2020, McDonald's [transitioned to a limited menu to simplify tasks for restaurant workers and safely serve customers during the coronavirus public health crisis](https://www.washingtonpost.com/business/2020/06/19/mcdonalds-coronavirus-menu/). By transitioning to a limited menu and simplifying tasks, the company hoped that interaction times between customers and staff would be shorter, giving the virus less time to move between hosts.
+
+A McDonald's franchise owner wished to take a data-driven approach to business, and came to you with a sample of data from the drive-through trips at their location. 
+
+### **Prepare**
+
+The franchise owner would like to know what a reasonable value for the true mean drive through wait time (in seconds) might be, based on the sample of their data. 
+
+```{r q4, echo=FALSE}
+question(
+  "What should our confidence interval be about?",
+  answer("$\\mu$, the mean drive-through wait time for all McDonald's in the US", correct = TRUE), 
+  answer("$\\bar{x}$, the mean drive-through wait time from our sample of trips", message = "Don't forget! The interval should be about a parameter, not a statistic."), 
+  answer("$p$, the proportion of drive-through wait times that decreased", message = "Don't forget! Our interval is about a mean, not a proportion."),
+answer("$\\hat{p}$, the proportion of drive-through wait times that decreased in our sample"),
+  random_answer_order = TRUE,
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the third secret word: BARRIER."
+)
+```
+
+#### Summary Statistics
+
+Part of the **Prepare** step involves computing the summary statistics. The drive-through wait times in seconds from the sample of trips appears below--use it to answer the following questions
+
+```{python setup2, exercise = TRUE, exercise.setup="packages"}
+mcds = [293, 174, 100, 272, 207, 145, 148, 495, 
+        348, 325, 330, 281, 257, 178, 140, 246, 
+        381, 242, 195, 115, 288, 162, 261, 291, 
+        397,  59, 251, 313, 175, 187, 297, 189, 
+        297, 207, 251, 284, 211, 153, 271,  89,
+        320, 244, 201,  89, 163, 262, 181, 229, 
+        307, 221, 237, 217, 319, 237, 286, 256, 
+        293, 139, 187, 190, 279, 225, 409, 157]
+```
+
+What is the mean of the dataset? Hint: look up the relevant `numpy` functions for mean and standard deviation.
+
+```{python mean, exercise = TRUE, exercise.setup = "setup2"}
+
+```
+
+```{python mean-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.mean(mcds)
+```
+
+```{r mean-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+What is the sample standard deviation of the dataset?
+
+```{python sd, exercise = TRUE, exercise.setup = "setup2"}
+
+```
+
+```{python sd-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.std(mcds)
+```
+
+```{r sd-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Finally, what is the sample size?
+
+```{python n, exercise = TRUE, exercise.setup = "setup2"}
+
+```
+
+```{python n-solution, message = FALSE, warning = FALSE, echo = FALSE}
+len(mcds)
+```
+
+```{r n-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Finally, we have to pick a confidence level. The "standard" level is 95\%, which we will use here. 
+
+### Check
+
+The next step is to check. For a "traditional" piece of inference like a $t$-interval for the mean, we tend to check two things:
+
+1. First, we check to see if the distribution of the sample mean is normal. The best way to do this is to check the distribution of the original data, using a histogram--if the original distribution is normal, the Central Limit Theorem will kick in faster, and we can safely assume the sampling distribution is normal as well. 
+
+Create a histogram using the sample. 
+
+```{python histogram, exercise = TRUE, exercise.setup = "setup2"}
+
+```
+
+```{r q6, echo=FALSE}
+question(
+  "Check all options that apply to the shape of this histogram.",
+  answer("Uniform"), 
+  answer("Unimodal", correct = TRUE), 
+  answer("Bimodal"), 
+  answer("Multimodal"), 
+  answer("Symmetric", correct = TRUE), 
+  answer("Right-Skewed"), 
+  answer("Left-Skewed"), 
+  allow_retry = TRUE
+)
+```
+
+Normal distributions are symmetric and unimodal (also often called "bell-shaped")--this data is normal, and therefore, we are safe in assuming that the sampling distribution is also normal. 
+
+2. Next, we assume the data are independent from each other, that is, no one observation gives us any information about the others. There is no good way to check independence other than to look at the context of the data. In this case, the franchise owner has assured us the sample is random, and therefore, we are again safe in assuming the data is independent.
+
+### Calculate
+
+Now, we use our formulas to calculate the standard error, margin of error, and the interval. Remember, the formula for the standard error in a $t$-test for the mean is 
+
+$$\frac{s}{\sqrt{n}}$$
+
+Implement this formula in the cell below, and save the standard error as `se_mcds`.
+
+```{python se, exercise = TRUE, exercise.setup = "setup2"}
+
+```
+
+```{python se-solution, message = FALSE, warning = FALSE, echo = FALSE}
+se_mcds = np.std(mcds)/np.sqrt(len(mcds))
+```
+
+```{r se-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now we need to calculate the margin of error. Remember that the formula for the margin of error is 
+
+$$t^*_{df} \times \frac{s}{\sqrt{n}}$$
+
+where $t^*_{n-1}$ depends on two quantities:
+
+* The confidence level, and 
+* The degrees of freedom, $df$. 
+
+First, let's focus on the confidence level. Earlier, we said that we would like to use a confidence level of 95\%, which means we are looking for an interval that contains 95\% of the sampling distribution. 
+
+```{r q7, echo=FALSE}
+question(
+  "If 95% of the sampling distribution is contained within the interval, how much of the interval is outside of the interval?",
+  answer("95%", message = "There should be 95% inside the interval, not outside."), 
+  answer("5%", correct = TRUE), 
+  answer("2.5%", message = "There should be 2.5% on either side of the interval, but 5% overall."), 
+  answer("No way to tell."), 
+  random_answer_order = TRUE,
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the fourth secret word: "
+)
+```
+
+Remember that the area outside the interval should fall equally on both sides of the area inside, which is centered at the sample mean. 
+
+```{r q7, echo=FALSE}
+question(
+  "If 95% of the sampling distribution is contained within the interval, how much of the interval is outside of the interval?",
+  answer("95%", message = "There should be 95% inside the interval, not outside."), 
+  answer("5%", correct = TRUE), 
+  answer("2.5%", message = "There should be 2.5% on either side of the interval, but 5% overall. ."), 
+  answer("No way to tell."), 
+  random_answer_order = TRUE,
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the fourth secret word: "
+)
+```
+
+```{r q8, echo=FALSE}
+question(
+  "If 95% of the sampling distribution is contained within the interval, how much of the interval is on each side of the interval?",
+  answer("95%", message = "There should be 95% inside the interval, not outside."), 
+  answer("5%", message = "There should be 5% on overall, but how much on each side?"), 
+  answer("2.5%", correct = TRUE, message = "To find this answer, we divide the area outside the interval, 5%, by 2."), 
+  answer("No way to tell."), 
+  random_answer_order = TRUE,
+  allow_retry = TRUE
+)
+```
+
+Find t*
+
+Use `se_mcds` and your code from the previous section to calculate the margin of error in the cell below. Save it as `MoE_mcds`.
+
+```{python setup_se, exercise = FALSE, echo = FALSE, exercise.setup = "setup2"}
+se_mcds = np.std(mcds)/np.sqrt(len(mcds))
+```
+
+```{python t_value, exercise = TRUE, exercise.setup = "setup_se"}
+
+```
+
+```{python t_value-solution, message = FALSE, warning = FALSE, echo = FALSE}
+t_mcds = (np.mean(mcds) - 284)/se_mcds
+```
+
+```{r t_value-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now, we can calculate the final interval by adding and subtracting the margin of error. First, calculate the lower bound. 
+
+Now, calculate the upper bound. 
+
+### Conclude
+
+What is the correct interpretation of your confidence interval?
+
+```{r q8, echo=FALSE}
+question(
+  "Based on this p-value, what would you do with the null hypothesis?",
+  answer("Accept", message = "We never say accept!"), 
+  answer("Fail to Reject"), 
+  answer("Reject", correct = TRUE), 
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the fifth and final secret word: CHEESE."
+)
+```
+
+
+The franchise owder specifically wanted to know if their average drive-through wait time (in seconds) has decreased from the average from 2019, [284 seconds](https://www.businessinsider.com/mcdonalds-drive-thru-times-speed-up-years-of-longer-waits-2019-10). 
+
+```{r q8, echo=FALSE}
+question(
+  "Based on this interval, is 284 seconds a reasonable value for... ?",
+  answer("Accept", message = "We never say accept!"), 
+  answer("Fail to Reject"), 
+  answer("Reject", correct = TRUE), 
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the fifth and final secret word: CHEESE."
+)
+```
+
+What would the results of a two-sided hypothesis for 284 seconds be?
+
+### Using `scipy.stats` Functions
+
+There is a faster way to run the $t$-test, and, if you are not comfortable with the math, it can also be more user-friendly. Look up the [documentation for `ttest_1samp`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ttest_1samp.html).
+
+
+```{r q9, echo=FALSE}
+question(
+  "What argument in `ttest_1samp` dictates the null value of the hypothesis test?",
+  answer("`a`"), 
+  answer("`popmean`", correct = TRUE), 
+  answer("`axis`"), 
+  answer("`nan_policy`"), 
+  answer("`alternative`"), 
+  answer("`keepdims`"), 
+  allow_retry = TRUE
+)
+```
+
+```{r q10, echo=FALSE}
+question(
+  "What argument in `ttest_1samp` dictates the alternative hypothesis of the hypothesis test?",
+  answer("`a`", message = "We never say accept!"), 
+  answer("`popmean`"), 
+  answer("`axis`"), 
+  answer("`nan_policy`"), 
+  answer("`alternative`", correct = TRUE), 
+  answer("`keepdims`"), 
+  allow_retry = TRUE
+)
+```
+
+Now, plug in the right values for all of the arguments. Do you reach the same conclusion as you found by hand?
+
+```{python ttest, exercise = TRUE, exercise.setup = "setup2"}
+st.ttest_1samp( )
+```
+
+```{python ttest-solution, message = FALSE, warning = FALSE, echo = FALSE}
+st.ttest_1samp(mcds, 284, alternative = 'less')
+```
+
+```{r ttest-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+There are lots of different hypothesis tests ([see some examples on Wikipedia](https://en.wikipedia.org/wiki/Category:Statistical_tests)). The details of each test, including what parameter is being tested, how we format the null and alternative hypotheses, the assumptions of each test, and the formulas for the test statistic and p-value may be different, but the overall framework is the same. You can always look up the details, but it is very helpful to be familiar with the general process. If you have any questions, we are happy to discuss!
