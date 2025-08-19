@@ -789,7 +789,7 @@ pred_res = calc_res(fat, cal)
 grade_this_code()
 ```
 
-### Loss Function and Optimization
+## Optimization
 
 The loss function for simple linear regression is the sum of the squared residuals (also known as the sum of squared errors, or SSE). Below is an example of what an SSE function can look like.
 
@@ -863,6 +863,10 @@ minimize(calc_SSE, x0 = [0]*2, args = (fat, cal), method = "BFGS").x
 ```
 
 You should find that these estimates are very close to the numbers that we calculated using the equations above.
+
+<!-- ## Grid Search -->
+
+<!-- Again, we are lucky to have closed form estimators for the slope and the intercept, as that is not always the case. When we don't have closed form estimators, we can also use something called a grid search. We are still looking for are the values where the loss function is minimized, but instead of using something like `minimize`, we can try many different values and choose the ones that minimize the loss function among those we have tried.  -->
 
 ## Using `statsmodels`
 
