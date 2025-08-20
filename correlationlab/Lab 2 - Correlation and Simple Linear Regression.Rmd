@@ -158,12 +158,12 @@ epicurious_nd = pd.read_csv("./data/epi_mini_clean.csv")
 
 ```{python scatter, exercise = TRUE, message = FALSE}
 (p9.ggplot(mtcars, p9.aes(x = ___, y = ___)) +
-  p9.geom_point())
+  p9.geom_point()).show()
 ```
 
 ```{python scatter-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
-  p9.geom_point())
+  p9.geom_point()).show()
 ```
 
 ```{r scatter-code-check, message = FALSE, warning = FALSE}
@@ -174,13 +174,13 @@ grade_this_code()
 
 ```{python lm, exercise = TRUE, message = FALSE}
 (p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
-  p9.geom_point())
+  p9.geom_point()).show()
 ```
 
 ```{python lm-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
   p9.geom_point() + 
-  p9.geom_smooth(method = "lm"))
+  p9.geom_smooth(method = "lm")).show()
 ```
 
 ```{r lm-code-check, message = FALSE, warning = FALSE}
@@ -192,7 +192,7 @@ Note that this added line includes something called standard error bars, which w
 ```{python lm_no_se, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 (p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
   p9.geom_point() + 
-  p9.geom_smooth(method = "lm", se = False))
+  p9.geom_smooth(method = "lm", se = False)).show()
 ```
 
 ```{r q3, echo=FALSE}
@@ -260,13 +260,13 @@ uiOutput("q3_plot_output")
 
 ```{python gas, exercise = TRUE, message = FALSE}
 (p9.ggplot(___, ___) +
-  p9.geom____())
+  p9.geom____()).show()
 ```
 
 ```{python gas-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(gasprice, p9.aes(x = 'time', y = 'value')) +
   p9.geom_point() + 
-  p9.geom_smooth(method = "lm", se = False))
+  p9.geom_smooth(method = "lm", se = False)).show()
 ```
 
 ```{r gas-code-check, message = FALSE, warning = FALSE}
@@ -338,13 +338,13 @@ The `eagles` dataset contains information on the number of mating pairs of bald 
 
 ```{python eagles, exercise = TRUE, message = FALSE}
 (p9.ggplot(___, ___) + 
-  ___ ...)
+  ___ ...).show()
 ```
 
 ```{python eagles-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(eagles, p9.aes(x = 'Year', y = 'Pairs')) +
   p9.geom_point() + 
-  p9.geom_smooth(method = "lm", se = False))
+  p9.geom_smooth(method = "lm", se = False)).show()
 ```
 
 ```{r eagles-code-check, message = FALSE, warning = FALSE}
@@ -437,7 +437,7 @@ question("8. Would you describe this as weak, moderate, or strong based on $r$?"
 ```{python fat-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(epicurious_nd, p9.aes(x = 'fat', y = 'calories')) +
   p9.geom_point() + 
-  p9.geom_smooth(method = "lm", se = False))
+  p9.geom_smooth(method = "lm", se = False)).show()
 ```
 
 ```{r fat-code-check, message = FALSE, warning = FALSE}
