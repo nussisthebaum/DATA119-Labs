@@ -749,7 +749,7 @@
         "Built": "R 4.4.0; ; 2024-04-05 15:17:29 UTC; unix"
       }
     },
-    "haven": {
+    "highr": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
       "description": {
@@ -1247,23 +1247,21 @@
         "SystemRequirements": "libpng",
         "URL": "http://www.rforge.net/png/",
         "NeedsCompilation": "yes",
-        "Packaged": "2024-03-16 14:10:21 UTC; gaborcsardi",
-        "Author": "Gábor Csárdi [aut, cre, cph] (<https://orcid.org/0000-0001-7098-9676>),\n  Winston Chang [aut],\n  Posit Software, PBC [cph, fnd],\n  Ascent Digital Services [cph, fnd]",
-        "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
+        "Packaged": "2022-11-29 09:42:31 UTC; rforge",
         "Repository": "CRAN",
         "Date/Publication": "2022-11-29 11:12:53 UTC",
         "Built": "R 4.4.0; aarch64-apple-darwin20; 2024-04-05 15:08:44 UTC; unix",
         "Archs": "png.so.dSYM"
       }
     },
-    "progress": {
+    "promises": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
       "description": {
         "Type": "Package",
         "Package": "promises",
         "Title": "Abstractions for Promise-Based Asynchronous Programming",
-        "Version": "1.3.2",
+        "Version": "1.3.0",
         "Authors@R": "c(\n    person(\"Joe\", \"Cheng\", , \"joe@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "Provides fundamental abstractions for doing asynchronous\n    programming in R using promises. Asynchronous programming is useful\n    for allowing a single R process to orchestrate multiple tasks in the\n    background while also attending to something else. Semantics are\n    similar to 'JavaScript' promises, but with a syntax that is idiomatic\n    R.",
         "License": "MIT + file LICENSE",
@@ -1405,7 +1403,7 @@
         "Built": "R 4.4.1; ; 2024-09-23 23:03:29 UTC; unix"
       }
     },
-    "reprex": {
+    "reticulate": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
       "description": {
