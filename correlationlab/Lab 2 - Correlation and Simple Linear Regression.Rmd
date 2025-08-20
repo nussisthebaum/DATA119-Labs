@@ -931,5 +931,9 @@ grade_this_code()
 25. As I mentioned, there is a lot! For now, we just want to use the `.summary()` method. Investigate the output below to see if you can locate where in the table the slope and intercept are located. Are they the same as the values calculated from the other two methods we've seen?
 
 ```{python summary, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats3"}
+#| output: asis
+#| results: asis
+#| html-table-processing: none
+
 model1.summary()
 ```
