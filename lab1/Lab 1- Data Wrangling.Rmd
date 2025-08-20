@@ -272,26 +272,26 @@ First, we start by providing the data and mapping the variables to the graph's a
 Below is a sample line of code for investigating the average ratings of the different recipes. Note that the functions `ggplot()` and `aes()` come from `plotnine`-- the data frame comes first, then the aesthetics of the graph are defined with `aes()`. You can view [plotnine syntax here](https://plotnine.readthedocs.io/en/stable/).
 
 ```{python badplot, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="plot-setup"}
-(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')))
+(p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating'))).show()
 ```
 
 If you run this chunk, a big, nearly blank box appears--there is no actual graph, but we can see that the `rating` variable is now located on the $x$-axis .There's nothing there because we haven't added a `geom` yet. A `geom` is a command representing the type of plot we want. To add a histogram, we use + `geom_histogram()` from `plotnine.`
 
 ```{python hist, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="plot-setup"}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
- + p9.geom_histogram())
+ + p9.geom_histogram()).show()
 ```
 
 8. Do you see a warning message saying `"Pick better value with 'binwidth'"`? This error is unique to `geom_histogram()`. To fix the warning, you can change the number of bins by adding a new argument, `bins = 10`, into the `geom_histogram()` function.
 
 ```{python bins, exercise=TRUE, message = FALSE, exercise.setup="plot-setup"}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
-+ p9.geom_histogram(bins = ___))
++ p9.geom_histogram(bins = ___)).show()
 ```
 
 ```{python bins-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
-+ p9.geom_histogram(bins = 10))
++ p9.geom_histogram(bins = 10)).show()
 ```
 
 ```{r bins-code-check, message = FALSE, warning = FALSE}
@@ -321,12 +321,12 @@ You can also avoid the message by specifying the `binwidth` instead of `bins`. T
 
 ```{python binwidth, exercise=TRUE, message = FALSE, exercise.setup="plot-setup"}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
-+ p9.geom_histogram(binwidth = ___))
++ p9.geom_histogram(binwidth = ___)).show()
 ```
 
 ```{python binwidth-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) 
-+ p9.geom_histogram(binwidth = 0.5))
++ p9.geom_histogram(binwidth = 0.5)).show()
 ```
 
 ```{r binwidth-code-check, message = FALSE, warning = FALSE}
@@ -340,21 +340,21 @@ Notice that on the $y$-axis we are displaying the counts of the observations in 
 
 ```{python proportion, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="plot-setup"}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating', y=p9.after_stat('density'))) 
- + p9.geom_histogram(binwidth = 0.5))
+ + p9.geom_histogram(binwidth = 0.5)).show()
 ```
 
 11. Look at the `plotnine` syntax and add a command that will add a smooth density estimate to the plot.
 
 ```{python density, exercise=TRUE, message = FALSE, exercise.setup="plot-setup"}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating', y=p9.after_stat('density'))) 
- + p9.geom_histogram(binwidth = 0.5) 
+ + p9.geom_histogram(binwidth = 0.5).show()
  + ___ )
 ```
 
 ```{python density-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'rating')) +
   p9.geom_histogram(binwidth = 0.5) +
-  p9.geom_density())
+  p9.geom_density()).show()
 ```
 
 ```{r density-code-check, message = FALSE, warning = FALSE}
@@ -369,13 +369,13 @@ grade_this_code(
 ```{python calorie, exercise=TRUE, message = FALSE, exercise.setup="plot-setup"}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = ___ , y=p9.after_stat('density'))) 
  + p9.geom_histogram(bins = 30) 
- + p9.geom_density())
+ + p9.geom_density()).show()
 ```
 
 ```{python calorie-solution, message=FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(epicurious_num_nd, p9.aes(x = 'calories', y=p9.after_stat('density'))) 
  + p9.geom_histogram(bins = 30) 
- + p9.geom_density())
+ + p9.geom_density()).show()
 ```
 
 ```{r calorie-code-check, message=FALSE, warning=FALSE}
@@ -400,6 +400,11 @@ maxcal = epicurious_num_nd['calories'].nlargest(n=10).index
 ```
 
 ```{python skew-hint-2}
+# we can use .nlargest along with index to get the relevant indices
+# here is an example for top 10 recipes by calories
+maxcal = epicurious_num_nd['calories'].nlargest(n=10).index
+# now you need to figure out how to get those that are in the top 10 for each
+
 # given two sets of numbers l1 and l2 we can use set.union(l1, l2) to get all numbers in either l1 or l2
 # how can we use this to get every recipe in the top 10 across all the categories
 # run the following code to see how it works
@@ -409,6 +414,18 @@ set.union(l1, l2)
 ```
 
 ```{python skew-hint-3}
+# we can use .nlargest along with index to get the relevant indices
+# here is an example for top 10 recipes by calories
+maxcal = epicurious_num_nd['calories'].nlargest(n=10).index
+# now you need to figure out how to get those that are in the top 10 for each
+
+# given two sets of numbers l1 and l2 we can use set.union(l1, l2) to get all numbers in either l1 or l2
+# how can we use this to get every recipe in the top 10 across all the categories
+# run the following code to see how it works
+l1 = [1, 2, 3]
+l2 = [2, 4, 6]
+set.union(l1, l2)
+
 maxcal = epicurious_num_nd['calories'].nlargest(n=10).index
 maxpro = epicurious_num_nd['protein'].nlargest(n=10).index
 maxfat = epicurious_num_nd['fat'].nlargest(n=10).index
@@ -450,13 +467,13 @@ epicurious_num_clean = epicurious_num_nd.drop(labels = maxvals, axis=0).drop_dup
 ```{python calorieclean, exercise=TRUE, message = FALSE, exercise.setup="clean"}
 (p9.ggplot(___, p9.aes(x = 'calories', y=p9.after_stat('density'))) 
  + p9.geom_histogram(bins = 30) 
- + p9.geom_density())
+ + p9.geom_density()).show()
 ```
 
 ```{python calorieclean-solution, message=FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(epicurious_num_clean, p9.aes(x = 'calories', y=p9.after_stat('density'))) 
  + p9.geom_histogram(bins = 30) 
- + p9.geom_density())
+ + p9.geom_density()).show()
 ```
 
 ```{r calorieclean-code-check, message=FALSE, warning=FALSE}
@@ -473,13 +490,13 @@ grade_this_code(
 
 ```{python scatter, exercise=TRUE, message = FALSE, exercise.setup="clean"}
 (p9.ggplot(epicurious_num_clean, p9.aes(x = '____' , y = '___' )) 
- + ___)
+ + ___).show()
 
 ```
 
 ```{python scatter-solution, message=FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(epicurious_num_clean, p9.aes(x = 'fat', y = 'calories')) 
- + p9.geom_point())
+ + p9.geom_point()).show()
 
 ```
 
@@ -507,14 +524,14 @@ question("16. Select all true statements about the association pictured in the g
 
 ```{python scattercolor, exercise=TRUE, exercise.eval=FALSE, message=FALSE, exercise.setup="clean"}
 (p9.ggplot(epicurious_num_clean, p9.aes(x = 'fat', y = 'calories')) 
- + p9.geom_point(color = ___))
+ + p9.geom_point(color = ___)).show()
 ```
 
 In addition to coloring the points a single color, color can also be used to encode data. The following chunk is an example of how to color the points by `rating`.
 
 ```{python colorcode, exercise=TRUE, exercise.eval=FALSE, message=FALSE, exercise.setup="clean"}
 (p9.ggplot(epicurious_num_clean, p9.aes(x = 'fat', y = 'calories', color = 'rating')) 
- + p9.geom_point())
+ + p9.geom_point()).show()
 ```
 
 
