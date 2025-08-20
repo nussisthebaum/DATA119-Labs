@@ -122,6 +122,10 @@ epicurious_nd = pd.read_csv("./data/epi_mini_clean.csv")
 fat= epicurious_nd['fat']
 fat_oz = epicurious_nd['fat']/28.346
 cal = epicurious_nd['calories']
+
+r_fatcal = fat.corr(cal)
+s_fat = epicurious_nd['fat'].std()
+s_cal = epicurious_nd['calories'].std()
 ```
 
 
