@@ -12,6 +12,11 @@ knitr::knit_engines$set(python = reticulate::eng_python)
 
 ## Package Requirements for Lab
 
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+## Package Requirements for Lab
+
 library(learnr)
 library(gradethis)
 library(reticulate)
