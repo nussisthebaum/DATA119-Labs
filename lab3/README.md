@@ -1,1 +1,0 @@
-Secret words for Lab 3: QUALITY, SEPARATE, BACKGROUND, SAMPLE, SHAPE.
