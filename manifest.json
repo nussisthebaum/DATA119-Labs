@@ -1,0 +1,4723 @@
+{
+  "version": 1,
+  "locale": "en_US",
+  "platform": "4.4.1",
+  "metadata": {
+    "appmode": "static",
+    "primary_rmd": null,
+    "primary_html": "bashlab/Bash-Lab.html",
+    "content_category": null,
+    "has_parameters": false
+  },
+  "packages": null,
+  "files": {
+    "bashlab/Bash Lab.Rmd": {
+      "checksum": "605c528ff63a57e99ad0764dc8a0ac99"
+    },
+    "bashlab/Bash-Lab.html": {
+      "checksum": "f3dc86b8bf60e6f30a5a7b6eff216d3d"
+    },
+    "bashlab/css/custom-styles.css": {
+      "checksum": "1088d4832ba104288b7671974571c27c"
+    },
+    "bashlab/data/cheatsheet.md": {
+      "checksum": "b71f3acc57c6d0719b57d68dfa00b2e9"
+    },
+    "bashlab/data/cheatsheet.pdf": {
+      "checksum": "3e029b4065c20cc3e3738aa94da82ddc"
+    },
+    "bashlab/data/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "bashlab/data/encoded": {
+      "checksum": "976489fe979911efe61a98144baa69aa"
+    },
+    "bashlab/data/hint1": {
+      "checksum": "bde49191785f6cb0ccf09fce4269b990"
+    },
+    "bashlab/data/hint2": {
+      "checksum": "2f9edae1611bc36497ce5e57b236a10c"
+    },
+    "bashlab/data/hint3": {
+      "checksum": "5bcbb5833497bc931ede54bc2c40d7e9"
+    },
+    "bashlab/data/hint4": {
+      "checksum": "7d13dc622c45f5f40bd9110281205160"
+    },
+    "bashlab/data/hint5": {
+      "checksum": "3f718ed262f29d355da737a40c24b559"
+    },
+    "bashlab/data/hint6": {
+      "checksum": "d750e1256cde524f8ac79b862db6f889"
+    },
+    "bashlab/data/hint7": {
+      "checksum": "697634a4ea23c648890a339004e09d35"
+    },
+    "bashlab/data/hint8": {
+      "checksum": "6f06b598529bb7facecc52bb21359b8a"
+    },
+    "bashlab/data/instructions": {
+      "checksum": "102d253562e4817557f54f4f39677370"
+    },
+    "bashlab/data/LICENSE.md": {
+      "checksum": "176b45286aa18302f101678bde10599c"
+    },
+    "bashlab/data/mystery/cheatsheet.md.save": {
+      "checksum": "26abbfbbdf75bf5c6ce163bca3ac3005"
+    },
+    "bashlab/data/mystery/crimescene": {
+      "checksum": "eb59f754d1f89234ed510826441a0d4a"
+    },
+    "bashlab/data/mystery/interviews/interview-000296": {
+      "checksum": "2e19f7148c7bc6e9d4fb2f62e7fb18b6"
+    },
+    "bashlab/data/mystery/interviews/interview-00448418": {
+      "checksum": "ed2078de54611a86d66c5b4c43da6046"
+    },
+    "bashlab/data/mystery/interviews/interview-00502304": {
+      "checksum": "4c4191d0d694422e8b97c30d60529c5d"
+    },
+    "bashlab/data/mystery/interviews/interview-005702": {
+      "checksum": "582067137fc73059e03a3db4e03f58f9"
+    },
+    "bashlab/data/mystery/interviews/interview-00617019": {
+      "checksum": "297fc599ad860f08962df19fed3421cd"
+    },
+    "bashlab/data/mystery/interviews/interview-00805135": {
+      "checksum": "d851d0fbe81b5696e5f3e123c59c05d4"
+    },
+    "bashlab/data/mystery/interviews/interview-016463": {
+      "checksum": "35b7d3500e7dc3fe7fcda1e0933f81fd"
+    },
+    "bashlab/data/mystery/interviews/interview-020337": {
+      "checksum": "48d28df86c01c59dd14a2c21a8983e67"
+    },
+    "bashlab/data/mystery/interviews/interview-022751": {
+      "checksum": "a279d556494d689003f23745ac2b3c1e"
+    },
+    "bashlab/data/mystery/interviews/interview-0234126": {
+      "checksum": "baf0a23ce83624ffacd40bc861d32202"
+    },
+    "bashlab/data/mystery/interviews/interview-02422821": {
+      "checksum": "f98b79716fbb0cbae3e984515007eb2b"
+    },
+    "bashlab/data/mystery/interviews/interview-0251720": {
+      "checksum": "9e8b96ffee21e585671c235197865658"
+    },
+    "bashlab/data/mystery/interviews/interview-03098229": {
+      "checksum": "e2770fd442b4b819a61f00edd96ea8fc"
+    },
+    "bashlab/data/mystery/interviews/interview-0315125": {
+      "checksum": "691ffa1665b7029cc68e67a8321085df"
+    },
+    "bashlab/data/mystery/interviews/interview-03316077": {
+      "checksum": "36d9c97c95e2c81c111dcf56c40c511c"
+    },
+    "bashlab/data/mystery/interviews/interview-034070": {
+      "checksum": "51d2446a7fd5049f0c2fdee956fd03bd"
+    },
+    "bashlab/data/mystery/interviews/interview-0349327": {
+      "checksum": "e0373742031f945fadcde268a4e43138"
+    },
+    "bashlab/data/mystery/interviews/interview-04393507": {
+      "checksum": "91a15158a581d4a2858cada609532657"
+    },
+    "bashlab/data/mystery/interviews/interview-044492": {
+      "checksum": "5d7902bbf3e2ea6657c3424f27b5efc8"
+    },
+    "bashlab/data/mystery/interviews/interview-0462097": {
+      "checksum": "3aa132392bf9454e56fa6d798255c85a"
+    },
+    "bashlab/data/mystery/interviews/interview-049721": {
+      "checksum": "8dde1ec8fec31e03d8edcf03d5f9416f"
+    },
+    "bashlab/data/mystery/interviews/interview-05297663": {
+      "checksum": "335976c5162ac816fd2beebbfc18c8d5"
+    },
+    "bashlab/data/mystery/interviews/interview-06032377": {
+      "checksum": "261196af5c17759353c5a8e2bacc9180"
+    },
+    "bashlab/data/mystery/interviews/interview-0613334": {
+      "checksum": "f4397471dc0d6d7d5d2e4049b7ea3154"
+    },
+    "bashlab/data/mystery/interviews/interview-066291": {
+      "checksum": "55a0c6e27718fec4daf2e06113730522"
+    },
+    "bashlab/data/mystery/interviews/interview-071537": {
+      "checksum": "acff334915d5fe3a388d963b97087e77"
+    },
+    "bashlab/data/mystery/interviews/interview-0732631": {
+      "checksum": "ad7518b9f63ce3b9af9c825877fe37ed"
+    },
+    "bashlab/data/mystery/interviews/interview-07497003": {
+      "checksum": "e03b8aff3b8f1e4651848145611e3613"
+    },
+    "bashlab/data/mystery/interviews/interview-0768255": {
+      "checksum": "293d567f69cba0753097d83531492b6f"
+    },
+    "bashlab/data/mystery/interviews/interview-092423": {
+      "checksum": "e7389c09ec8f98b8c9fa86c33aaf65b7"
+    },
+    "bashlab/data/mystery/interviews/interview-0953437": {
+      "checksum": "c11828292b58fec7e642a44e6431615b"
+    },
+    "bashlab/data/mystery/interviews/interview-096267": {
+      "checksum": "c75a48d183edd1a74584a26202b92752"
+    },
+    "bashlab/data/mystery/interviews/interview-102490": {
+      "checksum": "e96cf032db2a292935dfc422729729fd"
+    },
+    "bashlab/data/mystery/interviews/interview-109118": {
+      "checksum": "c13680b69da579200ccd48781f8fe330"
+    },
+    "bashlab/data/mystery/interviews/interview-1108561": {
+      "checksum": "4f4c0248c27754e68312e1a64c5ca397"
+    },
+    "bashlab/data/mystery/interviews/interview-114661": {
+      "checksum": "a0c8f3a10a8ab5d66bed26129bbdd5ab"
+    },
+    "bashlab/data/mystery/interviews/interview-11495001": {
+      "checksum": "3675938a5b4052acbe72e4014b026a55"
+    },
+    "bashlab/data/mystery/interviews/interview-116803": {
+      "checksum": "ef81acb46203221679937bb7e844a90c"
+    },
+    "bashlab/data/mystery/interviews/interview-11705111": {
+      "checksum": "8d35f1701b41a42e25776560ba6ef848"
+    },
+    "bashlab/data/mystery/interviews/interview-11783660": {
+      "checksum": "5c571bec24048342fcb6894787d94b49"
+    },
+    "bashlab/data/mystery/interviews/interview-11817172": {
+      "checksum": "be4c8db9ab2a1443ed1bd0030049597a"
+    },
+    "bashlab/data/mystery/interviews/interview-1186827": {
+      "checksum": "2623fa980712681202d208eb7a8ba118"
+    },
+    "bashlab/data/mystery/interviews/interview-1205060": {
+      "checksum": "6fd612d841630d9491c64ebd8d782953"
+    },
+    "bashlab/data/mystery/interviews/interview-1250176": {
+      "checksum": "6e22e9ed322ed5fd7c2ed8286d24200a"
+    },
+    "bashlab/data/mystery/interviews/interview-125204": {
+      "checksum": "19e8973c85105f51610f83845b5f3b7c"
+    },
+    "bashlab/data/mystery/interviews/interview-125271": {
+      "checksum": "521d06cb6c5515dcbdf6a0ad8d0718ec"
+    },
+    "bashlab/data/mystery/interviews/interview-1269181": {
+      "checksum": "0ea2b8122b24d2a81d377a9dd403ac52"
+    },
+    "bashlab/data/mystery/interviews/interview-1310392": {
+      "checksum": "2d916804649e8eed121d770b66ae6492"
+    },
+    "bashlab/data/mystery/interviews/interview-13768464": {
+      "checksum": "7a2b1e0869359bf053efe7d5efd745e1"
+    },
+    "bashlab/data/mystery/interviews/interview-13889608": {
+      "checksum": "0807bfa7e827acf797d251d40829d642"
+    },
+    "bashlab/data/mystery/interviews/interview-13920860": {
+      "checksum": "4fdcd2bdbafb40c7eb95d816ca118b25"
+    },
+    "bashlab/data/mystery/interviews/interview-1395414": {
+      "checksum": "b0d2aa3ba9b2143993de3410e02c16ac"
+    },
+    "bashlab/data/mystery/interviews/interview-141030": {
+      "checksum": "7cdfe9e121ab1e3d18d73087da774ff1"
+    },
+    "bashlab/data/mystery/interviews/interview-14153840": {
+      "checksum": "f503dea79ea66875de0cf1df9e072a7b"
+    },
+    "bashlab/data/mystery/interviews/interview-144873": {
+      "checksum": "0d9f410226746e2d1da0ab4e170efdfe"
+    },
+    "bashlab/data/mystery/interviews/interview-14590717": {
+      "checksum": "7b617d57c5549f785fde5b2ab91d0dc8"
+    },
+    "bashlab/data/mystery/interviews/interview-147283": {
+      "checksum": "f226ef5991f7d7c5d8d02ed5761ef853"
+    },
+    "bashlab/data/mystery/interviews/interview-15187437": {
+      "checksum": "a8da91949ea5f2409c5c3ddd89b49e1a"
+    },
+    "bashlab/data/mystery/interviews/interview-15354942": {
+      "checksum": "283a6c0b8a6a1eabd14b06f3d17afb5d"
+    },
+    "bashlab/data/mystery/interviews/interview-1536668": {
+      "checksum": "3fbc6a3c4ac959874e5f49e5b52fbba9"
+    },
+    "bashlab/data/mystery/interviews/interview-155049": {
+      "checksum": "c8f7929f2c13a9e04fa3a0bf9aafa59d"
+    },
+    "bashlab/data/mystery/interviews/interview-1578206": {
+      "checksum": "9d1a807a68b2f986a5aca0e41199ae79"
+    },
+    "bashlab/data/mystery/interviews/interview-159848": {
+      "checksum": "508d74d2b9c1b17b5151bc1f2a7460c0"
+    },
+    "bashlab/data/mystery/interviews/interview-16098538": {
+      "checksum": "39a6143e46c1f3af2094e06479097b70"
+    },
+    "bashlab/data/mystery/interviews/interview-1642421": {
+      "checksum": "0f3d1878c837e3b7a1aac6f09e378a8f"
+    },
+    "bashlab/data/mystery/interviews/interview-1643440": {
+      "checksum": "f926e920d571e6e4f75f285cd9960cea"
+    },
+    "bashlab/data/mystery/interviews/interview-16889008": {
+      "checksum": "846b581f88a80202f3434e38d2682c76"
+    },
+    "bashlab/data/mystery/interviews/interview-17248453": {
+      "checksum": "90859eed68aafa1cf69e0abe842db30f"
+    },
+    "bashlab/data/mystery/interviews/interview-17343208": {
+      "checksum": "5c534fc36b716ab13fab7f00d3d1896d"
+    },
+    "bashlab/data/mystery/interviews/interview-174898": {
+      "checksum": "d3599d3042b6801794657302bac25a75"
+    },
+    "bashlab/data/mystery/interviews/interview-1767435": {
+      "checksum": "00c48fc36db6ee46018b67f11dcf6d2a"
+    },
+    "bashlab/data/mystery/interviews/interview-17827186": {
+      "checksum": "7c2b3ab073e9e991caaafa479a81daef"
+    },
+    "bashlab/data/mystery/interviews/interview-179719": {
+      "checksum": "6d7b67ed0b62b81a905068f214fd39b0"
+    },
+    "bashlab/data/mystery/interviews/interview-1811770": {
+      "checksum": "ac6ccef36f2c39f32bd9250b6f49b8a9"
+    },
+    "bashlab/data/mystery/interviews/interview-18193261": {
+      "checksum": "1a7b4ba1e9da1fdc492f87db45784428"
+    },
+    "bashlab/data/mystery/interviews/interview-1823688": {
+      "checksum": "ea36383e57020aaaa64cfdf39690684f"
+    },
+    "bashlab/data/mystery/interviews/interview-18270219": {
+      "checksum": "3542204b15bc17fd5f4fc8f809079139"
+    },
+    "bashlab/data/mystery/interviews/interview-18441251": {
+      "checksum": "43155325d142d6756ffc2184acb2aad9"
+    },
+    "bashlab/data/mystery/interviews/interview-1850922": {
+      "checksum": "36d4284ccd887f1016dac35f0294aab6"
+    },
+    "bashlab/data/mystery/interviews/interview-1857368": {
+      "checksum": "f9cbc14b84ce62d8256c28a56a81be97"
+    },
+    "bashlab/data/mystery/interviews/interview-1906958": {
+      "checksum": "1c9c8494842b2da19c8c497776907b0e"
+    },
+    "bashlab/data/mystery/interviews/interview-191206": {
+      "checksum": "dbc7cf20148066968dae6622af38d33a"
+    },
+    "bashlab/data/mystery/interviews/interview-19300543": {
+      "checksum": "5772cb5cf3b43f280b37b1f42fa31a8e"
+    },
+    "bashlab/data/mystery/interviews/interview-1933118": {
+      "checksum": "7b617d57c5549f785fde5b2ab91d0dc8"
+    },
+    "bashlab/data/mystery/interviews/interview-19577850": {
+      "checksum": "a53f3c0c8530a0b2fc0dae108e8f4f3d"
+    },
+    "bashlab/data/mystery/interviews/interview-2058907": {
+      "checksum": "cd747437d0abadd57a7c7901132a7bfe"
+    },
+    "bashlab/data/mystery/interviews/interview-210355": {
+      "checksum": "f76e5ac6ea11db740f7f3cece2e565cd"
+    },
+    "bashlab/data/mystery/interviews/interview-218131": {
+      "checksum": "5d4bcc06315657fc7b70a70ed7c8f0c1"
+    },
+    "bashlab/data/mystery/interviews/interview-221039": {
+      "checksum": "19bb7684d232886e1e1646f155d44fb8"
+    },
+    "bashlab/data/mystery/interviews/interview-223913": {
+      "checksum": "079fae2d2d47b9cac1a70f0a1b1e9d2c"
+    },
+    "bashlab/data/mystery/interviews/interview-2277882": {
+      "checksum": "6e20829d2e5ec534b227eb9404639303"
+    },
+    "bashlab/data/mystery/interviews/interview-229443": {
+      "checksum": "b9c09bedae1fdb153b6325a6eca9be90"
+    },
+    "bashlab/data/mystery/interviews/interview-23167806": {
+      "checksum": "7c635e389bc6d94931fe4dd0444f611e"
+    },
+    "bashlab/data/mystery/interviews/interview-2326746": {
+      "checksum": "50d607a4bf3c8865d2f7fe35ed4384ff"
+    },
+    "bashlab/data/mystery/interviews/interview-23371263": {
+      "checksum": "ef023d545184e5647ab1e799be16c405"
+    },
+    "bashlab/data/mystery/interviews/interview-233800": {
+      "checksum": "9ab652f9028a02f22de45b84b25b2687"
+    },
+    "bashlab/data/mystery/interviews/interview-2415821": {
+      "checksum": "2dacf06c1b35c1e4f25e293de4600f76"
+    },
+    "bashlab/data/mystery/interviews/interview-243703": {
+      "checksum": "21c0ebacaa87858a5c72e4328f3d8442"
+    },
+    "bashlab/data/mystery/interviews/interview-2481877": {
+      "checksum": "b7a6450268b74fb2fd4c675bd2f7c3b6"
+    },
+    "bashlab/data/mystery/interviews/interview-250112": {
+      "checksum": "88bbf88a1dd63fa4d21825461a77e7e7"
+    },
+    "bashlab/data/mystery/interviews/interview-253705": {
+      "checksum": "1b61e82b7b61f31bddcb3b0245a398d0"
+    },
+    "bashlab/data/mystery/interviews/interview-255531": {
+      "checksum": "82337a031a6397866d547c41cd9a6b5c"
+    },
+    "bashlab/data/mystery/interviews/interview-25582311": {
+      "checksum": "5864e3382ceed8a272a69d92fe79b344"
+    },
+    "bashlab/data/mystery/interviews/interview-25834905": {
+      "checksum": "1a37d053521a697f79cc874f9adddb0a"
+    },
+    "bashlab/data/mystery/interviews/interview-259909": {
+      "checksum": "301c687933346d617784c7b2f04b1c62"
+    },
+    "bashlab/data/mystery/interviews/interview-2601508": {
+      "checksum": "8fde42909053ca68cc70113cd7594844"
+    },
+    "bashlab/data/mystery/interviews/interview-26373485": {
+      "checksum": "aa9313c5460d58d1a26dfbd15f6f75e6"
+    },
+    "bashlab/data/mystery/interviews/interview-2642139": {
+      "checksum": "36a75211526d72a5024114f658eb67ca"
+    },
+    "bashlab/data/mystery/interviews/interview-27042476": {
+      "checksum": "26f289c86bef5fc75e036c01f315c686"
+    },
+    "bashlab/data/mystery/interviews/interview-27504937": {
+      "checksum": "5e9718eaa01eaa0422d915c58e5b3789"
+    },
+    "bashlab/data/mystery/interviews/interview-275706": {
+      "checksum": "e5bd033d617960b02f36f144e1375f9f"
+    },
+    "bashlab/data/mystery/interviews/interview-279087": {
+      "checksum": "c111fcd765f0428c195ff919271d22a9"
+    },
+    "bashlab/data/mystery/interviews/interview-280877": {
+      "checksum": "fbc4977c347c48b977c37a98144d79ae"
+    },
+    "bashlab/data/mystery/interviews/interview-2834518": {
+      "checksum": "8197c40053a7a2f003561f1c9e977f2a"
+    },
+    "bashlab/data/mystery/interviews/interview-284560": {
+      "checksum": "d7ee5acf1b0f7fe7abbf07ff9833c026"
+    },
+    "bashlab/data/mystery/interviews/interview-2846076": {
+      "checksum": "5d7713d9f2dd74b1e84eab7b1bb85320"
+    },
+    "bashlab/data/mystery/interviews/interview-289524": {
+      "checksum": "c4af96c5a9e966894bdfade322a76aa5"
+    },
+    "bashlab/data/mystery/interviews/interview-290346": {
+      "checksum": "f6997a47fda039b70139b2482a6c33cf"
+    },
+    "bashlab/data/mystery/interviews/interview-291440": {
+      "checksum": "bdc6732389e75a9d675ff0b19c682169"
+    },
+    "bashlab/data/mystery/interviews/interview-2922290": {
+      "checksum": "45fec16739dd1d851d460379fb03cfc1"
+    },
+    "bashlab/data/mystery/interviews/interview-29316965": {
+      "checksum": "50889c942482189ac06cb22046223a4f"
+    },
+    "bashlab/data/mystery/interviews/interview-2939888": {
+      "checksum": "8490660aee6fff815976deed82860c73"
+    },
+    "bashlab/data/mystery/interviews/interview-296128": {
+      "checksum": "594bc10bd283dc7f83a5305711c9b432"
+    },
+    "bashlab/data/mystery/interviews/interview-29680692": {
+      "checksum": "ee62d4e4a6103fa95294931ae9598ebd"
+    },
+    "bashlab/data/mystery/interviews/interview-29741223": {
+      "checksum": "e06b37aebc077b1f0357bfac734a8d7f"
+    },
+    "bashlab/data/mystery/interviews/interview-2976680": {
+      "checksum": "6e22e9ed322ed5fd7c2ed8286d24200a"
+    },
+    "bashlab/data/mystery/interviews/interview-29838622": {
+      "checksum": "92114932f12338f05697ee65521984f9"
+    },
+    "bashlab/data/mystery/interviews/interview-2995681": {
+      "checksum": "c9aa22d2aa6e8bec7a9775a293d69ae3"
+    },
+    "bashlab/data/mystery/interviews/interview-301018": {
+      "checksum": "be330dca8743fe25a13e792cc58cfe6c"
+    },
+    "bashlab/data/mystery/interviews/interview-30259493": {
+      "checksum": "44fc32bc0f45da38dc646bd8fbec7a54"
+    },
+    "bashlab/data/mystery/interviews/interview-3049045": {
+      "checksum": "9a5a12c4007cc66c075f217d412d6182"
+    },
+    "bashlab/data/mystery/interviews/interview-305694": {
+      "checksum": "a6be729475e5c1439a56165dfb26988c"
+    },
+    "bashlab/data/mystery/interviews/interview-305949": {
+      "checksum": "2d052329d7d62ab1df1526a54e660fab"
+    },
+    "bashlab/data/mystery/interviews/interview-306616": {
+      "checksum": "7653193573358e28099c1253acedcef5"
+    },
+    "bashlab/data/mystery/interviews/interview-3074127": {
+      "checksum": "1bae1d601bfdbd2844b0f2ee6351121a"
+    },
+    "bashlab/data/mystery/interviews/interview-3099757": {
+      "checksum": "6e4ca37c43e1a911ef49a268a6caf1e4"
+    },
+    "bashlab/data/mystery/interviews/interview-312546": {
+      "checksum": "5ffd281f0b5aba00be35768e2e60412b"
+    },
+    "bashlab/data/mystery/interviews/interview-3128999": {
+      "checksum": "037cc33aabef0f7622959410a881f37e"
+    },
+    "bashlab/data/mystery/interviews/interview-3140662": {
+      "checksum": "0151c07e051128eac3a472bd85734d11"
+    },
+    "bashlab/data/mystery/interviews/interview-31635890": {
+      "checksum": "3a0da433c5ec0ec19c30e58e053a0a39"
+    },
+    "bashlab/data/mystery/interviews/interview-3201508": {
+      "checksum": "9fb2e762738339f45e99107f9378f16d"
+    },
+    "bashlab/data/mystery/interviews/interview-322305": {
+      "checksum": "6ca6da4308f5e61f715c30c695f1a537"
+    },
+    "bashlab/data/mystery/interviews/interview-32365018": {
+      "checksum": "cac14670518ed49d5072bfe4e8785147"
+    },
+    "bashlab/data/mystery/interviews/interview-324389": {
+      "checksum": "2d0151b02d22551c1c7a5c4d43dfb9ac"
+    },
+    "bashlab/data/mystery/interviews/interview-325611": {
+      "checksum": "f9c462afafa23510e7bb959cb299aae8"
+    },
+    "bashlab/data/mystery/interviews/interview-32639981": {
+      "checksum": "a415aef75c691a43fc2c94ee3fd8f08b"
+    },
+    "bashlab/data/mystery/interviews/interview-32712166": {
+      "checksum": "6edafacfccdd47f564f16634e130d2ed"
+    },
+    "bashlab/data/mystery/interviews/interview-331178": {
+      "checksum": "55b8a69acd8bfb61278896a6e9d90dc6"
+    },
+    "bashlab/data/mystery/interviews/interview-332596": {
+      "checksum": "514a4219f85f018d3eaea66f408b0295"
+    },
+    "bashlab/data/mystery/interviews/interview-33399976": {
+      "checksum": "9884bd834bc5f766d758c3b03d8532da"
+    },
+    "bashlab/data/mystery/interviews/interview-340396": {
+      "checksum": "6e261f7efdae29aa87fc4447286eb5cd"
+    },
+    "bashlab/data/mystery/interviews/interview-34041151": {
+      "checksum": "2fa8cee9492665062553abc37e658653"
+    },
+    "bashlab/data/mystery/interviews/interview-342393": {
+      "checksum": "e3f2cd7a85b141ac9b7b10e1e64160d2"
+    },
+    "bashlab/data/mystery/interviews/interview-34359897": {
+      "checksum": "e131d0c3ad094c566fde308e69872bd4"
+    },
+    "bashlab/data/mystery/interviews/interview-344331": {
+      "checksum": "a2e3469f76fc06f1ea643b1fb5ec6b32"
+    },
+    "bashlab/data/mystery/interviews/interview-34690644": {
+      "checksum": "d6f63bc2617267f890e5ba2e8c20d1c9"
+    },
+    "bashlab/data/mystery/interviews/interview-347303": {
+      "checksum": "95d50abb120ff8612d203f3f15cc2452"
+    },
+    "bashlab/data/mystery/interviews/interview-351963": {
+      "checksum": "4f8295dd5ed898be523b5e636386804f"
+    },
+    "bashlab/data/mystery/interviews/interview-353218": {
+      "checksum": "6bd57d95d0f74fe4120d5dabac497175"
+    },
+    "bashlab/data/mystery/interviews/interview-353467": {
+      "checksum": "a6bfe0635ecb52ba2706fae27201e65b"
+    },
+    "bashlab/data/mystery/interviews/interview-354262": {
+      "checksum": "2c90d800551e2609c54e50e998054163"
+    },
+    "bashlab/data/mystery/interviews/interview-3588302": {
+      "checksum": "0c9d8a418615ece8ecd935b1e4b8fd89"
+    },
+    "bashlab/data/mystery/interviews/interview-3609204": {
+      "checksum": "dbdfc6c4f0c96e29ecde542eef2b58e2"
+    },
+    "bashlab/data/mystery/interviews/interview-36398447": {
+      "checksum": "8109e21c20b342ff491a805096172000"
+    },
+    "bashlab/data/mystery/interviews/interview-364735": {
+      "checksum": "12e778847543a4290cbbb93f19328ca0"
+    },
+    "bashlab/data/mystery/interviews/interview-36527398": {
+      "checksum": "142d086ef29a3266661cc68ec3a19fc2"
+    },
+    "bashlab/data/mystery/interviews/interview-376115": {
+      "checksum": "c6f47e0974a81bf3f805acfbb542822c"
+    },
+    "bashlab/data/mystery/interviews/interview-37747405": {
+      "checksum": "036e24e9106a7819c9a5db57a9292bea"
+    },
+    "bashlab/data/mystery/interviews/interview-3804339": {
+      "checksum": "debb247442b50d80df537fc7bc03db29"
+    },
+    "bashlab/data/mystery/interviews/interview-3824641": {
+      "checksum": "0f1a5fccfcfd60d2707b7397b6a63037"
+    },
+    "bashlab/data/mystery/interviews/interview-38299069": {
+      "checksum": "8fb8505fc6dc9bc6dafffc176c440646"
+    },
+    "bashlab/data/mystery/interviews/interview-3871205": {
+      "checksum": "31392b8c87ebd5d63a199b3775bbd145"
+    },
+    "bashlab/data/mystery/interviews/interview-3871242": {
+      "checksum": "6bc060914e40c48172ee4361cb5aaba5"
+    },
+    "bashlab/data/mystery/interviews/interview-38899905": {
+      "checksum": "4d18ca1af5ff270ee3a0e64374c5c26a"
+    },
+    "bashlab/data/mystery/interviews/interview-3917097": {
+      "checksum": "f1295e581edc237e7776f0e67eb75605"
+    },
+    "bashlab/data/mystery/interviews/interview-391811": {
+      "checksum": "92360a2749d257faac38e03952e798fd"
+    },
+    "bashlab/data/mystery/interviews/interview-39481114": {
+      "checksum": "af741d192da2989a500ccde0020b1842"
+    },
+    "bashlab/data/mystery/interviews/interview-39825862": {
+      "checksum": "1f9db76cbc3bd9180696c2ea9f46b033"
+    },
+    "bashlab/data/mystery/interviews/interview-40534453": {
+      "checksum": "be49ad31c4d3c74db62859220de82e13"
+    },
+    "bashlab/data/mystery/interviews/interview-40610944": {
+      "checksum": "5f8c29d06b9dc2b77ae63635a5976b42"
+    },
+    "bashlab/data/mystery/interviews/interview-409731": {
+      "checksum": "ddee0a10ce15f437164df7c6d3af3507"
+    },
+    "bashlab/data/mystery/interviews/interview-41553314": {
+      "checksum": "e0ca933eb7d303089623300ae40c7699"
+    },
+    "bashlab/data/mystery/interviews/interview-416243": {
+      "checksum": "3f52804be93e895846aa201791592caf"
+    },
+    "bashlab/data/mystery/interviews/interview-41814745": {
+      "checksum": "d4cb2fd7915f804b112e7ed32f437565"
+    },
+    "bashlab/data/mystery/interviews/interview-4204949": {
+      "checksum": "6c79758aa514b576bd8b45dab04ff17a"
+    },
+    "bashlab/data/mystery/interviews/interview-42161907": {
+      "checksum": "f488a642ab22c8b9801810d72533ed14"
+    },
+    "bashlab/data/mystery/interviews/interview-4223536": {
+      "checksum": "01be31ea6e2195ab2f0b6f56d28d2466"
+    },
+    "bashlab/data/mystery/interviews/interview-4225866": {
+      "checksum": "f0f389ed3ce1679d7b9a2acf035a4d4a"
+    },
+    "bashlab/data/mystery/interviews/interview-42396365": {
+      "checksum": "ab8c786c94afbb7279e062243fc85788"
+    },
+    "bashlab/data/mystery/interviews/interview-4262657": {
+      "checksum": "590b06235518dff7dcbef566ce25764c"
+    },
+    "bashlab/data/mystery/interviews/interview-42934869": {
+      "checksum": "cbfffe3039ce0ba4a915db566204b352"
+    },
+    "bashlab/data/mystery/interviews/interview-4299898": {
+      "checksum": "a51dd555acc765d2018125782a253542"
+    },
+    "bashlab/data/mystery/interviews/interview-4335306": {
+      "checksum": "9b98e8037b9c004d7c7b00743f07d71f"
+    },
+    "bashlab/data/mystery/interviews/interview-4366523": {
+      "checksum": "58f3a9a7ed6acf541804f6473cb28409"
+    },
+    "bashlab/data/mystery/interviews/interview-44533008": {
+      "checksum": "01cd5b505327de7c14104489b46e7db7"
+    },
+    "bashlab/data/mystery/interviews/interview-4463090": {
+      "checksum": "437690dbc819536672d721fe3aead50a"
+    },
+    "bashlab/data/mystery/interviews/interview-448086": {
+      "checksum": "2bf0f8a3142fe81046877b382786f0b7"
+    },
+    "bashlab/data/mystery/interviews/interview-45615686": {
+      "checksum": "d851d0fbe81b5696e5f3e123c59c05d4"
+    },
+    "bashlab/data/mystery/interviews/interview-457117": {
+      "checksum": "2bbb88516ce90a02ea236ca075d79175"
+    },
+    "bashlab/data/mystery/interviews/interview-457451": {
+      "checksum": "6f642dc7bc8a50f17da4eaa82214a36a"
+    },
+    "bashlab/data/mystery/interviews/interview-466195": {
+      "checksum": "d646a8d6edf7e5dcef91622a6e129e89"
+    },
+    "bashlab/data/mystery/interviews/interview-4673074": {
+      "checksum": "53558b49ce8424b0ed4324b029819fbe"
+    },
+    "bashlab/data/mystery/interviews/interview-46773428": {
+      "checksum": "aa5f80be43eabbfbdc08aff5d5bae730"
+    },
+    "bashlab/data/mystery/interviews/interview-47246024": {
+      "checksum": "193551d1f78f55e64524007ca4df097a"
+    },
+    "bashlab/data/mystery/interviews/interview-4735823": {
+      "checksum": "ee6010e519d5365c75881fc5140b1cb3"
+    },
+    "bashlab/data/mystery/interviews/interview-4765278": {
+      "checksum": "0da79ee28f8b5045723139f8b55b7738"
+    },
+    "bashlab/data/mystery/interviews/interview-476744": {
+      "checksum": "420e6ddb4e82fa5a13f09cd9a9f66f95"
+    },
+    "bashlab/data/mystery/interviews/interview-478217": {
+      "checksum": "0eb932651192208ea4f35f2ea7968863"
+    },
+    "bashlab/data/mystery/interviews/interview-48088300": {
+      "checksum": "253fce3973a8fc926c9f6207c5ca84de"
+    },
+    "bashlab/data/mystery/interviews/interview-48148020": {
+      "checksum": "da7216b47f30894c07eb76c43b23941c"
+    },
+    "bashlab/data/mystery/interviews/interview-483817": {
+      "checksum": "ddf9ece7eea654b83aa6f1c0a8868a9a"
+    },
+    "bashlab/data/mystery/interviews/interview-485229": {
+      "checksum": "0e6e40ed28e78c11f9152e137a458227"
+    },
+    "bashlab/data/mystery/interviews/interview-4950099": {
+      "checksum": "8ef296a0ffff931274e1fcee42100e78"
+    },
+    "bashlab/data/mystery/interviews/interview-4961376": {
+      "checksum": "c395e526e9baf666e0a0a2bf072f5775"
+    },
+    "bashlab/data/mystery/interviews/interview-496772": {
+      "checksum": "60506e74f6594173aab41f839c9aadcc"
+    },
+    "bashlab/data/mystery/interviews/interview-498331": {
+      "checksum": "81179722f2322c5efc62964110326ae8"
+    },
+    "bashlab/data/mystery/interviews/interview-499096": {
+      "checksum": "5908c701c0d80f035c7a8cc44a2d1400"
+    },
+    "bashlab/data/mystery/interviews/interview-50168425": {
+      "checksum": "de09509d36c1e1bafe23a88f5ce7b4fa"
+    },
+    "bashlab/data/mystery/interviews/interview-50291987": {
+      "checksum": "5a0290a7c81ec2d4c690859d85822550"
+    },
+    "bashlab/data/mystery/interviews/interview-504687": {
+      "checksum": "fbeee88e3eaac9bd60b0e1178a0e6ae3"
+    },
+    "bashlab/data/mystery/interviews/interview-509105": {
+      "checksum": "e4fc871c373dfbd3b70ecbcef3c50518"
+    },
+    "bashlab/data/mystery/interviews/interview-5143029": {
+      "checksum": "213ad1ff9ae614323e46828b2332ad25"
+    },
+    "bashlab/data/mystery/interviews/interview-514793": {
+      "checksum": "add5bd4d0987a67dccda285308376d79"
+    },
+    "bashlab/data/mystery/interviews/interview-52280505": {
+      "checksum": "4e0519a9cac1d33b36c3a8b5c0607408"
+    },
+    "bashlab/data/mystery/interviews/interview-528044": {
+      "checksum": "a05029aff3351dbb1bfa6feacf03f3a8"
+    },
+    "bashlab/data/mystery/interviews/interview-529706": {
+      "checksum": "9406ae8e54d644a107830b2ad3fe69d8"
+    },
+    "bashlab/data/mystery/interviews/interview-53318557": {
+      "checksum": "454bf58bb01918cac8c1fb4e8f28b08f"
+    },
+    "bashlab/data/mystery/interviews/interview-535181": {
+      "checksum": "d90b42430f999c63f6274f1b7005cf38"
+    },
+    "bashlab/data/mystery/interviews/interview-5372865": {
+      "checksum": "3634edce603ee9cf0c9fe870189c38ec"
+    },
+    "bashlab/data/mystery/interviews/interview-538900": {
+      "checksum": "9242112e1d340b9d619882ed3a5ef61c"
+    },
+    "bashlab/data/mystery/interviews/interview-54026669": {
+      "checksum": "344b4e00464549e4602e4b30ec16c3de"
+    },
+    "bashlab/data/mystery/interviews/interview-541518": {
+      "checksum": "39f429b7131c3767b36d6ba194f523a7"
+    },
+    "bashlab/data/mystery/interviews/interview-5455315": {
+      "checksum": "37bbe3b46ad336edac5ae83e5f283d50"
+    },
+    "bashlab/data/mystery/interviews/interview-54619323": {
+      "checksum": "683843c5aaac6328a537b8ea2eeca72e"
+    },
+    "bashlab/data/mystery/interviews/interview-54851634": {
+      "checksum": "c16034b92f4b0a80c46856ebaa278a44"
+    },
+    "bashlab/data/mystery/interviews/interview-549055": {
+      "checksum": "83334fc6d8bbba0da522688bc89cb949"
+    },
+    "bashlab/data/mystery/interviews/interview-55382746": {
+      "checksum": "c13e21b86b6896880c9bc413acafb956"
+    },
+    "bashlab/data/mystery/interviews/interview-55410365": {
+      "checksum": "069e8885a8a1d6a45a3d953b84cedb8d"
+    },
+    "bashlab/data/mystery/interviews/interview-55435298": {
+      "checksum": "a6e2974aafad6d760142ad2978093248"
+    },
+    "bashlab/data/mystery/interviews/interview-55477243": {
+      "checksum": "626cf11faa3c472256836ec5c387c9f2"
+    },
+    "bashlab/data/mystery/interviews/interview-555536": {
+      "checksum": "37d2679403eec37e48de2a11e2be95db"
+    },
+    "bashlab/data/mystery/interviews/interview-5581158": {
+      "checksum": "e52a4c7275f19347c99950fc9cc7d178"
+    },
+    "bashlab/data/mystery/interviews/interview-55841398": {
+      "checksum": "b19dddf12d4d3e1964e10e67d851e025"
+    },
+    "bashlab/data/mystery/interviews/interview-55984022": {
+      "checksum": "6bee93790299cb18790b524baad1cbf2"
+    },
+    "bashlab/data/mystery/interviews/interview-565396": {
+      "checksum": "d2a3f999459fb13157b5920199a377ce"
+    },
+    "bashlab/data/mystery/interviews/interview-566707": {
+      "checksum": "e346c9a393a2f51746b4f28bb43eeee2"
+    },
+    "bashlab/data/mystery/interviews/interview-56784802": {
+      "checksum": "1a28f75822b6ba672987c076a9ae2ca8"
+    },
+    "bashlab/data/mystery/interviews/interview-56892213": {
+      "checksum": "bbc03ffcc1454fb8c16f944f7d6d6b09"
+    },
+    "bashlab/data/mystery/interviews/interview-57236791": {
+      "checksum": "43ce6de365455ed3f565e1acadc8fdfc"
+    },
+    "bashlab/data/mystery/interviews/interview-5739404": {
+      "checksum": "3659c6f594140f87d21a0df32a6ba98a"
+    },
+    "bashlab/data/mystery/interviews/interview-5766907": {
+      "checksum": "b34b53328ed165e38f9091d7b9fae2a8"
+    },
+    "bashlab/data/mystery/interviews/interview-5774468": {
+      "checksum": "878883180c1c3a087166565242911ba3"
+    },
+    "bashlab/data/mystery/interviews/interview-5782759": {
+      "checksum": "3cdba6334c55987eb3386501b71b7c77"
+    },
+    "bashlab/data/mystery/interviews/interview-579105": {
+      "checksum": "49991811d772626393dca608029aa7e5"
+    },
+    "bashlab/data/mystery/interviews/interview-5835471": {
+      "checksum": "7a25947934d1e4d2d81d186f0e0b2b04"
+    },
+    "bashlab/data/mystery/interviews/interview-586668": {
+      "checksum": "c29ebde07011943007fdf02806e51b50"
+    },
+    "bashlab/data/mystery/interviews/interview-58910793": {
+      "checksum": "30e9237f6f90c88887e84761ed6f9fff"
+    },
+    "bashlab/data/mystery/interviews/interview-5905106": {
+      "checksum": "a244bd2d38c7e8ceb41698e78cae5bae"
+    },
+    "bashlab/data/mystery/interviews/interview-591273": {
+      "checksum": "a832fbda2f52b68ad9fa24915f1461bb"
+    },
+    "bashlab/data/mystery/interviews/interview-5993978": {
+      "checksum": "c0cf927f93a6c3f11a59df8d90fbb504"
+    },
+    "bashlab/data/mystery/interviews/interview-60081985": {
+      "checksum": "b54b52dcc8f98d06fa451b26090cc2a1"
+    },
+    "bashlab/data/mystery/interviews/interview-604403": {
+      "checksum": "0df8c0950bd3f9b6baadc1bed70158c6"
+    },
+    "bashlab/data/mystery/interviews/interview-608607": {
+      "checksum": "6aeed6fff8346d39873007138b49407f"
+    },
+    "bashlab/data/mystery/interviews/interview-6093093": {
+      "checksum": "3634edce603ee9cf0c9fe870189c38ec"
+    },
+    "bashlab/data/mystery/interviews/interview-618764": {
+      "checksum": "ca13a65fc3f313805a12f652cc8cdcbb"
+    },
+    "bashlab/data/mystery/interviews/interview-6203192": {
+      "checksum": "159b81a6a16c918fce91a4dfea568918"
+    },
+    "bashlab/data/mystery/interviews/interview-628618": {
+      "checksum": "43ed02415b3ca72ae2e01bc213738242"
+    },
+    "bashlab/data/mystery/interviews/interview-63308519": {
+      "checksum": "c812e8e94cd56712444d1037da51d236"
+    },
+    "bashlab/data/mystery/interviews/interview-637657": {
+      "checksum": "d5aee9c7775fec3559792f8084ee8802"
+    },
+    "bashlab/data/mystery/interviews/interview-637928": {
+      "checksum": "2933ff684fc76f0c74a4ad931ca535c2"
+    },
+    "bashlab/data/mystery/interviews/interview-638121": {
+      "checksum": "0878623b035e34633c6335997abfd1f3"
+    },
+    "bashlab/data/mystery/interviews/interview-6417794": {
+      "checksum": "68ba1ef1e5e93bee2f0a2e2a7f4c7eee"
+    },
+    "bashlab/data/mystery/interviews/interview-645385": {
+      "checksum": "79573306e5ccdbce2b086ecc26daa78c"
+    },
+    "bashlab/data/mystery/interviews/interview-6553472": {
+      "checksum": "052e986771160dcf64c8fb29e9a5ade7"
+    },
+    "bashlab/data/mystery/interviews/interview-65792229": {
+      "checksum": "ecbf8b2341757068b45ef9a016913b24"
+    },
+    "bashlab/data/mystery/interviews/interview-659803": {
+      "checksum": "4f4efea30506603c0d1c9a3493424fa5"
+    },
+    "bashlab/data/mystery/interviews/interview-66101490": {
+      "checksum": "8d7ab3a4235b564da82e5d129051a7eb"
+    },
+    "bashlab/data/mystery/interviews/interview-66282920": {
+      "checksum": "3add4744f826d0313ea42b3d1052948a"
+    },
+    "bashlab/data/mystery/interviews/interview-6643191": {
+      "checksum": "bde0e13776c7b2f0470b070d041413b3"
+    },
+    "bashlab/data/mystery/interviews/interview-67279454": {
+      "checksum": "7751425b7100f9965c58ca439e796ede"
+    },
+    "bashlab/data/mystery/interviews/interview-673985": {
+      "checksum": "3e25e93dfd10ef53173f1f6647ad73bd"
+    },
+    "bashlab/data/mystery/interviews/interview-676473": {
+      "checksum": "0309f1057e42b5c11bcf95ba07a5ad24"
+    },
+    "bashlab/data/mystery/interviews/interview-67790846": {
+      "checksum": "1834d6af8be6f44ecf9c8d4851a70cf9"
+    },
+    "bashlab/data/mystery/interviews/interview-680549": {
+      "checksum": "8f6e7f86f21f6d7a44f89fc2dff4c619"
+    },
+    "bashlab/data/mystery/interviews/interview-6808205": {
+      "checksum": "3bf4a0bf4fb92d3031706a8259121a16"
+    },
+    "bashlab/data/mystery/interviews/interview-68195573": {
+      "checksum": "bdb9ca53f20147e871885e694f930b4b"
+    },
+    "bashlab/data/mystery/interviews/interview-68488577": {
+      "checksum": "66f89422d793c91a931de53eae0155e3"
+    },
+    "bashlab/data/mystery/interviews/interview-68764140": {
+      "checksum": "1ab00ceabd9d58c69c6ddd979f4cb63a"
+    },
+    "bashlab/data/mystery/interviews/interview-6884359": {
+      "checksum": "9a9fb7f1d5784b4a6aac967ffe38b398"
+    },
+    "bashlab/data/mystery/interviews/interview-6894000": {
+      "checksum": "984c4c8fda66a20f7fb650090a22e402"
+    },
+    "bashlab/data/mystery/interviews/interview-69170457": {
+      "checksum": "a1f7f561e6b3c3f2b9f0b503e48b39b8"
+    },
+    "bashlab/data/mystery/interviews/interview-6933068": {
+      "checksum": "a77fca3beffad38280417d897c04688f"
+    },
+    "bashlab/data/mystery/interviews/interview-699607": {
+      "checksum": "2b205b0233b3511421e8924237c2bb2f"
+    },
+    "bashlab/data/mystery/interviews/interview-70067280": {
+      "checksum": "5f867efa199cd67e94d5faf6cb62e759"
+    },
+    "bashlab/data/mystery/interviews/interview-70199425": {
+      "checksum": "adb3959d84bf3fcb8723dea86612e97c"
+    },
+    "bashlab/data/mystery/interviews/interview-703831": {
+      "checksum": "e1ca4ec2617184420b11412a9874bd34"
+    },
+    "bashlab/data/mystery/interviews/interview-704443": {
+      "checksum": "e125e4bca9a14a51e4b529469a447abc"
+    },
+    "bashlab/data/mystery/interviews/interview-70458099": {
+      "checksum": "ae2b88c28eeb9d283ec2d5eedad18f97"
+    },
+    "bashlab/data/mystery/interviews/interview-7046684": {
+      "checksum": "75e6269b6e5a1d63702d2646828ec77f"
+    },
+    "bashlab/data/mystery/interviews/interview-7066082": {
+      "checksum": "a222b4b2df69df59a0a16d993179d663"
+    },
+    "bashlab/data/mystery/interviews/interview-706620": {
+      "checksum": "5e916ac7cf792847ab2961d54ac847a4"
+    },
+    "bashlab/data/mystery/interviews/interview-707438": {
+      "checksum": "bc0b1441df445f46816976e7a47ad52f"
+    },
+    "bashlab/data/mystery/interviews/interview-708943": {
+      "checksum": "e53d9f8be8e3cd4b9630aaff74146e7b"
+    },
+    "bashlab/data/mystery/interviews/interview-7103823": {
+      "checksum": "fe4e058631937bffc7310e8d04ac7c40"
+    },
+    "bashlab/data/mystery/interviews/interview-71186817": {
+      "checksum": "57d028b939ee3b6644f37d183ff5b91a"
+    },
+    "bashlab/data/mystery/interviews/interview-71226767": {
+      "checksum": "012552a63a3f3dbb5fc210d00ae87786"
+    },
+    "bashlab/data/mystery/interviews/interview-71298441": {
+      "checksum": "7f5fac96badd599b7d03602fc326a66d"
+    },
+    "bashlab/data/mystery/interviews/interview-7180973": {
+      "checksum": "3dabcb27ccb55b84706422483f099f46"
+    },
+    "bashlab/data/mystery/interviews/interview-71993338": {
+      "checksum": "d06c5f3cbbb5e9bfcb758daf4df31dbc"
+    },
+    "bashlab/data/mystery/interviews/interview-720268": {
+      "checksum": "92114932f12338f05697ee65521984f9"
+    },
+    "bashlab/data/mystery/interviews/interview-7254073": {
+      "checksum": "2794208d281967909243bca9532bf358"
+    },
+    "bashlab/data/mystery/interviews/interview-728181": {
+      "checksum": "a6f6375f26040182abedec0b25a655af"
+    },
+    "bashlab/data/mystery/interviews/interview-730123": {
+      "checksum": "33ef4c395b923541b6679bbcbeb63ad0"
+    },
+    "bashlab/data/mystery/interviews/interview-73035802": {
+      "checksum": "b7b669eb3444eaad3d243a6cf1fd082b"
+    },
+    "bashlab/data/mystery/interviews/interview-7305678": {
+      "checksum": "5d55b0b4c4d792981e107395c7ce3a7f"
+    },
+    "bashlab/data/mystery/interviews/interview-73585672": {
+      "checksum": "da96da980a9419f75e7bfdc332f8fe12"
+    },
+    "bashlab/data/mystery/interviews/interview-737609": {
+      "checksum": "775b1e1ee143e2f87ce46faf20b5f713"
+    },
+    "bashlab/data/mystery/interviews/interview-7422077": {
+      "checksum": "e590e8587a10d8d2e61aea163ee93d85"
+    },
+    "bashlab/data/mystery/interviews/interview-74225310": {
+      "checksum": "7d0d1caa939d4967de670b2f3a39620e"
+    },
+    "bashlab/data/mystery/interviews/interview-7469675": {
+      "checksum": "63f0e7fef8886230eb8820f3d73d1bad"
+    },
+    "bashlab/data/mystery/interviews/interview-7541406": {
+      "checksum": "230d12b25a75c4edf1d7b3b82b4e30f5"
+    },
+    "bashlab/data/mystery/interviews/interview-75434722": {
+      "checksum": "82decbffa863f974284f5030f6e6a559"
+    },
+    "bashlab/data/mystery/interviews/interview-755037": {
+      "checksum": "5c0258ccd752e0f01b2ccf8803c109c3"
+    },
+    "bashlab/data/mystery/interviews/interview-75633580": {
+      "checksum": "f7aaf7daa96d9a7aa29d76af1aabc682"
+    },
+    "bashlab/data/mystery/interviews/interview-7580872": {
+      "checksum": "f96dd3feb3480b376195d1ae1a524539"
+    },
+    "bashlab/data/mystery/interviews/interview-77014856": {
+      "checksum": "5ba02c08a0d3ca4db8d29238ba3fb8f0"
+    },
+    "bashlab/data/mystery/interviews/interview-770439": {
+      "checksum": "4b65fba4dd61335ee9fb847588944021"
+    },
+    "bashlab/data/mystery/interviews/interview-77135281": {
+      "checksum": "a4e8e22ba0e28865017c48a9b7cd6616"
+    },
+    "bashlab/data/mystery/interviews/interview-7791374": {
+      "checksum": "910d50d49b98b2fa8a6bd4b5989efaf1"
+    },
+    "bashlab/data/mystery/interviews/interview-780255": {
+      "checksum": "b3bc9924333998cb1cd75f61956588d4"
+    },
+    "bashlab/data/mystery/interviews/interview-7863761": {
+      "checksum": "d8de346ca9a38cac8d39abb3b15ac3ef"
+    },
+    "bashlab/data/mystery/interviews/interview-789564": {
+      "checksum": "6fbf82b2b0003f810212df1b9b409494"
+    },
+    "bashlab/data/mystery/interviews/interview-791289": {
+      "checksum": "eb3d2e32b242dec85fd994d7fa2ec78e"
+    },
+    "bashlab/data/mystery/interviews/interview-79360358": {
+      "checksum": "9ee042f59c47e7c6dfe404d14708e246"
+    },
+    "bashlab/data/mystery/interviews/interview-79411932": {
+      "checksum": "3daeb98cef19699ea343bd15a0f41257"
+    },
+    "bashlab/data/mystery/interviews/interview-794525": {
+      "checksum": "63b58a10a97f2f502a90c2771f1b9969"
+    },
+    "bashlab/data/mystery/interviews/interview-7959148": {
+      "checksum": "41f75b04454dd4e901134a7845ca1028"
+    },
+    "bashlab/data/mystery/interviews/interview-796439": {
+      "checksum": "32f785fe5dc26b6538c598eb59dd9830"
+    },
+    "bashlab/data/mystery/interviews/interview-79667499": {
+      "checksum": "a0e8171a30572408283a8d02c371f0fe"
+    },
+    "bashlab/data/mystery/interviews/interview-79935965": {
+      "checksum": "9b3a8de506e9ac198a2db1ebdc814c71"
+    },
+    "bashlab/data/mystery/interviews/interview-7998181": {
+      "checksum": "60f5928818975ee31339d8512351741f"
+    },
+    "bashlab/data/mystery/interviews/interview-8095917": {
+      "checksum": "e2845540d69004409331fa5a2a4f72b4"
+    },
+    "bashlab/data/mystery/interviews/interview-809922": {
+      "checksum": "66f29135b43b12c274db1c7e61bbacc6"
+    },
+    "bashlab/data/mystery/interviews/interview-812725": {
+      "checksum": "c7654f68aada6d1d80fda5aa5ffcbb4a"
+    },
+    "bashlab/data/mystery/interviews/interview-81443363": {
+      "checksum": "66742eaf7c84e44419a501de0e53465a"
+    },
+    "bashlab/data/mystery/interviews/interview-822576": {
+      "checksum": "c2837a6d58c306a5c331e671e398388e"
+    },
+    "bashlab/data/mystery/interviews/interview-8245680": {
+      "checksum": "0e4769191d4d3ae6004c8e1ea7fb72ca"
+    },
+    "bashlab/data/mystery/interviews/interview-825165": {
+      "checksum": "c5f8a268be4696083e7a1779b7bfc6e9"
+    },
+    "bashlab/data/mystery/interviews/interview-82705993": {
+      "checksum": "f69269d87bbf21afdadef8c2007df480"
+    },
+    "bashlab/data/mystery/interviews/interview-831512": {
+      "checksum": "90e9bf3c410508d445e9d4c7199c4704"
+    },
+    "bashlab/data/mystery/interviews/interview-833367": {
+      "checksum": "d4081503013ed6aeb93af6d800aa66b7"
+    },
+    "bashlab/data/mystery/interviews/interview-838259": {
+      "checksum": "2d4ac58af567a422601d86c1abc47df8"
+    },
+    "bashlab/data/mystery/interviews/interview-8387710": {
+      "checksum": "d3d41e13cba326bcf374b84bfbafab6f"
+    },
+    "bashlab/data/mystery/interviews/interview-8402388": {
+      "checksum": "c99c3422527820444d13cc2d0c3c5218"
+    },
+    "bashlab/data/mystery/interviews/interview-8421696": {
+      "checksum": "68c2779ef27618167214b9089db85246"
+    },
+    "bashlab/data/mystery/interviews/interview-8464899": {
+      "checksum": "20863689e36ebba7930cdaca8755cd2a"
+    },
+    "bashlab/data/mystery/interviews/interview-84688694": {
+      "checksum": "dd190a32c9fb2e9205df03e359c923db"
+    },
+    "bashlab/data/mystery/interviews/interview-849256": {
+      "checksum": "4352bfbf4d5cfbae353dd0bcc2828854"
+    },
+    "bashlab/data/mystery/interviews/interview-85262552": {
+      "checksum": "dbe62a726b3698604f575ab79c3ab243"
+    },
+    "bashlab/data/mystery/interviews/interview-8531248": {
+      "checksum": "03c9fb5ae9d67b8a309a3fa864fc3f86"
+    },
+    "bashlab/data/mystery/interviews/interview-856221": {
+      "checksum": "2c14cd57db93094ca7b94b1ec06feffb"
+    },
+    "bashlab/data/mystery/interviews/interview-8586380": {
+      "checksum": "fdb00a157a6c3422af2c931d276d5022"
+    },
+    "bashlab/data/mystery/interviews/interview-861780": {
+      "checksum": "d51584bbee4e26cf265f44ab65039d38"
+    },
+    "bashlab/data/mystery/interviews/interview-862173": {
+      "checksum": "656b437cdd946341ffdc79c11799bae3"
+    },
+    "bashlab/data/mystery/interviews/interview-862717": {
+      "checksum": "b2c10258ca6ef88d190a6a9e8e30a3ab"
+    },
+    "bashlab/data/mystery/interviews/interview-8631232": {
+      "checksum": "92d6de82de72dd16c69d7916bc33c3f2"
+    },
+    "bashlab/data/mystery/interviews/interview-86395001": {
+      "checksum": "3f63f36046695bba49ce54c4ee955e71"
+    },
+    "bashlab/data/mystery/interviews/interview-865918": {
+      "checksum": "ee3386d6bb6eaeb8c3fb7d308b3c15c6"
+    },
+    "bashlab/data/mystery/interviews/interview-867999": {
+      "checksum": "b011dacb413c55f1619d2ebd593d38c9"
+    },
+    "bashlab/data/mystery/interviews/interview-8700943": {
+      "checksum": "a1eddb3a398c90202474f1e6c59ef4ea"
+    },
+    "bashlab/data/mystery/interviews/interview-87126591": {
+      "checksum": "4e225ec454263005f340b557cdab38a5"
+    },
+    "bashlab/data/mystery/interviews/interview-871877": {
+      "checksum": "f1cc99b680ff075e8fdffd04433e8efb"
+    },
+    "bashlab/data/mystery/interviews/interview-879569": {
+      "checksum": "fa337ad1d34889e2eaf179d69707f07d"
+    },
+    "bashlab/data/mystery/interviews/interview-8819490": {
+      "checksum": "84b474bcf25570c2a3c4ec14dd6eb84a"
+    },
+    "bashlab/data/mystery/interviews/interview-891720": {
+      "checksum": "c373bc48e665617b0230ff572b1881c0"
+    },
+    "bashlab/data/mystery/interviews/interview-896668": {
+      "checksum": "14cef4d6d2bf338404e522c0126d495f"
+    },
+    "bashlab/data/mystery/interviews/interview-9004767": {
+      "checksum": "79218e73ff5a34c6f542b6e3366e68ee"
+    },
+    "bashlab/data/mystery/interviews/interview-901603": {
+      "checksum": "52d4686ff9eb88e91c8c33e09f1318bb"
+    },
+    "bashlab/data/mystery/interviews/interview-901645": {
+      "checksum": "0f9b41a5e0a2cb843616b40f82ecf249"
+    },
+    "bashlab/data/mystery/interviews/interview-90394637": {
+      "checksum": "d4404ab1ff2fe01e914b2236f9ce6ae9"
+    },
+    "bashlab/data/mystery/interviews/interview-904020": {
+      "checksum": "0931a64b5e6ed879dd0a872227c8869f"
+    },
+    "bashlab/data/mystery/interviews/interview-907126": {
+      "checksum": "76a59c59170d5ac0ca9f8cca72f09a6d"
+    },
+    "bashlab/data/mystery/interviews/interview-9074626": {
+      "checksum": "e601755cfa5adb0bf6356939fa4d0fc8"
+    },
+    "bashlab/data/mystery/interviews/interview-911451": {
+      "checksum": "39d4018a96800bb3b3fec6705f98c7ad"
+    },
+    "bashlab/data/mystery/interviews/interview-91673757": {
+      "checksum": "27ae1c0df57797f5a9ebe2a2f8393bf5"
+    },
+    "bashlab/data/mystery/interviews/interview-917210": {
+      "checksum": "037a259786ee2939093f9997364ba569"
+    },
+    "bashlab/data/mystery/interviews/interview-9185205": {
+      "checksum": "c18eae511acce95fd187b481df25468d"
+    },
+    "bashlab/data/mystery/interviews/interview-920304": {
+      "checksum": "d924b01632f8f7178c0044df192d11b9"
+    },
+    "bashlab/data/mystery/interviews/interview-92391023": {
+      "checksum": "022716c5bc731c3f849d3e845bfd04f5"
+    },
+    "bashlab/data/mystery/interviews/interview-92670500": {
+      "checksum": "c1d1cfe11c6b36db79125d74d8263eef"
+    },
+    "bashlab/data/mystery/interviews/interview-927642": {
+      "checksum": "5c8f1c727c185c38f3729d3d7065d3f1"
+    },
+    "bashlab/data/mystery/interviews/interview-9332386": {
+      "checksum": "ee0861d7ee05bf9caec44347b4f05b16"
+    },
+    "bashlab/data/mystery/interviews/interview-9346061": {
+      "checksum": "424f6980ec178c15b5415c3f328314c9"
+    },
+    "bashlab/data/mystery/interviews/interview-93473333": {
+      "checksum": "bd548f045fb8a0f7b010f43bc42bd846"
+    },
+    "bashlab/data/mystery/interviews/interview-93696502": {
+      "checksum": "4100c89afb92f8b9b540b923271a2b24"
+    },
+    "bashlab/data/mystery/interviews/interview-938991": {
+      "checksum": "0402cca959ca9372f7e35e1792afecd2"
+    },
+    "bashlab/data/mystery/interviews/interview-9408565": {
+      "checksum": "7a1c24a77a162fccdfa5a5ca21165746"
+    },
+    "bashlab/data/mystery/interviews/interview-94126412": {
+      "checksum": "19c6bab1b5742539a1b2717f0585b1b7"
+    },
+    "bashlab/data/mystery/interviews/interview-9437737": {
+      "checksum": "a61037c359522d427d8b8b18262b8d9f"
+    },
+    "bashlab/data/mystery/interviews/interview-944493": {
+      "checksum": "f1b4ff0e196edfe829cb4cddb9219999"
+    },
+    "bashlab/data/mystery/interviews/interview-9446528": {
+      "checksum": "092703420aadc022427acaae9ca9ad5b"
+    },
+    "bashlab/data/mystery/interviews/interview-9501580": {
+      "checksum": "467842a50ae1665af2beb460987f16a1"
+    },
+    "bashlab/data/mystery/interviews/interview-95095182": {
+      "checksum": "42a36553cc2cc295543a7b8629cf3a77"
+    },
+    "bashlab/data/mystery/interviews/interview-95601730": {
+      "checksum": "c28e559bf9eaaf163901a0479c81753e"
+    },
+    "bashlab/data/mystery/interviews/interview-9618669": {
+      "checksum": "c545e8746c9ed65612c5464ddc041b72"
+    },
+    "bashlab/data/mystery/interviews/interview-9620713": {
+      "checksum": "303738383abbf33ba6f727282ea76e3b"
+    },
+    "bashlab/data/mystery/interviews/interview-9651888": {
+      "checksum": "614d7f276ee9db560258bd189f88fdd6"
+    },
+    "bashlab/data/mystery/interviews/interview-9666149": {
+      "checksum": "da0b409a91614b571ceef8b2b7a52c7e"
+    },
+    "bashlab/data/mystery/interviews/interview-97043057": {
+      "checksum": "0448595eb57df50ae29b835b21be9078"
+    },
+    "bashlab/data/mystery/interviews/interview-9709892": {
+      "checksum": "f5c62f2f6bd684c82696ea9e0c41a2df"
+    },
+    "bashlab/data/mystery/interviews/interview-9711852": {
+      "checksum": "80814a94681c957c10bbff6038214305"
+    },
+    "bashlab/data/mystery/interviews/interview-9712946": {
+      "checksum": "5029c17e24a2629b5342f6cdd7acc24e"
+    },
+    "bashlab/data/mystery/interviews/interview-9728756": {
+      "checksum": "3adcd15c583674b55722f1249cadce7f"
+    },
+    "bashlab/data/mystery/interviews/interview-97393699": {
+      "checksum": "3e6fcb5eea59fdc6be8a01220b1aae3e"
+    },
+    "bashlab/data/mystery/interviews/interview-97409610": {
+      "checksum": "d0d3c4700e819b9737b61515e92e80c6"
+    },
+    "bashlab/data/mystery/interviews/interview-980963": {
+      "checksum": "3dd3f06f09799de16c7d96c5b512b1cc"
+    },
+    "bashlab/data/mystery/interviews/interview-982013": {
+      "checksum": "d1c4bbf62aa76b0cf6040dcc39bbd073"
+    },
+    "bashlab/data/mystery/interviews/interview-9824821": {
+      "checksum": "2c8e5b32f3cbacd80f2c111f0266bfac"
+    },
+    "bashlab/data/mystery/interviews/interview-98912259": {
+      "checksum": "7638a16ea4dbd81fc0165f187fb35b2e"
+    },
+    "bashlab/data/mystery/interviews/interview-9901455": {
+      "checksum": "0b887ab94f19e84af334889cdd73fda6"
+    },
+    "bashlab/data/mystery/interviews/interview-9912172": {
+      "checksum": "1700d4b29bd0c48c089566977fff5221"
+    },
+    "bashlab/data/mystery/interviews/interview-992072": {
+      "checksum": "e25acb5b9168cee2ddc0b9e9d4352b48"
+    },
+    "bashlab/data/mystery/interviews/interview-99643550": {
+      "checksum": "cf6d13b78affc71849db9a7e6720e9b3"
+    },
+    "bashlab/data/mystery/interviews/interview-9969223": {
+      "checksum": "5f4783802ac4c73d7a6b2199ce1b58ea"
+    },
+    "bashlab/data/mystery/interviews/interview-999372": {
+      "checksum": "3e5b04b840b46fb3c2ccfea1126e94cb"
+    },
+    "bashlab/data/mystery/memberships/AAA": {
+      "checksum": "078180d164a5e066462db4176e0dbc41"
+    },
+    "bashlab/data/mystery/memberships/AAdvantage": {
+      "checksum": "c2cf45f5c1486b5b88f115147a6e2528"
+    },
+    "bashlab/data/mystery/memberships/Costco": {
+      "checksum": "474a902211121a196416b6e7db324cb7"
+    },
+    "bashlab/data/mystery/memberships/Delta_SkyMiles": {
+      "checksum": "87285466c9a6b3296312609734685c2d"
+    },
+    "bashlab/data/mystery/memberships/Fitness_Galaxy": {
+      "checksum": "f9e1f265c9027c08844da5406f16d026"
+    },
+    "bashlab/data/mystery/memberships/Museum_of_Bash_History": {
+      "checksum": "3fb1cfd15fedad993528fceb71c661f3"
+    },
+    "bashlab/data/mystery/memberships/REI": {
+      "checksum": "6db498fc5b37791369f132b7db59898c"
+    },
+    "bashlab/data/mystery/memberships/Rotary_Club": {
+      "checksum": "80b6c974cdb6927c2d7e7173841c7cbc"
+    },
+    "bashlab/data/mystery/memberships/TCSU_Alumni_Association": {
+      "checksum": "c153965b18138fb35827cf7acd51dcf1"
+    },
+    "bashlab/data/mystery/memberships/Terminal_City_Library": {
+      "checksum": "2c0aca547a6329f4a4246927ed259267"
+    },
+    "bashlab/data/mystery/memberships/United_MileagePlus": {
+      "checksum": "0e01471de676c11cf5db0eff34965f2c"
+    },
+    "bashlab/data/mystery/people": {
+      "checksum": "c2d82fe415edf2279ccd0645d3c32d68"
+    },
+    "bashlab/data/mystery/streets/Abbot_Street": {
+      "checksum": "007932769c57ca6c0f5ed2c0d81f7282"
+    },
+    "bashlab/data/mystery/streets/Acton_Street": {
+      "checksum": "43e128db4bb579faa6ddbd815052dc7e"
+    },
+    "bashlab/data/mystery/streets/Addington_Road": {
+      "checksum": "0aae0bb8c855b90c9e03aae9d428f515"
+    },
+    "bashlab/data/mystery/streets/Alaric_Street": {
+      "checksum": "fb793ae90f7d9a72287f52bf12aec15c"
+    },
+    "bashlab/data/mystery/streets/Albany_Street": {
+      "checksum": "e2a0a2382d6186aaa31bcc57ee05b6ae"
+    },
+    "bashlab/data/mystery/streets/Aldworth_Street": {
+      "checksum": "cf42baef983e409aa7b55ac08749fbf1"
+    },
+    "bashlab/data/mystery/streets/Alpine_Street": {
+      "checksum": "bfede59e06fc36dc573cca426ade4aa1"
+    },
+    "bashlab/data/mystery/streets/Andover_Road": {
+      "checksum": "07f9193ef04b4cb3e7128e04748b5de2"
+    },
+    "bashlab/data/mystery/streets/Ansonia_Road": {
+      "checksum": "8733e67749c03a270e14cb1f4f342d76"
+    },
+    "bashlab/data/mystery/streets/Appleton_Road": {
+      "checksum": "bb439a023b3881868b78597379832fd4"
+    },
+    "bashlab/data/mystery/streets/Aramon_Street": {
+      "checksum": "01a1cd1067cbe354c4a301f98f6ba588"
+    },
+    "bashlab/data/mystery/streets/Arcola_Street": {
+      "checksum": "59dee21aa96bc6e1fea8c488e64cf9aa"
+    },
+    "bashlab/data/mystery/streets/Atwood_Road": {
+      "checksum": "59122d3465b759d96fd75a9507d47e10"
+    },
+    "bashlab/data/mystery/streets/Auriga_Street": {
+      "checksum": "229eb70d4b99cf88bdef0f446633f8c1"
+    },
+    "bashlab/data/mystery/streets/Avalon_Road": {
+      "checksum": "17d26320f5d8e69df734f704e56f987c"
+    },
+    "bashlab/data/mystery/streets/B_Street": {
+      "checksum": "cfd264eb4f3b999f386e33743c88e6b5"
+    },
+    "bashlab/data/mystery/streets/Ballard_Street": {
+      "checksum": "de5a6d6f96bf5a7fac5f6d675a563be0"
+    },
+    "bashlab/data/mystery/streets/Balmoral_Park": {
+      "checksum": "81b401c37c7c1d7e54539309ce1c53bc"
+    },
+    "bashlab/data/mystery/streets/Bartlett_Avenue": {
+      "checksum": "c9978aab93e3b7e4ae75ecec0e440f08"
+    },
+    "bashlab/data/mystery/streets/Bellevue_Avenue": {
+      "checksum": "31147907cc36c16804e6d6a8b006f4e0"
+    },
+    "bashlab/data/mystery/streets/Bertson_Avenue": {
+      "checksum": "2c6624a0d7cbefc2081115e43be3ad36"
+    },
+    "bashlab/data/mystery/streets/Bicknell_Street": {
+      "checksum": "e5a9df505118aa882d083e9defa5e9e1"
+    },
+    "bashlab/data/mystery/streets/Blue_Hill_Avenue": {
+      "checksum": "abc1ddaedf4de201715c85a6069c9e6a"
+    },
+    "bashlab/data/mystery/streets/Bobolink_Street": {
+      "checksum": "8cc349a6e26df937582ea49668fcc9f2"
+    },
+    "bashlab/data/mystery/streets/Boston_Street": {
+      "checksum": "b5ce083b6da722b6b82e35a8c5a87017"
+    },
+    "bashlab/data/mystery/streets/Bothwell_Road": {
+      "checksum": "c3bc2a42c0b15051e8a8bf910059f4c5"
+    },
+    "bashlab/data/mystery/streets/Bournedale_Road": {
+      "checksum": "b3717e46e502640810eb6710b6e665d8"
+    },
+    "bashlab/data/mystery/streets/Boynton_Street": {
+      "checksum": "5d175d274e2a71d0433224e8236ca1ee"
+    },
+    "bashlab/data/mystery/streets/Brinton_Street": {
+      "checksum": "25c104e6df4879c2736229364d318b9b"
+    },
+    "bashlab/data/mystery/streets/Bristol_Street": {
+      "checksum": "cbfcb5671b7ccf3febf62e1bc6d2bab0"
+    },
+    "bashlab/data/mystery/streets/Broad_Canal_Street": {
+      "checksum": "971a8d8d54ee063d7cb6484f7061261d"
+    },
+    "bashlab/data/mystery/streets/Brookdale_Street": {
+      "checksum": "19354b9fb971c511cc9fa62c5e51f0da"
+    },
+    "bashlab/data/mystery/streets/Brookline_Avenue": {
+      "checksum": "ec7e01addb511bb50d91557eb27ac38e"
+    },
+    "bashlab/data/mystery/streets/Buckingham_Place": {
+      "checksum": "32fe4f4c312e1d04a949c3960c50c8a6"
+    },
+    "bashlab/data/mystery/streets/Burwell_Road": {
+      "checksum": "c208b9f14bcf6fba3ebe4156ddff9e12"
+    },
+    "bashlab/data/mystery/streets/Cadbury_Road": {
+      "checksum": "0a0718cd8fbe0967f847240d36c1d750"
+    },
+    "bashlab/data/mystery/streets/Cardinal_Medeiros_Avenue": {
+      "checksum": "df0c46d0132a578ef8ae658d87346477"
+    },
+    "bashlab/data/mystery/streets/Cardington_Street": {
+      "checksum": "93492303cfcd76a7c1b61b0ca1c89e35"
+    },
+    "bashlab/data/mystery/streets/Causeway_Street": {
+      "checksum": "6efcb17285fb64c556ea02ce1e4e6df9"
+    },
+    "bashlab/data/mystery/streets/Cerdan_Avenue": {
+      "checksum": "5363f544e09532693cb4912299b734d4"
+    },
+    "bashlab/data/mystery/streets/Channel_Center_Street": {
+      "checksum": "40820a2621352ff087eb9555a6d83f25"
+    },
+    "bashlab/data/mystery/streets/Cheverus_Road": {
+      "checksum": "17012df12f7a618533fbf0611fbf3786"
+    },
+    "bashlab/data/mystery/streets/Claremont_Park": {
+      "checksum": "c95fa25691362f4ddd302bf9c23c96a1"
+    },
+    "bashlab/data/mystery/streets/Clay_Street": {
+      "checksum": "a292e3915d6c3bcb1b89361a721e59de"
+    },
+    "bashlab/data/mystery/streets/Claybourne_Street": {
+      "checksum": "ae65a5456c89c476831ebeaec7acb8dd"
+    },
+    "bashlab/data/mystery/streets/Clipper_Ship_Lane": {
+      "checksum": "ab0f2358d0421c6ddef4774ef2689cd0"
+    },
+    "bashlab/data/mystery/streets/Cook_Street": {
+      "checksum": "0fa45bf082c19b12fd9e48f7a7a5deaa"
+    },
+    "bashlab/data/mystery/streets/Cornelia_Street": {
+      "checksum": "ea335ce54298a90216ab679be5e848d7"
+    },
+    "bashlab/data/mystery/streets/Corwin_Street": {
+      "checksum": "eb7f670b3f56d127dad2929a3cfe4d0a"
+    },
+    "bashlab/data/mystery/streets/Culbert_Street": {
+      "checksum": "33b3524ded7fb96cb3cbe3367e73ad4d"
+    },
+    "bashlab/data/mystery/streets/Dacia_Street": {
+      "checksum": "92941398c93059c5e9700265692788f2"
+    },
+    "bashlab/data/mystery/streets/Dalton_Street": {
+      "checksum": "aa4284a70982e7772f30eb49dabb9c3d"
+    },
+    "bashlab/data/mystery/streets/Dana_Avenue": {
+      "checksum": "5ab0086a68f177f5d79c1e3359cfb728"
+    },
+    "bashlab/data/mystery/streets/Davenport_Street": {
+      "checksum": "649b7cd68c0c2110fbe79e58633f3cdf"
+    },
+    "bashlab/data/mystery/streets/Devine_Way": {
+      "checksum": "7b13686a462e5ef185b1e396f8655bf8"
+    },
+    "bashlab/data/mystery/streets/Dewar_Street": {
+      "checksum": "a4a7fe237a9c71795c47872b5d9a44d0"
+    },
+    "bashlab/data/mystery/streets/Doane_Street": {
+      "checksum": "c6d141fee6d9c2c3346bc91cd037af82"
+    },
+    "bashlab/data/mystery/streets/Dock_Street": {
+      "checksum": "f281f21fbeac79d01d13cb4a81681282"
+    },
+    "bashlab/data/mystery/streets/Dorrance_Street": {
+      "checksum": "3fb87032d753a82df5796dab0d982226"
+    },
+    "bashlab/data/mystery/streets/Dover_Street": {
+      "checksum": "eced26e9ac79ae87ab6ec5364ee89c2d"
+    },
+    "bashlab/data/mystery/streets/Dresser_Street": {
+      "checksum": "922bfb35877914bd7cf5e205658d7828"
+    },
+    "bashlab/data/mystery/streets/Drumlin_Road": {
+      "checksum": "336aaf6942c34d942f14535937581d75"
+    },
+    "bashlab/data/mystery/streets/Dunstable_Road": {
+      "checksum": "24b6ca0c5cd2e16de9c96229d2327943"
+    },
+    "bashlab/data/mystery/streets/Elmore_Street": {
+      "checksum": "36d53c23adbfbfeb177d22e24f4422af"
+    },
+    "bashlab/data/mystery/streets/Embassy_Road": {
+      "checksum": "9152289f85894f996201184b3610442a"
+    },
+    "bashlab/data/mystery/streets/Enterprise_Street": {
+      "checksum": "b64b943481d3b2dd343a5ee2e25b8b14"
+    },
+    "bashlab/data/mystery/streets/Esther_Road": {
+      "checksum": "5251426e3e33c87047c03393fd8c5d4e"
+    },
+    "bashlab/data/mystery/streets/Estrella_Street": {
+      "checksum": "31ed269be354a4f9d03d898b4a28a45d"
+    },
+    "bashlab/data/mystery/streets/Eugenia_Road": {
+      "checksum": "c43bdf8853c0d9221a0046dbd7baa670"
+    },
+    "bashlab/data/mystery/streets/Fairfield_Street": {
+      "checksum": "2ddb1434294e15ba38b146c0086ef65a"
+    },
+    "bashlab/data/mystery/streets/Faunce_Road": {
+      "checksum": "a419352f904aa20dc43b09736e9b0f51"
+    },
+    "bashlab/data/mystery/streets/Fay_Street": {
+      "checksum": "ce35e390ccfc6314db5c9453b356eeb4"
+    },
+    "bashlab/data/mystery/streets/Fayston_Street": {
+      "checksum": "5875236203d61c862d9e59f4b77c2dc1"
+    },
+    "bashlab/data/mystery/streets/Fessenden_Street": {
+      "checksum": "c70cddf6d76f361bed410629c4b6d59d"
+    },
+    "bashlab/data/mystery/streets/Forestvale_Road": {
+      "checksum": "f132355b204e09f88f76942e202214f5"
+    },
+    "bashlab/data/mystery/streets/Foundry_Street": {
+      "checksum": "fd4111e06626d8a4fabcd5b05080b8a8"
+    },
+    "bashlab/data/mystery/streets/Fowler_Street": {
+      "checksum": "e35ba3946e69c67c618b310b582f210f"
+    },
+    "bashlab/data/mystery/streets/Frontage_Road": {
+      "checksum": "aa92af6bafb3fcee349aa0a0dfb3626b"
+    },
+    "bashlab/data/mystery/streets/Gerard_Street": {
+      "checksum": "d4596530366cfcdb15828258e7ff5720"
+    },
+    "bashlab/data/mystery/streets/Gillespies_Lane": {
+      "checksum": "1bf1064df73ad231563fdd4fc4fcb453"
+    },
+    "bashlab/data/mystery/streets/Glenville_Avenue": {
+      "checksum": "e7bf69b213319e2f84dbe1f80349402f"
+    },
+    "bashlab/data/mystery/streets/Glenwood_Avenue": {
+      "checksum": "8c6b3dfe52050c0a77d8265dc49bc0fb"
+    },
+    "bashlab/data/mystery/streets/Grampian_Way": {
+      "checksum": "bb4f0df26b0dc6a4b7fa26c25ab6cd11"
+    },
+    "bashlab/data/mystery/streets/Granby_Street": {
+      "checksum": "5b9d0735f8b56cf165756f727ea9c447"
+    },
+    "bashlab/data/mystery/streets/Gray_Gardens_East": {
+      "checksum": "b249aeaea28bf0148e9fcd7c81f1629e"
+    },
+    "bashlab/data/mystery/streets/Greendale_Road": {
+      "checksum": "2334ee10d5cbcd2d069348f7ac3cf0be"
+    },
+    "bashlab/data/mystery/streets/Gretter_Road": {
+      "checksum": "2ea4a4cd13bbea02b2272224d21730ee"
+    },
+    "bashlab/data/mystery/streets/Groveland_Street": {
+      "checksum": "61c1b89598db1d4d7b352099901c44a9"
+    },
+    "bashlab/data/mystery/streets/Hadassah_Way": {
+      "checksum": "36007f16d5a62d85d5acb1f940f9d8c5"
+    },
+    "bashlab/data/mystery/streets/Haley_Street": {
+      "checksum": "0ce4172e9ad10231d05ae5de04868b09"
+    },
+    "bashlab/data/mystery/streets/Harbor_Point_Boulevard": {
+      "checksum": "5a28953484810b0aa56ea2956ad3cf9a"
+    },
+    "bashlab/data/mystery/streets/Harding_Road": {
+      "checksum": "7d325565acd7432099952e763fe8d48e"
+    },
+    "bashlab/data/mystery/streets/Hart_Place": {
+      "checksum": "18a0741052e442d754a2f92f4ff7458a"
+    },
+    "bashlab/data/mystery/streets/Hazel_Street": {
+      "checksum": "0c742a320cbe69bd2eff3a5494774dc7"
+    },
+    "bashlab/data/mystery/streets/Hazelton_Street": {
+      "checksum": "f96008eef16900b12475f9602c8da399"
+    },
+    "bashlab/data/mystery/streets/High_Road": {
+      "checksum": "01b0ded18c096134b5d88874df31bc92"
+    },
+    "bashlab/data/mystery/streets/High_View_Avenue": {
+      "checksum": "eb6a650c39adc54fdbca9e3a58457227"
+    },
+    "bashlab/data/mystery/streets/Hobart_Street": {
+      "checksum": "fae48134c82ef68e3ad73a682b1c41ca"
+    },
+    "bashlab/data/mystery/streets/Hollander_Street": {
+      "checksum": "6843ab2e21c94e1fb7127064cdc54459"
+    },
+    "bashlab/data/mystery/streets/Hooten_Court": {
+      "checksum": "e6e2449163ee14e1e3c0fee8920b8e37"
+    },
+    "bashlab/data/mystery/streets/Hopedale_Street": {
+      "checksum": "866a0c16eded9c5962d218923c3170be"
+    },
+    "bashlab/data/mystery/streets/Hull_Street": {
+      "checksum": "05bb85583b5e49381440b3eb720bfc1a"
+    },
+    "bashlab/data/mystery/streets/Island_View_Place": {
+      "checksum": "b03ec24476643fa8c7b3858b53327a46"
+    },
+    "bashlab/data/mystery/streets/Jacob_Street": {
+      "checksum": "6f8c1a5e13bad3df7a51094fa3deb6ed"
+    },
+    "bashlab/data/mystery/streets/Jacqueline_Road": {
+      "checksum": "ca5b2e47ac74265833c8c3af60ede610"
+    },
+    "bashlab/data/mystery/streets/Jamaica_Place": {
+      "checksum": "d6e730e554c8dcc90f856578208a2909"
+    },
+    "bashlab/data/mystery/streets/Jersey_Street": {
+      "checksum": "f007ce403d9c8f6ac08b6ebcd2fbc6c6"
+    },
+    "bashlab/data/mystery/streets/Jeshurun_Street": {
+      "checksum": "a9327a7691f4a05ad713a8c1713d3d53"
+    },
+    "bashlab/data/mystery/streets/John_Alden_Road": {
+      "checksum": "8b130ee160c310d51e5159de37897674"
+    },
+    "bashlab/data/mystery/streets/Judge_Street": {
+      "checksum": "5f6e7e3826e58532d843894adde24d11"
+    },
+    "bashlab/data/mystery/streets/June_Street": {
+      "checksum": "f6d5d9b43ab1d51ce550789fc8c25c62"
+    },
+    "bashlab/data/mystery/streets/Kearsarge_Avenue": {
+      "checksum": "d6ee9aef0e8195b0b3cfb46a3df7a836"
+    },
+    "bashlab/data/mystery/streets/King_Place": {
+      "checksum": "8df774e50b471f63af96925f5ed06388"
+    },
+    "bashlab/data/mystery/streets/Kinross_Road": {
+      "checksum": "ab8ad317e8e2e18b7ecbf6c726b0a55b"
+    },
+    "bashlab/data/mystery/streets/Knoll_Street": {
+      "checksum": "25237b4ea53560b1a5f3d956be6e2406"
+    },
+    "bashlab/data/mystery/streets/Laban_Pratt_Road": {
+      "checksum": "e450f17e4d3f0bc3737b9f3fd0ad6553"
+    },
+    "bashlab/data/mystery/streets/Leseur_Road": {
+      "checksum": "ce0fd43bd1683f1655990af311e182a2"
+    },
+    "bashlab/data/mystery/streets/Lineham_Court": {
+      "checksum": "51daa4a3d508acb59b744ec0b73749e8"
+    },
+    "bashlab/data/mystery/streets/Lovis_Street": {
+      "checksum": "9f65424b9e222c7a2a276d73fd99bda2"
+    },
+    "bashlab/data/mystery/streets/Lynde_Street": {
+      "checksum": "d7b160a255f7174dc82dbd1b33dba5f2"
+    },
+    "bashlab/data/mystery/streets/Lynn_Street": {
+      "checksum": "3cd96ff0db515052c2805bc38c7b7597"
+    },
+    "bashlab/data/mystery/streets/Mamelon_Circle": {
+      "checksum": "1a7dc9c9f2d359d0b8ea82eb1f84a1c9"
+    },
+    "bashlab/data/mystery/streets/Manila_Avenue": {
+      "checksum": "a8a2242bbbd4e68b79d80c00a4ee1a4e"
+    },
+    "bashlab/data/mystery/streets/Manton_Terrace": {
+      "checksum": "d6fee75a6d0a4eab14a721fe4bdd5d6f"
+    },
+    "bashlab/data/mystery/streets/Marney_Street": {
+      "checksum": "97ec177aa3542b8a8aec729d8379974b"
+    },
+    "bashlab/data/mystery/streets/Mattapan_Street": {
+      "checksum": "ba59fc2bf859cba9394f382d340d6faf"
+    },
+    "bashlab/data/mystery/streets/May_Street": {
+      "checksum": "88ce2db25faa1952cf50aa59e8f8744b"
+    },
+    "bashlab/data/mystery/streets/Meadowview_Road": {
+      "checksum": "217b4e36503c58255dfdd86b5ecc5255"
+    },
+    "bashlab/data/mystery/streets/Merola_Park": {
+      "checksum": "31bcefc392463964592203b5f61ac022"
+    },
+    "bashlab/data/mystery/streets/Michigan_Avenue": {
+      "checksum": "7ab3e414ac57f23c8fdfbbc60cec052e"
+    },
+    "bashlab/data/mystery/streets/Miles_Street": {
+      "checksum": "5d6cce440d502b03cc5615f89e43c85f"
+    },
+    "bashlab/data/mystery/streets/Moloney_Street": {
+      "checksum": "343f3dd85df40ecb2af26aefa022857b"
+    },
+    "bashlab/data/mystery/streets/Mount_Ash_Road": {
+      "checksum": "94c01fca918a1fa21ddc5f6142733ccf"
+    },
+    "bashlab/data/mystery/streets/Mount_Ida_Road": {
+      "checksum": "7e863776e4c75b1657e01f421095401c"
+    },
+    "bashlab/data/mystery/streets/Mountain_Avenue": {
+      "checksum": "c701dd510744415cce94e4fbef72dbe2"
+    },
+    "bashlab/data/mystery/streets/Mozart_Street": {
+      "checksum": "9c4e4f1890b088e6d425fc173dd180fa"
+    },
+    "bashlab/data/mystery/streets/Myles_Standish_Road": {
+      "checksum": "a8421474f05c723f19674a9ac1e5916b"
+    },
+    "bashlab/data/mystery/streets/Mystic_Street": {
+      "checksum": "c16894992202443fc3bd8c94d3bb41d8"
+    },
+    "bashlab/data/mystery/streets/Nazing_Street": {
+      "checksum": "f795fc03659ba407a7eb424c40a7305e"
+    },
+    "bashlab/data/mystery/streets/New_Minton_Street": {
+      "checksum": "45046aa86f23a85d82294f27144c74aa"
+    },
+    "bashlab/data/mystery/streets/New_Park_Avenue": {
+      "checksum": "955376836c72efd7be36fbb6eb5dc293"
+    },
+    "bashlab/data/mystery/streets/Newcastle_Road": {
+      "checksum": "d2f3875ff6950f8d62e716f46eb83663"
+    },
+    "bashlab/data/mystery/streets/Newcroft_Circle": {
+      "checksum": "45bff3f50268c57ece030b750202b548"
+    },
+    "bashlab/data/mystery/streets/North_Washington_Street": {
+      "checksum": "92fd89c173137b0efb9ccf0984cb89f6"
+    },
+    "bashlab/data/mystery/streets/Norton_Street": {
+      "checksum": "5597d7965bc7fdbcb6fda00c5c8b1a80"
+    },
+    "bashlab/data/mystery/streets/Oak_Hill_Avenue": {
+      "checksum": "9cf3cfd8618a0e70052dad4c8cb9c5c7"
+    },
+    "bashlab/data/mystery/streets/Oak_Place": {
+      "checksum": "8bc7f2131e09715603ecae5834a22910"
+    },
+    "bashlab/data/mystery/streets/Oakley_Street": {
+      "checksum": "f5e21a36852a0b68813f9275918f7aae"
+    },
+    "bashlab/data/mystery/streets/Oliva_Road": {
+      "checksum": "d2b0a06f7e0d9334e738e47ac31beac1"
+    },
+    "bashlab/data/mystery/streets/Orchard_Road": {
+      "checksum": "ac4fed4ccfa3455054b8464ad2005732"
+    },
+    "bashlab/data/mystery/streets/Paragon_Road": {
+      "checksum": "300ca01cffc651262e36283c5fa77a71"
+    },
+    "bashlab/data/mystery/streets/Peacock_Lane": {
+      "checksum": "8d14bf900e6bea7e8f66651734126545"
+    },
+    "bashlab/data/mystery/streets/Peter_Parley_Road": {
+      "checksum": "8a0abb0a08ccfce4287fd8d7986a6e5c"
+    },
+    "bashlab/data/mystery/streets/Pinewood_Street": {
+      "checksum": "c98fa01ba27a99ffaf9fa8b638d49e21"
+    },
+    "bashlab/data/mystery/streets/Plain_Street": {
+      "checksum": "af29a784727661ec803365f9a1526b69"
+    },
+    "bashlab/data/mystery/streets/Plainfield_Street": {
+      "checksum": "935cd537c52cf6da9b91bd82add728ef"
+    },
+    "bashlab/data/mystery/streets/Potosi_Street": {
+      "checksum": "b77a813280a18f154be22b645051bec5"
+    },
+    "bashlab/data/mystery/streets/Priscilla_Road": {
+      "checksum": "93e25ffe0185dd3c4427ba0a91a8e79d"
+    },
+    "bashlab/data/mystery/streets/Proctor_Street": {
+      "checksum": "fbaf00099bc8d7116ae1775efe406a66"
+    },
+    "bashlab/data/mystery/streets/Quarley_Road": {
+      "checksum": "3f4db79b5eda2ec2ddc71c0046953cb4"
+    },
+    "bashlab/data/mystery/streets/Randlett_Place": {
+      "checksum": "95841fa9c0914e3d23311da6db7ee11a"
+    },
+    "bashlab/data/mystery/streets/Rena_Street": {
+      "checksum": "235c560e2c150ee92063b35b5950ee2e"
+    },
+    "bashlab/data/mystery/streets/Renfrew_Street": {
+      "checksum": "6ce791a5676e2890094ba3d4d3ff06b7"
+    },
+    "bashlab/data/mystery/streets/Richard_Avenue": {
+      "checksum": "85b79ad8e52614cd1787c1a56c5fb49c"
+    },
+    "bashlab/data/mystery/streets/Richardson_Street": {
+      "checksum": "1778e7b2cc7a595051fc58c197e52a82"
+    },
+    "bashlab/data/mystery/streets/Richmond_Street": {
+      "checksum": "876bb001992ee06a1536875a2fb94848"
+    },
+    "bashlab/data/mystery/streets/River_Street": {
+      "checksum": "6eb56600779712db5d0e57779cef58f8"
+    },
+    "bashlab/data/mystery/streets/Rivermoor_Street": {
+      "checksum": "ea59845411a5fdc9c7dad67bc98fb9ec"
+    },
+    "bashlab/data/mystery/streets/Rockmere_Street": {
+      "checksum": "9d56d69e8fed78513602dc76f5356b44"
+    },
+    "bashlab/data/mystery/streets/Rosaria_Street": {
+      "checksum": "e91fdfa4b2ecdfda50ca8c31dbd39868"
+    },
+    "bashlab/data/mystery/streets/Rowe_Street": {
+      "checksum": "a3ad5706898536fba7e8f4469375e2fb"
+    },
+    "bashlab/data/mystery/streets/Rozella_Street": {
+      "checksum": "77d351bf4db8f819beb8932a4651faae"
+    },
+    "bashlab/data/mystery/streets/Saco_Street": {
+      "checksum": "0cb6ca0223a8326de6a788195ff35086"
+    },
+    "bashlab/data/mystery/streets/Saint_Saveur_Court": {
+      "checksum": "db3b7ed97e8074adc9004640f32eaf5c"
+    },
+    "bashlab/data/mystery/streets/Salutation_Street": {
+      "checksum": "e39ae576358c3bca7752429bedc83cda"
+    },
+    "bashlab/data/mystery/streets/Sammett_Avenue": {
+      "checksum": "4319df4b0b1c57e6997ef6741eebb00c"
+    },
+    "bashlab/data/mystery/streets/Saunders_Street": {
+      "checksum": "18932a09b56b565d54c0f774e677f602"
+    },
+    "bashlab/data/mystery/streets/Scotia_Street": {
+      "checksum": "2d41c1448a3e6b32a997874a9027d17d"
+    },
+    "bashlab/data/mystery/streets/Searle_Road": {
+      "checksum": "3c6be74b900883fc1019d54d6644a863"
+    },
+    "bashlab/data/mystery/streets/Selwyn_Street": {
+      "checksum": "1defd7f7c11e624aa51f18b51621a929"
+    },
+    "bashlab/data/mystery/streets/Senders_Court": {
+      "checksum": "7c1919bef0c0836deff2c3243b2141c7"
+    },
+    "bashlab/data/mystery/streets/Sheldon_Street": {
+      "checksum": "2af7f82a4dbb8b2c1897a2e01a62506d"
+    },
+    "bashlab/data/mystery/streets/Silver_Street": {
+      "checksum": "6d663a7dd1b9985ff3f58716cc0b40fc"
+    },
+    "bashlab/data/mystery/streets/Sparrow_Street": {
+      "checksum": "782bd4fcf1ac4ff6acc85c6299da3460"
+    },
+    "bashlab/data/mystery/streets/Spaulding_Street": {
+      "checksum": "8789cadf7621ffd29d7a3c8dd4a6b205"
+    },
+    "bashlab/data/mystery/streets/Standard_Street": {
+      "checksum": "d077f0c3217a9c7253685771a1c5c5ad"
+    },
+    "bashlab/data/mystery/streets/Staniford_Street": {
+      "checksum": "e2e351a69de3ca8407a4ad4809fedd13"
+    },
+    "bashlab/data/mystery/streets/Story_Street": {
+      "checksum": "30bc23cabd305bb1e73a44dc0892cfef"
+    },
+    "bashlab/data/mystery/streets/Supple_Road": {
+      "checksum": "5ca32f298cb5d84534639b88525005fe"
+    },
+    "bashlab/data/mystery/streets/Taunton_Avenue": {
+      "checksum": "ac0d1a75a11fe42410528232b4714ba5"
+    },
+    "bashlab/data/mystery/streets/Tennyson_Street": {
+      "checksum": "eab39eebaa464f3658771218fe515b47"
+    },
+    "bashlab/data/mystery/streets/Terrace_Place": {
+      "checksum": "13320cf678abca2653abbe9f4a413916"
+    },
+    "bashlab/data/mystery/streets/Theodore_Street": {
+      "checksum": "360d42a0d06afad96bc937aa1d27ea68"
+    },
+    "bashlab/data/mystery/streets/Tolman_Street": {
+      "checksum": "95f83f364d07f2ffec464af90c759079"
+    },
+    "bashlab/data/mystery/streets/Topeka_Street": {
+      "checksum": "c5bea1a5ccc1b440dc04591d0bdef511"
+    },
+    "bashlab/data/mystery/streets/Trapelo_Street": {
+      "checksum": "2fd2271d1c05110fafb2971c7ed11c47"
+    },
+    "bashlab/data/mystery/streets/Trident_Street": {
+      "checksum": "d6a11677226fa4a721919c63356e2ffc"
+    },
+    "bashlab/data/mystery/streets/Trinity_Place": {
+      "checksum": "0dddca7450b958c74dccc54ef07b5b22"
+    },
+    "bashlab/data/mystery/streets/Unity_Court": {
+      "checksum": "7f339a72f578164e2859dc4bbb445872"
+    },
+    "bashlab/data/mystery/streets/Vassal_Lane": {
+      "checksum": "788ee9de97fb3b174ef2f8ca2e785d68"
+    },
+    "bashlab/data/mystery/streets/Victory_Road": {
+      "checksum": "faafc4246fa038284bef78aabe6cbb6e"
+    },
+    "bashlab/data/mystery/streets/Vinton_Street": {
+      "checksum": "eaaccdd29be7a77657f292ae6e70f8c7"
+    },
+    "bashlab/data/mystery/streets/Vista_Street": {
+      "checksum": "9eeb64fc39800156b6d54f68ab98bc16"
+    },
+    "bashlab/data/mystery/streets/Waldeck_Street": {
+      "checksum": "748fd8ace86a948c11fbe1c18f907ef4"
+    },
+    "bashlab/data/mystery/streets/Wallingford_Road": {
+      "checksum": "868f5fd8f301af4c8010ceae262f6f46"
+    },
+    "bashlab/data/mystery/streets/Warren_Avenue": {
+      "checksum": "614b84600a7bf4e9ff7e61351890c366"
+    },
+    "bashlab/data/mystery/streets/Wentworth_Street": {
+      "checksum": "a1477775aa1a28ad1ba8afa1b3cb8e39"
+    },
+    "bashlab/data/mystery/streets/Wesley_Place": {
+      "checksum": "719e3182343545fdbf51b62b7cc70838"
+    },
+    "bashlab/data/mystery/streets/Wheatland_Avenue": {
+      "checksum": "5c5fba3b487475cd684773d4c36c2f9a"
+    },
+    "bashlab/data/mystery/streets/Wiget_Street": {
+      "checksum": "331e6be031ac51b9d01923ad70a436ff"
+    },
+    "bashlab/data/mystery/streets/Wiggin_Street": {
+      "checksum": "b00a654ffab14f96fa8b29cb8115a0fb"
+    },
+    "bashlab/data/mystery/streets/Wilcox_Road": {
+      "checksum": "b696f69b83389455aa0e284b5e1d930c"
+    },
+    "bashlab/data/mystery/streets/Wilkinson_Park": {
+      "checksum": "0b043a4bfbf09eaf7fe76b7daaf985b8"
+    },
+    "bashlab/data/mystery/streets/Willet_Street": {
+      "checksum": "ea9547822a2299ca80dd40bf1e2ee616"
+    },
+    "bashlab/data/mystery/streets/Williston_Road": {
+      "checksum": "77c91c438653a0d96c0ad9cec1932bd5"
+    },
+    "bashlab/data/mystery/streets/Willowdean_Avenue": {
+      "checksum": "1d645b421a218566fd69e0b4b78cd124"
+    },
+    "bashlab/data/mystery/streets/Wilmington_Avenue": {
+      "checksum": "b82f20c6202176a8563b5f7bb685f973"
+    },
+    "bashlab/data/mystery/streets/Winter_Street": {
+      "checksum": "9fa9d61dd323fdbcb3c8563171bd4338"
+    },
+    "bashlab/data/mystery/streets/Woodcliff_Street": {
+      "checksum": "f289e2516064170c29cfab9f9038098a"
+    },
+    "bashlab/data/mystery/streets/Wooddale_Avenue": {
+      "checksum": "1a089b8f07134385be92328e9807dc48"
+    },
+    "bashlab/data/mystery/streets/Worrell_Street": {
+      "checksum": "4327dfd085b9c2b17f5a8ccc57a1e8bb"
+    },
+    "bashlab/data/mystery/streets/Wycliff_Avenue": {
+      "checksum": "744ff65a377ccde54f33cb33f385c7a5"
+    },
+    "bashlab/data/mystery/vehicles": {
+      "checksum": "991fd8921a975286593bdebe7b596685"
+    },
+    "bashlab/data/README.md": {
+      "checksum": "7d64ce2fddae4633a50d7bfe977ce990"
+    },
+    "bashlab/data/solution": {
+      "checksum": "ff587fb478fb252904e2269b99830ac5"
+    },
+    "bashlab/data/test.txt": {
+      "checksum": "2d546a3a97d2ed08045410af81b73d4c"
+    },
+    "bashlab/images/CLI_python.png": {
+      "checksum": "1bb63f120ad4e46973f7b0d6557e8021"
+    },
+    "bashlab/images/CLI.png": {
+      "checksum": "8b765f52481dc6c829fef9c6b933dc3b"
+    },
+    "bashlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "bashlab/README.md": {
+      "checksum": "2e852c8e45a0526e1728dded0759cc29"
+    },
+    "bashlab/requirements.txt": {
+      "checksum": "68b329da9893e34099c7d8ad5cb9c940"
+    },
+    "bashlab/sandbox/sandbox": {
+      "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "bashlab/www/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "clusteringlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "clusteringlab/data/epi_mini2.csv": {
+      "checksum": "ea18408f25efc107b3f574f77ce5ba6f"
+    },
+    "clusteringlab/data/temp.txt": {
+      "checksum": "cb28e764263e3a465e72a2c30b836738"
+    },
+    "clusteringlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "clusteringlab/images/temp.txt": {
+      "checksum": "2b48776884f30a7b31ac530f129d3320"
+    },
+    "clusteringlab/Lab 7.Rmd": {
+      "checksum": "f6c1c0ecea8b245524f37cea3699a0b0"
+    },
+    "clusteringlab/README.md": {
+      "checksum": "95d511538f7aa5fb105e9e7b4ed24067"
+    },
+    "clusteringlab/requirements.txt": {
+      "checksum": "8c0663b19e66f3ef4dea4edab875f8d4"
+    },
+    "clusteringlab/www/epi_mini2.csv": {
+      "checksum": "ea18408f25efc107b3f574f77ce5ba6f"
+    },
+    "commandlinelab/Bash Lab.Rmd": {
+      "checksum": "605c528ff63a57e99ad0764dc8a0ac99"
+    },
+    "commandlinelab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "commandlinelab/data/cheatsheet.md": {
+      "checksum": "b71f3acc57c6d0719b57d68dfa00b2e9"
+    },
+    "commandlinelab/data/cheatsheet.pdf": {
+      "checksum": "3e029b4065c20cc3e3738aa94da82ddc"
+    },
+    "commandlinelab/data/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "commandlinelab/data/encoded": {
+      "checksum": "976489fe979911efe61a98144baa69aa"
+    },
+    "commandlinelab/data/hint1": {
+      "checksum": "bde49191785f6cb0ccf09fce4269b990"
+    },
+    "commandlinelab/data/hint2": {
+      "checksum": "2f9edae1611bc36497ce5e57b236a10c"
+    },
+    "commandlinelab/data/hint3": {
+      "checksum": "5bcbb5833497bc931ede54bc2c40d7e9"
+    },
+    "commandlinelab/data/hint4": {
+      "checksum": "7d13dc622c45f5f40bd9110281205160"
+    },
+    "commandlinelab/data/hint5": {
+      "checksum": "3f718ed262f29d355da737a40c24b559"
+    },
+    "commandlinelab/data/hint6": {
+      "checksum": "d750e1256cde524f8ac79b862db6f889"
+    },
+    "commandlinelab/data/hint7": {
+      "checksum": "697634a4ea23c648890a339004e09d35"
+    },
+    "commandlinelab/data/hint8": {
+      "checksum": "6f06b598529bb7facecc52bb21359b8a"
+    },
+    "commandlinelab/data/instructions": {
+      "checksum": "102d253562e4817557f54f4f39677370"
+    },
+    "commandlinelab/data/LICENSE.md": {
+      "checksum": "176b45286aa18302f101678bde10599c"
+    },
+    "commandlinelab/data/mystery/cheatsheet.md.save": {
+      "checksum": "26abbfbbdf75bf5c6ce163bca3ac3005"
+    },
+    "commandlinelab/data/mystery/crimescene": {
+      "checksum": "eb59f754d1f89234ed510826441a0d4a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-000296": {
+      "checksum": "2e19f7148c7bc6e9d4fb2f62e7fb18b6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-00448418": {
+      "checksum": "ed2078de54611a86d66c5b4c43da6046"
+    },
+    "commandlinelab/data/mystery/interviews/interview-00502304": {
+      "checksum": "4c4191d0d694422e8b97c30d60529c5d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-005702": {
+      "checksum": "582067137fc73059e03a3db4e03f58f9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-00617019": {
+      "checksum": "297fc599ad860f08962df19fed3421cd"
+    },
+    "commandlinelab/data/mystery/interviews/interview-00805135": {
+      "checksum": "d851d0fbe81b5696e5f3e123c59c05d4"
+    },
+    "commandlinelab/data/mystery/interviews/interview-016463": {
+      "checksum": "35b7d3500e7dc3fe7fcda1e0933f81fd"
+    },
+    "commandlinelab/data/mystery/interviews/interview-020337": {
+      "checksum": "48d28df86c01c59dd14a2c21a8983e67"
+    },
+    "commandlinelab/data/mystery/interviews/interview-022751": {
+      "checksum": "a279d556494d689003f23745ac2b3c1e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-0234126": {
+      "checksum": "baf0a23ce83624ffacd40bc861d32202"
+    },
+    "commandlinelab/data/mystery/interviews/interview-02422821": {
+      "checksum": "f98b79716fbb0cbae3e984515007eb2b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-0251720": {
+      "checksum": "9e8b96ffee21e585671c235197865658"
+    },
+    "commandlinelab/data/mystery/interviews/interview-03098229": {
+      "checksum": "e2770fd442b4b819a61f00edd96ea8fc"
+    },
+    "commandlinelab/data/mystery/interviews/interview-0315125": {
+      "checksum": "691ffa1665b7029cc68e67a8321085df"
+    },
+    "commandlinelab/data/mystery/interviews/interview-03316077": {
+      "checksum": "36d9c97c95e2c81c111dcf56c40c511c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-034070": {
+      "checksum": "51d2446a7fd5049f0c2fdee956fd03bd"
+    },
+    "commandlinelab/data/mystery/interviews/interview-0349327": {
+      "checksum": "e0373742031f945fadcde268a4e43138"
+    },
+    "commandlinelab/data/mystery/interviews/interview-04393507": {
+      "checksum": "91a15158a581d4a2858cada609532657"
+    },
+    "commandlinelab/data/mystery/interviews/interview-044492": {
+      "checksum": "5d7902bbf3e2ea6657c3424f27b5efc8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-0462097": {
+      "checksum": "3aa132392bf9454e56fa6d798255c85a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-049721": {
+      "checksum": "8dde1ec8fec31e03d8edcf03d5f9416f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-05297663": {
+      "checksum": "335976c5162ac816fd2beebbfc18c8d5"
+    },
+    "commandlinelab/data/mystery/interviews/interview-06032377": {
+      "checksum": "261196af5c17759353c5a8e2bacc9180"
+    },
+    "commandlinelab/data/mystery/interviews/interview-0613334": {
+      "checksum": "f4397471dc0d6d7d5d2e4049b7ea3154"
+    },
+    "commandlinelab/data/mystery/interviews/interview-066291": {
+      "checksum": "55a0c6e27718fec4daf2e06113730522"
+    },
+    "commandlinelab/data/mystery/interviews/interview-071537": {
+      "checksum": "acff334915d5fe3a388d963b97087e77"
+    },
+    "commandlinelab/data/mystery/interviews/interview-0732631": {
+      "checksum": "ad7518b9f63ce3b9af9c825877fe37ed"
+    },
+    "commandlinelab/data/mystery/interviews/interview-07497003": {
+      "checksum": "e03b8aff3b8f1e4651848145611e3613"
+    },
+    "commandlinelab/data/mystery/interviews/interview-0768255": {
+      "checksum": "293d567f69cba0753097d83531492b6f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-092423": {
+      "checksum": "e7389c09ec8f98b8c9fa86c33aaf65b7"
+    },
+    "commandlinelab/data/mystery/interviews/interview-0953437": {
+      "checksum": "c11828292b58fec7e642a44e6431615b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-096267": {
+      "checksum": "c75a48d183edd1a74584a26202b92752"
+    },
+    "commandlinelab/data/mystery/interviews/interview-102490": {
+      "checksum": "e96cf032db2a292935dfc422729729fd"
+    },
+    "commandlinelab/data/mystery/interviews/interview-109118": {
+      "checksum": "c13680b69da579200ccd48781f8fe330"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1108561": {
+      "checksum": "4f4c0248c27754e68312e1a64c5ca397"
+    },
+    "commandlinelab/data/mystery/interviews/interview-114661": {
+      "checksum": "a0c8f3a10a8ab5d66bed26129bbdd5ab"
+    },
+    "commandlinelab/data/mystery/interviews/interview-11495001": {
+      "checksum": "3675938a5b4052acbe72e4014b026a55"
+    },
+    "commandlinelab/data/mystery/interviews/interview-116803": {
+      "checksum": "ef81acb46203221679937bb7e844a90c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-11705111": {
+      "checksum": "8d35f1701b41a42e25776560ba6ef848"
+    },
+    "commandlinelab/data/mystery/interviews/interview-11783660": {
+      "checksum": "5c571bec24048342fcb6894787d94b49"
+    },
+    "commandlinelab/data/mystery/interviews/interview-11817172": {
+      "checksum": "be4c8db9ab2a1443ed1bd0030049597a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1186827": {
+      "checksum": "2623fa980712681202d208eb7a8ba118"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1205060": {
+      "checksum": "6fd612d841630d9491c64ebd8d782953"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1250176": {
+      "checksum": "6e22e9ed322ed5fd7c2ed8286d24200a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-125204": {
+      "checksum": "19e8973c85105f51610f83845b5f3b7c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-125271": {
+      "checksum": "521d06cb6c5515dcbdf6a0ad8d0718ec"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1269181": {
+      "checksum": "0ea2b8122b24d2a81d377a9dd403ac52"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1310392": {
+      "checksum": "2d916804649e8eed121d770b66ae6492"
+    },
+    "commandlinelab/data/mystery/interviews/interview-13768464": {
+      "checksum": "7a2b1e0869359bf053efe7d5efd745e1"
+    },
+    "commandlinelab/data/mystery/interviews/interview-13889608": {
+      "checksum": "0807bfa7e827acf797d251d40829d642"
+    },
+    "commandlinelab/data/mystery/interviews/interview-13920860": {
+      "checksum": "4fdcd2bdbafb40c7eb95d816ca118b25"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1395414": {
+      "checksum": "b0d2aa3ba9b2143993de3410e02c16ac"
+    },
+    "commandlinelab/data/mystery/interviews/interview-141030": {
+      "checksum": "7cdfe9e121ab1e3d18d73087da774ff1"
+    },
+    "commandlinelab/data/mystery/interviews/interview-14153840": {
+      "checksum": "f503dea79ea66875de0cf1df9e072a7b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-144873": {
+      "checksum": "0d9f410226746e2d1da0ab4e170efdfe"
+    },
+    "commandlinelab/data/mystery/interviews/interview-14590717": {
+      "checksum": "7b617d57c5549f785fde5b2ab91d0dc8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-147283": {
+      "checksum": "f226ef5991f7d7c5d8d02ed5761ef853"
+    },
+    "commandlinelab/data/mystery/interviews/interview-15187437": {
+      "checksum": "a8da91949ea5f2409c5c3ddd89b49e1a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-15354942": {
+      "checksum": "283a6c0b8a6a1eabd14b06f3d17afb5d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1536668": {
+      "checksum": "3fbc6a3c4ac959874e5f49e5b52fbba9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-155049": {
+      "checksum": "c8f7929f2c13a9e04fa3a0bf9aafa59d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1578206": {
+      "checksum": "9d1a807a68b2f986a5aca0e41199ae79"
+    },
+    "commandlinelab/data/mystery/interviews/interview-159848": {
+      "checksum": "508d74d2b9c1b17b5151bc1f2a7460c0"
+    },
+    "commandlinelab/data/mystery/interviews/interview-16098538": {
+      "checksum": "39a6143e46c1f3af2094e06479097b70"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1642421": {
+      "checksum": "0f3d1878c837e3b7a1aac6f09e378a8f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1643440": {
+      "checksum": "f926e920d571e6e4f75f285cd9960cea"
+    },
+    "commandlinelab/data/mystery/interviews/interview-16889008": {
+      "checksum": "846b581f88a80202f3434e38d2682c76"
+    },
+    "commandlinelab/data/mystery/interviews/interview-17248453": {
+      "checksum": "90859eed68aafa1cf69e0abe842db30f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-17343208": {
+      "checksum": "5c534fc36b716ab13fab7f00d3d1896d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-174898": {
+      "checksum": "d3599d3042b6801794657302bac25a75"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1767435": {
+      "checksum": "00c48fc36db6ee46018b67f11dcf6d2a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-17827186": {
+      "checksum": "7c2b3ab073e9e991caaafa479a81daef"
+    },
+    "commandlinelab/data/mystery/interviews/interview-179719": {
+      "checksum": "6d7b67ed0b62b81a905068f214fd39b0"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1811770": {
+      "checksum": "ac6ccef36f2c39f32bd9250b6f49b8a9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-18193261": {
+      "checksum": "1a7b4ba1e9da1fdc492f87db45784428"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1823688": {
+      "checksum": "ea36383e57020aaaa64cfdf39690684f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-18270219": {
+      "checksum": "3542204b15bc17fd5f4fc8f809079139"
+    },
+    "commandlinelab/data/mystery/interviews/interview-18441251": {
+      "checksum": "43155325d142d6756ffc2184acb2aad9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1850922": {
+      "checksum": "36d4284ccd887f1016dac35f0294aab6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1857368": {
+      "checksum": "f9cbc14b84ce62d8256c28a56a81be97"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1906958": {
+      "checksum": "1c9c8494842b2da19c8c497776907b0e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-191206": {
+      "checksum": "dbc7cf20148066968dae6622af38d33a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-19300543": {
+      "checksum": "5772cb5cf3b43f280b37b1f42fa31a8e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-1933118": {
+      "checksum": "7b617d57c5549f785fde5b2ab91d0dc8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-19577850": {
+      "checksum": "a53f3c0c8530a0b2fc0dae108e8f4f3d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2058907": {
+      "checksum": "cd747437d0abadd57a7c7901132a7bfe"
+    },
+    "commandlinelab/data/mystery/interviews/interview-210355": {
+      "checksum": "f76e5ac6ea11db740f7f3cece2e565cd"
+    },
+    "commandlinelab/data/mystery/interviews/interview-218131": {
+      "checksum": "5d4bcc06315657fc7b70a70ed7c8f0c1"
+    },
+    "commandlinelab/data/mystery/interviews/interview-221039": {
+      "checksum": "19bb7684d232886e1e1646f155d44fb8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-223913": {
+      "checksum": "079fae2d2d47b9cac1a70f0a1b1e9d2c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2277882": {
+      "checksum": "6e20829d2e5ec534b227eb9404639303"
+    },
+    "commandlinelab/data/mystery/interviews/interview-229443": {
+      "checksum": "b9c09bedae1fdb153b6325a6eca9be90"
+    },
+    "commandlinelab/data/mystery/interviews/interview-23167806": {
+      "checksum": "7c635e389bc6d94931fe4dd0444f611e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2326746": {
+      "checksum": "50d607a4bf3c8865d2f7fe35ed4384ff"
+    },
+    "commandlinelab/data/mystery/interviews/interview-23371263": {
+      "checksum": "ef023d545184e5647ab1e799be16c405"
+    },
+    "commandlinelab/data/mystery/interviews/interview-233800": {
+      "checksum": "9ab652f9028a02f22de45b84b25b2687"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2415821": {
+      "checksum": "2dacf06c1b35c1e4f25e293de4600f76"
+    },
+    "commandlinelab/data/mystery/interviews/interview-243703": {
+      "checksum": "21c0ebacaa87858a5c72e4328f3d8442"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2481877": {
+      "checksum": "b7a6450268b74fb2fd4c675bd2f7c3b6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-250112": {
+      "checksum": "88bbf88a1dd63fa4d21825461a77e7e7"
+    },
+    "commandlinelab/data/mystery/interviews/interview-253705": {
+      "checksum": "1b61e82b7b61f31bddcb3b0245a398d0"
+    },
+    "commandlinelab/data/mystery/interviews/interview-255531": {
+      "checksum": "82337a031a6397866d547c41cd9a6b5c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-25582311": {
+      "checksum": "5864e3382ceed8a272a69d92fe79b344"
+    },
+    "commandlinelab/data/mystery/interviews/interview-25834905": {
+      "checksum": "1a37d053521a697f79cc874f9adddb0a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-259909": {
+      "checksum": "301c687933346d617784c7b2f04b1c62"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2601508": {
+      "checksum": "8fde42909053ca68cc70113cd7594844"
+    },
+    "commandlinelab/data/mystery/interviews/interview-26373485": {
+      "checksum": "aa9313c5460d58d1a26dfbd15f6f75e6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2642139": {
+      "checksum": "36a75211526d72a5024114f658eb67ca"
+    },
+    "commandlinelab/data/mystery/interviews/interview-27042476": {
+      "checksum": "26f289c86bef5fc75e036c01f315c686"
+    },
+    "commandlinelab/data/mystery/interviews/interview-27504937": {
+      "checksum": "5e9718eaa01eaa0422d915c58e5b3789"
+    },
+    "commandlinelab/data/mystery/interviews/interview-275706": {
+      "checksum": "e5bd033d617960b02f36f144e1375f9f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-279087": {
+      "checksum": "c111fcd765f0428c195ff919271d22a9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-280877": {
+      "checksum": "fbc4977c347c48b977c37a98144d79ae"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2834518": {
+      "checksum": "8197c40053a7a2f003561f1c9e977f2a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-284560": {
+      "checksum": "d7ee5acf1b0f7fe7abbf07ff9833c026"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2846076": {
+      "checksum": "5d7713d9f2dd74b1e84eab7b1bb85320"
+    },
+    "commandlinelab/data/mystery/interviews/interview-289524": {
+      "checksum": "c4af96c5a9e966894bdfade322a76aa5"
+    },
+    "commandlinelab/data/mystery/interviews/interview-290346": {
+      "checksum": "f6997a47fda039b70139b2482a6c33cf"
+    },
+    "commandlinelab/data/mystery/interviews/interview-291440": {
+      "checksum": "bdc6732389e75a9d675ff0b19c682169"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2922290": {
+      "checksum": "45fec16739dd1d851d460379fb03cfc1"
+    },
+    "commandlinelab/data/mystery/interviews/interview-29316965": {
+      "checksum": "50889c942482189ac06cb22046223a4f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2939888": {
+      "checksum": "8490660aee6fff815976deed82860c73"
+    },
+    "commandlinelab/data/mystery/interviews/interview-296128": {
+      "checksum": "594bc10bd283dc7f83a5305711c9b432"
+    },
+    "commandlinelab/data/mystery/interviews/interview-29680692": {
+      "checksum": "ee62d4e4a6103fa95294931ae9598ebd"
+    },
+    "commandlinelab/data/mystery/interviews/interview-29741223": {
+      "checksum": "e06b37aebc077b1f0357bfac734a8d7f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2976680": {
+      "checksum": "6e22e9ed322ed5fd7c2ed8286d24200a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-29838622": {
+      "checksum": "92114932f12338f05697ee65521984f9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-2995681": {
+      "checksum": "c9aa22d2aa6e8bec7a9775a293d69ae3"
+    },
+    "commandlinelab/data/mystery/interviews/interview-301018": {
+      "checksum": "be330dca8743fe25a13e792cc58cfe6c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-30259493": {
+      "checksum": "44fc32bc0f45da38dc646bd8fbec7a54"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3049045": {
+      "checksum": "9a5a12c4007cc66c075f217d412d6182"
+    },
+    "commandlinelab/data/mystery/interviews/interview-305694": {
+      "checksum": "a6be729475e5c1439a56165dfb26988c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-305949": {
+      "checksum": "2d052329d7d62ab1df1526a54e660fab"
+    },
+    "commandlinelab/data/mystery/interviews/interview-306616": {
+      "checksum": "7653193573358e28099c1253acedcef5"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3074127": {
+      "checksum": "1bae1d601bfdbd2844b0f2ee6351121a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3099757": {
+      "checksum": "6e4ca37c43e1a911ef49a268a6caf1e4"
+    },
+    "commandlinelab/data/mystery/interviews/interview-312546": {
+      "checksum": "5ffd281f0b5aba00be35768e2e60412b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3128999": {
+      "checksum": "037cc33aabef0f7622959410a881f37e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3140662": {
+      "checksum": "0151c07e051128eac3a472bd85734d11"
+    },
+    "commandlinelab/data/mystery/interviews/interview-31635890": {
+      "checksum": "3a0da433c5ec0ec19c30e58e053a0a39"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3201508": {
+      "checksum": "9fb2e762738339f45e99107f9378f16d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-322305": {
+      "checksum": "6ca6da4308f5e61f715c30c695f1a537"
+    },
+    "commandlinelab/data/mystery/interviews/interview-32365018": {
+      "checksum": "cac14670518ed49d5072bfe4e8785147"
+    },
+    "commandlinelab/data/mystery/interviews/interview-324389": {
+      "checksum": "2d0151b02d22551c1c7a5c4d43dfb9ac"
+    },
+    "commandlinelab/data/mystery/interviews/interview-325611": {
+      "checksum": "f9c462afafa23510e7bb959cb299aae8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-32639981": {
+      "checksum": "a415aef75c691a43fc2c94ee3fd8f08b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-32712166": {
+      "checksum": "6edafacfccdd47f564f16634e130d2ed"
+    },
+    "commandlinelab/data/mystery/interviews/interview-331178": {
+      "checksum": "55b8a69acd8bfb61278896a6e9d90dc6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-332596": {
+      "checksum": "514a4219f85f018d3eaea66f408b0295"
+    },
+    "commandlinelab/data/mystery/interviews/interview-33399976": {
+      "checksum": "9884bd834bc5f766d758c3b03d8532da"
+    },
+    "commandlinelab/data/mystery/interviews/interview-340396": {
+      "checksum": "6e261f7efdae29aa87fc4447286eb5cd"
+    },
+    "commandlinelab/data/mystery/interviews/interview-34041151": {
+      "checksum": "2fa8cee9492665062553abc37e658653"
+    },
+    "commandlinelab/data/mystery/interviews/interview-342393": {
+      "checksum": "e3f2cd7a85b141ac9b7b10e1e64160d2"
+    },
+    "commandlinelab/data/mystery/interviews/interview-34359897": {
+      "checksum": "e131d0c3ad094c566fde308e69872bd4"
+    },
+    "commandlinelab/data/mystery/interviews/interview-344331": {
+      "checksum": "a2e3469f76fc06f1ea643b1fb5ec6b32"
+    },
+    "commandlinelab/data/mystery/interviews/interview-34690644": {
+      "checksum": "d6f63bc2617267f890e5ba2e8c20d1c9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-347303": {
+      "checksum": "95d50abb120ff8612d203f3f15cc2452"
+    },
+    "commandlinelab/data/mystery/interviews/interview-351963": {
+      "checksum": "4f8295dd5ed898be523b5e636386804f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-353218": {
+      "checksum": "6bd57d95d0f74fe4120d5dabac497175"
+    },
+    "commandlinelab/data/mystery/interviews/interview-353467": {
+      "checksum": "a6bfe0635ecb52ba2706fae27201e65b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-354262": {
+      "checksum": "2c90d800551e2609c54e50e998054163"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3588302": {
+      "checksum": "0c9d8a418615ece8ecd935b1e4b8fd89"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3609204": {
+      "checksum": "dbdfc6c4f0c96e29ecde542eef2b58e2"
+    },
+    "commandlinelab/data/mystery/interviews/interview-36398447": {
+      "checksum": "8109e21c20b342ff491a805096172000"
+    },
+    "commandlinelab/data/mystery/interviews/interview-364735": {
+      "checksum": "12e778847543a4290cbbb93f19328ca0"
+    },
+    "commandlinelab/data/mystery/interviews/interview-36527398": {
+      "checksum": "142d086ef29a3266661cc68ec3a19fc2"
+    },
+    "commandlinelab/data/mystery/interviews/interview-376115": {
+      "checksum": "c6f47e0974a81bf3f805acfbb542822c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-37747405": {
+      "checksum": "036e24e9106a7819c9a5db57a9292bea"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3804339": {
+      "checksum": "debb247442b50d80df537fc7bc03db29"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3824641": {
+      "checksum": "0f1a5fccfcfd60d2707b7397b6a63037"
+    },
+    "commandlinelab/data/mystery/interviews/interview-38299069": {
+      "checksum": "8fb8505fc6dc9bc6dafffc176c440646"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3871205": {
+      "checksum": "31392b8c87ebd5d63a199b3775bbd145"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3871242": {
+      "checksum": "6bc060914e40c48172ee4361cb5aaba5"
+    },
+    "commandlinelab/data/mystery/interviews/interview-38899905": {
+      "checksum": "4d18ca1af5ff270ee3a0e64374c5c26a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-3917097": {
+      "checksum": "f1295e581edc237e7776f0e67eb75605"
+    },
+    "commandlinelab/data/mystery/interviews/interview-391811": {
+      "checksum": "92360a2749d257faac38e03952e798fd"
+    },
+    "commandlinelab/data/mystery/interviews/interview-39481114": {
+      "checksum": "af741d192da2989a500ccde0020b1842"
+    },
+    "commandlinelab/data/mystery/interviews/interview-39825862": {
+      "checksum": "1f9db76cbc3bd9180696c2ea9f46b033"
+    },
+    "commandlinelab/data/mystery/interviews/interview-40534453": {
+      "checksum": "be49ad31c4d3c74db62859220de82e13"
+    },
+    "commandlinelab/data/mystery/interviews/interview-40610944": {
+      "checksum": "5f8c29d06b9dc2b77ae63635a5976b42"
+    },
+    "commandlinelab/data/mystery/interviews/interview-409731": {
+      "checksum": "ddee0a10ce15f437164df7c6d3af3507"
+    },
+    "commandlinelab/data/mystery/interviews/interview-41553314": {
+      "checksum": "e0ca933eb7d303089623300ae40c7699"
+    },
+    "commandlinelab/data/mystery/interviews/interview-416243": {
+      "checksum": "3f52804be93e895846aa201791592caf"
+    },
+    "commandlinelab/data/mystery/interviews/interview-41814745": {
+      "checksum": "d4cb2fd7915f804b112e7ed32f437565"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4204949": {
+      "checksum": "6c79758aa514b576bd8b45dab04ff17a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-42161907": {
+      "checksum": "f488a642ab22c8b9801810d72533ed14"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4223536": {
+      "checksum": "01be31ea6e2195ab2f0b6f56d28d2466"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4225866": {
+      "checksum": "f0f389ed3ce1679d7b9a2acf035a4d4a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-42396365": {
+      "checksum": "ab8c786c94afbb7279e062243fc85788"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4262657": {
+      "checksum": "590b06235518dff7dcbef566ce25764c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-42934869": {
+      "checksum": "cbfffe3039ce0ba4a915db566204b352"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4299898": {
+      "checksum": "a51dd555acc765d2018125782a253542"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4335306": {
+      "checksum": "9b98e8037b9c004d7c7b00743f07d71f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4366523": {
+      "checksum": "58f3a9a7ed6acf541804f6473cb28409"
+    },
+    "commandlinelab/data/mystery/interviews/interview-44533008": {
+      "checksum": "01cd5b505327de7c14104489b46e7db7"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4463090": {
+      "checksum": "437690dbc819536672d721fe3aead50a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-448086": {
+      "checksum": "2bf0f8a3142fe81046877b382786f0b7"
+    },
+    "commandlinelab/data/mystery/interviews/interview-45615686": {
+      "checksum": "d851d0fbe81b5696e5f3e123c59c05d4"
+    },
+    "commandlinelab/data/mystery/interviews/interview-457117": {
+      "checksum": "2bbb88516ce90a02ea236ca075d79175"
+    },
+    "commandlinelab/data/mystery/interviews/interview-457451": {
+      "checksum": "6f642dc7bc8a50f17da4eaa82214a36a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-466195": {
+      "checksum": "d646a8d6edf7e5dcef91622a6e129e89"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4673074": {
+      "checksum": "53558b49ce8424b0ed4324b029819fbe"
+    },
+    "commandlinelab/data/mystery/interviews/interview-46773428": {
+      "checksum": "aa5f80be43eabbfbdc08aff5d5bae730"
+    },
+    "commandlinelab/data/mystery/interviews/interview-47246024": {
+      "checksum": "193551d1f78f55e64524007ca4df097a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4735823": {
+      "checksum": "ee6010e519d5365c75881fc5140b1cb3"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4765278": {
+      "checksum": "0da79ee28f8b5045723139f8b55b7738"
+    },
+    "commandlinelab/data/mystery/interviews/interview-476744": {
+      "checksum": "420e6ddb4e82fa5a13f09cd9a9f66f95"
+    },
+    "commandlinelab/data/mystery/interviews/interview-478217": {
+      "checksum": "0eb932651192208ea4f35f2ea7968863"
+    },
+    "commandlinelab/data/mystery/interviews/interview-48088300": {
+      "checksum": "253fce3973a8fc926c9f6207c5ca84de"
+    },
+    "commandlinelab/data/mystery/interviews/interview-48148020": {
+      "checksum": "da7216b47f30894c07eb76c43b23941c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-483817": {
+      "checksum": "ddf9ece7eea654b83aa6f1c0a8868a9a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-485229": {
+      "checksum": "0e6e40ed28e78c11f9152e137a458227"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4950099": {
+      "checksum": "8ef296a0ffff931274e1fcee42100e78"
+    },
+    "commandlinelab/data/mystery/interviews/interview-4961376": {
+      "checksum": "c395e526e9baf666e0a0a2bf072f5775"
+    },
+    "commandlinelab/data/mystery/interviews/interview-496772": {
+      "checksum": "60506e74f6594173aab41f839c9aadcc"
+    },
+    "commandlinelab/data/mystery/interviews/interview-498331": {
+      "checksum": "81179722f2322c5efc62964110326ae8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-499096": {
+      "checksum": "5908c701c0d80f035c7a8cc44a2d1400"
+    },
+    "commandlinelab/data/mystery/interviews/interview-50168425": {
+      "checksum": "de09509d36c1e1bafe23a88f5ce7b4fa"
+    },
+    "commandlinelab/data/mystery/interviews/interview-50291987": {
+      "checksum": "5a0290a7c81ec2d4c690859d85822550"
+    },
+    "commandlinelab/data/mystery/interviews/interview-504687": {
+      "checksum": "fbeee88e3eaac9bd60b0e1178a0e6ae3"
+    },
+    "commandlinelab/data/mystery/interviews/interview-509105": {
+      "checksum": "e4fc871c373dfbd3b70ecbcef3c50518"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5143029": {
+      "checksum": "213ad1ff9ae614323e46828b2332ad25"
+    },
+    "commandlinelab/data/mystery/interviews/interview-514793": {
+      "checksum": "add5bd4d0987a67dccda285308376d79"
+    },
+    "commandlinelab/data/mystery/interviews/interview-52280505": {
+      "checksum": "4e0519a9cac1d33b36c3a8b5c0607408"
+    },
+    "commandlinelab/data/mystery/interviews/interview-528044": {
+      "checksum": "a05029aff3351dbb1bfa6feacf03f3a8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-529706": {
+      "checksum": "9406ae8e54d644a107830b2ad3fe69d8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-53318557": {
+      "checksum": "454bf58bb01918cac8c1fb4e8f28b08f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-535181": {
+      "checksum": "d90b42430f999c63f6274f1b7005cf38"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5372865": {
+      "checksum": "3634edce603ee9cf0c9fe870189c38ec"
+    },
+    "commandlinelab/data/mystery/interviews/interview-538900": {
+      "checksum": "9242112e1d340b9d619882ed3a5ef61c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-54026669": {
+      "checksum": "344b4e00464549e4602e4b30ec16c3de"
+    },
+    "commandlinelab/data/mystery/interviews/interview-541518": {
+      "checksum": "39f429b7131c3767b36d6ba194f523a7"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5455315": {
+      "checksum": "37bbe3b46ad336edac5ae83e5f283d50"
+    },
+    "commandlinelab/data/mystery/interviews/interview-54619323": {
+      "checksum": "683843c5aaac6328a537b8ea2eeca72e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-54851634": {
+      "checksum": "c16034b92f4b0a80c46856ebaa278a44"
+    },
+    "commandlinelab/data/mystery/interviews/interview-549055": {
+      "checksum": "83334fc6d8bbba0da522688bc89cb949"
+    },
+    "commandlinelab/data/mystery/interviews/interview-55382746": {
+      "checksum": "c13e21b86b6896880c9bc413acafb956"
+    },
+    "commandlinelab/data/mystery/interviews/interview-55410365": {
+      "checksum": "069e8885a8a1d6a45a3d953b84cedb8d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-55435298": {
+      "checksum": "a6e2974aafad6d760142ad2978093248"
+    },
+    "commandlinelab/data/mystery/interviews/interview-55477243": {
+      "checksum": "626cf11faa3c472256836ec5c387c9f2"
+    },
+    "commandlinelab/data/mystery/interviews/interview-555536": {
+      "checksum": "37d2679403eec37e48de2a11e2be95db"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5581158": {
+      "checksum": "e52a4c7275f19347c99950fc9cc7d178"
+    },
+    "commandlinelab/data/mystery/interviews/interview-55841398": {
+      "checksum": "b19dddf12d4d3e1964e10e67d851e025"
+    },
+    "commandlinelab/data/mystery/interviews/interview-55984022": {
+      "checksum": "6bee93790299cb18790b524baad1cbf2"
+    },
+    "commandlinelab/data/mystery/interviews/interview-565396": {
+      "checksum": "d2a3f999459fb13157b5920199a377ce"
+    },
+    "commandlinelab/data/mystery/interviews/interview-566707": {
+      "checksum": "e346c9a393a2f51746b4f28bb43eeee2"
+    },
+    "commandlinelab/data/mystery/interviews/interview-56784802": {
+      "checksum": "1a28f75822b6ba672987c076a9ae2ca8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-56892213": {
+      "checksum": "bbc03ffcc1454fb8c16f944f7d6d6b09"
+    },
+    "commandlinelab/data/mystery/interviews/interview-57236791": {
+      "checksum": "43ce6de365455ed3f565e1acadc8fdfc"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5739404": {
+      "checksum": "3659c6f594140f87d21a0df32a6ba98a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5766907": {
+      "checksum": "b34b53328ed165e38f9091d7b9fae2a8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5774468": {
+      "checksum": "878883180c1c3a087166565242911ba3"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5782759": {
+      "checksum": "3cdba6334c55987eb3386501b71b7c77"
+    },
+    "commandlinelab/data/mystery/interviews/interview-579105": {
+      "checksum": "49991811d772626393dca608029aa7e5"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5835471": {
+      "checksum": "7a25947934d1e4d2d81d186f0e0b2b04"
+    },
+    "commandlinelab/data/mystery/interviews/interview-586668": {
+      "checksum": "c29ebde07011943007fdf02806e51b50"
+    },
+    "commandlinelab/data/mystery/interviews/interview-58910793": {
+      "checksum": "30e9237f6f90c88887e84761ed6f9fff"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5905106": {
+      "checksum": "a244bd2d38c7e8ceb41698e78cae5bae"
+    },
+    "commandlinelab/data/mystery/interviews/interview-591273": {
+      "checksum": "a832fbda2f52b68ad9fa24915f1461bb"
+    },
+    "commandlinelab/data/mystery/interviews/interview-5993978": {
+      "checksum": "c0cf927f93a6c3f11a59df8d90fbb504"
+    },
+    "commandlinelab/data/mystery/interviews/interview-60081985": {
+      "checksum": "b54b52dcc8f98d06fa451b26090cc2a1"
+    },
+    "commandlinelab/data/mystery/interviews/interview-604403": {
+      "checksum": "0df8c0950bd3f9b6baadc1bed70158c6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-608607": {
+      "checksum": "6aeed6fff8346d39873007138b49407f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-6093093": {
+      "checksum": "3634edce603ee9cf0c9fe870189c38ec"
+    },
+    "commandlinelab/data/mystery/interviews/interview-618764": {
+      "checksum": "ca13a65fc3f313805a12f652cc8cdcbb"
+    },
+    "commandlinelab/data/mystery/interviews/interview-6203192": {
+      "checksum": "159b81a6a16c918fce91a4dfea568918"
+    },
+    "commandlinelab/data/mystery/interviews/interview-628618": {
+      "checksum": "43ed02415b3ca72ae2e01bc213738242"
+    },
+    "commandlinelab/data/mystery/interviews/interview-63308519": {
+      "checksum": "c812e8e94cd56712444d1037da51d236"
+    },
+    "commandlinelab/data/mystery/interviews/interview-637657": {
+      "checksum": "d5aee9c7775fec3559792f8084ee8802"
+    },
+    "commandlinelab/data/mystery/interviews/interview-637928": {
+      "checksum": "2933ff684fc76f0c74a4ad931ca535c2"
+    },
+    "commandlinelab/data/mystery/interviews/interview-638121": {
+      "checksum": "0878623b035e34633c6335997abfd1f3"
+    },
+    "commandlinelab/data/mystery/interviews/interview-6417794": {
+      "checksum": "68ba1ef1e5e93bee2f0a2e2a7f4c7eee"
+    },
+    "commandlinelab/data/mystery/interviews/interview-645385": {
+      "checksum": "79573306e5ccdbce2b086ecc26daa78c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-6553472": {
+      "checksum": "052e986771160dcf64c8fb29e9a5ade7"
+    },
+    "commandlinelab/data/mystery/interviews/interview-65792229": {
+      "checksum": "ecbf8b2341757068b45ef9a016913b24"
+    },
+    "commandlinelab/data/mystery/interviews/interview-659803": {
+      "checksum": "4f4efea30506603c0d1c9a3493424fa5"
+    },
+    "commandlinelab/data/mystery/interviews/interview-66101490": {
+      "checksum": "8d7ab3a4235b564da82e5d129051a7eb"
+    },
+    "commandlinelab/data/mystery/interviews/interview-66282920": {
+      "checksum": "3add4744f826d0313ea42b3d1052948a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-6643191": {
+      "checksum": "bde0e13776c7b2f0470b070d041413b3"
+    },
+    "commandlinelab/data/mystery/interviews/interview-67279454": {
+      "checksum": "7751425b7100f9965c58ca439e796ede"
+    },
+    "commandlinelab/data/mystery/interviews/interview-673985": {
+      "checksum": "3e25e93dfd10ef53173f1f6647ad73bd"
+    },
+    "commandlinelab/data/mystery/interviews/interview-676473": {
+      "checksum": "0309f1057e42b5c11bcf95ba07a5ad24"
+    },
+    "commandlinelab/data/mystery/interviews/interview-67790846": {
+      "checksum": "1834d6af8be6f44ecf9c8d4851a70cf9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-680549": {
+      "checksum": "8f6e7f86f21f6d7a44f89fc2dff4c619"
+    },
+    "commandlinelab/data/mystery/interviews/interview-6808205": {
+      "checksum": "3bf4a0bf4fb92d3031706a8259121a16"
+    },
+    "commandlinelab/data/mystery/interviews/interview-68195573": {
+      "checksum": "bdb9ca53f20147e871885e694f930b4b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-68488577": {
+      "checksum": "66f89422d793c91a931de53eae0155e3"
+    },
+    "commandlinelab/data/mystery/interviews/interview-68764140": {
+      "checksum": "1ab00ceabd9d58c69c6ddd979f4cb63a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-6884359": {
+      "checksum": "9a9fb7f1d5784b4a6aac967ffe38b398"
+    },
+    "commandlinelab/data/mystery/interviews/interview-6894000": {
+      "checksum": "984c4c8fda66a20f7fb650090a22e402"
+    },
+    "commandlinelab/data/mystery/interviews/interview-69170457": {
+      "checksum": "a1f7f561e6b3c3f2b9f0b503e48b39b8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-6933068": {
+      "checksum": "a77fca3beffad38280417d897c04688f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-699607": {
+      "checksum": "2b205b0233b3511421e8924237c2bb2f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-70067280": {
+      "checksum": "5f867efa199cd67e94d5faf6cb62e759"
+    },
+    "commandlinelab/data/mystery/interviews/interview-70199425": {
+      "checksum": "adb3959d84bf3fcb8723dea86612e97c"
+    },
+    "commandlinelab/data/mystery/interviews/interview-703831": {
+      "checksum": "e1ca4ec2617184420b11412a9874bd34"
+    },
+    "commandlinelab/data/mystery/interviews/interview-704443": {
+      "checksum": "e125e4bca9a14a51e4b529469a447abc"
+    },
+    "commandlinelab/data/mystery/interviews/interview-70458099": {
+      "checksum": "ae2b88c28eeb9d283ec2d5eedad18f97"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7046684": {
+      "checksum": "75e6269b6e5a1d63702d2646828ec77f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7066082": {
+      "checksum": "a222b4b2df69df59a0a16d993179d663"
+    },
+    "commandlinelab/data/mystery/interviews/interview-706620": {
+      "checksum": "5e916ac7cf792847ab2961d54ac847a4"
+    },
+    "commandlinelab/data/mystery/interviews/interview-707438": {
+      "checksum": "bc0b1441df445f46816976e7a47ad52f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-708943": {
+      "checksum": "e53d9f8be8e3cd4b9630aaff74146e7b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7103823": {
+      "checksum": "fe4e058631937bffc7310e8d04ac7c40"
+    },
+    "commandlinelab/data/mystery/interviews/interview-71186817": {
+      "checksum": "57d028b939ee3b6644f37d183ff5b91a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-71226767": {
+      "checksum": "012552a63a3f3dbb5fc210d00ae87786"
+    },
+    "commandlinelab/data/mystery/interviews/interview-71298441": {
+      "checksum": "7f5fac96badd599b7d03602fc326a66d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7180973": {
+      "checksum": "3dabcb27ccb55b84706422483f099f46"
+    },
+    "commandlinelab/data/mystery/interviews/interview-71993338": {
+      "checksum": "d06c5f3cbbb5e9bfcb758daf4df31dbc"
+    },
+    "commandlinelab/data/mystery/interviews/interview-720268": {
+      "checksum": "92114932f12338f05697ee65521984f9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7254073": {
+      "checksum": "2794208d281967909243bca9532bf358"
+    },
+    "commandlinelab/data/mystery/interviews/interview-728181": {
+      "checksum": "a6f6375f26040182abedec0b25a655af"
+    },
+    "commandlinelab/data/mystery/interviews/interview-730123": {
+      "checksum": "33ef4c395b923541b6679bbcbeb63ad0"
+    },
+    "commandlinelab/data/mystery/interviews/interview-73035802": {
+      "checksum": "b7b669eb3444eaad3d243a6cf1fd082b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7305678": {
+      "checksum": "5d55b0b4c4d792981e107395c7ce3a7f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-73585672": {
+      "checksum": "da96da980a9419f75e7bfdc332f8fe12"
+    },
+    "commandlinelab/data/mystery/interviews/interview-737609": {
+      "checksum": "775b1e1ee143e2f87ce46faf20b5f713"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7422077": {
+      "checksum": "e590e8587a10d8d2e61aea163ee93d85"
+    },
+    "commandlinelab/data/mystery/interviews/interview-74225310": {
+      "checksum": "7d0d1caa939d4967de670b2f3a39620e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7469675": {
+      "checksum": "63f0e7fef8886230eb8820f3d73d1bad"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7541406": {
+      "checksum": "230d12b25a75c4edf1d7b3b82b4e30f5"
+    },
+    "commandlinelab/data/mystery/interviews/interview-75434722": {
+      "checksum": "82decbffa863f974284f5030f6e6a559"
+    },
+    "commandlinelab/data/mystery/interviews/interview-755037": {
+      "checksum": "5c0258ccd752e0f01b2ccf8803c109c3"
+    },
+    "commandlinelab/data/mystery/interviews/interview-75633580": {
+      "checksum": "f7aaf7daa96d9a7aa29d76af1aabc682"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7580872": {
+      "checksum": "f96dd3feb3480b376195d1ae1a524539"
+    },
+    "commandlinelab/data/mystery/interviews/interview-77014856": {
+      "checksum": "5ba02c08a0d3ca4db8d29238ba3fb8f0"
+    },
+    "commandlinelab/data/mystery/interviews/interview-770439": {
+      "checksum": "4b65fba4dd61335ee9fb847588944021"
+    },
+    "commandlinelab/data/mystery/interviews/interview-77135281": {
+      "checksum": "a4e8e22ba0e28865017c48a9b7cd6616"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7791374": {
+      "checksum": "910d50d49b98b2fa8a6bd4b5989efaf1"
+    },
+    "commandlinelab/data/mystery/interviews/interview-780255": {
+      "checksum": "b3bc9924333998cb1cd75f61956588d4"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7863761": {
+      "checksum": "d8de346ca9a38cac8d39abb3b15ac3ef"
+    },
+    "commandlinelab/data/mystery/interviews/interview-789564": {
+      "checksum": "6fbf82b2b0003f810212df1b9b409494"
+    },
+    "commandlinelab/data/mystery/interviews/interview-791289": {
+      "checksum": "eb3d2e32b242dec85fd994d7fa2ec78e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-79360358": {
+      "checksum": "9ee042f59c47e7c6dfe404d14708e246"
+    },
+    "commandlinelab/data/mystery/interviews/interview-79411932": {
+      "checksum": "3daeb98cef19699ea343bd15a0f41257"
+    },
+    "commandlinelab/data/mystery/interviews/interview-794525": {
+      "checksum": "63b58a10a97f2f502a90c2771f1b9969"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7959148": {
+      "checksum": "41f75b04454dd4e901134a7845ca1028"
+    },
+    "commandlinelab/data/mystery/interviews/interview-796439": {
+      "checksum": "32f785fe5dc26b6538c598eb59dd9830"
+    },
+    "commandlinelab/data/mystery/interviews/interview-79667499": {
+      "checksum": "a0e8171a30572408283a8d02c371f0fe"
+    },
+    "commandlinelab/data/mystery/interviews/interview-79935965": {
+      "checksum": "9b3a8de506e9ac198a2db1ebdc814c71"
+    },
+    "commandlinelab/data/mystery/interviews/interview-7998181": {
+      "checksum": "60f5928818975ee31339d8512351741f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8095917": {
+      "checksum": "e2845540d69004409331fa5a2a4f72b4"
+    },
+    "commandlinelab/data/mystery/interviews/interview-809922": {
+      "checksum": "66f29135b43b12c274db1c7e61bbacc6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-812725": {
+      "checksum": "c7654f68aada6d1d80fda5aa5ffcbb4a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-81443363": {
+      "checksum": "66742eaf7c84e44419a501de0e53465a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-822576": {
+      "checksum": "c2837a6d58c306a5c331e671e398388e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8245680": {
+      "checksum": "0e4769191d4d3ae6004c8e1ea7fb72ca"
+    },
+    "commandlinelab/data/mystery/interviews/interview-825165": {
+      "checksum": "c5f8a268be4696083e7a1779b7bfc6e9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-82705993": {
+      "checksum": "f69269d87bbf21afdadef8c2007df480"
+    },
+    "commandlinelab/data/mystery/interviews/interview-831512": {
+      "checksum": "90e9bf3c410508d445e9d4c7199c4704"
+    },
+    "commandlinelab/data/mystery/interviews/interview-833367": {
+      "checksum": "d4081503013ed6aeb93af6d800aa66b7"
+    },
+    "commandlinelab/data/mystery/interviews/interview-838259": {
+      "checksum": "2d4ac58af567a422601d86c1abc47df8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8387710": {
+      "checksum": "d3d41e13cba326bcf374b84bfbafab6f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8402388": {
+      "checksum": "c99c3422527820444d13cc2d0c3c5218"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8421696": {
+      "checksum": "68c2779ef27618167214b9089db85246"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8464899": {
+      "checksum": "20863689e36ebba7930cdaca8755cd2a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-84688694": {
+      "checksum": "dd190a32c9fb2e9205df03e359c923db"
+    },
+    "commandlinelab/data/mystery/interviews/interview-849256": {
+      "checksum": "4352bfbf4d5cfbae353dd0bcc2828854"
+    },
+    "commandlinelab/data/mystery/interviews/interview-85262552": {
+      "checksum": "dbe62a726b3698604f575ab79c3ab243"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8531248": {
+      "checksum": "03c9fb5ae9d67b8a309a3fa864fc3f86"
+    },
+    "commandlinelab/data/mystery/interviews/interview-856221": {
+      "checksum": "2c14cd57db93094ca7b94b1ec06feffb"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8586380": {
+      "checksum": "fdb00a157a6c3422af2c931d276d5022"
+    },
+    "commandlinelab/data/mystery/interviews/interview-861780": {
+      "checksum": "d51584bbee4e26cf265f44ab65039d38"
+    },
+    "commandlinelab/data/mystery/interviews/interview-862173": {
+      "checksum": "656b437cdd946341ffdc79c11799bae3"
+    },
+    "commandlinelab/data/mystery/interviews/interview-862717": {
+      "checksum": "b2c10258ca6ef88d190a6a9e8e30a3ab"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8631232": {
+      "checksum": "92d6de82de72dd16c69d7916bc33c3f2"
+    },
+    "commandlinelab/data/mystery/interviews/interview-86395001": {
+      "checksum": "3f63f36046695bba49ce54c4ee955e71"
+    },
+    "commandlinelab/data/mystery/interviews/interview-865918": {
+      "checksum": "ee3386d6bb6eaeb8c3fb7d308b3c15c6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-867999": {
+      "checksum": "b011dacb413c55f1619d2ebd593d38c9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8700943": {
+      "checksum": "a1eddb3a398c90202474f1e6c59ef4ea"
+    },
+    "commandlinelab/data/mystery/interviews/interview-87126591": {
+      "checksum": "4e225ec454263005f340b557cdab38a5"
+    },
+    "commandlinelab/data/mystery/interviews/interview-871877": {
+      "checksum": "f1cc99b680ff075e8fdffd04433e8efb"
+    },
+    "commandlinelab/data/mystery/interviews/interview-879569": {
+      "checksum": "fa337ad1d34889e2eaf179d69707f07d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-8819490": {
+      "checksum": "84b474bcf25570c2a3c4ec14dd6eb84a"
+    },
+    "commandlinelab/data/mystery/interviews/interview-891720": {
+      "checksum": "c373bc48e665617b0230ff572b1881c0"
+    },
+    "commandlinelab/data/mystery/interviews/interview-896668": {
+      "checksum": "14cef4d6d2bf338404e522c0126d495f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9004767": {
+      "checksum": "79218e73ff5a34c6f542b6e3366e68ee"
+    },
+    "commandlinelab/data/mystery/interviews/interview-901603": {
+      "checksum": "52d4686ff9eb88e91c8c33e09f1318bb"
+    },
+    "commandlinelab/data/mystery/interviews/interview-901645": {
+      "checksum": "0f9b41a5e0a2cb843616b40f82ecf249"
+    },
+    "commandlinelab/data/mystery/interviews/interview-90394637": {
+      "checksum": "d4404ab1ff2fe01e914b2236f9ce6ae9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-904020": {
+      "checksum": "0931a64b5e6ed879dd0a872227c8869f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-907126": {
+      "checksum": "76a59c59170d5ac0ca9f8cca72f09a6d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9074626": {
+      "checksum": "e601755cfa5adb0bf6356939fa4d0fc8"
+    },
+    "commandlinelab/data/mystery/interviews/interview-911451": {
+      "checksum": "39d4018a96800bb3b3fec6705f98c7ad"
+    },
+    "commandlinelab/data/mystery/interviews/interview-91673757": {
+      "checksum": "27ae1c0df57797f5a9ebe2a2f8393bf5"
+    },
+    "commandlinelab/data/mystery/interviews/interview-917210": {
+      "checksum": "037a259786ee2939093f9997364ba569"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9185205": {
+      "checksum": "c18eae511acce95fd187b481df25468d"
+    },
+    "commandlinelab/data/mystery/interviews/interview-920304": {
+      "checksum": "d924b01632f8f7178c0044df192d11b9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-92391023": {
+      "checksum": "022716c5bc731c3f849d3e845bfd04f5"
+    },
+    "commandlinelab/data/mystery/interviews/interview-92670500": {
+      "checksum": "c1d1cfe11c6b36db79125d74d8263eef"
+    },
+    "commandlinelab/data/mystery/interviews/interview-927642": {
+      "checksum": "5c8f1c727c185c38f3729d3d7065d3f1"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9332386": {
+      "checksum": "ee0861d7ee05bf9caec44347b4f05b16"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9346061": {
+      "checksum": "424f6980ec178c15b5415c3f328314c9"
+    },
+    "commandlinelab/data/mystery/interviews/interview-93473333": {
+      "checksum": "bd548f045fb8a0f7b010f43bc42bd846"
+    },
+    "commandlinelab/data/mystery/interviews/interview-93696502": {
+      "checksum": "4100c89afb92f8b9b540b923271a2b24"
+    },
+    "commandlinelab/data/mystery/interviews/interview-938991": {
+      "checksum": "0402cca959ca9372f7e35e1792afecd2"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9408565": {
+      "checksum": "7a1c24a77a162fccdfa5a5ca21165746"
+    },
+    "commandlinelab/data/mystery/interviews/interview-94126412": {
+      "checksum": "19c6bab1b5742539a1b2717f0585b1b7"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9437737": {
+      "checksum": "a61037c359522d427d8b8b18262b8d9f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-944493": {
+      "checksum": "f1b4ff0e196edfe829cb4cddb9219999"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9446528": {
+      "checksum": "092703420aadc022427acaae9ca9ad5b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9501580": {
+      "checksum": "467842a50ae1665af2beb460987f16a1"
+    },
+    "commandlinelab/data/mystery/interviews/interview-95095182": {
+      "checksum": "42a36553cc2cc295543a7b8629cf3a77"
+    },
+    "commandlinelab/data/mystery/interviews/interview-95601730": {
+      "checksum": "c28e559bf9eaaf163901a0479c81753e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9618669": {
+      "checksum": "c545e8746c9ed65612c5464ddc041b72"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9620713": {
+      "checksum": "303738383abbf33ba6f727282ea76e3b"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9651888": {
+      "checksum": "614d7f276ee9db560258bd189f88fdd6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9666149": {
+      "checksum": "da0b409a91614b571ceef8b2b7a52c7e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-97043057": {
+      "checksum": "0448595eb57df50ae29b835b21be9078"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9709892": {
+      "checksum": "f5c62f2f6bd684c82696ea9e0c41a2df"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9711852": {
+      "checksum": "80814a94681c957c10bbff6038214305"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9712946": {
+      "checksum": "5029c17e24a2629b5342f6cdd7acc24e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9728756": {
+      "checksum": "3adcd15c583674b55722f1249cadce7f"
+    },
+    "commandlinelab/data/mystery/interviews/interview-97393699": {
+      "checksum": "3e6fcb5eea59fdc6be8a01220b1aae3e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-97409610": {
+      "checksum": "d0d3c4700e819b9737b61515e92e80c6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-980963": {
+      "checksum": "3dd3f06f09799de16c7d96c5b512b1cc"
+    },
+    "commandlinelab/data/mystery/interviews/interview-982013": {
+      "checksum": "d1c4bbf62aa76b0cf6040dcc39bbd073"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9824821": {
+      "checksum": "2c8e5b32f3cbacd80f2c111f0266bfac"
+    },
+    "commandlinelab/data/mystery/interviews/interview-98912259": {
+      "checksum": "7638a16ea4dbd81fc0165f187fb35b2e"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9901455": {
+      "checksum": "0b887ab94f19e84af334889cdd73fda6"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9912172": {
+      "checksum": "1700d4b29bd0c48c089566977fff5221"
+    },
+    "commandlinelab/data/mystery/interviews/interview-992072": {
+      "checksum": "e25acb5b9168cee2ddc0b9e9d4352b48"
+    },
+    "commandlinelab/data/mystery/interviews/interview-99643550": {
+      "checksum": "cf6d13b78affc71849db9a7e6720e9b3"
+    },
+    "commandlinelab/data/mystery/interviews/interview-9969223": {
+      "checksum": "5f4783802ac4c73d7a6b2199ce1b58ea"
+    },
+    "commandlinelab/data/mystery/interviews/interview-999372": {
+      "checksum": "3e5b04b840b46fb3c2ccfea1126e94cb"
+    },
+    "commandlinelab/data/mystery/memberships/AAA": {
+      "checksum": "078180d164a5e066462db4176e0dbc41"
+    },
+    "commandlinelab/data/mystery/memberships/AAdvantage": {
+      "checksum": "c2cf45f5c1486b5b88f115147a6e2528"
+    },
+    "commandlinelab/data/mystery/memberships/Costco": {
+      "checksum": "474a902211121a196416b6e7db324cb7"
+    },
+    "commandlinelab/data/mystery/memberships/Delta_SkyMiles": {
+      "checksum": "87285466c9a6b3296312609734685c2d"
+    },
+    "commandlinelab/data/mystery/memberships/Fitness_Galaxy": {
+      "checksum": "f9e1f265c9027c08844da5406f16d026"
+    },
+    "commandlinelab/data/mystery/memberships/Museum_of_Bash_History": {
+      "checksum": "3fb1cfd15fedad993528fceb71c661f3"
+    },
+    "commandlinelab/data/mystery/memberships/REI": {
+      "checksum": "6db498fc5b37791369f132b7db59898c"
+    },
+    "commandlinelab/data/mystery/memberships/Rotary_Club": {
+      "checksum": "80b6c974cdb6927c2d7e7173841c7cbc"
+    },
+    "commandlinelab/data/mystery/memberships/TCSU_Alumni_Association": {
+      "checksum": "c153965b18138fb35827cf7acd51dcf1"
+    },
+    "commandlinelab/data/mystery/memberships/Terminal_City_Library": {
+      "checksum": "2c0aca547a6329f4a4246927ed259267"
+    },
+    "commandlinelab/data/mystery/memberships/United_MileagePlus": {
+      "checksum": "0e01471de676c11cf5db0eff34965f2c"
+    },
+    "commandlinelab/data/mystery/people": {
+      "checksum": "c2d82fe415edf2279ccd0645d3c32d68"
+    },
+    "commandlinelab/data/mystery/streets/Abbot_Street": {
+      "checksum": "007932769c57ca6c0f5ed2c0d81f7282"
+    },
+    "commandlinelab/data/mystery/streets/Acton_Street": {
+      "checksum": "43e128db4bb579faa6ddbd815052dc7e"
+    },
+    "commandlinelab/data/mystery/streets/Addington_Road": {
+      "checksum": "0aae0bb8c855b90c9e03aae9d428f515"
+    },
+    "commandlinelab/data/mystery/streets/Alaric_Street": {
+      "checksum": "fb793ae90f7d9a72287f52bf12aec15c"
+    },
+    "commandlinelab/data/mystery/streets/Albany_Street": {
+      "checksum": "e2a0a2382d6186aaa31bcc57ee05b6ae"
+    },
+    "commandlinelab/data/mystery/streets/Aldworth_Street": {
+      "checksum": "cf42baef983e409aa7b55ac08749fbf1"
+    },
+    "commandlinelab/data/mystery/streets/Alpine_Street": {
+      "checksum": "bfede59e06fc36dc573cca426ade4aa1"
+    },
+    "commandlinelab/data/mystery/streets/Andover_Road": {
+      "checksum": "07f9193ef04b4cb3e7128e04748b5de2"
+    },
+    "commandlinelab/data/mystery/streets/Ansonia_Road": {
+      "checksum": "8733e67749c03a270e14cb1f4f342d76"
+    },
+    "commandlinelab/data/mystery/streets/Appleton_Road": {
+      "checksum": "bb439a023b3881868b78597379832fd4"
+    },
+    "commandlinelab/data/mystery/streets/Aramon_Street": {
+      "checksum": "01a1cd1067cbe354c4a301f98f6ba588"
+    },
+    "commandlinelab/data/mystery/streets/Arcola_Street": {
+      "checksum": "59dee21aa96bc6e1fea8c488e64cf9aa"
+    },
+    "commandlinelab/data/mystery/streets/Atwood_Road": {
+      "checksum": "59122d3465b759d96fd75a9507d47e10"
+    },
+    "commandlinelab/data/mystery/streets/Auriga_Street": {
+      "checksum": "229eb70d4b99cf88bdef0f446633f8c1"
+    },
+    "commandlinelab/data/mystery/streets/Avalon_Road": {
+      "checksum": "17d26320f5d8e69df734f704e56f987c"
+    },
+    "commandlinelab/data/mystery/streets/B_Street": {
+      "checksum": "cfd264eb4f3b999f386e33743c88e6b5"
+    },
+    "commandlinelab/data/mystery/streets/Ballard_Street": {
+      "checksum": "de5a6d6f96bf5a7fac5f6d675a563be0"
+    },
+    "commandlinelab/data/mystery/streets/Balmoral_Park": {
+      "checksum": "81b401c37c7c1d7e54539309ce1c53bc"
+    },
+    "commandlinelab/data/mystery/streets/Bartlett_Avenue": {
+      "checksum": "c9978aab93e3b7e4ae75ecec0e440f08"
+    },
+    "commandlinelab/data/mystery/streets/Bellevue_Avenue": {
+      "checksum": "31147907cc36c16804e6d6a8b006f4e0"
+    },
+    "commandlinelab/data/mystery/streets/Bertson_Avenue": {
+      "checksum": "2c6624a0d7cbefc2081115e43be3ad36"
+    },
+    "commandlinelab/data/mystery/streets/Bicknell_Street": {
+      "checksum": "e5a9df505118aa882d083e9defa5e9e1"
+    },
+    "commandlinelab/data/mystery/streets/Blue_Hill_Avenue": {
+      "checksum": "abc1ddaedf4de201715c85a6069c9e6a"
+    },
+    "commandlinelab/data/mystery/streets/Bobolink_Street": {
+      "checksum": "8cc349a6e26df937582ea49668fcc9f2"
+    },
+    "commandlinelab/data/mystery/streets/Boston_Street": {
+      "checksum": "b5ce083b6da722b6b82e35a8c5a87017"
+    },
+    "commandlinelab/data/mystery/streets/Bothwell_Road": {
+      "checksum": "c3bc2a42c0b15051e8a8bf910059f4c5"
+    },
+    "commandlinelab/data/mystery/streets/Bournedale_Road": {
+      "checksum": "b3717e46e502640810eb6710b6e665d8"
+    },
+    "commandlinelab/data/mystery/streets/Boynton_Street": {
+      "checksum": "5d175d274e2a71d0433224e8236ca1ee"
+    },
+    "commandlinelab/data/mystery/streets/Brinton_Street": {
+      "checksum": "25c104e6df4879c2736229364d318b9b"
+    },
+    "commandlinelab/data/mystery/streets/Bristol_Street": {
+      "checksum": "cbfcb5671b7ccf3febf62e1bc6d2bab0"
+    },
+    "commandlinelab/data/mystery/streets/Broad_Canal_Street": {
+      "checksum": "971a8d8d54ee063d7cb6484f7061261d"
+    },
+    "commandlinelab/data/mystery/streets/Brookdale_Street": {
+      "checksum": "19354b9fb971c511cc9fa62c5e51f0da"
+    },
+    "commandlinelab/data/mystery/streets/Brookline_Avenue": {
+      "checksum": "ec7e01addb511bb50d91557eb27ac38e"
+    },
+    "commandlinelab/data/mystery/streets/Buckingham_Place": {
+      "checksum": "32fe4f4c312e1d04a949c3960c50c8a6"
+    },
+    "commandlinelab/data/mystery/streets/Burwell_Road": {
+      "checksum": "c208b9f14bcf6fba3ebe4156ddff9e12"
+    },
+    "commandlinelab/data/mystery/streets/Cadbury_Road": {
+      "checksum": "0a0718cd8fbe0967f847240d36c1d750"
+    },
+    "commandlinelab/data/mystery/streets/Cardinal_Medeiros_Avenue": {
+      "checksum": "df0c46d0132a578ef8ae658d87346477"
+    },
+    "commandlinelab/data/mystery/streets/Cardington_Street": {
+      "checksum": "93492303cfcd76a7c1b61b0ca1c89e35"
+    },
+    "commandlinelab/data/mystery/streets/Causeway_Street": {
+      "checksum": "6efcb17285fb64c556ea02ce1e4e6df9"
+    },
+    "commandlinelab/data/mystery/streets/Cerdan_Avenue": {
+      "checksum": "5363f544e09532693cb4912299b734d4"
+    },
+    "commandlinelab/data/mystery/streets/Channel_Center_Street": {
+      "checksum": "40820a2621352ff087eb9555a6d83f25"
+    },
+    "commandlinelab/data/mystery/streets/Cheverus_Road": {
+      "checksum": "17012df12f7a618533fbf0611fbf3786"
+    },
+    "commandlinelab/data/mystery/streets/Claremont_Park": {
+      "checksum": "c95fa25691362f4ddd302bf9c23c96a1"
+    },
+    "commandlinelab/data/mystery/streets/Clay_Street": {
+      "checksum": "a292e3915d6c3bcb1b89361a721e59de"
+    },
+    "commandlinelab/data/mystery/streets/Claybourne_Street": {
+      "checksum": "ae65a5456c89c476831ebeaec7acb8dd"
+    },
+    "commandlinelab/data/mystery/streets/Clipper_Ship_Lane": {
+      "checksum": "ab0f2358d0421c6ddef4774ef2689cd0"
+    },
+    "commandlinelab/data/mystery/streets/Cook_Street": {
+      "checksum": "0fa45bf082c19b12fd9e48f7a7a5deaa"
+    },
+    "commandlinelab/data/mystery/streets/Cornelia_Street": {
+      "checksum": "ea335ce54298a90216ab679be5e848d7"
+    },
+    "commandlinelab/data/mystery/streets/Corwin_Street": {
+      "checksum": "eb7f670b3f56d127dad2929a3cfe4d0a"
+    },
+    "commandlinelab/data/mystery/streets/Culbert_Street": {
+      "checksum": "33b3524ded7fb96cb3cbe3367e73ad4d"
+    },
+    "commandlinelab/data/mystery/streets/Dacia_Street": {
+      "checksum": "92941398c93059c5e9700265692788f2"
+    },
+    "commandlinelab/data/mystery/streets/Dalton_Street": {
+      "checksum": "aa4284a70982e7772f30eb49dabb9c3d"
+    },
+    "commandlinelab/data/mystery/streets/Dana_Avenue": {
+      "checksum": "5ab0086a68f177f5d79c1e3359cfb728"
+    },
+    "commandlinelab/data/mystery/streets/Davenport_Street": {
+      "checksum": "649b7cd68c0c2110fbe79e58633f3cdf"
+    },
+    "commandlinelab/data/mystery/streets/Devine_Way": {
+      "checksum": "7b13686a462e5ef185b1e396f8655bf8"
+    },
+    "commandlinelab/data/mystery/streets/Dewar_Street": {
+      "checksum": "a4a7fe237a9c71795c47872b5d9a44d0"
+    },
+    "commandlinelab/data/mystery/streets/Doane_Street": {
+      "checksum": "c6d141fee6d9c2c3346bc91cd037af82"
+    },
+    "commandlinelab/data/mystery/streets/Dock_Street": {
+      "checksum": "f281f21fbeac79d01d13cb4a81681282"
+    },
+    "commandlinelab/data/mystery/streets/Dorrance_Street": {
+      "checksum": "3fb87032d753a82df5796dab0d982226"
+    },
+    "commandlinelab/data/mystery/streets/Dover_Street": {
+      "checksum": "eced26e9ac79ae87ab6ec5364ee89c2d"
+    },
+    "commandlinelab/data/mystery/streets/Dresser_Street": {
+      "checksum": "922bfb35877914bd7cf5e205658d7828"
+    },
+    "commandlinelab/data/mystery/streets/Drumlin_Road": {
+      "checksum": "336aaf6942c34d942f14535937581d75"
+    },
+    "commandlinelab/data/mystery/streets/Dunstable_Road": {
+      "checksum": "24b6ca0c5cd2e16de9c96229d2327943"
+    },
+    "commandlinelab/data/mystery/streets/Elmore_Street": {
+      "checksum": "36d53c23adbfbfeb177d22e24f4422af"
+    },
+    "commandlinelab/data/mystery/streets/Embassy_Road": {
+      "checksum": "9152289f85894f996201184b3610442a"
+    },
+    "commandlinelab/data/mystery/streets/Enterprise_Street": {
+      "checksum": "b64b943481d3b2dd343a5ee2e25b8b14"
+    },
+    "commandlinelab/data/mystery/streets/Esther_Road": {
+      "checksum": "5251426e3e33c87047c03393fd8c5d4e"
+    },
+    "commandlinelab/data/mystery/streets/Estrella_Street": {
+      "checksum": "31ed269be354a4f9d03d898b4a28a45d"
+    },
+    "commandlinelab/data/mystery/streets/Eugenia_Road": {
+      "checksum": "c43bdf8853c0d9221a0046dbd7baa670"
+    },
+    "commandlinelab/data/mystery/streets/Fairfield_Street": {
+      "checksum": "2ddb1434294e15ba38b146c0086ef65a"
+    },
+    "commandlinelab/data/mystery/streets/Faunce_Road": {
+      "checksum": "a419352f904aa20dc43b09736e9b0f51"
+    },
+    "commandlinelab/data/mystery/streets/Fay_Street": {
+      "checksum": "ce35e390ccfc6314db5c9453b356eeb4"
+    },
+    "commandlinelab/data/mystery/streets/Fayston_Street": {
+      "checksum": "5875236203d61c862d9e59f4b77c2dc1"
+    },
+    "commandlinelab/data/mystery/streets/Fessenden_Street": {
+      "checksum": "c70cddf6d76f361bed410629c4b6d59d"
+    },
+    "commandlinelab/data/mystery/streets/Forestvale_Road": {
+      "checksum": "f132355b204e09f88f76942e202214f5"
+    },
+    "commandlinelab/data/mystery/streets/Foundry_Street": {
+      "checksum": "fd4111e06626d8a4fabcd5b05080b8a8"
+    },
+    "commandlinelab/data/mystery/streets/Fowler_Street": {
+      "checksum": "e35ba3946e69c67c618b310b582f210f"
+    },
+    "commandlinelab/data/mystery/streets/Frontage_Road": {
+      "checksum": "aa92af6bafb3fcee349aa0a0dfb3626b"
+    },
+    "commandlinelab/data/mystery/streets/Gerard_Street": {
+      "checksum": "d4596530366cfcdb15828258e7ff5720"
+    },
+    "commandlinelab/data/mystery/streets/Gillespies_Lane": {
+      "checksum": "1bf1064df73ad231563fdd4fc4fcb453"
+    },
+    "commandlinelab/data/mystery/streets/Glenville_Avenue": {
+      "checksum": "e7bf69b213319e2f84dbe1f80349402f"
+    },
+    "commandlinelab/data/mystery/streets/Glenwood_Avenue": {
+      "checksum": "8c6b3dfe52050c0a77d8265dc49bc0fb"
+    },
+    "commandlinelab/data/mystery/streets/Grampian_Way": {
+      "checksum": "bb4f0df26b0dc6a4b7fa26c25ab6cd11"
+    },
+    "commandlinelab/data/mystery/streets/Granby_Street": {
+      "checksum": "5b9d0735f8b56cf165756f727ea9c447"
+    },
+    "commandlinelab/data/mystery/streets/Gray_Gardens_East": {
+      "checksum": "b249aeaea28bf0148e9fcd7c81f1629e"
+    },
+    "commandlinelab/data/mystery/streets/Greendale_Road": {
+      "checksum": "2334ee10d5cbcd2d069348f7ac3cf0be"
+    },
+    "commandlinelab/data/mystery/streets/Gretter_Road": {
+      "checksum": "2ea4a4cd13bbea02b2272224d21730ee"
+    },
+    "commandlinelab/data/mystery/streets/Groveland_Street": {
+      "checksum": "61c1b89598db1d4d7b352099901c44a9"
+    },
+    "commandlinelab/data/mystery/streets/Hadassah_Way": {
+      "checksum": "36007f16d5a62d85d5acb1f940f9d8c5"
+    },
+    "commandlinelab/data/mystery/streets/Haley_Street": {
+      "checksum": "0ce4172e9ad10231d05ae5de04868b09"
+    },
+    "commandlinelab/data/mystery/streets/Harbor_Point_Boulevard": {
+      "checksum": "5a28953484810b0aa56ea2956ad3cf9a"
+    },
+    "commandlinelab/data/mystery/streets/Harding_Road": {
+      "checksum": "7d325565acd7432099952e763fe8d48e"
+    },
+    "commandlinelab/data/mystery/streets/Hart_Place": {
+      "checksum": "18a0741052e442d754a2f92f4ff7458a"
+    },
+    "commandlinelab/data/mystery/streets/Hazel_Street": {
+      "checksum": "0c742a320cbe69bd2eff3a5494774dc7"
+    },
+    "commandlinelab/data/mystery/streets/Hazelton_Street": {
+      "checksum": "f96008eef16900b12475f9602c8da399"
+    },
+    "commandlinelab/data/mystery/streets/High_Road": {
+      "checksum": "01b0ded18c096134b5d88874df31bc92"
+    },
+    "commandlinelab/data/mystery/streets/High_View_Avenue": {
+      "checksum": "eb6a650c39adc54fdbca9e3a58457227"
+    },
+    "commandlinelab/data/mystery/streets/Hobart_Street": {
+      "checksum": "fae48134c82ef68e3ad73a682b1c41ca"
+    },
+    "commandlinelab/data/mystery/streets/Hollander_Street": {
+      "checksum": "6843ab2e21c94e1fb7127064cdc54459"
+    },
+    "commandlinelab/data/mystery/streets/Hooten_Court": {
+      "checksum": "e6e2449163ee14e1e3c0fee8920b8e37"
+    },
+    "commandlinelab/data/mystery/streets/Hopedale_Street": {
+      "checksum": "866a0c16eded9c5962d218923c3170be"
+    },
+    "commandlinelab/data/mystery/streets/Hull_Street": {
+      "checksum": "05bb85583b5e49381440b3eb720bfc1a"
+    },
+    "commandlinelab/data/mystery/streets/Island_View_Place": {
+      "checksum": "b03ec24476643fa8c7b3858b53327a46"
+    },
+    "commandlinelab/data/mystery/streets/Jacob_Street": {
+      "checksum": "6f8c1a5e13bad3df7a51094fa3deb6ed"
+    },
+    "commandlinelab/data/mystery/streets/Jacqueline_Road": {
+      "checksum": "ca5b2e47ac74265833c8c3af60ede610"
+    },
+    "commandlinelab/data/mystery/streets/Jamaica_Place": {
+      "checksum": "d6e730e554c8dcc90f856578208a2909"
+    },
+    "commandlinelab/data/mystery/streets/Jersey_Street": {
+      "checksum": "f007ce403d9c8f6ac08b6ebcd2fbc6c6"
+    },
+    "commandlinelab/data/mystery/streets/Jeshurun_Street": {
+      "checksum": "a9327a7691f4a05ad713a8c1713d3d53"
+    },
+    "commandlinelab/data/mystery/streets/John_Alden_Road": {
+      "checksum": "8b130ee160c310d51e5159de37897674"
+    },
+    "commandlinelab/data/mystery/streets/Judge_Street": {
+      "checksum": "5f6e7e3826e58532d843894adde24d11"
+    },
+    "commandlinelab/data/mystery/streets/June_Street": {
+      "checksum": "f6d5d9b43ab1d51ce550789fc8c25c62"
+    },
+    "commandlinelab/data/mystery/streets/Kearsarge_Avenue": {
+      "checksum": "d6ee9aef0e8195b0b3cfb46a3df7a836"
+    },
+    "commandlinelab/data/mystery/streets/King_Place": {
+      "checksum": "8df774e50b471f63af96925f5ed06388"
+    },
+    "commandlinelab/data/mystery/streets/Kinross_Road": {
+      "checksum": "ab8ad317e8e2e18b7ecbf6c726b0a55b"
+    },
+    "commandlinelab/data/mystery/streets/Knoll_Street": {
+      "checksum": "25237b4ea53560b1a5f3d956be6e2406"
+    },
+    "commandlinelab/data/mystery/streets/Laban_Pratt_Road": {
+      "checksum": "e450f17e4d3f0bc3737b9f3fd0ad6553"
+    },
+    "commandlinelab/data/mystery/streets/Leseur_Road": {
+      "checksum": "ce0fd43bd1683f1655990af311e182a2"
+    },
+    "commandlinelab/data/mystery/streets/Lineham_Court": {
+      "checksum": "51daa4a3d508acb59b744ec0b73749e8"
+    },
+    "commandlinelab/data/mystery/streets/Lovis_Street": {
+      "checksum": "9f65424b9e222c7a2a276d73fd99bda2"
+    },
+    "commandlinelab/data/mystery/streets/Lynde_Street": {
+      "checksum": "d7b160a255f7174dc82dbd1b33dba5f2"
+    },
+    "commandlinelab/data/mystery/streets/Lynn_Street": {
+      "checksum": "3cd96ff0db515052c2805bc38c7b7597"
+    },
+    "commandlinelab/data/mystery/streets/Mamelon_Circle": {
+      "checksum": "1a7dc9c9f2d359d0b8ea82eb1f84a1c9"
+    },
+    "commandlinelab/data/mystery/streets/Manila_Avenue": {
+      "checksum": "a8a2242bbbd4e68b79d80c00a4ee1a4e"
+    },
+    "commandlinelab/data/mystery/streets/Manton_Terrace": {
+      "checksum": "d6fee75a6d0a4eab14a721fe4bdd5d6f"
+    },
+    "commandlinelab/data/mystery/streets/Marney_Street": {
+      "checksum": "97ec177aa3542b8a8aec729d8379974b"
+    },
+    "commandlinelab/data/mystery/streets/Mattapan_Street": {
+      "checksum": "ba59fc2bf859cba9394f382d340d6faf"
+    },
+    "commandlinelab/data/mystery/streets/May_Street": {
+      "checksum": "88ce2db25faa1952cf50aa59e8f8744b"
+    },
+    "commandlinelab/data/mystery/streets/Meadowview_Road": {
+      "checksum": "217b4e36503c58255dfdd86b5ecc5255"
+    },
+    "commandlinelab/data/mystery/streets/Merola_Park": {
+      "checksum": "31bcefc392463964592203b5f61ac022"
+    },
+    "commandlinelab/data/mystery/streets/Michigan_Avenue": {
+      "checksum": "7ab3e414ac57f23c8fdfbbc60cec052e"
+    },
+    "commandlinelab/data/mystery/streets/Miles_Street": {
+      "checksum": "5d6cce440d502b03cc5615f89e43c85f"
+    },
+    "commandlinelab/data/mystery/streets/Moloney_Street": {
+      "checksum": "343f3dd85df40ecb2af26aefa022857b"
+    },
+    "commandlinelab/data/mystery/streets/Mount_Ash_Road": {
+      "checksum": "94c01fca918a1fa21ddc5f6142733ccf"
+    },
+    "commandlinelab/data/mystery/streets/Mount_Ida_Road": {
+      "checksum": "7e863776e4c75b1657e01f421095401c"
+    },
+    "commandlinelab/data/mystery/streets/Mountain_Avenue": {
+      "checksum": "c701dd510744415cce94e4fbef72dbe2"
+    },
+    "commandlinelab/data/mystery/streets/Mozart_Street": {
+      "checksum": "9c4e4f1890b088e6d425fc173dd180fa"
+    },
+    "commandlinelab/data/mystery/streets/Myles_Standish_Road": {
+      "checksum": "a8421474f05c723f19674a9ac1e5916b"
+    },
+    "commandlinelab/data/mystery/streets/Mystic_Street": {
+      "checksum": "c16894992202443fc3bd8c94d3bb41d8"
+    },
+    "commandlinelab/data/mystery/streets/Nazing_Street": {
+      "checksum": "f795fc03659ba407a7eb424c40a7305e"
+    },
+    "commandlinelab/data/mystery/streets/New_Minton_Street": {
+      "checksum": "45046aa86f23a85d82294f27144c74aa"
+    },
+    "commandlinelab/data/mystery/streets/New_Park_Avenue": {
+      "checksum": "955376836c72efd7be36fbb6eb5dc293"
+    },
+    "commandlinelab/data/mystery/streets/Newcastle_Road": {
+      "checksum": "d2f3875ff6950f8d62e716f46eb83663"
+    },
+    "commandlinelab/data/mystery/streets/Newcroft_Circle": {
+      "checksum": "45bff3f50268c57ece030b750202b548"
+    },
+    "commandlinelab/data/mystery/streets/North_Washington_Street": {
+      "checksum": "92fd89c173137b0efb9ccf0984cb89f6"
+    },
+    "commandlinelab/data/mystery/streets/Norton_Street": {
+      "checksum": "5597d7965bc7fdbcb6fda00c5c8b1a80"
+    },
+    "commandlinelab/data/mystery/streets/Oak_Hill_Avenue": {
+      "checksum": "9cf3cfd8618a0e70052dad4c8cb9c5c7"
+    },
+    "commandlinelab/data/mystery/streets/Oak_Place": {
+      "checksum": "8bc7f2131e09715603ecae5834a22910"
+    },
+    "commandlinelab/data/mystery/streets/Oakley_Street": {
+      "checksum": "f5e21a36852a0b68813f9275918f7aae"
+    },
+    "commandlinelab/data/mystery/streets/Oliva_Road": {
+      "checksum": "d2b0a06f7e0d9334e738e47ac31beac1"
+    },
+    "commandlinelab/data/mystery/streets/Orchard_Road": {
+      "checksum": "ac4fed4ccfa3455054b8464ad2005732"
+    },
+    "commandlinelab/data/mystery/streets/Paragon_Road": {
+      "checksum": "300ca01cffc651262e36283c5fa77a71"
+    },
+    "commandlinelab/data/mystery/streets/Peacock_Lane": {
+      "checksum": "8d14bf900e6bea7e8f66651734126545"
+    },
+    "commandlinelab/data/mystery/streets/Peter_Parley_Road": {
+      "checksum": "8a0abb0a08ccfce4287fd8d7986a6e5c"
+    },
+    "commandlinelab/data/mystery/streets/Pinewood_Street": {
+      "checksum": "c98fa01ba27a99ffaf9fa8b638d49e21"
+    },
+    "commandlinelab/data/mystery/streets/Plain_Street": {
+      "checksum": "af29a784727661ec803365f9a1526b69"
+    },
+    "commandlinelab/data/mystery/streets/Plainfield_Street": {
+      "checksum": "935cd537c52cf6da9b91bd82add728ef"
+    },
+    "commandlinelab/data/mystery/streets/Potosi_Street": {
+      "checksum": "b77a813280a18f154be22b645051bec5"
+    },
+    "commandlinelab/data/mystery/streets/Priscilla_Road": {
+      "checksum": "93e25ffe0185dd3c4427ba0a91a8e79d"
+    },
+    "commandlinelab/data/mystery/streets/Proctor_Street": {
+      "checksum": "fbaf00099bc8d7116ae1775efe406a66"
+    },
+    "commandlinelab/data/mystery/streets/Quarley_Road": {
+      "checksum": "3f4db79b5eda2ec2ddc71c0046953cb4"
+    },
+    "commandlinelab/data/mystery/streets/Randlett_Place": {
+      "checksum": "95841fa9c0914e3d23311da6db7ee11a"
+    },
+    "commandlinelab/data/mystery/streets/Rena_Street": {
+      "checksum": "235c560e2c150ee92063b35b5950ee2e"
+    },
+    "commandlinelab/data/mystery/streets/Renfrew_Street": {
+      "checksum": "6ce791a5676e2890094ba3d4d3ff06b7"
+    },
+    "commandlinelab/data/mystery/streets/Richard_Avenue": {
+      "checksum": "85b79ad8e52614cd1787c1a56c5fb49c"
+    },
+    "commandlinelab/data/mystery/streets/Richardson_Street": {
+      "checksum": "1778e7b2cc7a595051fc58c197e52a82"
+    },
+    "commandlinelab/data/mystery/streets/Richmond_Street": {
+      "checksum": "876bb001992ee06a1536875a2fb94848"
+    },
+    "commandlinelab/data/mystery/streets/River_Street": {
+      "checksum": "6eb56600779712db5d0e57779cef58f8"
+    },
+    "commandlinelab/data/mystery/streets/Rivermoor_Street": {
+      "checksum": "ea59845411a5fdc9c7dad67bc98fb9ec"
+    },
+    "commandlinelab/data/mystery/streets/Rockmere_Street": {
+      "checksum": "9d56d69e8fed78513602dc76f5356b44"
+    },
+    "commandlinelab/data/mystery/streets/Rosaria_Street": {
+      "checksum": "e91fdfa4b2ecdfda50ca8c31dbd39868"
+    },
+    "commandlinelab/data/mystery/streets/Rowe_Street": {
+      "checksum": "a3ad5706898536fba7e8f4469375e2fb"
+    },
+    "commandlinelab/data/mystery/streets/Rozella_Street": {
+      "checksum": "77d351bf4db8f819beb8932a4651faae"
+    },
+    "commandlinelab/data/mystery/streets/Saco_Street": {
+      "checksum": "0cb6ca0223a8326de6a788195ff35086"
+    },
+    "commandlinelab/data/mystery/streets/Saint_Saveur_Court": {
+      "checksum": "db3b7ed97e8074adc9004640f32eaf5c"
+    },
+    "commandlinelab/data/mystery/streets/Salutation_Street": {
+      "checksum": "e39ae576358c3bca7752429bedc83cda"
+    },
+    "commandlinelab/data/mystery/streets/Sammett_Avenue": {
+      "checksum": "4319df4b0b1c57e6997ef6741eebb00c"
+    },
+    "commandlinelab/data/mystery/streets/Saunders_Street": {
+      "checksum": "18932a09b56b565d54c0f774e677f602"
+    },
+    "commandlinelab/data/mystery/streets/Scotia_Street": {
+      "checksum": "2d41c1448a3e6b32a997874a9027d17d"
+    },
+    "commandlinelab/data/mystery/streets/Searle_Road": {
+      "checksum": "3c6be74b900883fc1019d54d6644a863"
+    },
+    "commandlinelab/data/mystery/streets/Selwyn_Street": {
+      "checksum": "1defd7f7c11e624aa51f18b51621a929"
+    },
+    "commandlinelab/data/mystery/streets/Senders_Court": {
+      "checksum": "7c1919bef0c0836deff2c3243b2141c7"
+    },
+    "commandlinelab/data/mystery/streets/Sheldon_Street": {
+      "checksum": "2af7f82a4dbb8b2c1897a2e01a62506d"
+    },
+    "commandlinelab/data/mystery/streets/Silver_Street": {
+      "checksum": "6d663a7dd1b9985ff3f58716cc0b40fc"
+    },
+    "commandlinelab/data/mystery/streets/Sparrow_Street": {
+      "checksum": "782bd4fcf1ac4ff6acc85c6299da3460"
+    },
+    "commandlinelab/data/mystery/streets/Spaulding_Street": {
+      "checksum": "8789cadf7621ffd29d7a3c8dd4a6b205"
+    },
+    "commandlinelab/data/mystery/streets/Standard_Street": {
+      "checksum": "d077f0c3217a9c7253685771a1c5c5ad"
+    },
+    "commandlinelab/data/mystery/streets/Staniford_Street": {
+      "checksum": "e2e351a69de3ca8407a4ad4809fedd13"
+    },
+    "commandlinelab/data/mystery/streets/Story_Street": {
+      "checksum": "30bc23cabd305bb1e73a44dc0892cfef"
+    },
+    "commandlinelab/data/mystery/streets/Supple_Road": {
+      "checksum": "5ca32f298cb5d84534639b88525005fe"
+    },
+    "commandlinelab/data/mystery/streets/Taunton_Avenue": {
+      "checksum": "ac0d1a75a11fe42410528232b4714ba5"
+    },
+    "commandlinelab/data/mystery/streets/Tennyson_Street": {
+      "checksum": "eab39eebaa464f3658771218fe515b47"
+    },
+    "commandlinelab/data/mystery/streets/Terrace_Place": {
+      "checksum": "13320cf678abca2653abbe9f4a413916"
+    },
+    "commandlinelab/data/mystery/streets/Theodore_Street": {
+      "checksum": "360d42a0d06afad96bc937aa1d27ea68"
+    },
+    "commandlinelab/data/mystery/streets/Tolman_Street": {
+      "checksum": "95f83f364d07f2ffec464af90c759079"
+    },
+    "commandlinelab/data/mystery/streets/Topeka_Street": {
+      "checksum": "c5bea1a5ccc1b440dc04591d0bdef511"
+    },
+    "commandlinelab/data/mystery/streets/Trapelo_Street": {
+      "checksum": "2fd2271d1c05110fafb2971c7ed11c47"
+    },
+    "commandlinelab/data/mystery/streets/Trident_Street": {
+      "checksum": "d6a11677226fa4a721919c63356e2ffc"
+    },
+    "commandlinelab/data/mystery/streets/Trinity_Place": {
+      "checksum": "0dddca7450b958c74dccc54ef07b5b22"
+    },
+    "commandlinelab/data/mystery/streets/Unity_Court": {
+      "checksum": "7f339a72f578164e2859dc4bbb445872"
+    },
+    "commandlinelab/data/mystery/streets/Vassal_Lane": {
+      "checksum": "788ee9de97fb3b174ef2f8ca2e785d68"
+    },
+    "commandlinelab/data/mystery/streets/Victory_Road": {
+      "checksum": "faafc4246fa038284bef78aabe6cbb6e"
+    },
+    "commandlinelab/data/mystery/streets/Vinton_Street": {
+      "checksum": "eaaccdd29be7a77657f292ae6e70f8c7"
+    },
+    "commandlinelab/data/mystery/streets/Vista_Street": {
+      "checksum": "9eeb64fc39800156b6d54f68ab98bc16"
+    },
+    "commandlinelab/data/mystery/streets/Waldeck_Street": {
+      "checksum": "748fd8ace86a948c11fbe1c18f907ef4"
+    },
+    "commandlinelab/data/mystery/streets/Wallingford_Road": {
+      "checksum": "868f5fd8f301af4c8010ceae262f6f46"
+    },
+    "commandlinelab/data/mystery/streets/Warren_Avenue": {
+      "checksum": "614b84600a7bf4e9ff7e61351890c366"
+    },
+    "commandlinelab/data/mystery/streets/Wentworth_Street": {
+      "checksum": "a1477775aa1a28ad1ba8afa1b3cb8e39"
+    },
+    "commandlinelab/data/mystery/streets/Wesley_Place": {
+      "checksum": "719e3182343545fdbf51b62b7cc70838"
+    },
+    "commandlinelab/data/mystery/streets/Wheatland_Avenue": {
+      "checksum": "5c5fba3b487475cd684773d4c36c2f9a"
+    },
+    "commandlinelab/data/mystery/streets/Wiget_Street": {
+      "checksum": "331e6be031ac51b9d01923ad70a436ff"
+    },
+    "commandlinelab/data/mystery/streets/Wiggin_Street": {
+      "checksum": "b00a654ffab14f96fa8b29cb8115a0fb"
+    },
+    "commandlinelab/data/mystery/streets/Wilcox_Road": {
+      "checksum": "b696f69b83389455aa0e284b5e1d930c"
+    },
+    "commandlinelab/data/mystery/streets/Wilkinson_Park": {
+      "checksum": "0b043a4bfbf09eaf7fe76b7daaf985b8"
+    },
+    "commandlinelab/data/mystery/streets/Willet_Street": {
+      "checksum": "ea9547822a2299ca80dd40bf1e2ee616"
+    },
+    "commandlinelab/data/mystery/streets/Williston_Road": {
+      "checksum": "77c91c438653a0d96c0ad9cec1932bd5"
+    },
+    "commandlinelab/data/mystery/streets/Willowdean_Avenue": {
+      "checksum": "1d645b421a218566fd69e0b4b78cd124"
+    },
+    "commandlinelab/data/mystery/streets/Wilmington_Avenue": {
+      "checksum": "b82f20c6202176a8563b5f7bb685f973"
+    },
+    "commandlinelab/data/mystery/streets/Winter_Street": {
+      "checksum": "9fa9d61dd323fdbcb3c8563171bd4338"
+    },
+    "commandlinelab/data/mystery/streets/Woodcliff_Street": {
+      "checksum": "f289e2516064170c29cfab9f9038098a"
+    },
+    "commandlinelab/data/mystery/streets/Wooddale_Avenue": {
+      "checksum": "1a089b8f07134385be92328e9807dc48"
+    },
+    "commandlinelab/data/mystery/streets/Worrell_Street": {
+      "checksum": "4327dfd085b9c2b17f5a8ccc57a1e8bb"
+    },
+    "commandlinelab/data/mystery/streets/Wycliff_Avenue": {
+      "checksum": "744ff65a377ccde54f33cb33f385c7a5"
+    },
+    "commandlinelab/data/mystery/vehicles": {
+      "checksum": "991fd8921a975286593bdebe7b596685"
+    },
+    "commandlinelab/data/README.md": {
+      "checksum": "7d64ce2fddae4633a50d7bfe977ce990"
+    },
+    "commandlinelab/data/solution": {
+      "checksum": "ff587fb478fb252904e2269b99830ac5"
+    },
+    "commandlinelab/data/test.txt": {
+      "checksum": "2d546a3a97d2ed08045410af81b73d4c"
+    },
+    "commandlinelab/images/CLI_python.png": {
+      "checksum": "1bb63f120ad4e46973f7b0d6557e8021"
+    },
+    "commandlinelab/images/CLI.png": {
+      "checksum": "8b765f52481dc6c829fef9c6b933dc3b"
+    },
+    "commandlinelab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "commandlinelab/README.md": {
+      "checksum": "e1df710a730b0441413486c24af85c93"
+    },
+    "commandlinelab/requirements.txt": {
+      "checksum": "68b329da9893e34099c7d8ad5cb9c940"
+    },
+    "commandlinelab/sandbox/sandbox": {
+      "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "commandlinelab/www/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "confidenceintervalreviewlab/Confidence Interval Review.Rmd": {
+      "checksum": "d4d54b9d3f12fe327d890c2a39ab7424"
+    },
+    "confidenceintervalreviewlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "confidenceintervalreviewlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "confidenceintervalreviewlab/README.md": {
+      "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "confidenceintervalreviewlab/requirements.txt": {
+      "checksum": "ab8915bf1c71f271529738ae961bd825"
+    },
+    "correlationlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "correlationlab/data/eagles.csv": {
+      "checksum": "4d29fd34b7a59de7ea45c01dfd4eeede"
+    },
+    "correlationlab/data/epi_mini_clean.csv": {
+      "checksum": "235df25209772997a380ef45053f0214"
+    },
+    "correlationlab/data/epi_mini.csv": {
+      "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "correlationlab/data/gasprice.csv": {
+      "checksum": "a59133570d390f57c20393040d04947d"
+    },
+    "correlationlab/data/mtcars.csv": {
+      "checksum": "6463474bfe6973a81dc7cbc4a71e8dd1"
+    },
+    "correlationlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "correlationlab/Lab 2 - Correlation and Simple Linear Regression.Rmd": {
+      "checksum": "c6cd4593d4bfa986081760d8d26c163d"
+    },
+    "correlationlab/README.md": {
+      "checksum": "8b64a84194eca62fb9d79807c0867e15"
+    },
+    "correlationlab/requirements.txt": {
+      "checksum": "c9e550794b8d1407f30b7201aa05f46b"
+    },
+    "correlationlab/www/eagles.csv": {
+      "checksum": "4d29fd34b7a59de7ea45c01dfd4eeede"
+    },
+    "correlationlab/www/epi_mini.csv": {
+      "checksum": "e5d043b34dff4380546e4eb4dc6fede9"
+    },
+    "correlationlab/www/gasprice.csv": {
+      "checksum": "a59133570d390f57c20393040d04947d"
+    },
+    "correlationlab/www/mtcars.csv": {
+      "checksum": "6463474bfe6973a81dc7cbc4a71e8dd1"
+    },
+    "data/AirBnB_mini.csv": {
+      "checksum": "1efe3594d17acb42245b97573a8cbdeb"
+    },
+    "data/Arrests_mini.csv": {
+      "checksum": "9265cdbaff20a32669faec8a120d395b"
+    },
+    "data/birthwt.csv": {
+      "checksum": "b6a76967f87fc0197f443c4f178b71fd"
+    },
+    "data/eagles.csv": {
+      "checksum": "4d29fd34b7a59de7ea45c01dfd4eeede"
+    },
+    "data/epi_mini_clean.csv": {
+      "checksum": "235df25209772997a380ef45053f0214"
+    },
+    "data/epi_mini.csv": {
+      "checksum": "e5d043b34dff4380546e4eb4dc6fede9"
+    },
+    "data/epi_mini2.csv": {
+      "checksum": "ea18408f25efc107b3f574f77ce5ba6f"
+    },
+    "data/gasprice.csv": {
+      "checksum": "a59133570d390f57c20393040d04947d"
+    },
+    "data/mtcars.csv": {
+      "checksum": "6463474bfe6973a81dc7cbc4a71e8dd1"
+    },
+    "data/Workinghours_mini.csv": {
+      "checksum": "8055ee3a6a3f21ebfcb4ebdb78619239"
+    },
+    "data119reviewlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "data119reviewlab/data/msleep.csv": {
+      "checksum": "9c6a11a3097d98fa5c909e59b360f196"
+    },
+    "data119reviewlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "data119reviewlab/Lab 9.Rmd": {
+      "checksum": "a3fb7c3cea5d925d73552fdec97661ce"
+    },
+    "data119reviewlab/README.md": {
+      "checksum": "e6a951304d35a595114345da52aa0691"
+    },
+    "data119reviewlab/requirements.txt": {
+      "checksum": "8c0663b19e66f3ef4dea4edab875f8d4"
+    },
+    "data119reviewlab/www/msleep.csv": {
+      "checksum": "9c6a11a3097d98fa5c909e59b360f196"
+    },
+    "datavislab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "datavislab/data/beach_data.csv": {
+      "checksum": "54b941aa690e37aa799618dc90449c5e"
+    },
+    "datavislab/datavis.Rmd": {
+      "checksum": "ffc3c1daf38307f35a599db943440c5a"
+    },
+    "datavislab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "datavislab/README.md": {
+      "checksum": "6ad6cb38cae91b3daf2811bd7daba2b7"
+    },
+    "datavislab/requirements.txt": {
+      "checksum": "962051dfc3a31c8eb373856ee6912684"
+    },
+    "datavislab/www/beach_data.csv": {
+      "checksum": "54b941aa690e37aa799618dc90449c5e"
+    },
+    "datawranglinglab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "datawranglinglab/data/epi_mini.csv": {
+      "checksum": "8de60e3d1410e08df27f6f4d5bb6c563"
+    },
+    "datawranglinglab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "datawranglinglab/Lab 1- Data Wrangling.Rmd": {
+      "checksum": "97ee4cc15ea19702d835edbf340a9843"
+    },
+    "datawranglinglab/README.md": {
+      "checksum": "869b49a02c7f790deebe84f4182ca9ff"
+    },
+    "datawranglinglab/requirements.txt": {
+      "checksum": "c9e550794b8d1407f30b7201aa05f46b"
+    },
+    "datawranglinglab/www/epi_mini.csv": {
+      "checksum": "e5d043b34dff4380546e4eb4dc6fede9"
+    },
+    "debugginglab/css/custom-styles.css": {
+      "checksum": "930b8fc9915c2061ddf4112d9515d269"
+    },
+    "debugginglab/Debugging Lab.Rmd": {
+      "checksum": "cbcac414db72941e79738028272ea100"
+    },
+    "debugginglab/Debugging-Lab.html": {
+      "checksum": "b4e2c531fdcc0f01c9e609bab32b8cd0"
+    },
+    "debugginglab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "debugginglab/README.md": {
+      "checksum": "d664faab0f8308db36e6d195d36b51d7"
+    },
+    "debugginglab/requirements.txt": {
+      "checksum": "c9e550794b8d1407f30b7201aa05f46b"
+    },
+    "documentationlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "documentationlab/Documentation Lab.Rmd": {
+      "checksum": "1da5db1cafe252e9270c58c24d210cce"
+    },
+    "documentationlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "documentationlab/README.md": {
+      "checksum": "42bdc88c8442dd1895c3a12e036986f6"
+    },
+    "documentationlab/requirements.txt": {
+      "checksum": "c9e550794b8d1407f30b7201aa05f46b"
+    },
+    "functionslab/css/custom-styles.css": {
+      "checksum": "615f610a4d71df4850d8653607f9ad6a"
+    },
+    "functionslab/data/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "functionslab/functions_lab.html": {
+      "checksum": "7f87ed462c5e8d41dfbc021ce20da684"
+    },
+    "functionslab/functions_lab.Rmd": {
+      "checksum": "5a6a26e7d1a12c7ab3c977455b0d3776"
+    },
+    "functionslab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "functionslab/README.md": {
+      "checksum": "e8c15cd7b044f9ae0fc71632e7cd60fd"
+    },
+    "functionslab/requirements.txt": {
+      "checksum": "68b329da9893e34099c7d8ad5cb9c940"
+    },
+    "functionslab/www/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "hypothesistestreviewlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "hypothesistestreviewlab/Hypothesis Test Review.Rmd": {
+      "checksum": "079c8d119ba2ade300f64c038816d630"
+    },
+    "hypothesistestreviewlab/Hypothesis-Test-Review_files/figure-html/unnamed-chunk-2-1.png": {
+      "checksum": "d675566abe28bab0c87e23134f0a9b8a"
+    },
+    "hypothesistestreviewlab/Hypothesis-Test-Review_files/figure-html/unnamed-chunk-3-1.png": {
+      "checksum": "b45e9ec9c8e1909503d3210012e0316a"
+    },
+    "hypothesistestreviewlab/Hypothesis-Test-Review.html": {
+      "checksum": "8b3a41379e83262be16eebaf797ab6b1"
+    },
+    "hypothesistestreviewlab/images/both_high_leverage_&_large_residuals_residual_plot.png": {
+      "checksum": "6e3cf39f88418caeb2d6193837adab80"
+    },
+    "hypothesistestreviewlab/images/clustered_outliers_residual_plot.png": {
+      "checksum": "eaaf3c9b2e1bbff9420c77056f1ad0c7"
+    },
+    "hypothesistestreviewlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "hypothesistestreviewlab/images/exponential_combo_residual_plot_updated.png": {
+      "checksum": "10579154ddf3b51a9acfd934680ab99a"
+    },
+    "hypothesistestreviewlab/images/good_fit_residual_plot.png": {
+      "checksum": "e2ccdccf6a2a8e05c3ce46238b20be57"
+    },
+    "hypothesistestreviewlab/images/heteroscedasticity_residual_plot_updated.png": {
+      "checksum": "119f2e74ee0fc5c9d8d2bd2c406dcc52"
+    },
+    "hypothesistestreviewlab/images/high_leverage_points_residual_plot.png": {
+      "checksum": "c93e40a0871c73b1bab9b2b239374402"
+    },
+    "hypothesistestreviewlab/images/large_residuals_residual_plot.png": {
+      "checksum": "cd9c0b0b499497151a3a9bf6a7f8dc7d"
+    },
+    "hypothesistestreviewlab/images/non_normal_large_outliers_residual_plot.png": {
+      "checksum": "9edd38bbb0f515b0f7e93a4300a6cf84"
+    },
+    "hypothesistestreviewlab/images/non_normal_nonlinear_high_leverage_residual_plot.png": {
+      "checksum": "bb9346defb6cce168381792abf81274d"
+    },
+    "hypothesistestreviewlab/images/non-linearity_residual_plot.png": {
+      "checksum": "298beacd0bc209144e9be91e0c954e35"
+    },
+    "hypothesistestreviewlab/images/non-normal_residual_plot.png": {
+      "checksum": "e3252040df85a871f472dcef92b17ae5"
+    },
+    "hypothesistestreviewlab/images/non-normal_residuals_residual_plot.png": {
+      "checksum": "48f05842dbde6d68ee3b6379116d8e15"
+    },
+    "hypothesistestreviewlab/README.md": {
+      "checksum": "ab98674f4de69bb158b287600e08d388"
+    },
+    "hypothesistestreviewlab/requirements.txt": {
+      "checksum": "ab8915bf1c71f271529738ae961bd825"
+    },
+    "img/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "knnlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "knnlab/data/birthwt.csv": {
+      "checksum": "b6a76967f87fc0197f443c4f178b71fd"
+    },
+    "knnlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "knnlab/Lab 6.Rmd": {
+      "checksum": "9f49881083d18386c18a4e506b71eb90"
+    },
+    "knnlab/README.md": {
+      "checksum": "2f26e7bea82845053f411ca6c7a34915"
+    },
+    "knnlab/requirements.txt": {
+      "checksum": "b6320046ee48a234da957170fe3cbc51"
+    },
+    "knnlab/www/birthwt.csv": {
+      "checksum": "b6a76967f87fc0197f443c4f178b71fd"
+    },
+    "lab0/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "lab0/data/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "lab0/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "lab0/README.md": {
+      "checksum": "96aa9d1c2b04496253b25a9a6e40c9d0"
+    },
+    "lab0/www/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "lab11/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "lab11/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "lab11/Lists_Arrays_Dictionaries.html": {
+      "checksum": "4df62e63b08610c85cc2925d37abfdb5"
+    },
+    "lab11/Lists_Arrays_Dictionaries.Rmd": {
+      "checksum": "cc2c121b05e0804d4d7160674c15152b"
+    },
+    "lab11/requirements.txt": {
+      "checksum": "528f432cd681df8d8d540157fd04822a"
+    },
+    "lab12/README.md": {
+      "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "lab2/Lab-2---Correlation-and-Simple-Linear-Regression_files/figure-html/q3_conditioal-1.png": {
+      "checksum": "ce50e849361da3051d91215abf6ccea5"
+    },
+    "lab2/Lab-2---Correlation-and-Simple-Linear-Regression.html": {
+      "checksum": "5ac10aa0a8922290336f07a71bd03d6c"
+    },
+    "linearregressionlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "linearregressionlab/data/AirBnB_mini.csv": {
+      "checksum": "1efe3594d17acb42245b97573a8cbdeb"
+    },
+    "linearregressionlab/images/both_high_leverage_&_large_residuals_residual_plot.png": {
+      "checksum": "6e3cf39f88418caeb2d6193837adab80"
+    },
+    "linearregressionlab/images/clustered_outliers_residual_plot.png": {
+      "checksum": "eaaf3c9b2e1bbff9420c77056f1ad0c7"
+    },
+    "linearregressionlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "linearregressionlab/images/exponential_combo_residual_plot_updated.png": {
+      "checksum": "10579154ddf3b51a9acfd934680ab99a"
+    },
+    "linearregressionlab/images/good_fit_residual_plot.png": {
+      "checksum": "e2ccdccf6a2a8e05c3ce46238b20be57"
+    },
+    "linearregressionlab/images/heteroscedasticity_residual_plot_updated.png": {
+      "checksum": "119f2e74ee0fc5c9d8d2bd2c406dcc52"
+    },
+    "linearregressionlab/images/high_leverage_points_residual_plot.png": {
+      "checksum": "c93e40a0871c73b1bab9b2b239374402"
+    },
+    "linearregressionlab/images/large_residuals_residual_plot.png": {
+      "checksum": "cd9c0b0b499497151a3a9bf6a7f8dc7d"
+    },
+    "linearregressionlab/images/non_normal_large_outliers_residual_plot.png": {
+      "checksum": "9edd38bbb0f515b0f7e93a4300a6cf84"
+    },
+    "linearregressionlab/images/non_normal_nonlinear_high_leverage_residual_plot.png": {
+      "checksum": "bb9346defb6cce168381792abf81274d"
+    },
+    "linearregressionlab/images/non-linearity_residual_plot.png": {
+      "checksum": "298beacd0bc209144e9be91e0c954e35"
+    },
+    "linearregressionlab/images/non-normal_residual_plot.png": {
+      "checksum": "e3252040df85a871f472dcef92b17ae5"
+    },
+    "linearregressionlab/images/non-normal_residuals_residual_plot.png": {
+      "checksum": "48f05842dbde6d68ee3b6379116d8e15"
+    },
+    "linearregressionlab/Lab 3.Rmd": {
+      "checksum": "8409a7d71ab8ccd47448e0e79548a4de"
+    },
+    "linearregressionlab/README.md": {
+      "checksum": "2a98ea3c17845aa621913875916ff9a7"
+    },
+    "linearregressionlab/requirements.txt": {
+      "checksum": "af642136deacbf9cae46bb2c62f72c35"
+    },
+    "linearregressionlab/www/AirBnB_mini.csv": {
+      "checksum": "1efe3594d17acb42245b97573a8cbdeb"
+    },
+    "listsarraysdictionarieslab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "listsarraysdictionarieslab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "listsarraysdictionarieslab/Lists_Arrays_Dictionaries.Rmd": {
+      "checksum": "cc2c121b05e0804d4d7160674c15152b"
+    },
+    "listsarraysdictionarieslab/README.md": {
+      "checksum": "918aaf8c68ee086e422c6bd117c52bc7"
+    },
+    "listsarraysdictionarieslab/requirements.txt": {
+      "checksum": "528f432cd681df8d8d540157fd04822a"
+    },
+    "logisticregressionlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "logisticregressionlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "logisticregressionlab/images/empty": {
+      "checksum": "68b329da9893e34099c7d8ad5cb9c940"
+    },
+    "logisticregressionlab/Lab 4 - Logistic Regression and Confusion Matrices.Rmd": {
+      "checksum": "44a2fdc86090abcc32a673ed53c39f5c"
+    },
+    "logisticregressionlab/README.md": {
+      "checksum": "b461d8a7e10e40addbaf315ea4fed1ba"
+    },
+    "logisticregressionlab/requirements.txt": {
+      "checksum": "b6320046ee48a234da957170fe3cbc51"
+    },
+    "old_data/epi_num.csv": {
+      "checksum": "4f0864a99ba4977c8f13a18d5cda894f"
+    },
+    "old_data/epi_test.csv": {
+      "checksum": "f79c62dfb35d20a3857d8aa5397df6be"
+    },
+    "pandaslab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "pandaslab/data/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "pandaslab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "pandaslab/README.md": {
+      "checksum": "5f3e3bd7230b4b8d8137513ccfa9810f"
+    },
+    "pandaslab/www/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "probabilitylab_1/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "probabilitylab_1/data/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "probabilitylab_1/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "probabilitylab_1/README.md": {
+      "checksum": "96aa9d1c2b04496253b25a9a6e40c9d0"
+    },
+    "probabilitylab_1/www/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "README.md": {
+      "checksum": "1f0d05de558126ca87ea7900644d1b06"
+    },
+    "regularizationlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "regularizationlab/data/Workinghours_mini.csv": {
+      "checksum": "8055ee3a6a3f21ebfcb4ebdb78619239"
+    },
+    "regularizationlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "regularizationlab/Lab 5.Rmd": {
+      "checksum": "3b4c86ef69ad33661037816086649fee"
+    },
+    "regularizationlab/README.md": {
+      "checksum": "27a1e9d475160212fdf23685d145623c"
+    },
+    "regularizationlab/requirements.txt": {
+      "checksum": "b6320046ee48a234da957170fe3cbc51"
+    },
+    "regularizationlab/www/Workinghours_mini.csv": {
+      "checksum": "8055ee3a6a3f21ebfcb4ebdb78619239"
+    },
+    "SQL Test/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "SQL Test/README.md": {
+      "checksum": "68b329da9893e34099c7d8ad5cb9c940"
+    },
+    "SQL Test/SQL_Test.Rmd": {
+      "checksum": "5b9ef720081f766dc5541bd01d93ab55"
+    },
+    "sqllab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "sqllab/data/goodreads_jotte.csv": {
+      "checksum": "409823da0a6f359df2241edd6d877d6f"
+    },
+    "sqllab/data/goodreads_nussbaum.csv": {
+      "checksum": "21df7b3b12d53e0e6cd32245d943d0a2"
+    },
+    "sqllab/data/locations.csv": {
+      "checksum": "618537978baaa2912ecd9203506bf611"
+    },
+    "sqllab/data/plots.csv": {
+      "checksum": "c48a308dd29a584a841e0cbc02cbb81c"
+    },
+    "sqllab/data/species.csv": {
+      "checksum": "9429df7764952ee388cae8f4f6d928cb"
+    },
+    "sqllab/data/surveys.csv": {
+      "checksum": "4c89ff002338699112c1fef5210661da"
+    },
+    "sqllab/data/temp.txt": {
+      "checksum": "68b329da9893e34099c7d8ad5cb9c940"
+    },
+    "sqllab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "sqllab/images/temp.txt": {
+      "checksum": "adc45927a5be066fbe0a2f74e069017a"
+    },
+    "sqllab/Lab 8.Rmd": {
+      "checksum": "326333a8d2471b4406a0ab6b826dd1c2"
+    },
+    "sqllab/README.md": {
+      "checksum": "afd3d8a1cc57be3e81e68de5a0d33a85"
+    },
+    "UChicago_DataScienceInstitute_Vertical_White.svg": {
+      "checksum": "7894d22f6e55c4c962a089bb8b023349"
+    },
+    "vifcategoricallab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "vifcategoricallab/data/AirBnB_mini.csv": {
+      "checksum": "1efe3594d17acb42245b97573a8cbdeb"
+    },
+    "vifcategoricallab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "vifcategoricallab/Lab 3.5 - VIF and Categorical Variables.Rmd": {
+      "checksum": "a7f9bfef39ccc9bbefa92063bb082977"
+    },
+    "vifcategoricallab/README": {
+      "checksum": "08eeb640e4597b1c4cef2a93c00c83ec"
+    },
+    "vifcategoricallab/requirements.txt": {
+      "checksum": "6e4e9b98619aca974eb53691af3a42b5"
+    },
+    "vifcategoricallab/www/AirBnB_mini.csv": {
+      "checksum": "1efe3594d17acb42245b97573a8cbdeb"
+    }
+  },
+  "users": null
+}
