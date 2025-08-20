@@ -4,7 +4,7 @@
   "platform": "4.4.1",
   "metadata": {
     "appmode": "rmd-shiny",
-    "primary_rmd": "Hypothesis Test Review.Rmd",
+    "primary_rmd": "Lab 2 - Correlation and Simple Linear Regression.Rmd",
     "primary_html": null,
     "content_category": null,
     "has_parameters": false
@@ -16,7 +16,7 @@
         "version": "21.2.4",
         "package_file": "requirements.txt"
       }
-    },  
+    },
   "packages": {
     "MASS": {
       "Source": "CRAN",
@@ -410,35 +410,6 @@
         "Archs": "commonmark.so.dSYM"
       }
     },
-    "cpp11": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
-      "description": {
-        "Package": "cpp11",
-        "Title": "A C++11 Interface for R's C Interface",
-        "Version": "0.5.0",
-        "Authors@R": "\n    c(\n      person(\"Davis\", \"Vaughan\", email = \"davis@posit.co\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0003-4777-038X\")),\n      person(\"Jim\",\"Hester\", role = \"aut\", comment = c(ORCID = \"0000-0002-2739-7082\")),\n      person(\"Romain\", \"François\", role = \"aut\", comment = c(ORCID = \"0000-0002-2444-4226\")),\n      person(\"Benjamin\", \"Kietzman\", role = \"ctb\"),\n      person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n    )",
-        "Description": "Provides a header only, C++11 interface to R's C\n    interface.  Compared to other approaches 'cpp11' strives to be safe\n    against long jumps from the C API as well as C++ exceptions, conform\n    to normal R function semantics and supports interaction with 'ALTREP'\n    vectors.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://cpp11.r-lib.org, https://github.com/r-lib/cpp11",
-        "BugReports": "https://github.com/r-lib/cpp11/issues",
-        "Depends": "R (>= 3.6.0)",
-        "Suggests": "bench, brio, callr, cli, covr, decor, desc, ggplot2, glue,\nknitr, lobstr, mockery, progress, rmarkdown, scales, Rcpp,\ntestthat (>= 3.2.0), tibble, utils, vctrs, withr",
-        "VignetteBuilder": "knitr",
-        "Config/Needs/website": "tidyverse/tidytemplate",
-        "Config/testthat/edition": "3",
-        "Config/Needs/cpp11/cpp_register": "brio, cli, decor, desc, glue, tibble,\nvctrs",
-        "Encoding": "UTF-8",
-        "RoxygenNote": "7.2.3",
-        "NeedsCompilation": "no",
-        "Packaged": "2024-08-26 21:19:28 UTC; davis",
-        "Author": "Davis Vaughan [aut, cre] (<https://orcid.org/0000-0003-4777-038X>),\n  Jim Hester [aut] (<https://orcid.org/0000-0002-2739-7082>),\n  Romain François [aut] (<https://orcid.org/0000-0002-2444-4226>),\n  Benjamin Kietzman [ctb],\n  Posit Software, PBC [cph, fnd]",
-        "Maintainer": "Davis Vaughan <davis@posit.co>",
-        "Repository": "CRAN",
-        "Date/Publication": "2024-08-27 04:30:17 UTC",
-        "Built": "R 4.4.1; ; 2024-08-27 05:43:37 UTC; unix"
-      }
-    },
     "crayon": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -782,7 +753,7 @@
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "CRAN",
         "Date/Publication": "2024-09-30 22:30:01 UTC",
-        "Built": "R 4.4.1; aarch64-apple-darwin20; 2024-10-01 00:07:34 UTC; unix",
+        "Built": "R 4.4.1; aarch64-apple-darwin20; 2025-02-01 04:45:00 UTC; unix",
         "Archs": "glue.so.dSYM"
       }
     },
@@ -1600,7 +1571,7 @@
         "Type": "Package",
         "Package": "promises",
         "Title": "Abstractions for Promise-Based Asynchronous Programming",
-        "Version": "1.3.0",
+        "Version": "1.3.2",
         "Authors@R": "c(\n    person(\"Joe\", \"Cheng\", , \"joe@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "Provides fundamental abstractions for doing asynchronous\n    programming in R using promises. Asynchronous programming is useful\n    for allowing a single R process to orchestrate multiple tasks in the\n    background while also attending to something else. Semantics are\n    similar to 'JavaScript' promises, but with a syntax that is idiomatic\n    R.",
         "License": "MIT + file LICENSE",
@@ -1613,14 +1584,14 @@
         "Config/Needs/website": "rsconnect",
         "Encoding": "UTF-8",
         "Language": "en-US",
-        "RoxygenNote": "7.3.1",
+        "RoxygenNote": "7.3.2",
         "NeedsCompilation": "yes",
-        "Packaged": "2024-04-04 20:02:05 UTC; jcheng",
+        "Packaged": "2024-11-27 23:38:47 UTC; jcheng",
         "Author": "Joe Cheng [aut, cre],\n  Posit Software, PBC [cph, fnd]",
         "Maintainer": "Joe Cheng <joe@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2024-04-05 15:00:06 UTC",
-        "Built": "R 4.4.0; aarch64-apple-darwin20; 2024-04-07 21:44:51 UTC; unix",
+        "Date/Publication": "2024-11-28 00:40:02 UTC",
+        "Built": "R 4.4.1; aarch64-apple-darwin20; 2024-11-28 01:18:58 UTC; unix",
         "Archs": "promises.so.dSYM"
       }
     },
@@ -1683,32 +1654,6 @@
         "Date/Publication": "2021-01-31 05:40:02 UTC",
         "Built": "R 4.4.0; aarch64-apple-darwin20; 2024-04-05 15:02:04 UTC; unix",
         "Archs": "rappdirs.so.dSYM"
-      }
-    },
-    "rematch2": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
-      "description": {
-        "Package": "rematch2",
-        "Title": "Tidy Output from Regular Expression Matching",
-        "Version": "2.1.2",
-        "Authors@R": "c(\n    person(\"Gábor\", \"Csárdi\", email = \"csardi.gabor@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Matthew\", \"Lincoln\", email = \"matthew.d.lincoln@gmail.com\", role = c(\"ctb\")))",
-        "Description": "Wrappers on 'regexpr' and 'gregexpr' to return the match\n    results in tidy data frames.",
-        "License": "MIT + file LICENSE",
-        "LazyData": "true",
-        "URL": "https://github.com/r-lib/rematch2#readme",
-        "BugReports": "https://github.com/r-lib/rematch2/issues",
-        "RoxygenNote": "7.1.0",
-        "Imports": "tibble",
-        "Suggests": "covr, testthat",
-        "Encoding": "UTF-8",
-        "NeedsCompilation": "no",
-        "Packaged": "2020-04-30 10:31:13 UTC; gaborcsardi",
-        "Author": "Gábor Csárdi [aut, cre],\n  Matthew Lincoln [ctb]",
-        "Maintainer": "Gábor Csárdi <csardi.gabor@gmail.com>",
-        "Repository": "CRAN",
-        "Date/Publication": "2020-05-01 06:50:02 UTC",
-        "Built": "R 4.4.0; ; 2024-04-06 09:14:59 UTC; unix"
       }
     },
     "renv": {
@@ -1955,13 +1900,13 @@
         "Package": "shiny",
         "Type": "Package",
         "Title": "Web Application Framework for R",
-        "Version": "1.9.1",
+        "Version": "1.10.0",
         "Authors@R": "c(\n    person(\"Winston\", \"Chang\", role = c(\"aut\", \"cre\"), email = \"winston@posit.co\", comment = c(ORCID = \"0000-0002-1576-2126\")),\n    person(\"Joe\", \"Cheng\", role = \"aut\", email = \"joe@posit.co\"),\n    person(\"JJ\", \"Allaire\", role = \"aut\", email = \"jj@posit.co\"),\n    person(\"Carson\", \"Sievert\", role = \"aut\", email = \"carson@posit.co\", comment = c(ORCID = \"0000-0002-4958-2844\")),\n    person(\"Barret\", \"Schloerke\", role = \"aut\", email = \"barret@posit.co\", comment = c(ORCID = \"0000-0001-9986-114X\")),\n    person(\"Yihui\", \"Xie\", role = \"aut\", email = \"yihui@posit.co\"),\n    person(\"Jeff\", \"Allen\", role = \"aut\"),\n    person(\"Jonathan\", \"McPherson\", role = \"aut\", email = \"jonathan@posit.co\"),\n    person(\"Alan\", \"Dipert\", role = \"aut\"),\n    person(\"Barbara\", \"Borges\", role = \"aut\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\")),\n    person(family = \"jQuery Foundation\", role = \"cph\",\n    comment = \"jQuery library and jQuery UI library\"),\n    person(family = \"jQuery contributors\", role = c(\"ctb\", \"cph\"),\n    comment = \"jQuery library; authors listed in inst/www/shared/jquery-AUTHORS.txt\"),\n    person(family = \"jQuery UI contributors\", role = c(\"ctb\", \"cph\"),\n    comment = \"jQuery UI library; authors listed in inst/www/shared/jqueryui/AUTHORS.txt\"),\n    person(\"Mark\", \"Otto\", role = \"ctb\",\n    comment = \"Bootstrap library\"),\n    person(\"Jacob\", \"Thornton\", role = \"ctb\",\n    comment = \"Bootstrap library\"),\n    person(family = \"Bootstrap contributors\", role = \"ctb\",\n    comment = \"Bootstrap library\"),\n    person(family = \"Twitter, Inc\", role = \"cph\",\n    comment = \"Bootstrap library\"),\n    person(\"Prem Nawaz\", \"Khan\", role = \"ctb\",\n    comment = \"Bootstrap accessibility plugin\"),\n    person(\"Victor\", \"Tsaran\", role = \"ctb\",\n    comment = \"Bootstrap accessibility plugin\"),\n    person(\"Dennis\", \"Lembree\", role = \"ctb\",\n    comment = \"Bootstrap accessibility plugin\"),\n    person(\"Srinivasu\", \"Chakravarthula\", role = \"ctb\",\n    comment = \"Bootstrap accessibility plugin\"),\n    person(\"Cathy\", \"O'Connor\", role = \"ctb\",\n    comment = \"Bootstrap accessibility plugin\"),\n    person(family = \"PayPal, Inc\", role = \"cph\",\n    comment = \"Bootstrap accessibility plugin\"),\n    person(\"Stefan\", \"Petre\", role = c(\"ctb\", \"cph\"),\n    comment = \"Bootstrap-datepicker library\"),\n    person(\"Andrew\", \"Rowls\", role = c(\"ctb\", \"cph\"),\n    comment = \"Bootstrap-datepicker library\"),\n    person(\"Brian\", \"Reavis\", role = c(\"ctb\", \"cph\"),\n    comment = \"selectize.js library\"),\n    person(\"Salmen\", \"Bejaoui\", role = c(\"ctb\", \"cph\"),\n    comment = \"selectize-plugin-a11y library\"),\n    person(\"Denis\", \"Ineshin\", role = c(\"ctb\", \"cph\"),\n    comment = \"ion.rangeSlider library\"),\n    person(\"Sami\", \"Samhuri\", role = c(\"ctb\", \"cph\"),\n    comment = \"Javascript strftime library\"),\n    person(family = \"SpryMedia Limited\", role = c(\"ctb\", \"cph\"),\n    comment = \"DataTables library\"),\n    person(\"John\", \"Fraser\", role = c(\"ctb\", \"cph\"),\n    comment = \"showdown.js library\"),\n    person(\"John\", \"Gruber\", role = c(\"ctb\", \"cph\"),\n    comment = \"showdown.js library\"),\n    person(\"Ivan\", \"Sagalaev\", role = c(\"ctb\", \"cph\"),\n    comment = \"highlight.js library\"),\n    person(family = \"R Core Team\", role = c(\"ctb\", \"cph\"),\n    comment = \"tar implementation from R\")\n    )",
         "Description": "Makes it incredibly easy to build interactive web\n    applications with R. Automatic \"reactive\" binding between inputs and\n    outputs and extensive prebuilt widgets make it possible to build\n    beautiful, responsive, and powerful applications with minimal effort.",
         "License": "GPL-3 | file LICENSE",
         "Depends": "R (>= 3.0.2), methods",
-        "Imports": "utils, grDevices, httpuv (>= 1.5.2), mime (>= 0.3), jsonlite\n(>= 0.9.16), xtable, fontawesome (>= 0.4.0), htmltools (>=\n0.5.4), R6 (>= 2.0), sourcetools, later (>= 1.0.0), promises\n(>= 1.1.0), tools, crayon, rlang (>= 0.4.10), fastmap (>=\n1.1.1), withr, commonmark (>= 1.7), glue (>= 1.3.2), bslib (>=\n0.6.0), cachem (>= 1.1.0), lifecycle (>= 0.2.0)",
-        "Suggests": "datasets, DT, Cairo (>= 1.5-5), testthat (>= 3.0.0), knitr\n(>= 1.6), markdown, rmarkdown, ggplot2, reactlog (>= 1.0.0),\nmagrittr, yaml, future, dygraphs, ragg, showtext, sass",
+        "Imports": "utils, grDevices, httpuv (>= 1.5.2), mime (>= 0.3), jsonlite\n(>= 0.9.16), xtable, fontawesome (>= 0.4.0), htmltools (>=\n0.5.4), R6 (>= 2.0), sourcetools, later (>= 1.0.0), promises\n(>= 1.3.2), tools, crayon, rlang (>= 0.4.10), fastmap (>=\n1.1.1), withr, commonmark (>= 1.7), glue (>= 1.3.2), bslib (>=\n0.6.0), cachem (>= 1.1.0), lifecycle (>= 0.2.0)",
+        "Suggests": "coro (>= 1.1.0), datasets, DT, Cairo (>= 1.5-5), testthat (>=\n3.0.0), knitr (>= 1.6), markdown, rmarkdown, ggplot2, reactlog\n(>= 1.0.0), magrittr, yaml, future, dygraphs, ragg, showtext,\nsass",
         "URL": "https://shiny.posit.co/, https://github.com/rstudio/shiny",
         "BugReports": "https://github.com/rstudio/shiny/issues",
         "Collate": "'globals.R' 'app-state.R' 'app_template.R' 'bind-cache.R'\n'bind-event.R' 'bookmark-state-local.R' 'bookmark-state.R'\n'bootstrap-deprecated.R' 'bootstrap-layout.R' 'conditions.R'\n'map.R' 'utils.R' 'bootstrap.R' 'busy-indicators-spinners.R'\n'busy-indicators.R' 'cache-utils.R' 'deprecated.R' 'devmode.R'\n'diagnose.R' 'extended-task.R' 'fileupload.R' 'graph.R'\n'reactives.R' 'reactive-domains.R' 'history.R' 'hooks.R'\n'html-deps.R' 'image-interact-opts.R' 'image-interact.R'\n'imageutils.R' 'input-action.R' 'input-checkbox.R'\n'input-checkboxgroup.R' 'input-date.R' 'input-daterange.R'\n'input-file.R' 'input-numeric.R' 'input-password.R'\n'input-radiobuttons.R' 'input-select.R' 'input-slider.R'\n'input-submit.R' 'input-text.R' 'input-textarea.R'\n'input-utils.R' 'insert-tab.R' 'insert-ui.R' 'jqueryui.R'\n'knitr.R' 'middleware-shiny.R' 'middleware.R' 'timer.R'\n'shiny.R' 'mock-session.R' 'modal.R' 'modules.R'\n'notifications.R' 'priorityqueue.R' 'progress.R' 'react.R'\n'reexports.R' 'render-cached-plot.R' 'render-plot.R'\n'render-table.R' 'run-url.R' 'runapp.R' 'serializers.R'\n'server-input-handlers.R' 'server-resource-paths.R' 'server.R'\n'shiny-options.R' 'shiny-package.R' 'shinyapp.R' 'shinyui.R'\n'shinywrappers.R' 'showcase.R' 'snapshot.R' 'staticimports.R'\n'tar.R' 'test-export.R' 'test-server.R' 'test.R'\n'update-input.R' 'utils-lang.R' 'version_bs_date_picker.R'\n'version_ion_range_slider.R' 'version_jquery.R'\n'version_jqueryui.R' 'version_selectize.R' 'version_strftime.R'\n'viewer.R'",
@@ -1971,12 +1916,12 @@
         "Config/testthat/edition": "3",
         "Config/Needs/check": "shinytest2",
         "NeedsCompilation": "no",
-        "Packaged": "2024-07-31 17:44:44 UTC; cpsievert",
+        "Packaged": "2024-12-13 21:47:15 UTC; cpsievert",
         "Author": "Winston Chang [aut, cre] (<https://orcid.org/0000-0002-1576-2126>),\n  Joe Cheng [aut],\n  JJ Allaire [aut],\n  Carson Sievert [aut] (<https://orcid.org/0000-0002-4958-2844>),\n  Barret Schloerke [aut] (<https://orcid.org/0000-0001-9986-114X>),\n  Yihui Xie [aut],\n  Jeff Allen [aut],\n  Jonathan McPherson [aut],\n  Alan Dipert [aut],\n  Barbara Borges [aut],\n  Posit Software, PBC [cph, fnd],\n  jQuery Foundation [cph] (jQuery library and jQuery UI library),\n  jQuery contributors [ctb, cph] (jQuery library; authors listed in\n    inst/www/shared/jquery-AUTHORS.txt),\n  jQuery UI contributors [ctb, cph] (jQuery UI library; authors listed in\n    inst/www/shared/jqueryui/AUTHORS.txt),\n  Mark Otto [ctb] (Bootstrap library),\n  Jacob Thornton [ctb] (Bootstrap library),\n  Bootstrap contributors [ctb] (Bootstrap library),\n  Twitter, Inc [cph] (Bootstrap library),\n  Prem Nawaz Khan [ctb] (Bootstrap accessibility plugin),\n  Victor Tsaran [ctb] (Bootstrap accessibility plugin),\n  Dennis Lembree [ctb] (Bootstrap accessibility plugin),\n  Srinivasu Chakravarthula [ctb] (Bootstrap accessibility plugin),\n  Cathy O'Connor [ctb] (Bootstrap accessibility plugin),\n  PayPal, Inc [cph] (Bootstrap accessibility plugin),\n  Stefan Petre [ctb, cph] (Bootstrap-datepicker library),\n  Andrew Rowls [ctb, cph] (Bootstrap-datepicker library),\n  Brian Reavis [ctb, cph] (selectize.js library),\n  Salmen Bejaoui [ctb, cph] (selectize-plugin-a11y library),\n  Denis Ineshin [ctb, cph] (ion.rangeSlider library),\n  Sami Samhuri [ctb, cph] (Javascript strftime library),\n  SpryMedia Limited [ctb, cph] (DataTables library),\n  John Fraser [ctb, cph] (showdown.js library),\n  John Gruber [ctb, cph] (showdown.js library),\n  Ivan Sagalaev [ctb, cph] (highlight.js library),\n  R Core Team [ctb, cph] (tar implementation from R)",
         "Maintainer": "Winston Chang <winston@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2024-08-01 10:50:02 UTC",
-        "Built": "R 4.4.0; ; 2024-08-01 13:49:42 UTC; unix"
+        "Date/Publication": "2024-12-14 00:10:02 UTC",
+        "Built": "R 4.4.1; ; 2024-12-14 00:26:59 UTC; unix"
       }
     },
     "sourcetools": {
@@ -2280,26 +2225,26 @@
       "description": {
         "Package": "waldo",
         "Title": "Find Differences Between R Objects",
-        "Version": "0.5.3",
+        "Version": "0.6.1",
         "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
         "Description": "Compare complex R objects and reveal the key differences.\n    Designed particularly for use in testing packages where being able to\n    quickly isolate key differences makes understanding test failures much\n    easier.",
         "License": "MIT + file LICENSE",
         "URL": "https://waldo.r-lib.org, https://github.com/r-lib/waldo",
         "BugReports": "https://github.com/r-lib/waldo/issues",
-        "Depends": "R (>= 3.6)",
-        "Imports": "cli, diffobj (>= 0.3.4), glue, methods, rematch2, rlang (>=\n1.0.0), tibble",
-        "Suggests": "covr, R6, testthat (>= 3.0.0), withr, xml2",
+        "Depends": "R (>= 4.0)",
+        "Imports": "cli, diffobj (>= 0.3.4), glue, methods, rlang (>= 1.1.0)",
+        "Suggests": "bit64, R6, S7, testthat (>= 3.0.0), withr, xml2",
         "Config/Needs/website": "tidyverse/tidytemplate",
         "Config/testthat/edition": "3",
         "Encoding": "UTF-8",
         "RoxygenNote": "7.3.2",
         "NeedsCompilation": "no",
-        "Packaged": "2024-08-23 20:40:36 UTC; hadleywickham",
+        "Packaged": "2024-11-07 15:32:32 UTC; hadleywickham",
         "Author": "Hadley Wickham [aut, cre],\n  Posit Software, PBC [cph, fnd]",
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "CRAN",
-        "Date/Publication": "2024-08-23 22:00:02 UTC",
-        "Built": "R 4.4.1; ; 2024-08-24 01:59:12 UTC; unix"
+        "Date/Publication": "2024-11-07 20:50:01 UTC",
+        "Built": "R 4.4.1; ; 2024-11-07 21:21:26 UTC; unix"
       }
     },
     "withr": {
@@ -2444,17 +2389,53 @@
     }
   },
   "files": {
-    "Hypothesis Test Review.Rmd": {
-      "checksum": "0ec0037bc8ff3994a7535ac94c72e554"
+    "css/custom-styles.css": {
+      "checksum": "53026cc16d8d96879dd8a4eaa065e763"
     },
-    "Hypothesis-Test-Review_files/figure-html/unnamed-chunk-2-1.png": {
-      "checksum": "b69f95f1b126f800a997ef1cc9b977c4"
+    "data/eagles.csv": {
+      "checksum": "4d29fd34b7a59de7ea45c01dfd4eeede"
     },
-    "Hypothesis-Test-Review_files/figure-html/unnamed-chunk-3-1.png": {
-      "checksum": "28e2cd0b4ef1e869ac78b58dcc782d3d"
+    "data/epi_mini_clean.csv": {
+      "checksum": "235df25209772997a380ef45053f0214"
     },
-    "Hypothesis-Test-Review.html": {
-      "checksum": "9f31d2de15cd8feeb1589d0f33f4d3ce"
+    "data/epi_mini.csv": {
+      "checksum": "e5d043b34dff4380546e4eb4dc6fede9"
+    },
+    "data/gasprice.csv": {
+      "checksum": "a59133570d390f57c20393040d04947d"
+    },
+    "data/mtcars.csv": {
+      "checksum": "6463474bfe6973a81dc7cbc4a71e8dd1"
+    },
+    "images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "Lab 2 - Correlation and Simple Linear Regression.Rmd": {
+      "checksum": "43ab24e8935fc64380395c9fa89d4043"
+    },
+    "Lab-2---Correlation-and-Simple-Linear-Regression_files/figure-html/q3_conditioal-1.png": {
+      "checksum": "ce50e849361da3051d91215abf6ccea5"
+    },
+    "Lab-2---Correlation-and-Simple-Linear-Regression.html": {
+      "checksum": "5ac10aa0a8922290336f07a71bd03d6c"
+    },
+    "README.md": {
+      "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "requirements.txt": {
+      "checksum": "d4a0110333301b2d0822f68901c152a6"
+    },
+    "www/eagles.csv": {
+      "checksum": "4d29fd34b7a59de7ea45c01dfd4eeede"
+    },
+    "www/epi_mini.csv": {
+      "checksum": "e5d043b34dff4380546e4eb4dc6fede9"
+    },
+    "www/gasprice.csv": {
+      "checksum": "a59133570d390f57c20393040d04947d"
+    },
+    "www/mtcars.csv": {
+      "checksum": "6463474bfe6973a81dc7cbc4a71e8dd1"
     }
   },
   "users": null

@@ -1,0 +1,931 @@
+---
+title: "DATA119 - Lab 2"
+output: 
+  learnr::tutorial:
+    css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+## Package Requirements for Lab
+
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+## Package Requirements for Lab
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+library(shinyjs)
+
+## Package Requirements for Content
+
+library(ggplot2)
+
+## Reactivity Requirements
+useShinyjs()
+
+## Calculations for Lab
+
+mtcars <- read.csv("./data/mtcars.csv")
+mtcars_model <- lm(disp ~ wt, data = mtcars)
+mtcars_residuals <- data.frame(cbind(mtcars_model$fitted.values, mtcars_model$residuals))
+colnames(mtcars_residuals) <- c("fitted.values", "residuals")
+mtcars_residual_plot <- ggplot(data = mtcars_residuals, aes(x = fitted.values, y = residuals)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  geom_hline(yintercept = 0, color = "red") + 
+  scale_x_continuous(name = "Predicted Values") + 
+  scale_y_continuous(name = "Residuals")
+
+gasprice <- read.csv("./data/gasprice.csv")
+gasprice_model <- lm(value ~ time, data = gasprice)
+gasprice_residuals <- data.frame(cbind(gasprice_model$fitted.values, gasprice_model$residuals))
+colnames(gasprice_residuals) <- c("fitted.values", "residuals")
+gasprice_residual_plot <- ggplot(data = gasprice_residuals, aes(x = fitted.values, y = residuals)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  geom_hline(yintercept = 0, color = "red") + 
+  scale_x_continuous(name = "Predicted Values") + 
+  scale_y_continuous(name = "Residuals")
+
+eagles <- read.csv("./data/eagles.csv")
+eagles_model <- lm(Pairs ~ Year, data = eagles)
+eagles_residuals <- data.frame(cbind(eagles_model$fitted.values, eagles_model$residuals))
+colnames(eagles_residuals) <- c("fitted.values", "residuals")
+eagles_residual_plot <- ggplot(data = eagles_residuals, aes(x = fitted.values, y = residuals)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  geom_hline(yintercept = 0, color = "red") + 
+  scale_x_continuous(name = "Predicted Values") + 
+  scale_y_continuous(name = "Residuals")
+
+epi_mini <- read.csv("./data/epi_mini_clean.csv")
+epi_mini_model <- lm(calories ~ fat, data = epi_mini)
+epi_mini_residuals <- data.frame(cbind(epi_mini_model$fitted.values, epi_mini_model$residuals))
+colnames(epi_mini_residuals) <- c("fitted.values", "residuals")
+epi_mini_residual_plot <- ggplot(data = epi_mini_residuals, aes(x = fitted.values, y = residuals)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  geom_hline(yintercept = 0, color = "red") + 
+  scale_x_continuous(name = "Predicted Values") + 
+  scale_y_continuous(name = "Residuals")
+
+# Optional: Install necessary Python packages if not already installed
+#system("/opt/python/3.9.21/bin/python -m pip install numpy pandas plotnine")
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
+```
+
+```{r header, echo=FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Correlation and Simple Linear Regression", class = "pageTitle")
+  )
+)
+```
+
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+
+mtcars = pd.read_csv("./data/mtcars.csv")
+gasprice = pd.read_csv("./data/gasprice.csv")
+eagles = pd.read_csv("./data/eagles.csv")
+
+epicurious_nd = pd.read_csv("./data/epi_mini_clean.csv")
+
+fat= epicurious_nd['fat']
+fat_oz = epicurious_nd['fat']/28.346
+cal = epicurious_nd['calories']
+```
+
+
+## Goals
+
+* To continue practicing making data visualizations.
+* To familiarize yourself with Pearson's correlation coefficient $r$.
+* To practice writing functions.
+* To practice calculating linear regression estimates.
+
+## Setup
+
+For this lab we will be using the `plotnine`, `pandas`, and `numpy` modules in Python, as well as three new datasets: `eagles.csv`, `gasprice.csv`, and `mtcars.csv`. Finally, you will be using the cleaned version of the Epicurious dataset from Lab 1. Run the cell below to setup the environment.
+
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+
+# To download any of these data files 
+# go to https://posit.ds.uchicago.edu/data119-lab2/www/<name of file here>.csv
+
+mtcars = pd.read_csv("./data/mtcars.csv")
+gasprice = pd.read_csv("./data/gasprice.csv")
+eagles = pd.read_csv("./data/eagles.csv")
+
+epicurious_nd = pd.read_csv("./data/epi_mini_clean.csv")
+```
+
+
+## Describing Relationships with `mtcars`
+
+1. The `mtcars` dataset includes data on various aspects of 32 different cars, extracted from the 1974 US issue of *Motor Trend* magazine (check out the [`mtcars` documentation here](https://vincentarelbundock.github.io/Rdatasets/doc/datasets/mtcars.html)). Using `plotnine`, create a scatterplot displaying the relationship between `weight` and `displacement` in `mtcars`. Remember that you should be supplying an `x` and a `y` aesthetic, and that `x` is traditionally the explanatory variable and `y` is traditionally the response.
+
+```{python scatter, exercise = TRUE, message = FALSE}
+(p9.ggplot(mtcars, p9.aes(x = ___, y = ___)) +
+  p9.geom_point())
+```
+
+```{python scatter-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
+  p9.geom_point())
+```
+
+```{r scatter-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+2. Note that `plotnine` has a tool for us to easily add the line of best fit to a plot--it is the function `geom_smooth()`. We need to specify that geom_smooth should be using linear regression, which we can do with the argument `method = "lm"`. Add this argument to the previous graph
+
+```{python lm, exercise = TRUE, message = FALSE}
+(p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
+  p9.geom_point())
+```
+
+```{python lm-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
+  p9.geom_point() + 
+  p9.geom_smooth(method = "lm"))
+```
+
+```{r lm-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Note that this added line includes something called standard error bars, which we will not be covering in this class. If you would like to turn them off to make things visually cleaner, you can use the argument `se = False`, like so:
+
+```{python lm_no_se, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+(p9.ggplot(mtcars, p9.aes(x = 'wt', y = 'disp')) +
+  p9.geom_point() + 
+  p9.geom_smooth(method = "lm", se = False))
+```
+
+```{r q3, echo=FALSE}
+question("3. Is a linear relationship appropriate for describing the relationship between weight and displacement? If not, what type of relationship might be more appropriate?",
+         answer("Linear", message = "There is not an even distribution of points above and below the line, look closely at the middle of the graph."),
+         answer("Quadratic", correct = TRUE),
+         answer("Exponential"),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         post_message = "Congratulations! You have found the first secret word: SUPPRESS.")
+```
+
+```{r q3_residuals, context="server"}
+q3_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$q3$correct,
+  valueFunc = function() get_tutorial_state()$q3$correct
+)
+
+q3_hint_visible <- reactiveVal(FALSE)
+
+output$q3_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q3_correct_poll())) {
+    tagList(
+      p("Now check out the residual plot below--what do you see that supports your answer?"),
+      renderPlot(mtcars_residual_plot),
+      actionButton("q3_show_hint_btn", "💡 Show hint"),
+      tags$div(
+        id = "q3_hint_box",
+        style = paste(
+          if (!q3_hint_visible()) "display:none;" else "",
+          "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+        ),
+        "What should I be looking for? Remember that sometimes points near the ends of the x-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red y = 0 line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend!")
+      )
+  } else {
+    tagList(
+      p("Answer Question 3 correctly to reveal the residual plot for the `mtcars` model.")
+    )
+  }
+})
+
+observeEvent(input$q3_show_hint_btn, {
+  shinyjs::toggle(id = "q3_hint_box", anim = TRUE, time = 0.2)
+  q3_hint_visible(!q3_hint_visible())
+  updateActionButton(
+    session, "q3_show_hint_btn",
+    label = if (q3_hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+  )
+})
+```
+
+```{r q3_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("q3_plot_output")
+```
+
+
+<!-- <div id="q3_conditional-hint"> -->
+<!-- What should I be looking for? Remember that sometimes points near the ends of the $x$-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red $y = 0$ line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend! -->
+<!-- </div> -->
+
+## Describing Relationships with `gasprice`
+
+4. The `gasprice` dataset includes the average price of gas in the US for every week from February 1990 to June 2003 (check out the [`gasprice` documentation here](https://vincentarelbundock.github.io/Rdatasets/doc/quantreg/gasprice.html)). Using `plotnine`, create a scatterplot displaying the relationship between `time` and `value` (the price of gas). Add the line of best fit to help you describe the plot.
+
+```{python gas, exercise = TRUE, message = FALSE}
+(p9.ggplot(___, ___) +
+  p9.geom____())
+```
+
+```{python gas-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(gasprice, p9.aes(x = 'time', y = 'value')) +
+  p9.geom_point() + 
+  p9.geom_smooth(method = "lm", se = False))
+```
+
+```{r gas-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q5, echo=FALSE}
+question("5. Is a linear relationship appropriate for describing the relationship between time and price? Why or why not?",
+         answer("True", message = "This is an example of a time series, which should not be analyzed using linear regression."),
+         answer("False", correct = TRUE),
+         allow_retry = TRUE,
+         post_message = "This is an example of a time series, which should not be analyzed using linear regression. Also, congratulations! You have found the second secret word: COMMISSION.")
+```
+
+```{r q5_residuals, context="server"}
+q5_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$q5$correct,
+  valueFunc = function() get_tutorial_state()$q5$correct
+)
+
+q5_hint_visible <- reactiveVal(FALSE)
+
+output$q5_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q5_correct_poll())) {
+    tagList(
+      p("Now check out the residual plot below--what do you see that supports your answer?"),
+      renderPlot(gasprice_residual_plot),
+      actionButton("q5_show_hint_btn", "💡 Show hint"),
+      tags$div(
+        id = "q5_hint_box",
+        style = paste(
+          if (!q5_hint_visible()) "display:none;" else "",
+          "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+        ),
+        "What should I be looking for? Some of the same things that are present in the original plot! You can see that the points from one month to the next are clustered very closely, but honestly, it is more helpful to investigate the context of the plot and note that it is collected at very regular intervals. This helps to tip us off that we are working with time series data. You can also look at something called autocorrelation, but that is beyond the scope of this class.")
+     )
+  } else {
+    tagList(
+      p("Answer Question 5 correctly to reveal the residual plot for the `gasprice` model.")
+    )
+  }
+})
+
+observeEvent(input$q5_show_hint_btn, {
+  shinyjs::toggle(id = "q5_hint_box", anim = TRUE, time = 0.2)
+  q5_hint_visible(!q5_hint_visible())
+  updateActionButton(
+    session, "q5_show_hint_btn",
+    label = if (q5_hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+  )
+})
+
+```
+
+```{r q5_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("q5_plot_output")
+```
+
+<!-- <div id="q5_conditional-hint"> -->
+<!-- What should I be looking for? Some of the same things that are present in the original plot! You can see that the points from one month to the next are clustered very closely, but honestly, it is more helpful to investigate the context of the plot and note that it is collected at very regular intervals. This helps to tip us off that we are working with time series data. You can also look at something called autocorrelation, but that is beyond the scope of this class.-->
+<!-- </div> -->
+
+## Describing Relationships with `eagles`
+
+The `eagles` dataset contains information on the number of mating pairs of bald eagles in the United States. In 1967, bald eagles officially became an endangered species, and in 1972, the use of DDT (a pesticide causing damage to the shells of the eagle eggs) was banned--[scientists have been tracking the population since](https://courses.lumenlearning.com/wmopen-concepts-statistics/chapter/exponential-relationships-1-of-6/).
+
+6. Create a scatterplot displaying the relationship between time (`Year`) and the number of mating pairs (`Pairs`). Add the line of best fit to help you describe the plot.
+
+```{python eagles, exercise = TRUE, message = FALSE}
+(p9.ggplot(___, ___) + 
+  ___ ...)
+```
+
+```{python eagles-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(eagles, p9.aes(x = 'Year', y = 'Pairs')) +
+  p9.geom_point() + 
+  p9.geom_smooth(method = "lm", se = False))
+```
+
+```{r eagles-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q7, echo=FALSE}
+question("7. Is a linear relationship appropriate for describing the relationship between `Year` and `Pairs`? If not, what type of relationship might be more appropriate?",
+         answer("Linear", message = "Look closely at the graph, all of the points below the line are clustered together, and all of the points above the line are clustered together."),
+         answer("Quadratic"),
+         answer("Exponential", correct = TRUE),
+         allow_retry = TRUE,
+         random_answer_order = TRUE,
+         post_message = "This is an example of an exponential curve, which are often used to model growth and decay. Also, congratulations! You have found the third secret word: MOON.")
+```
+
+```{r q7_residuals, context="server"}
+q7_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$q7$correct,
+  valueFunc = function() get_tutorial_state()$q7$correct
+)
+
+q7_hint_visible <- reactiveVal(FALSE)
+
+output$q7_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q7_correct_poll())) {
+    tagList(
+      p("Now check out the residual plot below--what do you see that supports your answer?"),
+      renderPlot(eagles_residual_plot),
+      actionButton("q7_show_hint_btn", "💡 Show hint"),
+      tags$div(
+        id = "q7_hint_box",
+        style = paste(
+          if (!q7_hint_visible()) "display:none;" else "",
+          "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+        ),
+        "What should I be looking for? Sometimes it can be hard to tell if a plot is half of a quadratic or exponential. We see some of the same things as the `mtcars` residual plot, like the fact that all of the points above the red y = 0 line are at the beginning and end of the plot and all of the points below are in the middle. However, this is another case where it is useful to consider the context--very often, exponential models are used to describe patterns of growth and decay, like the growth of the eagle population! So in this case, that is the best choice to use.")
+     )
+  } else {
+    tagList(
+      p("Answer Question 7 correctly to reveal the residual plot for the `eagles` model.")
+    )
+  }
+})
+
+observeEvent(input$q7_show_hint_btn, {
+  shinyjs::toggle(id = "q7_hint_box", anim = TRUE, time = 0.2)
+  q7_hint_visible(!q7_hint_visible())
+  updateActionButton(
+    session, "q7_show_hint_btn",
+    label = if (q7_hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+  )
+})
+```
+
+```{r q7_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("q7_plot_output")
+```
+
+<!-- <div id="q7_conditional-hint"> -->
+<!-- What should I be looking for? Sometimes it can be hard to tell if a plot is half of a quadratic or exponential. We see some of the same things as the `mtcars` residual plot, like the fact that all of the points above the red $y = 0$ line are at the beginning and end of the plot and all of the points below are in the middle. However, this is another case where it is useful to consider the context--very often, exponential models are used to describe patterns of growth and decay, like the growth of the eagle population! So in this case, that is the best choice to use. -->
+<!-- </div> -->
+
+Now to confirm the value of the correlation between `Year` and `Pairs` you can use `.corr()`. Run this cell to get the value of $r$.
+
+```{python corr, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+Year = eagles['Year']
+Pairs = eagles['Pairs']
+
+Year.corr(Pairs)
+```
+
+```{r q8, echo=FALSE}
+question("8. Would you describe this as weak, moderate, or strong based on $r$?",
+         answer("Weak"),
+         answer("Moderate"),
+         answer("Strong", correct=TRUE, message = "This is a great example of why you need to look at the correlation and the scatterplot! Even though this relationship is not linear, it appears to be a strong linear relationship based on $r$."), 
+         allow_retry = TRUE)
+```
+
+## Describing Relationships with `epicurious_nd`
+
+9. For the remaining exercises, we will use the `epicurious_nd` dataset, treating `fat` as an explanatory variable and `calories` as the response variable. Create a scatterplot displaying the relationship between `fat` and `calories.` Be sure to put the variables on the appropriate axes.
+
+```{python fat, exercise = TRUE, message = FALSE}
+
+```
+
+```{python fat-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(p9.ggplot(epicurious_nd, p9.aes(x = 'fat', y = 'calories')) +
+  p9.geom_point() + 
+  p9.geom_smooth(method = "lm", se = False))
+```
+
+```{r fat-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q10, echo=FALSE}
+question("10. Is a linear relationship appropriate for describing the relationship between fat and calories? If not, what type of relationship might be more appropriate?",
+         answer("Linear", correct=TRUE, message = "There are a few unusual values, but this is a good example of a linear relationship!"),
+         answer("Quadratic"),
+         answer("Exponential"),
+         allow_retry = TRUE
+)
+```
+
+```{r q10_residuals, context="server"}
+q10_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$q10$correct,
+  valueFunc = function() get_tutorial_state()$q10$correct
+)
+
+q10_hint_visible <- reactiveVal(FALSE)
+
+output$q10_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q10_correct_poll())) {
+    tagList(
+      p("Now check out the residual plot below--what do you see that supports your answer?"),
+      renderPlot(epi_mini_residual_plot),
+      actionButton("q10_show_hint_btn", "💡 Show hint"),
+      tags$div(
+        id = "q10_hint_box",
+        style = paste(
+          if (!q10_hint_visible()) "display:none;" else "",
+          "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+        ),
+        "What should I be looking for? It is very hard to see what is going on here, due to the large outlier on the righthand side of the plot. However, if we ignore some of the points, we can see that there does not appear to be a pattern--the points are roughly scattered. I might remove the outliers or investigate the log scale to be sure, but this is as close to appropriate as we have seen so far. This makes sense based on the context, as it is a known fact that there are nine calories per gram of fat in a food item.")
+     )
+  } else {
+    tagList(
+      p("Answer Question 10 correctly to reveal the residual plot for the `epi_mini` model.")
+    )
+  }
+})
+
+observeEvent(input$q10_show_hint_btn, {
+  shinyjs::toggle(id = "q10_hint_box", anim = TRUE, time = 0.2)
+  q10_hint_visible(!q10_hint_visible())
+  updateActionButton(
+    session, "q10_show_hint_btn",
+    label = if (q10_hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+  )
+})
+```
+
+```{r q10_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("q10_plot_output")
+```
+
+<!-- <div id="q10_conditional-hint"> -->
+<!-- What should I be looking for? It is very hard to see what is going on here, due to the large outlier on the righthand side of the plot. However, if we ignore some of the points, we can see that there does not appear to be a pattern--the points are roughly scattered. I might remove the outliers or investigate the log scale to be sure, but this is as close to appropriate as we have seen so far. This makes sense based on the context, as it is a known fact that there are nine calories per gram of fat in a food item. -->
+<!-- </div> -->
+
+11. Now, define lists `fat` and `cal`, and calculate the correlation between fat and calories.
+
+```{python fatcor, exercise = TRUE, message = FALSE}
+fat = 
+cal = 
+```
+
+```{python fatcor-solution, message = FALSE, warning = FALSE, echo = FALSE}
+fat = epicurious_nd['fat']
+cal = epicurious_nd['calories']
+
+fat.corr(cal)
+```
+
+```{r fatcor-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+12. There are 28.346 grams of fat in an ounce. Create a new list called `fat_oz` containing the amount fat in the recipe in ounces. Now, calculate the correlation between `fat_oz` and `calories`. 
+
+```{python fatoz, exercise = TRUE, message = FALSE}
+fat_oz = 
+cal = epicurious_nd['calories']
+
+```
+
+```{python fatoz-solution, message = FALSE, warning = FALSE, echo = FALSE}
+fat_oz = epicurious_nd['fat']/28.346
+cal = epicurious_nd['calories']
+
+fat_oz.corr(cal)
+```
+
+```{r fatoz-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+You should have found that the correlations that you just calculated are identical. This is because correlation is **unitless**--it does not depend on the units of either of the variables. Similarly, the order doesn't matter. Run the cell below to confirm.
+
+```{python switch, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+cal.corr(fat)
+```
+
+
+## Writing Functions
+
+### Slope
+
+Occasionally we want to perform calculations and repeat them over and over again--this is an excellent place to write a function.     
+
+13. Using the equation $b_1 = r \times \frac{s_y}{s_x}$, fill out the function below called `calc_slope` that will calculate the estimate of the slope, $b_1$, given the correlation between two variables, the standard deviation of the explanatory variable, and the standard deviation of the response. 
+
+```{python slope, exercise = TRUE, message = FALSE}
+def calc_slope(r_xy, s_x, s_y):
+    b1 = 
+    return(b1)
+
+```
+
+```{python slope-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def calc_slope(r_xy, s_x, s_y):
+    b1 = r_xy*s_y/s_x 
+    return(b1)
+```
+
+```{r slope-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+14.  Now, apply your function to the `epicurious_nd` data. You will need the correlation and standard deviations--save the correlation as `r_fatcal` and the standard deviations as `s_fat` and `s_cal`.
+
+```{python setup2, exercise=FALSE, echo=FALSE}
+fat = epicurious_nd['fat']
+cal = epicurious_nd['calories']
+
+def calc_slope(r_xy, s_x, s_y):
+    b1 = r_xy*s_y/s_x 
+    return(b1)
+```
+
+```{python slopec, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+r_fatcal = 
+s_fat = 
+s_cal = 
+
+
+```
+
+```{python slopec-solution, message = FALSE, warning = FALSE, echo = FALSE}
+r_fatcal = fat.corr(cal)
+s_fat = epicurious_nd['fat'].std()
+s_cal = epicurious_nd['calories'].std()
+
+calc_slope(r_fatcal, s_fat, s_cal)
+```
+
+```{r slopec-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q15, echo=FALSE}
+question("15. Fill in the blank: for every additional ___, we should expect 12.73 additional ___",
+         answer("gram of fat; calories", correct=TRUE),
+         answer("calorie; grams of fat", message = "Consider what the independent and dependent variables are."),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the fourth secret word: ASTONISHING.")
+```
+
+### Intercept 
+
+16. We also need to frequently calculate the intercept. Using the equation $b_0 = \bar{y} - b_1\bar{x}$ write a function called `calc_int` that will calculate the estimate of the intercept, $b_0$, given the correlation between two variables, the standard deviations of both the explanatory and response variables, and the means of both the explanatory and response variables. Your new function should use the `calc_slope` function you just wrote.
+
+```{python int, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+def calc_int(r_xy, s_x, s_y, m_x, m_y):
+    b1 = 
+    b0 = 
+    return(b0)
+
+```
+
+```{python int-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def calc_int(r_xy, s_x, s_y, m_x, m_y):
+    b1 = calc_slope(r_xy, s_x, s_y)
+    b0 = m_y - b1*m_x
+    return(b0)
+```
+
+```{r int-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+17. Now apply your function to the `epicurious_nd` data. Save the means as `m_fat` and `m_cal`. 
+
+```{python setup3, exercise=FALSE, echo=FALSE, exercise.setup="setup2"}
+def calc_int(r_xy, s_x, s_y, m_x, m_y):
+    b1 = calc_slope(r_xy, s_x, s_y)
+    b0 = m_y - b1*m_x
+    return(b0)
+```
+
+```{python intc, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+m_fat = 
+m_cal = 
+
+
+```
+
+```{python intc-solution, message = FALSE, warning = FALSE, echo = FALSE}
+m_fat = epicurious_nd['fat'].mean()
+m_cal = epicurious_nd['calories'].mean()
+
+calc_int(r_fatcal, s_fat, s_cal, m_fat, m_cal)
+```
+
+```{r intc-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q18, echo=FALSE}
+question("18. Fill in the blank: if the recipe has 0 ___ then we should expect it to have 132.86 ___",
+         answer("calories; grams of fat"),
+         answer("grams of fat; calories", correct=TRUE),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the fifth secret word: ARCHITECT.")
+
+```
+
+### Prediction
+
+19. One of the linear regression tasks we are usually interested in is prediction. Write a function called `calc_pred` that can predict values of $y$ from $x$ given a column of data for the explanatory variable and a column of data for the response. Your new function should use both the `calc_slope` and `calc_int` functions. 
+
+```{python pred, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+def calc_pred(x, y):
+    r_xy = 
+    
+    m_x = 
+    m_y = 
+    
+    sd_x = 
+    sd_y = 
+    
+    b1 = 
+    b0 = 
+    
+    preds = 
+    
+    return(preds)
+```
+
+```{python pred-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def calc_pred(x, y):
+    r_xy = x.corr(y)
+    
+    m_x = x.mean()
+    m_y = y.mean()
+    
+    sd_x = x.std()
+    sd_y = y.std()
+    
+    b1 = calc_slope(r_xy, sd_x, sd_y)
+    b0 = calc_int(r_xy, sd_x, sd_y, m_x, m_y)
+    
+    preds = b0 + b1*x
+    
+    return(preds)
+```
+
+```{r pred-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+20. Now, apply the function to the `epicurious_nd` dataset and save a list of calorie predictions as `pred_cal`. 
+
+```{python setup4, exercise=FALSE, echo=FALSE, exercise.setup="setup3"}
+def calc_pred(x, y):
+    r_xy = x.corr(y)
+    
+    m_x = x.mean()
+    m_y = y.mean()
+    
+    sd_x = x.std()
+    sd_y = y.std()
+    
+    b1 = calc_slope(r_xy, sd_x, sd_y)
+    b0 = calc_int(r_xy, sd_x, sd_y, m_x, m_y)
+    
+    preds = b0 + b1*x
+    
+    return(preds)
+```
+
+
+```{python predc, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+fat = epicurious_nd['fat']
+cal = epicurious_nd['calories']
+
+pred_cal = 
+```
+
+```{python predc-solution, message = FALSE, warning = FALSE, echo = FALSE}
+fat = epicurious_nd['fat']
+cal = epicurious_nd['calories']
+
+pred_cal = calc_pred(fat, cal)
+```
+
+```{r predc-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+### Residuals
+
+21. We will definitely need to repeatedly calculate the residuals. Write a function called `calc_res` that can calculate the residuals for the entire dataset, given a column of data for the explanatory variable, and a column of data for the response. Your new function should use at least one of the functions you have already written.
+
+```{python res, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+def calc_res(x, y):  
+    preds = 
+    resids = 
+    return(resids)
+```
+
+```{python res-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def calc_res(x, y):  
+    preds = calc_pred(x, y)
+    resids = y - preds
+    return(resids)
+```
+
+```{r res-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+22. Now, apply the function to the `epicurious_nd` dataset and save a list of residuals as `pred_res`. 
+
+```{python setup5, exercise=FALSE, echo=FALSE, exercise.setup="setup4"}
+def calc_res(x, y):  
+    preds = calc_pred(x, y)
+    resids = y - preds
+    return(resids)
+```
+
+```{python resc, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+pred_res
+```
+
+```{python resc-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pred_res = calc_res(fat, cal)
+```
+
+```{r resc-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+## Optimization
+
+The loss function for simple linear regression is the sum of the squared residuals (also known as the sum of squared errors, or SSE). Below is an example of what an SSE function can look like.
+
+```{python sse, exercise=TRUE, exercise.eval = FALSE, exercise.setup="setup5"}
+def calc_SSE(x, y):  
+    resids = calc_res(x, y)
+    resids2 = resids**2
+
+    return(resids2.sum())
+```
+
+We are lucky to have equations (more formally known as closed form estimators) to estimate the slope and the intercept. However, this is not always the case! Recall that the estimates are derived from minimizing the sum of the squared residuals--when we don't have closed form estimators (which happens frequently in more complicated models), we will have to use computers to minimize our loss function. Then, the estimates we are looking for are the values where the loss function is minimized.
+
+Minimizing a loss function is a special case of optimization. To optimize, we will need the `scipy`. From `scipy.optimize`, we specifically need `minimize`.
+
+```{python scipy, exercise=TRUE, exercise.eval = FALSE, exercise.setup="sse"}
+import scipy
+from scipy.optimize import minimize
+```
+
+The `minimize` method accepts many different arguments, but here's what we are specifically concerned about:
+
+* `fun`, the objective function to be minimized.
+* `x0`, an initial guess for the values we are looking for. 
+
+You can read more about the other arguments, which may come into play with more complicated models, in the [scipy.optimize.minimize documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html). You will have to specify a method, for most problems, `method="BFGS"` will work.
+
+In this case, the objective function is the loss function we happen to be using--in the case of linear regression, the SSE function. We can't just use the function as is, it has to have a special format. 
+
+* The first argument needs contain the values that you are looking for, in this case, the slope and intercept. Other things you need can go next. 
+* The function must return the loss function, in this case, the SSE. 
+
+23. Adapt the example `calc_SSE` function so that it follows these requirements. 
+
+```{python sseo, exercise = TRUE, message = FALSE, exercise.setup="scipy"}
+def calc_SSE(parms, x, y):  
+    preds = 
+    resids = 
+    resids2 = 
+    return(resids2.sum())
+```
+
+```{python sseo-solution, message = FALSE, warning = FALSE, echo = FALSE}
+def calc_SSE(parms, x, y):  
+    preds = parms[0] + parms[1]*x
+    resids = y - preds
+    resids2 = resids**2
+    return(resids2.sum())
+```
+
+```{r sseo-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+We can give any real values for the initial guesses, but we have to give at least two, one for the intercept and one for the slope. For now, we can just use zero for both. With both of these pieces, we can run `minimize()`
+
+```{python minset, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="sseo"}
+def calc_SSE(parms, x, y):  
+    preds = parms[0] + parms[1]*x
+    resids = y - preds
+    resids2 = resids**2
+    return(resids2.sum())
+
+fat = epicurious_nd['fat']
+cal = epicurious_nd['calories']
+```
+
+
+```{python min, exercise = TRUE, message = FALSE, exercise.setup="minset"}
+minimize(calc_SSE, x0 = [0]*2, args = (fat, cal), method = "BFGS").x
+```
+
+You should find that these estimates are very close to the numbers that we calculated using the equations above.
+
+<!-- ## Grid Search -->
+
+<!-- Again, we are lucky to have closed form estimators for the slope and the intercept, as that is not always the case. When we don't have closed form estimators, we can also use something called a grid search. We are still looking for are the values where the loss function is minimized, but instead of using something like `minimize`, we can try many different values and choose the ones that minimize the loss function among those we have tried.  -->
+
+## Using `statsmodels`
+
+In addition to writing your own functions, either to directly estimate parameters or to minimize the loss function, there are a lot of pre-packaged methods in Python to use for linear regression. You may be familiar with `scikit-learn` already, but I want to introduce another module, `statsmodels`. Both modules work similarly, but `statsmodels` has some functionality that will help us out in future weeks. 
+
+```{python stats, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="min"}
+import statsmodels.api as sm
+```
+
+To fit a linear regression model with `statsmodels`, we first have to separately save our $X$ and $Y$ variables. Technically, we've already done that with `fat` and `calories`, but review the code below--it's good practice to get into this type of syntax. I've used `X1` since this is our first (and only) variable. 
+
+```{python stats1, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats"}
+X1 = epicurious_nd["fat"]
+Y = epicurious_nd["calories"]
+```
+
+Note that we've only saved one explanatory variable here, but you could save more than one to use with multiple linear regression. 
+
+By saving `"fat"` inside `X1`, we're letting Python know that we want a slope for fat just like when we create our X variable for `sklearn`. However, unlike in `sklearn`, `statsmodels` won't automatically assume we want to fit an intercept too. but we also need to specify that we would like an intercept as well. 
+
+If we fit our model with `X1` and `Y` like they are now, we will only get an estimate for the slope - the intercept will be 0. This forces our regression like to go through the origin which may or may not make sense depending on our data... Most of the time, it is useful to add an intercept to our model to avoid this.
+
+We do that by using the following code:
+
+```{python stats2, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats1"}
+X1 = sm.add_constant(X1)
+```
+
+The `add_constant` function adds a column of 1's to `X1`. Finding the slope for a column of 1's is equivalent to finding an intercept (if x is always 1,  b*x = b).
+
+Now, we can actually fit the model. We do this with the following line of code (again, I've saved an object called `model1` since this is the first model we are fitting. Also, the only model for this lab, but it's good practice to get into the habit of giving different models different names so you don't write over anything and lose track of what you were doing. 
+
+```{python stats3, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats2"}
+model1 = sm.OLS(Y, X1).fit()
+```
+
+`statsmodels` knows that people using linear regression are generally going to be performing similar calculations, so there is a lot packed into `model1`. 
+
+24.  Apply the `dir()` function to `model1`, and see if you can identify any of the parts packed into the object. 
+
+```{python dir, exercise = TRUE, message = FALSE, exercise.setup="stats3"}
+
+```
+
+```{python dir-solution, message = FALSE, warning = FALSE, echo = FALSE}
+dir(model1)
+```
+
+```{r dir-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+25. As I mentioned, there is a lot! For now, we just want to use the `.summary()` method. Investigate the output below to see if you can locate where in the table the slope and intercept are located. Are they the same as the values calculated from the other two methods we've seen?
+
+```{python summary, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats3"}
+model1.summary()
+```

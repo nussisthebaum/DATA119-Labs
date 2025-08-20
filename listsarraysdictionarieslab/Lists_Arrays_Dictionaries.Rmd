@@ -1,0 +1,1366 @@
+---
+title: "Data 118: LabX"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(shiny)
+library(gradethis)
+library(learnr)
+library(reticulate)
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Python Data Storage", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goal of this lab is review some of what you've learned about coding in Python. We will cover:
+
+- Lists
+- Sets
+- Tuples
+- Arrays
+- Dictionaries
+
+## Storing Data in Python
+
+Python and its libraries provide many ways to group data together.   Some important ones:
+
+- Lists, Tuples, Sets, Dictionaries (built-in to Python)
+
+- Arrays (found in the `NumPy` library)
+
+- DataFrames (in `Pandas`)
+
+
+The above are listed in order of increasing functionality and sophistication
+
+In general you should use the simplest one that meets your needs...
+
+
+## Sequences (built into Python)
+
+
+Sequences are a basic type of structure to group data. You don't need to import any additional libraries to use them.
+
+We will focus mostly on one type of sequence: **lists**! (**sets** and **tuples** are other useful types of sequences)
+
+
+### Lists
+
+A **list** is an ordered sequence of values that can be changed.
+
+You can create a list by using square brackets "[]". Each element is separated by commas.
+
+#### Let's create a list!
+
+```{python list1, exercise=TRUE, exercise.eval = FALSE}
+School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
+School_locations
+```
+
+##### Lists can have different data types!
+
+```{python list2, exercise=TRUE, exercise.eval = FALSE}
+Random_stuff = ["California", 38, 3.14159] #A string, int, float
+Random_stuff
+```
+
+#### Built-in Functions
+
+Recall Python has built-in functions of the form `function_name()`
+A very common one is the `print()` function!
+
+`type()` is another important function. We can call this on a number, string, list, or any object to see type it is!
+
+```{python listfuncs, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'list2'}
+print("California")
+print(type("California"))
+print(type(38))
+print(type("38"))
+print(type(3.14))
+print(type(Random_stuff))
+```
+
+We can also find the length of a list:
+
+```{python listfuncs2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'list2'}
+len(Random_stuff)
+```
+
+
+#### Accessing values from a list
+
+
+Each element of a sequence is assigned an index corresponding to its position where **indices start at 0**. We can access an element by calling the sequence or list and putting in square brackets the element we want!
+
+```{python listvals1, exercise=TRUE, exercise.eval = FALSE}
+School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
+School_locations[1]
+```
+
+Negative indexes count from the end of the sequence.
+
+```{python listvals2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'listvals1'}
+School_locations[-1]
+```
+
+If our list is long or we want the first or second from end, this is useful!
+
+
+1. What will be the result of running the following code? Answer in the box below.
+
+```python
+School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
+
+School_locations[6]
+```
+
+```{r q1, echo=FALSE}
+question(
+  "What will be the result of running the code above?",
+  answer("California"),
+  answer("Illinois"),
+  answer("North Carolina"),
+  answer("Texas"),
+  answer("Georgia"),
+  answer("Washinton D.C."),
+  answer("An Error", correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+
+#### List Slicing
+
+We can also extract a "slice" of a list.
+
+The range of elements can be specified with colons. The output is a list starting at left index and stopping at (right index -1). The range you specify is a half-closed interval \[start,end)
+
+```python
+list[start: end]
+```
+
+```{python listslice1, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'listvals1'}
+School_locations[1:3] # up to but not including the end of the slice
+```
+
+The above prints out the second and third elements.
+
+We can still slice a list by 'leaving out' a starting (or ending) position. The missing position will revert to the default. The default start value is the beginning of the list. The default end value is the end of the list.
+
+```{python listslice2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'listvals1'}
+School_locations[:3] #start at beginning stop at index end-1 -----> 3-1=2
+```
+
+2. What will the following output? Answer in the box below.
+
+```python
+School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]  
+
+School_locations[:]
+```
+
+```{r q2, echo=FALSE}
+question(
+  "What will be the result of running the code above?",
+  answer("[]"),
+  answer("[California, Washington D.C.]"),
+  answer("[California, Illinois, North Carolina, Texas, Georgia, Washington D.C.]", correct = TRUE),
+  answer("An Error"),
+  allow_retry = TRUE
+)
+```
+
+
+#### Default Settings: List Slicing
+
+It might be useful to take out every even index from a list.
+
+There is an optional argument we can use when slicing a list, the step.
+In general we can slice by using ```list[start: end: step]``` where the default (what is used when it isn't specified) of step is 1
+
+```{python listslice3, exercise=TRUE, exercise.eval = FALSE}
+School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
+
+School_locations[::2]
+```
+
+3. What do you think the following will output? Answer in the box below.
+
+```python
+School_locations[:3:3]
+```
+
+```{r q3, echo=FALSE}
+question(
+  "What will be the result of running the code above?",
+  answer("[]"),
+  answer("[California]", correct = TRUE),
+  answer("[California, Texas]"),
+  answer("[North Carolina, Washington D.C.]"),
+  answer("[North Carolina]"),
+  answer("[California, Illinois, North Carolina, Texas, Georgia, Washington D.C.]"),
+  answer("An Error"),
+  allow_retry = TRUE
+)
+```
+
+#### Operations and manipulation on lists
+
+We can: 
+- Insert items into lists!
+    - at either end
+    - in the middle      
+- Count how many items have a specific value
+- Sort elements
+
+How do we do this? By using methods. 
+
+*Methods* are particular built-in functions that work on objects in python. There are specific methods that work for all *list* objects!
+
+Methods take the form:
+
+```python
+list.method()
+```
+
+Built-in functions can also be applied to objects in python. Recall they take the form:
+
+```python
+function_name(list)
+```
+
+#### Appending to a list
+
+You can append an item to the end of a list:
+
+```{python append1, exercise=TRUE, exercise.eval = FALSE}
+School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
+
+School_locations.append('Michigan')
+School_locations
+```
+
+Or you can insert a value at a particular index:
+
+```{python append2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'append1'}
+School_locations.insert(4,'tomato')
+School_locations
+```
+
+Note we didn't assign the result to `School_locations`, but this automatically changes/overwrites the object.
+
+Let's make a copy of our list so we can see how this works.
+
+```{python append3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'append1'}
+School_location_og = School_locations.copy()
+School_location_og
+```
+
+4. Append the number 2023 to our list and then view the list. Note even though the list contains only strings, I can append an integer as lists accept any data type.
+
+```{python append4, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'append2'}
+
+```
+
+```{python append4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+School_locations.append(2023)
+School_locations
+```
+
+```{r append4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+This does not change our copy of the list!
+
+```{python append5, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'append3'}
+School_location_og
+```
+
+#### How do we find methods?
+
+Use online [documentation](https://docs.python.org/3/tutorial/datastructures.html)!
+
+Or use the built-in function ```dir()```.
+
+```{python dir, exercise=TRUE, exercise.eval = FALSE}
+print(dir(School_locations))
+
+print(dir(list))
+```
+
+#### Let's play with lists!
+
+Create a list with at least 4 items. (Recall items can be a string, int, float.) Name the list `my_list`.
+
+```{python ex1, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+5. Remove the 2nd and 3rd elements. You may want to check the documentation for list functions and methods!
+
+```{python ex2, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'ex1'}
+
+```
+
+```{python ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+del my_list[1:2]
+```
+
+```{r ex2-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+6. Append your 316 to the end of the list.
+
+```{python ex3, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'ex2'}
+
+```
+
+```{python ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+my_list.append(316)
+```
+
+```{r ex3-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+7. Insert the string "Math is fun" at index 2.
+
+```{python ex4, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'ex3'}
+
+```
+
+```{python ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+my_list.insert("Math is fun", 2)
+```
+
+```{r ex4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+8. 
+
+```{r q4, echo=FALSE}
+question(
+  "Did your above operations change your original list, or create a copy?",
+  answer("Change Original", correct = TRUE),
+  answer("Create a Copy"),
+  allow_retry = TRUE
+)
+```
+
+9. Given list ```number_list = [1,2,3,4,5,6,7]```, create a new list ```new_list = [6,4,2]``` in 2 lines of code. 
+
+```{python ex5, exercise=TRUE, exercise.eval = TRUE}
+number_list = [1,2,3,4,5,6,7]
+
+```
+
+```{python ex5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+number_list = [1,2,3,4,5,6,7]
+
+new_list = number_list[1::2]
+new_list.reverse()
+new_list
+```
+
+```{r ex5-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+
+### Sets
+
+Let's say that you want to find all unique elements in the following list:
+
+```{python set0, exercise=TRUE, exercise.eval = FALSE}
+grocery_list = ['apple', 'apple', 'milk', 'cheese', 'egg', 'egg', 'egg']
+```
+
+The best way to do this with a list is to write a loop or list comprehension. However, there is a better way to carry out tasks like this using a different data type: a **set**. 
+A **set** is an unordered sequence of unique values that can be changed. 
+
+You can create a set by using the curly braces (`{}`). Each element is separated by commas. Alternatively, you can use the built-in function `set()` to convert a list to a set. 
+
+#### Let's create a set!
+
+First, let's try using the curly braces:
+
+```{python set1a, exercise=TRUE, exercise.eval = FALSE}
+grocery_set = {'apple', 'apple', 'milk', 'cheese', 'egg', 'egg', 'egg'}
+grocery_set
+```
+
+Now, let's see what using `set()` looks like:
+
+```{python set1b, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set0'}
+grocery_set = set(grocery_list)
+grocery_set
+```
+
+Count how many times each item appears in `grocery_list`, and then how many times each item appears in `grocery_set`. Notice that the duplicate values are removed, and you are left with only unique values. This is one of the advantages of sets!
+
+#### Properties of Sets
+
+Sets borrow mathematical concepts as a way to maintain information on different things and possibly counts. 
+
+##### `in`
+
+One of the most helpful things you can use on sets are logical operators, like `in`, which will tell you if an item is included in the set:
+
+```{python set2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set1b'}
+'cheese' in grocery_set
+'bread' in grocery_set
+```
+
+##### Intersect
+
+You can also find all of the elements that two sets have in common. This is known as finding the intersection of two sets, and uses the `&`:
+
+```{python set3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set1b'}
+fruits_set = {'apple', 'grape', 'kiwi', 'pear', 'strawberry'}
+fruits_set & grocery_set
+```
+
+```{r q5, echo=FALSE}
+question(
+  "If we create a third set, `dairy_set = {'milk', 'cheese', 'cream'}`, what will the intersection of `groceries_set` and `dairy_set` be?",
+  answer("`None`"),
+  answer("`{'cream'}`"),
+  answer("`{'milk', 'cheese'}`", correct = TRUE),
+  answer("`{'cream', 'cheese', 'apple', 'milk', 'egg'}`"),
+  allow_retry = TRUE
+)
+```
+
+##### Union
+
+You can also find all of the elements that two sets have in total, even if the item only belongs to one set. This is known as finding the union of two sets, and uses the `|`:
+
+```{python set4, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set3'}
+fruits_set | grocery_set
+```
+
+```{r q6, echo=FALSE}
+question(
+  "Again, let `dairy_set = {'milk', 'cheese', 'cream'}`. What will the union of `groceries_set` and `dairy_set` be?",
+  answer("`None`"),
+  answer("`{'cream'}`"),
+  answer("`{'milk', 'cheese'}`"),
+  answer("`{'cream', 'cheese', 'apple', 'milk', 'egg'}`", correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+##### Difference
+
+Finally, you can find all of the elements in one set, but not the other. This is known as finding the difference between two sets, and uses the `-`:
+
+```{python set5, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set3'}
+fruits_set - grocery_set
+grocery_set - fruits_set
+```
+
+```{r q7, echo=FALSE}
+question(
+  "Again, let `dairy_set = {'milk', 'cheese', 'cream'}`. What will union of `dairy_set - grocery_set` be?",
+  answer("`None`"),
+  answer("`{'cream'}`", correct = TRUE),
+  answer("`{'milk', 'cheese'}`"),
+  answer("`{'cream', 'cheese', 'apple', 'milk', 'egg'}`"),
+  allow_retry = TRUE
+)
+```
+
+##### Sets can have different data types!
+
+Just like lists!
+
+```{python set6, exercise=TRUE, exercise.eval = FALSE}
+Random_set = {"California", 38, 3.14159} #A string, int, float
+Random_set
+```
+
+#### `type()`
+
+Remember that we can call `type()` on an object, including sets, to see type it is!
+
+```{python set7, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set2'}
+print(type(Random_set))
+```
+
+We can also find the size of a set:
+
+```{python set8, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set2'}
+len(Random_set)
+```
+
+#### Accessing values from a set
+
+Remember, sets are unordered. Therefore, elements of a set are not assigned any indices. This means that you cannot access an element in a set! 
+
+#### Operations and manipulation on sets
+
+We can: 
+ 
+* Insert items into sets!
+* Remove items from sets!
+
+How do we do this? By using the built-in set methods. 
+
+#### Adding to a set
+
+You can add an item to a set with the `.add()` method:
+
+```{python set9, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set3'}
+grocery_set.add('bread')
+grocery_set
+```
+
+Note we didn't assign the results to `grocery_set`. Just like lists, the output was automatically changed.
+
+Your turn! Try adding `'butter'` to `grocery_set`.
+
+```{python set10, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set9'}
+```
+
+```{python set10-solution, message = FALSE, warning = FALSE, echo = FALSE}
+grocery_set.add('butter')
+```
+
+```{r set10-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+#### Removing from a set
+
+You can remove an item from a set with the `.discard()` method:
+
+```{python setup_discard, exercise = FALSE, echo = FALSE, exercise.setup = "set10"}
+grocery_set.add('butter')
+```
+
+```{python set11, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'setup_discard'}
+grocery_set.discard('egg')
+grocery_set
+```
+
+#### Subsets
+
+A set of where all of the elements belong to a larger set is known as a subset. You can check to see if one set is a subset of another using the method `.issubset()`. 
+
+```{python setup_subset, exercise = FALSE, echo = FALSE, exercise.setup = "set10"}
+grocery_set.discard('egg')
+```
+
+```{python set12, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'setup_subset'}
+toast_set = {'bread', 'butter'}
+toast_set.issubset(grocery_set)
+
+toast_set.add('cinnamon')
+toast_set.add('sugar')
+toast_set.issubset(grocery_set)
+```
+
+#### How do we find methods?
+
+Use the built-in function ```dir()```.
+
+```{python dir2, exercise=TRUE, exercise.eval = FALSE}
+print(dir(grocery_set))
+```
+
+#### Let's play with sets!
+
+1. Create a set with at least 4 fruits. Name the set `my_set_1`.
+
+```{python set_ex1, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+2. Create another set with at least 4 distinct fruits. Name the set `my_set_2`.
+
+```{python set_ex2, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set_ex1'}
+
+```
+
+3. Confirm that these sets have no elements in common, i.e., are *disjoint*. You may want to look up a new method!
+
+```{python set_ex3, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set_ex2'}
+
+```
+
+```{python set_ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+my_set_1.isdisjoint(my_set_2)
+```
+
+```{r set_ex3-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+4. Create a new set that contains all of the elements in `my_set_1` and `my_set_2`. Call this set `my_big_set`. 
+
+```{python set_ex4, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set_ex2'}
+
+```
+
+```{python set_ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+my_big_set = my_set_1 | my_set_2
+```
+
+```{r set_ex4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+5. Confirm that `my_set_1` is a subset of `my_big_set`. 
+
+```{python set_ex5, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set_ex4'}
+
+```
+
+```{python set_ex5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+my_set_1.issubset(my_big_set)
+```
+
+```{r set_ex5-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+6. Write a line of code to see if `'plum'` is in `my_big_set`.
+
+```{python set_ex6, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'set_ex4'}
+
+```
+
+```{python set_ex6-solution, message = FALSE, warning = FALSE, echo = FALSE}
+'plum' in my_big_set
+```
+
+```{r set_ex6-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+### Tuples
+
+Like lists, a **tuple** is an ordered sequence of values. However, unlike lists, tuples cannot be changed (including adding and removing elements) after they are created--this is known as being **immutable**.
+
+Tuples can be helpful when data are structured like Cartesian coordinates, but can be also generalized to a greater number of dimensions. These objects often can be stored together, but are somewhat nonsensical to store as a list.
+
+Consider a list of universities with the following information:
+ 
+* Name
+* City 
+* State 
+
+It might make more sense to bundle this information as a tuple (also called "packing").
+
+You can create a tuple by using parentheses (`()`). Each element in the tuple should be separated by commas.
+
+#### Let's create a tuple!
+
+Let's create a tuple representing the University of Chicago and its city and state.
+
+```{python tuple1, exercise=TRUE, exercise.eval = FALSE}
+uc = ("University of Chicago", "Chicago", "Illinois")
+uc
+```
+
+##### Tuples can have different data types!
+
+Let's say that we want to add an element to the tuple for the University's undergraduate enrollment (which requires an integer type, not a string). Remember, you can't change a tuple after it has been made because it is immutable! This includes adding or removing elements. You would have to overwrite the tuple or create a new one. 
+
+```{python tuple2, exercise=TRUE, exercise.eval = FALSE}
+uc_enrollment = ("University of Chicago", "Chicago", "Illinois", 7653)
+uc_enrollment
+```
+
+#### `type()`
+
+Remember that we can call `type()` on an object, including sets, to see type it is!
+
+```{python tuple3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+type(uc_enrollment)
+```
+
+We can also find the length of a tuple:
+
+```{python tuple4, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+len(uc_enrollment)
+```
+
+
+#### Accessing values from a tuple
+
+Because tuples are ordered, each element of the tuple is assigned an index corresponding to its position where **indices start at 0**. We can access an element by calling the tuple and putting in square brackets the element we want!
+
+```{python tuple5, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+uc_enrollment[1]
+```
+
+Just like lists, negative indexes count from the end of the tuple.
+
+```{python tuple6, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+uc_enrollment[-1]
+```
+
+9. What will be the result of running the following code? Answer in the box below.
+
+```python
+stanford_enrollment = ("Stanford University", "Stanford", "California", 7554)
+stanford_enrollment[2]
+```
+
+```{r q9, echo=FALSE}
+question(
+  "What will be the result of running the code above?",
+  answer("Stanford University"),
+  answer("Stanford"),
+  answer("California", correct = TRUE),
+  answer("7554"),
+  allow_retry = TRUE
+)
+```
+
+#### Tuple methods
+
+Python only has two built-in methods for tuples!
+
+* `count()`: Returns the number of times a specified value occurs in a tuple.
+* `index()`: Searches the tuple for a specified value and returns the position of where it was found 
+
+Write a line of code to count how many times `'Illinois'` occurs in `uc_enrollment`.
+
+```{python tuple7, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+
+```
+
+```{python tuple7-solution, message = FALSE, warning = FALSE, echo = FALSE}
+uc_enrollment.count("Illinois")
+```
+
+```{r tuple7-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+Write a line of code to find which index represents `'Illinois'` in `uc_enrollment`.
+
+```{python tuple8, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
+
+```
+
+```{python tuple8-solution, message = FALSE, warning = FALSE, echo = FALSE}
+uc_enrollment.index("Illinois")
+```
+
+```{r tuple8-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+<!-- #### Let's play with tuples! -->
+
+<!-- Create a new tuple, `northwestern_enrollment`, knowing that Northwestern University is located in Evanston, Illinois, and has an undergraduate enrollment of 8,709. -->
+
+<!-- ```{python tuple_ex1, exercise=TRUE, exercise.eval = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{python tuple_ex1-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+<!-- northwestern_enrollment = ("Northwestern University", "Evanston", "IL", 8709) -->
+<!-- ``` -->
+
+<!-- ```{r tuple_ex1-code-check, message = FALSE, warning = FALSE, echo = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
+
+## Grouping Data using Arrays
+
+Arrays (from the `NumPy` library) are another way to collect data. Like a list, they contain a sequence of values. But, unlike a list, all elements of an array must have the same data type. This is because `NumPy` arrays were built for efficient computation. They can perform operations on all elements in one step. They can also do element-wise computation. This means that, for example, if you add two arrays together, the result will be an array where the element at each index is the sum of the elements at the index in the two original arrays. For this reason, when two arrays are added (or subtracted, multiplied, or divided) they must have the same size.
+
+### Lists vs Arrays
+
+Lists are more flexible
+  - Can contain elements of different types
+    
+`NumPy` arrays have some advantages
+  - size - they take up less computer memory than lists
+  - performance - faster access than lists
+  - functionality - linear algebra functions built-in
+  - can be multiple dimensions
+
+### Creating an array
+
+First import the `NumPy` library!! We do this using an import statement and we give `NumPy` the alias `np`. This makes it so that any time we want to access the `NumPy` library, we only need to type `np`.
+
+We can create an array using `np.array()` which takes in a list of values of the same data type. Below is an example of writing the import statement and creating an empty array. The array is empty because the list has no elements.
+
+```python
+import numpy as np
+
+np.array([])
+```
+
+Now, let's actually import numpy and create an array with two elements.
+
+```{python array1, exercise=TRUE, exercise.eval = FALSE}
+import numpy as np
+
+np.array([1,2])
+```
+
+Below, we create a list that contains integers and a string.
+
+```{python array2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "array1"}
+tomato_list = [22, 38, 26, 35, 35,'tomato']
+print(tomato_list)
+```
+
+Let's see what happens when we try to make an array from this list.
+
+```{python array3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "array2"}
+tomato_array = np.array([22, 38, 26, 35, 35,'tomato'])
+print(tomato_array)
+```
+
+A list can have different types, but an array will default to one. So you can see all `int`s were changed to `string`s (notice the single quotes around the numbers).
+
+An array will make sure everything is the same type.
+
+### Exploring arrays
+
+Let's create an array by converting a list to a `NumPy` array.
+
+```{python prime50, exercise=TRUE, exercise.eval = FALSE}
+prime50_array = np.array([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47])
+
+print(type(prime50_array))
+```
+
+Extraction and slicing of one-dimensional arrays work exactly the same as lists!
+
+10. Print the second element of `prime50_array`.
+
+```{python prime50_ex1, exercise=TRUE, exercise.eval = TRUE}
+
+```
+
+```{python prime50_ex1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+print(prime50_array[1])
+
+```
+
+```{r prime50_ex1-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+11. Print the array starting at index 1 and up to (but excluding) index 2.
+
+```{python prime50_ex2, exercise=TRUE, exercise.eval = TRUE}
+
+```
+
+```{python prime50_ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+print(prime50_array[1:2])
+
+```
+
+```{r prime50_ex2-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+
+12. Will the following give the same or different outputs?
+
+```python
+prime50_array[1::2]
+
+prime50_array[::2]
+```
+
+```{r q12., echo=FALSE}
+question(
+  "Will the code above give the same or different outputs?",
+  answer("Same", message = "Not quite. Remember that the default starting index is  0."),
+  answer("Different", correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+### Arrays have attributes
+
+**Attributes** are characteristics of an object. We can view an object's attributes by using the dot operator `.` similarly to when we used methods by using the syntax `object.method()`. However, to access an attribute, we don't use parentheses.
+(See https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html)
+
+Two attributes of arrays are size, which we can access using `.size`, and shape, accessed using `.shape`.
+
+```{python arraysize, exercise=TRUE, exercise.eval = FALSE}
+prime50_array.size
+```
+
+```{python arrayshape, exercise=TRUE, exercise.eval = FALSE}
+prime50_array.shape
+```
+
+### Arrays have useful methods
+
+Like lists, there are a lot of useful methods we can use on array objects. Here are a couple:
+
+ -  `.sum()`
+    
+ -  `.mean()`
+
+ -  `.nonzero()`
+
+
+(see the documentation for a complete list: https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html)
+
+We can sum arrays, but we cannot always sum a list because a list can have different data types!
+
+```{python arraysum, exercise=TRUE, exercise.eval = FALSE}
+print(prime50_array.sum())
+```
+
+### Numpy also has many useful built-in functions to use on arrays!
+
+Notice there is often more than one way to do a common operation!
+
+```{python arraymult, exercise=TRUE, exercise.eval = FALSE}
+print(prime50_array.sum()) #sum method
+
+print(np.sum(prime50_array)) #sum function (from NumPy library)
+
+print(np.count_nonzero(np.array([1,2,0,2,1,0,2])))
+
+print(prime50_array.mean()) #mean method
+
+print(np.mean(prime50_array)) #mean function
+```
+
+
+#### We can easily create arrays by specifying a range.
+
+Calling ```np.arange()``` creates a half-closed interval \[start,end) - the end value is not included
+
+```{python arange1, exercise=TRUE, exercise.eval = FALSE}
+np.arange(4,10)
+```
+
+If you leave out the start, the default is zero.
+
+```{python arange2, exercise=TRUE, exercise.eval = FALSE}
+print(np.arange(10))
+```
+
+We can specify a step size we want to increment by. If we leave out the step, the default is one
+
+```{python arange3, exercise=TRUE, exercise.eval = FALSE}
+print(np.arange(1,31,2))
+```
+
+### Another reason why arrays are useful!
+
+Element-wise operations!
+
+Take a moment to think about what the following will produce before running the cell.
+
+```{python array_ops, exercise=TRUE, exercise.eval = FALSE}
+array_1 = np.arange(10)
+array_2 = np.array([1,2,3,4,5,6,7,8,9,10])
+difference_array = array_1 - array_2
+difference_array
+```
+
+13. Consider the following code:
+
+```python
+import numpy as np
+a = np.array([1,2,3,5,8])
+b = np.array([0,3,4,2,1])
+c = a + b
+c = c*a
+print(c[2])
+```
+
+```{r q13, echo=FALSE}
+question_numeric(text = "What will be the result of the code above?",
+                 answer("21", correct = TRUE),
+                 allow_retry = TRUE,
+                 min = 0,
+                 max = 100,
+                 step = 1)
+```
+
+14.  Consider the following code:
+
+```python
+ number_array = np.array([1,2,3,5,8])
+ number_array = number_array + 1
+ print(number_array[1])
+```
+
+```{r q14, echo=FALSE}
+question_numeric(text = "What will be the result of the code above?",
+                 answer("3", correct = TRUE),
+                 allow_retry = TRUE,
+                 min = 0,
+                 max = 100,
+                 step = 1)
+```
+
+### We may have higher dimensional arrays.
+
+These are organized into rows and columns and are built row-by-row.
+
+```{python array2d, exercise=TRUE, exercise.eval = FALSE}
+arr_2d = np.array([[1, 2, 3], [4, 5, 6]]) #specify first row then second
+
+print(arr_2d)
+```
+
+```{python array2dshape, exercise=TRUE, exercise.eval = FALSE, exercise.setup='array2d'}
+arr_2d.shape #outputs (#rows, #columns)
+```
+
+
+We can reshape our arrays using `np.reshape()` which takes in the array to reshape as well as the new shape. 
+
+When the new shape provided is an integer, the array produced will be 1-dimensional.
+
+```{python arrayreshape, exercise=TRUE, exercise.eval = FALSE, exercise.setup='array2d'}
+reshaped_arr = np.reshape(arr_2d, 6)
+
+reshaped_arr.shape
+```
+
+When the new shape is a [tuple](#LinkToTuplesSection using {#custom} in the heading of that section and matching here), the array produced will have the same number of dimensions as elements in the tuple.
+
+```{python reshape2, exercise=TRUE, exercise.eval = FALSE, exercise.setup='array2d'}
+np.reshape(arr_2d, (3,2))
+
+np.reshape(arr_2d, (3,2)).shape
+```
+
+Sometimes arrays are large and we don't want to do the math to figure out the size of each dimension. If we know we want it to have 3 rows. We can use -1 for the second dimension. Using -1, tells Python to infer the remaining dimension from the size of the input array.
+
+```{python reshape3, exercise=TRUE, exercise.eval = FALSE, exercise.setup='array2d'}
+np.reshape(arr_2d, (3,-1)) # the unspecified value is inferred to be 2
+
+np.reshape(arr_2d, (3,-1)).shape
+```
+
+```{python reshape4, exercise=TRUE, exercise.eval = FALSE, exercise.setup='array2d'}
+arr_2d[:,2] #all of the rows, column at index 2
+```
+
+```{python reshape5, exercise=TRUE, exercise.eval = FALSE, exercise.setup='array2d'}
+arr_2d[0,1] #element with row index 0 and column index 1
+```
+
+### Let's Play with Arrays!
+
+Use the array below to answer the following questions:
+
+```{python exsetup, exercise=TRUE, exercise.eval = FALSE}
+random_number_array = np.array([32, 56, 78, 3, 15, 109, 13, 24, 58, 61, 90, 93, 45, 21, 46])
+```
+
+15.  Remove elements 2 and 3.
+
+```{python arex1, exercise=TRUE, exercise.eval = FALSE, exercise.setup='exsetup'}
+
+```
+
+```{python arex1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.delete(random_number_array, [1,2])
+```
+
+```{r arex1-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+16. Use a method to find the minimum value in the array
+
+```{python arex2, exercise=TRUE, exercise.eval = FALSE, exercise.setup='exsetup'}
+
+```
+
+```{python arex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+random_number_array.min()
+```
+
+```{r arex2-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+17. Find the 4th smallest element in the array
+
+```{python arex3, exercise=TRUE, exercise.eval = FALSE, exercise.setup='exsetup'}
+
+```
+
+```{python arex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.sort(random_number_array)[3]
+#or np.partition(random_number_array,3)[3]
+```
+
+```{r arex3-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+18. Create an array with 60 elements that corresponds to the 60 minutes in an hour. Name it `hour`.
+
+```{python arex4, exercise=TRUE, exercise.eval = FALSE}
+
+```
+
+```{python arex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+hour = np.arange(60)
+```
+
+```{r arex4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+19. Starting (and including) minute 4, extract every 5th element.
+
+```{python arex5, exercise=TRUE, exercise.eval = FALSE, exercise.setup='arex4'}
+
+```
+
+```{python arex5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+hour[3::5]
+```
+
+```{r arex5-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+## Another Built-in Collection of Data: Dictionaries
+
+A **dictionary** is a set of "key: value" pairs where each key is unique.
+
+We can create a dictionary with curly brackets "{}"
+
+Entries of a dictionary are of the form "key: value"
+
+```{python likert, exercise=TRUE, exercise.eval = FALSE}
+survey_dict = {0: "Strongly Disagree", 1: "Disagree", 2: "No opinion", 3: "Agree", 4: "Strongly Agree"}
+```
+
+We can access values of a dictionary by their key. (This is why all keys must be unique!)
+
+```{python keys, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert"}
+survey_dict[1]
+```
+
+Dictionaries are useful for storing and extracting data! Think of them like an address book where you look up someone's address by finding their name.
+
+A few useful operations with dictionaries:
+
+ - Add an entry
+
+ - Delete an entry
+
+We can delete pairs:
+
+```{python delkeys, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert"}
+del survey_dict[1]
+survey_dict
+```
+
+Or add new pairs:
+
+```{python addkeys, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "delkeys"}
+survey_dict['new_key'] = 'new value'
+survey_dict
+```
+
+We can also determine if keys are contained in the dictionary
+
+```{python findkeys1, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "addkeys"}
+3 in survey_dict
+```
+
+```{python findkeys2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "addkeys"}
+"Disagree" in survey_dict
+```
+
+```{python findkeys3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "addkeys"}
+'new_key' in survey_dict
+```
+
+Keep in mind, keys do not all need to be the same type...although it may make more sense to keep them that way.
+
+```{python likert2, exercise=TRUE, exercise.eval = FALSE}
+survey_dict_2 = {"Strongly Disagree": 0 , "Disagree": 1 , 2: "No opinion", 3: "Agree", 4: "Strongly Agree"}
+```
+
+```{python likert3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert2"}
+survey_dict_2["Disagree"]
+```
+
+```{python likert4, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert2"}
+list(survey_dict_2)
+```
+
+### Dictionary Methods
+
+There are methods that you can use on dictionaries, just like with lists and arrays. Here are a few:
+
+```{python methods, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert2"}
+print(dir(survey_dict_2))
+```
+
+```{python methods2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert2"}
+survey_dict.keys()
+```
+
+```{python methods3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "likert2"}
+survey_dict.items()
+```
+
+### Working with Dictionaries
+
+Below is a dictionary containing total number of homicides in the United States in 2021, by state. (Published by Statista Research Department, Oct 14, 2022). Note Washington D.C. is included as 'District of Columbia'.
+
+```{python homdict, exercise=TRUE, exercise.eval = FALSE}
+homicide_dict = {'Texas': 2064, 'North Carolina': 928, 'Ohio': 824, 'Michigan': 747, 'Georgia': 728, 'Tennessee': 672, 'Missouri': 593, 'Virginia': 562, 'South Carolina': 548, 'Illinois': 514, 'Pennsylvania': 510, 'Louisiana': 447, 'Indiana': 438, 'Alabama': 370, 'Kentucky': 365, 'Colorado': 358, 'Washington': 325, 'Arkansas': 321, 'Wisconsin': 315, 'Oklahoma': 284, 'Nevada': 232, 'Minnesota': 203, 'Arizona': 190, 'Oregon': 188, 'New Mexico': 169, 'Mississippi': 149, 'Connecticut': 148, 'Maryland': 138, 'New Jersey': 137, 'Massachusetts': 132, 'New York': 124, 'California': 123, 'District of Columbia': 109, 'West Virginia': 95, 'Delaware': 94, 'Kansas': 87, 'Utah': 85, 'Iowa': 70, 'Rhode Island': 38, 'Idaho': 36, 'Montana': 31, 'South Dakota': 26, 'Nebraska': 25, 'Alaska': 18, 'Maine': 18, 'Wyoming': 17, 'New Hampshire': 14, 'North Dakota': 14, 'Vermont': 8, 'Hawaii': 6}
+```
+
+Pick a few states of interest and find their homicide number (use code here...do not just manually search the dictionary!)
+
+```{python homdict2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = "homdict"}
+
+```
+
+20.   Find the number of keys in the dictionary.
+
+```{python dict, exercise=TRUE, exercise.eval = FALSE, exercise.setup='homdict'}
+
+```
+
+```{python dict-solution, message = FALSE, warning = FALSE, echo = FALSE}
+len(homicide_dict.keys())
+```
+
+```{r dict-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+1. Does this imply all 50 states are included here?
+2. What are some limitations to this data?
+::::
+
+
+## Grouping Data with DataFrames
+
+One of the most commonly used collections of data in data science is the DataFrame. DataFrames come from the `pandas` library which we will talk in more detail in later labs! For now, here is a quick introduction.
+
+### Different objects for different goals
+
+There are different collections of data in Python because each works well in different contexts. We've already talked about lists and arrays:
+
+Method 1: (Using lists from python (no import `numpy` needed))
+- list of lists
+- Hard to manipulate
+
+
+Method 2: (Using np.array)
+- All values of same data type
+- Easy to do math and matrix manipulations
+- No row column names
+
+DataFrames are useful if we have multiple observations of data of different types.
+
+Imagine you are conducting a survey. On this survey you ask about a person's height in inches, favorite fruit, and whether they own a dog. Each of these pieces of information would be stored in Python using a different data type.
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+As an exercise, what data type would you use for each?
+::::
+
+Each person that you survey provides a different 'observation' of those 3 pieces of information. Picture a DataFrame as a table with rows and columns. Each row corresponds to a different person being surveyed and each column corresponds to their answer to a particular question. Each column contains the same data type within that column but individual columns can be of different data types. Here are some useful elements of DataFrames:
+
+Method 3: (Using `pandas` DataFrames)
+- Different columns can have different types
+- Easy to manipulate by name
+- row and column names built in!
+- Rows are "individuals" or "instances"
+- Columns are attributes of those individuals
+
+### Storing Data in 3 ways
+
+Suppose we take a survey of student ID, favorite number, and favorite food.
+
+We can store this data as a list of lists, a 2-dimensional array, or a DataFrame.
+
+```{python lofl, exercise=TRUE, exercise.eval = FALSE}
+list_of_lists=[['Pizza','Pierogi','Ramen'],  #fav food
+               [0,22,-3.1415],  #fav number
+               [1234, 4456, 5882]]   #Student ID
+
+list_of_lists
+```
+
+```{python ar2d, exercise=TRUE, exercise.eval = FALSE}
+np.array([['Pizza','Pierogi','Ramen'],  #fav food
+               [0,22,-3.1415],  #fav number
+               [1234, 4456, 5882]]) #student id
+```
+
+```{python datfram, exercise=TRUE, exercise.eval = FALSE}
+#ignore this code for now!
+import pandas as pd
+df = pd.DataFrame(
+    { 1:['Pizza','Pierogi','Ramen'],  #fav food
+      2:[0,22,-3.1415], #fav number
+     3:[1234, 4456, 5882]}) #id
+
+df
+```
+
+## Wrapping Up
+
+In this notebook, we learned about lists, arrays, and dictionaries and were introduced to the concept of DataFrames. During the next lab, we will build on these concepts so that you feel comfortable working with and manipulating large groups of data.
