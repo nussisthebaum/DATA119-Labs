@@ -10,13 +10,13 @@
     "has_parameters": false
   },
   "python": {
-      "version": "3.9.21",
-      "package_manager": {
-        "name": "pip",
-        "version": "21.2.4",
-        "package_file": "requirements.txt"
-      }
-    },
+    "version": "3.8.16",
+    "package_manager": {
+      "name": "pip",
+      "version": "23.0.1",
+      "package_file": "requirements.txt"
+    }
+  },
   "packages": {
     "MASS": {
       "Source": "CRAN",
@@ -1865,6 +1865,33 @@
         "Built": "R 4.4.1; ; 2024-12-14 00:26:59 UTC; unix"
       }
     },
+    "shinyjs": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "shinyjs",
+        "Title": "Easily Improve the User Experience of Your Shiny Apps in Seconds",
+        "Version": "2.1.0",
+        "Authors@R": "person(\"Dean\", \"Attali\", \n    email = \"daattali@gmail.com\",\n    role = c(\"aut\", \"cre\"),\n    comment= c(ORCID=\"0000-0002-5645-3493\"))",
+        "Description": "Perform common useful JavaScript operations in Shiny apps that will\n    greatly improve your apps without having to know any JavaScript. Examples\n    include: hiding an element, disabling an input, resetting an input back to\n    its original value, delaying code execution by a few seconds, and many more\n    useful functions for both the end user and the developer. 'shinyjs' can also\n    be used to easily call your own custom JavaScript functions from R.",
+        "URL": "https://deanattali.com/shinyjs/",
+        "BugReports": "https://github.com/daattali/shinyjs/issues",
+        "Depends": "R (>= 3.1.0)",
+        "Imports": "digest (>= 0.6.8), jsonlite, shiny (>= 1.0.0)",
+        "Suggests": "htmltools (>= 0.2.9), knitr (>= 1.7), rmarkdown, shinyAce,\nshinydisconnect, testthat (>= 0.9.1)",
+        "License": "MIT + file LICENSE",
+        "VignetteBuilder": "knitr",
+        "RoxygenNote": "7.1.1",
+        "Encoding": "UTF-8",
+        "NeedsCompilation": "no",
+        "Packaged": "2021-12-21 11:32:22 UTC; Dean-X1C",
+        "Author": "Dean Attali [aut, cre] (<https://orcid.org/0000-0002-5645-3493>)",
+        "Maintainer": "Dean Attali <daattali@gmail.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2021-12-23 10:10:02 UTC",
+        "Built": "R 4.4.0; ; 2024-04-06 10:53:15 UTC; unix"
+      }
+    },
     "sourcetools": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -2176,7 +2203,7 @@
   },
   "files": {
     "css/custom-styles.css": {
-      "checksum": "53026cc16d8d96879dd8a4eaa065e763"
+      "checksum": "0871b5891eed8618b54047979b496cfa"
     },
     "data/eagles.csv": {
       "checksum": "4d29fd34b7a59de7ea45c01dfd4eeede"
@@ -2185,7 +2212,7 @@
       "checksum": "235df25209772997a380ef45053f0214"
     },
     "data/epi_mini.csv": {
-      "checksum": "e5d043b34dff4380546e4eb4dc6fede9"
+      "checksum": "d41d8cd98f00b204e9800998ecf8427e"
     },
     "data/gasprice.csv": {
       "checksum": "a59133570d390f57c20393040d04947d"
@@ -2197,16 +2224,10 @@
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
     "Lab 2 - Correlation and Simple Linear Regression.Rmd": {
-      "checksum": "43ab24e8935fc64380395c9fa89d4043"
-    },
-    "Lab-2---Correlation-and-Simple-Linear-Regression_files/figure-html/q3_conditioal-1.png": {
-      "checksum": "ce50e849361da3051d91215abf6ccea5"
-    },
-    "Lab-2---Correlation-and-Simple-Linear-Regression.html": {
-      "checksum": "5ac10aa0a8922290336f07a71bd03d6c"
+      "checksum": "c6cd4593d4bfa986081760d8d26c163d"
     },
     "README.md": {
-      "checksum": "d41d8cd98f00b204e9800998ecf8427e"
+      "checksum": "8b64a84194eca62fb9d79807c0867e15"
     },
     "requirements.txt": {
       "checksum": "d4a0110333301b2d0822f68901c152a6"
