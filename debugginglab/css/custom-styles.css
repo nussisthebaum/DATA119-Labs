@@ -51,6 +51,8 @@ a:hover {
     color: white;             /* White text */
     font-family:'EB Garamond', serif;
     padding: 12px 20px;            /* Add padding for spacing */
+    font-family:'EB Garamond', serif;
+    padding: 12px 20px;            /* Add padding for spacing */
     box-sizing: border-box;   /* Ensure padding doesn't exceed width */
     margin-bottom: 20px;      /* Add spacing below the header */
 }
@@ -108,6 +110,29 @@ a:hover {
     border-radius: 5px; /* Rounded corners */
 }
 
+.discussionbox {
+    background-color: #ddd;  /* Light red/pink background */
+    border-left: 6px solid #800000; /* Dark red border */
+    padding: 10px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.discussionbox .center {
+    text-align: center;
+}
+
+.notebox {
+    background-color: #ddd;  /* Light greyish green background */
+    border-left: 6px solid #800000; /* Dark red border */
+    padding: 10px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.notebox .center {
+    text-align: center;
+}
 .discussionbox {
     background-color: #ddd;  /* Light red/pink background */
     border-left: 6px solid #800000; /* Dark red border */

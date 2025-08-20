@@ -51,26 +51,18 @@ a:hover {
     color: white;             /* White text */
     font-family:'EB Garamond', serif;
     padding: 12px 20px;            /* Add padding for spacing */
-    font-family:'EB Garamond', serif;
-    padding: 12px 20px;            /* Add padding for spacing */
     box-sizing: border-box;   /* Ensure padding doesn't exceed width */
     margin-bottom: 20px;      /* Add spacing below the header */
 }
 
-/* Header layout: logo left, title centered in remaining space */
 /* Header layout: logo left, title centered in remaining space */
 .logoAndTitle {
   display: grid;
   grid-template-columns: auto 1fr; /* logo | remaining space for title */
   align-items: center;
   gap: 16px;
-  display: grid;
-  grid-template-columns: auto 1fr; /* logo | remaining space for title */
-  align-items: center;
-  gap: 16px;
 }
 
-/* Logo pinned left */
 /* Logo pinned left */
 .topLogo {
   grid-column: 1;
@@ -78,24 +70,10 @@ a:hover {
   max-height: 70px;
   width: auto;
   display: block;
-  grid-column: 1;
-  justify-self: start;
-  max-height: 70px;
-  width: auto;
-  display: block;
 }
 
 /* Title centered within the remaining space (column 2) */
-/* Title centered within the remaining space (column 2) */
 .pageTitle {
-  grid-column: 2;            /* <-- don't span all columns */
-  justify-self: center;      /* center horizontally in column 2 */
-  text-align: center;
-  font-family: 'EB Garamond', serif;  /* ensure correct font */
-  font-size: 3.5rem;
-  line-height: 1.1;
-  margin: 0;
-  color: white;
   grid-column: 2;            /* <-- don't span all columns */
   justify-self: center;      /* center horizontally in column 2 */
   text-align: center;
@@ -135,6 +113,25 @@ a:hover {
     margin: 20px 0;
     border-radius: 5px;
 }
+<<<<<<<< HEAD:lab3/css/custom-styles.css
+
+.discussionbox .center {
+    text-align: center;
+}
+
+.notebox {
+    background-color: #ddd;  /* Light greyish green background */
+    border-left: 6px solid #800000; /* Dark red border */
+    padding: 10px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.notebox .center {
+    text-align: center;
+}
+========
+>>>>>>>> dev_aj:functionslab/css/custom-styles.css
 
 .discussionbox .center {
     text-align: center;

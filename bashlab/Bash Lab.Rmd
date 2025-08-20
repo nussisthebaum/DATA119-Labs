@@ -1,0 +1,689 @@
+---
+title: "Introduction to BASH"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+#knitr::knit_engines$set(python = reticulate::eng_python)
+
+## Directory Requirements ??
+
+## Package Requirements for Lab
+
+library(gradethis)
+library(learnr)
+library(tidyverse)
+
+## Package Requirements  for Content
+
+## Requirements for Answer Checking
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+<!-- ```{bash setup} -->
+<!-- cd data -->
+<!-- ``` -->
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Command Line Interface and Bash", class = "pageTitle")
+  )
+)
+```
+
+
+## Goals
+
+The goal of this lab is to practice basic BASH commands using the command line interface. 
+
+Please note that this lab borrows HEAVILY from the [Command Line Murder Mystery](https://github.com/veltman/clmystery) by Noah Veltman--once you have worked through the basic commands, you can either solve the murder mystery on the Shiny Server OR download the file and practice using the command line interface on your own machine!
+
+## Setup
+
+## Command Line Interface, BASH, and Directories
+
+### What is the command line interface?
+
+The command line (also known as the command line interface, or CLI, or sometimes the terminal), is a **plain text-based interface** for executing commands on a computer. If you've ever seen a movie about hackers from the 1980s, like WarGames, where they stare at a prompt on a black screen and type in commands one at a time, it's basically that.
+
+You will always be working in a specific directory on your laptop. Usually, this directory comes before either the dollar sign (`$`) or the percent sign (`%`). Check on your machine to see which one you should be looking for! On my machine, the command line looks like this:
+
+![](images/CLI.png)
+
+A symbol (like `$` or `%`) that lets you know that the command line is ready to receive input is known as a prompt. Once you see the prompt, you can type in a command and hit 'Enter' to execute it. An example command would be:
+
+```{bash example1, echo = TRUE, eval = FALSE}
+touch newfile.txt
+```
+
+This command will create a file called `newfile.txt`.
+
+### How do we access the command line?
+
+You can open the command line differently according to different operating systems:
+
+#### Mac OS X
+
+Go to "/Applications/Utilities" and click on "Terminal" or search for "Terminal" in Spotlight (the magnifying glass at the top right corner of your screen).
+
+#### Windows
+
+Windows is a bit of a special case. If you go to the Start Menu and click "Run", and then type "cmd" and hit enter, it will open the Windows version of the command line. Unfortunately, the Windows version of the command line kind of has its own
+system, so for the purposes of following these examples, you'll want to install [Cygwin](http://www.cygwin.com/), which will allow you to mimic a Linux-style
+command line.
+
+#### Desktop Linux
+
+You can search for the "Terminal" application from the Dash. Let's be honest, though, if you're running Linux, you probably don't need this tutorial.
+
+### BASH Syntax
+
+BASH is one of the most commonly used languages used in the command line interface. BASH commands generally take the format:
+
+```{bash example2, echo = TRUE, eval = FALSE}
+[name of the command] [option] [option] [option] ...
+```
+
+Note that this is similar to specifying arguments inside a Python function or method.
+
+### Directories and Paths
+
+The prompt will also show what directory (folder) you're currently sitting in. Whenever you execute a command, you do it from a particular directory. This matters because when you execute a command that involves a filename or a directory name, you can
+specify it one of two ways.
+
+#### Relative Paths
+
+Specifying a file or directory as a relative path means you are specifying where it sits *relative to the directory you're in* . For example, let's say you're in the `videos` subdirectory of the `files` directory. You'll see this prompt:
+
+```{bash example3, echo = TRUE, eval = FALSE}
+/files/videos$
+```
+
+Any commands you want to use need to go after the prompt. If you execute a command like `touch newfile.txt`, it will create `newfile.txt` inside the current directory. Relative paths don't start with a slash.
+
+#### Absolute Paths
+
+Specifying a file or directory as an absolute path means you are specifying where it sits *on the computer in absolute terms*, starting from the top level. For example, let's say you're in the `videos` subdirectory of the `files` directory again. 
+
+```{bash example4, echo = TRUE, eval = FALSE}
+/files/videos$
+```
+
+If you execute a command like `touch /files/music/newfile.txt`, it will create `newfile.txt` inside a different folder, the `music` subfolder of the `files` folder. Absolute paths start with a slash.
+
+If you use an absolute path, the command will do the same thing no matter what directory you execute it from. So these two commands will have the same result from the `/files/videos` directory:
+
+```{bash example5, echo = TRUE, eval = FALSE}
+/files/videos$ rm video.mp4
+```
+
+This will delete the file `video.mp4` from the current directory.
+
+```{bash example5_5, echo = TRUE, eval = FALSE}
+/files/videos$ rm /files/videos/video.mp4
+```
+
+This will delete `video.mp4` from the `/files/videos/` directory, which happens to be the current directory.
+
+The same two commands will not have the same result if you are in a different directory:
+
+```{bash example6, echo = TRUE, eval = FALSE}
+/files/text$ rm video.mp4
+```
+
+This will try to delete the file `video.mp4` from the `text` subdirectory instead, because that's the current directory.
+
+```{bash example6_5, echo = TRUE, eval = FALSE}
+/files/text$ rm /files/videos/video.mp4
+```
+
+This will delete the file from the `/files/videos/ directory`, even though it isn't the current directory).
+
+**Remember: Starting a path with a slash means you want to give the entire path and ignore what directory you're currently in. Not starting a path with a slash means you want to give the path starting from the directory you're in.**
+
+## Basic BASH Commands
+
+You have already seen `touch`, but let's learn some other useful commands. 
+
+### Print Working Directory
+
+If you're ever unsure of what directory you're in, you can use the `pwd` (`p`rint `w`orking `d`irectory) command to get the absolute path of the current directory.
+
+```{bash example7, echo = TRUE, eval = FALSE}
+pwd
+```
+
+In the cell below, print your current working directory. 
+
+```{bash ex1, exercise = TRUE, eval = FALSE}
+
+```
+
+```{bash ex1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pwd
+```
+
+```{r ex1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Because we are on the server, you have a temporary directory with a complicated name--but you can navigate just as if you were working on your computer with permanent directories.
+
+### Deleting Files
+
+If you want to delete a file, you can use the `rm` (I think of it as `r`e`m`ove) command. Note that this file works in conjunction with relative and absolute paths. 
+Say we have a specific file in our working directory named `specific_file.txt`. Removing this specific file looks like 
+
+```{bash example8, echo = TRUE, eval = FALSE}
+rm specific_file.txt
+```
+
+### File Patterns
+
+In most cases when you have to specify a file name or directory name, you can also specify a general pattern that might match multiple files. There are lots of ins and outs with this, but the most basic version is using the asterisk (`*`), which matches anything. It's also known as a wildcard.
+
+To delete any file in your current directory, run
+
+```{bash example9, echo = TRUE, eval = FALSE}
+rm *
+```
+
+To delete any text file (a file ending with the `.txt` extension), run
+
+```{bash example10, echo = TRUE, eval = FALSE}
+rm *.txt
+```
+
+To delete any file with a name starting with `data`, run
+
+```{bash example11, echo = TRUE, eval = FALSE}
+rm data*
+```
+
+Obviously, you can change the phrase or extension you are looking for! However, note that deleting files using the wildcard may remove something you actually wanted to keep, so be careful!
+
+```{r q1, echo=FALSE}
+question(
+  "How would you delete all PDFs in your working directory?",
+  answer("`rm *`"),
+  answer("`rm *.txt`"),
+  answer("`rm *.pdf`", correct = TRUE),
+  answer("`rm pdf*`"),
+  answer("Delete one specific `.pdf` file at a time until everything is gone."),
+  allow_retry = TRUE
+)
+```
+
+### Navigating
+
+The two core commands for navigating what directory the prompt is in are `cd` and `ls`.
+
+#### Changing Directories
+
+`cd` is a command to change the current directory, and must be followed by a directory you want to change to. You can supply an absolute or relative path.
+
+For example, to move from `files` to `files/videos`, run
+
+```{bash example12, echo = TRUE, eval = FALSE}
+cd videos
+```
+
+Note that when you change a directory on your computer, you will notice that the directory listed before the prompt will change!
+
+Once you change into a subdirectory, you can keep going. For example, to move to `videos` and then to `vines`, 
+
+```{bash example13, echo = TRUE, eval = FALSE}
+cd /videos
+cd vines
+```
+
+You can jump multiple levels at once if you want.
+
+```{bash example14, echo = TRUE, eval = FALSE}
+cd /videos/short
+```
+
+Make sure to type the name of the directory exactly, otherwise you will get a message like 
+
+```{bash example15, echo = TRUE, eval = FALSE}
+cd: no such file or directory:
+```
+
+This can also happen when you supply the absolute file name but forget a subdirectory. There are a couple of habits you should establish to make sure this doesn't happen:
+
+1. Be careful when typing (obvious, but harder than you think when you get very complicated names!!) 
+2. Copy and paste the path/filename--on a Mac, right click on the file or directory you are interested in using Finder and then click on "Get Info". On a PC, right click on the file or directory and then click on "Properties."
+3. Use the "Tab" key for autocompletion. This will feel weird at first but can dramatically speed up your work!
+4. Use the up arrow key to find previous commands--if you visit a directory a lot, you'll probably find it again!
+
+You can also move up a directory, using
+
+```{bash example16, echo = TRUE, eval = FALSE}
+cd ..
+```
+
+#### Listing Files
+
+`ls` will `l`i`s`t the files in the current directory. It's helpful for figuring out where you are, what files exist, and what subfolders exist.
+
+```{bash example17, echo = TRUE, eval = FALSE}
+ls
+```
+
+Using `ls -l` will print the list vertically, with lots of other extra information about the file size, permissions, and last modified date--the command line interface isn't always very readable, so it's helpful to use tips like this when you can. 
+
+### `head`
+
+The `head` command will print out the first 10 lines of a file named `names.txt`:
+
+```{bash example18, echo = TRUE, eval = FALSE}
+head names.txt
+```
+
+You can also specify a different number of lines. This will print out the first 15 lines of the file:
+
+```{bash example19, echo = TRUE, eval = FALSE}
+head -n 15 names.txt
+```
+
+Or, if you want to print all the file but leave out the LAST 15 lines, you can give a negative number:
+
+```{bash example20, echo = TRUE, eval = FALSE}
+head -n -15 names.txt
+```
+
+One of the nice uses of `head` is to quickly peek inside a large text file to see what's in it without having to wait for a text editor to load it. This becomes a big deal when you're talking about a 1 GB file!
+
+### `tail`
+
+The `tail` command is the reverse of `head`. It will print out the last 10 lines of a file:
+
+```{bash example21, echo = TRUE, eval = FALSE}
+tail names.txt
+```
+
+This will print out the last 15 lines of a file:
+
+```{bash example22, echo = TRUE, eval = FALSE}
+tail -n 15 names.txt
+```
+
+Or, if you want to print all the file but leave out the FIRST 15 lines, you can add a plus sign:
+
+```{bash example23, echo = TRUE, eval = FALSE}
+tail -n +16 names.txt
+```
+
+This is helpful if you want to, say, remove a header row from a .csv file:
+
+```{bash example24, echo = TRUE, eval = FALSE}
+tail -n +2 names.txt > names-no-header.txt
+```
+
+### `grep`
+
+The `grep` command  will let you search a file (or multiple files) for a phrase. By default, it will print out each line that matches your search.
+
+For example, to print out lines that contain the word "darkwing":
+
+```{bash example25, echo = TRUE, eval = FALSE}
+grep "darkwing" famousducks.txt
+```
+
+Notice that `grep` is followed by the phrase you are searching for in quotes, which is followed by the filename. `grep` by itself will only look for specific phrases, but has options to make it much more powerful. 
+
+This command will return the same as above, but *the search is now case-insensitive*:
+
+```{bash example26, echo = TRUE, eval = FALSE}
+grep -i "darkwing" famousducks.txt
+```
+
+This command will find matches *for the exact word* "Donald" in a file - words that contain "Donald," like "McDonald," won't count:
+
+```{bash example27, echo = TRUE, eval = FALSE}
+grep -w "Donald" famousducks.txt
+```
+
+This command will find matches for "McDuck" *in every file* in the current directory:
+
+```{bash example28, echo = TRUE, eval = FALSE}
+grep "McDuck" *
+```
+
+This command will find matches for "McDuck" *in every file in the current directory AND every subdirectory*, all the way down:
+
+```{bash example29, echo = TRUE, eval = FALSE}
+grep -r "McDuck" *
+```
+
+This command will print out *that line AND the 4 lines after it* (5 lines total) for each match of "Howard":
+
+```{bash example30, echo = TRUE, eval = FALSE}
+grep -A 4 "Howard" famousducks.txt
+```
+
+This command will print out *that line AND the 4 lines before it* (5 lines total) for each match of "Howard":
+
+```{bash example31, echo = TRUE, eval = FALSE}
+grep -B 4 "Howard" famousducks.txt
+```
+
+This command will print out *that line AND the 4 lines before it AND the 4 lines after it* (9 lines total) for each match of "Howard":
+
+```{bash example32, echo = TRUE, eval = FALSE}
+grep -C 4 "Howard" famousducks.txt
+```
+
+You might be interested in printing filenames that match your search rather than the matching lines themselves: 
+
+```{bash example33, echo = TRUE, eval = FALSE}
+grep -l "Daffy" *
+```
+
+Alternatively, sometimes we are just interested in the number of matches:
+
+```{bash example34, echo = TRUE, eval = FALSE}
+grep -c "Daffy" *
+```
+
+Finally, we can ask to show line numbers along with the matching lines:
+
+```{bash example35, echo = TRUE, eval = FALSE}
+grep -n "Daffy" famousducks.txt
+```
+
+### The Pipe Operator
+
+You can send the output to another command using the pipe symbol, `|`. For example, now that we know that `grep` command searches through some text for matches, you can chain two commands together to get the first 10 lines of a file, and then search for "Steve" within those 10 lines:
+
+```{bash example36, echo = TRUE, eval = FALSE}
+head names.txt | grep "Steve"
+```
+
+```{r q2, echo=FALSE}
+question(
+  "Which part of the command finds the first 10 lines of the file?",
+  answer("`head`", correct = TRUE),
+  answer("`names.txt`"),
+  answer("`|`"),
+  answer("`grep`"),
+  answer("Steve"),
+  allow_retry = TRUE
+)
+```
+
+```{r q3, echo=FALSE}
+question(
+  "Which part of the command finds lines matching the phrase 'Steve'?",
+  answer("`head`"),
+  answer("`names.txt`"),
+  answer("`|`"),
+  answer("`grep`", correct = TRUE),
+  answer("Steve"),
+  allow_retry = TRUE
+)
+```
+
+Note that the `>` symbol sends the output of a command to a file. So, the previous command is basically the same as doing this:
+
+```{bash example37, echo = TRUE, eval = FALSE}
+head names.txt > temporaryfile.txt
+grep "Steve" temporaryfile.txt
+```
+
+But instead of first sending the output to a file and then running the second command on that file, you pipe the output directly from the first command into the second. 
+
+You can chain as many commands together as you want:
+
+```{bash example38, echo = TRUE, eval = FALSE}
+grep "United States" addresses.csv | grep "California" | head
+```
+
+This would search the file `addresses.csv` for lines that contain the phrase "United States", then search the results for lines that contain the word "California", and then print out the first 10 of those matches.
+
+### `cat`
+
+The `cat` (short for "con`cat`enate") command will combine multiple files together. This will print three files in a row, as if they were one file:
+
+```{bash example39, echo = TRUE, eval = FALSE}
+cat turkey.txt duck.txt chicken.txt
+```
+
+Remember that this will just print the output into your terminal. If there is a lot of output, it might be better to use `grep` and find something specific!
+
+### Regular Expressions
+
+When using something like `grep` to search, you can search for a simple term with only letters, numbers, and spaces. But if you want to search for a pattern, you can use what's called a regular expression. Regular expressions use special characters to represent patterns, like "any number," "any letter," "X or Y," "at least three lowercase letters," and so on.
+
+We won't worry about the ins and outs for now, but one useful operator is the period, `.`. In regular expression-ese, this means "One of any character." So you can search for something like:
+
+```{bash example40, echo = TRUE, eval = FALSE}
+grep -i "car.s" dictionary.txt
+```
+
+This would match words like "cards", "carts", "cares", and so on. It would also match the middle of the phrase "scar story" (*s*CAR S*tory*) because "any character" means ANY character, including a space or a punctuation mark.
+
+One more example:
+
+```{bash example41, echo = TRUE, eval = FALSE}
+grep -i ".e.st" dictionary.txt
+```
+
+This would match things like "least", "beast", and "heist".
+
+### Command List
+
+So, for reference, here are all the commands we've covered:
+
+* `touch`: Creates a new file
+* `pwd`: Prints your working directory. 
+* `cd`: Changes your working directory. 
+* `ls`: Lists the files in your working directory. 
+* `head -n N`: Shows the first `N` lines of a file. 
+* `tail -n N`: Shows the last `N` lines of a file. 
+* `grep`: Helps find instances of exact phrases or variations on exact phrases within a text file. 
+* `cat`: prints output into the terminal.
+
+## Murder Mystery
+
+There's been a murder in Terminal City, and TCPD needs your help! You can solve this mystery using the commands covered in the previous section of this lab, including `cat`, `cd`, `grep`, `head`, and `ls`. 
+
+First, navigate to the `data` directory and print the files within. 
+
+```{bash ex2, exercise = TRUE}
+
+```
+
+```{bash ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+cd data
+ls
+```
+
+```{r ex2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+You should see a list of files, including many that you will need to solve the murder mystery. 
+
+Please note that due to how our server is set up, you will have to change the directory to `data` at the beginning of each chunk. Now, show the `instructions` file. 
+
+```{bash setup-directory, eval = TRUE, engine.opts='-l'}
+cd data
+```
+
+```{bash ex3, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
+```
+
+```{bash ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+cd data
+cat instructions
+```
+
+```{r ex3-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+In the chunk(s) below, use the commands you know to solve the mystery--we have given you three spaces to work so that you can cross-reference the outputs, but you only have to use one if you want. We recommend that you use each of `cat`, `cd`, `grep`, `head`, and `ls`at least once. Just remember that if a command does not work as you expect or you want to rewrite a command to give more readable output, go ahead and retry! 
+
+```{bash ex4, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
+
+```
+
+```{bash ex5, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
+
+```
+
+```{bash ex6, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
+
+```
+
+Once you think you have solved the mystery, replace `John Doe` below with the name of the suspect and run the code!
+
+```{bash setup-directory2}
+cd data/mystery
+```
+
+```{bash ex7, exercise = TRUE, exercise.setup = "setup-directory2"}
+cd data/mystery
+echo "John Doe" | $(command -v md5 || command -v md5sum) | grep -qif /dev/stdin encoded && echo CORRECT\! GREAT WORK, GUMSHOE. || echo SORRY, TRY AGAIN.
+```
+
+Once you are done with the murder mystery, remember that you can download the files for yourself and "re-solve" on your own computer to get used to the command line interface (maybe try using different strategies). Visit [Command Line Murder Mystery](https://github.com/veltman/clmystery) to get the files. 
+
+## Python Specific Tasks
+
+Eventually you might want to be able to run Python from the terminal! To do so, simply use the command `python`:
+
+```{bash example42, echo = TRUE, eval = FALSE}
+python
+```
+
+Using this command results in something like
+
+```{bash example43, echo = TRUE, eval = FALSE}
+(base) amynussbaum@Amys-MacBook-Pro ~ % python
+Python 3.11.5 (main, Sep 11 2023, 08:31:25) [Clang 14.0.6 ] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+```
+
+
+<!-- ![](images/CLI_python.png) -->
+
+Note that once you are running Python, the prompt changes. 
+
+```{r q4, echo=FALSE}
+question(
+  "According to the screenshot, what is the prompt for Python?",
+  answer("`$`",),
+  answer("`%`"),
+  answer("`>>>`", correct = TRUE),
+  answer("`help`"),
+  answer("`copyright`"), 
+  answer("`license`"), 
+  allow_retry = TRUE
+)
+```
+
+You can also run a single line of Python code using the `-c` option! Note that you will have to use the `print()` command, as well as quotation marks, to actually return the results of any calculations. Edit the following line of code to use Python to find the sum of 8 and 7. 
+
+```{bash ex8, exercise = TRUE}
+python -c "print(2+2)"
+```
+
+```{bash ex8-solution, message = FALSE, warning = FALSE, echo = FALSE}
+python -c "print(8+7)" 
+```
+
+```{r ex8-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+
+Several single lines of code listed one right after the other can be saved as a Python script. You may be used to working only with notebooks so far, but a document containing only Python commands (no plain text or explanations) usually has a `.py` extension. To run the script, you just type the name after `python`, like:
+
+```{bash example44, echo = TRUE, eval = FALSE}
+python example_script.py
+```
+
+This will execute everything inside `example_script.py` linearly (each command after the one before it). Note that you either have to be working inside the directory where the script is saved (check with `pwd`) or change to the directory before you try to run it. 
+
+You will also want to install Python packages and modules from the command line. You can do this using `pip`, which stands for `P`ip `I`nstalls `P`ackages, or `P`ip `I`nstalls `P`ython, depending on who you ask. `pip` is a program typically included with most Python installations. Once you specify that you would like to use `pip`, you also need to include a command--in this case, `install`. Finally, you need the name of the package. For example, say you want to install the package `numpy`:
+
+```{bash example45, echo = TRUE, eval = FALSE}
+pip install numpy
+```
+
+Please note that if you use Anaconda, `pip` will not work for you! Instead, use `conda`:
+
+```{bash example46, echo = TRUE, eval = FALSE}
+conda install numpy
+```
+
+If you are not sure which to use, try `pip` first--don't be afraid to test it out, the worst that will happen is an error message, and then you can move on to `conda`.
+
+There are also other `pip` commands, like `uninstall`, `inspect`, `list`, `show`, and `check`. Use the [`pip` documentation](https://pip.pypa.io/en/stable/cli/) to answer the following questions?
+
+```{r q5, echo=FALSE}
+question(
+  "Which `pip` command will tell you which Python packages are installed?",
+  answer("`uninstall`",),
+  answer("`inspect`"),
+  answer("`list`", correct = TRUE),
+  answer("`show`"),
+  answer("`check`"), 
+  allow_retry = TRUE
+)
+```
+
+```{r q6, echo=FALSE}
+question(
+  "Which `pip` command will verify that the installed packages have compatible dependencies?",
+  answer("`uninstall`",),
+  answer("`inspect`"),
+  answer("`list`"),
+  answer("`show`"),
+  answer("`check`", correct = TRUE), 
+  allow_retry = TRUE
+)
+```
+
+## Resources
+
+For quick references, check out:
+
+* [Command Line Murder Mystery](https://github.com/veltman/clmystery)
+* [Command Line Cheatsheet](https://github.com/veltman/clmystery/blob/master/cheatsheet.pdf)
+* [`pip` Documentation](https://pip.pypa.io/en/stable/cli/)
+
+In addition, if you find a resource that you think is very helpful, let us know!
+
