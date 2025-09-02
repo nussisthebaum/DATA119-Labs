@@ -1,0 +1,859 @@
+---
+title: "Probability Distributions"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+library(dplyr)
+library(kableExtra)
+library(latex2exp)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 180)
+```
+
+```{python setup_py, include=FALSE}
+
+
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Practicing Probability Distributions", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goals of this lab are:
+
+* To review certain probability distributions. 
+* To calculate probabilities using Python commands. 
+
+## Setup
+
+For this lab we will be using `plotnine`, `pandas`, `numpy`, ... 
+
+```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+```
+
+## Probability Distributions
+
+Often, we are interested in calculating probabilities associated with a **random variable**, where random variables are defined as... . To calculate a probability, we need to know the random variable's **probability distribution**. You may already be familiar with probability distributions defined in some sort of table (for review, see the Introduction to Probability Lab). 
+
+More often, we are interested in looking at the variable and seeing if it fits a known probability distribution. This lab will cover a few specific distributions, like the Bernoulli, Binomial, Geometric, Poisson, and Normal distributions, but there are many, MANY more! For example, view the following chart:
+
+![](/images/Probability Distribution Chart.pdf)
+
+Even though you won't be formally introduced to many of these distributions, the following generally apply:
+
+* Distributions are generally appropriate in certain situations and not appropriate in others. It is your job to pick something that will work well! 
+* Distributions will generally be described by either a **P**robability **M**ass **F**unction, abbreviated as **PMF** (in the case of discrete variables) or a **P**robability **D**istribution **F**unction, abbreviated as **PDF** (in the case of continuous variables). 
+* Distributions will be characterized by parameters, like the mean and standard deviation. Usually, we use Greek letters to indicate that a value is a parameter, like $\mu$ for the mean and $\sigma$ for the standard deviation. 
+* Distributions almost always have an expected value and variance (if not, they are known as degenerate distributions). You can (and probably will!) calculate the expected value and variance by hand, but sometimes there are formulas based on the parameters. You can look these formulas up to use them if the distribution is well known--it is often much easier to use them. 
+
+## Bernoulli Distribution
+
+Bernoulli distributions are appropriate when the random variable in question can take one of two values: 1, with probability $p$, or $0$, with probability $1-p$. Because it takes only values 0 and 1, it is a discrete variable and is described with a probability mass function (PMF). Then, you can write the PMF as follows:
+
+$$$$
+
+Remember that the expected value for a discrete variable is
+
+$$$$
+
+and the variance for a discrete variable is
+
+$$$$
+
+Using these definitions, we can plug the PMF in to derive equations for the expected value and variance of a Bernoulli variable. First, the expected value:
+
+\begin{align*}
+
+\end{align*}
+
+Now, the variance:
+
+\begin{align*}
+
+\end{align*}
+
+Typically, this information is summarized in a table, like the following:
+
+Now, let's practice some Bernoulli probability questions:
+
+```{r q1, echo=FALSE}
+question_numeric(
+  "1. What is $d_{Man}(F, I)$, a.k.a., the Manhattan distance between $F = (3, 6)$ and $I = (6, 7)$?",
+  answer(4, correct = TRUE),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the first secret word: SUPERINTENDENT."
+)
+```
+
+```{python col, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+
+```
+
+```{python col-solution, message = FALSE, warning = FALSE, echo = FALSE}
+epi.columns
+```
+
+```{r col-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+
+Notice that the Bernoulli distribution is not particularly interesting! So why are we covering it? Because it is a useful building block for many other distributions, like the Binomial and Geometric distributions. 
+
+## Binomial Distribution
+
+Binomial distributions are appropriate when the random variable is the number of successes in a sequence of $n$ independent trials, where each trial can only be a success or failure. This type of outcome is often described as binary, and hopefully sounds familiar to you--a single trial can be described as a Bernoulli variable! To check if something can be described with a Binomial distribution, ask yourself:
+
+1. Is the number of trials, $n$, fixed in advance?
+2. Can each trial be described only as a success or failure, and is the probability of success constant throughout all $n$ trials?
+3. Is each trial independent (that is, the outcome of one trial is not affected by the outcome of another)?
+
+If the answer to ALL of these questions is yes, then you have a Binomial random variable.
+
+Because the random variable takes only values 0, 1, 2, 3, etc., it is a discrete variable and is described with a probability mass function (PMF). Deriving the expressions for the expected value and variance can be done by hand, but relies on some mathematical tricks--you can read about [the derivations]() if you are interested, but otherwise, we will just report the relevant equations:
+
+
+
+Now, let's practice some Binomial distribution questions:
+
+Suppose I work at a bakery that sells two types of pies: apple and pumpkin. The pies are boxed in such a way that I must open the box to identify what type of pie is inside. I know the probability that a randomly selected pie is an apple pie is 42\%. Assume any samples are randomly selected, and assume that I am opening randomly selected boxes.
+
+\begin{enumerate}[label=(\alph*)]
+   \item How many boxes should I expect to open before I find an apple pie?
+   \item[] \textcolor{blue}{I am looking for the number of trials required to observe a single success--I should use the geometric distribution.}
+   \item[] $\color{blue}{E(X) = \frac{1}{p} = \frac{1}{0.42}= 2.380952}$
+   \item I have 27 pies. What is the probability that more than 17 are pumpkin? 
+   \item[] \textcolor{blue}{I am looking at a scenario with a fixed number of trials--I should use the binomial distribution.}
+\end{enumerate}
+
+```{r}
+1 - pbinom(17, size = 27, prob = 1 - 0.42)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{2}
+   \item What is the probability that I must open at least 5 boxes to find apple?
+   \item[] \textcolor{blue}{I am looking for the number of trials required to observe a single success--I should use the geometric distribution.}
+\end{enumerate}
+
+```{r}
+1 - pgeom(3, prob = 0.42)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{3}
+   \item I have 32 pies to sell. How many should I expect to be apple?
+   \item[] \textcolor{blue}{I am looking at a scenario with a fixed number of trials--I should use the binomial distribution.}
+   \item[] $\color{blue}{E(X) = np = 32 \times 0.42 = 13.44}$
+   \item Of the 32 pies, what is the probability that less than 9 are pumpkin?
+   \item[] \textcolor{blue}{I am looking at a scenario with a fixed number of trials--I should use the binomial distribution.}
+\end{enumerate}   
+
+```{r}
+pbinom(8, size = 32, prob = 1 - 0.42)
+```
+
+
+## Geometric Distribution
+
+Geometric distributions are appropriate when the random variable is the number of trials until you find a single success. Again, each trial can only be a success or failure, and the sequence of trials must be independent. Note that unlike the Binomial distribution, the number of trials is not fixed--you are waiting until you get a success. 
+
+Because the random variable takes only values 0, 1, 2, 3, etc., it is a discrete variable and is described with a probability mass function (PMF). Deriving the expressions for the expected value and variance can be done by hand, but relies on some mathematical tricks--you can read about [the derivations]() if you are interested, but otherwise, we will just report the relevant equations:
+
+
+
+Now, let's practice some Geometric distribution questions:
+
+A husband and wife both have brown eyes but carry genes that make it possible for their children to have brown eyes (probability 0.75), blue eyes (0.125), or green eyes (0.125).
+
+\textcolor{red}{Think very carefully about what distributions you should be using!}
+
+\begin{enumerate}[label=(\alph*)]
+   \item (1 pt) What is the probability the first blue-eyed child they have is their third child? Assume that the eye colors of the children are independent of each other.
+\end{enumerate} 
+
+```{r}
+dgeom(2, prob = 0.125)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{1}
+   \item (2 pts) On average, how many children would such a pair of parents have before having a blue-eyed child? What is the standard deviation of the number of children they would expect to have until the first blue-eyed child?
+   \item[] \color{blue}{$E(X) = 1/0.125 = 8, SD(X) = \sqrt{\frac{1 - 0.125}{0.125*0.125}} = 7.48$} 
+\end{enumerate} 
+
+Exercise 4.13 introduces a husband and wife with brown eyes who have 0.75 probability of having children with brown eyes, 0.125 probability of having children with blue eyes, and 0.125 probability of having children with green eyes.
+
+\textcolor{red}{Think very carefully about what distributions you should be using!}
+
+\begin{enumerate}[label=(\alph*)]
+   \item (1 pt) What is the probability that their first child will have green eyes and the second will not? 
+   \item[] \color{blue}{$P(Not \; Blue) = 1 - 0.875$}
+\end{enumerate} 
+
+```{r}
+dgeom(1, prob = 0.875)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{1}
+   \item (1 pt) What is the probability that exactly one of their two children will have green eyes?
+   \item[] \color{blue}{$n = 2, \; P(Green) = 0.125$}
+\end{enumerate} 
+
+```{r}
+dbinom(1, size = 2, prob = 0.125)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{2}
+   \item (1 pt) If they have six children, what is the probability that exactly two will have green eyes? 
+   \item[] \color{blue}{$n = 6, \; P(Green) = 0.125$}
+\end{enumerate} 
+
+```{r}
+dbinom(2, size = 6, prob = 0.125)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{3}
+   \item (1 pt) If they have six children, what is the probability that at least one will have green eyes?
+   \item[] \color{blue}{$n = 6, \; P(Green) = 0.125$}
+\end{enumerate} 
+
+```{r}
+1 - dbinom(0, size = 6, prob = 0.125)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{4}
+   \item (1 pt) What is the probability that the first green eyed child will be the $4^{th}$ child?
+   \item[] \color{blue}{$\; P(Green) = 0.125$}
+\end{enumerate}
+
+```{r}
+dgeom(3, prob = 0.125)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{5}
+   \item (1 pt) Would it be considered unusual if only 2 out of their 6 children had brown eyes?
+   \item[] \color{blue}{$n = 6, \; P(Brown) = 0.75$}
+\end{enumerate}
+
+```{r}
+dbinom(2, size = 6, prob = 0.75)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{6}
+   \item[] \textcolor{blue}{Yes, the probability of two children having brown eyes is 3\%, which is fairly unusual. }
+\end{enumerate}
+
+
+## Poisson Distribution
+
+Unlike the Binomial and Geometric distributions, Poisson distributions are characterized by a rate parameter, $\lambda$. Typically, the Poisson distribution describes the number of events in a fixed unit of time or space (the number of spam texts you receive per one day, the number of defects in a square yard of material, etc.)
+
+Because the random variable takes only values 0, 1, 2, 3, etc., it is a discrete variable and is described with a probability mass function (PMF). Deriving the expressions for the expected value and variance can be done by hand, but relies on some mathematical tricks--you can read about [the derivations]() if you are interested, but otherwise, we will just report the relevant equations:
+
+
+
+Now, let's practice some Poisson distribution questions:
+
+A very skilled court stenographer makes one typographical error (typo) per hour on average.
+
+\begin{enumerate}[label=(\alph*)]
+   \item (1 pt) What probability distribution is most appropriate for calculating the probability of a given number of typos this stenographer makes in an hour?
+   \item[] \textcolor{blue}{Since we are counting the number of events in a set period of time, we should use the Poisson distribution.}
+   \item (2 pts) What are the mean and the standard deviation of the number of typos this stenographer makes?
+   \item[] \color{blue}{$\mu = 1, \; \sigma = \sqrt{1}$}
+   \item (1 pt) Would it be considered unusual if this stenographer made 4 typos in a given hour?
+\end{enumerate}
+
+```{r}
+dpois(4, lambda = 1)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{3}
+   \item[] \textcolor{blue}{Yes, the probability of making four typos is 1\%, which is very unusual.}
+   \item (1 pt) Calculate the probability that this stenographer makes at most 2 typos in a given hour.
+\end{enumerate}
+
+```{r}
+ppois(2, lambda = 1)
+```
+
+
+## Normal Distribution
+
+
+
+Now, let's practice some Normal distribution questions:
+
+
+In triathlons, it is common for racers to be placed into age and gender groups. Friends Leo and Mary both completed the Hermosa Beach Triathlon, where Leo competed in the Men, Ages 30 - 34 group while Mary competed in the Women, Ages 25 - 29 group. Leo completed the race in 1:22:28 (4948 seconds), while Mary completed the race in 1:31:53 (5513 seconds). Obviously Leo finished faster, but they are curious about how they did within their respective groups. Can you help them? Here is some information on the performance of their groups:
+
+* The finishing times of the Men, Ages 30 - 34 group has a mean of 4313 seconds with a standard deviation of 583 seconds.
+* The finishing times of the Women, Ages 25 - 29 group has a mean of 5261 seconds with a standard deviation of 807 seconds. 
+* The distributions of finishing times for both groups are approximately Normal. Remember: a better performance corresponds to a faster finish.
+
+\begin{enumerate}[label=(\alph*)]
+   \item (1 pt) Write down the short-hand for these two normal distributions.
+   \item[] \color{blue}{N(4313, 583),} \color{blue}{N(5261, 807)} \color{black}
+   \item (2 pts)  What are the Z-scores for Leo’s and Mary’s finishing times? What do these Z-scores tell you?
+\end{enumerate}   
+
+```{r}
+### Leo
+(4948 - 4313)/583
+## Mary
+(5513 - 5261)/807
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{1}
+   \item[] \textcolor{blue}{Leo's triathlon time was 1.09 standard deviations above the mean for 30-34 year old men. Mary's triathlon time was 0.31 standard deviations above the mean for 25-29 year old women.}
+   \item (1 pt) Did Leo or Mary rank better in their respective groups? Explain your reasoning.
+   \item[] \textcolor{blue}{Mary's Z-score is lower, so she had a faster triathlon time relative to her age and gender group.}
+   \item (1 pt) What percent of the triathletes did Leo finish faster than in his group?
+\end{enumerate} 
+
+```{r}
+1 - pnorm(4948, mean = 4313, sd = 583)
+```
+
+\begin{enumerate}[label=(\alph*)]
+   \setcounter{enumi}{3}
+   \item (1 pt) What percent of the triathletes did Mary finish faster than in her group?
+\end{enumerate} 
+
+```{r}
+1 - pnorm(5513, mean = 5261, sd = 807)
+```
+
+
+## More Practice Questions
+
+When practicing these questions, make sure you are asking yourself what distribution you should be using!
+
+### Cake Batter
+
+The yield of a box of cake mix is normally distributed with a mean of 4.75 cups of batter and a standard deviation of 0.25 cups. 
+
+Write this distribution in mathematical notation. 
+
+```{r cakebatter1, echo=FALSE}
+question("Write this distribution in mathematical notation.",
+  answer("$N(4.75, 0.25)$", correct = TRUE),
+  answer("$N(0.25, 4.75)$"),
+  answer("$N(0, 1)$"),
+  answer("$N(1, 0)$"),
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+Calculate the Z-score for a box of cake mix yielding 5.2 cups of batter. 
+
+```{r cakebatter2, exercise = TRUE}
+
+```
+
+```{r cakebatter2-solution, message = FALSE, warning = FALSE}
+(5.2-4.75)/0.25
+```
+
+```{r cakebatter2-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, (5.2-4.75)/0.25))
+})
+```
+
+```{r cakebatter3, echo=FALSE}
+question("Interpret the Z-score.",
+  answer("The Z-score is 1.8 standard deviations above the mean.", correct = TRUE),
+  answer("The Z-score is 1.8 standard deviations below the mean."),
+  answer("The Z-score is 1.8 standard deviations away from the mean.", message = "There is a more precise answer!"),
+  answer("95% of points should be within 1.8 standard deviations of the mean."),
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+What is the probability that a box of cake mix yields less than 4.15 cups of batter?
+
+```{r cakebatter4, exercise = TRUE}
+pnorm()
+```
+
+```{r cakebatter4-solution, message = FALSE, warning = FALSE}
+pnorm(4.15, mean = 4.75, sd = 0.25)
+```
+
+```{r cakebatter4-check, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pnorm(4.15, mean = 4.75, sd = 0.25)))
+})
+```
+
+What is the probability that the box of cake mix yielded more than 5.2 cups of batter? 
+
+```{r cakebatter5, exercise = TRUE}
+
+```
+
+```{r cakebatter5-solution, warning = FALSE}
+1 - pnorm(5.2, mean = 4.75, sd = 0.25)
+```
+
+```{r cakebatter5-check}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - pnorm(5.2, mean = 4.75, sd = 0.25)))
+})
+```
+
+What is the probability that the box of cake mix yields between 4.25 and 4.85 cups of batter?
+
+```{r cakebatter6, exercise = TRUE}
+
+```
+
+```{r cakebatter6-solution, message = FALSE, warning = FALSE}
+pnorm(4.85, mean = 4.75, sd = 0.25) - pnorm(4.25, mean = 4.75, sd = 0.25)
+```
+
+```{r cakebatter6-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pnorm(4.85, mean = 4.75, sd = 0.25) - pnorm(4.25, mean = 4.75, sd = 0.25)))
+})
+```
+
+### Coffee Drinkers
+
+A 2017 study shows that 64\% of Americans drink coffee every day.
+
+In a group of 14 people, how many are expected to drink coffee every day? \textcolor{red}{Hint: what distribution should you be using to answer this question?}
+
+```{r coffee1, exercise = TRUE}
+
+```
+
+```{r coffee1-solution, message = FALSE, warning = FALSE}
+14*0.64
+```
+
+```{r coffee1-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 14*0.64))
+})
+```
+
+In the same group of 14 Americans, what is the probability that exactly 9 drink coffee every day?
+
+```{r coffee2, exercise = TRUE}
+
+```
+
+```{r coffee2-solution, message = FALSE, warning = FALSE}
+dbinom(9, size = 14, prob = 0.64)
+```
+
+```{r coffee2-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dbinom(9, size = 14, prob = 0.64)))
+})
+```
+
+What is the probability that at least ten drink coffee every day?
+
+```{r coffee3, exercise = TRUE}
+
+```
+
+```{r coffee3-solution, message = FALSE, warning = FALSE}
+1 - pbinom(9, size = 14, prob = 0.64)
+```
+
+```{r coffee3-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - pbinom(9, size = 14, prob = 0.64)))
+})
+```
+
+What is the probability that at most 7 drink coffee every day?
+
+```{r coffee4, exercise = TRUE}
+
+```
+
+```{r coffee4-solution, message = FALSE, warning = FALSE}
+pbinom(7, size = 14, prob = 0.64)
+```
+
+```{r coffee4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pbinom(7, size = 14, prob = 0.64)))
+})
+```
+
+What is the probability that between 3 and 8 drink coffee every day?
+
+```{r coffee5, exercise = TRUE}
+
+```
+
+```{r coffee5-solution, message = FALSE, warning = FALSE}
+pbinom(8, size = 14, prob = 0.64) - pbinom(2, size = 14, prob = 0.64)
+```
+
+```{r coffee5-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pbinom(8, size = 14, prob = 0.64) - pbinom(2, size = 14, prob = 0.64)))
+})
+```
+
+### Dogs in Apartments
+
+In a certain apartment complex, residents are allowed to have dogs. The rate of dogs in the apartment complex is 4 per building. 
+
+```{r dogs1, echo=FALSE, eval = F}
+question("How many dogs should I expect to be living in a building?",
+  answer("4", correct = TRUE),
+  answer("16"),
+  answer("2"),
+  answer("0")
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+What is the probability that a building has at least one dog?
+
+```{r dogs2, exercise = TRUE}
+
+```
+
+```{r dogs2-solution, message = FALSE, warning = FALSE}
+1 - ppois(0, lambda = 4)
+```
+
+```{r dogs2-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - ppois(0, lambda = 4)))
+})
+```
+
+What is the probability that a building has exactly five dogs?
+
+```{r dogs3, exercise = TRUE}
+
+```
+
+```{r dogs3-solution, message = FALSE, warning = FALSE}
+dpois(5, lambda = 4)
+```
+
+```{r dogs3-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dpois(5, lambda = 4)))
+})
+```
+
+What is the probability that a building has no more than 3 dogs?
+
+```{r dogs4, exercise = TRUE}
+
+```
+
+```{r dogs4-solution, message = FALSE, warning = FALSE}
+ppois(3, lambda = 4)
+```
+
+```{r dogs4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, ppois(3, lambda = 4)))
+})
+```
+
+### Freethrows
+
+Assume that a basketball player has a 76.3\% chance of making a free throw. How many free throws should we expect her to shoot before making one? 
+
+```{r freethrows1, exercise = TRUE}
+
+```
+
+```{r freethrows1-solution, message = FALSE, warning = FALSE}
+1/0.763
+```
+
+```{r freethrows1-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1/0.763))
+})
+```
+
+What is the probability that she makes her first free throw on her third shot?
+
+```{r freethrows2, exercise = TRUE}
+
+```
+
+```{r freethrows2-solution, message = FALSE, warning = FALSE}
+dgeom(2, prob = 0.763)
+```
+
+```{r freethrows2-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dgeom(2, prob = 0.763)))
+})
+```
+
+<div id="freethrows2-hint">
+**Hint:** Don't forget! `dgeom()` requires the number of failures, not the total number of trials. 
+</div>
+
+What is the probability that she makes her first free throw some time after her third shot?
+
+```{r freethrows3, exercise = TRUE}
+
+```
+
+```{r freethrows3-solution, message = FALSE, warning = FALSE}
+1 - pgeom(2, prob = 0.763) 
+```
+
+```{r freethrows3-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - pgeom(2, prob = 0.763)))
+})
+```
+
+What is the probability that it takes her no more than two shots to make her first free throw?
+
+```{r freethrows4, exercise = TRUE}
+
+```
+
+```{r freethrows4-solution, message = FALSE, warning = FALSE}
+pgeom(1, prob = 0.763)
+```
+
+```{r freethrows4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pgeom(1, prob = 0.763)))
+})
+```
+
+### Bookworms
+
+One in four Americans did not read a single book last year. 
+
+What is the probability, $p$, that a randomly chosen American did not read a single book last year?
+
+```{r books1, exercise = TRUE}
+
+```
+
+```{r books1-solution, message = FALSE, warning = FALSE}
+1/4
+```
+
+```{r books1-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1/4))
+})
+```
+
+In a group of 24 Americans, how many are expected to have not read a single book last year?
+
+```{r books2, exercise = TRUE}
+
+```
+
+```{r books2-solution, message = FALSE, warning = FALSE}
+24*0.25
+```
+
+```{r books2-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 24*0.25))
+})
+```
+
+When meeting a group of new people (all Americans), what is the probability that I meet the first person who did not read a single book last year during my fifth meeting?
+
+```{r books3, exercise = TRUE}
+
+```
+
+```{r books3-solution, message = FALSE, warning = FALSE}
+dgeom(4, prob = 0.25)
+```
+
+```{r books3-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dgeom(4, prob = 0.25)))
+})
+```
+
+How many Americans should I expect to meet before meeting one who did not read a single book last year?
+
+```{r books4, exercise = TRUE}
+
+```
+
+```{r books4-solution, message = FALSE, warning = FALSE}
+1/0.25
+```
+
+```{r books4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1/0.25))
+})
+```
+
+In a group of 10 people, what is the probability that exactly three did not read a single book last year?
+
+```{r books5, exercise = TRUE}
+
+```
+
+```{r books5-solution, message = FALSE, warning = FALSE}
+dbinom(3, size = 10, prob = 0.25)
+```
+
+```{r books5-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dbinom(3, size = 10, prob = 0.25)))
+})
+```
+
+In a group of 19 people, what is the probability that no more than 3 people did not read a single book last year?
+
+```{r books6, exercise = TRUE}
+
+```
+
+```{r books6-solution, message = FALSE, warning = FALSE}
+pbinom(3, size = 19, prob = 0.25)
+```
+
+```{r books6-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pbinom(3, size = 19, prob = 0.25)))
+})
+```
+
+### San Antonio Spurs
+
+In the 2019-2020 NBA season prior to the break, the San Antonio Spurs scored an average of 28.25 points per quarter (4 quarters of 12 minutes each per one game). Let $S$ be a random variable describing the number of points scored in a quarter.
+
+```{r spurs1, echo=FALSE, eval = F}
+question("What distribution is most appropriate to use to calculate the probability of scoring more than 32 points in a quarter?",
+  answer("Poisson", correct = TRUE),
+  answer("Binomial"),
+  answer("Geometric"),
+  answer("Bernoulli"), 
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+What are the expected value and the standard deviation of this distribution? Save them as `exp_val` and `sd`.
+
+```{r spurs2, exercise = TRUE}
+exp_val <- 
+sd <-
+```
+
+```{r spurs2-solution, message = FALSE, warning = FALSE}
+exp_val <- 28.25
+sd <- sqrt(28.25)
+```
+
+```{r spurs2-check, message = FALSE, warning = FALSE}
+grade_code()
+```
+
+What is the probability that the San Antonio Spurs scored more than 32 points in a quarter?
+
+```{r spurs3, exercise = TRUE}
+
+```
+
+```{r spurs3-solution, message = FALSE, warning = FALSE}
+1 - ppois(32, lambda = 28.25)
+```
+
+```{r spurs3-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - ppois(32, lambda = 28.25)))
+})
+```
+
+What is the probability that the San Antonio Spurs score between 24 and 28 points in a quarter (including both 24 and 28)?
+
+```{r spurs4, exercise = TRUE}
+
+```
+
+```{r spurs4-solution, message = FALSE, warning = FALSE}
+sum(dpois(24:28, lambda = 28.25))
+```
+
+```{r spurs4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, sum(dpois(24:28, lambda = 28.25))))
+})
+```
+
+
+
