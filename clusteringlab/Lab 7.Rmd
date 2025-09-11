@@ -668,7 +668,7 @@ Obviously, `n_clusters` is the number of clusters. `n_init` is the number of tim
 <!-- epi = epi.iloc[:, 6:680] -->
 <!-- ``` -->
 
-```{python clust1, exercise = TRUE, message = FALSE}
+```{python clust1, exercise = TRUE, message = FALSE, exercise.timelimit = 120}
 from sklearn.cluster import KMeans
 
 kmeans1 = KMeans(n_clusters = 12, n_init = 10, random_state = 1145)
