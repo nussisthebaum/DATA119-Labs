@@ -100,26 +100,6 @@ beach = pd.read_csv("./data/beach_data.csv", index_col = 0)
 beach.head()
 ```
 
-
-```{python main-setup, exercise=FALSE, include=FALSE, message=FALSE, exercise.setup="packages"}
-beach_year_avg = beach.drop(columns=['Month', 'Hour', 'Day of Year']).groupby("Station Name").mean().reset_index()
-stations = beach_year_avg['Station Name']
-wind_avg = beach_year_avg['Wind Speed']
-max_wind = beach[beach['Maximum Wind Speed'] < 100]['Maximum Wind Speed'] 
-# dealing with weird outliers
-hourly_wind = beach[beach['Maximum Wind Speed'] < 100]['Wind Speed']
-
-beach_day_max = beach[beach['Station Name'] == 'Oak Street'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
-
-day = beach_day_max['Day of Year']
-daily_temp = beach_day_max['Air Temperature']
-
-beach_day_max_foster = beach[beach['Station Name'] == 'Foster'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
-
-daily_temp_oak = beach_day_max['Air Temperature']
-daily_temp_foster = beach_day_max_foster['Air Temperature]
-```
-
 ## Graphing with Matplotlib
 
 Below you will be walked through the key components of Matplotlib. As you explore it may be useful to check out [Matplotlib's quick start guide](https://matplotlib.org/stable/users/explain/quick_start.html) or other parts of it's documentation for more details.
@@ -206,6 +186,7 @@ question("2. As you increase the number of bins what is the impact on the histog
          answer("There is less blank space"),
          answer("There is more blank space", correct=TRUE), 
         allow_retry = TRUE,
+        post_message = "Congratulations! You have found the first secret word: BINS.",
   random_answer_order = TRUE)
 ```
 3. Make your own count histogram with 10 bins using the hourly maximum wind readings which have been stored for you in the variable `max_wind`.
@@ -303,7 +284,7 @@ After we've made a figure or one has been generated automatically through making
 
 6. Add the title `Average Wind by Beach in 2024`, and the y-axis label as `Avg Wind` and the x-axis label as `Beach Name` to the bar chart we made earlier.
 
-```{python beach-avg-wind-bar-labeled, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="main-setup"}
+```{python beach-avg-wind-bar-labeled, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-avg-setup"}
 ...
 ...
 ...
@@ -502,7 +483,7 @@ As we can see from this there is a clear error with the readings being done at F
 
 So far we have used `Matplotlib`, `Pandas`, and `Seaborn` to create graphs with varying degrees of control over the image being created. You should hopefully be familiar with the different methods used to create **bar charts**, **line charts**, **scatter plots**, and **histograms** as well as basic customization. Now we are going to shift towards utilizing the grammar of graphics and packages like `altair` and `plotnine` to create graphs. 
 
-Below we'll reproduce some of the graphs so you can get some exposure to how to so using the grammar of graphics. Before we do that though let's discuss what makes the **grammar of graphics** approach different.
+Below we'll reproduce some of the graphs so you can get some exposure to how to do so using the grammar of graphics. Before we do that though let's discuss what makes the **grammar of graphics** approach different.
 
 The key idea behind the grammar of graphics is that every single plot can be broken down into the **dataset**, the **mapping** between features of the dataset and visuals on the graph, and the **geometry** used to encode the observations in your graph. The grammar of graphics also has some nuance surrounding the coordinates and scales of the plot that we unfortunately can't address here. If you're interested check out Leland Wilkinson's book the *Grammar of Graphics*.
 
@@ -523,5 +504,68 @@ labs(title="Average Wind by Beach")
 ```
 Finally, as you can see above we used `labs` to add a title and the `fill` and `color` arguments to adjust the appearance of the graph. Feel free to experiment with those arguments to get the graph looking how you prefer. 
 
-If you're really into colors check out this [list of color options](https://matplotlib.org/stable/gallery/color/named_colors.html) from Matplotlib and see if you can go back and change colors in matplotlib and seaborn as well! 
+If you're really into colors check out this [list of color options](https://matplotlib.org/stable/gallery/color/named_colors.html) from Matplotlib and see if you can go back and change colors in matplotlibprevious sections as well!
 
+Similarly we can also make a histogram using plotnine. Here's an example of the syntax below to make an overlaid histogram using a filtered version of the beach dataset once again.
+
+```{python beach-overlaid-hist-p9, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-max-wind-hist-pandas-setup"}
+(
+    p9.ggplot(beach[beach['Maximum Wind Speed'] < 100], p9.aes(x='Maximum Wind Speed', fill='Station Name')) +
+    p9.geom_histogram(position='identity', alpha=0.5, color = 'black', bins=10) +
+    p9.labs(title='Distribution of Max Wind by Beach', x='Max Wind', y='Count')
+).show()
+```
+Just like before it follows the same formula starting with a call to ggplot and an assignment of the aes, then a creation of a geom, and then a addition of titles with labs. This consistent format regardless of graph type is generally considered an advantage of using grammar of graphics type packages.
+
+Above to get the overlaid histogram we set the fill argument to a categorical variable. The graphs being overlaid rather than side by side is determined by the `position` [argument](https://plotnine.org/reference/#positions). Try experimenting with some of these arguments and see how the graph changes. Alternatively try doing the same graph but with two calls to `geom_histogram`.
+
+Finally, here we'll show you how to make a scatter plot in plotnine by reproducing the earlier overlaid scatter plot of wind speed.
+
+```{python beach-scatter-overlaid-p9, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
+(
+    p9.ggplot(beach[beach['Wind Speed'] < 100], p9.aes(x="Air Temperature", y="Wind Speed", shape="Station Name"))
+    + p9.geom_point()
+).show()
+```
+
+
+### repeat with altair
+
+## Choosing the Right Visualization
+
+Now that we have conducted extensive practice creating different graphs it's important that we practice when to use each one! Using the wnba data loaded in below from the 2024 season answer the following questions and practice making more graphs.
+
+```{python wnba-setup, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
+wnba = pd.read_csv('data/wnba_data.csv')
+wnba.head()
+```
+
+```{r outlier-rebounds, echo=FALSE}
+question("13. Which graph would be best for identifying if there are any players who have an abnormally high number or rebounds per game",
+         answer("Bar Chart", message = "While a Bar Chart would technically work Bar Charts are better for categorical data and this data is numerical."),
+         answer("Line Chart"),
+         answer("Histogram", correct=TRUE),
+         answer("Overlaid Histogram"),
+         answer("Scatterplot"), 
+        allow_retry = TRUE,
+        post_message = "Congratulations! You have found the 2nd secret word: OUTLIERS",
+  random_answer_order = TRUE)
+```
+Use this cell to create the correct graph using whatever graphing library you prefer.
+```{python wnba-histogram, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="wnba-setup"}
+```
+
+```{r threePointPercentage, echo=FALSE}
+question("13. Which graph would be best for identifying if there is a relationship between Free Throw Percentage (FT%) any Three Point Percentage (3P%)",
+         answer("Bar Chart", message = "While a Bar Chart would technically work Bar Charts are better for categorical data and this data is numerical."),
+         answer("Line Chart"),
+         answer("Histogram"),
+         answer("Overlaid Histogram"),
+         answer("Scatterplot", correct=TRUE), 
+        allow_retry = TRUE,
+        post_message = "Congratulations! You have found the 3nd secret word: MONEY",
+  random_answer_order = TRUE)
+```
+
+```{python wnba-scatterplot, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="wnba-setup"}
+```
