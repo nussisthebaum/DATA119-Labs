@@ -1,0 +1,81 @@
+---
+title: "DATA119 - Randomness and Simulation"
+output: 
+  learnr::tutorial:
+    css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+#reticulate::py_install(c('numpy', 'pandas'))
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Randomness and Simulation", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goals of this lab are:
+
+* To learn how to use `np.random.choice` to select random values in python
+* To practice using simulation to estimate probabilities
+* To practice using simulations to improve decision making
+
+## Randomness
+
+intro here
+
+### Overview
+
+brief overview of lab and first setup chunk
+
+### Introduction to `np.random.choice`
+
+description then some practice exercises. similar to textbook
+
+## Simulation
+
+make an example 
+
+do $1 milkshake exercise 
+
+## Making the Best Lineup
+
+take in stats from 2024 season for the Chicago White Sox
+simulate different lineup combinations (mention caveats)
