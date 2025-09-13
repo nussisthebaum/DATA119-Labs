@@ -563,7 +563,7 @@ question("13. Which graph would be best for identifying if there is a relationsh
          answer("Overlaid Histogram"),
          answer("Scatterplot", correct=TRUE), 
         allow_retry = TRUE,
-        post_message = "Congratulations! You have found the 3nd secret word: MONEY",
+        post_message = "Congratulations! You have found the 3rd secret word: MONEY",
   random_answer_order = TRUE)
 ```
 
