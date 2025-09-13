@@ -58,7 +58,7 @@ The goals of this lab are:
 * To understand the basic theory underpinning the field of data visualization.
 * To learn which visualizations are best suited to which use cases
 * To practice using matplotlib to make visualizations
-* To get exposure to seaborn, plotnine, plotly, and altair as alternative graphing packages to matplotlib
+* To get exposure to seaborn, plotnine, and altair as alternative graphing packages to matplotlib
 
 ## Visualization Theory
 
