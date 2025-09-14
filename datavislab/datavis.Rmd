@@ -87,7 +87,7 @@ import numpy as np
 import pandas as pd
 # graphing
 import matplotlib.pyplot as plt
-import altair
+import altair as alt
 import seaborn as sns
 import plotnine as p9
 
@@ -529,21 +529,34 @@ Finally, here we'll show you how to make a scatter plot in plotnine by reproduci
 ```
 
 
-### repeat with altair
+<!-- ```{python beach-scatter-overlaid-altair, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"} -->
+<!-- alt.Chart(beach[beach['Wind Speed'] < 100]).mark_point().encode( -->
+<!--     x='Air Temperature', -->
+<!--     y='Wind Speed', -->
+<!--     shape='Station Name' -->
+<!-- ).show() -->
+<!-- ``` -->
+<!-- currently not working due to too many points for altair -->
+<!-- ### repeat with altair -->
 
 ## Choosing the Right Visualization
 
-Now that we have conducted extensive practice creating different graphs it's important that we practice when to use each one! Using the wnba data loaded in below from the 2024 season answer the following questions and practice making more graphs.
+Now that we have conducted extensive practice creating different graphs it's important that we practice when to use each one! Using the wnba data loaded in below from the 2024 season answer the following questions and practice making more graphs. 
 
 ```{python wnba-setup, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
 wnba = pd.read_csv('data/wnba_data.csv')
 wnba.head()
 ```
 
+Like any good data science project make sure to explore the data first a little before attempting to answer the below questions. You can use the box below!
+```{python wnba-explore, exercise=TRUE, message= FALSE, exercise.eval=FALSE, exercise.setup='wnba-setup'}
+
+```
+
 ```{r outlier-rebounds, echo=FALSE}
-question("13. Which graph would be best for identifying if there are any players who have an abnormally high number or rebounds per game",
+question("13. Which graph would be best for identifying if there are any players who have an abnormally high number of rebounds per game?",
          answer("Bar Chart", message = "While a Bar Chart would technically work Bar Charts are better for categorical data and this data is numerical."),
-         answer("Line Chart"),
+         answer("Line Chart", message = "Line Charts are better for temporal data"),
          answer("Histogram", correct=TRUE),
          answer("Overlaid Histogram"),
          answer("Scatterplot"), 
@@ -553,11 +566,12 @@ question("13. Which graph would be best for identifying if there are any players
 ```
 Use this cell to create the correct graph using whatever graphing library you prefer.
 ```{python wnba-histogram, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="wnba-setup"}
+
 ```
 
 ```{r threePointPercentage, echo=FALSE}
-question("13. Which graph would be best for identifying if there is a relationship between Free Throw Percentage (FT%) any Three Point Percentage (3P%)",
-         answer("Bar Chart", message = "While a Bar Chart would technically work Bar Charts are better for categorical data and this data is numerical."),
+question("14. Which graph would be best for identifying if there is a relationship between Free Throw Percentage (FT%) and Three Point Percentage (3P%)?",
+         answer("Bar Chart"),
          answer("Line Chart"),
          answer("Histogram"),
          answer("Overlaid Histogram"),
@@ -566,6 +580,22 @@ question("13. Which graph would be best for identifying if there is a relationsh
         post_message = "Congratulations! You have found the 3rd secret word: MONEY",
   random_answer_order = TRUE)
 ```
-
+Use this cell to create the correct graph using whatever graphing library you prefer.
 ```{python wnba-scatterplot, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="wnba-setup"}
+```
+
+```{r roty, echo=FALSE}
+question("15. Which graph would be best for exploring the cumulative total number of points, rebounds, and assists between WNBA stars Caitlin Clark and Angel Reese over the course of the season?",
+         answer("Bar Chart"),
+         answer("Line Chart", correct=TRUE),
+         answer("Histogram"),
+         answer("Overlaid Histogram"),
+         answer("Scatterplot"), 
+        allow_retry = TRUE,
+        post_message = "Congratulations! You have found the 4th secret word: ROTY",
+  random_answer_order = TRUE)
+```
+Use this cell to create the correct graph using whatever graphing library you prefer.
+```{python wnba-line, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="wnba-setup"}
+
 ```
