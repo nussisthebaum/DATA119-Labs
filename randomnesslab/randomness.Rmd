@@ -17,7 +17,7 @@ library(reticulate)
 #reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
-#reticulate::py_install(c('numpy', 'pandas'))
+# reticulate::py_install(c('numpy', 'pandas'))
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
@@ -59,13 +59,139 @@ The goals of this lab are:
 
 ## Randomness
 
-intro here
+Randomness plays a key role in much of data science. In fact, the probabilistic assumptions that underpin many of the tests and models you'll learn about in this class rely upon our ability as data scientists to inject randomness into our work. 
+
+For instance, imagine if we were trying to estimate the average length of the grass on the quad (hopefully you never have to do this but imagine you did). To get a perfect answer (the population parameter) you could measure every piece of grass but it would be much simpler to take an average from a representative sample (the sample statistic). In order to take a good sample you might randomly choose 100 pieces from around the quad to measure and the randomness would be used to ensure it was likely representative. This is just one toy example of why randomness is important.
+
+Beyond the above example though randomness plays a large role throughout data science from impacting our ability to measure the significance and variability of results to ensuring that we're fair and as unbiased as possible in our data collection processes.
 
 ### Overview
 
-brief overview of lab and first setup chunk
+In the remainder of the lab we'll start by introducing `np.random.choice` and `df.sample` which are two key ways in which we invoke randomness in python though there are many more. Next we'll get some practice using the power of randomness for estimating probabilities. Finally, we'll use randomness to simulate the results of a hypothetical line up in baseball to see how simulation could be used in practice.
 
-### Introduction to `np.random.choice`
+### Setup
+Before continuing we've done the imports for you here of `numpy` and `pandas`
+```{python setup_py, exercise=FALSE, message = FALSE, eval=TRUE, include=TRUE, context='setup'}
+# data manipulation
+import numpy as np
+import pandas as pd
+```
+
+## Introduction to `np.random.choice`
+
+The `numpy` library in python has a module called `random` which can be used to (pseudo) generate random numbers or samples. Within the [random module](https://numpy.org/doc/stable/reference/random/generator.html) it has many different ways to sample randomly but in this lab we'll focus on `np.random.choice`.
+
+`np.random.choice(a, size=None, replace=True, p=None, **args)` randomly samples **size** elements from **a** or from the range **(0, a]** if a is an int. It samples with replacement when **replace** is True and the **p** argument can be used for probabilistic samples. 
+
+To get you started thinking about the behavior of `np.random.choice` we have a couple questions for you. If you're uncertain I'd reccommend just trying `np.random.choice` with different arguments in the cell below to get a feel for what it's doing.
+
+```{python random-practice, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+```
+
+
+```{r q1, echo=FALSE}
+question("1. What are possible samples from executing the code np.random.choice(5, 2)?",
+         answer("Error", message = "The first argument can also be an interger"),
+         answer("3", message = "The sample size is two so there will always be at least two numbers outputted"),
+         answer("np.array([1, 6])", message="6 is outside the range of possible answers!"),
+         answer("np.array([2, 3])", correct=TRUE),
+        allow_retry = TRUE,
+        post_message = "Congratulations! You have found the 1st secret word: RANDOM",
+  random_answer_order = TRUE)
+```
+
+When using `np.random.choice` there may often be multiple ways to achieve the same goal. Which approach is right is generally left up to you; however, throughout this lab we might ask you to do something a certain way to gain experience.
+
+```{r q2, echo=FALSE}
+question("2. Which of the following code chunks when executed would simulate flipping two random fair coins and returning the number of heads? Select all that apply.",
+         answer("np.sum(np.random.choice(['H', 'T'], size=2)=='H')", correct=TRUE),
+         answer("np.random.choice(['H', 'T'], size=1) + np.random.choice(['H', 'T'], size=1)",message="While the idea is good we need to convert the result of the sample to a boolean in order to get the sum of the number of heads", correct=FALSE),
+         answer("np.sum(np.random.choice(['H', 'T'], size=2, replace=False)=='H')", message="This would always give exactly 1 head!", correct=FALSE),
+         answer("np.sum(np.random.choice([0, 1], size=2))", correct=TRUE),
+         answer("np.sum(np.random.choice([0, 1, 0, 1], size=2))", correct=TRUE),
+        allow_retry = TRUE,
+        post_message = "Congratulations! You have found the 2nd secret word: OPTIONS",
+  random_answer_order = TRUE)
+```
+
+```{r q2_hint, context="server"}
+q2_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$q2$correct,
+  valueFunc = function() get_tutorial_state()$q2$correct
+)
+
+q2_hint_visible <- reactiveVal(FALSE)
+
+output$q2_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q2_correct_poll())) {
+    tagList(
+      p("Discuss with a partner or on edStem about at least one of the following prompts?"),
+      actionButton("q2_show_hint_btn", "💡 Show discussion"),
+      tags$div(
+        id = "q2_hint_box",
+        style = paste(
+          if (!q2_hint_visible()) "display:none;" else "",
+          "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+        ),
+        "1. Why do we need to convert the letter 'H' to a boolean before summing the result? Why does summing booleans work for counting the number of heads?
+        
+         2. One approach sampled from a list of two numbers [0, 1] and the other from a list of four numbers [0, 1, 0, 1]. Why are these two approaches essentially equivalent?
+         
+        3. What are the implications from sampling the numbers 0 and 1 vs. 'H' and 'T' or another option like 'Heads' and 'Tails'? When might we prefer one approach to another?")
+     )
+  } else {
+    tagList(
+      p("Answer Question 2 correctly to reveal a discussion on approaches to using `np.random.choice`")
+    )
+  }
+})
+
+observeEvent(input$q2_show_hint_btn, {
+  shinyjs::toggle(id = "q2_hint_box", anim = TRUE, time = 0.2)
+  q2_hint_visible(!q2_hint_visible())
+  updateActionButton(
+    session, "q2_show_hint_btn",
+    label = if (q2_hint_visible()) "🙈 Hide discussion" else "💡 Show discussion"
+  )
+})
+```
+
+```{r q2_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("q2_plot_output")
+```
+
+
+
+Now that you've given some thought to how `np.random.choice` works here are some more examples and exercises to practice with it.
+
+As mentioned above we can use the **p** argument when we want to sample probalistically rather than every possible item in the sample having the same probability (a uniform sample). Here is one example of sampling a weighted coin.
+
+```{python weighted-coin, exercise=TRUE, setup='setup_py'}
+np.random.choice(['Heads', 'Tails'],size=5, p=[0.25, 0.75])
+```
+
+3. Use `np.random.choice` to randomly roll a die 6 times. The die should have even weight given to rolling a 1, 2, 3, or 4, and 25% chance each of rolling a 5 or 6. Use only 1 line.
+```{python unfair-die, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{python unfair-die-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.random.choice([1, 2, 3, 4, 5, 6], size=6, p=[0.125, 0.125, 0.125, 0.125, 0.25, 0.25])
+```
+```{python unfair-die-hint-1,  message = FALSE, warning = FALSE, echo = FALSE}
+Make sure that all the probabilities in the list given to p sum to 1. And there should be 1 probability for each number on the die.
+```
+
+```{python unfair-die-hint-2,  message = FALSE, warning = FALSE, echo = FALSE}
+Remember we don't want to roll a zero so we have to pass in the entire list of numbers. If you're using np.arange that would also work but to pass the test just give it as a list.
+```
+
+```{r unfair-die-code-check, message = TRUE, warning = FALSE}
+grade_this_code(
+  correct = "That's an unfair die!",
+)
+```
 
 description then some practice exercises. similar to textbook
 
