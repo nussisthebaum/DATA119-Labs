@@ -2,6 +2,7 @@
 title: "DATA119 - Randomness and Simulation"
 output: 
   learnr::tutorial:
+    progressive: true
     css: css/custom-styles.css
 runtime: shiny_prerendered
 ---
@@ -57,7 +58,7 @@ The goals of this lab are:
 * To practice using simulation to estimate probabilities
 * To practice using simulations to improve decision making
 
-## Randomness
+## Randomness {data-progressive=FALSE}
 
 Randomness plays a key role in much of data science. In fact, the probabilistic assumptions that underpin many of the tests and models you'll learn about in this class rely upon our ability as data scientists to inject randomness into our work. 
 
@@ -65,13 +66,13 @@ For instance, imagine if we were trying to estimate the average length of the gr
 
 Beyond the above example though randomness plays a large role throughout data science from impacting our ability to measure the significance and variability of results to ensuring that we're fair and as unbiased as possible in our data collection processes.
 
-### Overview
+### Overview  
 
 In the remainder of the lab we'll start by introducing `np.random.choice` and `df.sample` which are two key ways in which we invoke randomness in python though there are many more. Next we'll get some practice using the power of randomness for estimating probabilities. Finally, we'll use randomness to simulate the results of a hypothetical line up in baseball to see how simulation could be used in practice.
 
-### Setup
+### Setup {data-progressive=FALSE}
 Before continuing we've done the imports for you here of `numpy` and `pandas`
-```{python setup_py, exercise=FALSE, message = FALSE, eval=TRUE, include=TRUE, context='setup'}
+```{python setup_py, exercise=TRUE, message = FALSE, echo=TRUE, exercise.eval=TRUE, context='setup'}
 # data manipulation
 import numpy as np
 import pandas as pd
@@ -83,18 +84,18 @@ The `numpy` library in python has a module called `random` which can be used to 
 
 `np.random.choice(a, size=None, replace=True, p=None, **args)` randomly samples **size** elements from **a** or from the range **(0, a]** if a is an int. It samples with replacement when **replace** is True and the **p** argument can be used for probabilistic samples. 
 
-To get you started thinking about the behavior of `np.random.choice` we have a couple questions for you. If you're uncertain I'd reccommend just trying `np.random.choice` with different arguments in the cell below to get a feel for what it's doing.
+To get you started thinking about the behavior of `np.random.choice` we have a couple questions for you. If you're uncertain I'd recommend just trying `np.random.choice` with different arguments in the cell below to get a feel for what it's doing.
 
 ```{python random-practice, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 ```
 
 
 ```{r q1, echo=FALSE}
-question("1. What are possible samples from executing the code np.random.choice(5, 2)?",
-         answer("Error", message = "The first argument can also be an interger"),
-         answer("3", message = "The sample size is two so there will always be at least two numbers outputted"),
-         answer("np.array([1, 6])", message="6 is outside the range of possible answers!"),
-         answer("np.array([2, 3])", correct=TRUE),
+question("1. What are possible samples from executing the code `np.random.choice(5, 2)`?",
+         answer("`Error`", message = "The first argument can also be an interger"),
+         answer("`3`", message = "The sample size is two so there will always be at least two numbers outputted"),
+         answer("`np.array([1, 6])`", message="6 is outside the range of possible answers!"),
+         answer("`np.array([2, 3])`", correct=TRUE),
         allow_retry = TRUE,
         post_message = "Congratulations! You have found the 1st secret word: RANDOM",
   random_answer_order = TRUE)
@@ -104,11 +105,11 @@ When using `np.random.choice` there may often be multiple ways to achieve the sa
 
 ```{r q2, echo=FALSE}
 question("2. Which of the following code chunks when executed would simulate flipping two random fair coins and returning the number of heads? Select all that apply.",
-         answer("np.sum(np.random.choice(['H', 'T'], size=2)=='H')", correct=TRUE),
-         answer("np.random.choice(['H', 'T'], size=1) + np.random.choice(['H', 'T'], size=1)",message="While the idea is good we need to convert the result of the sample to a boolean in order to get the sum of the number of heads", correct=FALSE),
-         answer("np.sum(np.random.choice(['H', 'T'], size=2, replace=False)=='H')", message="This would always give exactly 1 head!", correct=FALSE),
-         answer("np.sum(np.random.choice([0, 1], size=2))", correct=TRUE),
-         answer("np.sum(np.random.choice([0, 1, 0, 1], size=2))", correct=TRUE),
+         answer("`np.sum(np.random.choice(['H', 'T'], size=2)=='H')`", correct=TRUE),
+         answer("`np.random.choice(['H', 'T'], size=1) + np.random.choice(['H', 'T'], size=1)`",message="While the idea is good we need to convert the result of the sample to a boolean in order to get the sum of the number of heads", correct=FALSE),
+         answer("`np.sum(np.random.choice(['H', 'T'], size=2, replace=False)=='H')`", message="This would always give exactly 1 head!", correct=FALSE),
+         answer("`np.sum(np.random.choice([0, 1], size=2))`", correct=TRUE),
+         answer("`np.sum(np.random.choice([0, 1, 0, 1], size=2))`", correct=TRUE),
         allow_retry = TRUE,
         post_message = "Congratulations! You have found the 2nd secret word: OPTIONS",
   random_answer_order = TRUE)
@@ -161,17 +162,26 @@ observeEvent(input$q2_show_hint_btn, {
 uiOutput("q2_plot_output")
 ```
 
+```{r q3, echo=FALSE}
+question("3. True or False: The following block of code will generate a 12 numbers between 0 and 10. `np.random.choice(10, size=12, replace=False)`",
+         answer("False", correct=TRUE),
+         answer("True",message="If we're sampling without replacement our sample space must be larger than our sample size otherwise our code will error!", correct=FALSE),
+        allow_retry = TRUE,
+        post_message = "Great Job!",
+  random_answer_order = TRUE)
+```
+
 
 
 Now that you've given some thought to how `np.random.choice` works here are some more examples and exercises to practice with it.
 
-As mentioned above we can use the **p** argument when we want to sample probalistically rather than every possible item in the sample having the same probability (a uniform sample). Here is one example of sampling a weighted coin.
+As mentioned above we can use the **p** argument when we want to sample probabilistically rather than every possible item in the sample having the same probability (a uniform sample). Here is one example of sampling a weighted coin.
 
 ```{python weighted-coin, exercise=TRUE, setup='setup_py'}
 np.random.choice(['Heads', 'Tails'],size=5, p=[0.25, 0.75])
 ```
 
-3. Use `np.random.choice` to randomly roll a die 6 times. The die should have even weight given to rolling a 1, 2, 3, or 4, and 25% chance each of rolling a 5 or 6. Use only 1 line.
+4. Use `np.random.choice` to randomly roll a die 6 times. The die should have even weight given to rolling a 1, 2, 3, or 4, and 25% chance each of rolling a 5 or 6. Use only 1 line.
 ```{python unfair-die, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
@@ -193,9 +203,67 @@ grade_this_code(
 )
 ```
 
-description then some practice exercises. similar to textbook
-
 ## Simulation
+
+The ability to draw random samples may be enough for some use cases. However, sometimes we may want to keep track of many random samples. For instance, if we wanted to know the probability of getting between 45 and 55 heads out of 100 tosses of a fair coin we could do the calculation; however, we could also use python to toss 100 coins 1000 times each and count the number out of 1000 where of the 100 flips in a single round 45 to 55 ended up heads. Whatever that proportion ends up being would be the estimated probability and as long as we do enough simulations should be a very accurate approximation of the true probability. 
+
+Before we can actually conduct estimate the probability of getting between 45 and 55 heads out of 100 using simulation lets break down what are the necessary components. First, if we want to know the probability of getting between 45 and 55 heads out of 100 flips we need a way to simulate 100 flips. Second, we need a way to check if between 45 and 55 of those flips were heads. Third, we need a way to keep track of each round of simulation. And finally, we need a way to repeat our simulation of 100 flips enough times for our estimate to be accurate. Once we've done all of the above we'll able to easily summarize our answer.
+
+In the following questions we'll build up all the code we need to run this simulation. 
+
+### One Simulation
+
+5. Write code to simulate 100 flips of a fair coin using the `coin` defined for you.
+
+```{python q5, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+coin = ['Heads', 'Tails']
+# your code goes here
+```
+
+
+```{python q5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+coin = ['Heads', 'Tails']
+np.random.choice(coin, size=100)
+```
+
+```{r q5-code-check, message = TRUE, warning = FALSE}
+grade_this_code(
+  correct = "That's an unfair die!",
+)
+```
+
+### One Simulation: Count the Heads
+
+Once we have 100 randomly generated coin flips we need a way to keep track of whether or not that round resulted in a "success" of 45-55 Heads or not. 
+
+6. Fill in the following code to get the result of a single round.
+
+```{python q6, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+coin = ['Heads', 'Tails']
+one_simulation = np.random.choice(coin, 100)
+total_heads_one_simulation = ...
+result = ...
+print(result)
+```
+
+
+```{python q6-solution, message = FALSE, warning = FALSE, echo = FALSE}
+coin = ['Heads', 'Tails']
+one_simulation = np.random.choice(coin, 100)
+total_heads_one_simulation = sum(one_simulation)
+result = 45 <= total_heads_one_simulation <= 55
+print(result)
+```
+
+```{r q6-hint,  message = FALSE, warning = FALSE, echo = FALSE}
+While you could use multiple condtions and an & here, try to use the fact that a <= x <= b is a valid way to check if a is in the range a to b in python.
+```
+
+```{r q6-code-check, message = TRUE, warning = FALSE}
+grade_this_code(
+  correct = "That's a lot of heads, maybe!",
+)
+```
 
 make an example 
 
