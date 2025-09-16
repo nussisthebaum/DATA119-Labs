@@ -211,7 +211,7 @@ Before we can actually conduct estimate the probability of getting between 45 an
 
 In the following questions we'll build up all the code we need to run this simulation. 
 
-### One Simulation
+### One Simulation: Flip the Coins
 
 5. Write code to simulate 100 flips of a fair coin using the `coin` defined for you.
 
@@ -250,7 +250,7 @@ print(result)
 ```{python q6-solution, message = FALSE, warning = FALSE, echo = FALSE}
 coin = ['Heads', 'Tails']
 one_simulation = np.random.choice(coin, 100)
-total_heads_one_simulation = sum(one_simulation)
+total_heads_one_simulation = sum(one_simulation == 'Heads')
 result = 45 <= total_heads_one_simulation <= 55
 print(result)
 ```
@@ -264,6 +264,84 @@ grade_this_code(
   correct = "That's a lot of heads, maybe!",
 )
 ```
+
+### One Simulation: Repeated Rounds
+
+Now that we know how to do one simulation of our desired result we need to do it many times to get an accurate estimate. This presents a problem though in that so far we haven't addressed how to keep track of our results. One way to do so is by making an array and updating it with the outcome of each round simulation. To do that we'll introduce another numpy method
+
+```
+np.append(arr, values, axis)
+```
+
+`np.append` takes in an array **arr** and adds the new **values** to the end of a copy of it and stores the combination of the elements from **arr** and **values** in a new array.
+
+Use the following code snippet to answer question 7.
+
+```
+first_five = np.arange(5)
+np.arange(first_five, 6)
+```
+
+```{r q7, echo=FALSE}
+question("7. What is contained in the array `first_five` after the above two lines of code are run? ",
+         answer("`np.array([0, 1, 2, 3, 4, 5, 6])`", correct=FALSE),
+         answer("`np.array([0, 1, 2, 3, 4, 6])`", correct=FALSE),
+         answer("`np.array([0, 1, 2, 3, 4])`", correct=TRUE),
+         answer("`np.array([1, 2, 3, 4, 5, 6])`", correct=FALSE),
+         answer("`None` There was an Error", correct=FALSE),
+         allow_retry = TRUE,
+        post_message = "Congratulations! You have found the 3rd secret word: COPY",
+  random_answer_order = TRUE)
+```
+
+Now it's time to put it all together and run the simulation. Our simulations will generally take the following form.
+
+```
+num_iterations = ... # a large number for the number of iterations
+results = ... # an empty array or int set to zero that will be updated with our results
+for i in np.arange(num_iterations):
+  # do one simulation here. This is often multiple lines of code or a function
+  # update results with the value of that one simuulation
+# summarize the results
+```
+
+8. Fill in the blanks below using all the code you've written so far to run 1000 simulations of whether there are 45 to 55 heads in 100 tosses of a fair coin.
+
+```{python q8, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+coin = ['Heads', 'Tails']
+num_iterations = ...
+results_array = ...
+for i in np.arange(num_iterations):
+  one_simulation = ...
+  total_heads_one_simulation = ...
+  one_result = ...
+  ...
+print(results_array[0:10])
+```
+
+
+```{python q8-solution, message = FALSE, warning = FALSE, echo = FALSE}
+coin = ['Heads', 'Tails']
+num_iterations = 1000
+results_array = np.array([])
+for i in np.arange(num_iterations):
+  one_simulation = np.random.choice(coin, 100)
+  total_heads_one_simulation = sum(one_simulation == 'Heads')
+  one_result = 45 <= total_heads_one_simulation <= 55
+  results_array = np.append(results_array, one_result)
+print(results_array[0:10])
+```
+
+```{r q8-code-check, message = TRUE, warning = FALSE}
+grade_this_code(
+  correct = "That's a lot of flips!",
+)
+```
+
+
+add a discussion question about how this could be done without explicitly creating or updating any arrays (counter approach)?
+
+add q9 where we'll calculate the actual probability
 
 make an example 
 
