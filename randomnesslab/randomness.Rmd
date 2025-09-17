@@ -362,7 +362,7 @@ for i in np.arange(num_iterations):
   results_array = np.append(results_array, one_result)
 ```
 
-```{python q9, exercise = TRUE, message = FALSE}
+```{python q9, exercise = TRUE, message = FALSE, exercise.setup='q9-setup'}
 final_probability = ...
 print(final_probability)
 ```
@@ -389,13 +389,128 @@ Your answer should be reasonably close to the true probability of ~72.8%. If you
 ::: {.center}
 **Discuss with a neighbor (or on Ed):**
 :::
-1. In this question we used arrays to keep track of our results. How would our code change if we used an int to keep track of our results?
+In this question we used arrays to keep track of our results. How would our code change if we used an int to keep track of our results?
 ::::
 
+### Shake Day Probabilties
 
-make an example 
+Hutch Commons at UChicago is renowned for their $1 milkshakes on Wednesday's. Each milkshake can either be Chocolate, Vanilla, or Dairy Free Vanilla. In terms of toppings students can get up to 3 of Nilla wafers, Oreos, Sprinkles, or Maraschino Cherries (assume they can get multiple of each option). They also have the option of adding whip cream.
 
-do $1 milkshake exercise 
+Each student chooses their order according to the probabilities in this table. 
+
+| Milkshake Option | Order Probability |
+|----------|:--------:|
+| Chocolate Shake | 0.3 |
+| Vanilla Shake | 0.5 |
+| Dairy-Free Vanilla Shake | 0.2 |
+| Oreo Topping | 0.4 |
+| Nilla Wafer Topping | 0.2 |
+| Sprinkles Topping | 0.35 |
+| Maraschino Cherries Topping | 0.05 |
+| Whipcream | 0.5 |
+
+
+If any of their order is unavailable they won't get their milkshake. Unfortunately not every milkshake option is available every time. The (made up) probability of each option being available is provided in the following table. You can assume these probabilities are always true when the student goes to place their order.
+
+| Milkshake Option | Availability Probability |
+|----------|:--------:|
+| Chocolate Shake | 0.8 |
+| Vanilla Shake | 0.9 |
+| Dairy-Free Vanilla Shake | 0.5 |
+| Oreo Topping | 0.7 |
+| Nilla Wafer Topping | 0.9 |
+| Sprinkles Topping | 0.95 |
+| Maraschino Cherries Topping | 0.8 |
+| Whipcream | 0.6 |
+
+```{r q10, echo=FALSE}
+question_numeric("10. At most how many calls to `np.random.choice` have to be made in every round of simulation?",
+         answer("6", correct=TRUE),
+         try_again = "In one round we need to know the student's order (which requires 3 separate calls), the availability of their chosen flavor, the availability of their chosen toppings, and the availability of whip cream in case they want it.",
+         allow_retry = TRUE,
+        post_message = "Congratulations! You have found the fourth secret word: ORDER-UP")
+```
+
+10. Use simulation to estimate the probability that any given student will make an order. You should have 10000 rounds of simulation. We have provided for you the lists `flavors` and `toppings` with the relevant options as well as a dictionary `option_probs` linking each option to it's probability. 
+
+```{python q9-setup, include=TRUE, exercise.setup='setup_py'}
+flavors = ['Chocolate', 'Vanilla', 'Dairy-Free Vanilla']
+toppings = ['Oreos', 'Nilla Wafers', 'Sprinkles', 'Maraschino Cherries']
+options_probs = {
+    'Chocolate': 0.8,
+    'Vanilla': 0.9,
+    'Dairy-Free Vanilla': 0.5,
+    'Oreo': 0.7,
+    'Nilla Wafers': 0.9,
+    'Sprinkles': 0.95,
+    'Maraschino Cherries': 0.8,
+    'Whipcream': 0.6
+}
+```
+
+```{python q9, exercise = TRUE, message = FALSE, exercise.setup='q9-setup'}
+# do the simulation here
+final_probability = ...
+print(final_probability)
+```
+
+```{python q10-solution, message = FALSE, warning = FALSE, echo = FALSE}
+final_probability = sum(results_array)/len(results_array)
+print(final_probability)
+```
+
+
+
+TODO
+
+write question where they simulate the above question.
+define probability and choice arrays in advance. skeleton the rest???
+
+introduce blurb about random seed somewhere
+write baseball question
+
+```python 
+# Assume runners are represented by a list of integers indicating their current base
+# Example: [0, 1, 2] represents runners on 1st, 2nd, and 3rd base
+# A hit value is the number of bases the runners will advance (1 for single, 2 for double, etc.)
+
+def simulate_hit(hit_value, base_state):
+    """
+    Simulate the effect of a hit on the base state and count the number of runs scored.
+    
+    Args:
+        hit_value (int): Number of bases advanced by each runner (1 for single, 2 for double, etc.)
+        base_state (list): A list representing the positions of runners on bases.
+                           0 = no runner, 1 = runner on 1st base, etc.
+    
+    Returns:
+        int: Number of runs scored
+        list: Updated base state after the hit
+    """
+    runs_scored = 0
+    new_base_state = [0] * 4  # List representing 1st, 2nd, 3rd, and Home base
+
+    # For each runner, calculate where they will end up
+    for i in range(3, -1, -1):  # Start from 3rd base (home)
+        if base_state[i] > 0:  # If there's a runner on this base
+            new_position = i + hit_value  # Calculate the new position
+            if new_position >= 3:  # If they would score a run
+                runs_scored += 1
+            else:  # Otherwise, move them to the new base
+                new_base_state[new_position] += 1
+
+    return runs_scored, new_base_state
+
+
+# Example usage:
+base_state = [0, 1, 1, 0]  # Runners on 1st and 2nd base
+hit_value = 2  # Double (runners move 2 bases)
+
+runs, new_base_state = simulate_hit(hit_value, base_state)
+print(f"Runs scored: {runs}")
+print(f"New base state: {new_base_state}")
+
+```
 
 ## Making the Best Lineup
 
