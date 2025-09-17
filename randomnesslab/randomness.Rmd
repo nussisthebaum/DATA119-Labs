@@ -76,6 +76,7 @@ Before continuing we've done the imports for you here of `numpy` and `pandas`
 # data manipulation
 import numpy as np
 import pandas as pd
+np.random.seed(42)
 ```
 
 ## Introduction to `np.random.choice`
@@ -122,25 +123,30 @@ q2_correct_poll <- reactivePoll(500, session,
 )
 
 q2_hint_visible <- reactiveVal(FALSE)
-
 output$q2_plot_output <- renderUI({
   print(get_tutorial_state())
   if (isTRUE(q2_correct_poll())) {
     tagList(
-      p("Discuss with a partner or on edStem about at least one of the following prompts?"),
+      p("Discuss with a partner or on edStem about at least one of the following prompts."),
       actionButton("q2_show_hint_btn", "💡 Show discussion"),
       tags$div(
         id = "q2_hint_box",
+        class="discussionbox",
         style = paste(
           if (!q2_hint_visible()) "display:none;" else "",
-          "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+          "margin-top:.6px; border:1px solid #ddd; padding:.20px; border-radius:.5px;"
         ),
-        "1. Why do we need to convert the letter 'H' to a boolean before summing the result? Why does summing booleans work for counting the number of heads?
-        
-         2. One approach sampled from a list of two numbers [0, 1] and the other from a list of four numbers [0, 1, 0, 1]. Why are these two approaches essentially equivalent?
-         
-        3. What are the implications from sampling the numbers 0 and 1 vs. 'H' and 'T' or another option like 'Heads' and 'Tails'? When might we prefer one approach to another?")
+        tags$div(
+        class = "center",
+        tags$strong("Discuss with a neighbor (or on Ed):")
+        ),
+        tags$ol(
+        tags$li("Why do we need to convert the letter 'H' to a boolean before summing the result? Why does summing booleans work for counting the number of heads?"),
+         tags$li("One approach sampled from a list of two numbers [0, 1] and the other from a list of four numbers [0, 1, 0, 1]. Why are these two approaches essentially equivalent?"),
+         tags$li("What are the implications from sampling the numbers 0 and 1 vs. 'H' and 'T' or another option like 'Heads' and 'Tails'? When might we prefer one approach to another?")
      )
+    )
+    )
   } else {
     tagList(
       p("Answer Question 2 correctly to reveal a discussion on approaches to using `np.random.choice`")
@@ -161,6 +167,7 @@ observeEvent(input$q2_show_hint_btn, {
 ```{r q2_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
 uiOutput("q2_plot_output")
 ```
+
 
 ```{r q3, echo=FALSE}
 question("3. True or False: The following block of code will generate a 12 numbers between 0 and 10. `np.random.choice(10, size=12, replace=False)`",
@@ -273,7 +280,7 @@ Now that we know how to do one simulation of our desired result we need to do it
 np.append(arr, values, axis)
 ```
 
-`np.append` takes in an array **arr** and adds the new **values** to the end of a copy of it and stores the combination of the elements from **arr** and **values** in a new array.
+`np.append` takes in an array **arr** and adds the new **values** to the end of a copy of it and stores the combination of the elements from **arr** and **values** in a new array. The axis argument can be useful for appending to matrices which won't be dealing with here.
 
 Use the following code snippet to answer question 7.
 
@@ -307,7 +314,7 @@ for i in np.arange(num_iterations):
 
 8. Fill in the blanks below using all the code you've written so far to run 1000 simulations of whether there are 45 to 55 heads in 100 tosses of a fair coin.
 
-```{python q8, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+```{python q8, exercise = TRUE, message = FALSE, exercise.setup="setup_py", exercise.eval=FALSE}
 coin = ['Heads', 'Tails']
 num_iterations = ...
 results_array = ...
@@ -338,10 +345,53 @@ grade_this_code(
 )
 ```
 
+#### One Simulation: Summarizing Results
 
-add a discussion question about how this could be done without explicitly creating or updating any arrays (counter approach)?
+Once we have all our rounds of simulation complete it's time to use them to summarize the results of our simulation. In this case that means computing the estimate of the probability we initially wanted to know.
 
-add q9 where we'll calculate the actual probability
+9. Fill in the blank below to compute our final estimate of the probability that out of 100 tosses of a coin 45-55 end up heads using our `results_array`.
+
+```{python q9-setup, include=FALSE, exercise.setup='setup_py'}
+coin = ['Heads', 'Tails']
+num_iterations = 1000
+results_array = np.array([])
+for i in np.arange(num_iterations):
+  one_simulation = np.random.choice(coin, 100)
+  total_heads_one_simulation = sum(one_simulation == 'Heads')
+  one_result = 45 <= total_heads_one_simulation <= 55
+  results_array = np.append(results_array, one_result)
+```
+
+```{python q9, exercise = TRUE, message = FALSE}
+final_probability = ...
+print(final_probability)
+```
+
+```{python q9-hint, message = FALSE, warning = FALSE, echo = FALSE}
+Your answer should include sum and len to be marked correct but there are multiple approaches
+```
+
+```{python q9-solution, message = FALSE, warning = FALSE, echo = FALSE}
+final_probability = sum(results_array)/len(results_array)
+print(final_probability)
+```
+
+```{r q9-code-check, message = TRUE, warning = FALSE}
+grade_this_code(
+  correct = "72% is pretty good!",
+)
+```
+
+
+Your answer should be reasonably close to the true probability of ~72.8%. If you increase the number of iterations and try again you'll see that it will be even closer on average.
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+1. In this question we used arrays to keep track of our results. How would our code change if we used an int to keep track of our results?
+::::
+
 
 make an example 
 
