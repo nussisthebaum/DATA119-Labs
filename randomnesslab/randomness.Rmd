@@ -20,7 +20,7 @@ library(reticulate)
 # Optional: Install necessary Python packages if not already installed
 # reticulate::py_install(c('numpy', 'pandas'))
 
-custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+custom_checker <- function(label, user_code, solution_code, check_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
       if (user_code == solution_code){
           return(list(message = random_praise(), correct = TRUE))
@@ -394,9 +394,9 @@ In this question we used arrays to keep track of our results. How would our code
 
 ### Shake Day Probabilties
 
-Hutch Commons at UChicago is renowned for their $1 milkshakes on Wednesday's. Each milkshake can either be Chocolate, Vanilla, or Dairy Free Vanilla. In terms of toppings students can get up to 3 of Nilla wafers, Oreos, Sprinkles, or Maraschino Cherries (assume they can get multiple of each option). They also have the option of adding whip cream.
+Hutch Commons at UChicago is renowned for their $1 milkshakes on Wednesday's. Each milkshake can either be Chocolate, Vanilla, or Dairy Free Vanilla. In terms of toppings students can get up to 3 of Nilla wafers, Oreos, Sprinkles, or Maraschino Cherries. They also have the option of adding whip cream.
 
-Each student chooses their order according to the probabilities in this table. 
+Each student chooses their order according to the probabilities in this table. Once a topping is chosen the probability is spread equally to the remaining toppings.
 
 | Milkshake Option | Order Probability |
 |----------|:--------:|
@@ -410,7 +410,7 @@ Each student chooses their order according to the probabilities in this table.
 | Whipcream | 0.5 |
 
 
-If any of their order is unavailable they won't get their milkshake. Unfortunately not every milkshake option is available every time. The (made up) probability of each option being available is provided in the following table. You can assume these probabilities are always true when the student goes to place their order.
+If any of their order is unavailable they won't order their milkshake. Unfortunately not every milkshake option is available every time. The (made up) probability of each option being available is provided in the following table. You can assume these probabilities are always true when the student goes to place their order.
 
 | Milkshake Option | Availability Probability |
 |----------|:--------:|
@@ -421,44 +421,89 @@ If any of their order is unavailable they won't get their milkshake. Unfortunate
 | Nilla Wafer Topping | 0.9 |
 | Sprinkles Topping | 0.95 |
 | Maraschino Cherries Topping | 0.8 |
-| Whipcream | 0.6 |
+| Whipcream | 0.9 |
 
 ```{r q10, echo=FALSE}
 question_numeric("10. At most how many calls to `np.random.choice` have to be made in every round of simulation?",
-         answer("6", correct=TRUE),
-         try_again = "In one round we need to know the student's order (which requires 3 separate calls), the availability of their chosen flavor, the availability of their chosen toppings, and the availability of whip cream in case they want it.",
+         answer("8", correct=TRUE, message="That's right! One call for the shake flavor, one call for the toppings, one call for the whipcream, and then five calls to check all the availabiliies."),
+         answer("10", correct=TRUE, message="This is correct if you assume each topping ordered is drawn separately. Make sure to be careful of how the probability for each topping is adjusted after one is chosen."),
+         try_again = "In one round we need to know the student's order (which requires 3 separate calls), the availability of their chosen flavor, the availability of each of their chosen toppings separately, and the availability of whip cream in case they want it.",
          allow_retry = TRUE,
         post_message = "Congratulations! You have found the fourth secret word: ORDER-UP")
 ```
 
-10. Use simulation to estimate the probability that any given student will make an order. You should have 10000 rounds of simulation. We have provided for you the lists `flavors` and `toppings` with the relevant options as well as a dictionary `option_probs` linking each option to it's probability. 
+11. Use simulation to estimate the probability that any given student will make an order. You should have 10000 rounds of simulation. We have provided for you the lists `flavors` and `toppings` with the relevant options as well as a dictionary `option_probs` linking each option to it's probability. 
 
-```{python q9-setup, include=TRUE, exercise.setup='setup_py'}
+```{python q11-setup, exercise=TRUE, include=TRUE, exercise.eval=TRUE, exercise.setup='setup_py'}
 flavors = ['Chocolate', 'Vanilla', 'Dairy-Free Vanilla']
 toppings = ['Oreos', 'Nilla Wafers', 'Sprinkles', 'Maraschino Cherries']
+flavor_order_probs = [0.3, 0.5, 0.2]
+topping_order_probs = [0.4, 0.2, 0.35, 0.05]
 options_probs = {
     'Chocolate': 0.8,
     'Vanilla': 0.9,
     'Dairy-Free Vanilla': 0.5,
-    'Oreo': 0.7,
+    'Oreos': 0.7,
     'Nilla Wafers': 0.9,
     'Sprinkles': 0.95,
     'Maraschino Cherries': 0.8,
-    'Whipcream': 0.6
+    'Whipcream': 0.9
 }
 ```
 
-```{python q9, exercise = TRUE, message = FALSE, exercise.setup='q9-setup'}
+```{python q11, exercise = TRUE, message = FALSE, exercise.setup='q11-setup', exercise.checker = gradethis::grade_learnr}
 # do the simulation here
 final_probability = ...
 print(final_probability)
 ```
 
-```{python q10-solution, message = FALSE, warning = FALSE, echo = FALSE}
-final_probability = sum(results_array)/len(results_array)
-print(final_probability)
+```{python q11-solution, message = FALSE, warning = FALSE, echo = FALSE}
+# do the simulation here
+num_iterations = 10000
+successful_orders = 0
+for i in np.arange(num_iterations):
+  student_order = np.append([np.random.choice(flavors, p=flavor_order_probs)], np.random.choice(toppings, size=3, replace=False, p=topping_order_probs))
+  makes_order = True
+  for order_component in student_order:
+    order_option_prob = options_probs[order_component]
+    has_milkshake_option = np.random.choice([True, False], p=[order_option_prob, 1-order_option_prob])
+    if not has_milkshake_option:
+      makes_order = False
+    if np.random.choice(['Add Whip', 'No Whip']) == 'Add Whip':
+      if not np.random.choice([True, False], p=[0.9, 0.1]):
+        makes_order = False
+  if makes_order:
+    successful_orders += 1
+final_probability = round(successful_orders/num_iterations, 2)
+final_probabilityprint(final_probability)
 ```
 
+```{python q11-check}
+print(.result)
+grade_this({
+  if (identical(.result, .38)) {
+    pass("Great Work!")
+  }
+  fail("try again")
+})
+```
+
+## Making the Best Lineup
+
+Now that you've seen how to use simulation for estimating probability we want to introduce you to another way to use simulation -- optimization. 
+
+Sometimes we have to make choices about the future with incomplete information. If we have ways to frame the future as a series of probabilistic events we can use simulation to estimate how different decisions we take could impact the future. This is commonly used in finance, healthcare, logistics, and other industries. In the following example you'll see one way in which simulation can be used in sports.
+
+### Interlude: `df.sample`
+Before we can continue on to the example we first have to introduce `df.sample` which will be used in this exercise.
+
+Describe df.sample here
+
+### Lineup Optimization: Overview
+In baseball the goal of each game is to score more runs than the other team. A team scores a run by having their player reach base and advance to first, second, third, and finally home base. The opposing team tries to stop them by getting 3 outs. Each team gets 9 innings (sets of 3 outs) on offense whoever scores the most runs at the end wins.
+
+The manager of each team gets to choose the order in which their nine players hits each game with the goal of choosing the lineup which will score the most. In real baseball there are many things the manager has to consider like player health, match ups against the opposing pitcher, and more. In our simplified analysis we'll simply be focusing on the nine players who played the most for the White Sox in 2024 and seeing which lineup combination is best using simulation. 
+To do this simulation you'll use the stats from the 2024 season for each of the nine players which have been converted to the probability each player reaches base via a walk, single, double, triple, or home run (for baseball fans we'll be ignoring hbp, roe, dropped third strike, fielder's choice, and catcher's interference for simplicity). Runners on base will advance as many bases as the hit (i.e. two base for a double). For the sake of simplicity we'll assume if a batter gets out no runner advances and there is no stealing. If this interests you can definitely copy the code and remove some assumptions on your own!
 
 
 TODO
@@ -488,10 +533,10 @@ def simulate_hit(hit_value, base_state):
         list: Updated base state after the hit
     """
     runs_scored = 0
-    new_base_state = [0] * 4  # List representing 1st, 2nd, 3rd, and Home base
+    new_base_state = [0] * 3  # List representing 1st, 2nd, 3rd, and Home base
 
     # For each runner, calculate where they will end up
-    for i in range(3, -1, -1):  # Start from 3rd base (home)
+    for i in range(2, -1, -1):  # Start from 3rd base
         if base_state[i] > 0:  # If there's a runner on this base
             new_position = i + hit_value  # Calculate the new position
             if new_position >= 3:  # If they would score a run
@@ -512,7 +557,6 @@ print(f"New base state: {new_base_state}")
 
 ```
 
-## Making the Best Lineup
 
 take in stats from 2024 season for the Chicago White Sox
 simulate different lineup combinations (mention caveats)
