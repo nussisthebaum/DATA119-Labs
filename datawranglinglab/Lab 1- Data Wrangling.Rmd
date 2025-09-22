@@ -110,7 +110,7 @@ This lab will use both `numpy` and `python`. We will also be using a dataset scr
 import numpy as np
 import pandas as pd
 
-# To download this file go to https://posit.ds.uchicago.edu/data119-lab1/www/epi_mini.csv
+# To download this file go to https://posit.ds.uchicago.edu/datawranglinglab/www/epi_mini.csv
 
 epicurious = pd.read_csv("./data/epi_mini.csv", index_col = 0)
 ```
@@ -194,6 +194,15 @@ grade_this_code(
   correct = "stuff"
 )
 ```
+
+Please note that some of the values in the `.describe()` output appear in [scientific notation](https://en.wikipedia.org/wiki/Scientific_notation), e.g., `4.190000e+02`. The `e` in Python refers to the times 10, and the `02` refers to the power on the 10. So, `4.190000e+02`
+
+
+
+
+<!-- <div id="q3_conditional-hint"> -->
+<!-- What should I be looking for? Remember that sometimes points near the ends of the $x$-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red $y = 0$ line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend! -->
+<!-- </div> -->
 
 5. It is also helpful to discuss how many missing values the dataset has. Identify the percentage of missing values in the `protein` column.
 
