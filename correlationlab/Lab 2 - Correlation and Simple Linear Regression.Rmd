@@ -287,7 +287,7 @@ output$q3_plot_output <- renderUI({
           if (!q3_hint_visible()) "display:none;" else "",
           "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
         ),
-        "What should I be looking for? Remember that sometimes points near the ends of the x-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red y = 0 line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend!")
+        "What should I be looking for? Remember that sometimes points near the ends of the x-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red y = 0 line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend! Many students report that it is difficult for them to tell exactly what the relationship looks like--especially the difference between exponential and quadratic relationships. This ability will come with practice! If you are struggling to see the pattern here, move on to a different section, check out other graphs, and revisit this plot after you've looked to see if the pattern seems clearer. ")
       )
   } else {
     tagList(
@@ -309,9 +309,6 @@ observeEvent(input$q3_show_hint_btn, {
 ```{r q3_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
 uiOutput("q3_plot_output")
 ```
-
-
-Many students report that it is difficult for them to tell exactly what the relationship looks like--especially the difference between exponential and quadratic relationships. This ability will come with practice! If you are struggling to see the pattern here, move on to a different section, check out other graphs, and revisit this plot after you've looked to see if the pattern seems clearer. 
 
 ## Describing Relationships with `gasprice`
 
