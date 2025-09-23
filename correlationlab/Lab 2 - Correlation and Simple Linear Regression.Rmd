@@ -112,6 +112,9 @@ tags$div(
 import numpy as np
 import pandas as pd
 import plotnine as p9
+import scipy
+from scipy.optimize import minimize
+import statsmodels.api as sm
 
 mtcars = pd.read_csv("./data/mtcars.csv")
 gasprice = pd.read_csv("./data/gasprice.csv")
@@ -126,8 +129,62 @@ cal = epicurious_nd['calories']
 r_fatcal = fat.corr(cal)
 s_fat = epicurious_nd['fat'].std()
 s_cal = epicurious_nd['calories'].std()
-```
 
+def calc_slope(r_xy, s_x, s_y):
+    b1 = r_xy*s_y/s_x 
+    return(b1)
+  
+def calc_int(r_xy, s_x, s_y, m_x, m_y):
+    b1 = calc_slope(r_xy, s_x, s_y)
+    b0 = m_y - b1*m_x
+    return(b0)  
+  
+def calc_pred(x, y):
+    r_xy = x.corr(y)
+    
+    m_x = x.mean()
+    m_y = y.mean()
+    
+    sd_x = x.std()
+    sd_y = y.std()
+    
+    b1 = calc_slope(r_xy, sd_x, sd_y)
+    b0 = calc_int(r_xy, sd_x, sd_y, m_x, m_y)
+    
+    preds = b0 + b1*x
+    
+    return(preds)
+  
+def calc_res(x, y):  
+    preds = calc_pred(x, y)
+    resids = y - preds
+    return(resids)
+
+def calc_SSE(x, y):  
+    resids = calc_res(x, y)
+    resids2 = resids**2
+
+    return(resids2.sum())
+  
+def calc_SSE(parms, x, y):  
+    preds = parms[0] + parms[1]*x
+    resids = y - preds
+    resids2 = resids**2
+    return(resids2.sum())
+  
+def calc_SSE(parms, x, y):  
+    preds = parms[0] + parms[1]*x
+    resids = y - preds
+    resids2 = resids**2
+    return(resids2.sum())
+  
+X1 = epicurious_nd["fat"]
+Y = epicurious_nd["calories"]
+
+X1 = sm.add_constant(X1)
+
+model1 = sm.OLS(Y, X1).fit()
+```
 
 ## Goals
 
@@ -146,7 +203,7 @@ import pandas as pd
 import plotnine as p9
 
 # To download any of these data files 
-# go to https://posit.ds.uchicago.edu/data119-lab2/www/<name of file here>.csv
+# go to https://posit.ds.uchicago.edu/correlationlab/www/<name of file here>.csv
 
 mtcars = pd.read_csv("./data/mtcars.csv")
 gasprice = pd.read_csv("./data/gasprice.csv")
@@ -254,9 +311,7 @@ uiOutput("q3_plot_output")
 ```
 
 
-<!-- <div id="q3_conditional-hint"> -->
-<!-- What should I be looking for? Remember that sometimes points near the ends of the $x$-axis can through the graph off! If we ignore the last three points, we can see that most of the points above the red $y = 0$ line are near the beginning and end, and most of the points below the line are in the middle. In addition, we can see a parabolic trend in the first half of the graph (look at the blue line). Both of these things point to a quadratic trend! -->
-<!-- </div> -->
+Many students report that it is difficult for them to tell exactly what the relationship looks like--especially the difference between exponential and quadratic relationships. This ability will come with practice! If you are struggling to see the pattern here, move on to a different section, check out other graphs, and revisit this plot after you've looked to see if the pattern seems clearer. 
 
 ## Describing Relationships with `gasprice`
 
@@ -576,16 +631,7 @@ grade_this_code()
 
 14.  Now, apply your function to the `epicurious_nd` data. You will need the correlation and standard deviations--save the correlation as `r_fatcal` and the standard deviations as `s_fat` and `s_cal`.
 
-```{python setup2, exercise=FALSE, echo=FALSE}
-fat = epicurious_nd['fat']
-cal = epicurious_nd['calories']
-
-def calc_slope(r_xy, s_x, s_y):
-    b1 = r_xy*s_y/s_x 
-    return(b1)
-```
-
-```{python slopec, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+```{python slopec, exercise = TRUE, message = FALSE}
 r_fatcal = 
 s_fat = 
 s_cal = 
@@ -617,7 +663,7 @@ question("15. Fill in the blank: for every additional ___, we should expect 12.7
 
 16. We also need to frequently calculate the intercept. Using the equation $b_0 = \bar{y} - b_1\bar{x}$ write a function called `calc_int` that will calculate the estimate of the intercept, $b_0$, given the correlation between two variables, the standard deviations of both the explanatory and response variables, and the means of both the explanatory and response variables. Your new function should use the `calc_slope` function you just wrote.
 
-```{python int, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+```{python int, exercise = TRUE, message = FALSE}
 def calc_int(r_xy, s_x, s_y, m_x, m_y):
     b1 = 
     b0 = 
@@ -638,14 +684,7 @@ grade_this_code()
 
 17. Now apply your function to the `epicurious_nd` data. Save the means as `m_fat` and `m_cal`. 
 
-```{python setup3, exercise=FALSE, echo=FALSE, exercise.setup="setup2"}
-def calc_int(r_xy, s_x, s_y, m_x, m_y):
-    b1 = calc_slope(r_xy, s_x, s_y)
-    b0 = m_y - b1*m_x
-    return(b0)
-```
-
-```{python intc, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+```{python intc, exercise = TRUE, message = FALSE}
 m_fat = 
 m_cal = 
 
@@ -676,7 +715,7 @@ question("18. Fill in the blank: if the recipe has 0 ___ then we should expect i
 
 19. One of the linear regression tasks we are usually interested in is prediction. Write a function called `calc_pred` that can predict values of $y$ from $x$ given a column of data for the explanatory variable and a column of data for the response. Your new function should use both the `calc_slope` and `calc_int` functions. 
 
-```{python pred, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+```{python pred, exercise = TRUE, message = FALSE}
 def calc_pred(x, y):
     r_xy = 
     
@@ -718,26 +757,7 @@ grade_this_code()
 
 20. Now, apply the function to the `epicurious_nd` dataset and save a list of calorie predictions as `pred_cal`. 
 
-```{python setup4, exercise=FALSE, echo=FALSE, exercise.setup="setup3"}
-def calc_pred(x, y):
-    r_xy = x.corr(y)
-    
-    m_x = x.mean()
-    m_y = y.mean()
-    
-    sd_x = x.std()
-    sd_y = y.std()
-    
-    b1 = calc_slope(r_xy, sd_x, sd_y)
-    b0 = calc_int(r_xy, sd_x, sd_y, m_x, m_y)
-    
-    preds = b0 + b1*x
-    
-    return(preds)
-```
-
-
-```{python predc, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python predc, exercise = TRUE, message = FALSE}
 fat = epicurious_nd['fat']
 cal = epicurious_nd['calories']
 
@@ -759,7 +779,7 @@ grade_this_code()
 
 21. We will definitely need to repeatedly calculate the residuals. Write a function called `calc_res` that can calculate the residuals for the entire dataset, given a column of data for the explanatory variable, and a column of data for the response. Your new function should use at least one of the functions you have already written.
 
-```{python res, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python res, exercise = TRUE, message = FALSE}
 def calc_res(x, y):  
     preds = 
     resids = 
@@ -779,14 +799,7 @@ grade_this_code()
 
 22. Now, apply the function to the `epicurious_nd` dataset and save a list of residuals as `pred_res`. 
 
-```{python setup5, exercise=FALSE, echo=FALSE, exercise.setup="setup4"}
-def calc_res(x, y):  
-    preds = calc_pred(x, y)
-    resids = y - preds
-    return(resids)
-```
-
-```{python resc, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+```{python resc, exercise = TRUE, message = FALSE}
 pred_res
 ```
 
@@ -802,7 +815,7 @@ grade_this_code()
 
 The loss function for simple linear regression is the sum of the squared residuals (also known as the sum of squared errors, or SSE). Below is an example of what an SSE function can look like.
 
-```{python sse, exercise=TRUE, exercise.eval = FALSE, exercise.setup="setup5"}
+```{python sse, exercise=TRUE, exercise.eval = FALSE}
 def calc_SSE(x, y):  
     resids = calc_res(x, y)
     resids2 = resids**2
@@ -814,7 +827,7 @@ We are lucky to have equations (more formally known as closed form estimators) t
 
 Minimizing a loss function is a special case of optimization. To optimize, we will need the `scipy`. From `scipy.optimize`, we specifically need `minimize`.
 
-```{python scipy, exercise=TRUE, exercise.eval = FALSE, exercise.setup="sse"}
+```{python scipy, exercise=TRUE, exercise.eval = FALSE}
 import scipy
 from scipy.optimize import minimize
 ```
@@ -833,7 +846,7 @@ In this case, the objective function is the loss function we happen to be using-
 
 23. Adapt the example `calc_SSE` function so that it follows these requirements. 
 
-```{python sseo, exercise = TRUE, message = FALSE, exercise.setup="scipy"}
+```{python sseo, exercise = TRUE, message = FALSE}
 def calc_SSE(parms, x, y):  
     preds = 
     resids = 
@@ -855,7 +868,7 @@ grade_this_code()
 
 We can give any real values for the initial guesses, but we have to give at least two, one for the intercept and one for the slope. For now, we can just use zero for both. With both of these pieces, we can run `minimize()`
 
-```{python minset, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="sseo"}
+```{python minset, exercise = FALSE, echo=FALSE, message = FALSE}
 def calc_SSE(parms, x, y):  
     preds = parms[0] + parms[1]*x
     resids = y - preds
@@ -867,7 +880,7 @@ cal = epicurious_nd['calories']
 ```
 
 
-```{python min, exercise = TRUE, message = FALSE, exercise.setup="minset"}
+```{python min, exercise = TRUE, message = FALSE}
 minimize(calc_SSE, x0 = [0]*2, args = (fat, cal), method = "BFGS").x
 ```
 
@@ -881,13 +894,13 @@ You should find that these estimates are very close to the numbers that we calcu
 
 In addition to writing your own functions, either to directly estimate parameters or to minimize the loss function, there are a lot of pre-packaged methods in Python to use for linear regression. You may be familiar with `scikit-learn` already, but I want to introduce another module, `statsmodels`. Both modules work similarly, but `statsmodels` has some functionality that will help us out in future weeks. 
 
-```{python stats, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="min"}
+```{python stats, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 import statsmodels.api as sm
 ```
 
 To fit a linear regression model with `statsmodels`, we first have to separately save our $X$ and $Y$ variables. Technically, we've already done that with `fat` and `calories`, but review the code below--it's good practice to get into this type of syntax. I've used `X1` since this is our first (and only) variable. 
 
-```{python stats1, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats"}
+```{python stats1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 X1 = epicurious_nd["fat"]
 Y = epicurious_nd["calories"]
 ```
@@ -900,7 +913,7 @@ If we fit our model with `X1` and `Y` like they are now, we will only get an est
 
 We do that by using the following code:
 
-```{python stats2, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats1"}
+```{python stats2, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 X1 = sm.add_constant(X1)
 ```
 
@@ -908,7 +921,7 @@ The `add_constant` function adds a column of 1's to `X1`. Finding the slope for 
 
 Now, we can actually fit the model. We do this with the following line of code (again, I've saved an object called `model1` since this is the first model we are fitting. Also, the only model for this lab, but it's good practice to get into the habit of giving different models different names so you don't write over anything and lose track of what you were doing. 
 
-```{python stats3, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats2"}
+```{python stats3, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 model1 = sm.OLS(Y, X1).fit()
 ```
 
@@ -916,7 +929,7 @@ model1 = sm.OLS(Y, X1).fit()
 
 24.  Apply the `dir()` function to `model1`, and see if you can identify any of the parts packed into the object. 
 
-```{python dir, exercise = TRUE, message = FALSE, exercise.setup="stats3"}
+```{python dir, exercise = TRUE, message = FALSE}
 
 ```
 
@@ -930,10 +943,80 @@ grade_this_code()
 
 25. As I mentioned, there is a lot! For now, we just want to use the `.summary()` method. Investigate the output below to see if you can locate where in the table the slope and intercept are located. Are they the same as the values calculated from the other two methods we've seen?
 
-```{python summary, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="stats3"}
+```{python summary, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 #| output: asis
 #| results: asis
 #| html-table-processing: none
 
 model1.summary()
 ```
+
+If you were to write up a hypothesis test to see if `fat` is a significant predictor of `calories` to include in a data analysis report...
+
+```{r q26, echo=FALSE}
+question(
+  "26. What parameter would your hypotheses be about?",
+  answer("$\\beta_0$, the intercept in a model predicting calories from fat.", message = "Sometimes we run a hypothesis test on the intercept, but usually we are far more interested in the slope."), 
+  answer("$\\beta_1$, the slope in a model predicting calories from fat.", correct = TRUE),
+  answer("$b_0$, the estimated intercept in a model predicting calories from fat.", message = "Don't forget! Hypotheses should be about parameters, not statistics."),
+answer("$b_1$, the estimated slope in a model predicting calories from fat.", message = "Don't forget! Hypotheses should be about parameters, not statistics."),
+  random_answer_order = TRUE,
+  allow_retry = TRUE
+)
+```
+
+```{r q27, echo=FALSE}
+question(
+  "27. Which of the following is an appropriate pair of hypotheses?",
+  answer("$H_0: \\beta_1 \\geq 0$ vs. $H_A: \\beta_1 < 0$", message = "Sometimes we run a one-sided test, but usually we are far more interested in a two-sided test."), 
+  answer("$H_0: \\beta_1 = 0$ vs. $H_A: \\beta_1 \\neq 0$", correct = TRUE), 
+  answer("$H_0: \\beta_1 \\leq 0$ vs. $H_A: \\beta_1 > 0$", message = "Sometimes we run a one-sided test, but usually we are far more interested in a two-sided test."),
+  allow_retry = TRUE)
+```
+
+```{r q28, echo=FALSE}
+question(
+  "28. Based on the output, what is the test statistic?",
+  answer("12.7294", message = "That is slope!"), 
+  answer("0.341", message = "That is standard error for the slope!"), 
+  answer("8.701", message = "That is the test statistic for the intercept!"), 
+  answer("37.347", correct = TRUE), 
+  answer("0.000", message = "That is the p-value for the slope!"), 
+  random_answer_order = TRUE,
+  allow_retry = TRUE
+)
+```
+
+```{r q29, echo=FALSE}
+question(
+  "29. Based on the output, what is the test statistic?",
+  answer("12.7294", message = "That is slope!"), 
+  answer("0.341", message = "That is standard error for the slope!"), 
+  answer("8.701", message = "That is the test statistic for the intercept!"), 
+  answer("37.347", message = "That is the test statistic for the slope!"), 
+  answer("0.000", correct = TRUE), 
+  random_answer_order = TRUE,
+  allow_retry = TRUE
+)
+```
+
+```{r q30, echo=FALSE}
+question(
+  "30. Based on this p-value, what would you do with the null hypothesis?",
+  answer("Accept", message = "We never say accept!"), 
+  answer("Fail to Reject"), 
+  answer("Reject", correct = TRUE), 
+  allow_retry = TRUE
+)
+```
+
+Discuss: 
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+1. How would you draw a conclusion to this test, based on the context of this problem?
+2. Do you have any additional context that might shed light on how reasonable this value is? Is there another value you would like to test?
+
+::::
