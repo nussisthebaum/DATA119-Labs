@@ -1,0 +1,1195 @@
+---
+title: "Probability Distributions"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+library(dplyr)
+library(kableExtra)
+library(latex2exp)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 180)
+```
+
+```{python setup_py, include=FALSE}
+import math
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy.stats
+
+from scipy.stats import binom
+from scipy.stats import geom
+from scipy.stats import poisson
+from scipy.stats import norm
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Practicing Probability Distributions", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goals of this lab are:
+
+* To review certain probability distributions. 
+* To calculate probabilities using Python commands. 
+
+## Setup
+
+For this lab we will be using  `math`, n`numpy`, `plotnine`, `pandas`, `scipy.stats` ...
+
+```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import math
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy.stats
+```
+
+## Probability Distributions
+
+Often, we are interested in calculating probabilities associated with a **random variable**, where random variables are defined as a variable or process with a numerical outcome. We usually represent random variables with a capital letter, such as $X, Y,$ or $Z$.
+
+To calculate a probability, we need to know the random variable's **probability distribution**. A probability distribution is a list of the random variable's possible outcomes with corresponding probabilities that satisfies three rules:
+
+1. The outcomes must be disjoint. 
+2. Each probability must be between 0 and 1. 
+3. The probabilities must total 1. 
+
+<!--  (for review, see the Introduction to Probability Lab).  -->
+
+You may already be familiar with probability distributions defined in some sort of table. More often, we are interested in looking at the variable and seeing if it fits a known probability distribution. This lab will cover a few specific distributions, like the Bernoulli, Binomial, Geometric, Poisson, and Normal distributions, but there are many, MANY more! For example, view the following chart:
+
+![](/images/Probability Distribution Chart.pdf)
+
+Even though you won't be formally introduced to many of these distributions, the following generally apply:
+
+* Distributions are generally appropriate in certain situations and not appropriate in others. It is your job to pick something that will work well! 
+* Distributions will generally be described by either a **P**robability **M**ass **F**unction, abbreviated as **PMF** (in the case of discrete variables) or a **P**robability **D**istribution **F**unction, abbreviated as **PDF** (in the case of continuous variables). 
+* Distributions will be characterized by parameters, like the mean and standard deviation. Usually, we use Greek letters to indicate that a value is a parameter, like $\mu$ for the mean and $\sigma$ for the standard deviation. 
+* Distributions almost always have an expected value and variance (if not, they are known as degenerate distributions). You can (and probably will!) calculate the expected value and variance by hand, but sometimes there are formulas based on the parameters. You can look these formulas up to use them if the distribution is well known--it is often much easier to use them. 
+
+## Bernoulli Distribution
+
+Bernoulli distributions are appropriate when the random variable in question can take one of two values: 1, with probability $p$, or $0$, with probability $1-p$. Because it takes only values 0 and 1, it is a discrete variable and is described with a probability mass function (PMF). Then, you can write the PMF as follows:
+
+$$
+P(x) = \begin{cases} 1-p & \text{if } x = 0 \\ 
+                     p  & \text{if } x = 1 \\ 
+                     0  & \text{otherwise} \end{cases}
+$$
+
+Remember that the expected value, denoted $E(X)$, for a discrete variable is
+
+$$
+\begin{aligned}
+E(X) & = x_1 \times P(X=x_1) + x_2 \times P(X=x_2) + \\
+ & \; \; \; \;\; \; \; ... + x_k \times P(X=x_k) \\
+& = \sum^k_{i = 1} x_i P(X=x_i) 
+\end{aligned}
+$$ 
+
+and the variance for a discrete variable is
+
+
+$$
+\begin{aligned}
+Var(X) & = (x_1 - E(X))^2 \times P(X=x_1) + ... + (x_k - E(X))^2 \times P(X=x_k) \\
+& = \sum^k_{i = 1} (x_i - E(X))^2 P(X=x_i) \\
+& = \sigma^2
+\end{aligned}
+$$ 
+
+Using these definitions, we can plug the PMF in to derive equations for the expected value and variance of $X$, a Bernoulli variable. First, the expected value:
+
+$$
+\begin{aligned}
+E(X) & = \sum^k_{i = 1} x_i P(X=x_i) \\
+& = x_1 \times P(X=x_1) + x_2 \times P(X=x_2) \\
+& = 0 \times (1-p) + 1 \times p \\
+& = p
+\end{aligned}
+$$ 
+
+Now, the variance:
+
+$$
+\begin{aligned}
+Var(X) & = \sum^k_{i = 1} (x_i - E(X))^2 P(X=x_i) \\
+& = \sum^k_{i = 1} x_i^2 P(X=x_i) - \big(E(X)\big)^2 \\
+& = 0^2 \times (1-p) + 1^2 \times p - p^2 \\
+& = p - p^2 \\
+& = p(1-p)
+\end{aligned}
+$$ 
+
+Typically, this information is summarized in a table, like the following:
+
+Support | PMF | $E(X)$ | $Var(X)$
+--------|----|--------|---------
+$x \in \{0, 1\}$ | $P(x) = \begin{cases} 1-p & \text{if } x = 0 \\ p  & \text{if } x = 1 \\ 0  & \text{otherwise} \end{cases}$ | $p$ | $p(1-p)$ 
+
+Now, let's practice some Bernoulli probability questions:
+
+Suppose I work at a bakery that sells two types of pies: apple and pumpkin. The pies are boxed in such a way that I must open the box to identify what type of pie is inside. I know the probability that a randomly selected pie is an apple pie is 42\%. Assume any samples are randomly selected, and assume that I am opening randomly selected boxes.
+
+```{r q1, echo=FALSE}
+question(
+  "1. What is a 'success', according to this problem?",
+  answer("The pie inside is an apple pie.", correct = TRUE),
+  answer("The pie inside is a pumpkin pie."),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the first secret word: BANQUET."
+)
+```
+
+What is the probability of finding a pumpkin pie, a.k.a., a "failure", in a randomly chosen box? Use the cell below to calculate if you need.
+
+```{python q2_calc, exercise = TRUE, message = FALSE}
+
+```
+
+```{r q2, echo=FALSE}
+question_numeric(
+  "2. What is the probability of a pumpkin pie?",
+  answer(0.58, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.01,
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the second secret word: HARBOR."
+)
+```
+
+3. What is the probability of finding apple pies in three randomly selected boxes?
+
+```{python bern1, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bern1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+0.42*0.42*0.42
+```
+
+```{r bern1-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 0.42*0.42*0.42, tolerance = 0.0001))
+})
+```
+
+4. What is the probability of finding pumpkin pies in three randomly selected boxes?
+
+```{python bern2, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bern2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+0.58*0.58*0.58
+```
+
+```{r bern2-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 0.58*0.58*0.58, tolerance = 0.0001))
+})
+```
+
+Notice that the Bernoulli distribution is not particularly interesting! So why are we covering it? Because it is a useful building block for many other distributions, like the Binomial and Geometric distributions. 
+
+## Binomial Distribution
+
+Binomial distributions are appropriate when the random variable is the number of successes in a sequence of $n$ independent trials, where each trial can only be a success or failure. This type of outcome is often described as binary, and hopefully sounds familiar to you--a single trial can be described as a Bernoulli variable! To check if something can be described with a Binomial distribution, ask yourself:
+
+1. Is the number of trials, $n$, fixed in advance?
+2. Can each trial be described only as a success or failure, and is the probability of success constant throughout all $n$ trials?
+3. Is each trial independent (that is, the outcome of one trial is not affected by the outcome of another)?
+
+If the answer to ALL of these questions is yes, then you have a Binomial random variable.
+
+Because the random variable takes only values 0, 1, 2, 3, etc., it is a discrete variable and is described with a probability mass function (PMF). Deriving the expressions for the expected value and variance can be done by hand, but relies on some mathematical tricks--you can read about [the derivation for the expected value of the Binomial Distribution](https://proofwiki.org/wiki/Expectation_of_Binomial_Distribution) if you are interested, but otherwise, we will just report the relevant equations:
+
+Support | PMF | $E(X)$ | $Var(X)$
+--------|----|--------|---------
+$x \in \{0, 1, ... n\}$ | $P(x) = \begin{cases} \binom{n}{k} p^k(1-p)^k & \text{if } x = 0 \\ 0  & \text{otherwise} \end{cases}$ | $np$ | $np(1-p)$ 
+
+Here, $\binom{n}{k}$ is read as $n$ choose $k$, where the choose function is defined as 
+
+$$ \binom{n}{k} = \frac{n!}{k!(n-k)!}$$
+
+Now, let's practice some Binomial distribution questions. 
+
+I am still working at the same bakery from the previous section. I have 27 boxes--what is the probability that 17 of them contain pumpkin pies? Hint: for the choose function, you can use `math.comb(n,k)`.
+
+```{r q5, echo=FALSE}
+question_numeric(
+  "5. What is $n$ in this problem?",
+  answer(27, correct = TRUE),
+  min = 0,
+  max = 27,
+  step = 1,
+  allow_retry = TRUE
+)
+```
+
+```{r q6, echo=FALSE}
+question_numeric(
+  "6. What is $k$ in this problem?",
+  answer(17, correct = TRUE),
+  min = 0,
+  max = 27,
+  step = 1,
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the third secret word: VOLUNTEER."
+)
+```
+
+7. What is the probability that 17 of 27 boxes contain pumpkin pies?
+
+```{python bin1, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bin1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+math.comb(27,17)*(0.58**17)*(0.42**10)
+```
+
+```{r bin1-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dbinom(17, 27, 0.58), tolerance = 0.0001))
+})
+```
+
+8. There is a special function that will carry out this work for you! You can use `scipy.stats.binom`--look at the [documentation for `scipy.stats.binom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html), and use the function to confirm your result from Question 7. 
+
+```{python bin2, exercise = TRUE, message = FALSE}
+from scipy.stats import binom
+
+
+```
+
+```{python bin2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from scipy.stats import binom
+
+binom.pmf(17, 27, 0.58)
+```
+
+```{r bin2-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dbinom(17, 27, 0.58), tolerance = 0.0001))
+})
+```
+
+9. Of my 27 pies, how many should I expect to be apple?
+
+```{python bin3, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bin3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+27*0.42
+```
+
+```{r bin3-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 27*0.42, tolerance = 0.0001))
+})
+```
+
+10. Now assume I have three pies, like I did in the Bernoulli distribution section. What is the probability that all three are pumpkin?
+
+```{python bin4, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bin4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+binom.pmf(3, 3, 0.58)
+```
+
+```{r bin4-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 0.58^3, tolerance = 0.0001))
+})
+```
+
+11. What is the probability that all three are apple?
+
+```{python bin5, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bin5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+binom.pmf(3, 3, 0.42)
+```
+
+```{r bin5-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 0.42^3, tolerance = 0.0001))
+})
+```
+
+DISCUSSION: Do your answers match the values in the previous section? Why or why not?
+
+12. We may also want to calculate probabilities for a range of values. Because the values are mutually exclusive, we can simply add probabilities together. For example, find the probability that there are two or fewer apple pies. 
+
+```{python bin6, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bin6-solution, message = FALSE, warning = FALSE, echo = FALSE}
+binom.pmf(0, 3, 0.42) + binom.pmf(1, 3, 0.42) + binom.pmf(2, 3, 0.42)
+```
+
+```{r bin6-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, sum(dbinom(0:2, 3, 0.42)), tolerance = 0.0001))
+})
+```
+
+You can see that this could get extremely tedious if the range is very much larger! Luckily for us, there is a special function called a **cumulative mass function** that will calculate probabilities associated with a range of values. For the Binomial distribution, that command is `binom.cdf()` (technically, it should be abbreviated `binom.cmf()`, but many computer languages get a little sloppy when naming their commands).
+
+13. Re-read the documentation linked above, and confirm your answer with `binom.cdf()`. 
+
+```{python bin7, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bin7-solution, message = FALSE, warning = FALSE, echo = FALSE}
+binom.cdf(2, 3, 0.42) 
+```
+
+```{r bin7-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, sum(dbinom(0:2, 3, 0.42)), tolerance = 0.0001))
+})
+```
+
+14. Now assume I have 32 pies. What is the probability that more than 23 are apple?
+
+```{python bin8, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bin8-solution, message = FALSE, warning = FALSE, echo = FALSE}
+1 - binom.cdf(23, 32, 0.42) 
+```
+
+```{r bin8-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, sum(dbinom(24:32, 32, 0.42)), tolerance = 0.0001))
+})
+```
+
+15. What is the probability that less than 8 are apple?
+
+```{python bin9, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bin9-solution, message = FALSE, warning = FALSE, echo = FALSE}
+binom.cdf(7, 32, 0.42) 
+```
+
+```{r bin9-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, sum(dbinom(0:7, 32, 0.42)), tolerance = 0.0001))
+})
+```
+
+16. What is the probability that between 13 and 18 are apple? Treat 13 and 18 inclusively, that is, include them in the range you are looking for. 
+
+```{python bin10, exercise = TRUE, message = FALSE}
+
+```
+
+```{python bin10-solution, message = FALSE, warning = FALSE, echo = FALSE}
+binom.cdf(19, 32, 0.42) - binom.cdf(12, 32, 0.42)
+```
+
+```{r bin10-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, sum(dbinom(13:18, 32, 0.42)), tolerance = 0.0001))
+})
+```
+
+## Geometric Distribution
+
+Geometric distributions are appropriate when the random variable is the number of trials until you find a single success. Again, each trial can only be a success or failure, and the sequence of trials must be independent. Note that unlike the Binomial distribution, the number of trials is not fixed--you are waiting until you get a success. 
+
+Because the random variable takes only values 0, 1, 2, 3, etc., it is a discrete variable and is described with a probability mass function (PMF). Deriving the expressions for the expected value and variance can be done by hand, but relies on some mathematical tricks--you can read about [the derivation of the expectation of the Geometric distribution](https://www.cs.cornell.edu/courses/cs280/2008sp/280wk11_x4.pdf) if you are interested, but otherwise, we will just report the relevant equations:
+
+Support | PMF | $E(X)$ | $Var(X)$
+--------|----|--------|---------
+$x \in \{1, 2, ... n\}$ | $P(x) = \begin{cases} (1-p)^{k-1}p & \text{if } x > 0 \\ 0  & \text{otherwise} \end{cases}$ | $\frac{1}{p}$ | $\frac{1-p}{p^2}$ 
+
+Now, let's practice some Geometric distribution questions:
+
+A husband and wife both have brown eyes but carry genes that make it possible for their children to have brown eyes (probability 0.75), blue eyes (0.125), or green eyes (0.125).
+
+17. What is the probability the first blue-eyed child they have is their third child? Assume that the eye colors of the children are independent of each other.
+
+```{python geo1, exercise = TRUE, message = FALSE}
+
+```
+
+```{python geo1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(1-0.125)*(1-0.125)*0.125
+```
+
+```{r geo1-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, (1-0.125)*(1-0.125)*0.125, tolerance = 0.0001))
+})
+```
+
+Note that you can actually carry out this calculation without knowing specific Python commands for the Geometric distribution! In fact, the Geometric distribution is also a series of Bernoulli variables--take a look at the solution, and you may even be able to tell how the PMF is derived. 
+
+18. `scipy.stats.geom` has many relevant commands for the Geometric distribution. look at the [documentation for `scipy.stats.geom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.geom.html) and confirm your answer to Question 17 using code from `scipy.stats`.
+
+```{python geo2, exercise = TRUE, message = FALSE}
+from scipy.stats import geom
+
+```
+
+```{python geo2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from scipy.stats import geom
+
+geom.pmf(3, 0.125)
+```
+
+```{r geo2-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, (1-0.125)*(1-0.125)*0.125, tolerance = 0.0001))
+})
+```
+
+19. On average, how many children would such a pair of parents have before having a blue-eyed child?
+
+```{python geo3, exercise = TRUE, message = FALSE}
+
+```
+
+```{python geo3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+1/0.125
+```
+
+```{r geo3-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1/0.125, tolerance = 0.0001))
+})
+```
+
+20.  What is the standard deviation of the number of children they would expect to have until the first blue-eyed child?
+
+```{python geo4, exercise = TRUE, message = FALSE}
+
+```
+
+```{python geo4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+math.sqrt((1-0.125)/(0.125)**2)
+```
+
+```{r geo4-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1/0.125, tolerance = 0.0001))
+})
+```
+
+21. What is the probability that their first child will have green eyes and the second will not? 
+
+```{python geo5, exercise = TRUE, message = FALSE}
+
+```
+
+```{python geo5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+geom.pmf(2, 0.875)
+```
+
+```{r geo5-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dgeom(1, prob = 0.875), tolerance = 0.0001))
+})
+```
+
+22. What is the probability that the first green eyed child will be the $4^{th}$ child?
+
+```{python geo6, exercise = TRUE, message = FALSE}
+
+```
+
+```{python geo6-solution, message = FALSE, warning = FALSE, echo = FALSE}
+geom.pmf(4, 0.125)
+```
+
+```{r geo6-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dgeom(3, prob = 0.125), tolerance = 0.0001))
+})
+```
+
+## Poisson Distribution
+
+Unlike the Binomial and Geometric distributions, Poisson distributions are characterized by a rate parameter, $\lambda$. Typically, the Poisson distribution describes the number of events in a fixed unit of time or space (the number of spam texts you receive per one day, the number of defects in a square yard of material, etc.)
+
+Because the random variable takes only values 0, 1, 2, 3, etc., it is a discrete variable and is described with a probability mass function (PMF). Deriving the expressions for the expected value and variance can be done by hand, but relies on some mathematical tricks--you can read about [the derivation for the expected value of the Poisson Distribution](https://proofwiki.org/wiki/Expectation_of_Poisson_Distribution) if you are interested, but otherwise, we will just report the relevant equations:
+
+Support | PMF | $E(X)$ | $Var(X)$
+--------|----|--------|---------
+$x \in \{0, 1, ... n\}$ | $P(x) = \begin{cases} \frac{\lambda^xe^{-\lambda}}{x!} & \text{if } x \geq 0 \\ 0  & \text{otherwise} \end{cases}$ | $\lambda$ | $\lambda$ 
+
+Now, let's practice some Poisson distribution questions:
+
+A very skilled court stenographer makes one typographical error (typo) per hour on average.
+
+```{r q23, echo=FALSE}
+question_numeric(
+  "23. What is the mean number of typos this stenographer makes per hour?",
+  answer(1, correct = TRUE),
+  min = 0,
+  max = 100,
+  step = 1,
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the fourth secret word: REPUTATION."
+)
+```
+
+```{r q24, echo=FALSE}
+question_numeric(
+  "24. What is the standard deviation for the number of typos this stenographer makes per hour?",
+  answer(1, correct = TRUE),
+  min = 0,
+  max = 100,
+  step = 1,
+  allow_retry = TRUE
+)
+```
+
+25. Would it be considered unusual if this stenographer made 4 typos in a given hour? Note: you can either use the CMF, or you can use `scipy.stats.poisson`--look at the [documentation for `scipy.stats.poisson`]https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.poisson.html). 
+
+```{python pois1, exercise = TRUE, message = FALSE}
+from scipy.stats import poisson
+
+
+```
+
+```{python pois1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from scipy.stats import poisson
+
+poisson.pmf(4, 1)
+```
+
+```{r pois1-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dpois(4, lambda = 1), tolerance = 0.0001))
+})
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor:**
+:::
+
+Is this probability small enough to be considered unusual? If not, what would you consider unusual?
+::::
+
+26. Calculate the probability that this stenographer makes at most 2 typos in a given hour. Note: you can either do this by adding multiple instances of `poisson.pmf()`, or you can use `poisson.cdf()`. 
+
+```{python pois2, exercise = TRUE, message = FALSE}
+
+```
+
+```{python pois2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+poisson.pmf(4, 1)
+```
+
+```{r pois2-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, ppois(2, lambda = 1), tolerance = 0.0001))
+})
+```
+
+## Normal Distribution
+
+The Normal distribution is unlike any of the other distributions we have learned so far, since it is the only continuous distribution. Furthermore, it is characterized by two parameters: $\mu$, the expected value or mean (sometimes referred to as the location parameter), and $\sigma$, the standard deviation (sometimes referred to as the scale parameter). There are many distributions that are well approximated by the Normal distribution, and in fact, it is the most important distribution to many statisticians. 
+
+Because a normally distributed variable is a continuous variable, it is described with a probability density function (PDF). Here are the relevant equations: 
+
+Support | PMF | $E(X)$ | $Var(X)$
+--------|----|--------|---------
+$x \in \mathbb{R}$ | $P(x) =  \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$ | $\lambda$ | $\lambda$ 
+
+Two notes:
+
+* Like any continuous distribution, the probability of observing a single value is exactly and always 0. We are typically looking at finding the probability of a range of values, i.e., $P(X<0)$, $P(X>3)$, $P(-1<X<1)$.
+* To find probabilities associated with a range of values, you need to integrate the PDF over a certain range. The PDF for the normal distribution CANNOT be integrated by hand! Instead, you need to use the CDF (**C**umulative **D**istribution **F**unction), which is easiest to find with `scipy.stats.norm` (read [the documentation for `scipy.stats.norm` here](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html)).
+
+Now, let's practice some Normal distribution questions:
+
+
+In triathlons, it is common for racers to be placed into age and gender groups. Friends Leo and Mary both completed the Hermosa Beach Triathlon, where Leo competed in the Men, Ages 30 - 34 group while Mary competed in the Women, Ages 25 - 29 group. Leo completed the race in 1:22:28 (4948 seconds), while Mary completed the race in 1:31:53 (5513 seconds). Obviously Leo finished faster, but they are curious about how they did within their respective groups. Can you help them? Here is some information on the performance of their groups:
+
+* The finishing times of the Men, Ages 30 - 34 group has a mean of 4313 seconds with a standard deviation of 583 seconds.
+* The finishing times of the Women, Ages 25 - 29 group has a mean of 5261 seconds with a standard deviation of 807 seconds. 
+* The distributions of finishing times for both groups are approximately Normal. Remember: a better performance corresponds to a faster finish.
+
+```{r 27., echo=FALSE}
+question("27. Write the distribution for the finishing triathlon times for Men Ages 30-34 using proper notation.",
+  answer("$N(0, 1)$"),
+  answer("$N(1, 0)$"),
+  answer("$N(4313, 583)$", correct = TRUE),
+  answer("$N(583, 4313)$", correct = TRUE),
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+```{r 28., echo=FALSE}
+question("28. Write the distribution for the finishing triathlon times for Women Ages 25-29 using proper notation.",
+  answer("$N(0, 1)$"),
+  answer("$N(1, 0)$"),
+  answer("$N(5261, 807)$", correct = TRUE),
+  answer("$N(807, 5261)$", correct = TRUE),
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+
+29. What percent of the triathletes did Leo finish faster than in his group?
+
+```{python norm1, exercise = TRUE, message = FALSE}
+from scipy.stats import norm
+
+```
+
+```{python norm1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+from scipy.stats import norm
+
+1 - norm.cdf(4948, loc = 4313, scale = 583)
+```
+
+```{r norm1-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - pnorm(4948, mean = 4313, sd = 583), tolerance = 0.0001))
+})
+```
+
+30. What percent of the triathletes did Mary finish faster than in her group?
+
+```{python norm2, exercise = TRUE, message = FALSE}
+
+
+
+```
+
+```{python norm2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+1 - norm.cdf(5513, loc = 5261, scale = 807)
+```
+
+```{r norm2-code-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - pnorm(5513, mean = 5261, sd = 807), tolerance = 0.0001))
+})
+```
+
+```{r}
+
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor:**
+:::
+
+Who did better in the triathlon, relative to their sex/age group? Hpw do you know?
+::::
+
+## More Practice Questions
+
+When practicing these questions, make sure you are asking yourself what distribution you should be using!
+
+### Cake Batter
+
+The yield of a box of cake mix is normally distributed with a mean of 4.75 cups of batter and a standard deviation of 0.25 cups. 
+
+Write this distribution in mathematical notation. 
+
+```{r cakebatter1, echo=FALSE}
+question("Write this distribution in mathematical notation.",
+  answer("$N(4.75, 0.25)$", correct = TRUE),
+  answer("$N(0.25, 4.75)$"),
+  answer("$N(0, 1)$"),
+  answer("$N(1, 0)$"),
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+What is the probability that a box of cake mix yields less than 4.15 cups of batter?
+
+```{python cakebatter2, exercise = TRUE}
+pnorm()
+```
+
+```{python cakebatter2-solution, message = FALSE, warning = FALSE}
+pnorm(4.15, mean = 4.75, sd = 0.25)
+```
+
+```{r cakebatter2-check, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pnorm(4.15, mean = 4.75, sd = 0.25)))
+})
+```
+
+What is the probability that the box of cake mix yielded more than 5.2 cups of batter? 
+
+```{python cakebatter3, exercise = TRUE}
+
+```
+
+```{python cakebatter3-solution, warning = FALSE}
+1 - pnorm(5.2, mean = 4.75, sd = 0.25)
+```
+
+```{r cakebatter3-check}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - pnorm(5.2, mean = 4.75, sd = 0.25)))
+})
+```
+
+What is the probability that the box of cake mix yields between 4.25 and 4.85 cups of batter?
+
+```{python cakebatter4, exercise = TRUE}
+
+```
+
+```{python cakebatter4-solution, message = FALSE, warning = FALSE}
+pnorm(4.85, mean = 4.75, sd = 0.25) - pnorm(4.25, mean = 4.75, sd = 0.25)
+```
+
+```{python cakebatter4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pnorm(4.85, mean = 4.75, sd = 0.25) - pnorm(4.25, mean = 4.75, sd = 0.25)))
+})
+```
+
+### Coffee Drinkers
+
+A 2017 study shows that 64\% of Americans drink coffee every day.
+
+In a group of 14 people, how many are expected to drink coffee every day? \textcolor{red}{Hint: what distribution should you be using to answer this question?}
+
+```{python coffee1, exercise = TRUE}
+
+```
+
+```{python coffee1-solution, message = FALSE, warning = FALSE}
+14*0.64
+```
+
+```{r coffee1-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 14*0.64))
+})
+```
+
+In the same group of 14 Americans, what is the probability that exactly 9 drink coffee every day?
+
+```{python coffee2, exercise = TRUE}
+
+```
+
+```{python coffee2-solution, message = FALSE, warning = FALSE}
+binom.pmf(9, 14, 0.64)
+```
+
+```{r coffee2-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dbinom(9, size = 14, prob = 0.64)))
+})
+```
+
+What is the probability that at least ten drink coffee every day?
+
+```{python coffee3, exercise = TRUE}
+
+```
+
+```{python coffee3-solution, message = FALSE, warning = FALSE}
+1 - binom.cdf(9, 14, 0.64)
+```
+
+```{python coffee3-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - pbinom(9, size = 14, prob = 0.64)))
+})
+```
+
+What is the probability that at most 7 drink coffee every day?
+
+```{python coffee4, exercise = TRUE}
+
+```
+
+```{python coffee4-solution, message = FALSE, warning = FALSE}
+binom.cdf(7, 14, 0.64)
+```
+
+```{r coffee4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pbinom(7, size = 14, prob = 0.64)))
+})
+```
+
+What is the probability that between 3 and 8 drink coffee every day?
+
+```{python coffee5, exercise = TRUE}
+
+```
+
+```{python coffee5-solution, message = FALSE, warning = FALSE}
+binom.cdf(8, 14, 0.64) - binom.cdf(2, 14, 0.64)
+```
+
+```{python coffee5-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pbinom(8, size = 14, prob = 0.64) - pbinom(2, size = 14, prob = 0.64)))
+})
+```
+
+### Dogs in Apartments
+
+In a certain apartment complex, residents are allowed to have dogs. The rate of dogs in the apartment complex is 4 per building. 
+
+```{r dogs1, echo=FALSE, eval = F}
+question("How many dogs should I expect to be living in a building?",
+  answer("4", correct = TRUE),
+  answer("16"),
+  answer("2"),
+  answer("0")
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+What is the probability that a building has at least one dog?
+
+```{python dogs2, exercise = TRUE}
+
+```
+
+```{python dogs2-solution, message = FALSE, warning = FALSE}
+1 - poisson.cdf(0, 4)
+```
+
+```{r dogs2-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - ppois(0, lambda = 4)))
+})
+```
+
+What is the probability that a building has exactly five dogs?
+
+```{python dogs3, exercise = TRUE}
+
+```
+
+```{python dogs3-solution, message = FALSE, warning = FALSE}
+poisson.pmf(5, 4)
+```
+
+```{r dogs3-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dpois(5, lambda = 4)))
+})
+```
+
+What is the probability that a building has no more than 3 dogs?
+
+```{python dogs4, exercise = TRUE}
+
+```
+
+```{python dogs4-solution, message = FALSE, warning = FALSE}
+poisson.cdf(3, 4)
+```
+
+```{r dogs4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, ppois(3, lambda = 4)))
+})
+```
+
+### Freethrows
+
+Assume that a basketball player has a 76.3\% chance of making a free throw. How many free throws should we expect her to shoot before making one? 
+
+```{python freethrows1, exercise = TRUE}
+
+```
+
+```{python freethrows1-solution, message = FALSE, warning = FALSE}
+1/0.763
+```
+
+```{r freethrows1-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1/0.763))
+})
+```
+
+What is the probability that she makes her first free throw on her third shot?
+
+```{python freethrows2, exercise = TRUE}
+
+```
+
+```{python freethrows2-solution, message = FALSE, warning = FALSE}
+geom.pmf(3, 0.763)
+```
+
+```{r freethrows2-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dgeom(2, prob = 0.763)))
+})
+```
+
+What is the probability that she makes her first free throw some time after her third shot?
+
+```{python freethrows3, exercise = TRUE}
+
+```
+
+```{python freethrows3-solution, message = FALSE, warning = FALSE}
+1 - geom.cdf(3, 0.763)
+```
+
+```{r freethrows3-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1 - pgeom(2, prob = 0.763)))
+})
+```
+
+What is the probability that it takes her no more than two shots to make her first free throw?
+
+```{python freethrows4, exercise = TRUE}
+
+```
+
+```{python freethrows4-solution, message = FALSE, warning = FALSE}
+geom.cdf(2, 0.763)
+```
+
+```{r freethrows4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pgeom(1, prob = 0.763)))
+})
+```
+
+### Bookworms
+
+One in four Americans did not read a single book last year. 
+
+What is the probability, $p$, that a randomly chosen American did not read a single book last year?
+
+```{python books1, exercise = TRUE}
+
+```
+
+```{python books1-solution, message = FALSE, warning = FALSE}
+1/4
+```
+
+```{r books1-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1/4))
+})
+```
+
+In a group of 24 Americans, how many are expected to have not read a single book last year?
+
+```{python books2, exercise = TRUE}
+
+```
+
+```{python books2-solution, message = FALSE, warning = FALSE}
+24*0.25
+```
+
+```{r books2-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 24*0.25))
+})
+```
+
+When meeting a group of new people (all Americans), what is the probability that I meet the first person who did not read a single book last year during my fifth meeting?
+
+```{python books3, exercise = TRUE}
+
+```
+
+```{python books3-solution, message = FALSE, warning = FALSE}
+geom.pmf(5, 0.25)
+```
+
+```{r books3-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dgeom(4, prob = 0.25)))
+})
+```
+
+How many Americans should I expect to meet before meeting one who did not read a single book last year?
+
+```{python books4, exercise = TRUE}
+
+```
+
+```{python books4-solution, message = FALSE, warning = FALSE}
+1/0.25
+```
+
+```{r books4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, 1/0.25))
+})
+```
+
+In a group of 10 people, what is the probability that exactly three did not read a single book last year?
+
+```{python books5, exercise = TRUE}
+
+```
+
+```{python books5-solution, message = FALSE, warning = FALSE}
+binom.pmf(3, 10, 0.25)
+
+dbinom(3, size = 10, prob = 0.25)
+```
+
+```{r books5-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, dbinom(3, size = 10, prob = 0.25)))
+})
+```
+
+In a group of 19 people, what is the probability that no more than 3 people did not read a single book last year?
+
+```{python books6, exercise = TRUE}
+
+```
+
+```{r books6-solution, message = FALSE, warning = FALSE}
+binom.cdf(3, 19, 0.25)
+```
+
+```{r books6-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, pbinom(3, size = 19, prob = 0.25)))
+})
+```
+
+### San Antonio Spurs
+
+In the 2019-2020 NBA season prior to the break, the San Antonio Spurs scored an average of 28.25 points per quarter (4 quarters of 12 minutes each per one game). Let $S$ be a random variable describing the number of points scored in a quarter.
+
+```{python spurs1, echo=FALSE, eval = F}
+question("What distribution is most appropriate to use to calculate the probability of scoring more than 32 points in a quarter?",
+  answer("Poisson", correct = TRUE),
+  answer("Binomial"),
+  answer("Geometric"),
+  answer("Bernoulli"), 
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+What are the expected value and the standard deviation of this distribution? Save them as `exp_val` and `sd`.
+
+```{python spurs2, exercise = TRUE}
+exp_val =
+sd =
+```
+
+```{python spurs2-solution, message = FALSE, warning = FALSE}
+exp_val = 28.25
+sd = sqrt(28.25)
+```
+
+```{r spurs2-check, message = FALSE, warning = FALSE}
+grade_this({
+  pass_if(~ all.equal(reticulate::py$exp_val, 28.25), "Fantastic!")
+})
+```
+
+What is the probability that the San Antonio Spurs scored more than 32 points in a quarter?
+
+```{python spurs3, exercise = TRUE}
+
+```
+
+```{python spurs3-solution, message = FALSE, warning = FALSE}
+1 - poisson.cdf(32, 28.25)
+```
+
+```{r spurs3-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.py_result, 1 - poisson.cdf(32, 28.25))), 
+})
+```
+
+What is the probability that the San Antonio Spurs score between 24 and 28 points in a quarter (including both 24 and 28)?
+
+```{python spurs4, exercise = TRUE}
+
+```
+
+```{python spurs4-solution, message = FALSE, warning = FALSE}
+sum([poisson.pmf(x, 28.25) for x in [24, 25, 26, 27, 28]])
+```
+
+```{r spurs4-check, message = FALSE, warning = FALSE}
+grade_result({
+  pass_if(~ all.equal(.result, sum(dpois(24:28, lambda = 28.25))))
+})
+```
+
+
+
