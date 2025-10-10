@@ -3,11 +3,12 @@ title: "Data119 - Lab 3"
 output: 
    learnr::tutorial:
       css: css/custom-styles.css
+      df_print: default
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(error = TRUE)
+knitr::opts_chunk$set(error = TRUE, paged.print = FALSE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
 library(learnr)
@@ -85,9 +86,48 @@ tags$div(
 )
 ```
 
-```{python empty, echo=FALSE}
-# removing the internal error with an empty python chunk
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import statsmodels.api as sm
+
+# To download this file go to https://posit.ds.uchicago.edu/linearregressionlab/www/AirBnB_mini.csv
+
+AirBnB_prices = pd.read_csv("./data/AirBnB_mini.csv") 
+
+pd.set_option('display.max_columns', None)
+
+X1 = AirBnB_prices["dist"]
+X1 = sm.add_constant(X1)
+
+Y = AirBnB_prices["realSum"]
+
+model1 = sm.OLS(Y, X1).fit()
+
+AirBnB_prices['logRealSum'] = np.log(AirBnB_prices['realSum'])
+
+model1_df = model1.fittedvalues.to_frame(name = 'Fitted')
+model1_df['Residuals'] = model1.resid
+
+Y2 = AirBnB_prices["logRealSum"]
+
+model2 = sm.OLS(Y2, X1).fit()
+
+model2_df = model2.fittedvalues.to_frame(name = 'Fitted')
+model2_df['Residuals'] = model2.resid
+
+X3 = AirBnB_prices[['person_capacity', 'cleanliness_rating', 'guest_satisfaction_overall', 'bedrooms', 'dist', 'metro_dist', 'attr_index_norm', 'rest_index_norm', 'lng', 'lat']]
+X3 = sm.add_constant(X3)
+
+model3 = sm.OLS(Y, X3).fit()
+
+model3_df = model3.fittedvalues.to_frame(name = 'Fitted')
+model3_df['Residuals'] = model3.resid
+
+model4 = sm.OLS(Y2, X3).fit()
 ```
+
 
 ## Goals
 
@@ -115,11 +155,77 @@ AirBnB_prices = pd.read_csv("./data/AirBnB_mini.csv")
 pd.set_option('display.max_columns', None)
 ```
 
+## Assumptions of Linear Regression
+
+Before we create our own diagnostic plots, let's review the linear regression assumptions:
+
+1. **Linearity** - x and y have a linear relationship
+2. **Constant variance** (homoscedasticity) - the variance does not change for different values of x
+3. **Symmetric, unimodal residuals** - residuals should have an approximately normal distribution
+4. **Independence of predictors** (we will talk about this more in Lab 3.5)
+5. **Independence of errors** (this we usually assume to be true)
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+1. What would a diagnostic plot that fits all assumptions look like?
+2. What would you look for in a diagnostic plot to test for each assumption?
+::::
+
+Practice looking for these issues in diagnostic plots by answering the following questions:
+
+```{r q1, echo = FALSE}
+uiOutput("residual_bucket_ui")
+actionButton("submit_resid", "Submit")
+#actionButton("reset_resid", "Try Again")
+verbatimTextOutput("result_resid")
+```
+
+```{r q2, echo = FALSE}
+uiOutput("outlier_bucket_ui")
+actionButton("submit_outlier", "Submit")
+#actionButton("reset_outlier", "Try Again")
+verbatimTextOutput("result_outlier")
+```
+
+```{r q3, echo = FALSE}
+question_checkbox(
+  HTML("
+    3. Which issues are present in the residual plot shown?<br><br>
+    <img src='./images/non_normal_nonlinear_high_leverage_residual_plot.png' height='200px'>
+  "),
+  answer("Non-Linearity", correct = TRUE),
+  answer("Heteroscedasticity"),
+  answer("Non-Normal Residuals", correct = TRUE),
+  answer("High Leverage Points", correct = TRUE),
+  message = "The residuals show a nonlinear trend with a skewed distribution and several extreme values, indicating non-linearity, non-normality, and large outliers.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+```{r q4, echo = FALSE}
+question_checkbox(
+  HTML("4. Which issues are present in this residual plot shown?<br><br>
+    <img src='./images/exponential_combo_residual_plot_updated.png' height='200px'>"),
+  answer("Non-Linearity", correct = TRUE),
+  answer("Heteroscedasticity", correct = TRUE),
+  answer("Non-Normal Residuals"),
+  answer("High Leverage Points"),
+  message = "The residuals increase in spread and follow a curved pattern — suggesting both heteroscedasticity and non-linearity.",
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+
+```
+
+
 ## Reviewing SLR with `statsmodels`
 
-1. Using `statsmodels` syntax, refit a simple linear regression model predicting `realSum` from `dist`, and make a note of the $R^2$ (which can be found in the `.summary()` output.
+5. Using `statsmodels` syntax, refit a simple linear regression model predicting `realSum` from `dist`, and make a note of the $R^2$ (which can be found in the `.summary()` output.
 
-```{python slr, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python slr, exercise = TRUE, message = FALSE, paged.print = FALSE}
 X1 = AirBnB_prices[...]
 X1 = sm.add_constant(X1)
 
@@ -143,18 +249,58 @@ model1.summary()
 grade_this_code()
 ```
 
-2. You might remember that the `dir()` function can identify different objects within another object, and that in `statsmodels` objects, there are lot of useful, pre-calculated objects. Apply it to `model1`.
+```{r slr_reformat, context="server"}
+slr_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$slr$correct,
+  valueFunc = function() get_tutorial_state()$slr$correct
+)
 
-```{python setup1_5, exercise=FALSE, echo=FALSE, exercise.setup="setup1"}
-X1 = AirBnB_prices["dist"]
-X1 = sm.add_constant(X1)
+slr_hint_visible <- reactiveVal(FALSE)
 
-Y = AirBnB_prices["realSum"]
+output$slr_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(slr_correct_poll())) {
+    tagList(
+    p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Take a look at how it should appear in a Jupyter notebook or other IDE."),
+    renderImage({
+      filename <-normalizePath(file.path("./images/q1_reformat.png"))
+      list(src = filename, width = "450px")
+    },  deleteFile = FALSE),
+    #actionButton("slr_show_hint_btn", "💡 Show hint"),
+    tags$div(
+      id = "slr_hint_box",
+      style = paste(
+        if (!slr_hint_visible()) "display:none;" else "",
+        "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+      ),
+      "")
+    )
+  } else {
+    tagList(
+      p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Answer Question 1 correctly to reveal reformatted results.")
+    )
+  }
+}
+)
 
-model1 = sm.OLS(Y, X1).fit()
+# observeEvent(input$slr_show_hint_btn, {
+#   shinyjs::toggle(id = "slr_hint_box", anim = TRUE, time = 0.2)
+#   slr_hint_visible(!slr_hint_visible())
+#   updateActionButton(
+#     session, "slr_show_hint_btn",
+#     label = if (slr_hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+#   )
+# })
 ```
 
-```{python dir, exercise = TRUE, message = FALSE, exercise.setup="setup1_5"}
+```{r slr_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("slr_plot_output")
+```
+
+
+6. You might remember that the `dir()` function can identify different objects within another object, and that in `statsmodels` objects, there are lot of useful, pre-calculated objects. Apply it to `model1`.
+
+```{python dir, exercise = TRUE, message = FALSE}
 
 ```
 
@@ -166,8 +312,8 @@ dir(model1)
 grade_this_code()
 ```
 
-```{r q3, echo=FALSE}
-question("3. Which object do you think contains the predicted values for this model?",
+```{r q7, echo=FALSE}
+question("7. Which object do you think contains the predicted values for this model?",
          answer("`resid`", message = "`resid` gives you the residuals, which are calculated using the predicted values, but are not the same."),
          answer("`fittedvalues`", correct=TRUE, message = "Fitted values is another way of saying predicted values."),
          answer("`predict`", message = "Close! `predict` is actually a method that will predict a value using the line for a new observation."),
@@ -177,8 +323,8 @@ question("3. Which object do you think contains the predicted values for this mo
          post_message = "Congratulations! You have found the first secret word: QUALITY.")
 ```
 
-```{r q4, echo=FALSE}
-question("4. Which object do you think contains the residuals for this model?",
+```{r q8, echo=FALSE}
+question("8. Which object do you think contains the residuals for this model?",
          answer("`resid`", correct = TRUE),
          answer("`fittedvalues`", message = "We do need the predicted values to calculate the residuals, but we also need the observed values as well."),
          answer("`resid_pearson`", message = "Close! `resid_pearson` is actually a slightly different kind of residual, which you may learn more about in DATA213."),
@@ -189,88 +335,11 @@ question("4. Which object do you think contains the residuals for this model?",
 
 There are many other useful things to unpack from a `statsmodels` object, but for now, let's focus on using `fittedvalues` and `resid` to create diagnostic plots.
 
-## Assumptions of Linear Regression
-
-Before we create our own diagnostic plots, let's review the linear regression assumptions:
-
-1. **Linearity** - x and y have a linear relationship
-2. **Constant variance** (homoscedasticity) - the variance does not change for different values of x
-3. **Symmetric, unimodal residuals** - residuals should have an approximately normal distribution
-4. **Independence of predictors** (we will talk about this more in Lab 3.5)
-5. **Independence of errors** (this we usually assume to be true)
-
-:::: {.discussionbox}
-::: {.center}
-**Discuss with a neighbor (or on Ed):**
-:::
-1. What would a diagnostic plot that fits all assumptions look like?
-2. What would you look for in a diagnostic plot to test for each assumption?
-::::
-
-Practice looking for these issues in diagnostic plots by answering the following questions:
-
-```{r q5, echo = FALSE}
-uiOutput("residual_bucket_ui")
-actionButton("submit_resid", "Submit")
-#actionButton("reset_resid", "Try Again")
-verbatimTextOutput("result_resid")
-```
-
-```{r q6, echo = FALSE}
-uiOutput("outlier_bucket_ui")
-actionButton("submit_outlier", "Submit")
-#actionButton("reset_outlier", "Try Again")
-verbatimTextOutput("result_outlier")
-```
-
-```{r q7, echo = FALSE}
-question_checkbox(
-  HTML("
-    7. Which issues are present in the residual plot shown?<br><br>
-    <img src='./images/non_normal_nonlinear_high_leverage_residual_plot.png' height='200px'>
-  "),
-  answer("Non-Linearity", correct = TRUE),
-  answer("Heteroscedasticity"),
-  answer("Non-Normal Residuals", correct = TRUE),
-  answer("High Leverage Points", correct = TRUE),
-  message = "The residuals show a nonlinear trend with a skewed distribution and several extreme values, indicating non-linearity, non-normality, and large outliers.",
-  allow_retry = TRUE,
-  random_answer_order = TRUE
-)
-```
-
-```{r q8, echo = FALSE}
-question_checkbox(
-  HTML("8. Which issues are present in this residual plot shown?<br><br>
-    <img src='./images/exponential_combo_residual_plot_updated.png' height='200px'>"),
-  answer("Non-Linearity", correct = TRUE),
-  answer("Heteroscedasticity", correct = TRUE),
-  answer("Non-Normal Residuals"),
-  answer("High Leverage Points"),
-  message = "The residuals increase in spread and follow a curved pattern — suggesting both heteroscedasticity and non-linearity.",
-  allow_retry = TRUE,
-  random_answer_order = TRUE
-)
-
-```
-
-
 ## Diagnostic Plots
 
 9. Edit the cell below to extract the predicted values and the residuals and turns them into a DataFrame (which we need to use for `plotnine`).
 
-```{python setup2, exercise=FALSE, echo=FALSE, exercise.setup="setup1_5"}
-X1 = AirBnB_prices["dist"]
-X1 = sm.add_constant(X1)
-
-Y = AirBnB_prices["realSum"]
-
-model1 = sm.OLS(Y, X1).fit()
-
-AirBnB_prices['logRealSum'] = np.log(AirBnB_prices['realSum'])
-```
-
-```{python dp_extract, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+```{python dp_extract, exercise = TRUE, message = FALSE}
 ## Extracting the predicted values from the model and
 ## putting them in a DataFrame.
 model1_df = model1.fittedvalues.to_frame(name = ___ )
@@ -294,31 +363,26 @@ grade_this_code()
 
 10. Now, using `model1_df`, edit the cell to produce the diagnostic plots (a scatterplot of residuals against the predicted (aka fitted) values, and a histogram of the residuals).
 
-```{python setup2_5, exercise=FALSE, echo=FALSE, exercise.setup="setup2"}
-model1_df = model1.fittedvalues.to_frame(name = 'Fitted')
-model1_df['Residuals'] = model1.resid
-```
-
-```{python dp_produce, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2_5"}
+```{python dp_produce, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 (p9.ggplot(model1_df, p9.aes(x = ___, y = ___)) +
  p9.geom_point() +
  p9.xlab("Predicted Price") +
- p9.ylab("Residuals")).show()
+ p9.ylab("Residuals"))
              
 (p9.ggplot(model1_df, p9.aes(x = ___)) +
    p9.geom____(bins = 230) +
-   p9.xlab("Residuals")).show()
+   p9.xlab("Residuals"))
 ```
 
 ```{python dp_produce-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(model1_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("Predicted Price") +
- p9.ylab("Residuals")).show()
+ p9.ylab("Residuals"))
              
 (p9.ggplot(model1_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(bins = 230) +
-   p9.xlab("Residuals")).show()
+   p9.xlab("Residuals"))
 ```
 
 ```{r dp_produce-code-check, message = FALSE, warning = FALSE}
@@ -339,18 +403,18 @@ question("11. Describe the distribution of the residuals.",
 
 To address the skewness, apply the log (base $e$) transformation to `realSum`. Save the transformed values as a new column in your data frame (name it `logRealSum`). Plot the distribution of the transformed variable and re-examine the histogram.
 
-```{python log, exercise = TRUE, message = FALSE, exercise.setup="setup2_5"}
+```{python log, exercise = TRUE, message = FALSE}
 AirBnB_prices['logRealSum'] = np.log(___)
 
 (p9.ggplot(AirBnB_prices, p9.aes(x = ___)) +
-  p9.geom_histogram(bins = 24)).show()
+  p9.geom_histogram(bins = 24))
 ```
 
 ```{python log-solution, message = FALSE, warning = FALSE, echo = FALSE}
 AirBnB_prices['logRealSum'] = np.log(AirBnB_prices['realSum'])
 
 (p9.ggplot(AirBnB_prices, p9.aes(x = 'logRealSum')) +
-  p9.geom_histogram(bins = 24)).show()
+  p9.geom_histogram(bins = 24))
 ```
 
 ```{r log-code-check, message = FALSE, warning = FALSE}
@@ -361,7 +425,7 @@ This distribution is far less skewed! The center and spread have also changed si
 
 13. Now, edit this cell to fit a new model predicting `logRealSum` from `dist`. Make a note of the $R^2$. Examine the diagnostic plots from the new model, which you should call `model2`.
 
-```{python log_diag, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup2_5"}
+```{python log_diag, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 Y2 = AirBnB_prices["logRealSum"]
 
 model2 = sm.OLS(___, ___).fit()
@@ -373,11 +437,11 @@ model2_df['Residuals'] = model2.resid
 (p9.ggplot(model2_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("log Predicted Price") +
- p9.ylab("Residuals")).show()
+ p9.ylab("Residuals"))
  
 (p9.ggplot(model2_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(bins = 24) +
-   p9.xlab("Residuals")).show()
+   p9.xlab("Residuals"))
 ```
 
 ```{python log_diag-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -392,11 +456,11 @@ model2_df['Residuals'] = model2.resid
 (p9.ggplot(model2_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("log Predicted Price") +
- p9.ylab("Residuals")).show()
+ p9.ylab("Residuals"))
  
 (p9.ggplot(model2_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(bins = 24) +
-   p9.xlab("Residuals")).show()
+   p9.xlab("Residuals"))
 ```
 
 ```{r log_diag-code-check, message = FALSE, warning = FALSE}
@@ -436,16 +500,7 @@ Each of our hypotheses is written in terms of $\beta_{dist}$, the **parameter** 
 
 16. Print the summary output from `model2`.
 
-```{python setup3, exercise=FALSE, echo=FALSE, exercise.setup="setup2_5"}
-Y2 = AirBnB_prices["logRealSum"]
-
-model2 = sm.OLS(Y2, X1).fit()
-
-model2_df = model2.fittedvalues.to_frame(name = 'Fitted')
-model2_df['Residuals'] = model2.resid
-```
-
-```{python m2, exercise=TRUE, message = FALSE, exercise.setup="setup3"}
+```{python m2, exercise=TRUE, message = FALSE}
 model2.___
 ```
 
@@ -456,6 +511,55 @@ model2.summary()
 ```{r m2-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
+
+```{r m2_reformat, context="server"}
+m2_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$m2$correct,
+  valueFunc = function() get_tutorial_state()$m2$correct
+)
+
+m2_hint_visible <- reactiveVal(FALSE)
+
+output$m2_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(m2_correct_poll())) {
+    tagList(
+    p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Take a look at how it should appear in a Jupyter notebook or other IDE."),
+    renderImage({
+      filename <-normalizePath(file.path("./images/q16_reformat.png"))
+      list(src = filename, width = "450px")
+    },  deleteFile = FALSE),
+    #actionButton("m2_show_hint_btn", "💡 Show hint"),
+    tags$div(
+      id = "slr_hint_box",
+      style = paste(
+        if (!slr_hint_visible()) "display:none;" else "",
+        "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+      ),
+      "")
+    )
+  } else {
+    tagList(
+      p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Answer Question 16 correctly to reveal reformatted results.")
+    )
+  }
+}
+)
+
+# observeEvent(input$slr_show_hint_btn, {
+#   shinyjs::toggle(id = "slr_hint_box", anim = TRUE, time = 0.2)
+#   slr_hint_visible(!slr_hint_visible())
+#   updateActionButton(
+#     session, "slr_show_hint_btn",
+#     label = if (slr_hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+#   )
+# })
+```
+
+```{r m2_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("m2_plot_output")
+```
+
 
 ```{r q17, echo=FALSE}
 question("17. Would you reject or fail to reject a formal hypothesis test investigating whether or not the coefficient is zero?",
@@ -475,7 +579,7 @@ We did not provide "Accept" as an answer choice. We never accept the null hypoth
 
 18. `dist` may be significant, but as we can see from the adjusted $R$-squared, it doesn't predict `logRealSum` very well. Let's try adding more variables! Run this cell to take a look at `AirBnB_prices` and use it to answer the following question--again, check out the [Kaggle documentation](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities) if you need.
 
-```{python col, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
+```{python col, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 AirBnB_prices.columns
 ```
 
@@ -493,7 +597,7 @@ question_checkbox("Some variables are likely collinear--can you identify any pai
 
 19. To confirm assumptions, edit the code so that it will calculate the correlation matrix for the numeric variables (we can ignore indicators for Lab 3). For easier reading, I've rounded to three decimals. 
 
-```{python cormat, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
+```{python cormat, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 round(AirBnB_prices[[ ___ ]].corr(), 3)
 ```
 
@@ -511,12 +615,72 @@ We are not covering multicollinearity (AKA the 4th assumption in our earlier lis
 
 20. Now let's try multiple linear regression. Run the cell below to fit a model predicting `realSum` with the numeric variables--be careful to use only one set of the `attr` and `rest` variables.
 
-```{python setup4, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup3"}
+```{python setup4, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 X3 = AirBnB_prices[['person_capacity', 'cleanliness_rating', 'guest_satisfaction_overall', 'bedrooms', 'dist', 'metro_dist', 'attr_index_norm', 'rest_index_norm', 'lng', 'lat']]
 X3 = sm.add_constant(X3)
 
 model3 = sm.OLS(Y, X3).fit()
 model3.summary()
+```
+
+```{python setup4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+X3 = AirBnB_prices[['person_capacity', 'cleanliness_rating', 'guest_satisfaction_overall', 'bedrooms', 'dist', 'metro_dist', 'attr_index_norm', 'rest_index_norm', 'lng', 'lat']]
+X3 = sm.add_constant(X3)
+
+model3 = sm.OLS(Y, X3).fit()
+model3.summary()
+```
+
+```{r setup4-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r setup4_reformat, context="server"}
+setup4_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$setup4$correct,
+  valueFunc = function() get_tutorial_state()$setup4$correct
+)
+
+setup4_hint_visible <- reactiveVal(FALSE)
+
+output$setup4_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(setup4_correct_poll())) {
+    tagList(
+    p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Take a look at how it should appear in a Jupyter notebook or other IDE."),
+    renderImage({
+      filename <-normalizePath(file.path("./images/q20_reformat.png"))
+      list(src = filename, width = "450px")
+    },  deleteFile = FALSE),
+    #actionButton("setup4_show_hint_btn", "💡 Show hint"),
+    tags$div(
+      id = "setup4_hint_box",
+      style = paste(
+        if (!setup4_hint_visible()) "display:none;" else "",
+        "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+      ),
+      "")
+    )
+  } else {
+    tagList(
+      p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Click on the Submit Answer button in the above chunk to reveal reformatted results.")
+    )
+  }
+}
+)
+
+# observeEvent(input$setup4_show_hint_btn, {
+#   shinyjs::toggle(id = "setup4_hint_box", anim = TRUE, time = 0.2)
+#   setup4_hint_visible(!setup4_hint_visible())
+#   updateActionButton(
+#     session, "setup4_show_hint_btn",
+#     label = if (setup4_hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+#   )
+# })
+```
+
+```{r setup4_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("setup4_plot_output")
 ```
 
 ```{r q20, echo=FALSE}
@@ -539,18 +703,18 @@ question_numeric(
 
 21. Run this cell to look at the diagnostic plots of this model.
 
-```{python diagplots, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup4"}
+```{python diagplots, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 model3_df = model3.fittedvalues.to_frame(name = 'Fitted')
 model3_df['Residuals'] = model3.resid
 
 (p9.ggplot(model3_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("Predicted Price") +
- p9.ylab("Residuals")).show()
+ p9.ylab("Residuals"))
 
 (p9.ggplot(model3_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(bins = 24) +
-   p9.xlab("Residuals")).show()
+   p9.xlab("Residuals"))
 ```
 
 ```{r q22, echo=FALSE}
@@ -562,9 +726,66 @@ question("22. True or False: The linear model is appropriate for this dataset.",
 
 23.  Don't forget that the transformed response had much better diagnostic plots for the simple linear regression! Run the cell below to predict `logRealSum`.
 
-```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup4"}
+```{python setup5, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 model4 = sm.OLS(Y2, X3).fit()
 model4.summary()
+```
+
+```{python setup5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+model4 = sm.OLS(Y2, X3).fit()
+model4.summary()
+```
+
+```{r setup5-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r setup5_reformat, context="server"}
+setup5_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$setup5$correct,
+  valueFunc = function() get_tutorial_state()$setup5$correct
+)
+
+setup5_hint_visible <- reactiveVal(FALSE)
+
+output$setup5_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(setup5_correct_poll())) {
+    tagList(
+    p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Take a look at how it should appear in a Jupyter notebook or other IDE."),
+    renderImage({
+      filename <-normalizePath(file.path("./images/q23_reformat.png"))
+      list(src = filename, width = "450px")
+    },  deleteFile = FALSE),
+    #actionButton("setup5_show_hint_btn", "💡 Show hint"),
+    tags$div(
+      id = "setup5_hint_box",
+      style = paste(
+        if (!setup5_hint_visible()) "display:none;" else "",
+        "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+      ),
+      "")
+    )
+  } else {
+    tagList(
+      p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Click on the Submit Answer button in the above chunk to reveal reformatted results.")
+    )
+  }
+}
+)
+
+# observeEvent(input$setup5_show_hint_btn, {
+#   shinyjs::toggle(id = "setup5_hint_box", anim = TRUE, time = 0.2)
+#   setup5_hint_visible(!setup5_hint_visible())
+#   updateActionButton(
+#     session, "setup5_show_hint_btn",
+#     label = if (setup5_hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+#   )
+# })
+```
+
+```{r setup5_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("setup5_plot_output")
 ```
 
 ```{r q23, echo=FALSE}
@@ -585,7 +806,7 @@ question_numeric(
 
 24. Redo the diagnostic plots (use the code above as a reference if you need!).
 
-```{python diagnostic_plots_log, exercise=TRUE, message = FALSE, exercise.setup="setup5"}
+```{python diagnostic_plots_log, exercise=TRUE, message = FALSE}
 
 ```
 
@@ -596,11 +817,11 @@ model4_df['Residuals'] = model4.resid
 (p9.ggplot(model4_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("Predicted Price") +
- p9.ylab("Residuals")).show()
+ p9.ylab("Residuals"))
 
 (p9.ggplot(model4_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(bins = 24) +
-   p9.xlab("Residuals")).show()
+   p9.xlab("Residuals"))
 ```
 
 ```{r diagnostic_plots_log-code-check, message = FALSE, warning = FALSE}
@@ -626,9 +847,11 @@ In the summary there was a warning about a large condition number. This warning 
 
 Use the summary of the multiple linear regression model to answer the following questions. 
 
-```{python mlrsummary, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup5"}
-model4.summary()
-```
+<!-- ```{python mlrsummary, exercise=TRUE, exercise.eval = FALSE, message = FALSE} -->
+<!-- model4.summary() -->
+<!-- ``` -->
+
+![](./images/q23_reformat.png){width=80%}
 
 ```{r q26, echo=FALSE}
 question_checkbox("26. Which of the variables are significant at the 5% level? Select ALL that apply.",
@@ -657,11 +880,35 @@ question("27. For every one bedroom increase, log price is expected to  ",
          random_answer_order = TRUE)
 ```
 
+```{r q28, echo=FALSE}
+question("28. If you were carrying out backward model selection, the first variable you would remove is... ",
+         answer("`const`", message = "We almost never remove the intercept, focus on the slopes instead!"),
+         answer("`person_capacity`"),
+         answer("`cleanliness_rating`"),
+         answer("`guest_satisfaction_overall`"),
+         answer("`bedrooms`"),
+         answer("`dist`"),
+         answer("`metro_dist`", correct = TRUE),
+         answer("`attr_index_norm`"),
+         answer("`rest_index_norm `"),
+         answer("`lng`"),
+         answer("`lat`"),
+         allow_retry = TRUE)
+```
+
+```{r q29, echo=FALSE}
+question("29. True or False: If you were to remove a variable from this model and refit, the coefficients on the remaining variables would remain the same.",
+         answer("True"),
+         answer("False", correct = TRUE),
+
+         allow_retry = TRUE)
+```
+
 ```{r serverstuff, echo = FALSE, context = "server"}
 # UI for residual matching
 output$residual_bucket_ui <- renderUI({
   bucket_list(
-    header = "5. Drag each residual plot to the issue it illustrates:",
+    header = "1. Drag each residual plot to the issue it illustrates:",
     group_name = "residuals",
     orientation = "horizontal",
     add_rank_list(
@@ -703,7 +950,7 @@ observeEvent(input$submit_resid, {
 
 output$outlier_bucket_ui <- renderUI({
   bucket_list(
-    header = "6. Drag each residual plot to the type of outlier it shows:",
+    header = "2. Drag each residual plot to the type of outlier it shows:",
     group_name = "outliers",
     orientation = "horizontal",
     add_rank_list(
