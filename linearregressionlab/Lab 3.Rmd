@@ -367,22 +367,22 @@ grade_this_code()
 (p9.ggplot(model1_df, p9.aes(x = ___, y = ___)) +
  p9.geom_point() +
  p9.xlab("Predicted Price") +
- p9.ylab("Residuals"))
+ p9.ylab("Residuals")).show()
              
 (p9.ggplot(model1_df, p9.aes(x = ___)) +
    p9.geom____(bins = 230) +
-   p9.xlab("Residuals"))
+   p9.xlab("Residuals")).show()
 ```
 
 ```{python dp_produce-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(model1_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("Predicted Price") +
- p9.ylab("Residuals"))
+ p9.ylab("Residuals")).show()
              
 (p9.ggplot(model1_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(bins = 230) +
-   p9.xlab("Residuals"))
+   p9.xlab("Residuals")).show()
 ```
 
 ```{r dp_produce-code-check, message = FALSE, warning = FALSE}
@@ -407,14 +407,14 @@ To address the skewness, apply the log (base $e$) transformation to `realSum`. S
 AirBnB_prices['logRealSum'] = np.log(___)
 
 (p9.ggplot(AirBnB_prices, p9.aes(x = ___)) +
-  p9.geom_histogram(bins = 24))
+  p9.geom_histogram(bins = 24)).show()
 ```
 
 ```{python log-solution, message = FALSE, warning = FALSE, echo = FALSE}
 AirBnB_prices['logRealSum'] = np.log(AirBnB_prices['realSum'])
 
 (p9.ggplot(AirBnB_prices, p9.aes(x = 'logRealSum')) +
-  p9.geom_histogram(bins = 24))
+  p9.geom_histogram(bins = 24)).show()
 ```
 
 ```{r log-code-check, message = FALSE, warning = FALSE}
@@ -437,11 +437,11 @@ model2_df['Residuals'] = model2.resid
 (p9.ggplot(model2_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("log Predicted Price") +
- p9.ylab("Residuals"))
+ p9.ylab("Residuals")).show()
  
 (p9.ggplot(model2_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(bins = 24) +
-   p9.xlab("Residuals"))
+   p9.xlab("Residuals")).show()
 ```
 
 ```{python log_diag-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -456,11 +456,11 @@ model2_df['Residuals'] = model2.resid
 (p9.ggplot(model2_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("log Predicted Price") +
- p9.ylab("Residuals"))
+ p9.ylab("Residuals")).show()
  
 (p9.ggplot(model2_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(bins = 24) +
-   p9.xlab("Residuals"))
+   p9.xlab("Residuals")).show()
 ```
 
 ```{r log_diag-code-check, message = FALSE, warning = FALSE}
@@ -710,11 +710,11 @@ model3_df['Residuals'] = model3.resid
 (p9.ggplot(model3_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("Predicted Price") +
- p9.ylab("Residuals"))
+ p9.ylab("Residuals")).show()
 
 (p9.ggplot(model3_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(bins = 24) +
-   p9.xlab("Residuals"))
+   p9.xlab("Residuals")).show()
 ```
 
 ```{r q22, echo=FALSE}
@@ -817,11 +817,11 @@ model4_df['Residuals'] = model4.resid
 (p9.ggplot(model4_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("Predicted Price") +
- p9.ylab("Residuals"))
+ p9.ylab("Residuals")).show()
 
 (p9.ggplot(model4_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(bins = 24) +
-   p9.xlab("Residuals"))
+   p9.xlab("Residuals")).show()
 ```
 
 ```{r diagnostic_plots_log-code-check, message = FALSE, warning = FALSE}
