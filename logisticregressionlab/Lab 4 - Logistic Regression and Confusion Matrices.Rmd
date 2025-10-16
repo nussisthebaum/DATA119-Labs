@@ -50,6 +50,51 @@ tags$div(
 )
 ```
 
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE, output = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import sklearn
+import statsmodels.api as sm
+
+arrests_raw = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/Arrests_mini.csv", index_col = 0)
+
+arrests = pd.get_dummies(arrests_raw, columns = ['released', 'race', 'sex', 'employed', 'citizen'], dtype = float, drop_first = True)
+
+X_arrests = arrests[['year', 'age', 'checks', 'race_White', 'sex_Male', 'employed_Yes', 'citizen_Yes']]
+y_arrests = arrests['released_Yes']
+
+import sklearn.model_selection
+
+X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(X_arrests, y_arrests, test_size = 0.3, random_state = 1040)
+
+X_tr_int = sm.add_constant(X_tr)
+model1 = sm.Logit(y_tr, X_tr_int).fit(disp = False)
+cm1 = model1.pred_table()
+
+X_ts_int = sm.add_constant(X_ts)
+
+preds1 = model1.predict(X_ts_int)
+
+from sklearn import metrics, linear_model
+
+TPR = []
+TNR = []
+
+thresholds = np.arange(0.00001, 1, 0.05)
+
+for threshold in thresholds:
+  temp_cm = sklearn.metrics.confusion_matrix(y_ts, preds1 > threshold)
+  
+  TPR.append(temp_cm[1][1]/(temp_cm[1][0] + temp_cm[1][1]))
+  TNR.append(temp_cm[0][0]/(temp_cm[0][0] + temp_cm[0][1]))
+  
+metrics_df = pd.DataFrame({"Thresholds": thresholds,
+                           "TPR": TPR, 
+                           "TNR": TNR})
+```
+
+
 ## Goals
 
 -   To practice fitting logistic regression models.
@@ -68,7 +113,7 @@ import plotnine as p9
 import sklearn
 import statsmodels.api as sm
 
-arrests = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/Arrests_mini.csv", index_col = 0)
+arrests_raw = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-Labs/refs/heads/main/data/Arrests_mini.csv", index_col = 0)
 ```
 
 ## Exploratory Data Analysis
@@ -80,7 +125,7 @@ arrests = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA119-L
 ```
 
 ```{python des-solution, message = FALSE, warning = FALSE, echo = FALSE}
-arrests.head()
+arrests_raw.head()
 ```
 
 ```{r des-code-check, message = FALSE, warning = FALSE}
@@ -104,7 +149,7 @@ question("2. Which of the variables in `arrests` are categorical? Select all tha
 
 3. Use the empty cell to answer the following question. 
 
-```{python empty, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python empty, exercise = TRUE, message = FALSE}
 
 ```
 
@@ -123,12 +168,12 @@ question_numeric("How many variables will you need to encode `race` as a categor
 
 4. Convert the categorical variables to dummies by using `pd.get_dummies()`. Choose the correct data type to allow for regression.
 
-```{python dum, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
-arrests = pd.get_dummies(arrests, columns = [...], dtype = ___, drop_first = ___)
+```{python dum, exercise = TRUE, message = FALSE}
+arrests = pd.get_dummies(arrests_raw, columns = [...], dtype = ..., drop_first = ...)
 ```
 
 ```{python dum-solution, message = FALSE, warning = FALSE, echo = FALSE}
-arrests = pd.get_dummies(arrests, columns = ['released', 'race', 'sex', 'employed', 'citizen'], dtype = float, drop_first = True)
+arrests = pd.get_dummies(arrests_raw, columns = ['released', 'race', 'sex', 'employed', 'citizen'], dtype = float, drop_first = True)
 ```
 
 ```{r dum-code-check, message = FALSE, warning = FALSE}
@@ -137,11 +182,7 @@ grade_this_code()
 
 5. Just like with linear regression, we will need to separate our explanatory and response variables. Take this step now--name them `X_arrests` and `y_arrests.` 
 
-```{python setup2, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup1"}
-arrests = pd.get_dummies(arrests, columns = ['released', 'race', 'sex', 'employed', 'citizen'], dtype = float)
-```
-
-```{python sep, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+```{python sep, exercise = TRUE, message = FALSE}
 X_arrests = [...]
 y_arrests = [...]
 ```
@@ -157,15 +198,10 @@ grade_this_code()
 
 6. Now that you have familiarized yourself with the data, split the data into a 70% training set and a 30% training set using the [`train_test_split()` function from `sklearn`](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html). Read through the options in the documentation to find the argument that allows a 70/30 split. Note that when you use this function, you should be saving four things at the same time--the explanatory variables for the training and test sets, and the response variables for the training and test sets. When you're done, calculate summary statistics for the the explanatory variables for the training and test sets using `.describe()`. 
 
-```{python setup3, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup2"}
-X_arrests = arrests[['year', 'age', 'checks', 'race_White', 'sex_Male', 'employed_Yes', 'citizen_Yes']]
-y_arrests = arrests['released_Yes']
-```
-
-```{python split, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+```{python split, exercise = TRUE, message = FALSE}
 import sklearn.model_selection
 
-X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(___, ___, ___)
+X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(..., ..., ...)
 ```
 
 ```{python split-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -183,7 +219,7 @@ grade_this_code()
 
 7. Run the chunk above again, and look at the summary statistics. Did they change? `train_test_split()` relies on random selection to split the data. When you randomly split, you will get a different dataset each time--this will lead to consistent, but different, results. If you want to have the same results every time, you can set a random seed first--use the `random_state` argument. For now, I've set it to `1040` so that everyone can get the same results, but in the future, you can choose your own seeds for reproducibility--please note that statisticians recommend using different seeds for different problems, it should not be the exact same thing every time!
 
-```{python split2, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+```{python split2, exercise = TRUE, message = FALSE}
 import sklearn.model_selection
 
 X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(X_arrests, y_arrests, test_size = 0.3, random_state = 1040)
@@ -191,18 +227,14 @@ X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(X_arrests, y_a
 
 8. Now, using your training set, fit a logistic regression model. You will be using the `Logit()` function from `statsmodels`--you can review the [documentation here](https://www.statsmodels.org/stable/examples/notebooks/generated/discrete_choice_overview.html#Logit-Model), but the syntax will be almost identical to what we used with linear regression. Fit a model predicting whether an individual is released with a summons using all of the explanatory variables. 
 
-```{python setup4, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup3"}
-X_tr, X_ts, y_tr, y_ts = sklearn.model_selection.train_test_split(X_arrests, y_arrests, test_size = 0.3, random_state = 1040)
-```
+```{python mod1, exercise = TRUE, message = FALSE}
+X_tr_int = 
 
-```{python mod1, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
-X_tr = 
-
-model1 = sm.Logit(___, ___).fit()
+model1 = sm.Logit(..., ...).fit()
 ```
 
 ```{python mod1-solution, message = FALSE, warning = FALSE, echo = FALSE}
-X_tr = sm.add_constant(X_tr)
+X_tr_int = sm.add_constant(X_tr)
 
 model1 = sm.Logit(y_tr, X_tr).fit()
 ```
@@ -213,13 +245,7 @@ grade_this_code()
 
 9. Print out the summary output of the model.
 
-```{python setup5, exercise = FALSE, message = TRUE, echo=TRUE, exercise.setup="setup4"}
-X_tr = sm.add_constant(X_tr)
-model1 = sm.Logit(y_tr, X_tr).fit()
-cm1 = model1.pred_table()
-```
-
-```{python sum, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+```{python sum, exercise = TRUE, message = FALSE}
 
 ```
 
@@ -230,6 +256,55 @@ model1.summary()
 ```{r sum-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
+
+```{r sum_reformat, context="server"}
+sum_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$sum$correct,
+  valueFunc = function() get_tutorial_state()$sum$correct
+)
+
+sum_hint_visible <- reactiveVal(FALSE)
+
+output$sum_plot_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(sum_correct_poll())) {
+    tagList(
+    p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Take a look at how it should appear in a Jupyter notebook or other IDE."),
+    renderImage({
+      filename <-normalizePath(file.path("./images/model_1_summary.png"))
+      list(src = filename, width = "300px")
+    },  deleteFile = FALSE),
+    #actionButton("slr_show_hint_btn", "💡 Show hint"),
+    tags$div(
+      id = "sum_hint_box",
+      style = paste(
+        if (!fullmodel_hint_visible()) "display:none;" else "",
+        "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
+      ),
+      "")
+    )
+  } else {
+    tagList(
+      p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Answer Question 9 correctly to reveal reformatted results.")
+    )
+  }
+}
+)
+
+# observeEvent(input$slr_show_hint_btn, {
+#   shinyjs::toggle(id = "slr_hint_box", anim = TRUE, time = 0.2)
+#   slr_hint_visible(!slr_hint_visible())
+#   updateActionButton(
+#     session, "slr_show_hint_btn",
+#     label = if (slr_hint_visible()) "🙈 Hide hint" else "💡 Show hint"
+#   )
+# })
+```
+
+```{r sum_conditional, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("sum_plot_output")
+```
+
 
 ```{r q10, echo=FALSE}
 question("10. True or False: The coefficient on `age` is significant.",
@@ -272,7 +347,7 @@ question("12. What is the correct interpretation on the coefficient `employed_Ye
 
 13. Last week we saw that sometimes we don't need all of the printed output, and sometimes we would like to find specific values. First, we need to identify what is included in the model fitting process. Apply the `dir()` function to your model to see what is included. Scan the terms and extract the `aic` and `bic`. 
 
-```{python dir, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+```{python dir, exercise = TRUE, message = FALSE}
 
 ```
 
@@ -289,7 +364,7 @@ grade_this_code()
 
 14. AIC and BIC are model fit statistics for classifiers, like logistic regression (they may get covered more in DATA221/231). Another common method for evaluating logistic regression models is the confusion matrix. Use `pred_table()` to print it out.
 
-```{python mat, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+```{python mat, exercise = TRUE, message = FALSE}
 
 ```
 
@@ -303,7 +378,7 @@ grade_this_code()
 
 15. Be careful when using `pred_table`! In this method, the rows indicate the truth and the columns indicate the predictions, which is "flipped" from what I presented in class. Read the [pred_table documentation](https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.LogitResults.pred_table.html) to confirm. Then, calculate the accuracy, true positive rate, and true negative rate. You should be using indexing with the square brackets (`[]`) in your calculations.
 
-```{python tab, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+```{python tab, exercise = TRUE, message = FALSE}
 cm1 = model1.pred_table()
 
 ## Accuracy
@@ -336,7 +411,7 @@ grade_this_code()
 
 16. Remember that we might want a baseline accuracy to compare with the new accuracy. Calculate the baseline accuracy for this dataset.
 
-```{python bs, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+```{python bs, exercise = TRUE, message = FALSE}
 
 ```
 
@@ -350,16 +425,16 @@ grade_this_code()
 
 17. Use the `.predict()` method to predict the outcome for the test set. Save the list to use for later.
 
-```{python pred, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
-X_ts = 
+```{python pred, exercise = TRUE, message = FALSE}
+X_ts_int = 
 
 preds1 = 
 ```
 
 ```{python pred-solution, message = FALSE, warning = FALSE, echo = FALSE}
-X_ts = sm.add_constant(X_ts)
+X_ts_int = sm.add_constant(X_ts)
 
-preds1 = model1.predict(X_ts)
+preds1 = model1.predict(X_ts_int)
 ```
 
 ```{r pred-code-check, message = FALSE, warning = FALSE}
@@ -368,16 +443,8 @@ grade_this_code()
 
 18. Let's investigate an alternative method for finding the confusion matrix. You can use the `pd.crosstab()` function--the benefit of this function is that you have more control over what is in the rows and what is in the columns. See if you can use it to find the confusion matrix and accuracy metrics using a threshold of 0.5.
 
-```{python setup6, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup5"}
-X_ts = sm.add_constant(X_ts)
-
-preds1 = model1.predict(X_ts)
-
-from sklearn import metrics, linear_model
-```
-
-```{python conf, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
-pd.crosstab(___, ___ > ___)
+```{python conf, exercise = TRUE, message = FALSE}
+pd.crosstab(..., ... > ...)
 ```
 
 ```{python conf-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -390,9 +457,9 @@ grade_this_code()
 
 19. A final method for confusion matrices that might be nice to use in reports and such is the `.confusion_matrix()` method from sklearn. See the code below for evaluating the confusion matrix on the training set. Adapt the code to return the confusion matrix for the test set.
 
-```{python sk, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+```{python sk, exercise = TRUE, message = FALSE}
 sklearn.metrics.confusion_matrix(y_tr, model1.predict() > 0.5)
-sklearn.metrics.confusion_matrix(___, ___ > ___)
+sklearn.metrics.confusion_matrix(..., ... > ...)
 ```
 
 ```{python sk-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -408,21 +475,15 @@ grade_this_code()
 
 20. Another helpful function in `sklearn` is the AUC method. See the code below for evaluating the AUC of the training set. Can you adapt the code to return the AUC of the test set? You can read the [AUC documentation](https://www.w3schools.com/python/python_ml_auc_roc.asp) if you need it.
 
-```{python auc, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+```{python auc, exercise = TRUE, message = FALSE}
 from sklearn import metrics
 
 fpr, tpr, thresholds = metrics.roc_curve(y_tr, model1.predict(), pos_label = 1)
 metrics.auc(fpr, tpr)
-
-fpr, tpr, thresholds = metrics.roc_curve(...)
-metrics.auc(___, ___)
 ```
 
 ```{python auc-solution, message = FALSE, warning = FALSE, echo = FALSE}
 from sklearn import metrics
-
-fpr, tpr, thresholds = metrics.roc_curve(y_tr, model1.predict(), pos_label=1)
-metrics.auc(fpr, tpr)
 
 fpr, tpr, thresholds = metrics.roc_curve(y_ts, preds1, pos_label=1)
 metrics.auc(fpr, tpr)
@@ -446,30 +507,30 @@ question("21. True or False: The test set AUC for `model1` represents an improve
 Recall that we don't necessarily have to use a threshold of 0.5 for prediction. 
 
 ```{r q22, echo=FALSE}
-question("22. What threshold will return the proportion of true positives in the data?",
-         answer("0"),
-         answer("1", correct = TRUE),
-         answer("There is no way to tell."),
+question("22. What threshold will result in an accuracy equal to the proportion of actual positives in the data?",
+         answer("0", correct = TRUE),
+         answer("1"),
+         answer("There is no way to tell.", message = "Use the confusion matrix function to confirm for yourself!"),
          allow_retry = TRUE
          )
 ```
 
 ```{r q23, echo=FALSE}
-question("23. What threshold will return the proportion of true negatives in the data?",
-         answer("0", correct = TRUE),
-         answer("1"),
-         answer("There is no way to tell."),
+question("23. What threshold will result in an accuracy equal to the proportion of actual negatives in the data?",
+         answer("0"),
+         answer("1", correct = TRUE),
+         answer("There is no way to tell.", message = "Use the confusion matrix function to confirm for yourself!"),
          allow_retry = TRUE
          )
 ```
 
-The ROC curve is one way of summarizing information over many possible thresholds. Let's work through an example of plotting one. 
+The AUC and the ROC curve is one way of summarizing information over many possible thresholds. Let's work through an example of plotting one. 
 
-We will need to write a loop that is able to iterate over multiple thresholds and calculate the confusion matrix at each point. 
+We will need to write a loop that is able to iterate over multiple thresholds and calculate the confusion matrix for the test set at each point. 
 
 24. First, create empty lists to store the true positive rate and true negative rate (we'll save the thresholds separately). 
 
-```{python empty_lists, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+```{python empty_lists, exercise = TRUE, message = FALSE}
 TPR = 
 TNR = 
 ```
@@ -483,9 +544,9 @@ TNR = []
 grade_this_code()
 ```
 
-25. Next, select a range of thresholds to iterate over. ($t$ from the lecture notes, `C` in `sklearn`). To actually create the range, you can use `np.arange()` (must be used instead of `range`() for floats). You should use a step size of 0.05--this step size can be smaller for a smoother curve, but should not go any larger. 
+25. Next, select a range of thresholds to iterate over. To actually create the range, you can use `np.arange()` (must be used instead of `range`() for floats). You should use a step size of 0.05--this step size can be smaller for a smoother curve, but should not go any larger. 
 
-```{python arange, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+```{python arange, exercise = TRUE, message = FALSE}
 thresholds = 
 ```
 
@@ -497,26 +558,19 @@ thresholds = np.arange(0.00001, 1, 0.05)
 grade_this_code()
 ```
 
-26. Now, use `thresholds` to create the loop. You can use the code from 15 to fill in the contents of the loops. You might also want to review the documentation of `pred_table()` to figure out how to change the threshold. 
+26. Now, use `thresholds` to create the loop. You can use the code from 15 to fill in the contents of the loops. You might also want to review the documentation of `sklearn.metrics.confusion_matrix()` to figure out how to change the threshold. 
 
-```{python setup7, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup6"}
-TPR = []
-TNR = []
-
-thresholds = np.arange(0.00001, 1, 0.05)
-```
-
-```{python loop, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
+```{python loop, exercise = TRUE, message = FALSE}
 for threshold in thresholds:
-  temp_cm = model1.pred_table(___)
+  temp_cm = sklearn.metrics.confusion_matrix(...)
   
-  TPR.append(___)
-  TNR.append(___)
+  TPR.append(...)
+  TNR.append(...)
 ```
 
 ```{python loop-solution, message = FALSE, warning = FALSE, echo = FALSE}
 for threshold in thresholds:
-  temp_cm = model1.pred_table(threshold = threshold)
+  temp_cm = sklearn.metrics.confusion_matrix(y_ts, preds1 > threshold)
   
   TPR.append(temp_cm[1][1]/(temp_cm[1][0] + temp_cm[1][1]))
   TNR.append(temp_cm[0][0]/(temp_cm[0][0] + temp_cm[0][1]))
@@ -528,15 +582,7 @@ grade_this_code()
 
 27. If we want to plot this using `plotnine`, we need the data to be a DataFrame. Remember, one of the fastest ways to create a dataframe is by using a dictionary. Make sure to include the thresholds, the TPR, and the TNR.
 
-```{python setup8, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup7"}
-for threshold in thresholds:
-  temp_cm = model1.pred_table(threshold = threshold)
-  
-  TPR.append(temp_cm[1][1]/(temp_cm[1][0] + temp_cm[1][1]))
-  TNR.append(temp_cm[0][0]/(temp_cm[0][0] + temp_cm[0][1]))
-```
-
-```{python df, exercise = TRUE, message = FALSE, exercise.setup="setup8"}
+```{python df, exercise = TRUE, message = FALSE}
 metrics_df = pd.DataFrame({...})
 ```
 
@@ -552,20 +598,14 @@ grade_this_code()
 
 28. Create a plot with the TNR on the $x$-axis and the TPR on the $y$-axis and add the coordinate pairs using `geom_point()`. 
 
-```{python setup9, exercise = FALSE, message = FALSE, echo=FALSE, exercise.setup="setup8"}
-metrics_df = pd.DataFrame({"Thresholds": thresholds,
-                           "TPR": TPR, 
-                           "TNR": TNR})
-```
-
-```{python roc1, exercise = TRUE, message = FALSE, exercise.setup="setup9"}
-(p9.ggplot(___, p9.aes(...)) +
-  ___)
+```{python roc1, exercise = TRUE, message = FALSE}
+(p9.ggplot(..., p9.aes(...)) +
+  ...).show()
 ```
 
 ```{python roc1-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(metrics_df, p9.aes(x = "TNR", y = "TPR")) +
-  p9.geom_point())
+  p9.geom_point()).show()
 ```
 
 ```{r roc1-code-check, message = FALSE, warning = FALSE}
@@ -574,13 +614,13 @@ grade_this_code()
 
 29. Instead of points, ROC curves are traditionally plotted with lines. Check out [the `plotnine` documentation](https://plotnine.org/reference/#geoms) to see if you can find the correct geom to use to change the points to a line. 
 
-```{python roc2, exercise = TRUE, message = FALSE, exercise.setup="setup9"}
+```{python roc2, exercise = TRUE, message = FALSE}
 
 ```
 
 ```{python roc2-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(metrics_df, p9.aes(x = "TNR", y = "TPR")) +
-  p9.geom_line())
+  p9.geom_line()).show()
 ```
 
 ```{r roc2-code-check, message = FALSE, warning = FALSE}
@@ -589,8 +629,8 @@ grade_this_code()
 
 30. We also traditionally plot ROC curves with $1-TNR$ on the $x$-axis. You could create a new column in your variable, or you could add another layer to the plot. Run the code below to see how this new command works!
 
-```{python roc3, exercise = TRUE, message = FALSE, exercise.setup="setup9"}
+```{python roc3, exercise = TRUE, message = FALSE}
 (p9.ggplot(metrics_df, p9.aes(x = "TNR", y = "TPR")) +
   p9.geom_line() + 
-  p9.scale_x_reverse())
+  p9.scale_x_reverse()).show()
 ```
