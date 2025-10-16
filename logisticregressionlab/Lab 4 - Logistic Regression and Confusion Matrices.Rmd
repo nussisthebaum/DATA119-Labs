@@ -507,7 +507,7 @@ question("21. True or False: The test set AUC for `model1` represents an improve
 Recall that we don't necessarily have to use a threshold of 0.5 for prediction. 
 
 ```{r q22, echo=FALSE}
-question("22. What threshold will result in an accuracy equal to the proportion of true positives in the data?",
+question("22. What threshold will result in an accuracy equal to the proportion of actual positives in the data?",
          answer("0", correct = TRUE),
          answer("1"),
          answer("There is no way to tell.", message = "Use the confusion matrix function to confirm for yourself!"),
@@ -516,7 +516,7 @@ question("22. What threshold will result in an accuracy equal to the proportion 
 ```
 
 ```{r q23, echo=FALSE}
-question("23. What threshold will result in an accuracy equal to the proportion of true negatives in the data?",
+question("23. What threshold will result in an accuracy equal to the proportion of actual negatives in the data?",
          answer("0"),
          answer("1", correct = TRUE),
          answer("There is no way to tell.", message = "Use the confusion matrix function to confirm for yourself!"),
