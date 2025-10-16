@@ -334,8 +334,8 @@ question("11. Which variable is the most significant?",
 question("12. What is the correct interpretation on the coefficient `employed_Yes`?",
          answer("If an arrestee is employed, the odds they are released are expected to rise by a factor of $e^{0.7235}$, all other factors held equal.", correct = TRUE),
          answer("If an arrestee is employed, the odds they are released are expected to rise by a factor of $0.7235$, all other factors held equal."),
-         answer("If an arrestee not is employed, the odds they are released are expected to rise by a factor of $0.7235$, all other factors held equal."),
-         answer("If an arrestee not is employed, the odds they are released are expected to rise by $e^{0.7235}$, all other factors held equal."),
+         answer("If an arrestee is not employed, the odds they are released are expected to rise by a factor of $0.7235$, all other factors held equal."),
+         answer("If an arrestee is not employed, the odds they are released are expected to rise by $e^{0.7235}$, all other factors held equal."),
          answer("If an arrestee is employed, the odds they are released are expected to rise by a factor of $0.7235$."),         
          allow_retry = TRUE, 
          random_answer_order = TRUE#,
@@ -459,11 +459,9 @@ grade_this_code()
 
 ```{python sk, exercise = TRUE, message = FALSE}
 sklearn.metrics.confusion_matrix(y_tr, model1.predict() > 0.5)
-sklearn.metrics.confusion_matrix(..., ... > ...)
 ```
 
 ```{python sk-solution, message = FALSE, warning = FALSE, echo = FALSE}
-sklearn.metrics.confusion_matrix(y_tr, model1.predict() > 0.5)
 sklearn.metrics.confusion_matrix(y_ts, preds1 > 0.5)
 ```
 
