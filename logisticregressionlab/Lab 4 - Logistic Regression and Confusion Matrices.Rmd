@@ -459,11 +459,9 @@ grade_this_code()
 
 ```{python sk, exercise = TRUE, message = FALSE}
 sklearn.metrics.confusion_matrix(y_tr, model1.predict() > 0.5)
-sklearn.metrics.confusion_matrix(..., ... > ...)
 ```
 
 ```{python sk-solution, message = FALSE, warning = FALSE, echo = FALSE}
-sklearn.metrics.confusion_matrix(y_tr, model1.predict() > 0.5)
 sklearn.metrics.confusion_matrix(y_ts, preds1 > 0.5)
 ```
 
