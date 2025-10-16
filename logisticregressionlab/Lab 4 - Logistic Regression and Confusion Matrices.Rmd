@@ -272,13 +272,13 @@ output$sum_plot_output <- renderUI({
     p("For some reason the formatting of the `summary()` on tutorials hosted on our server is very bad. Take a look at how it should appear in a Jupyter notebook or other IDE."),
     renderImage({
       filename <-normalizePath(file.path("./images/model_1_summary.png"))
-      list(src = filename, width = "300px")
+      list(src = filename, width = "400px")
     },  deleteFile = FALSE),
     #actionButton("slr_show_hint_btn", "💡 Show hint"),
     tags$div(
       id = "sum_hint_box",
       style = paste(
-        if (!fullmodel_hint_visible()) "display:none;" else "",
+        if (!sum_hint_visible()) "display:none;" else "",
         "margin-top:.6rem; border:1px solid #ddd; padding:.6rem; border-radius:.5rem;"
       ),
       "")
