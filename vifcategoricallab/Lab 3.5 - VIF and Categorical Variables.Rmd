@@ -256,13 +256,13 @@ question_numeric("3. If the VIF for `guest_satisfaction_overall` is 2, what is $
 4. We can confirm this answer! Fit a new model predicting `guest_satisfaction_overall` from  `person_capacity`, `cleanliness_rating`, `bedrooms`, `dist`, `metro_dist`, `attr_index_norm`, `rest_index_norm`, `lng`, and `lat`. Then, extract the $R^2$. 
 
 ```{python VIF3, exercise = TRUE, message = FALSE}
-X_gso = AirBnB_prices_raw[[___]]
-X_gso = sm.add_constant(___)
+X_gso = AirBnB_prices_raw[[...]]
+X_gso = sm.add_constant(...)
 
-gso = AirBnB_prices_raw['___']
+gso = AirBnB_prices_raw['...']
 
-model_gso = sm.OLS(___, ___).fit()
-model_gso.___
+model_gso = sm.OLS(..., ...).fit()
+model_gso....
 ```
 
 ```{python VIF3-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -359,7 +359,7 @@ question_checkbox("7. Which variables are categorical (regardless of how they ha
 8. `multi` and `biz` are already stored as 0's and 1's. `room_type`, `room_shared`, `room_private`, `host_is_superhost`, `city`, and `dayType` are not and need to be converted to dummy variables. Let's use the methods from `pandas`--the specific function is [`get_dummies()`](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html). The first argument is the DataFrame and the second is a list of categorical variables--try it now.
 
 ```{python dummy1, exercise = TRUE, message = FALSE}
-pd.get_dummies(AirBnB_prices_raw, columns = [ ___ ])
+pd.get_dummies(AirBnB_prices_raw, columns = [ ... ])
 ```
 
 ```{python dummy1-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -386,7 +386,7 @@ question("9. How are the results of `pd.get_dummies()` stored?",
 10. Booleans, a.k.a, `True` and `False`, will not work with `statsmodels`. To convert to numbers rather than Booleans, look online at the [pd.get_dummies() syntax](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html) and fill in the correct `dtype`:
 
 ```{python dummy2, exercise = TRUE, message = FALSE}
-AirBnB_prices = pd.get_dummies(AirBnB_prices_raw, columns = ___, dtype = ___)
+AirBnB_prices = pd.get_dummies(AirBnB_prices_raw, columns = ..., dtype = ...)
 ```
 
 ```{python dummy2-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -400,10 +400,10 @@ grade_this_code()
 11. You might also introduce multicollinearity issues using your categorical variables. In fact, let's try it using `city`. Create a model predicting the log price from ALL of the `city` variables we just created with `pd.get_dummies`. Call this model `model_wrong`.
 
 ```{python dummy3, exercise = TRUE, message = FALSE}
-X_wrong = AirBnB_prices[[ ___ ]]
+X_wrong = AirBnB_prices[[ ... ]]
 X_wrong = sm.add_constant(X_wrong)
 
-model_wrong = sm.OLS(Y, ___ ).fit()
+model_wrong = sm.OLS(Y, ... ).fit()
 model_wrong.summary()
 ```
 
@@ -473,8 +473,8 @@ uiOutput("dummy3_plot_output")
 12. Look at the output--do you see another warning message about multicollinearity? Just like before, you should look at the VIF.
 
 ```{python vif4, exercise = TRUE, exercise.eval = FALSE, message = FALSE, warning = FALSE}
-VIF_cities = [variance_inflation_factor(___, i) for i in range(len(___.columns))]
-VIF_cities_df = pd.DataFrame({"feature": ___.columns, "VIF": ___})
+VIF_cities = [variance_inflation_factor(..., i) for i in range(len(....columns))]
+VIF_cities_df = pd.DataFrame({"feature": ....columns, "VIF": ...})
 VIF_cities_df
 ```
 
@@ -687,7 +687,7 @@ Now, we can see that `city_amsterdam` is back in the model, but `city_london` is
 14. If you don't want to change the reference level, but you do want to avoid the multicollinearity issues incurred when converting to dummy variables outright, you can add another argument. The `drop_first` argument will convert everything to dummy variables, and then drop the very first column (alphabetically), avoiding any multicollinearity issues. Edit the code to use the `drop_first` argument.
 
 ```{python dummy_drop, exercise = TRUE, message = FALSE}
-AirBnB_prices2 = pd.get_dummies(AirBnB_prices_raw, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float, ___)
+AirBnB_prices2 = pd.get_dummies(AirBnB_prices_raw, columns = ['room_type', 'room_shared', 'room_private', 'host_is_superhost', 'city', 'dayType'], dtype = float, ...)
 ```
 
 ```{python dummy_drop-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -705,7 +705,7 @@ Run this cell (which contains all of the options we have covered with `pd.get_du
 15. Let's put everything in! Fit the model with all of the variables, and run the VIF code. Don't forget that the variable names change after running `pd.get_dummies()`!
 
 ```{python fullmodel, exercise = TRUE, message = FALSE, warning = FALSE}
-X_full = AirBnB_prices2[[___]]
+X_full = AirBnB_prices2[[...]]
 X_full = sm.add_constant(X_full)
 
 model_full = sm.OLS(Y_log, X_full).fit()
