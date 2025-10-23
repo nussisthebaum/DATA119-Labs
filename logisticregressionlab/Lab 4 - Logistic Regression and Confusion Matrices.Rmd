@@ -118,7 +118,7 @@ arrests_raw = pd.read_csv("https://raw.githubusercontent.com/nussisthebaum/DATA1
 
 ## Exploratory Data Analysis
 
-1. Use `.head()` to look over the data in `arrests`.
+1. Use `.head()` to look over the data in `arrests_raw`.
 
 ```{python des, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
 
@@ -180,7 +180,7 @@ arrests = pd.get_dummies(arrests_raw, columns = ['released', 'race', 'sex', 'emp
 grade_this_code()
 ```
 
-5. Just like with linear regression, we will need to separate our explanatory and response variables. Take this step now--name them `X_arrests` and `y_arrests.` 
+5. Just like with linear regression, we will need to separate our explanatory and response variables. Take this step now--name them `X_arrests` and `y_arrests.` We want to predict `released`, which tells us whether or not the arrestee was released with a summons (charged with a minor offense, as opposed to being arrested).
 
 ```{python sep, exercise = TRUE, message = FALSE}
 X_arrests = [...]
@@ -196,7 +196,7 @@ y_arrests = arrests['released_Yes']
 grade_this_code()
 ```
 
-6. Now that you have familiarized yourself with the data, split the data into a 70% training set and a 30% training set using the [`train_test_split()` function from `sklearn`](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html). Read through the options in the documentation to find the argument that allows a 70/30 split. Note that when you use this function, you should be saving four things at the same time--the explanatory variables for the training and test sets, and the response variables for the training and test sets. When you're done, calculate summary statistics for the the explanatory variables for the training and test sets using `.describe()`. 
+6. Now that you have familiarized yourself with the data, split the data into a 70% training set and a 30% testing set using the [`train_test_split()` function from `sklearn`](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html). Read through the options in the documentation to find the argument that allows a 70/30 split. Note that when you use this function, you should be saving four things at the same time--the explanatory variables for the training and test sets, and the response variables for the training and test sets. When you're done, calculate summary statistics for the the explanatory variables for the training and test sets using `.describe()`. 
 
 ```{python split, exercise = TRUE, message = FALSE}
 import sklearn.model_selection
@@ -236,7 +236,7 @@ model1 = sm.Logit(..., ...).fit()
 ```{python mod1-solution, message = FALSE, warning = FALSE, echo = FALSE}
 X_tr_int = sm.add_constant(X_tr)
 
-model1 = sm.Logit(y_tr, X_tr).fit()
+model1 = sm.Logit(y_tr, X_tr_int).fit()
 ```
 
 ```{r mod1-code-check, message = FALSE, warning = FALSE}
