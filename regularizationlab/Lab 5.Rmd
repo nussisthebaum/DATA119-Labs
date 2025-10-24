@@ -146,7 +146,7 @@ import pandas as pd
 import plotnine as p9
 import sklearn
 
-# To download this file go to https://posit.ds.uchicago.edu/data119-lab5/www/Workinghours_mini.csv
+# To download this file go to https://posit.ds.uchicago.edu/regularizationlab/www/Workinghours_mini.csv
 
 Workinghours = pd.read_csv("./data/Workinghours_mini.csv", index_col = 0)
 ```
@@ -199,7 +199,7 @@ Workinghours_nz
 grade_this_code()
 ```
 
-4.Take some time to really explore this dataset. Look at summary statistics and distributions of each of the variables.  
+4.Take some time to really explore this dataset. Look at summary statistics and distributions of each of the variables. Note that there is no solution for this exercise, you can do whatever you think is necessary to explore!
 
 ```{python explore, exercise = TRUE, message = FALSE}
 
@@ -276,7 +276,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3,
 X_train.describe()
 ```
 
-8.  Now, we need to do one last thing. Remember that we like to scale the variables so that our results don't depend on the units recorded in the dataset. Let's do that know using another `sklearn` function, `StandardScaler()` ([the documentation for `StandardScaler()` is here if you need it](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)). Note that this code is complicated, and it's totally okay with me if you copy and paste the below code in your homework assignments and change the relevant variables when you need.
+8.  Now, we need to do one last thing. Remember that we like to scale the variables so that our results don't depend on the units recorded in the dataset. Let's do that know using another `sklearn` function, `StandardScaler()` ([the documentation for `StandardScaler()` is here if you need it](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)). Note that this code is complicated, and it's totally okay with me if you copy and paste the below code in your homework assignments and change the relevant variables and functions when you need. 
 
 Inspect the code below. Again, we start by importing the function.
 
@@ -589,6 +589,8 @@ grade_this_code()
 ```{r colorplot-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
+
+Some of you will have noticed that the colors are difficult to parse! I like to put labels on my graphs, but that isn't strictly necessary--if you do want to do it, check out the documentation for [`geom_label()`](https://plotnine.org/reference/geom_label.html). You will also have to explore the `inherit_aes` option.
 
 26. Most of the plots we saw in class are "flipped"--the large values of the coefficients are on the righthand side of the graph. To make this switch, you can add another command to your graph, `scale_x_reverse()`.
 
