@@ -50,6 +50,61 @@ tags$div(
 )
 ```
 
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE, output = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import sklearn
+import warnings
+warnings.filterwarnings('ignore')
+
+# To download this file go to https://posit.ds.uchicago.edu/knnlab/www/birthwt.csv
+
+
+birthwt = pd.read_csv("./data/birthwt.csv", index_col = 0)
+birthwt = pd.get_dummies(birthwt, columns = ['race'], drop_first = True, dtype = float)
+
+X = birthwt[['age', 'lwt', 'smoke', 'ptl', 'ht', 'ui', 'ftv', 'race_2', 'race_3']]
+Y = birthwt['low']
+
+from sklearn.preprocessing import StandardScaler
+from sklearn import neighbors
+
+scaler = StandardScaler()
+scaler.fit(X)
+
+X_pp = pd.DataFrame(scaler.transform(X), columns = [['age', 'lwt', 'smoke', 'ptl', 
+                                                     'ht', 'ui', 'ftv', 'race_2',                                                            'race_3']])
+                                                     
+knn5 = sklearn.neighbors.KNeighborsClassifier(n_neighbors = 5)
+
+knn5_fit = knn5.fit(X_pp, Y)
+
+knn5_preds = knn5_fit.predict(X_pp)
+
+knn5_preds_proba = knn5_fit.predict_proba(X_pp)[:,1]
+
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.3, random_state = 850)
+
+scaler = StandardScaler()
+scaler.fit(X_train)
+
+X_train_pp = pd.DataFrame(scaler.transform(X_train), columns = [['age', 'lwt', 'smoke', 'ptl', 'ht', 'ui', 'ftv', 'race_2', 'race_3']])
+                                                          
+X_test_pp = pd.DataFrame(scaler.transform(X_test), columns = [['age', 'lwt', 'smoke', 'ptl', 'ht', 'ui','ftv', 'race_2', 'race_3']])
+
+metric = []
+
+for k in range(1, 16):
+  tempknn = sklearn.neighbors.KNeighborsRegressor(n_neighbors = k).fit(X_train_pp, y_train)
+  tempknn_preds = tempknn.predict(X_test_pp)
+  tempknn_cm = pd.crosstab(tempknn_preds > 0.5, y_test)
+  metric.append((tempknn_cm.iloc[0,0] + tempknn_cm.iloc[1,1])/X_test.shape[0])
+```
+
 ## Goals
 
 * Practice calculating different distance metrics. 
@@ -309,7 +364,16 @@ question("11. Would increasing the number of neighbors to 5 affect the training 
 )
 ```
 
-How do you know?
+
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+How do you know? 
+
+::::
 
 ## Implementing $k$NN
 
@@ -321,9 +385,7 @@ question("12. Recall that in Homeworks 3 and 4 we were interested in predicting 
 
 Run this cell to prepare our data for classification--remember that for your assignments, you should be standardizing your data and using `sklearn` syntax.
 
-```{python prep, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
-## Setup Chunk
-
+```{python prep, exercise = TRUE, message = FALSE}
 X = birthwt[['age', 'lwt', 'smoke', 'ptl', 'ht', 'ui', 'ftv', 'race_2', 'race_3']]
 Y = birthwt['low']
 
@@ -339,7 +401,7 @@ X_pp = pd.DataFrame(scaler.transform(X), columns = [['age', 'lwt', 'smoke', 'ptl
 
 13. Look up the documentation for $k$NN implementation using the links in Question 1. Use the documentation to complete the line of code below, which should specify the number of neighbors in your classifier as $k = 5$. No need to fit anything yet, but name the model `knn5`.
 
-```{python k, exercise = TRUE, message = FALSE, exercise.setup="prep"}
+```{python k, exercise = TRUE, message = FALSE}
 knn5 = sklearn.neighbors.KNeighborsClassifier(...)
 ```
 
@@ -353,11 +415,11 @@ grade_this_code()
 
 14. Now, fit your classifier from Question 13 with `X_pp` and `Y` from the setup chunk.
 
-```{python setup2, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="prep"}
+```{python setup2, exercise = FALSE, echo=FALSE, message = FALSE}
 knn5 = sklearn.neighbors.KNeighborsClassifier(n_neighbors = 5)
 ```
 
-```{python fit, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
+```{python fit, exercise = TRUE, message = FALSE}
 knn5_fit = knn5.fit(...)
 ```
 
@@ -371,11 +433,7 @@ grade_this_code()
 
 15. Next, apply `.predict()` to get the probability predictions from the model in Step 3 (name them `knn5_preds` to use for later). 
 
-```{python setup3, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup2"}
-knn5_fit = knn5.fit(X_pp, Y)
-```
-
-```{python pred, exercise = TRUE, message = FALSE, exercise.setup="setup3"}
+```{python pred, exercise = TRUE, message = FALSE}
 knn5_preds = knn5_fit.predict(...)
 ```
 
@@ -389,11 +447,7 @@ grade_this_code()
 
 16. Now, use `pd.crosstabs()` to calculate a confusion matrix for this model.
 
-```{python setup4, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup3"}
-knn5_preds = knn5_fit.predict(X_pp)
-```
-
-```{python cross, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
+```{python cross, exercise = TRUE, message = FALSE}
 cm = pd.crosstab(..., ...)
 ```
 
@@ -407,11 +461,7 @@ grade_this_code()
 
 17. Note that when you calculated the predictions, you were returned an array of 0's and 1's corresponding to a non-low birthweight and a low birthweight, respectively. This is not what we are used to--with the results of a logistic regression, for example, we see probabilities. To get probabilities out of a $k$NN model, use `.predict_proba()` and save the new predictions as `knn5_preds_proba`.
 
-```{python setup5, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup4"}
-knn5_preds = knn5_fit.predict(X_pp)
-```
-
-```{python prob, exercise = TRUE, message = FALSE, exercise.setup="setup5"}
+```{python prob, exercise = TRUE, message = FALSE}
 knn5_preds_proba = knn5_fit.predict_proba(...)
 knn5_preds_proba
 ```
@@ -429,11 +479,7 @@ Here, we are given an array--there are a few things going on inside. First, we n
 
 18. Extract the second column of `knn5_preds_proba` to use as the predicted probabilities. Use that column, along with the column for the response variable, to calculate a ROC curve and value for AUC.
 
-```{python setup6, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup5"}
-knn5_preds_proba = knn5_fit.predict_proba(X_pp)[:,1]
-```
-
-```{python met, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+```{python met, exercise = TRUE, message = FALSE}
 knn5_preds_proba = knn5_fit.predict_proba(X_pp)[:,1]
 
 from sklearn.metrics import (confusion_matrix, accuracy_score)
@@ -469,7 +515,7 @@ question("Is this a good model? ",
 
 Remember that you've run this setup chunk:
 
-```{python prep2, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
+```{python prep2, exercise = TRUE, message = FALSE}
 ## Setup Chunk
 
 X = birthwt[['age', 'lwt', 'smoke', 'ptl', 'ht', 'ui', 'ftv', 'race_2', 'race_3']]
@@ -487,7 +533,7 @@ X_pp = pd.DataFrame(scaler.transform(X), columns = [['age', 'lwt', 'smoke', 'ptl
 
 19. Let's move on to choosing the best value of $k$ for this data. Remember that we typically do so by using cross-validation, or at least using some model selection statistic on a test set. Let's proceed with taking a 70/30 split of our data using the `train_test_split()` function from `sklearn`. Don't forget that you will need `X_train`, `X_test`, `y_train`, and `y_test`. You will want to use `random_state = 850` to get the same results I did.
 
-```{python choose, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
+```{python choose, exercise = TRUE, message = FALSE}
 from sklearn.model_selection import train_test_split
 
 X_train, X_test, y_train, y_test = train_test_split(..., ..., test_size = ...)
@@ -505,15 +551,7 @@ grade_this_code()
 
 20. Remember that we need to scale the data as well--if we used the scaled data from before, it would be scaled using statistics from all of the data, not just the training data. Go ahead and run this cell to rescale `X_train` and `X_test` with the summary statistics from the training data so that they both have column means all equal to 0 and column standard deviations all equal to 1. 
 
-
-```{python setup7, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="setup6"}
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.3, random_state = 850)
-```
-
-```{python scale, exercise = TRUE, message = FALSE, exercise.setup="setup7"}
+```{python scale, exercise = TRUE, message = FALSE}
 scaler = StandardScaler()
 scaler.fit(X_train)
 
@@ -524,7 +562,7 @@ X_test_pp = pd.DataFrame(scaler.transform(X_test), columns = [['age', 'lwt', 'sm
 
 21. Now, we need to write a loop again. This loop needs to search over a range of $k$ (I used 1 to 15), and in each iteration, fit a $k$NN model using the training set with the new value of $k$, predict the classes of the test set, and summarize the performance of the model using some appropriate value. For simplicity, let's use accuracy. Fill in the loop below, storing the results from the test set in `metric`. You may want to use your code from Steps 3, 4, and 5. 
 
-```{python loop, exercise = TRUE, message = FALSE, exercise.setup="scale"}
+```{python loop, exercise = TRUE, message = FALSE}
 metric = []
 
 for k in range(1, 16):
@@ -551,26 +589,16 @@ grade_this_code()
 
 Now, run the code below to create a plot showing the relationship between $k$ and test set accuracy (it may also help to just look at the metrics).
 
-```{python setup8, exercise = FALSE, echo=FALSE, message = FALSE, exercise.setup="scale"}
-metric = []
-
-for k in range(1, 16):
-  tempknn = sklearn.neighbors.KNeighborsRegressor(n_neighbors = k).fit(X_train_pp, y_train)
-  tempknn_preds = tempknn.predict(X_test_pp)
-  tempknn_cm = pd.crosstab(tempknn_preds > 0.5, y_test)
-  metric.append((tempknn_cm[0][0] + tempknn_cm[1][1])/X_test.shape[0])
-```
-
-```{python plot, exercise = TRUE, message = FALSE, exercise.setup="setup8"}
+```{python plot, exercise = TRUE, message = FALSE}
 d_kNN = {'k': range(1, 16), 'Metric': metric}
 kNN_plot = pd.DataFrame(data = d_kNN)  
 
-print(p9.ggplot(kNN_plot, p9.aes(x = 'k', y = 'Metric')) +
+(p9.ggplot(kNN_plot, p9.aes(x = 'k', y = 'Metric')) +
        p9.geom_line() +
        p9.geom_vline(xintercept = k) + 
        p9.scale_x_continuous(name = "$k$") + 
        p9.scale_y_continuous(name = "Test Set Accuracy") +
-       p9.theme(legend_position = "none", figure_size = [6, 3.25]))
+       p9.theme(legend_position = "none", figure_size = [6, 3.25])).show()
 ```
 
 ```{r q22, echo=FALSE}
