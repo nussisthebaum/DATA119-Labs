@@ -50,16 +50,11 @@ tags$div(
 )
 ```
 
-```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE, output = FALSE}
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE, output = FALSE, include = FALSE}
 import numpy as np
 import pandas as pd
 import plotnine as p9
 import sklearn
-import warnings
-warnings.filterwarnings('ignore')
-
-# To download this file go to https://posit.ds.uchicago.edu/knnlab/www/birthwt.csv
-
 
 birthwt = pd.read_csv("./data/birthwt.csv", index_col = 0)
 birthwt = pd.get_dummies(birthwt, columns = ['race'], drop_first = True, dtype = float)
@@ -89,7 +84,6 @@ from sklearn import metrics
 
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.3, random_state = 850)
 
-scaler = StandardScaler()
 scaler.fit(X_train)
 
 X_train_pp = pd.DataFrame(scaler.transform(X_train), columns = [['age', 'lwt', 'smoke', 'ptl', 'ht', 'ui', 'ftv', 'race_2', 'race_3']])
