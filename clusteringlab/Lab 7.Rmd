@@ -58,15 +58,42 @@ max_sim <- function(df1, df2){
 
   return(max(man_Ds))}
 
-Cluster <- c(1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 7, 7, 7, 5, 5, 5, 5, 5, 6, 6) 
-X <- c(2, 2, 3, 3, 4, 3, 4, 4, 6, 7, 6, 7, 7, 8, 8, 9, 9, 10, 11, 12, 12, 12, 13, 4, 4)
-Y <- c(1, 2, 2, 3, 2, 6, 5, 6, 7, 8, 3, 3, 4, 3, 4, 2, 1, 1, 7, 8, 9, 10, 9, 10, 11)
+A <- c(2, 1)
+B <- c(2, 2)
+C <- c(3, 2)
+D <- c(3, 3)
+E <- c(4, 2)
+f <- c(3, 6)
+G <- c(4, 5)
+H <- c(4, 6)
+I <- c(6, 7)
+J <- c(6, 8)
+K <- c(6, 3)
+L <- c(7, 3)
+M <- c(7, 4)
+N <- c(8, 3)
+O <- c(8, 4)
+P <- c(9, 2)
+Q <- c(9, 1)
+R <- c(10, 1)
+S <- c(11, 7)
+tee <- c(12, 8)
+U <- c(12, 9)
+V <- c(12, 10)
+W <- c(13, 9)
+eX <- c(4, 10)
+why <- c(4, 11)
 
-cluster_XY <- data.frame(X = X, Y = Y)
+Cluster <- c(1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 7, 7, 7, 5, 5, 5, 5, 5, 6, 6) 
+table_XY <- rbind(A, B, C, D, E, f, G, H, I, J, K, L,
+                  M, N, O, P, Q, R, S, tee, U, V, W, eX, why)
+
+cluster_XY <- data.frame(table_XY)
 rownames(cluster_XY) = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
                          "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y")
 
 cluster_XY$Label <- rownames(cluster_XY)
+colnames(cluster_XY) <- c("X", "Y", "Label")
 
 little_XY <- cluster_XY %>%
   filter(Label %in% c("F", "G", "H", "I", "J"))
@@ -135,60 +162,60 @@ colnames(sim_table) <- c("Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cl
 rownames(sim_table) <- c("Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6")
 ```
 
-```{python setup_py, include=FALSE}
+```{python setup_py, context="setup", echo = FALSE, include = FALSE}
 import numpy as np
+import os
+os.environ["OMP_NUM_THREADS"] = "1" ## Not sure why we need lines 140 and 141, but the code won't run without them. The errors we get is specifically related to the KMeans.fit() command.
 import pandas as pd
 import plotnine as p9
 import scipy
 import sklearn
 
-# To download this file go to https://posit.ds.uchicago.edu/data119-lab7/www/epi_mini2.csv
+# To download this file go to https://posit.ds.uchicago.edu/clusteringlab/www/epi_mini2.csv
 
-epi = pd.read_csv("./data/epi_mini2.csv", index_col = 0)
+epi_raw = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
 
-epi = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
-
-epi = epi.iloc[:, 6:680]
-
+epi = epi_raw.iloc[:, 6:680]
+ 
 from sklearn.cluster import KMeans
 
 kmeans1 = KMeans(n_clusters = 6, n_init = 5, random_state = 1145)
 clust_1 = kmeans1.fit(epi)
-
+ 
 inertias = []
 
 for i in range(1,16):
     kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 1145)
     kmeans.fit(epi)
     inertias.append(kmeans.inertia_)
-    
+
 chooseK = {'K': range(1, 16), 'Inertia': inertias}
 chooseK_df = pd.DataFrame(data = chooseK)    
-
+ 
 kmeans2 = KMeans(n_clusters = 11, n_init = 5, random_state = 1145)
 clust_2 = kmeans2.fit(epi)
-
+ 
 from sklearn.cluster import AgglomerativeClustering
-
+ 
 clust_3 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'complete').fit(epi)
-
+ 
 clust_4 = AgglomerativeClustering(distance_threshold = None, n_clusters = 11, linkage = 'ward').fit(epi)
-epi.index[clust_4.labels_ == 0.0].tolist()
+#epi.index[clust_4.labels_ == 0.0].tolist()
 
 epi_tiny = epi.sample(50, random_state = 524)
-
+ 
 clust_5 = AgglomerativeClustering(distance_threshold = 0, n_clusters = None, linkage = 'complete').fit(epi_tiny)
 
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
-
+ 
 epi_tiny = epi.sample(50, random_state = 524)
-
+ 
 l_epi = linkage(epi_tiny, method='complete')
 
 def plot_dendrogram(model, **kwargs):
-    # Create linkage matrix and then plot the dendrogram
+    #Create linkage matrix and then plot the dendrogram
 
-    # create the counts of samples under each node
+    #create the counts of samples under each node
     counts = np.zeros(model.children_.shape[0])
     n_samples = len(model.labels_)
     for i, merge in enumerate(model.children_):
@@ -206,7 +233,6 @@ def plot_dendrogram(model, **kwargs):
 
     # Plot the corresponding dendrogram
     dendrogram(linkage_matrix, **kwargs)
-
 ```
 
 ```{r header, echo = FALSE}
@@ -230,7 +256,7 @@ tags$div(
 
 The goals of this lab are:
 
-* To practice basic data cleaning, such as removing columns, dropping rows with missing values, and accessing row names of a dataframe.
+* To practice basic data cleaning, such as removing columns, dropping rows with missing values, and accessing row names of a DataFrame.
 * To implement $K$-means clustering, including selecting an appropriate value for $K$ and interpreting the cluster output.
 * To implement hierarchical clustering, including creation of dendrograms.
 
@@ -245,27 +271,54 @@ import plotnine as p9
 import scipy
 import sklearn
 
-# To download this file go to https://posit.ds.uchicago.edu/data119-lab7/www/epi_mini2.csv
+# To download this file go to https://posit.ds.uchicago.edu/data119-lab7/data/epi_mini2.csv
 
-epi = pd.read_csv("./data/epi_mini2.csv", index_col = 0)
+epi_raw = pd.read_csv("./data/epi_mini2.csv", index_col = 0)
 ```
 
 ## Understanding Clustering
 
-A hierarchical clustering algorithm using Manhattan distance and complete linkage is applied to a dataset with 25 observations and two variables $X_1$ and $X_2$. At a certain stage, there are at least two clusters--one comprised of the points $F = (3, 6)$, $G = (4, 5)$, and $H = (4, 6)$, and another comprised of the points $I = (6, 7)$ and $J = (7, 8)$. Call these clusters 2 and 3. 
+A hierarchical clustering algorithm using Manhattan distance and complete linkage is applied to a dataset with 25 observations and two variables $X_1$ and $X_2$. At a certain stage, there are at least two clusters--one comprised of the points $F = (3, 6)$, $G = (4, 5)$, and $H = (4, 6)$, and another comprised of the points $I = (6, 7)$ and $J = (6, 8)$. Call these clusters 2 and 3. 
 
 ```{r, echo = FALSE}
 library(latex2exp)
 
-Cluster <- c(1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 7, 7, 7, 5, 5, 5, 5, 5, 6, 6) 
-X <- c(2, 2, 3, 3, 4, 3, 4, 4, 6, 7, 6, 7, 7, 8, 8, 9, 9, 10, 11, 12, 12, 12, 13, 4, 4)
-Y <- c(1, 2, 2, 3, 2, 6, 5, 6, 7, 8, 3, 3, 4, 3, 4, 2, 1, 1, 7, 8, 9, 10, 9, 10, 11)
+A <- c(2, 1)
+B <- c(2, 2)
+C <- c(3, 2)
+D <- c(3, 3)
+E <- c(4, 2)
+f <- c(3, 6)
+G <- c(4, 5)
+H <- c(4, 6)
+I <- c(6, 7)
+J <- c(6, 8)
+K <- c(6, 3)
+L <- c(7, 3)
+M <- c(7, 4)
+N <- c(8, 3)
+O <- c(8, 4)
+P <- c(9, 2)
+Q <- c(9, 1)
+R <- c(10, 1)
+S <- c(11, 7)
+tee <- c(12, 8)
+U <- c(12, 9)
+V <- c(12, 10)
+W <- c(13, 9)
+eX <- c(4, 10)
+why <- c(4, 11)
 
-cluster_XY <- data.frame(X = X, Y = Y)
+Cluster <- c(1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 7, 7, 7, 5, 5, 5, 5, 5, 6, 6) 
+table_XY <- rbind(A, B, C, D, E, f, G, H, I, J, K, L,
+                  M, N, O, P, Q, R, S, tee, U, V, W, eX, why)
+
+cluster_XY <- data.frame(table_XY)
 rownames(cluster_XY) = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
                          "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y")
 
 cluster_XY$Label <- rownames(cluster_XY)
+colnames(cluster_XY) <- c("X", "Y", "Label")
 
 little_XY <- cluster_XY %>%
   filter(Label %in% c("F", "G", "H", "I", "J"))
@@ -291,8 +344,8 @@ question_numeric(
 
 ```{r q2, echo=FALSE}
 question_numeric(
-  "2. What is $d_{Man}(F, J)$, a.k.a., the Manhattan distance between $F = (3, 6)$ and $J = (7, 8)$?",
-  answer(6, correct = TRUE),
+  "2. What is $d_{Man}(F, J)$, a.k.a., the Manhattan distance between $F = (3, 6)$ and $J = (6, 8)$?",
+  answer(5, correct = TRUE),
   allow_retry = TRUE
 )
 ```
@@ -307,8 +360,8 @@ question_numeric(
 
 ```{r q4, echo=FALSE}
 question_numeric(
-  "4. What is $d_{Man}(G, J)$, a.k.a., the Manhattan distance between $G = (4, 5)$ and $J = (7, 8)$?",
-  answer(6, correct = TRUE),
+  "4. What is $d_{Man}(G, J)$, a.k.a., the Manhattan distance between $G = (4, 5)$ and $J = (6, 8)$?",
+  answer(5, correct = TRUE),
   allow_retry = TRUE, 
   post_message = "Congratulations! You have found the second secret word: QUIET."
 )
@@ -324,8 +377,8 @@ question_numeric(
 
 ```{r q6, echo=FALSE}
 question_numeric(
-  "6. What is $d_{Man}(H, J)$, a.k.a., the Manhattan distance between $H = (4, 6)$ and $J = (7, 8)$?",
-  answer(5, correct = TRUE),
+  "6. What is $d_{Man}(H, J)$, a.k.a., the Manhattan distance between $H = (4, 6)$ and $J = (6, 8)$?",
+  answer(4, correct = TRUE),
   allow_retry = TRUE
 )
 ```
@@ -333,7 +386,7 @@ question_numeric(
 ```{r q7, echo=FALSE}
 question_numeric(
   "7. Using your answers from Questions 1-6, what is the maximal intercluster dissimilarity between Clusters 2 and 3 using Manhattan distance?",
-  answer(6, correct = TRUE),
+  answer(5, correct = TRUE),
   allow_retry = TRUE,
   min = 2,
   max = 8
@@ -353,14 +406,12 @@ question(
 )
 ```
 
-It is hard to tell since there are multiple pairs of clusters with a dissimilarity of 6. All of these clusters will be merged, since 6 is the lowest dissimilarity! Since Clusters 2 and 3 are one such pair, they will be merged also. 
-
 A dendrogram for the hierarchical clustering algorithm appears below. 
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 library(ggdendro)
 
-hclust_XY <- hclust(dist(cluster_XY, method = "manhattan"), method = "complete")
+hclust_XY <- hclust(dist(cluster_XY[,1:2], method = "manhattan"), method = "complete")
 
 col <- rep("black", 25)
 col[19] <- "red"
@@ -397,19 +448,17 @@ question(
 question_numeric(
   "11. Where could you cut the dendrogram to create two distinct clusters?",
   answer(20, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
-  answer(21, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
-  answer(22, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
-  answer(23, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
-  answer(24, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
-  answer(25, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
-  answer(26, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
-  answer(27, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
-  answer(28, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
-  answer(29, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
-  answer(30, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(13, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(14, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(15, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(16, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(17, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(18, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(19, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
+  answer(20, correct = TRUE, message = "Anything greater than approximately 20 would work!"),
   allow_retry = TRUE, 
   min = 0,
-  max = 30,
+  max = 20,
   step = 1
 )
 ```
@@ -483,7 +532,7 @@ Let's move on to examples of clustering as applied to a real world dataset. Reca
 * Place tags (`alabama`, `alaska`, `aspen`, `australia`, and so forth)
 * Other tags (`advance.prep.required`, `anthony.bourdain`, etc.)
 
-14. Before we do anything else, look at the column names of `epi`.
+14. Before we do anything else, look at the column names of `epi_raw`.
 
 ```{python setup1, exercise = FALSE, echo=FALSE, message = FALSE}
 import numpy as np
@@ -492,7 +541,7 @@ import plotnine as p9
 import scipy
 import sklearn
 
-epi = pd.read_csv("./data/epi_mini2.csv", index_col = 0)
+epi_raw = pd.read_csv("./data/epi_mini2.csv")
 ```
 
 ```{python col, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
@@ -500,7 +549,7 @@ epi = pd.read_csv("./data/epi_mini2.csv", index_col = 0)
 ```
 
 ```{python col-solution, message = FALSE, warning = FALSE, echo = FALSE}
-epi.columns
+epi_raw.columns
 ```
 
 ```{r col-code-check, message = FALSE, warning = FALSE}
@@ -514,7 +563,7 @@ grade_this_code()
 ```
 
 ```{python title-solution, message = FALSE, warning = FALSE, echo = FALSE}
-epi['title']
+epi_raw['title']
 ```
 
 ```{r title-code-check, message = FALSE, warning = FALSE}
@@ -523,14 +572,14 @@ grade_this_code()
 
 16. We've kind of ignored these type of variables so far--that is, variables that are ID numbers or names. They are technically a type of categorical variable and haven't really been useful to us so far. However, they can be very valuable much later in a clustering analysis, when we try to interpret the clusters. They are the most helpful when they are the row names rather than a separate variable column. Edit the line of code below to "re-import" the data with recipe titles as row names, and remember this trick for later!
 
-```{python imp, exercise = TRUE, message = FALSE, exercise.setup="setup1"}
-epi = pd.read_csv("./data/epi_mini2.csv", index_col = ___)
-epi.head()
+```{python imp, exercise = TRUE, message = FALSE}
+epi_raw = pd.read_csv("./data/epi_mini2.csv", index_col = ___)
+epi_raw.head()
 ```
 
 ```{python imp-solution, message = FALSE, warning = FALSE, echo = FALSE}
-epi = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
-epi.head()
+epi_raw = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
+epi_raw.head()
 ```
 
 ```{r imp-code-check, message = FALSE, warning = FALSE}
@@ -540,13 +589,7 @@ grade_this_code()
 17. Now, check out the dataset with `.describe()`. 
 
 ```{python setup2, exercise = FALSE, echo=FALSE, message = FALSE}
-import numpy as np
-import pandas as pd
-import plotnine as p9
-import scipy
-import sklearn
-
-epi = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
+epi_raw = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
 ```
 
 ```{python desc, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
@@ -554,7 +597,7 @@ epi = pd.read_csv("./data/epi_mini2.csv", index_col = 'title')
 ```
 
 ```{python desc-solution, message = FALSE, warning = FALSE, echo = FALSE}
-epi.describe()
+epi_raw.describe()
 ```
 
 ```{r desc-code-check, message = FALSE, warning = FALSE}
@@ -609,7 +652,7 @@ question("19. What is the mean of `calories`?",
 ```
 
 ```{python missing-solution, message = FALSE, warning = FALSE, echo = FALSE}
-np.sum(pd.isna(epi), axis = 0)
+np.sum(pd.isna(epi_raw), axis = 0)
 ```
 
 ```{r missing-code-check, message = FALSE, warning = FALSE}
@@ -639,7 +682,7 @@ Most of the time, I've been redefining DataFrames with only a subset of columns 
 21. The line of code below returns a DataFrame with all of the columns. Can you edit it so that I keep only the last 674 columns and drop the numerical variables (a.k.a., the first five columns)? Print out the column names to confirm.
 
 ```{python drop, exercise = TRUE, message = FALSE, exercise.setup="setup2"}
-epi = epi.iloc[:, :]
+epi = epi_raw.iloc[:, :]
 epi.columns
 ```
 
