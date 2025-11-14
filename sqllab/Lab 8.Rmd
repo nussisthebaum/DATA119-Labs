@@ -248,7 +248,7 @@ grade_this_code()
 
 ```{r q3, echo=FALSE}
 question(
-  "Is there a publisher that Professor Nussbaum seems to enjoy more than others, based on her ratings?",
+  "Is there a publisher that Professor Nussbaum seems to enjoy more than others, based on her ratings? Select all that apply.",
   answer("Barnes & Noble Classics"),
   answer("Children's Classics", correct = TRUE),
   answer("Clarkson Potter", correct = TRUE),
@@ -261,7 +261,15 @@ question(
 )
 ```
 
-4. The results of the previous query should seem suspicious to you. Write a query that answers the same question--what publisher does Professor Nussbaum enjoy the most--but considering only publishers that she have read from at least five times.
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+The results of the previous query should seem suspicious to you. Why are there so many publishers that have perfect five star ratings?
+
+::::
+
+4. Write a query that answers the same question--what publisher does Professor Nussbaum enjoy the most--but considering only publishers that she have read from at least five times.
 
 ```{sql goodreads4, exercise = TRUE, connection = "db_con"}
 SELECT ...
@@ -285,7 +293,7 @@ grade_this_code()
 
 ```{r q4, echo=FALSE}
 question(
-  "Is there a publisher that Professor Nussbaum seems to enjoy more than others, assuming she has read from them at least five times, based on her ratings??",
+  "Is there a publisher that Professor Nussbaum seems to enjoy more than others, assuming she has read from them at least five times, based on her ratings?",
   answer("Audible Original"),
   answer("Hachette Audio", correct = TRUE),
   answer("One World"),
@@ -401,7 +409,7 @@ WHERE title = "Spitting Gold";
 grade_this_code()
 ```
 
-9. Now, write a query that will result in all of the books with 0 pages. Does this give you any more insight into why a book might have 0 pages?
+9. Now, write a query that will result in all of the books with 0 pages. 
 
 ```{sql goodreads9, exercise = TRUE, connection = "db_con"}
 
@@ -416,6 +424,14 @@ WHERE number_of_pages = 0;
 ```{r goodreads9-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+Does this give you any more insight into why a book might have 0 pages?
+
+::::
 
 10. Let's confirm our hypothesis. Write a query that will return the average page length of an audiobook. Make sure to consider all possible bindings.
 
@@ -648,9 +664,9 @@ question(
 ```
 
 ```{sql goodreads17-solution, message = FALSE, warning = FALSE, echo = FALSE}
-SELECT title, my_rating, locations, exclusive_shelf
+SELECT title, my_rating, location, exclusive_shelf
 FROM both
-WHERE exclusive_shelf = "read" and locations = "uk-england" AND my_rating = 2;
+WHERE exclusive_shelf = "read" and location = "uk-england" AND my_rating = 2;
 ```
 
 ```{r goodreads17-code-check, message = FALSE, warning = FALSE}
