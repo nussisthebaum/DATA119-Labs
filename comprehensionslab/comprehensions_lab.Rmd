@@ -1,0 +1,101 @@
+---
+title: "Advanced Iteration"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(shiny)
+library(gradethis)
+library(learnr)
+library(reticulate)
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Advanced Iteration", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+The goals of this lab to are learn and gain experience using advanced iteration techniques. We will cover
+  - Comprehensions of:
+    - Lists
+    - Sets
+    - Dictionaries
+  - The `enumerate` utility function
+  - The `zip` utility function
+  
+## Advanced Iteration Techniques
+So far you have learned about for and while loops. In this lab we will introduce **comprehensions**. Comprehensions allow us to succinctly create new lists, sets, and dictionaries all in one line. They are generally faster than the equivalent for loop as well; however, they can be harder to read. As a data scientist it will be your responsibility to decide between using a standard for loop or a comprehension as you trade off between readability and speed/conciseness. In teaching you about these techniques we'll introduce to you the `enumerate` and `zip` functions which can make it easier to keep track of an index when iterating or to iterate through multiple things at once.
+
+## Setup
+
+For this lab we will be using the `pandas`, and `numpy` modules in Python, as well as a new dataset: `add dataset here later`.
+
+```{python setup_py, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import numpy as np
+import pandas as pd
+
+add_dataset_here = ...
+```
+
+# List comprehensions
+
+- Do it with a for loop (example) of only indexes divisible by 2 or 3
+- Do it with a comprehension
+- discuss explicitly the syntax being used
+- how I'll introduce zip
+  - nested loop which goes through both and if only do something when equal indexes
+  - show that zip just gaurantees this and remind unpacking items x, y = (1, 2)
+- show a loop with 2 conditions and the equivalent comprehension
+- add check for understanding on syntax
+- add discussion question on choosing between a for and comprehension, readability
+- do final overview of all syntax
+- bonus, show nested comprehensions
+  - make a matrix and show getting an x slice
+  
+# Dictionary Comprehensions
+- remind students about what a dictionary is (keys, values, updating)
+- describe a use case for a dictionary (maybe say applying functions to update each value in a dictionary)
+- conditional updating the earlier example
+- explicitly go through syntax
+- one more example problem
+  - have it depend on an index which allows the use of enumerate
+  - explain enumerate here
+- conceptual question here
+
+# Set Comprehensions
+
+# Extra Practice
+  
+
