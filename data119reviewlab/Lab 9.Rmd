@@ -138,7 +138,7 @@ import scipy
 import sklearn
 import matplotlib.pyplot as plt
 
-# To download this file go to https://posit.ds.uchicago.edu/data119-lab9/www/msleep.csv
+# To download this file go to https://posit.ds.uchicago.edu/data119reviewlab/www/msleep.csv
 
 msleep = pd.read_csv("./data/msleep.csv").drop(columns = ['rownames'])
 msleep.head()
@@ -181,11 +181,11 @@ question(
 ```{r q2, echo=FALSE}
 question(
   "More specifically, which model should I use?",
-  answer("KNN",  message = "Not quite. KNN (K Nearest Neighbors) is a classification algorithm which does not allow us to model continuous response variables."),
+  answer("$k$NN",  message = "Not quite. $k$NN ($k$ Nearest Neighbors) is a classification algorithm which does not allow us to model continuous response variables."),
   answer("Simple linear regression", message = "Very close! Simple linear regression allows us to model a continuous response variable. But, it only allows us to use one predictor and I want to investigate more than one..."),
   answer("Multiple linear regression", correct = TRUE, message = "Correct! Multiple linear regresison will allow us to model a continuous response variable using multiple features."),
   answer("Logistic regression", message = "Not quite. Even though regression is in the name, logistic regression is a classification algorithm which does not allow us to model continuous response variables."),
-  answer("K-Means", message = "Not quite. K-Means is a method of clustering which is an unsupervised learning algorithm."),
+  answer("$K$-Means", message = "Not quite. $K$-Means is a method of clustering which is an unsupervised learning algorithm."),
   allow_retry = TRUE,
   post_message = "Congratulations! You have found the first secret word: LOCAL."
 )
@@ -195,12 +195,12 @@ Now, that we've narrowed down the type of model we want to build, we need to che
 
 ```{python sleep_hist, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 (p9.ggplot(msleep, p9.aes(x = ___)) +
-  p9.geom_histogram(bins = 10))
+  p9.geom_histogram(bins = 10)).show()
 ```
 
 ```{python sleep_hist-solution, message = FALSE, warning = FALSE, echo = FALSE}
 (p9.ggplot(msleep, p9.aes(x = "sleep_total")) +
-  p9.geom_histogram(bins = 10))
+  p9.geom_histogram(bins = 10)).show()
 ```
 
 ```{r sleep_hist-code-check, message = FALSE, warning = FALSE, echo = FALSE}
@@ -221,18 +221,18 @@ Now, we need to choose which variables to include in our model. Before you do an
 ```{r q4, echo=FALSE}
 question_checkbox(
   "Select the variables that you are concerned about including in the model. ",
-  answer("name"),
-  answer("genus"),
-  answer("vore"),
-  answer("order"),
-  answer("conservation"),
-  answer("sleep_rem"),
-  answer("sleep_cycle"),
-  answer("awake"),
-  answer("brainwt"),
-  answer("bodywt"),
+  answer("`name`"),
+  answer("`genus`"),
+  answer("`vore`"),
+  answer("`order`"),
+  answer("`conservation`"),
+  answer("`sleep_rem`"),
+  answer("`sleep_cycle`"),
+  answer("`awake`"),
+  answer("`brainwt`"),
+  answer("`bodywt`"),
   answer_fn(function(value) {
-    correct("There are multiple correct answers to this question, but the variables I found concerning were name (unique for every animal) and sleep_rem, sleep_cycle, and awake (these should be highly related with sleep_total but might not help us learn much about what contributes to how much an animal sleeps). bodywt and brainwt might also be very similar to each other which could be an issue...")
+    correct("There are multiple correct answers to this question, but the variables I found concerning were name (unique for every animal) and `sleep_rem`, `sleep_cycle`, and `awake` (these should be highly related with `sleep_total` but might not help us learn much about what contributes to how much an animal sleeps). `bodywt` and `brainwt` might also be very similar to each other which could be an issue...")
   }),
   allow_retry = TRUE
 )
@@ -301,14 +301,14 @@ grade_this_code()
 ```{r q5, echo=FALSE}
 question_checkbox(
   "After looking at your correlation matrix and VIFs, select the variables that you are concerned about including in the model. ",
-  answer("vore"),
-  answer("conservation"),
-  answer("sleep_rem"),
-  answer("sleep_cycle"),
-  answer("awake"),
-  answer("brainwt"),
+  answer("`vore`"),
+  answer("`conservation`"),
+  answer("`sleep_rem`"),
+  answer("`sleep_cycle`"),
+  answer("`awake`"),
+  answer("`brainwt`"),
   answer_fn(function(value) {
-    correct("There are multiple correct answers to this question, but the variable I found concerning was conservation. Some of the levels had high VIF. For the purposes of our model, we will keep it in for now.")
+    correct("There are multiple correct answers to this question, but the variable I found concerning was `conservation`. Some of the levels had high VIF. For the purposes of our model, we will keep it in for now.")
   }),
   allow_retry = TRUE,
   post_message = "Congratulations! You have found the second secret word: KIN."
@@ -452,11 +452,11 @@ model_df = pd.DataFrame({'Fitted': ___, 'Residuals': ___})
 (p9.ggplot(model_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("Fitted Values") +
- p9.ylab("Residuals"))
+ p9.ylab("Residuals")).show()
 
 (p9.ggplot(model_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram(b) +
-   p9.xlab("Residuals"))
+   p9.xlab("Residuals")).show()
 ```
 
 ```{python diagplots-solution, message = FALSE, warning = FALSE}
@@ -465,11 +465,11 @@ model_df = pd.DataFrame({'Fitted': test_preds, 'Residuals': (y_test - test_preds
 (p9.ggplot(model_df, p9.aes(x = 'Fitted', y = 'Residuals')) +
  p9.geom_point() +
  p9.xlab("Fitted Values") +
- p9.ylab("Residuals"))
+ p9.ylab("Residuals")).show()
 
 (p9.ggplot(model_df, p9.aes(x = 'Residuals')) +
    p9.geom_histogram() +
-   p9.xlab("Residuals"))
+   p9.xlab("Residuals")).show()
 ```
 
 ```{r diagplots-code-check, message = FALSE, warning = FALSE}
@@ -576,11 +576,11 @@ question(
 ```{r q8, echo=FALSE}
 question_checkbox(
   "More specifically, which model(s) could I use?",
-  answer("KNN",correct = TRUE,  message = "Correct! KNN (K Nearest Neighbors) is a classification algorithm which allows us to model binary response variables."),
+  answer("$k$NN",correct = TRUE,  message = "Correct! $k$NN ($k$ Nearest Neighbors) is a classification algorithm which allows us to model binary response variables."),
   answer("Simple linear regression", message = "Not quite. Simple linear regression allows us to model a continuous response variable, not a binary response variable"),
   answer("Multiple linear regression", message = "Not quite. Multiple linear regresison will allow us to model a continuous response variable using multiple features, but our repsonse variable is binary."),
   answer("Logistic regression", correct = TRUE, message = "Correct! Logistic regression is a classification algorithm which allows us to model binary response variables."),
-  answer("K-Means", message = "Not quite. K-Means is a method of clustering which is an unsupervised learning algorithm."),
+  answer("$K$-Means", message = "Not quite. $K$-Means is a method of clustering which is an unsupervised learning algorithm."),
   allow_retry = TRUE
 )
 ```
@@ -611,7 +611,7 @@ X_train_pp[col_names] = scaler.transform(X_train_pp[col_names])
 X_test_pp[col_names] = scaler.transform(X_test_pp[col_names])
 ```
 
-Try running KNN with different numbers of neighbors. Plot the training and the testing accuracy across different values of K.
+Try running $k$NN with different numbers of neighbors. Plot the training and the testing accuracy across different values of $k$.
 
 ```{python loop, exercise = TRUE, message = FALSE, exercise.setup="setup4"}
 from sklearn.neighbors import KNeighborsClassifier
@@ -643,13 +643,11 @@ d_kNN = {
 
 kNN_plot = pd.DataFrame(d_kNN)
 
-print(
-    p9.ggplot(kNN_plot, p9.aes(x=___, y=___, color=___)) +
+(p9.ggplot(kNN_plot, p9.aes(x=___, y=___, color=___)) +
     p9.geom_line() +
     p9.geom_vline(xintercept=5, linetype="dashed") + 
     p9.scale_x_continuous(name="$k$") +
-    p9.scale_y_continuous(name="Accuracy")
-)
+    p9.scale_y_continuous(name="Accuracy")).show()
 ```
 
 ```{python loop-solution, exercise = FALSE, message = FALSE, warning = FALSE, echo = FALSE}
@@ -682,12 +680,10 @@ d_kNN = {
 
 kNN_plot = pd.DataFrame(d_kNN)
 
-print(
-    p9.ggplot(kNN_plot, p9.aes(x="k", y="Accuracy", color="Data")) +
+(p9.ggplot(kNN_plot, p9.aes(x="k", y="Accuracy", color="Data")) +
     p9.geom_line() +
     p9.scale_x_continuous(name="$k$") +
-    p9.scale_y_continuous(name="Accuracy")
-)
+    p9.scale_y_continuous(name="Accuracy")).show()
 
 ```
 
@@ -700,14 +696,14 @@ grade_this_code()
 **Discuss with a neighbor (or on Ed):**
 :::
 
-* What value of K would you choose? Why?
-* For which values of K does the model underfit? Overfit?
+* What value of $k$ would you choose? Why?
+* For which values of $k$ does the model underfit? Overfit?
 
 ::::
 
 
 ```{r q9, echo=FALSE}
-question_numeric("What $k$? would you choose?",
+question_numeric("What $k$ would you choose?",
          answer_fn(function(value){
            if (value %in% c(3,5)){
              correct("Good choice!")
@@ -839,7 +835,7 @@ question(
 )
 ```
 
-In class, we learned about 2 clustering methods K-Means and Hierarchical clustering. 
+In class, we learned about 2 clustering methods $K$-Means and Hierarchical clustering. 
 
 :::: {.discussionbox data-latex=""}
 ::: {.center data-latex=""}
@@ -850,7 +846,7 @@ Which clustering method do you think makes the most sense for this dataset?
 
 ::::
 
-First, let's use K-Means to cluster the data. We need to prepare our data for clustering.
+First, let's use $K$-Means to cluster the data. We need to prepare our data for clustering.
 
 - Read in the data with `name` as the index
 - Create dummy variables for the categorical variables 
@@ -882,7 +878,7 @@ Why do we need to standardize our numeric variables before we use our clustering
 
 ::::
 
-Next, create an elbow plot to help us choose the best value for K.
+Next, create an elbow plot to help us choose the best value for $K$.
 
 ```{python looped, exercise = TRUE, message = FALSE, exercise.setup="setup6"}
 inertias = []
@@ -925,7 +921,7 @@ grade_this_code()
 ```
 
 ```{r q12, echo=FALSE}
-question_numeric("What $k$? would you choose?",
+question_numeric("What $K$ would you choose?",
          answer_fn(function(value){
            if (value %in% c(3,4,5,6)){
              correct("Good choice!")
@@ -939,7 +935,7 @@ question_numeric("What $k$? would you choose?",
 )
 ```
 
-Rerun the clustering using this value of $k$. (Note that the solution may use a different value of k from what you chose - if your $k$ passed the question above, it was still a good choice of $k$!) 
+Rerun the clustering using this value of $K$. (Note that the solution may use a different value of $K$ from what you chose - if your $K$ passed the question above, it was still a good choice of $K$!) 
 
 ```{python kmeans, exercise = TRUE, message = FALSE, exercise.setup = "setup6"}
 kmeans = KMeans(n_clusters = ___, n_init = 5, random_state = 314)
