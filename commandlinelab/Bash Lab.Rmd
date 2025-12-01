@@ -1,5 +1,5 @@
 ---
-title: "Introduction to BASH"
+title: "Introduction to the Command Line Interface"
 output: 
    learnr::tutorial:
       css: css/custom-styles.css
@@ -34,10 +34,6 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
 ```
-
-<!-- ```{bash setup} -->
-<!-- cd data -->
-<!-- ``` -->
 
 ```{r header, echo = FALSE}
 library(htmltools)
@@ -355,7 +351,7 @@ For example, to print out lines that contain the word "darkwing":
 grep "darkwing" famousducks.txt
 ```
 
-Notice that `grep` is followed by the phrase you are searching for in quotes, which is followed by the filename. `grep` by itself will only look for specific phrases, but has options to make it much more powerful. 
+Notice that `grep` is followed by the phrase you are searching for in quotes, which is followed by the filename. `grep` by itself will only look for specific phrases, but has options to make it much more powerful.
 
 This command will return the same as above, but *the search is now case-insensitive*:
 
