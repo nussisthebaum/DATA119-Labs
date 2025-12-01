@@ -1,0 +1,454 @@
+---
+title: "Style Guide"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+#knitr::knit_engines$set(python = reticulate::eng_python)
+
+## Directory Requirements ??
+
+## Package Requirements for Lab
+
+library(gradethis)
+library(learnr)
+library(tidyverse)
+
+## Package Requirements  for Content
+
+## Requirements for Answer Checking
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Command Line Interface and Bash", class = "pageTitle")
+  )
+)
+```
+
+
+## Goals
+
+The goal of this lab is to become familiar with the concept of style guides for code, and ultimately use those conventions to write more readable, easy to digest code.
+
+## What is a style guide?
+
+## Lanugage Rules
+
+### `import` statements
+
+We often start our scripts by collecting all of the classes, functions, and other objects we may need for the task at hand. These objects are frequently bundled together as a module or a package. According to the Python documentation, a module is "a file containing Python definitions and statements", intended to be called into scripts or other modules, and a package is a collection of related modules. (https://docs.python.org/3/tutorial/modules.html#packages)
+
+Calling a module or package into a script is known as importing, and is done with the Python keyword `import`. There are several rules for `import` statements that should help you to remember where different functions come from, in case you need to debug something later. 
+
+1. **Use `import` statements for packages and modules only, not for individual types, classes, or functions.**
+
+For example, instead of 
+
+```{python, eval = FALSE, echo = TRUE}
+
+```
+
+You should use
+
+```{python, eval = FALSE, echo = TRUE}
+
+```
+
+Do you see the difference? If there were to be an issue with the function `function`, you may not realize what module or package contains the original version, and it may be harder to figure out what to do. It is not obvious in this short example, but in a script with many many lines of code, it might be more apparent.
+
+```{r mc_import1, echo=FALSE}
+question(
+  "How would you delete all PDFs in your working directory?",
+  answer("`rm *`"),
+  answer("`rm *.txt`"),
+  answer("`rm *.pdf`", correct = TRUE),
+  answer("`rm pdf*`"),
+  answer("Delete one specific `.pdf` file at a time until everything is gone."),
+  allow_retry = TRUE
+)
+```
+
+Now, you try! Edit the following line of code so that this style guide convention is satisfied.
+
+```{python import1, exercise = TRUE}
+
+```
+
+```{python import1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+cd data
+ls
+```
+
+```{r import1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+2. **Use `from x import y` where `x` is the package prefix and `y` is the module name with no prefix.**
+
+Occasionally, you may want to rename a module--as you can see in some of the previous examples, it can be cumbersome to continually type the full package, module, and function names every time you want to use them. In these cases, you can use the keyword `as`, but be prepared to follow some additional rules
+
+3. **Use `from x import y as z` in any of the following circumstances:**
+
+* **3a. Two modules named `y` are to be imported.** This should not happen frequently, but we can't avoid two independent developers coming up with the same name for different modules. In particular, this may help with what are called "aliased" functions--functions that have the same name. For example:
+
+* **3b. `y` conflicts with a top-level name defined in the current module.**
+
+
+* **3c. `y` conflicts with a common parameter name that is part of the public API (e.g., features).**
+
+* **3d. `y` is too generic in the context of your code (e.g., `from storage.file_system import options as fs_options`).**
+
+* **3e. `y` is an inconveniently long name.** At some point when you are coding, everything seems inconveniently long! In fact, there are several standard abbreviations you may have already seen in other data science coursework:
+
+Package | Abbreviation | Purpose
+--------|--------------|--------
+`numpy` | `np` | ...
+`pandas` | `pd` | ...
+`plotnine` | `p9` | ...
+`statsmodels` | `sm` | ...
+
+
+### Comprehensions & Generator Expressions
+
+Okay to use for simple cases--multiple `for` clauses or filter expressions are not permitted. Optimize for readability, not conciseness.
+
+```{python, eval = FALSE, echo = TRUE}
+No:
+  result = [(x, y) for x in range(10) for y in range(5) if x * y > 10]
+
+  return (
+      (x, y, z)
+      for x in range(5)
+      for y in range(5)
+      if x != y
+      for z in range(5)
+      if y != z
+  )
+```
+
+### Conditional Expressions
+
+Okay for simple cases. Each portion must fit on one line: true-expression, if-expression, else-expression. Use a complete if statement when things get more complicated.
+
+```{python, eval = FALSE, echo = TRUE}
+No:
+    bad_line_breaking = ('yes' if predicate(value) else
+                         'no')
+    portion_too_long = ('yes'
+                        if some_long_module.some_long_predicate_function(
+                            really_long_variable_name)
+                        else 'no, false, negative, nay')
+```
+
+### True/False Evaluations
+
+Use the "implicit" false if at all possible (with a few caveats), e.g., `if foo:` rather than `if foo != []:`.
+
+* A quick "rule of thumb" is that all "empty" values are considered false, so `0`, `None`, `[]`, `{}`, `''` all evaluate as false in a boolean context.
+* There are a few caveats that you should keep in mind:
+  + Always use `if foo is None:` (or `is not None`) to check for a `None` value, e.g., when testing whether a variable or argument that defaults to `None` was set to some other value. 
+  + Never compare a boolean variable to `False` using ` ==`. Use `if not x`: instead. If you need to distinguish `False` from `None` then chain the expressions, such as i`f not x and x is not None:`.
+  + For sequences (strings, lists, tuples), use the fact that empty sequences are false, so `if seq:` and `if not seq:` are preferable to `if len(seq):` and `if not len(seq):` respectively.
+  
+* More caveats:
+  + When handling integers, implicit false may involve more risk than benefit (i.e., accidentally handling `None` as 0). You may compare a value which is known to be an integer (and is not the result of `len()`) against the integer 0.
+  + Note that `'0'` (i.e., 0 as string) evaluates to true.
+  + Note that Numpy arrays may raise an exception in an implicit boolean context. Prefer the `.size` attribute when testing emptiness of a `np.array` (e.g. `if not users.size`).
+
+
+## Style Rules
+
+### Semicolons
+
+Do not terminate your lines with semicolons, and do not use semicolons to put two statements on the same line.
+
+### Line Length
+
+Maximum line length is 80 characters.
+
+* Explicit exceptions to the 80 character limit:
+  + Long import statements.
+  + URLs, pathnames, or long flags in comments.
+  + Long string module-level constants not containing whitespace that would be inconvenient to split across lines such as URLs or pathnames.
+  + Pylint disable comments. (e.g.: `# pylint: disable=invalid-name`)
+* Do not use a backslash for [explicit line continuation](https://docs.python.org/3/reference/lexical_analysis.html#explicit-line-joining). Instead, make use of Python’s [implicit line joining inside parentheses, brackets and braces](https://docs.python.org/3/reference/lexical_analysis.html#implicit-line-joining). If necessary, you can add an extra pair of parentheses around an expression.
+
+Which of the following 80+ character lines is acceptable in the style guide?
+
+Turn on Ruler in VS Code
+
+### Blank Lines
+
+* Two blank lines between top-level definitions, be they function or class definitions. 
+* One blank line between method definitions and between the docstring of a `class` and the first method. 
+* No blank line following a `def` line. Use single blank lines as you judge appropriate within functions or methods.
+
+### Parentheses
+
+* It is fine, though not required, to use parentheses around tuples. 
+* Do not use them in return statements or conditional statements unless using parentheses for implied line continuation or to indicate a tuple.
+
+```{python, eval = FALSE, echo = TRUE}
+No:  if (x):
+         bar()
+     if not(x):
+         bar()
+     return (foo)
+```
+
+### Indentation
+
+Indent your code blocks with 4 spaces. Never use tabs. 
+
+Turn on spaces/tabs in VS Code
+
+### White Space
+
+Follow standard typographic rules for the use of spaces around punctuation.
+
+* No whitespace inside parentheses, brackets or braces.
+
+```{python, eval = FALSE, echo = TRUE}
+Yes: spam(ham[1], {'eggs': 2}, [])
+No:  spam( ham[ 1 ], { 'eggs': 2 }, [ ] )
+```
+
+* No whitespace before a comma, semicolon, or colon. Do use whitespace after a comma, semicolon, or colon, except at the end of the line.
+
+```{python, eval = FALSE, echo = TRUE}
+Yes: if x == 4:
+         print(x, y)
+     x, y = y, x
+No:  if x == 4 :
+         print(x , y)
+     x , y = y , x
+```
+
+* No whitespace before the open parentheses/bracket that starts an argument list, indexing or slicing.
+
+```{python, eval = FALSE, echo = TRUE}
+Yes: spam(1)
+No:  spam (1)
+Yes: dict['key'] = list[index]
+No:  dict ['key'] = list [index]
+```
+
+* No trailing whitespace. Surround binary operators with a single space on either side for assignment (`=`), comparisons (`==`, `<`, `>`, `!=`, `<>`, `<=`, `>=`, `in`, `not in`, `is`, `is not`), and Booleans (`and`, `or`, `not`). Use your better judgment for the insertion of spaces around arithmetic operators (`+`, `-`, `*`, `/`, `//`, `%`, `**`, `@`).
+
+```{python, eval = FALSE, echo = TRUE}
+Yes: x == 1
+No:  x<1
+```
+
+### Function Length
+
+Prefer small and focused functions.
+
+* We recognize that long functions are sometimes appropriate, so no hard limit is placed on function length. If a function exceeds about 40 lines, think about whether it can be broken up without harming the structure of the program.
+* Even if your long function works perfectly now, someone modifying it in a few months may add new behavior. This could result in bugs that are hard to find. Keeping your functions short and simple makes it easier for other people to read and modify your code.
+* You could find long and complicated functions when working with some code. Do not be intimidated by modifying existing code: if working with such a function proves to be difficult, you find that errors are hard to debug, or you want to use a piece of it in several different contexts, consider breaking up the function into smaller and more manageable pieces.
+
+### Miscellaneous
+
+## Naming
+
+### Naming 
+
+Function names, variable names, and filenames should be descriptive; avoid abbreviation. In particular, do not use abbreviations that are ambiguous or unfamiliar to readers outside your project, and do not abbreviate by deleting letters within a word.
+
+Names to Avoid
+
+* single character names, except for specifically allowed cases: counters or iterators (e.g. `i`, `j`, `k`, `v`, et al.) 
+* dashes (`-`) in any package/module name
+* `__double_leading_and_trailing_underscore__` names (reserved by Python)
+* offensive terms
+* names that needlessly include the type of the variable (for example: `id_to_name_dict`)
+
+* Variable and function names should use the [snake_case](https://en.wikipedia.org/wiki/Snake_case) naming convention (i.e., `lowercase_with_underscore`). For example:
+
+```{python, eval = FALSE, echo = TRUE}
+sum_of_squares
+print_happy_birthday
+total_apples
+```
+
+One exception: class names should start with a capital letter and use CamelCase:
+
+```{python, eval = FALSE, echo = TRUE}
+DivvyStation
+Route
+VotingBooths
+```
+
+Constants names should use snake_case with all caps:
+
+```{python, eval = FALSE, echo = TRUE}
+PI
+MAX_CLIENTS
+MAX_IRC_MSG_LEN
+```
+
+Use descriptive names for parameter names, variables, and function names. Use short names for local variables. In general, the further away a variable will be used, the more descriptive the name needs to be. 
+
+```{python, eval = FALSE, echo = TRUE}
+Yes:
+  for x in data:
+    print(f(x))
+No: 
+  for element_of_list in data:
+    print(f(element_of_list))
+```
+
+The names of functions that perform an action should include a verb:
+
+```{python, eval = FALSE, echo = TRUE}
+Yes: read_column_from_csv
+No:  column_from_csv
+```
+
+## Writing Comments
+
+### Comments
+
+A good place to have comments is in tricky parts of the code. **If you’re going to have to explain it at the next code review, you should comment it now.** Complicated operations get a few lines of comments before the operations commence. Non-obvious ones get comments at the end of the line.
+
+```{python, eval = FALSE, echo = TRUE}
+# We use a weighted dictionary search to find out where i is in
+# the array.  We extrapolate position based on the largest num
+# in the array and the array size and then do binary search to
+# get the exact number.
+
+if i & (i-1) == 0:  # True if i is 0 or a power of 2.
+```
+
+* To improve legibility, these comments should start at least 2 spaces away from the code with the comment character `#`, followed by at least one space before the text of the comment itself.
+
+* On the other hand, never describe the code. Assume the person reading the code knows Python (though not what you’re trying to do) better than you do.
+
+```{python, eval = FALSE, echo = TRUE}
+# BAD COMMENT: Now go through the b array and make sure whenever i occurs
+# the next element is i+1
+```
+
+Pay attention to punctuation, spelling, and grammar; it is easier to read well-written comments than badly written ones.
+
+* Comments should be as readable as narrative text, with proper capitalization and punctuation. In many cases, complete sentences are more readable than sentence fragments. Shorter comments, such as comments at the end of a line of code, can sometimes be less formal, but you should be consistent with your style.
+* Although it can be frustrating to have a code reviewer point out that you are using a comma when you should be using a semicolon, it is very important that source code maintain a high level of clarity and readability. Proper punctuation, spelling, and grammar help with that goal.
+
+
+
+## Parting Words
+
+BE CONSISTENT.
+
+If you're editing code, take a few minutes to look at the code around you and determine its style. If they use `_idx` suffixes in index variable names, you should too. If their comments have little boxes of hash marks around them, make your comments have little boxes of hash marks around them too.
+
+**The point of having style guidelines is to have a common vocabulary of coding so people can concentrate on what you're saying rather than on how you're saying it.** We present global style rules here so people know the vocabulary, but local style is also important. If code you add to a file looks drastically different from the existing code around it, it throws readers out of their rhythm when they go to read it.
+
+However, there are limits to consistency. It applies more heavily locally and on choices unspecified by the global style. Consistency should not generally be used as a justification to do things in an old style without considering the benefits of the new style, or the tendency of the codebase to converge on newer styles over time.
+
+
+
+#########
+
+
+```{bash example1, echo = TRUE, eval = FALSE}
+touch newfile.txt
+```
+
+
+
+```{r q2, echo=FALSE}
+question(
+  "Which part of the command finds the first 10 lines of the file?",
+  answer("`head`", correct = TRUE),
+  answer("`names.txt`"),
+  answer("`|`"),
+  answer("`grep`"),
+  answer("Steve"),
+  allow_retry = TRUE
+)
+```
+
+```{r q3, echo=FALSE}
+question(
+  "Which part of the command finds lines matching the phrase 'Steve'?",
+  answer("`head`"),
+  answer("`names.txt`"),
+  answer("`|`"),
+  answer("`grep`", correct = TRUE),
+  answer("Steve"),
+  allow_retry = TRUE
+)
+```
+
+
+
+```{bash setup-directory, eval = TRUE, engine.opts='-l'}
+cd data
+```
+
+```{bash ex3, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
+```
+
+```{bash ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+cd data
+cat instructions
+```
+
+```{r ex3-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+
+```{bash ex4, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
+
+```
+
+```{bash ex5, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
+
+```
+
+```{bash ex6, exercise = TRUE, exercise.setup = "setup-directory"}
+cd data
+
+```
+
+```{bash setup-directory2}
+cd data/mystery
+```
+
+```{bash ex7, exercise = TRUE, exercise.setup = "setup-directory2"}
+cd data/mystery
+echo "John Doe" | $(command -v md5 || command -v md5sum) | grep -qif /dev/stdin encoded && echo CORRECT\! GREAT WORK, GUMSHOE. || echo SORRY, TRY AGAIN.
+```
