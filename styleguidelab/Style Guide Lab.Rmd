@@ -10,8 +10,6 @@ runtime: shiny_prerendered
 knitr::opts_chunk$set(error = TRUE)
 #knitr::knit_engines$set(python = reticulate::eng_python)
 
-## Directory Requirements ??
-
 ## Package Requirements for Lab
 
 library(gradethis)
@@ -47,17 +45,32 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Command Line Interface and Bash", class = "pageTitle")
+    tags$h1("Style Guide", class = "pageTitle")
   )
 )
 ```
 
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
+import numpy as np
+import pandas as pd
+import plotnine as p9
+
+data = pd.read_csv(".data/nussbaum_goodreads_library_export.csv", index_col = "Title")
+```
 
 ## Goals
 
 The goal of this lab is to become familiar with the concept of style guides for code, and ultimately use those conventions to write more readable, easy to digest code.
 
-## What is a style guide?
+## Introductions to Style Guides
+
+What is a style guide?
+
+"A set of conventions (sometimes arbitrary) about how to write code for that project. It is much easier to understand a large codebase when all the code in it is in a consistent style."
+
+Who write style guides? Usually, organizations that want to encourage collaborating between different programmers, including large companies, like Google, or the University of Chicago Computer Science Department (both of which are similar and contain principles we will be using in class. )
+
+Since you are likely at the beginning of your programming careers, it is best to learn these principles now and use them as you continue learning. Read through the following sets of rules pertaining to language, style, naming, and comments to learn more.
 
 ## Lanugage Rules
 
@@ -67,231 +80,779 @@ We often start our scripts by collecting all of the classes, functions, and othe
 
 Calling a module or package into a script is known as importing, and is done with the Python keyword `import`. There are several rules for `import` statements that should help you to remember where different functions come from, in case you need to debug something later. 
 
-1. **Use `import` statements for packages and modules only, not for individual types, classes, or functions.**
+1. Use `import` statements for packages and modules only, not for individual types, classes, or functions.
 
 For example, instead of 
 
 ```{python, eval = FALSE, echo = TRUE}
+from numpy import log
 
+log(10)
 ```
 
 You should use
 
 ```{python, eval = FALSE, echo = TRUE}
+import numpy 
 
+numpy.log(10)
 ```
 
-Do you see the difference? If there were to be an issue with the function `function`, you may not realize what module or package contains the original version, and it may be harder to figure out what to do. It is not obvious in this short example, but in a script with many many lines of code, it might be more apparent.
-
-```{r mc_import1, echo=FALSE}
-question(
-  "How would you delete all PDFs in your working directory?",
-  answer("`rm *`"),
-  answer("`rm *.txt`"),
-  answer("`rm *.pdf`", correct = TRUE),
-  answer("`rm pdf*`"),
-  answer("Delete one specific `.pdf` file at a time until everything is gone."),
-  allow_retry = TRUE
-)
-```
+Do you see the difference? If there were to be an issue with the function `function`, you may not realize what module or package contains the original version, and it may be harder to figure out what to do. It is not obvious in this short example, but in a script with many many lines of code, it might be more apparent. 
 
 Now, you try! Edit the following line of code so that this style guide convention is satisfied.
 
 ```{python import1, exercise = TRUE}
+from pandas import read_csv
 
+epi_mini = read_csv"(https://github.com/nussisthebaum/DATA119-Labs/blob/main/datawranglinglab/data/epi_mini.csv")
 ```
 
 ```{python import1-solution, message = FALSE, warning = FALSE, echo = FALSE}
-cd data
-ls
+import pandas
+
+epi_mini = pandas.read_csv"(https://github.com/nussisthebaum/DATA119-Labs/blob/main/datawranglinglab/data/epi_mini.csv")
 ```
 
 ```{r import1-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-2. **Use `from x import y` where `x` is the package prefix and `y` is the module name with no prefix.**
+2. Use `from x import y` where `x` is the package prefix and `y` is the module name with no prefix. For example, 
 
-Occasionally, you may want to rename a module--as you can see in some of the previous examples, it can be cumbersome to continually type the full package, module, and function names every time you want to use them. In these cases, you can use the keyword `as`, but be prepared to follow some additional rules
+```{python, eval = FALSE, echo = TRUE}
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LinearRegression
+from sklearn.datasets import load_iris
+import numpy as np
 
-3. **Use `from x import y as z` in any of the following circumstances:**
+# Load sample data
+iris = load_iris()
+X, y = iris.data, iris.target
 
-* **3a. Two modules named `y` are to be imported.** This should not happen frequently, but we can't avoid two independent developers coming up with the same name for different modules. In particular, this may help with what are called "aliased" functions--functions that have the same name. For example:
+# Define the model (estimator)
+model = LinearRegression(X, y, fit_intercept=True)
 
-* **3b. `y` conflicts with a top-level name defined in the current module.**
+# Compute 5-fold cross-validation scores
+scores = cross_val_score(model, X, y, cv = 5)
+```
 
+Occasionally, you may want to rename a module--as you can see in some of the previous examples, it can be cumbersome to continually type the full package, module, and function names every time you want to use them. In these cases, you can use the keyword `as`, but be prepared to follow some additional rules.
 
-* **3c. `y` conflicts with a common parameter name that is part of the public API (e.g., features).**
+**Use** `from x import y as z` **in any of the following circumstances:**
 
-* **3d. `y` is too generic in the context of your code (e.g., `from storage.file_system import options as fs_options`).**
+* **3a. Two modules named `y` are to be imported.** This should not happen frequently, but we can't avoid two independent developers coming up with the same name for different modules. In particular, this may help with what are called "aliased" functions--functions that have the same name. 
+
+<!-- For example: -->
+
+<!-- ```{r mc_import3a, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE)), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{python import3a, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python import3a-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r import3a-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
+
+* **3b. `y` conflicts with a top-level name defined in the current module.** This means that you are attempting to use the name `y` for a new import, variable, or function, but the name `y` is already in use at the top level of your current file or module. The best way to fix it is to give the new function an alias so you can use both.
+
+<!-- For example: -->
+
+<!-- ```{r mc_import3b, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE)), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{python import3b, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python import3b-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r import3b-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
+
+* **3c. `*y` conflicts with a common parameter name that is part of the public API** (e.g., `features`).
+
+<!-- For example: -->
+
+<!-- ```{r mc_import3c, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE)), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{python import3c, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python import3c-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r import3c-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
+
+* **3d. `y` is too generic in the context of your code** (e.g., `from storage.file_system import options as fs_options`).
+
+<!-- For example: -->
+
+<!-- ```{r mc_import3d, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE)), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{python import3d, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python import3d-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r import3d-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
 
 * **3e. `y` is an inconveniently long name.** At some point when you are coding, everything seems inconveniently long! In fact, there are several standard abbreviations you may have already seen in other data science coursework:
 
 Package | Abbreviation | Purpose
 --------|--------------|--------
-`numpy` | `np` | ...
-`pandas` | `pd` | ...
-`plotnine` | `p9` | ...
-`statsmodels` | `sm` | ...
+`numpy` | `np` | [Fundamental package for scientific computing in Python](https://numpy.org/doc/stable/index.html)
+`pandas` | `pd` | [Open source data analysis and manipulation tool](https://pandas.pydata.org/)
+`plotnine` | `p9` | [Data visualization package for Python based on the grammar of graphics](https://plotnine.org/)
+`scikit-learn` | `sklearn` | [Machine Learning in Python](https://scikit-learn.org/stable/index.html#)
+`statsmodels` | `sm` | [Classes and functions for the estimation of many different statistical models, as well as for conducting statistical tests, and statistical data exploration](https://www.statsmodels.org/stable/index.html)
 
+<!-- For example: -->
+
+<!-- ```{r mc_import3e, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE)), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+Adapt the code from one of the previous examples to use the standard abbreviations:
+
+```{python import3e, exercise = TRUE}
+import pandas
+
+epi_mini = pandas.read_csv"(https://github.com/nussisthebaum/DATA119-Labs/blob/main/datawranglinglab/data/epi_mini.csv")
+```
+
+```{python import3e-solution, message = FALSE, warning = FALSE, echo = FALSE}
+import pandas as pd
+
+epi_mini = pd.read_csv"(https://github.com/nussisthebaum/DATA119-Labs/blob/main/datawranglinglab/data/epi_mini.csv")
+```
+
+```{r import3e-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
 
 ### Comprehensions & Generator Expressions
 
-Okay to use for simple cases--multiple `for` clauses or filter expressions are not permitted. Optimize for readability, not conciseness.
+1. Comprehensions, a common way to create new sequences from existing sequences, and generator expressions, which create iterators, should be short! They are okay to use for simple cases, but multiple `for` clauses or filter expressions are not permitted. Optimize for readability, not conciseness. For example, consider the following list comprehension, named `result`:
 
 ```{python, eval = FALSE, echo = TRUE}
-No:
-  result = [(x, y) for x in range(10) for y in range(5) if x * y > 10]
-
-  return (
-      (x, y, z)
-      for x in range(5)
-      for y in range(5)
-      if x != y
-      for z in range(5)
-      if y != z
-  )
+result = [(x, y) for x in range(10) for y in range(5) if x * y > 10]
 ```
+
+There are two `for` statements here, and often beginners are tempted to chain many `for` statements together. You can make them shorter by using the [`itertools`](https://docs.python.org/3/library/itertools.html) package.
+
+Consider also the following generator expression
+
+<!-- ```{python, eval = FALSE, echo = TRUE} -->
+<!-- return ( -->
+<!--     (x, y, z) -->
+<!--     for x in range(5) -->
+<!--     for y in range(5) -->
+<!--     if x != y -->
+<!--     for z in range(5) -->
+<!--     if y != z -->
+<!--   ) -->
+<!-- ``` -->
+
+<!-- ```{r mc_comprehensions1, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{python comprehensions1, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python comprehensions1-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+<!-- ``` -->
+
+<!-- ```{r comprehensions1-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
 
 ### Conditional Expressions
 
-Okay for simple cases. Each portion must fit on one line: true-expression, if-expression, else-expression. Use a complete if statement when things get more complicated.
+Conditional expressions evaluate conditions and return one of two options: `True`, or `False`. Each portion of the conditional statement (true-expression, if-expression, else-expression) must fit on one line. 
+
+The following example shows a violation of the rule because it breaks in the middle of the line. Adapt it so that the statement is all on one line. 
+
+```{python conditional1, exercise = TRUE}
+bad_line_breaking = ('yes' if predicate(value) else
+                     'no')
+```
+
+```{python conditional1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+bad_line_breaking = ('yes' if predicate(value) else 'no')
+```
+
+```{r conditional1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+This example shows a violation of the rule because it does not technically fit on the line. 
 
 ```{python, eval = FALSE, echo = TRUE}
-No:
-    bad_line_breaking = ('yes' if predicate(value) else
-                         'no')
-    portion_too_long = ('yes'
-                        if some_long_module.some_long_predicate_function(
-                            really_long_variable_name)
-                        else 'no, false, negative, nay')
+portion_too_long = ('yes'
+                    if some_long_module.some_long_predicate_function(
+                        really_long_variable_name)
+                    else 'no, false, negative, nay')
+```
+
+Use a complete `if` statement to fix the code above:
+
+```{python conditional2, exercise = TRUE}
+if ...:
+ ...
+else:
+ ...
+```
+
+```{python conditional2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+if some_long_module.some_long_predicate_function(really_long_variable_name):
+  portion_too_long = 'yes'
+else:
+  portion_too_long = 'no, false, negative, nay'
+```
+
+```{r conditional2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
 ```
 
 ### True/False Evaluations
 
-Use the "implicit" false if at all possible (with a few caveats), e.g., `if foo:` rather than `if foo != []:`.
+Use the "implicit" `True`/`False` if at all possible (with a few caveats), e.g., `if foo:` rather than `if foo != []:`. 
 
-* A quick "rule of thumb" is that all "empty" values are considered false, so `0`, `None`, `[]`, `{}`, `''` all evaluate as false in a boolean context.
-* There are a few caveats that you should keep in mind:
-  + Always use `if foo is None:` (or `is not None`) to check for a `None` value, e.g., when testing whether a variable or argument that defaults to `None` was set to some other value. 
-  + Never compare a boolean variable to `False` using ` ==`. Use `if not x`: instead. If you need to distinguish `False` from `None` then chain the expressions, such as i`f not x and x is not None:`.
-  + For sequences (strings, lists, tuples), use the fact that empty sequences are false, so `if seq:` and `if not seq:` are preferable to `if len(seq):` and `if not len(seq):` respectively.
-  
-* More caveats:
-  + When handling integers, implicit false may involve more risk than benefit (i.e., accidentally handling `None` as 0). You may compare a value which is known to be an integer (and is not the result of `len()`) against the integer 0.
-  + Note that `'0'` (i.e., 0 as string) evaluates to true.
-  + Note that Numpy arrays may raise an exception in an implicit boolean context. Prefer the `.size` attribute when testing emptiness of a `np.array` (e.g. `if not users.size`).
+Adapt the following code to use an implicit `True`/`False`:
 
+```{python implicittrue1, exercise = TRUE}
+integer = 46
+
+if integer % 2 == False:
+ print("Integer is even.")
+else integer % 2 == True:
+  print("Integer is odd.")
+```
+
+```{python implicittrue1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+integer = 46
+
+if integer % 2:
+  print("Integer is odd.")
+else:
+  print("Integer is even.")
+```
+
+```{r implicittrue1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+A quick "rule of thumb" is that all "empty" values are considered false, so `0`, `None`, `[]`, `{}`, `''` all evaluate as false in a Boolean context.
+
+There are a few caveats that you should keep in mind:
+
+* Always use `if foo is None:` (or `is not None`) to check for a `None` value, e.g., when testing whether a variable or argument that defaults to `None` was set to some other value.
+* Never compare a Boolean variable to `False` using ` ==`. Use `if not x`: instead. If you need to distinguish `False` from `None` then chain the expressions, such as i`f not x and x is not None:`.
+* For sequences (strings, lists, tuples), use the fact that empty sequences are false, so `if seq:` and `if not seq:` are preferable to `if len(seq):` and `if not len(seq):` respectively.
+
+More caveats:
+
+* When handling integers, implicit `False` may involve more risk than benefit (i.e., accidentally handling `None` as `0`). You may compare a value which is known to be an integer (and is not the result of `len()`) against the integer 0.
+* Note that `'0'` (i.e., `0` as string) evaluates to true.
+* Note that `numpy` arrays may raise an exception in an implicit Boolean context. Prefer the `.size` attribute when testing emptiness of a `np.array` (e.g. `if not users.size`).
+
+<!--   ```{r mc_implicittrue1, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- Now, you try! Edit the following line of code so that this style guide convention is satisfied. -->
+
+<!-- ```{python implicittrue2, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python implicittrue2-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r implicittrue2-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
 
 ## Style Rules
 
 ### Semicolons
 
-Do not terminate your lines with semicolons, and do not use semicolons to put two statements on the same line.
+Do not terminate your lines with semicolons, and do not use semicolons to put two statements on the same line. Edit the following line of code so that this style guide convention is satisfied. -->
+
+```{python semicolons1, exercise = TRUE}
+1+1; 2+2; 3+3;
+```
+
+```{python semicolons1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+1+1
+2+2
+3+3
+```
+
+```{r semicolons1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
 
 ### Line Length
 
-Maximum line length is 80 characters.
-
-* Explicit exceptions to the 80 character limit:
-  + Long import statements.
-  + URLs, pathnames, or long flags in comments.
-  + Long string module-level constants not containing whitespace that would be inconvenient to split across lines such as URLs or pathnames.
+The maximum line length SHOULD be 80 characters. However, there are some explicit exceptions to the 80 character limit, including:
+  + Long import statements, 
+  + URLs, path names, or long flags in comments, 
+  + Long string module-level constants not containing white space that would be inconvenient to split across lines such as URLs or path names, and
   + Pylint disable comments. (e.g.: `# pylint: disable=invalid-name`)
-* Do not use a backslash for [explicit line continuation](https://docs.python.org/3/reference/lexical_analysis.html#explicit-line-joining). Instead, make use of Python’s [implicit line joining inside parentheses, brackets and braces](https://docs.python.org/3/reference/lexical_analysis.html#implicit-line-joining). If necessary, you can add an extra pair of parentheses around an expression.
+  
+For example, consider the following list comprehension:
 
-Which of the following 80+ character lines is acceptable in the style guide?
+```{linelengthex1, eval = FALSE}
+list_of_fruits = [("apples", 4), ("limes", 1), ("lemons", 1), ("blackberries", 45), ("blueberries", 116)]
 
-Turn on Ruler in VS Code
+[print("I have {} {} in my kitchen right now.".format(fruit[1], fruit[0])) for fruit in list_of_fruits]
+```
+
+```{r mc_linelength1, echo=FALSE}
+question(
+  "Does the above line of code violate the line length convention from the style guide?",
+  answer("No, because it is a long import statement."),
+  answer("No, because it is a URL."),
+  answer("No, because it would be inconvenient to split across lines."),
+  answer("Yes, because it exceeds 80 characters.", correct = TRUE),
+  allow_retry = TRUE
+)
+```
+  
+Now, consider the following chunk of code:
+
+```{linelengthex1, eval = FALSE}
+from Tkinter import Tk, Frame, Button, Entry, Canvas, Text, LEFT, DISABLED, NORMAL, RIDGE, END 
+```
+
+```{r mc_linelength2, echo=FALSE}
+question(
+  "Does the above line of code violate the line length convention from the style guide?",
+  answer("No, because it is a long import statement.", correct = TRUE),
+  answer("No, because it is a URL."),
+  answer("No, because it would be inconvenient to split across lines."),
+  answer("Yes, because it exceeds 80 characters."),
+  allow_retry = TRUE
+)
+```
+
+Some might recommend using a backslash for [explicit line continuation](https://docs.python.org/3/reference/lexical_analysis.html#explicit-line-joining), like so:
+
+```{linelengthex2, eval = FALSE}
+from Tkinter import Tk, Frame, Button, Entry, Canvas, Text, \
+LEFT, DISABLED, NORMAL, RIDGE, END 
+```
+
+This is NOT recommended!! Instead, make use of Python’s [implicit line joining inside parentheses, brackets and braces](https://docs.python.org/3/reference/lexical_analysis.html#implicit-line-joining). If necessary, you can add an extra pair of parentheses around an expression.
+
+Adapt the following code using implicit line joining:
+
+```{python linelength, exercise = TRUE}
+list_of_fruits = [("apples", 4), ("limes", 1), ("lemons", 1), ("blackberries", 45), ("blueberries", 116)]
+
+[print("I have {} {} in my kitchen right now.".format(fruit[1], fruit[0])) for fruit in list_of_fruits]
+```
+
+```{python linelength-solution, message = FALSE, warning = FALSE, echo = FALSE}
+list_of_fruits = [("apples", 4), ("limes", 1), ("lemons", 1), 
+                  ("blackberries", 45), ("blueberries", 116)]
+
+[print("I have {} {} in my kitchen right now.".format(fruit[1], fruit[0])) 
+for fruit in list_of_fruits]
+```
+
+```{r linelength-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Finally, consider the following chunk of code:
+
+```{python linelengthex3, eval = FALSE}
+from Tkinter import (Tk, Frame, Button, Entry, Canvas, Text,
+                     LEFT, DISABLED, NORMAL, RIDGE, END)
+```
+
+
+```{r mc_linelength3, echo=FALSE}
+question(
+  "Does the above line of code now follow all style guide conventions?",
+  answer("Yes.", message = "Even though neither line is longer than eighty characters, there is another style guide convention violated."),
+  answer("No.", correct = TRUE, message = "Correct! Don't forget, you are not supposed to import specific functions from a package or module."),
+  allow_retry = TRUE
+)
+```
+
+Thankfully, there are tools to help us adhere to this particular style guide convention! Use this guide to help [turn on Ruler in VSCode](https://uchicago-cs.github.io/student-resource-guide/vscode/config.html). This should give you a visual signifier when you exceed the line length.
 
 ### Blank Lines
 
-* Two blank lines between top-level definitions, be they function or class definitions. 
-* One blank line between method definitions and between the docstring of a `class` and the first method. 
-* No blank line following a `def` line. Use single blank lines as you judge appropriate within functions or methods.
+Using blank lines can help make it easier to read code. In general, use
+
+* Two blank lines between top-level definitions (function or class definitions).
+* One blank line between method definitions and between the docstring of a `class` and the first method.
+* No blank line following a `def` line. 
+
+You can also use single blank lines as you judge appropriate within functions or methods. I like to use them to separate like tasks into certain groups. For example, consider the following functions to calculate predicted values for a linear regression model and then to calculate residuals for a linear regression model:
+
+```{python}
+def calc_pred(x, y):
+    r_xy = x.corr(y)
+    
+    m_x = x.mean()
+    m_y = y.mean()
+    
+    sd_x = x.std()
+    sd_y = y.std()
+    
+    b1 = calc_slope(r_xy, sd_x, sd_y)
+    b0 = calc_int(r_xy, sd_x, sd_y, m_x, m_y)
+    
+    preds = b0 + b1*x
+    
+    return(preds)
+  
+  
+def calc_res(x, y):  
+    preds = calc_pred(x, y)
+    resids = y - preds
+    return(resids)  
+```
+
+Within the `calc_pred`, I have used lines to group the calculations of various statistics together, since it makes sense to calculate first the correlation, then the means, then the standard deviations of the `x` and `y` variables before calculating the slope and the intercept before I finally calculate and return the predictions. Note that there is also no blank line after `calc_pred` or `calc_res`, but there are two lines between `calc_pred` and `calc_res`.
+
+<!-- ```{r mc_blanklines1, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- Now, you try! Edit the following line of code so that this style guide convention is satisfied. -->
+
+<!-- ```{python blanklines1, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python blanklines1-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r blanklines1-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
 
 ### Parentheses
 
-* It is fine, though not required, to use parentheses around tuples. 
-* Do not use them in return statements or conditional statements unless using parentheses for implied line continuation or to indicate a tuple.
+It is fine, though not required, to use parentheses around tuples, e.g., `("apples", 4)`. However, do not use them in return statements or conditional statements unless using parentheses for implied line continuation or to indicate a tuple.
 
-```{python, eval = FALSE, echo = TRUE}
-No:  if (x):
-         bar()
-     if not(x):
-         bar()
-     return (foo)
+<!-- ```{r mc_blanklines1, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+Edit the following line of code so that this style guide convention is satisfied.
+
+```{python parentheses1, exercise = TRUE}
+integer = 46
+
+if (integer % 2):
+  print("Integer is odd.")
+else:
+  print("Integer is even.")
+```
+
+```{python parentheses1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+integer = 46
+
+if integer % 2:
+  print("Integer is odd.")
+else:
+  print("Integer is even.")
+```
+
+```{r parentheses1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
 ```
 
 ### Indentation
 
-Indent your code blocks with 4 spaces. Never use tabs. 
+Indent your code blocks with 4 spaces (never use tabs!!). Sometimes it can be hard to see the spaces when writing code, luckily, VSCode has more tools to help. Use this guide to [configure your indentation in VSCode](https://uchicago-cs.github.io/student-resource-guide/vscode/config.html).
 
-Turn on spaces/tabs in VS Code
+<!-- ```{r mc_indentation, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- Now, you try! Edit the following line of code so that this style guide convention is satisfied. -->
+
+<!-- ```{python indentation, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python indentation-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r indentation-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
 
 ### White Space
 
-Follow standard typographic rules for the use of spaces around punctuation.
+Follow standard typographic rules for the use of spaces around punctuation. This means:
 
 * No whitespace inside parentheses, brackets or braces.
 
-```{python, eval = FALSE, echo = TRUE}
-Yes: spam(ham[1], {'eggs': 2}, [])
-No:  spam( ham[ 1 ], { 'eggs': 2 }, [ ] )
+Edit the following lines of code so that this style guide convention is satisfied.
+
+<!-- ```{r mc_whitespace1, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+```{python whitespace1, exercise = TRUE}
+spam( ham[ 1 ], { 'eggs': 2 }, [ ] ) 
+```
+
+```{python whitespace1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+spam(ham[1], {'eggs': 2}, [])
+```
+
+```{r whitespace1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
 ```
 
 * No whitespace before a comma, semicolon, or colon. Do use whitespace after a comma, semicolon, or colon, except at the end of the line.
 
-```{python, eval = FALSE, echo = TRUE}
-Yes: if x == 4:
-         print(x, y)
-     x, y = y, x
-No:  if x == 4 :
-         print(x , y)
-     x , y = y , x
+<!-- ```{r mc_whitespace2, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+Edit the following line of code so that this style guide convention is satisfied.
+
+```{python whitespace2, exercise = TRUE}
+if x == 4 :
+     print(x , y)
+x , y = y , x
+```
+
+```{python whitespace2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+if x == 4:
+    print(x, y)
+x, y = y, x
+```
+
+```{r whitespace2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
 ```
 
 * No whitespace before the open parentheses/bracket that starts an argument list, indexing or slicing.
 
-```{python, eval = FALSE, echo = TRUE}
-Yes: spam(1)
-No:  spam (1)
-Yes: dict['key'] = list[index]
-No:  dict ['key'] = list [index]
+<!-- ```{r mc_blanklines1, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{python, eval = FALSE, echo = TRUE} -->
+<!-- Yes: spam(1) -->
+<!-- No:  spam (1) -->
+<!-- Yes: dict['key'] = list[index] -->
+<!-- No:  dict ['key'] = list [index] -->
+<!-- ``` -->
+
+Edit the following line of code so that this style guide convention is satisfied.
+
+```{python whitespace3, exercise = TRUE}
+spam (1) 
+dict ['key'] = list [index] 
+```
+
+```{python whitespace3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+spam(1)
+dict['key'] = list[index]
+```
+
+```{r whitespace3-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
 ```
 
 * No trailing whitespace. Surround binary operators with a single space on either side for assignment (`=`), comparisons (`==`, `<`, `>`, `!=`, `<>`, `<=`, `>=`, `in`, `not in`, `is`, `is not`), and Booleans (`and`, `or`, `not`). Use your better judgment for the insertion of spaces around arithmetic operators (`+`, `-`, `*`, `/`, `//`, `%`, `**`, `@`).
 
-```{python, eval = FALSE, echo = TRUE}
-Yes: x == 1
-No:  x<1
+<!-- ```{r mc_blanklines1, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+Edit the following line of code so that this style guide convention is satisfied.
+
+```{python blanklines1, exercise = TRUE}
+x<1
+```
+
+```{python blanklines1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+x < 1
+```
+
+```{r blanklines1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
 ```
 
 ### Function Length
 
-Prefer small and focused functions.
+Try and write small and focused functions.
 
 * We recognize that long functions are sometimes appropriate, so no hard limit is placed on function length. If a function exceeds about 40 lines, think about whether it can be broken up without harming the structure of the program.
 * Even if your long function works perfectly now, someone modifying it in a few months may add new behavior. This could result in bugs that are hard to find. Keeping your functions short and simple makes it easier for other people to read and modify your code.
 * You could find long and complicated functions when working with some code. Do not be intimidated by modifying existing code: if working with such a function proves to be difficult, you find that errors are hard to debug, or you want to use a piece of it in several different contexts, consider breaking up the function into smaller and more manageable pieces.
 
-### Miscellaneous
-
 ## Naming
 
-### Naming 
+### Functions
 
-Function names, variable names, and filenames should be descriptive; avoid abbreviation. In particular, do not use abbreviations that are ambiguous or unfamiliar to readers outside your project, and do not abbreviate by deleting letters within a word.
+Function names, variable names, and filenames should be descriptive; avoid abbreviation. In particular, do not use abbreviations that are ambiguous or unfamiliar to readers outside your project, and do not abbreviate by deleting letters within a word. There are also some names to avoid:
 
-Names to Avoid
-
-* single character names, except for specifically allowed cases: counters or iterators (e.g. `i`, `j`, `k`, `v`, et al.) 
-* dashes (`-`) in any package/module name
+* single character names, except for specifically allowed cases: counters or iterators (e.g. `i`, `j`, `k`, `v`, et al.)
+* dashes (`-`) in any package/module name (looking at YOU, `scikit-learn`!!!!!)
 * `__double_leading_and_trailing_underscore__` names (reserved by Python)
 * offensive terms
-* names that needlessly include the type of the variable (for example: `id_to_name_dict`)
+* names that needlessly include the type of the variable, for example: `id_to_name_dict`. Please note that this is something that the Google Style Guide states, but I tend to disagree with, especially in some data science applications where you need to switch back and forth between several data types frequently.
 
-* Variable and function names should use the [snake_case](https://en.wikipedia.org/wiki/Snake_case) naming convention (i.e., `lowercase_with_underscore`). For example:
+### Variables and Functions
+
+Variable and function names should use the [snake_case](https://en.wikipedia.org/wiki/Snake_case) naming convention (i.e., `lowercase_with_underscore`). For example:
 
 ```{python, eval = FALSE, echo = TRUE}
 sum_of_squares
@@ -299,13 +860,65 @@ print_happy_birthday
 total_apples
 ```
 
-One exception: class names should start with a capital letter and use CamelCase:
+```{r mc_snakecase, echo=FALSE}
+question(
+  "Which of the following lines of code is written in snake case?",
+  answer("LibraryBooks"),
+  answer("rgb_to_hex", correct = TRUE),
+  answer("NUMBER_OF_STUDENTS", correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+<!-- Now, you try! Edit the following line of code so that this style guide convention is satisfied. -->
+
+<!-- ```{python snakecase, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python snakecase-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r snakecase-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
+
+### Classes
+
+Class names should start with a capital letter and use CamelCase:
 
 ```{python, eval = FALSE, echo = TRUE}
 DivvyStation
 Route
 VotingBooths
 ```
+
+```{r mc_camelcase, echo=FALSE}
+question(
+  "Which of the following lines of code is written in Camel Case?",
+  answer("LibraryBooks", correct = TRUE),
+  answer("rgb_to_hex"),
+  answer("NUMBER_OF_STUDENTS"),
+  allow_retry = TRUE
+)
+```
+
+<!-- Now, you try! Edit the following line of code so that this style guide convention is satisfied. -->
+
+<!-- ```{python camelcase, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python camelcase-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r camelcase-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
+
+### Constants
 
 Constants names should use snake_case with all caps:
 
@@ -315,27 +928,90 @@ MAX_CLIENTS
 MAX_IRC_MSG_LEN
 ```
 
-Use descriptive names for parameter names, variables, and function names. Use short names for local variables. In general, the further away a variable will be used, the more descriptive the name needs to be. 
+<!-- ```{r mc_constants, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
 
-```{python, eval = FALSE, echo = TRUE}
-Yes:
-  for x in data:
-    print(f(x))
-No: 
-  for element_of_list in data:
+<!-- Now, you try! Edit the following line of code so that this style guide convention is satisfied. -->
+
+<!-- ```{python constants, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python constants-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r constants-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
+
+### More on Naming
+
+Use descriptive names for parameter names, variables, and function names. Use short names for local variables. In general, the further away a variable will be used, the more descriptive the name needs to be.
+
+<!-- ```{r mc_naming1, echo=FALSE} -->
+<!-- question( -->
+<!--   "", -->
+<!--   answer("", correct = TRUE), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   answer(""), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+Edit the following line of code so that this style guide convention is satisfied.
+
+```{python morenaming1, exercise = TRUE}
+for element_of_list in data:
     print(f(element_of_list))
+```
+
+```{python morenaming1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+for x in data:
+    print(f(x))
+```
+
+```{r morenaming1-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
 ```
 
 The names of functions that perform an action should include a verb:
 
-```{python, eval = FALSE, echo = TRUE}
-Yes: read_column_from_csv
-No:  column_from_csv
+```{r mc_naming2, echo=FALSE}
+question(
+  "Which of the following is a more appropriate name for a function?",
+  answer("column_from_csv"),
+  answer("read_column_from_csv", correct = TRUE),
+  allow_retry = TRUE
+)
 ```
 
-## Writing Comments
+<!-- Now, you try! Edit the following line of code so that this style guide convention is satisfied. -->
 
-### Comments
+<!-- ```{python morenaming2, exercise = TRUE} -->
+
+<!-- ``` -->
+
+<!-- ```{python morenaming2-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+
+<!-- ``` -->
+
+<!-- ```{r morenaming2-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
+
+## Comments
 
 A good place to have comments is in tricky parts of the code. **If you’re going to have to explain it at the next code review, you should comment it now.** Complicated operations get a few lines of comments before the operations commence. Non-obvious ones get comments at the end of the line.
 
@@ -348,9 +1024,9 @@ A good place to have comments is in tricky parts of the code. **If you’re goin
 if i & (i-1) == 0:  # True if i is 0 or a power of 2.
 ```
 
-* To improve legibility, these comments should start at least 2 spaces away from the code with the comment character `#`, followed by at least one space before the text of the comment itself.
+To improve legibility, these comments should start at least 2 spaces away from the code with the comment character `#`, followed by at least one space before the text of the comment itself.
 
-* On the other hand, never describe the code. Assume the person reading the code knows Python (though not what you’re trying to do) better than you do.
+On the other hand, never describe the code. Assume the person reading the code knows Python (though not what you’re trying to do) better than you do. Consider the following "bad comment".
 
 ```{python, eval = FALSE, echo = TRUE}
 # BAD COMMENT: Now go through the b array and make sure whenever i occurs
@@ -362,8 +1038,6 @@ Pay attention to punctuation, spelling, and grammar; it is easier to read well-w
 * Comments should be as readable as narrative text, with proper capitalization and punctuation. In many cases, complete sentences are more readable than sentence fragments. Shorter comments, such as comments at the end of a line of code, can sometimes be less formal, but you should be consistent with your style.
 * Although it can be frustrating to have a code reviewer point out that you are using a comma when you should be using a semicolon, it is very important that source code maintain a high level of clarity and readability. Proper punctuation, spelling, and grammar help with that goal.
 
-
-
 ## Parting Words
 
 BE CONSISTENT.
@@ -374,81 +1048,78 @@ If you're editing code, take a few minutes to look at the code around you and de
 
 However, there are limits to consistency. It applies more heavily locally and on choices unspecified by the global style. Consistency should not generally be used as a justification to do things in an old style without considering the benefits of the new style, or the tendency of the codebase to converge on newer styles over time.
 
+Use everything that you have learned in the Style Guide Tutorial to edit the following two passages of code:
 
-
-#########
-
-
-```{bash example1, echo = TRUE, eval = FALSE}
-touch newfile.txt
+```{python finalexercise1, exercise = TRUE}
+import math
+def func(a, b, c):
+  
+    det = b**2 - 4*a*c
+    if det<0 == True:
+        print("This quadratic equation does not have a real solution.")
+    x1 = (-1*b - math.sqrt(det))/2*a
+    x2 = (-1*b - math.sqrt(det))/2*a
+    return (x1, x2)
 ```
 
+```{python finalexercise1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+import math
 
+def solve_quadratic_equation(a, b, c):
+    det = b**2 - 4*a*c
 
-```{r q2, echo=FALSE}
-question(
-  "Which part of the command finds the first 10 lines of the file?",
-  answer("`head`", correct = TRUE),
-  answer("`names.txt`"),
-  answer("`|`"),
-  answer("`grep`"),
-  answer("Steve"),
-  allow_retry = TRUE
-)
+    if det < 0:
+        print("This quadratic equation does not have a real solution.")
+
+    x1 = (-1*b - math.sqrt(det))/2*a
+    x2 = (-1*b - math.sqrt(det))/2*a
+
+    return (x1, x2)
 ```
 
-```{r q3, echo=FALSE}
-question(
-  "Which part of the command finds lines matching the phrase 'Steve'?",
-  answer("`head`"),
-  answer("`names.txt`"),
-  answer("`|`"),
-  answer("`grep`", correct = TRUE),
-  answer("Steve"),
-  allow_retry = TRUE
-)
-```
-
-
-
-```{bash setup-directory, eval = TRUE, engine.opts='-l'}
-cd data
-```
-
-```{bash ex3, exercise = TRUE, exercise.setup = "setup-directory"}
-cd data
-```
-
-```{bash ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
-cd data
-cat instructions
-```
-
-```{r ex3-code-check, message = FALSE, warning = FALSE}
+```{r finalexercise1-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-
-```{bash ex4, exercise = TRUE, exercise.setup = "setup-directory"}
-cd data
+```{python finalexercise2, exercise = TRUE}
+import scipy
+import plotnine
+import pandas
+data=pandas.read_csv("nussbaum_goodreads_library_export.csv",index_col="Title"); data=data[['My Rating','Average Rating',"Number of Pages","Binding","Date Read"]]     
+a=[];
+data=data.dropna(subset=[ 'Binding' ])
+for book in data.index:
+    if (data.loc[book]["Binding"] in [ "Hardcover" ,"Kindle Edition" ,"Mass Market Paperback" ,"Paperback" ,"ebook" ])==True:
+        a.append(book) ##364
+data=data.loc [ a ]
+plotnine.ggplot(data,plotnine.aes(x="Number of Pages",fill="My Rating"))+p9.geom_histogram()+p9.facet_grid('My Rating~.')
 
 ```
 
-```{bash ex5, exercise = TRUE, exercise.setup = "setup-directory"}
-cd data
+```{python finalexercise2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+import plotnine as p9
+import pandas as pd
 
+p9.options.figure_size = (6, 4.5)
+
+data = pd.read_csv("nussbaum_goodreads_library_export.csv", index_col = "Title")
+data = data[["My Rating", "Average Rating", "Number of Pages", "Binding", "Date Read"]]
+data = data.dropna(subset = [ 'Binding' ])
+
+keep = []
+bindings = ["Hardcover", "Kindle Edition", "Mass Market Paperback", "Paperback", "ebook"]
+
+for book in data.index:
+    if (data.loc[book]["Binding"] in bindings):
+        keep.append(book) 
+
+data = data.loc[keep]
+
+print(p9.ggplot(data, p9.aes(x = "Number of Pages", fill = "My Rating")) +
+  p9.geom_histogram() +
+  p9.facet_grid('My Rating~.'))
 ```
 
-```{bash ex6, exercise = TRUE, exercise.setup = "setup-directory"}
-cd data
-
-```
-
-```{bash setup-directory2}
-cd data/mystery
-```
-
-```{bash ex7, exercise = TRUE, exercise.setup = "setup-directory2"}
-cd data/mystery
-echo "John Doe" | $(command -v md5 || command -v md5sum) | grep -qif /dev/stdin encoded && echo CORRECT\! GREAT WORK, GUMSHOE. || echo SORRY, TRY AGAIN.
+```{r finalexercise2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
 ```
