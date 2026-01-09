@@ -55,7 +55,7 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 
-data = pd.read_csv(".www/nussbaum_goodreads_library_export.csv", index_col = "Title")
+data = pd.read_csv("./data/nussbaum_goodreads_library_export.csv", index_col = "Title")
 ```
 
 ## Goals
@@ -66,9 +66,9 @@ The goal of this lab is to become familiar with the concept of style guides for 
 
 What is a style guide?
 
-"A set of conventions (sometimes arbitrary) about how to write code for that project. It is much easier to understand a large codebase when all the code in it is in a consistent style."
+> "A set of conventions (sometimes arbitrary) about how to write code for that project. It is much easier to understand a large codebase when all the code in it is in a consistent style."
 
-Who write style guides? Usually, organizations that want to encourage collaborating between different programmers, including large companies, like Google, or the University of Chicago Computer Science Department (both of which are similar and contain principles we will be using in class. )
+Who write style guides? Usually, organizations that want to encourage collaborating between different programmers, including large companies, like Google, or the [University of Chicago Computer Science Department](https://uchicago-cs.github.io/student-resource-guide/style-guide/python.html) (both of which are similar and contain principles we will be using in class. )
 
 Since you are likely at the beginning of your programming careers, it is best to learn these principles now and use them as you continue learning. Read through the following sets of rules pertaining to language, style, naming, and comments to learn more.
 
@@ -76,7 +76,7 @@ Since you are likely at the beginning of your programming careers, it is best to
 
 ### `import` statements
 
-We often start our scripts by collecting all of the classes, functions, and other objects we may need for the task at hand. These objects are frequently bundled together as a module or a package. According to the Python documentation, a module is "a file containing Python definitions and statements", intended to be called into scripts or other modules, and a package is a collection of related modules. (https://docs.python.org/3/tutorial/modules.html#packages)
+We often start our scripts by collecting all of the classes, functions, and other objects we may need for the task at hand. These objects are frequently bundled together as a module or a package. According to the [Python documentation](https://docs.python.org/3/tutorial/modules.html#packages), a module is "a file containing Python definitions and statements", intended to be called into scripts or other modules, and a package is a collection of related modules.
 
 Calling a module or package into a script is known as importing, and is done with the Python keyword `import`. There are several rules for `import` statements that should help you to remember where different functions come from, in case you need to debug something later. 
 
@@ -105,13 +105,13 @@ Now, you try! Edit the following line of code so that this style guide conventio
 ```{python import1, exercise = TRUE}
 from pandas import read_csv
 
-epi_mini = read_csv"(https://github.com/nussisthebaum/DATA119-Labs/blob/main/datawranglinglab/data/epi_mini.csv")
+goodreads = read_csv("./data/nussbaum_goodreads_library_export.csv", index_col = "Title")
 ```
 
 ```{python import1-solution, message = FALSE, warning = FALSE, echo = FALSE}
 import pandas
 
-epi_mini = pandas.read_csv"(https://github.com/nussisthebaum/DATA119-Labs/blob/main/datawranglinglab/data/epi_mini.csv")
+goodreads = pandas.read_csv("./data/nussbaum_goodreads_library_export.csv", index_col = "Title")
 ```
 
 ```{r import1-code-check, message = FALSE, warning = FALSE}
@@ -139,9 +139,9 @@ scores = cross_val_score(model, X, y, cv = 5)
 
 Occasionally, you may want to rename a module--as you can see in some of the previous examples, it can be cumbersome to continually type the full package, module, and function names every time you want to use them. In these cases, you can use the keyword `as`, but be prepared to follow some additional rules.
 
-**Use** `from x import y as z` **in any of the following circumstances:**
+3. **Use** `from x import y as z` **in any of the following circumstances:**
 
-* **3a. Two modules named `y` are to be imported.** This should not happen frequently, but we can't avoid two independent developers coming up with the same name for different modules. In particular, this may help with what are called "aliased" functions--functions that have the same name. 
+* **Two modules named `y` are to be imported.** This should not happen frequently, but we can't avoid two independent developers coming up with the same name for different modules. In particular, this may help with what are called "aliased" functions--functions that have the same name. 
 
 <!-- For example: -->
 
@@ -169,7 +169,7 @@ Occasionally, you may want to rename a module--as you can see in some of the pre
 <!-- grade_this_code() -->
 <!-- ``` -->
 
-* **3b. `y` conflicts with a top-level name defined in the current module.** This means that you are attempting to use the name `y` for a new import, variable, or function, but the name `y` is already in use at the top level of your current file or module. The best way to fix it is to give the new function an alias so you can use both.
+* **`y` conflicts with a top-level name defined in the current module.** This means that you are attempting to use the name `y` for a new import, variable, or function, but the name `y` is already in use at the top level of your current file or module. The best way to fix it is to give the new function an alias so you can use both.
 
 <!-- For example: -->
 
@@ -197,7 +197,7 @@ Occasionally, you may want to rename a module--as you can see in some of the pre
 <!-- grade_this_code() -->
 <!-- ``` -->
 
-* **3c. `*y` conflicts with a common parameter name that is part of the public API** (e.g., `features`).
+* **`y` conflicts with a common parameter name that is part of the public API** (e.g., `features`).
 
 <!-- For example: -->
 
@@ -225,7 +225,7 @@ Occasionally, you may want to rename a module--as you can see in some of the pre
 <!-- grade_this_code() -->
 <!-- ``` -->
 
-* **3d. `y` is too generic in the context of your code** (e.g., `from storage.file_system import options as fs_options`).
+* **`y` is too generic in the context of your code** (e.g., `from storage.file_system import options as fs_options`).
 
 <!-- For example: -->
 
@@ -253,7 +253,7 @@ Occasionally, you may want to rename a module--as you can see in some of the pre
 <!-- grade_this_code() -->
 <!-- ``` -->
 
-* **3e. `y` is an inconveniently long name.** At some point when you are coding, everything seems inconveniently long! In fact, there are several standard abbreviations you may have already seen in other data science coursework:
+* **`y` is an inconveniently long name.** At some point when you are coding, everything seems inconveniently long! In fact, there are several standard abbreviations you may have already seen in other data science coursework:
 
 Package | Abbreviation | Purpose
 --------|--------------|--------
@@ -282,13 +282,13 @@ Adapt the code from one of the previous examples to use the standard abbreviatio
 ```{python import3e, exercise = TRUE}
 import pandas
 
-epi_mini = pandas.read_csv"(https://github.com/nussisthebaum/DATA119-Labs/blob/main/datawranglinglab/data/epi_mini.csv")
+epi_mini = pandas.read_csv("https://github.com/nussisthebaum/DATA119-Labs/blob/main/datawranglinglab/data/epi_mini.csv")
 ```
 
 ```{python import3e-solution, message = FALSE, warning = FALSE, echo = FALSE}
 import pandas as pd
 
-epi_mini = pd.read_csv"(https://github.com/nussisthebaum/DATA119-Labs/blob/main/datawranglinglab/data/epi_mini.csv")
+epi_mini = pd.read_csv("https://github.com/nussisthebaum/DATA119-Labs/blob/main/datawranglinglab/data/epi_mini.csv")
 ```
 
 ```{r import3e-code-check, message = FALSE, warning = FALSE}
@@ -297,7 +297,7 @@ grade_this_code()
 
 ### Comprehensions & Generator Expressions
 
-1. Comprehensions, a common way to create new sequences from existing sequences, and generator expressions, which create iterators, should be short! They are okay to use for simple cases, but multiple `for` clauses or filter expressions are not permitted. Optimize for readability, not conciseness. For example, consider the following list comprehension, named `result`:
+4. Comprehensions, a common way to create new sequences from existing sequences, and generator expressions, which create iterators, should be short! They are okay to use for simple cases, but multiple `for` clauses or filter expressions are not permitted. Optimize for readability, not conciseness. For example, consider the following list comprehension, named `result`:
 
 ```{python, eval = FALSE, echo = TRUE}
 result = [(x, y) for x in range(10) for y in range(5) if x * y > 10]
@@ -305,7 +305,7 @@ result = [(x, y) for x in range(10) for y in range(5) if x * y > 10]
 
 There are two `for` statements here, and often beginners are tempted to chain many `for` statements together. You can make them shorter by using the [`itertools`](https://docs.python.org/3/library/itertools.html) package.
 
-Consider also the following generator expression
+<!-- Consider also the following generator expression: -->
 
 <!-- ```{python, eval = FALSE, echo = TRUE} -->
 <!-- return ( -->
@@ -391,7 +391,7 @@ grade_this_code()
 
 ### True/False Evaluations
 
-Use the "implicit" `True`/`False` if at all possible (with a few caveats), e.g., `if foo:` rather than `if foo != []:`. 
+Use the "implicit" `True`/`False` if at all possible (with a few caveats), e.g., `if foo:` rather than `if foo != []:` (here is a refresher on what [foo means](https://en.wikipedia.org/wiki/Foobar)).
 
 Adapt the following code to use an implicit `True`/`False`:
 
@@ -399,7 +399,7 @@ Adapt the following code to use an implicit `True`/`False`:
 integer = 46
 
 if integer % 2 == False:
- print("Integer is even.")
+  print("Integer is even.")
 else integer % 2 == True:
   print("Integer is odd.")
 ```
@@ -422,7 +422,7 @@ A quick "rule of thumb" is that all "empty" values are considered false, so `0`,
 There are a few caveats that you should keep in mind:
 
 * Always use `if foo is None:` (or `is not None`) to check for a `None` value, e.g., when testing whether a variable or argument that defaults to `None` was set to some other value.
-* Never compare a Boolean variable to `False` using ` ==`. Use `if not x`: instead. If you need to distinguish `False` from `None` then chain the expressions, such as i`f not x and x is not None:`.
+* Never compare a Boolean variable to `False` using ` ==`. Use `if not x`: instead. If you need to distinguish `False` from `None` then chain the expressions, such as `if not x and x is not None:`.
 * For sequences (strings, lists, tuples), use the fact that empty sequences are false, so `if seq:` and `if not seq:` are preferable to `if len(seq):` and `if not len(seq):` respectively.
 
 More caveats:
@@ -461,7 +461,7 @@ More caveats:
 
 ### Semicolons
 
-Do not terminate your lines with semicolons, and do not use semicolons to put two statements on the same line. Edit the following line of code so that this style guide convention is satisfied. -->
+Do not terminate your lines with semicolons, and do not use semicolons to put two statements on the same line. Edit the following line of code so that this style guide convention is satisfied.
 
 ```{python semicolons1, exercise = TRUE}
 1+1; 2+2; 3+3;
@@ -480,12 +480,23 @@ grade_this_code()
 ### Line Length
 
 The maximum line length SHOULD be 80 characters. However, there are some explicit exceptions to the 80 character limit, including:
-  + Long import statements, 
-  + URLs, path names, or long flags in comments, 
-  + Long string module-level constants not containing white space that would be inconvenient to split across lines such as URLs or path names, and
-  + Pylint disable comments. (e.g.: `# pylint: disable=invalid-name`)
+
+* Long import statements, 
+* URLs, path names, or long flags in comments, 
+* Long string module-level constants not containing white space that would be inconvenient to split across lines such as URLs or path names, and
+* Pylint disable comments. (e.g.: `# pylint: disable=invalid-name`)
+
+For this section, use this "ruler", which measures 80 characters:
+
+```{ruler1, eval = FALSE}
+....|....|....|....|....|....|....|...|....|....|....|....|....|....|....|...|
+```
   
 For example, consider the following list comprehension:
+
+```{ruler2, eval = FALSE}
+....|....|....|....|....|....|....|...|....|....|....|....|....|....|....|...|
+```
 
 ```{linelengthex1, eval = FALSE}
 list_of_fruits = [("apples", 4), ("limes", 1), ("lemons", 1), ("blackberries", 45), ("blueberries", 116)]
@@ -506,6 +517,10 @@ question(
   
 Now, consider the following chunk of code:
 
+```{ruler3, eval = FALSE}
+....|....|....|....|....|....|....|...|....|....|....|....|....|....|....|...|
+```
+
 ```{linelengthex1, eval = FALSE}
 from Tkinter import Tk, Frame, Button, Entry, Canvas, Text, LEFT, DISABLED, NORMAL, RIDGE, END 
 ```
@@ -523,6 +538,10 @@ question(
 
 Some might recommend using a backslash for [explicit line continuation](https://docs.python.org/3/reference/lexical_analysis.html#explicit-line-joining), like so:
 
+```{ruler4, eval = FALSE}
+....|....|....|....|....|....|....|...|....|....|....|....|....|....|....|...|
+```
+
 ```{linelengthex2, eval = FALSE}
 from Tkinter import Tk, Frame, Button, Entry, Canvas, Text, \
 LEFT, DISABLED, NORMAL, RIDGE, END 
@@ -531,6 +550,10 @@ LEFT, DISABLED, NORMAL, RIDGE, END
 This is NOT recommended!! Instead, make use of Python’s [implicit line joining inside parentheses, brackets and braces](https://docs.python.org/3/reference/lexical_analysis.html#implicit-line-joining). If necessary, you can add an extra pair of parentheses around an expression.
 
 Adapt the following code using implicit line joining:
+
+```{ruler5, eval = FALSE}
+....|....|....|....|....|....|....|...|....|....|....|....|....|....|....|...|
+```
 
 ```{python linelength, exercise = TRUE}
 list_of_fruits = [("apples", 4), ("limes", 1), ("lemons", 1), ("blackberries", 45), ("blueberries", 116)]
@@ -552,6 +575,10 @@ grade_this_code()
 
 Finally, consider the following chunk of code:
 
+```{ruler6, eval = FALSE}
+....|....|....|....|....|....|....|...|....|....|....|....|....|....|....|...|
+```
+
 ```{python linelengthex3, eval = FALSE}
 from Tkinter import (Tk, Frame, Button, Entry, Canvas, Text,
                      LEFT, DISABLED, NORMAL, RIDGE, END)
@@ -567,7 +594,7 @@ question(
 )
 ```
 
-Thankfully, there are tools to help us adhere to this particular style guide convention! Use this guide to help [turn on Ruler in VSCode](https://uchicago-cs.github.io/student-resource-guide/vscode/config.html). This should give you a visual signifier when you exceed the line length.
+Unfortunately, you won't always have the ruler above--thankfully, VSCode has tools to help us adhere to this particular style guide convention! Use this guide to help [turn on Ruler in VSCode](https://uchicago-cs.github.io/student-resource-guide/vscode/config.html). This should give you a visual signifier when you exceed the line length.
 
 ### Blank Lines
 
@@ -863,9 +890,9 @@ total_apples
 ```{r mc_snakecase, echo=FALSE}
 question(
   "Which of the following lines of code is written in snake case?",
-  answer("LibraryBooks"),
-  answer("rgb_to_hex", correct = TRUE),
-  answer("NUMBER_OF_STUDENTS", correct = TRUE),
+  answer("`LibraryBooks`"),
+  answer("`rgb_to_hex`", correct = TRUE),
+  answer("`NUMBER_OF_STUDENTS`"),
   allow_retry = TRUE
 )
 ```
@@ -897,9 +924,9 @@ VotingBooths
 ```{r mc_camelcase, echo=FALSE}
 question(
   "Which of the following lines of code is written in Camel Case?",
-  answer("LibraryBooks", correct = TRUE),
-  answer("rgb_to_hex"),
-  answer("NUMBER_OF_STUDENTS"),
+  answer("`LibraryBooks`", correct = TRUE),
+  answer("`rgb_to_hex`"),
+  answer("`NUMBER_OF_STUDENTS`"),
   allow_retry = TRUE
 )
 ```
@@ -991,8 +1018,8 @@ The names of functions that perform an action should include a verb:
 ```{r mc_naming2, echo=FALSE}
 question(
   "Which of the following is a more appropriate name for a function?",
-  answer("column_from_csv"),
-  answer("read_column_from_csv", correct = TRUE),
+  answer("`column_from_csv`"),
+  answer("`read_column_from_csv`", correct = TRUE),
   allow_retry = TRUE
 )
 ```
