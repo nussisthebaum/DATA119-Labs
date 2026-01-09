@@ -55,7 +55,7 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 
-data = pd.read_csv(".data/nussbaum_goodreads_library_export.csv", index_col = "Title")
+data = pd.read_csv(".www/nussbaum_goodreads_library_export.csv", index_col = "Title")
 ```
 
 ## Goals
