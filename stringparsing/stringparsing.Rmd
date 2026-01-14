@@ -25,6 +25,11 @@ tags$div(
   class = "topContainer",
   tags$div(
     class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
     tags$h1("String Methods and Parsing Lab", class = "pageTitle")
   )
 )
