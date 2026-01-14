@@ -15,7 +15,7 @@ library(gradethis)
 library(reticulate)
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.blanks = "\.{3}")
+tutorial_options(exercise.completion = FALSE, exercise.blanks = "\\.{3}")
 ```
 
 ```{r header, echo = FALSE}
