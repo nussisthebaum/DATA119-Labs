@@ -1,0 +1,510 @@
+---
+title: "String Methods and Parsing Lab"
+output: 
+  learnr::tutorial:
+    css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+gradethis_setup()
+#tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$h1("String Methods and Parsing Lab", class = "pageTitle")
+  )
+)
+```
+
+```{python setup_py, echo = FALSE}
+my_string = "hello world"
+```
+
+## Goals
+
+By the end of this lab, you should be able to:
+
+- Use indexing and slicing to extract parts of strings
+- Apply common string methods (`strip`, `lower`, `replace`, `split`, `join`, `count`, etc)
+- Parse semi-structured strings (paths, CSV rows)
+- Write small loops to perform custom string processing
+
+
+## Setup
+
+For this lab, we do not need any additional packages or modules. In fact, we discourage you from using any other packages or modules for this lab!
+
+## Strings are Sequences
+
+Recall, a **string** is a data type that represents a sequence of characters, such as letters, numbers, or punctuation. Strings in Python are written inside quotation marks — single (' '), double (" "), or triple (''' ''' or """ """). For more information about creating and displaying strings, see [this textbook chapter](https://ds1.datascience.uchicago.edu/03/4/Strings.html).
+
+We will talk more about **sequences** later, but for now, think back to when you learned about **lists** in Data 118. Each element in a list has an **index** that is used to refer to that element. You can think of a string as a list of characters where each character has an index.
+
+Python is a **0-indexed language** meaning that counting starts at 0 rather than 1. For example, the string below contains 11 characters.
+
+```{python demo1, exercise=TRUE, exercise.eval = FALSE}
+my_string = "hello world"
+
+len(my_string)
+```
+
+Like with lists, we can use square brackets `[]` with the index inside to refer to particular characters in the string.
+
+```{python demo2, exercise=TRUE, exercise.eval = FALSE}
+my_string[0] # We count starting with 0
+```
+
+```{python demo3, exercise=TRUE, exercise.eval = FALSE}
+my_string[1] # Index 1 refers to the second character
+```
+
+We can also **slice** the string to select a subset of characters. Slices are constructed by providing a `start`, `end`, and `step` separated by colons `:`. The lower bound, or `start`, is always inclusive. The upper bound, or `end`, is always exclusive. All of these arguments are optional, and their defaults are to start with the first element of the list, to end after the last element of the list, and to `step` through the elements one-by-one.
+
+Here we slice by telling Python to start at index 1, end at index 9, and step through elements by 3's (aka include every third element). 
+
+```{python demo4, exercise=TRUE, exercise.eval = FALSE}
+my_string[1:9:3]
+```
+
+Change the code above to help remind yourself how slicing works. If you need a refresher see [this chapter](https://ds1.datascience.uchicago.edu/04/1/Lists.html#slices) on list slicing.
+
+### Exercise 1
+
+Create the variable `course` containing `"DATA 120"` **using slicing**.
+
+```{python ex1, exercise=TRUE, exercise.eval = FALSE}
+s = "Welcome to DATA 120 this quarter!"
+
+course = ...
+course
+```
+
+```{python ex1-solution, echo=FALSE}
+s = "Welcome to DATA 120 this quarter!"
+course = s[11:19]
+course
+```
+
+```{r ex1-check, context="server"}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your slice and make sure the last line is `course`.")
+  }
+
+  res <- reticulate::py_to_r(.result)
+
+  if (identical(res, "DATA 120")) {
+    pass("Nice work! You correctly extracted `DATA 120` using slicing.")
+  } else {
+    fail(paste0(
+      "I expected `\"DATA 120\"`, but got `\"",
+      res,
+      "\"` instead."
+    ))
+  }
+})
+```
+
+:::: {.discussionbox}
+::: {.center}
+**For extra practice:**
+:::
+Try re-doing Exercise 1 using negative indexing!
+::::
+
+## Cleaning Pipelines
+
+### Exercise 2
+
+Create `clean` by performing **all** of the following:
+
+1. strip leading/trailing whitespace  
+2. convert to lowercase  
+3. remove all `"!"`  
+4. replace `"data science"` with `"data-science"`
+
+You should make use of string methods (like in Data 118).
+
+If you need to review these, see more information on methods [here](https://ds1.datascience.uchicago.edu/03/5/1/BuiltIn.html#methods) and a full list of built-in string methods [here](https://docs.python.org/3/library/stdtypes.html#string-methods). 
+
+
+```{python ex3, exercise=TRUE}
+raw = "   DATA SCIENCE is AWESOME!!!   "
+
+clean = ...
+clean
+```
+
+```{python ex3-solution, echo=FALSE}
+raw = "   DATA SCIENCE is AWESOME!!!   "
+clean = (
+    raw.strip()
+       .lower()
+       .replace("!", "")
+       .replace("data science", "data-science")
+)
+clean
+```
+
+```{r ex3-check, context="server"}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your code and make sure the last line is `clean`.")
+  }
+
+  res <- reticulate::py_to_r(.result)
+
+  if (identical(res, "data-science is awesome")) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
+```
+
+### Exercise 3
+
+Create `normalized` so that:
+- words are separated by a single space
+- there should be no leading or trailing whitespace
+
+```{python ex4, exercise=TRUE}
+messy = "  The   quick   brown    fox   jumps  "
+
+normalized = ...
+normalized
+```
+
+```{python ex4-solution, echo=FALSE}
+messy = "  The   quick   brown    fox   jumps  "
+normalized = " ".join(messy.split())
+normalized
+```
+
+```{r ex4-check}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your code and make sure the last line is `normalized`.")
+  }
+
+  res <- reticulate::py_to_r(.result)
+
+  if (identical(res, "The quick brown fox jumps")) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
+```
+
+## Parsing & Extraction
+
+### Exercise 4
+
+From `path`, create:
+- `filename`: the name of the file
+- `stem`: the name of the file excluding the extension
+- `ext`: the file extension excluding the `.`
+
+```{python ex5, exercise=TRUE}
+path = "/Users/amanda/Data120/Homework/Winter26/Data-120-W26-HW1.pdf"
+
+filename = ...
+stem = ...
+ext = ...
+
+[filename, stem, ext]
+```
+
+```{python ex5-solution, echo=FALSE}
+path = "/Users/amanda/Data120/Homework/Winter26/Data-120-W26-HW1.pdf"
+
+filename = path.split("/")[-1]
+stem, ext = filename.rsplit(".", 1)
+
+[filename, stem, ext]
+```
+
+```{r ex5-check, context="server"}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your code and make sure the last line is `[filename, stem, ext]`.")
+  }
+  
+  expected <- c(
+    "Data-120-W26-HW1.pdf",
+    "Data-120-W26-HW1",
+    "pdf"
+  )
+
+  res <- reticulate::py_to_r(.result)
+
+  if (identical(res, expected)) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
+```
+
+### Exercise 6
+
+The string below contains a CSV with a header row, containing weather data.
+
+Ignore the header row and create a list called `sentences` containing one sentence per data row. Remember, you can add to a list using `.append()`.
+
+Each element of `sentences` should have the format: "On <this date> in <this city>, it was <this temperature> and <this weather condition>."
+
+```{python ex6, exercise=TRUE}
+csv_data = """date,city,temp,condition
+2026-01-12,Chicago,7F,cloudy
+2026-01-13,New York,32F,snowy
+2026-01-14,Los Angeles,65F,sunny"""
+
+sentences = []
+
+...
+
+sentences
+```
+
+```{r ex6-hint-1, echo=FALSE}
+"Hint 1: Start by splitting the string into rows using '\\n'."
+```
+
+```{r ex6-hint-2, echo=FALSE}
+"Hint 2: Ignore the header row."
+```
+
+```{r ex6-hint-3, echo=FALSE}
+"Hint 3: Split each row by ',' and unpack into 4 variables."
+```
+
+```{r ex6-hint-4, echo=FALSE}
+"Hint 4: Use an f-string to construct the sentence."
+# learnr::hint("Hint 5: You may need a loop.")
+```
+
+```{r ex6-hint-5, echo=FALSE}
+"Hint 5: You may need a loop."
+```
+
+```{python ex6-solution, echo=FALSE}
+#Solution
+
+csv_data = """date,city,temp,condition
+2026-01-12,Chicago,7F,cloudy
+2026-01-13,New York,32F,snowy
+2026-01-14,Los Angeles,65F,sunny"""
+
+sentences = []
+
+rows = csv_data.split("\n")[1:]  # skip header
+
+for row in rows:
+    date, city, temp, condition = row.split(",")
+    sentence = f"On {date} in {city}, it was {temp} and {condition}."
+    sentences.append(sentence)
+
+sentences
+```
+
+```{r ex6-check, context="server"}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your code and make sure the last line is `sentences`.")
+  }
+
+  res <- reticulate::py_to_r(.result)
+  
+  expected <- c(
+    "On 2026-01-12 in Chicago, it was 7F and cloudy.",
+    "On 2026-01-13 in New York, it was 32F and snowy.",
+    "On 2026-01-14 in Los Angeles, it was 65F and sunny."
+  )
+
+  if (identical(res, expected)) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
+```
+
+:::: {.discussionbox}
+::: {.center}
+**For extra practice:**
+:::
+Modify your code so that the weather condition is always capitalized in the sentence.
+::::
+
+:::: {.discussionbox}
+::: {.center}
+**For extra, EXTRA practice:**
+:::
+Modify your code so that the date appears as 'Month Day, Year'. For example, 'March 16, 2025'.
+::::
+
+
+## Custom String Processing
+
+### Exercise 7
+
+Replace **only** the standalone word `"regression"` with `"linear regression"`.
+
+Do NOT change:
+- `"regressions"`
+- `"regression-based"`
+
+```{python ex8, exercise=TRUE}
+note = "We will discuss regression, not regressions, and not regression-based models."
+
+out = ...
+out
+```
+
+```{r ex8-hint-1, echo=FALSE}
+"Hint 1: I don't recommend using `str.replace()`."
+```
+
+```{r ex8-hint-2, echo=FALSE}
+"Hint 2: You may need if-statements."
+```
+
+```{r ex8-hint-3, echo=FALSE}
+"Hint 3: You may need a loop."
+```
+
+```{r ex8-hint-4, echo=FALSE}
+"Hint 4: A list may also be helpful."
+```
+
+```{python ex8-solution, echo=FALSE}
+# Solution
+
+note = "We will discuss regression, not regressions, and not regression-based models."
+
+tokens = note.split(" ")
+out_tokens = []
+
+for tok in tokens:
+    punct = ""
+    if tok and tok[-1] in [".", ","]:
+        punct = tok[-1]
+        core = tok[:-1]
+    else:
+        core = tok
+
+    if core == "regression":
+        core = "linear regression"
+
+    out_tokens.append(core + punct)
+
+out = " ".join(out_tokens)
+out
+```
+
+```{r ex8-check, context="server"}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your code and make sure the last line is `out`.")
+  }
+
+  res <- reticulate::py_to_r(.result)
+
+  if (identical(res, "We will discuss linear regression, not regressions, and not regression-based models.")) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
+```
+
+### Exercise 8 (no regex)
+
+Extract all integers from the string below into a list `nums`.
+
+Expected result: `[3, 7, 45]`
+
+```{python ex9, exercise=TRUE}
+text = "Lab 3: due in 7 days (estimated time: 45 minutes)."
+
+nums = ...
+nums
+```
+
+```{r ex9-hint-1, echo=FALSE}
+"Hint 1: You will want to use if-statements."
+```
+
+```{r ex9-hint-2, echo=FALSE}
+"Hint 2: You may also need a loop."
+```
+
+```{r ex9-hint-3, echo=FALSE}
+"Hint 3: Look for a particularly useful string method in the documentation."
+```
+
+```{python ex9-solution, echo=FALSE}
+# Solution
+
+text = "Lab 3: due in 7 days (estimated time: 45 minutes)."
+
+nums = []
+current = ""
+
+for ch in text:
+    if ch.isdigit():
+        current += ch
+    else:
+        if current:
+            nums.append(int(current))
+            current = ""
+
+if current:
+    nums.append(int(current))
+
+nums
+```
+
+```{r ex9-check, context="server"}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your code and make sure the last line is `nums`.")
+  }
+
+  res <- reticulate::py_to_r(.result)
+
+  if (identical(res, c(3, 7, 45))) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
+```
+
+## Wrap-up
+
+Before you move on, make sure you can explain:
+
+- How Python treats strings as sequences, and how indexing and slicing allow you to extract substrings.
+- How chaining string methods can form **cleaning pipelines** for messy text data.
+- How to break down semi-structured strings (paths, CSVs, sentences) into smaller pieces and reconstruct them.
+- When a problem can be solved with built-in string methods versus when you need loops and conditionals.
+- What limitations you encountered when parsing strings manually, and how this motivates using specialized tools later.
+
+
