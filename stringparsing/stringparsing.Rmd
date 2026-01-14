@@ -30,7 +30,7 @@ tags$div(
 )
 ```
 
-```{python setup_py, echo = FALSE}
+```{python setup_py, context="setup", echo = FALSE}
 my_string = "hello world"
 ```
 
