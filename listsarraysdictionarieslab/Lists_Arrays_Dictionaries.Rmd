@@ -39,7 +39,8 @@ tags$div(
 ```
 
 ```{python setup_py, context="setup"}
-
+School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
+Random_stuff = ["California", 38, 3.14159] #A string, int, float
 ```
 
 ## Goals
