@@ -5,7 +5,7 @@
   "metadata": {
     "appmode": "static",
     "primary_rmd": null,
-    "primary_html": "bashlab/Bash-Lab.html",
+    "primary_html": "correlationlab/Lab-2---Correlation-and-Simple-Linear-Regression.html",
     "content_category": null,
     "has_parameters": false
   },
@@ -13,9 +13,6 @@
   "files": {
     "bashlab/Bash Lab.Rmd": {
       "checksum": "605c528ff63a57e99ad0764dc8a0ac99"
-    },
-    "bashlab/Bash-Lab.html": {
-      "checksum": "f3dc86b8bf60e6f30a5a7b6eff216d3d"
     },
     "bashlab/css/custom-styles.css": {
       "checksum": "1088d4832ba104288b7671974571c27c"
@@ -2082,7 +2079,7 @@
       "checksum": "0871b5891eed8618b54047979b496cfa"
     },
     "clusteringlab/data/epi_mini2.csv": {
-      "checksum": "ea18408f25efc107b3f574f77ce5ba6f"
+      "checksum": "c5e3666dbca15221b3a649004fa2a3d8"
     },
     "clusteringlab/data/temp.txt": {
       "checksum": "cb28e764263e3a465e72a2c30b836738"
@@ -2094,7 +2091,19 @@
       "checksum": "2b48776884f30a7b31ac530f129d3320"
     },
     "clusteringlab/Lab 7.Rmd": {
-      "checksum": "f6c1c0ecea8b245524f37cea3699a0b0"
+      "checksum": "0d95fc6970990ce81bec2a41ca13ac8e"
+    },
+    "clusteringlab/Lab-7_files/figure-html/unnamed-chunk-1-1.png": {
+      "checksum": "61799b1d2ec12f5e06f39b57d63435fd"
+    },
+    "clusteringlab/Lab-7_files/figure-html/unnamed-chunk-2-1.png": {
+      "checksum": "ba484bff41ad7d14eaae8edf78bdffae"
+    },
+    "clusteringlab/Lab-7_files/figure-html/unnamed-chunk-3-1.png": {
+      "checksum": "088e0d925239bda719f8da50b1a47762"
+    },
+    "clusteringlab/Lab-7_files/figure-html/unnamed-chunk-4-1.png": {
+      "checksum": "b75d6317077a0f77b11c8759d0120b69"
     },
     "clusteringlab/README.md": {
       "checksum": "95d511538f7aa5fb105e9e7b4ed24067"
@@ -2106,7 +2115,7 @@
       "checksum": "ea18408f25efc107b3f574f77ce5ba6f"
     },
     "commandlinelab/Bash Lab.Rmd": {
-      "checksum": "605c528ff63a57e99ad0764dc8a0ac99"
+      "checksum": "d4bdf80a71e8cc273940ad853f64ab09"
     },
     "commandlinelab/css/custom-styles.css": {
       "checksum": "0871b5891eed8618b54047979b496cfa"
@@ -4206,7 +4215,10 @@
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
     "correlationlab/Lab 2 - Correlation and Simple Linear Regression.Rmd": {
-      "checksum": "c6cd4593d4bfa986081760d8d26c163d"
+      "checksum": "bfcd2e73094933bbfbb6b698578ef111"
+    },
+    "correlationlab/Lab-2---Correlation-and-Simple-Linear-Regression.html": {
+      "checksum": "7543ca3d0fa2d236df5e2901e171ab37"
     },
     "correlationlab/README.md": {
       "checksum": "8b64a84194eca62fb9d79807c0867e15"
@@ -4284,7 +4296,7 @@
       "checksum": "54b941aa690e37aa799618dc90449c5e"
     },
     "datavislab/datavis.Rmd": {
-      "checksum": "ffc3c1daf38307f35a599db943440c5a"
+      "checksum": "de90b2efece288a5eaaa99da4228600d"
     },
     "datavislab/images/dsi_logo.png": {
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
@@ -4308,7 +4320,7 @@
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
     "datawranglinglab/Lab 1- Data Wrangling.Rmd": {
-      "checksum": "97ee4cc15ea19702d835edbf340a9843"
+      "checksum": "824f3edf78776dc199cd1a3f79dda02f"
     },
     "datawranglinglab/README.md": {
       "checksum": "869b49a02c7f790deebe84f4182ca9ff"
@@ -4324,9 +4336,6 @@
     },
     "debugginglab/Debugging Lab.Rmd": {
       "checksum": "cbcac414db72941e79738028272ea100"
-    },
-    "debugginglab/Debugging-Lab.html": {
-      "checksum": "b4e2c531fdcc0f01c9e609bab32b8cd0"
     },
     "debugginglab/images/dsi_logo.png": {
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
@@ -4358,9 +4367,6 @@
     "functionslab/data/data.csv": {
       "checksum": "7820c50870b51a53d57c65ace597a62a"
     },
-    "functionslab/functions_lab.html": {
-      "checksum": "7f87ed462c5e8d41dfbc021ce20da684"
-    },
     "functionslab/functions_lab.Rmd": {
       "checksum": "5a6a26e7d1a12c7ab3c977455b0d3776"
     },
@@ -4383,13 +4389,10 @@
       "checksum": "079c8d119ba2ade300f64c038816d630"
     },
     "hypothesistestreviewlab/Hypothesis-Test-Review_files/figure-html/unnamed-chunk-2-1.png": {
-      "checksum": "d675566abe28bab0c87e23134f0a9b8a"
+      "checksum": "98c33f3448317ae409ae786032498529"
     },
     "hypothesistestreviewlab/Hypothesis-Test-Review_files/figure-html/unnamed-chunk-3-1.png": {
-      "checksum": "b45e9ec9c8e1909503d3210012e0316a"
-    },
-    "hypothesistestreviewlab/Hypothesis-Test-Review.html": {
-      "checksum": "8b3a41379e83262be16eebaf797ab6b1"
+      "checksum": "d25667fb1cc7f7a7c3e26621f56f6b08"
     },
     "hypothesistestreviewlab/images/both_high_leverage_&_large_residuals_residual_plot.png": {
       "checksum": "6e3cf39f88418caeb2d6193837adab80"
@@ -4449,7 +4452,10 @@
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
     "knnlab/Lab 6.Rmd": {
-      "checksum": "9f49881083d18386c18a4e506b71eb90"
+      "checksum": "4a65c30f9cd0c95de1edaa92089eca7f"
+    },
+    "knnlab/Lab-6_files/figure-html/unnamed-chunk-1-1.png": {
+      "checksum": "29e3901b50fd00cd09f591e3878bb488"
     },
     "knnlab/README.md": {
       "checksum": "2f26e7bea82845053f411ca6c7a34915"
@@ -4481,9 +4487,6 @@
     "lab11/images/dsi_logo.png": {
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
-    "lab11/Lists_Arrays_Dictionaries.html": {
-      "checksum": "4df62e63b08610c85cc2925d37abfdb5"
-    },
     "lab11/Lists_Arrays_Dictionaries.Rmd": {
       "checksum": "cc2c121b05e0804d4d7160674c15152b"
     },
@@ -4492,12 +4495,6 @@
     },
     "lab12/README.md": {
       "checksum": "d41d8cd98f00b204e9800998ecf8427e"
-    },
-    "lab2/Lab-2---Correlation-and-Simple-Linear-Regression_files/figure-html/q3_conditioal-1.png": {
-      "checksum": "ce50e849361da3051d91215abf6ccea5"
-    },
-    "lab2/Lab-2---Correlation-and-Simple-Linear-Regression.html": {
-      "checksum": "5ac10aa0a8922290336f07a71bd03d6c"
     },
     "linearregressionlab/css/custom-styles.css": {
       "checksum": "0871b5891eed8618b54047979b496cfa"
@@ -4544,8 +4541,20 @@
     "linearregressionlab/images/non-normal_residuals_residual_plot.png": {
       "checksum": "48f05842dbde6d68ee3b6379116d8e15"
     },
+    "linearregressionlab/images/q1_reformat.png": {
+      "checksum": "0084ee7613af0d37ac329488683829e7"
+    },
+    "linearregressionlab/images/q16_reformat.png": {
+      "checksum": "8c9835a8b4237937c865d740736837a9"
+    },
+    "linearregressionlab/images/q20_reformat.png": {
+      "checksum": "e235ccb1d1f4f28b326c284e35fc3e68"
+    },
+    "linearregressionlab/images/q23_reformat.png": {
+      "checksum": "64c2b534bdb2795db7e29db86faee854"
+    },
     "linearregressionlab/Lab 3.Rmd": {
-      "checksum": "8409a7d71ab8ccd47448e0e79548a4de"
+      "checksum": "ff4578fd9a207d20d85f35f3cf7c1ee0"
     },
     "linearregressionlab/README.md": {
       "checksum": "2a98ea3c17845aa621913875916ff9a7"
@@ -4562,8 +4571,11 @@
     "listsarraysdictionarieslab/images/dsi_logo.png": {
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
+    "listsarraysdictionarieslab/Lists_Arrays_Dictionaries.html": {
+      "checksum": "b8ea02d8f611cd793e584ecf85927383"
+    },
     "listsarraysdictionarieslab/Lists_Arrays_Dictionaries.Rmd": {
-      "checksum": "cc2c121b05e0804d4d7160674c15152b"
+      "checksum": "5fb729b1ce3c7636effb8f7a0f983970"
     },
     "listsarraysdictionarieslab/README.md": {
       "checksum": "918aaf8c68ee086e422c6bd117c52bc7"
@@ -4580,8 +4592,11 @@
     "logisticregressionlab/images/empty": {
       "checksum": "68b329da9893e34099c7d8ad5cb9c940"
     },
+    "logisticregressionlab/images/model_1_summary.png": {
+      "checksum": "b6760e30100f49a5483cdeba7e123c4c"
+    },
     "logisticregressionlab/Lab 4 - Logistic Regression and Confusion Matrices.Rmd": {
-      "checksum": "44a2fdc86090abcc32a673ed53c39f5c"
+      "checksum": "0a2b8cbfa35d7039304579a3b6980dda"
     },
     "logisticregressionlab/README.md": {
       "checksum": "b461d8a7e10e40addbaf315ea4fed1ba"
@@ -4610,6 +4625,27 @@
     "pandaslab/www/data.csv": {
       "checksum": "7820c50870b51a53d57c65ace597a62a"
     },
+    "probabilitydistributionlab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "probabilitydistributionlab/data/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "probabilitydistributionlab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "probabilitydistributionlab/images/Probability Distribution Chart.pdf": {
+      "checksum": "18c4a261bf6aa78e47fe160e42942b26"
+    },
+    "probabilitydistributionlab/Probability_Distribution_Lab.Rmd": {
+      "checksum": "2d9c4182497e7d4da22dfc59ff4813ef"
+    },
+    "probabilitydistributionlab/README.md": {
+      "checksum": "96aa9d1c2b04496253b25a9a6e40c9d0"
+    },
+    "probabilitydistributionlab/www/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
     "probabilitylab_1/css/custom-styles.css": {
       "checksum": "0871b5891eed8618b54047979b496cfa"
     },
@@ -4625,6 +4661,21 @@
     "probabilitylab_1/www/data.csv": {
       "checksum": "7820c50870b51a53d57c65ace597a62a"
     },
+    "randomnesslab/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "randomnesslab/data/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "randomnesslab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "randomnesslab/README.md": {
+      "checksum": "84860c48b5bc2464465a046bffee9afa"
+    },
+    "randomnesslab/www/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
     "README.md": {
       "checksum": "1f0d05de558126ca87ea7900644d1b06"
     },
@@ -4638,7 +4689,7 @@
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
     "regularizationlab/Lab 5.Rmd": {
-      "checksum": "3b4c86ef69ad33661037816086649fee"
+      "checksum": "4d196013d15fca2bcd3d1d7c12558cae"
     },
     "regularizationlab/README.md": {
       "checksum": "27a1e9d475160212fdf23685d145623c"
@@ -4689,10 +4740,52 @@
       "checksum": "adc45927a5be066fbe0a2f74e069017a"
     },
     "sqllab/Lab 8.Rmd": {
-      "checksum": "326333a8d2471b4406a0ab6b826dd1c2"
+      "checksum": "66cc467b582aa6297112896dc2058407"
     },
     "sqllab/README.md": {
       "checksum": "afd3d8a1cc57be3e81e68de5a0d33a85"
+    },
+    "stringparsing/css/custom-styles.css": {
+      "checksum": "0871b5891eed8618b54047979b496cfa"
+    },
+    "stringparsing/data/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "stringparsing/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "stringparsing/README.md": {
+      "checksum": "dfa73a530f1d7577818abfa99cc93299"
+    },
+    "stringparsing/requirements.txt": {
+      "checksum": "42fb93fc4150551a83e65bf187661a40"
+    },
+    "stringparsing/stringparsing.Rmd": {
+      "checksum": "58e5a402cdcec357074bed0d1b492d51"
+    },
+    "stringparsing/www/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
+    "styleguidelab/css/custom-styles.css": {
+      "checksum": "1088d4832ba104288b7671974571c27c"
+    },
+    "styleguidelab/data/nussbaum_goodreads_library_export.csv": {
+      "checksum": "e0cd1ba3094843e66bd875e4d1c8c302"
+    },
+    "styleguidelab/images/dsi_logo.png": {
+      "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
+    },
+    "styleguidelab/README.md": {
+      "checksum": "bf23a30e5aea646634ec23fe0624b02c"
+    },
+    "styleguidelab/requirements.txt": {
+      "checksum": "c9e550794b8d1407f30b7201aa05f46b"
+    },
+    "styleguidelab/Style Guide Lab.Rmd": {
+      "checksum": "6114f952e9b34a5033c2d1408155aa42"
+    },
+    "styleguidelab/www/nussbaum_goodreads_library_export.csv": {
+      "checksum": "15449cbbdd840755db8905200de1a33d"
     },
     "UChicago_DataScienceInstitute_Vertical_White.svg": {
       "checksum": "7894d22f6e55c4c962a089bb8b023349"
@@ -4706,8 +4799,29 @@
     "vifcategoricallab/images/dsi_logo.png": {
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
+    "vifcategoricallab/images/model_full_summary.png": {
+      "checksum": "e6a84bafbad183159f42945f6aadbdd2"
+    },
+    "vifcategoricallab/images/model_nocity_summary.png": {
+      "checksum": "76627f0e4a164f341d47f23d27eb99cc"
+    },
+    "vifcategoricallab/images/model_nolatlng_summary.png": {
+      "checksum": "d381f41106149e1887d674bdd19d8b79"
+    },
+    "vifcategoricallab/images/model_num_summary.png": {
+      "checksum": "413cc7fb1e9f10c65983b0be766f4bbf"
+    },
+    "vifcategoricallab/images/model_right_summary.png": {
+      "checksum": "31ffcd4ad585839bafb4017c547a0c6a"
+    },
+    "vifcategoricallab/images/model_right2_summary.png": {
+      "checksum": "167fed4ec246c3d6cefaabc1648d7296"
+    },
+    "vifcategoricallab/images/model_wrong_summary.png": {
+      "checksum": "9f23011ffbe1efd716f65738a855b202"
+    },
     "vifcategoricallab/Lab 3.5 - VIF and Categorical Variables.Rmd": {
-      "checksum": "a7f9bfef39ccc9bbefa92063bb082977"
+      "checksum": "fae71c8b4e9d832ad1f0684bd2fd1fff"
     },
     "vifcategoricallab/README": {
       "checksum": "08eeb640e4597b1c4cef2a93c00c83ec"
