@@ -10,7 +10,7 @@ runtime: shiny_prerendered
 knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
-install.packages(c("RcppTOML", "here", "withr"))
+#install.packages(c("RcppTOML", "here", "withr"))
 
 library(shiny)
 library(gradethis)
