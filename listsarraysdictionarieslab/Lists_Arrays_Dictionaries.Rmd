@@ -15,17 +15,8 @@ library(gradethis)
 library(learnr)
 library(reticulate)
 
-custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
-  if (stage == "code_check") {
-      if (user_code == solution_code){
-          return(list(message = random_praise(), correct = TRUE))
-      }
-    return(list(message = random_encouragement(), correct = FALSE))
-  }
-}
-
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, exercise.blanks = "\\.{3}")
 ```
 
 ```{r header, echo = FALSE}
@@ -68,15 +59,13 @@ Python and its libraries provide many ways to group data together.   Some import
 
 The above are listed in order of increasing functionality and sophistication
 
-In general you should use the simplest one that meets your needs...
+In general you should use the simplest one that meets your needs.
 
 
 ## Sequences (built into Python)
 
 
 Sequences are a basic type of structure to group data. You don't need to import any additional libraries to use them.
-
-We will focus mostly on one type of sequence: **lists**! (**sets** and **tuples** are other useful types of sequences)
 
 
 ### Lists
@@ -294,7 +283,9 @@ School_location_og
 4. Append the number 2023 to our list and then view the list. Note even though the list contains only strings, I can append an integer as lists accept any data type.
 
 ```{python append4, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'append2'}
+...
 
+School_locations
 ```
 
 ```{python append4-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -302,8 +293,22 @@ School_locations.append(2023)
 School_locations
 ```
 
-```{r append4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
-grade_this_code()
+```{r append4-check, context="server"}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your code and make sure the last line is `School_locations`.")
+  }
+
+  res <- reticulate::py_to_r(.result)
+  
+  School_locations_ans = c("California", "Illinois", "North Carolina", "Texas", "tomato", "Georgia", "Washington D.C.", "Michigan", 2023)
+
+  if (identical(res, School_locations_ans)) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 This does not change our copy of the list!
@@ -346,7 +351,7 @@ del my_list[1:2]
 grade_this_code()
 ```
 
-6. Append your 316 to the end of the list.
+6. Append 316 to the end of the list.
 
 ```{python ex3, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'ex2'}
 
@@ -442,7 +447,7 @@ Sets borrow mathematical concepts as a way to maintain information on different 
 
 ##### `in`
 
-One of the most helpful things you can use on sets are logical operators, like `in`, which will tell you if an item is included in the set:
+One of the most helpful operators you can use on sets are logical operators, like `in`, which will tell you if an item is included in the set:
 
 ```{python set2, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'set1b'}
 'cheese' in grocery_set
@@ -533,7 +538,7 @@ len(Random_set)
 
 #### Accessing values from a set
 
-Remember, sets are unordered. Therefore, elements of a set are not assigned any indices. This means that you cannot access an element in a set! 
+Sets are unordered. Therefore, elements of a set are not assigned any indices. This means that you cannot access an element in a set by indexing! 
 
 #### Operations and manipulation on sets
 
@@ -583,7 +588,7 @@ grocery_set
 
 #### Subsets
 
-A set of where all of the elements belong to a larger set is known as a subset. You can check to see if one set is a subset of another using the method `.issubset()`. 
+A set where all of the elements belong to a larger set is known as a subset. You can check to see if one set is a subset of another using the method `.issubset()`. 
 
 ```{python setup_subset, exercise = FALSE, echo = FALSE, exercise.setup = "set10"}
 grocery_set.discard('egg')
@@ -678,9 +683,9 @@ grade_this_code()
 
 ### Tuples
 
-Like lists, a **tuple** is an ordered sequence of values. However, unlike lists, tuples cannot be changed (including adding and removing elements) after they are created--this is known as being **immutable**.
+Like lists, a **tuple** is an ordered sequence of values. However, unlike lists or sets, tuples cannot be changed (including adding and removing elements) after they are created--this is known as being **immutable**.
 
-Tuples can be helpful when data are structured like Cartesian coordinates, but can be also generalized to a greater number of dimensions. These objects often can be stored together, but are somewhat nonsensical to store as a list.
+Tuples can be helpful when data are structured like Cartesian coordinates, but can also be generalized to a greater number of dimensions. These objects often can be stored together, but are somewhat nonsensical to store as a list.
 
 Consider a list of universities with the following information:
  
@@ -712,7 +717,7 @@ uc_enrollment
 
 #### `type()`
 
-Remember that we can call `type()` on an object, including sets, to see type it is!
+Remember that we can call `type()` on an object, including sets, to see what type it is!
 
 ```{python tuple3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'tuple2'}
 type(uc_enrollment)
@@ -792,21 +797,38 @@ uc_enrollment.index("Illinois")
 grade_this_code()
 ```
 
-<!-- #### Let's play with tuples! -->
+#### Nested sequences
 
-<!-- Create a new tuple, `northwestern_enrollment`, knowing that Northwestern University is located in Evanston, Illinois, and has an undergraduate enrollment of 8,709. -->
+Create a new tuple, `northwestern_enrollment`, knowing that Northwestern University is located in Evanston, Illinois, and has an undergraduate enrollment of 8,709. 
 
-<!-- ```{python tuple_ex1, exercise=TRUE, exercise.eval = FALSE} -->
+```{python tuple_ex1, exercise=TRUE, exercise.eval = FALSE} 
 
-<!-- ``` -->
+```
 
-<!-- ```{python tuple_ex1-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
-<!-- northwestern_enrollment = ("Northwestern University", "Evanston", "IL", 8709) -->
-<!-- ``` -->
+```{python tuple_ex1-solution, message = FALSE, warning = FALSE, echo = FALSE}
+northwestern_enrollment = ("Northwestern University", "Evanston", "Illinois", 8709)
+```
 
-<!-- ```{r tuple_ex1-code-check, message = FALSE, warning = FALSE, echo = FALSE} -->
-<!-- grade_this_code() -->
-<!-- ``` -->
+```{r tuple_ex1-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+It would be useful to store our two college-related tuples together along with any we create in the future. Create a list containing these two tuples in alphabetical order by college name. Let's call the list `tuple_list`.
+
+
+```{python tuple_ex2, exercise=TRUE, exercise.eval = FALSE} 
+tuple_list = ...
+tuple_list
+```
+
+```{python tuple_ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+tuple_list = [uc_enrollment, northwestern_enrollment]
+tuple_list
+```
+
+```{r tuple_ex2-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
 
 ## Grouping Data using Arrays
 
@@ -1256,7 +1278,7 @@ survey_dict.items()
 
 ### Working with Dictionaries
 
-Below is a dictionary containing total number of homicides in the United States in 2021, by state. (Published by Statista Research Department, Oct 14, 2022). Note Washington D.C. is included as 'District of Columbia'.
+Below is a dictionary containing total number of homicides in the United States in 2021, by state. (Published by Statistal Research Department, Oct 14, 2022). Note Washington D.C. is included as 'District of Columbia'.
 
 ```{python homdict, exercise=TRUE, exercise.eval = FALSE}
 homicide_dict = {'Texas': 2064, 'North Carolina': 928, 'Ohio': 824, 'Michigan': 747, 'Georgia': 728, 'Tennessee': 672, 'Missouri': 593, 'Virginia': 562, 'South Carolina': 548, 'Illinois': 514, 'Pennsylvania': 510, 'Louisiana': 447, 'Indiana': 438, 'Alabama': 370, 'Kentucky': 365, 'Colorado': 358, 'Washington': 325, 'Arkansas': 321, 'Wisconsin': 315, 'Oklahoma': 284, 'Nevada': 232, 'Minnesota': 203, 'Arizona': 190, 'Oregon': 188, 'New Mexico': 169, 'Mississippi': 149, 'Connecticut': 148, 'Maryland': 138, 'New Jersey': 137, 'Massachusetts': 132, 'New York': 124, 'California': 123, 'District of Columbia': 109, 'West Virginia': 95, 'Delaware': 94, 'Kansas': 87, 'Utah': 85, 'Iowa': 70, 'Rhode Island': 38, 'Idaho': 36, 'Montana': 31, 'South Dakota': 26, 'Nebraska': 25, 'Alaska': 18, 'Maine': 18, 'Wyoming': 17, 'New Hampshire': 14, 'North Dakota': 14, 'Vermont': 8, 'Hawaii': 6}
