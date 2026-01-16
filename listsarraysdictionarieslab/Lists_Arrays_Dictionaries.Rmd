@@ -38,6 +38,10 @@ tags$div(
 )
 ```
 
+```{python setup_py, context="setup"}
+
+```
+
 ## Goals
 
 The goal of this lab is review some of what you've learned about coding in Python. We will cover:
