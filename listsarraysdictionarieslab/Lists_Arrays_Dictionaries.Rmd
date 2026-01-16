@@ -1,5 +1,5 @@
 ---
-title: "Sequences of Data"
+title: "Sequences of Data" 
 output: 
    learnr::tutorial:
       css: css/custom-styles.css
