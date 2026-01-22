@@ -10,6 +10,7 @@ runtime: shiny_prerendered
 knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
+
 ## Package Requirements for Lab
 
 knitr::opts_chunk$set(error = TRUE)
@@ -986,7 +987,7 @@ question(
 
 ```{r q29, echo=FALSE}
 question(
-  "29. Based on the output, what is the test statistic?",
+  "29. Based on the output, what is the p-value?",
   answer("12.7294", message = "That is slope!"), 
   answer("0.341", message = "That is standard error for the slope!"), 
   answer("8.701", message = "That is the test statistic for the intercept!"), 

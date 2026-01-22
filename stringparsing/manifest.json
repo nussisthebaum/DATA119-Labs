@@ -4,11 +4,19 @@
   "platform": "4.4.1",
   "metadata": {
     "appmode": "rmd-shiny",
-    "primary_rmd": "Lists_Arrays_Dictionaries.Rmd",
+    "primary_rmd": "stringparsing.Rmd",
     "primary_html": null,
     "content_category": null,
     "has_parameters": false
   },
+   "python": {
+      "version": "3.9.21",
+      "package_manager": {
+        "name": "pip",
+        "version": "21.2.4",
+        "package_file": "requirements.txt"
+      }
+    },
   "packages": {
     "Matrix": {
       "Source": "CRAN",
@@ -1697,17 +1705,20 @@
     "css/custom-styles.css": {
       "checksum": "0871b5891eed8618b54047979b496cfa"
     },
+    "data/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
+    },
     "images/dsi_logo.png": {
       "checksum": "fa7f60b8aa6ff32d5ab11d678b9e8bb6"
     },
-    "Lists_Arrays_Dictionaries.Rmd": {
-      "checksum": "5fb729b1ce3c7636effb8f7a0f983970"
-    },
     "README.md": {
-      "checksum": "918aaf8c68ee086e422c6bd117c52bc7"
+      "checksum": "dfa73a530f1d7577818abfa99cc93299"
     },
-    "requirements.txt": {
-      "checksum": "528f432cd681df8d8d540157fd04822a"
+    "stringparsing.Rmd": {
+      "checksum": "97ada45fd40481ea9de5c3c3e465c083"
+    },
+    "www/data.csv": {
+      "checksum": "7820c50870b51a53d57c65ace597a62a"
     }
   },
   "users": null
