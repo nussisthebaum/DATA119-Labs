@@ -62,7 +62,7 @@ We will talk more about **sequences** later, but for now, think back to when you
 
 Python is a **0-indexed language** meaning that counting starts at 0 rather than 1. For example, the string below contains 11 characters.
 
-```{python demo1, exercise=TRUE, exercise.eval = FALSE}
+```{python demo1, exercise=TRUE}
 my_string = "hello world"
 
 len(my_string)
@@ -70,11 +70,11 @@ len(my_string)
 
 Like with lists, we can use square brackets `[]` with the index inside to refer to particular characters in the string.
 
-```{python demo2, exercise=TRUE, exercise.eval = FALSE}
+```{python demo2}
 my_string[0] # We count starting with 0
 ```
 
-```{python demo3, exercise=TRUE, exercise.eval = FALSE}
+```{python demo3}
 my_string[1] # Index 1 refers to the second character
 ```
 
@@ -82,7 +82,7 @@ We can also **slice** the string to select a subset of characters. Slices are co
 
 Here we slice by telling Python to start at index 1, end at index 9, and step through elements by 3's (aka include every third element). 
 
-```{python demo4, exercise=TRUE, exercise.eval = FALSE}
+```{python demo4}
 my_string[1:9:3]
 ```
 
@@ -92,7 +92,7 @@ Change the code above to help remind yourself how slicing works. If you need a r
 
 Create the variable `course` containing `"DATA 120"` **using slicing**.
 
-```{python ex1, exercise=TRUE, exercise.eval = FALSE}
+```{python ex1, exercise=TRUE}
 s = "Welcome to DATA 120 this quarter!"
 
 course = ...
