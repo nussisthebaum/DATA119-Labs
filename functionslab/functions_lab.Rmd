@@ -94,6 +94,8 @@ The goals of this lab are to:
 
 * Understand when and why to write functions. 
 * Understand how to write functions. 
+* Learn how to read error messages. 
+* Learn how to write your own custom error messages. 
 
 ## Setup
 
@@ -103,7 +105,18 @@ For this lab, we do not need any additional packages or modules.
 
 Hopefully by now you have come to realize that writing code is a form of communication--you are both communicating with a computer to tell it what to do, as well as communicating with other humans to tell them what the computer is supposed to be doing (other humans, including your future self!)
 
-Consider another form of communication: writing an academic paper. Typically, academic papers can be broken down into parts: the abstract, the introduction, a methods section, a results section, a discussion of results, a conclusion, references, and acknowledgments. Each of these parts serves a specific purpose, and most people know how to navigate to a specific section to find what they are looking for. 
+Consider another form of communication: writing an academic paper. Typically, academic papers can be broken down into parts: 
+
+* The abstract, 
+* The introduction, 
+* A methods section,
+* A results section, 
+* A discussion of results,
+* A conclusion, 
+* References, and 
+* Acknowledgments. 
+
+Each of these parts serves a specific purpose, and most people know how to navigate to a specific section to find what they are looking for. 
 
 The abstract, introduction, etc. can be broken down into even smaller pieces: paragraphs, which can be broken down into sentences, which can be broken down into words and punctuation. We organize our writing like this for more effective communication with other people--most know what to expect and where to look. This organization makes it easier to actually understand the content of the paper. 
 
@@ -116,6 +129,11 @@ Consider the following example on movie theater finances:
 * Profit: defined as revenue (money from ticket sales) - cost (studio fees)
 * Revenue: calculated from ticket price multiplied by the number of attendees
 * Cost: $\$180$ studio fee plus four cents for every attendee
+
+Mathematically, this means:
+ 
+ 
+$$\text{profit} = \text{price} \times (\text{attendees}) - (180 + 0.04\times\text{attendees})$$
 
 So, if tickets cost $5 and we have 120 attendees, we can calculate the profit. Translate the information above into Python code in the following chunk:
 
@@ -159,12 +177,12 @@ grade_this_code()
 
 ### Introducing Variables
 
-As a capitalist, the movie theater owner wants to know: **Can we make more by changing the price?** Define a discount as the difference between the base price, `5`, and the lower price attendees are actually paying. From previous experience, assume we know that for every ten cent discount, an additional 15 people will come. 
+As a capitalist, the movie theater owner wants to know: **Can we make more by changing the price?** Define a discount as the difference between the base price, `5`, and the lower price attendees are actually paying. From previous experience, assume we know that for every ten cent discount, an additional 15 people will come. Mathematically, this means:
  
  
-$$\text{price}*(120 + 15 * (5 - \text{discount})/0.1) - 180 - 0.04*\text{attendees}$$
+$$\text{profit} = \text{price}\times(120 + 15 \times (5 - \text{discount})/0.1) - (180 + 0.04\times \text{attendees})$$
 
-Since `PRICE` and `ATTENDEES` are now changing depending on the base price, they are no longer constants--instead, they are variables! In the chunk below, set a new named constant, `BASE_PRICE`, equal to `5`, and then create two new variables for price and attendees according to the above equation. Price should depend on another variable, `discount`--you can set the discount equal to one dollar, for now. Make sure to follow style guide conventions!
+Since `PRICE` and `ATTENDEES` are now changing depending on the base price, they are no longer constants--instead, they are variables! In the chunk below, set a new named constant, `BASE_PRICE`, equal to `5`, and then create two new variables for price and attendees according to the above equation. Price should depend on another variable, `discount`--you can set the discount equal to one dollar, for now. Make sure to follow [style guide](https://uchicago-cs.github.io/student-resource-guide/style-guide/python.html) conventions!
 
 ```{python ex3, exercise = TRUE}
 BASE_PRICE = 
@@ -175,9 +193,9 @@ BASE_PRICE =
 
 ```{python ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
 BASE_PRICE = 5
-discount = 1
-price = BASE_PRICE - discount
-attendees = 120 + 15*discount/0.1
+DISCOUNT = 1
+price = BASE_PRICE - DISCOUNT
+attendees = 120 + 15*DISCOUNT/0.1
 ```
 
 ```{r ex3-code-check, message = FALSE, warning = FALSE}
@@ -248,10 +266,9 @@ If you want to write a function, you always start with something like:
 def function_name(argument)
 ```
 
-* Functions begin with a special Python keyword, `def`, as in `def`ine. Functions must have names--similar to how you would name variables in Python code. In the code above, my function name is `function_name`.
-
+* Functions begin with a special Python keyword, `def`, as in `def`ine. Functions must have names--similar to how you would name variables in Python code. In the code above, my function name is `function_name`. The [style guide](https://uchicago-cs.github.io/student-resource-guide/style-guide/python.html) also states we should try to have a verb in the name, so it is a better description of what the function actually does.
 * Your function name should follow [snake case](https://en.wikipedia.org/wiki/Snake_case), just like variables. 
-* The function name referably includes a verb to demonstrate what it actually does!
+* The function name preferably includes a verb to demonstrate what it actually does!
 
 Immediately after the name, we open up a set of parentheses and list the arguments (like the $x$ in $f(x)$). 
 
@@ -291,14 +308,22 @@ grade_this_code()
 
 As long as the actions are on the same level of indentation, they will all be run whenever the function is called. 
 
-If the function is meant to to calculate something based on the arguments and provide it back to the function that calls it, then use have the keyword `return`. 
+If the function is meant to to calculate something based on the arguments and provide it back to the function that calls it, then use the keyword `return`. 
 
 ```{python example5, exercise = FALSE, echo = TRUE, eval = TRUE}
 def function_name(argument):
     return something
 ```
 
-When should you use a function? Look for things that belong together, things that have names, and things you might want to do a lot. For example, we have already considered that we might want to calculate the number of attendees as a function of `price`. Fill in the right equation below so that we have a new function, `attendees()`.
+Note that the [style guide](https://uchicago-cs.github.io/student-resource-guide/style-guide/python.html) also states that we should be using doc strings. The functions in this lab do not have doc strings, but make sure to review the syntax of a doc string and know how to write a good description of what the function does. This is a one time pass, the rest of your work should have them!
+
+When should you use a function? Look for:
+
+* Things that belong together, 
+* Things that have names, and 
+* Rhings you might want to do a lot.
+
+For example, we have already considered that we might want to calculate the number of attendees as a function of `price`. Fill in the right equation below so that we have a new function, `attendees()`.
 
 ```{python ex7, exercise = TRUE}
 def calc_attendees(price):
@@ -313,6 +338,8 @@ def calc_attendees(price):
 ```{r ex7-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
+
+Note that when you run this code, nothing happens--or at least, it looks like nothing is happening. Although there is no output, `calc_attendees()` has been defined as a function and now exists in your environment, even though Python did not print anything. That's okay! 
 
 Functions can use other functions! In the chunk below, edit the code for the function `calc_cost()` so that it depends on `calc_attendees()`.
 
@@ -380,7 +407,7 @@ def days_in_month(month):
         days = 30
     if (month == ...):
         days = 28
-  return(days)
+    return(days)
 ```
 
 ```{python ex11-hint-1, message = FALSE, warning = FALSE, echo = FALSE}
@@ -567,20 +594,20 @@ def days_in_month(month, year):
 THIRTY_DAYS = [4, 6, 9, 11]
 
 def days_in_month(month, year):
-  if month == 2:
-    if is_leap_year(year):
-      return 29
-    return 28
-  if month in THIRTY_DAYS:
-    return 30
-  return 31  
+    if month == 2:
+        if is_leap_year(year):
+            return 29
+        return 28
+    if month in THIRTY_DAYS:
+        return 30
+    return 31  
 ```
 
 ```{r ex15-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-Why don't I have to write `is_leap_year(year) == True`? 1Using the implicit `True` is a tiny bit faster, and using the implicit `False` adheres to the style guide. Overall there is much less visual clutter!
+Why don't I have to write `is_leap_year(year) == True`? Using the implicit `True` is a tiny bit faster, and using the implicit `False` adheres to the style guide. Overall there is much less visual clutter!
 
 ## Raising Error Messages
 
@@ -610,20 +637,20 @@ You may have encountered the following errors, among others:
 * `IndexError`
 * `SynaxError`
 
-We are used to being frustrated when we encounter errors. Errors are not necessarily a bad thing, as they sometimes give us information about how we are wrong. This means that we may want to be able to raise errors when we are writing our own functions! Remember that our code looks like:
+We are used to being frustrated when we encounter errors. Errors are not necessarily a bad thing, as they sometimes give us information about how we are wrong. For more descriptions of what each of these means, you may want to look at our [Debugging Lab](https://posit.ds.uchicago.edu/debugging/). For now, we will focus on writing our own errors when we are writing our own functions! Remember that our code looks like:
 
 ```{python, echo = TRUE}
 def days_in_month(month, year):
-  if month == 2:
-    if is_leap_year(year):
-      return 29
-    return 28
-  if month in THIRTY_DAYS:
-    return 30
-  return 31
+    if month == 2:
+        if is_leap_year(year):
+            return 29
+        return 28
+    if month in THIRTY_DAYS:
+        return 30
+    return 31
 ```
 
-What should the function do if you put in a month like 2022 or 2023? We want it to at least check if we've done it correctly, but also, **return something that one way or the other makes us think about how to proceed**. You should never just give a bogus answer! Similarly--if you're writing a function to calculate the mean, but the mean for whatever reason does not exist, do return something like zero! Use `None` instead.
+What should the function do if you put in a month like 2022 or 2023? We want it to at least check if we've done it correctly, but also, **return something that one way or the other makes us think about how to proceed**. You should never just give a bogus answer! Similarly--if you're writing a function to calculate the mean, but the mean for whatever reason does not exist, don't return something like zero, which has meaning! Use `None` instead.
 
 The syntax for raising an error looks like this:
 
@@ -634,7 +661,7 @@ raise ValueError("days_in_month: invalid month")
 Just like we define functions with the Python keyword `def`, we raise errors with the Python keyword `raise`. Then, we have to consider the correct type of error:
 
 * If we are using incorrect inputs, we raise `ValueError`s.
-* If we are using the incorrect type of inputs (e.g., `days_in_month("banana)`), we raise `TypeError`s.
+* If we are using the incorrect type of inputs (e.g., `days_in_month("banana")`), we raise `TypeError`s.
 
 Then, we include open/close parentheses surrounding an error statement, written as a string.
 
@@ -642,15 +669,15 @@ Edit the code below to return the correct type of error message:
 
 ```{python ex18, exercise = TRUE}
 def days_in_month(month, year):
-  if month < 1 or month > 12:
-      ...
-  if month == 2:
-    if leap_year(year):
-      return 28
-    elif month in THIRTY_DAYS:
-      return 30
-    else:
-      return 31
+    if month < 1 or month > 12:
+        ...
+    if month == 2:
+        if leap_year(year):
+            return 28
+        elif month in THIRTY_DAYS:
+            return 30
+        else:
+            return 31
 ```
 
 ```{python ex18-hint, message = FALSE, warning = FALSE, echo = FALSE}
@@ -659,17 +686,19 @@ def days_in_month(month, year):
 
 ```{python ex18-solution, message = FALSE, warning = FALSE, echo = FALSE}
 def days_in_month(month, year):
-  if month < 1 or month > 12:
-      raise ValueError("days_in_month: invalid month")
-  if month == 2:
-    if leap_year(year):
-      return 28
-    elif month in THIRTY_DAYS:
-      return 30
+    if month < 1 or month > 12:
+        raise ValueError("days_in_month: invalid month")
+    if month == 2:
+        if leap_year(year):
+            return 28
+        elif month in THIRTY_DAYS:
+            return 30
     else:
-      return 31
+        return 31
 ```
 
 ```{r ex18-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
+
+
