@@ -1392,4 +1392,4 @@ df
 
 ## Wrapping Up
 
-In this notebook, we learned about lists, arrays, and dictionaries and were introduced to the concept of DataFrames. During the next lab, we will build on these concepts so that you feel comfortable working with and manipulating large groups of data.
+In this activity, we learned about lists, arrays, dictionaries, sets, and tuples and were introduced to the concept of DataFrames. In future activities we will build on these concepts until you feel comfortable working with and manipulating large groups of data.
