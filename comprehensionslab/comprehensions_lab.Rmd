@@ -15,17 +15,9 @@ library(gradethis)
 library(learnr)
 library(reticulate)
 
-custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
-  if (stage == "code_check") {
-      if (user_code == solution_code){
-          return(list(message = random_praise(), correct = TRUE))
-      }
-    return(list(message = random_encouragement(), correct = FALSE))
-  }
-}
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, "\\.{3}")
 ```
 
 ```{r header, echo = FALSE}
@@ -47,55 +39,278 @@ tags$div(
 
 ## Goals
 
-The goals of this lab to are learn and gain experience using advanced iteration techniques. We will cover
-  - Comprehensions of:
+The goals of this lab to are learn and gain experience using advanced iteration techniques. We will cover *comprehensions* of:
+
     - Lists
     - Sets
     - Dictionaries
-  - The `enumerate` utility function
-  - The `zip` utility function
+    
+In the process we will also explore the `enumerate` utility function and the `zip` utility function.
   
-## Advanced Iteration Techniques
-So far you have learned about for and while loops. In this lab we will introduce **comprehensions**. Comprehensions allow us to succinctly create new lists, sets, and dictionaries all in one line. They are generally faster than the equivalent for loop as well; however, they can be harder to read. As a data scientist it will be your responsibility to decide between using a standard for loop or a comprehension as you trade off between readability and speed/conciseness. In teaching you about these techniques we'll introduce to you the `enumerate` and `zip` functions which can make it easier to keep track of an index when iterating or to iterate through multiple things at once.
+### Advanced Iteration Techniques
+So far you have learned about for and while loops. In this lab we will introduce **comprehensions**. Comprehensions allow us to succinctly create new lists, sets, and dictionaries all in one line. They are generally faster than the equivalent for loop as well; however, they can be harder to read. As a data scientist it will be your responsibility to decide between using a standard for loop or a comprehension as you trade off between readability and speed/conciseness. In learning you about these techniques we'll introduce to you the `enumerate` and `zip` functions which can make it easier to keep track of an index when iterating or to iterate through multiple iterable objects at once.
 
 ## Setup
 
-For this lab we will be using the `pandas`, and `numpy` modules in Python, as well as a new dataset: `add dataset here later`.
+For this lab we will be using the `pandas`, and `numpy` modules in Python, as well as a new dataset: `classroom_locations`. The classroom locations dataset is based on the [university directory](https://registrar.uchicago.edu/faculty-staff/classroom-scheduling/buildings-directory-2/) and also includes geocodes which were added on.
 
-```{python setup_py, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python setup_py, context="setup", echo = FALSE}
 import numpy as np
 import pandas as pd
 
-add_dataset_here = ...
+uni_directory = pd.read_csv("data/university_directory.csv").iloc[:, 0:4]
 ```
 
-# List comprehensions
 
-- Do it with a for loop (example) of only indexes divisible by 2 or 3
-- Do it with a comprehension
-- discuss explicitly the syntax being used
-- how I'll introduce zip
-  - nested loop which goes through both and if only do something when equal indexes
-  - show that zip just gaurantees this and remind unpacking items x, y = (1, 2)
-- show a loop with 2 conditions and the equivalent comprehension
-- add check for understanding on syntax
-- add discussion question on choosing between a for and comprehension, readability
-- do final overview of all syntax
-- bonus, show nested comprehensions
-  - make a matrix and show getting an x slice
+```{python setup_py1, exercise = TRUE, exercise.eval=FALSE, message=FALSE}
+import numpy as np
+import pandas as pd
+
+uni_directory = pd.read_csv("data/university_directory.csv").iloc[:, 0:4]
+uni_directory.sample(5)
+```
+
+## List comprehensions
+
+As we mentioned earlier comprehensions are in essence a shorter way to do a for loop. In the below example we make a list of all numbers divisible by 2 and 3 using a for loop. 
+
+```{python first_example_list, exercise=TRUE}
+loop_list = [] # creating a empty list
+for i in np.arange(1, 26): # i takes on each value in np.arange(1, 26)
+  # only add to the list if divisble by 2 & 3
+  if((i % 2) == 0) and ((i % 3) == 0): 
+    loop_list.append(i) # updating the list
+loop_list
+```
+
+Here is the equivalent way to accomplish this task with a list comprehension.
+
+```{python first_example_comprehension, exercise = TRUE}
+comp_list = [i for i in np.arange(1, 26) if ((i % 2) == 0) and ((i % 3) == 0)]
+comp_list
+```
+
+```{r q1_discussion, context="server"}
+q1_hint_visible <- reactiveVal(FALSE)
+output$q1_plot_output <- renderUI({
+    tagList(
+      p("Discuss with a partner or on edStem about at least one of the following prompts."),
+      actionButton("q1_show_hint_btn", "💡 Show discussion"),
+      tags$div(
+        id = "q1_hint_box",
+        class="discussionbox",
+        style = paste(
+          if (!q1_hint_visible()) "display:none;" else "",
+          "margin-top:.6px; border:1px solid #ddd; padding:.20px; border-radius:.5px;"
+        ),
+        tags$div(
+        class = "center",
+        tags$strong("Discuss with a neighbor (or on Ed):")
+        ),
+        tags$ol(
+        tags$li("What are the major differences between the for loop and list comprehension examples above syntactically?"),
+         tags$li("What parts seem to be the same for both for statements?"),
+         tags$li("What are your initial guesses about when you personally would prefer one over the other?")
+     )
+    )
+    )
+})
+
+observeEvent(input$q1_show_hint_btn, {
+  shinyjs::toggle(id = "q1_hint_box", anim = TRUE, time = 0.2)
+  q1_hint_visible(!q1_hint_visible())
+  updateActionButton(
+    session, "q1_show_hint_btn",
+    label = if (q1_hint_visible()) "🙈 Hide discussion" else "💡 Show discussion"
+  )
+})
+```
+
+```{r q1_discussion_output, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE}
+uiOutput("q1_plot_output")
+```
+
+Now that we've given some thought to the difference in style between the two types of loops lets break down the exact syntax for list comprehensions.
+
+Each list comprehension has a version of the following syntax:
+`[expression for item in iterable if condition]`.
+
+If you want to iterate through two different things at once you can do so with
+`[expression for item_1 in iterable_1 for item_2 in iterable_2 if condition]`
+
+And if you wanted two conditions you simply adjust the above so it reads 
+`[expression for item_1 in iterable_1 for item_2 in iterable_2 if condition_1 if condition_2]`
+
+As you can tell list comprehensions are an extremely flexible and concise way to make lists. Below we'll go through some more examples where you'll start making your own list comprehensions.
+
+```{r q1, echo=FALSE}
+question("1. If you wanted to change our initial example so that it would instead get all numbers divisible by both 2 and 4 between 1 and 25 which of the following parts of the list comprehension would you have to change?",
+         answer("`i for i`", correct=FALSE),
+         answer("`in np.arange(1,26)`",message="Our range of possible values is not changing here only which subset of numbers in the range we want to include!", correct=FALSE),
+         answer("`((i % 2) == 0) and ((i % 3) == 0)`", message="Correct! Changing the conditional is the same as in the for loop approach it's just in a different place now.", correct=TRUE),
+         answer("No need to change anything at all!", correct=FALSE, message="Since the condition changes we need to adjust the code so the new condition is met!"),
+        allow_retry = TRUE,
+        post_message = "Congratulations! You have found the 1st secret word: CONDITIONAL",
+  random_answer_order = TRUE)
+```
+
+Question 2. Fill in the blank below to make a list comprehension that is equivalent to the following for loop which puts the squares of the first 10 numbers in a list.
+```
+empty_list = []
+for i in range(1,11):
+  empty_list.append(i**2)
+```
+
+```{python q2, exercise=TRUE}
+list_of_squares = ...
+list_of_squares
+```
+
+```{python q2-solution, echo=FALSE}
+list_of_squares = [i**2 for i in range(1, 11)]
+list_of_squares
+```
+
+```{r q2-check, context="server"}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your answer and make sure the last line is `list_of_squares`.")
+  }
+
+  res <- reticulate::py_to_r(.result)
   
-# Dictionary Comprehensions
+  if (isTRUE(all.equal(res, c(1, 4, 9, 16, 25, 36, 49, 64, 81, 100)))) {
+    pass("Nice work! You correctly made the list comprehension.")
+  } else {
+    fail(paste0(
+      "I expected `\"[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]\"`, but got `\"",
+      paste0("[", paste(res, collapse = ", "), "]"),
+      "\"` instead."
+    ))
+  }
+})
+```
+
+Now we'll start considering conditions.
+
+Question 3. Using a list comprehension assign short names to a list of the abbreviations of campus buildings which have a abbreviation that's less than 3 characters 
+
+```{python q3, exercise=TRUE}
+abbr = uni_directory.iloc[:, 0]
+short_names = ...
+short_names
+```
+
+```{python q3-solution, echo=FALSE}
+abbr = uni_directory.iloc[:, 0]
+short_names = [abb for abb in abbr if len(abb) < 3]
+short_names
+```
+
+```{r q3-check, context="server"}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your answer and make sure the last line is `short_names`.")
+  }
+
+  res <- reticulate::py_to_r(.result)
+  
+  if (isTRUE(all.equal(res, c('A', 'AB', 'BG', 'C', 'CL', 'E', 'ED', 'F', 'GC', 'H', 'HC', 'HM', 'K', 'LC', 'M', 'MS', 'OR', 'P', 'RO', 'RY', 'S', 'SS', 'TH', 'W', 'WB', 'Y', 'Z')))) {
+    pass("Nice work! You correctly made the list comprehension.")
+  } else {
+    fail(paste0(
+      "I expected `\"['A', 'AB', 'BG', 'C', 'CL', 'E', 'ED', 'F', 'GC', 'H', 'HC', 'HM', 'K', 'LC', 'M', 'MS', 'OR', 'P', 'RO', 'RY', 'S', 'SS', 'TH', 'W', 'WB', 'Y', 'Z']\"`, but got `\"",
+      paste0("[", paste(res, collapse = ", "), "]"),
+      "\"` instead."
+    ))
+  }
+})
+```
+
+Before we continue we want to introduce the `enumerate` utility function. The `enumerate` function takes in a single iterable and returns an iterable of tuples where the first element of each iterable is the "index" of the input to the function and the second element is just the original element passed into the function at that "index". That explanation seems a little confusing but the concept will hopefully be clear with the below example.
+
+```{python enumerate-example, exercise=TRUE}
+for i, elem in enumerate(["red", "orange", "yellow", "green", "blue", "indigo", "violet"]):
+  print("The", i, " element in the list is ", elem)
+```
+
+Question 4. Take advantage of our new knowledge to assign `every_even_R_name` to a list which contains the names of all buildings that start with R and have an even index.
+
+```{python q4, exercise=TRUE}
+names = uni_directory.iloc[:, 1]
+every_even_R_name = ...
+every_even_R_name
+```
+
+```{python q4-solution, echo=FALSE}
+names = uni_directory.iloc[:, 1]
+every_even_R_name = [name for i, name in enumerate(names) if name[0] == "R" if i%2 == 0]
+every_even_R_name
+```
+
+```{r q4-check, context="server"}
+grade_this({
+  if (is.null(.result)) {
+    fail("Replace the `...` with your answer and make sure the last line is `every_even_R_name`.")
+  }
+
+  res <- reticulate::py_to_r(.result)
+  
+  if (isTRUE(all.equal(res, c('Reva and David Logan Center for the Arts, 915 E. 60th St.', 'Rockefeller Memorial Chapel, 5850 S. Woodlawn Ave.', 'Ryerson Physical Laboratory, 1100 E. 58th St., Chicago')))) {
+    pass("Nice work! You correctly made the list comprehension.")
+  } else {
+    fail(paste0(
+      "I expected `\"['Reva and David Logan Center for the Arts, 915 E. 60th St.', 'Rockefeller Memorial Chapel, 5850 S. Woodlawn Ave.', 'Ryerson Physical Laboratory, 1100 E. 58th St., Chicago']\"`, but got `\"",
+      paste0("[", paste(res, collapse = ", "), "]"),
+      "\"` instead."
+    ))
+  }
+})
+```
+
+Use this matrix in the following question.
+
+```{python list-of-lists, exercise=TRUE}
+matrix = np.array([[1, 4, 7], [2, 5, 8], [3, 6, 9]])
+matrix
+```
+
+```{r q5, echo=FALSE}
+question("5. Which of the following list comprehensions correctly get all the elements above or along the diagonal of the matrix",
+         answer("`[matrix[i, j] for i in range(matrix.shape[0]) for j in range(i, matrix.shape[0]) if j >= i ]`", message="Correct, great job navigating the indexes.", correct=TRUE),
+         answer("`[matrix[i, j] for i in range(matrix.shape[0]) for j in range(i, matrix.shape[0]) if i >= j ]`", correct=FALSE),
+         answer("`[matrix[i, j] for i in range(matrix.shape[0]) for j in range(matrix.shape[0])]`", correct=FALSE),
+         answer("`[matrix[i][j] for i in range(matrix.shape[0]) for j in range(i, matrix.shape[0]) if i >= j]`", correct=FALSE),
+        allow_retry = TRUE,
+        post_message = "Congratulations! You have found the 2nd secret word: MAGIC",
+  random_answer_order = TRUE)
+```
+
+Note while list comprehensions works great here we shouldn't always use them just because we can. In this case `matrix[np.triu_indices(3)]` which takes advantage of a numpy function would work as well.
+
+
+:::: {.discussionbox}
+::: {.center}
+**Before continuing take a moment to consider
+with a neighbor (or on Ed):**
+:::
+When does it make sense to use a list comprehension rather than a standard for loop. What are the pros and cons of each approach?
+::::
+
+- todo: add hints
+
+## Dictionary Comprehensions
 - remind students about what a dictionary is (keys, values, updating)
 - describe a use case for a dictionary (maybe say applying functions to update each value in a dictionary)
 - conditional updating the earlier example
 - explicitly go through syntax
+- introduce zip
+- problem which motivates using zip
 - one more example problem
-  - have it depend on an index which allows the use of enumerate
-  - explain enumerate here
 - conceptual question here
 
-# Set Comprehensions
+## Set Comprehensions
 
-# Extra Practice
+## Extra Practice
   
 
