@@ -39,13 +39,11 @@ tags$div(
 
 ## Goals
 
-The goals of this lab to are learn and gain experience using advanced iteration techniques. We will cover *comprehensions* of:
+The goals of this lab to are learn and gain experience using advanced iteration techniques. 
 
-    - Lists
-    - Sets
-    - Dictionaries
-    
-In the process we will also explore the `enumerate` utility function and the `zip` utility function.
+* Students will be able to read and write list comprehensions
+* Students will be able to read and write dictionary comprehensions
+* Students will be able to know how and when to use `zip` and `enumerate`
   
 ### Advanced Iteration Techniques
 So far you have learned about for and while loops. In this lab we will introduce **comprehensions**. Comprehensions allow us to succinctly create new lists, sets, and dictionaries all in one line. They are generally faster than the equivalent for loop as well; however, they can be harder to read. As a data scientist it will be your responsibility to decide between using a standard for loop or a comprehension as you trade off between readability and speed/conciseness. In learning you about these techniques we'll introduce to you the `enumerate` and `zip` functions which can make it easier to keep track of an index when iterating or to iterate through multiple iterable objects at once.
