@@ -79,13 +79,13 @@ We will get to a more formal definition of trees later, but for now, let's consi
 
 Other trees that you might be more familiar with from a data science context are decision trees. Decision trees can be hardcoded--consider the following tree, built using *Tree Finder, A Manual for the Identification of Trees by Their Leaves*, originally published in 1963. 
 
-![](./images/Tree Decision Tree.png){width=80%}
+![](./images/Tree Decision Tree.png){width=99%}
 
 When traversing this tree, you have to first decide if a tree has needles or leaves, then you must examine the length of the needles, then you must count how many needles in a bunch, etc. This tree is hierarchical, each decision you make depends on your previous decision. Decision trees for classification and regression work in the same way--they have just been made with training data. 
 
 Another tree that you are hopefully familiar with is a dendrogram, used to visualize clusters created via Hierarchical or Agglomerative clustering. Consider the following dendrogram, creating clusters of various mammals based on different characteristics and physical measurements.
 
-![](./images/Dendrogram.png){width=80%}
+![](./images/Dendrogram.png){width=99%}
 
 Again, we can see that this is by nature hierarchical. The clusters are broken down into successively smaller groups, until each observation is on its own. These are only a few examples of trees, but hopefully you can see that they fulfill a need when discussing hierarchically structured data. 
 
@@ -103,7 +103,7 @@ Here is some vocabulary you will need to know to discuss trees:
 
 Consider again the decision tree discussed in the previous section:
 
-![](./images/Tree Decision Tree.png){width=80%}
+![](./images/Tree Decision Tree.png){width=99%}
 
 ```{r mc_node, echo=FALSE}
 question(
