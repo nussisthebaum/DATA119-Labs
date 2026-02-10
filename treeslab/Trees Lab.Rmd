@@ -126,7 +126,8 @@ question(
   answer("If there are 5 needles in a bundle, it is WHITE PINE.", correct = TRUE),
   answer("If there are 2 needles in a bundle, go on page 8.", correct = TRUE),
   answer("If the needles are 6 inches to 9 inches, rather stiff, it is LOBLOLLY PINE.", correct = TRUE),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the first secret word: AQUARIUM."
 )
 ```
 
@@ -174,7 +175,8 @@ question(
   answer("If there are 5 needles in a bundle, it is WHITE PINE.", correct = TRUE),
   answer("If the branchlets are not drooping, and the cones are about $1/2$ inch long, it is an AMERICAN LARCH.", correct = TRUE),
   answer("If the needles are 6 inches to 9 inches, rather stiff, it is LOBLOLLY PINE.", correct = TRUE),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: POT."
 )
 ```
 
@@ -226,7 +228,8 @@ question(
   answer("Dictionaries", correct = TRUE),
   answer("Tuples"),
   answer("Sets", correct = TRUE),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the third secret word: SEA."
 )
 ```
 
@@ -382,7 +385,8 @@ question(
   answer("`[]`", correct = TRUE),
   answer("Another tree object."),
   message = "Correct! We haven't added any children yet, so we are left with the empty list.",
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the fourth secret word: PERFORATE"
 )
 ```
 
@@ -510,7 +514,8 @@ question(
   answer("Roots"),
   answer("Leaves", correct = TRUE),
   message = "Child nodes and descendant nodes are technically correct, but the most specific answer here is a leaf.",
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the fifth and final secret word: PLACE."
 )
 ```
 
