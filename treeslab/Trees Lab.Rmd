@@ -59,6 +59,21 @@ class Tree:
     self.children = []
   def add_child(self, child):
     self.children.append(child)
+    
+pit = Tree("Pittsburgh", 0.3)
+phl = Tree("Philadelphia", 1.6)
+pa = Tree("Pennsylvania", 0)
+
+pa.add_child(pit)
+pa.add_child(phl)
+
+chi = Tree("Chicago", 2.7)
+il = Tree("Illinois", 0)
+
+il.add_child(chi)
+
+us = Tree("United States", 0)
+
 ```
 
 ## Goals
@@ -270,8 +285,9 @@ grade_this_code()
 Now, take all the code you have written and add whatever you need to make it a proper class, `Tree`. 
 
 ```{python TreeClass, exercise = TRUE}
-    def add_child(...):
-        ...
+
+
+
 ```
 
 ```{python TreeClass-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -311,7 +327,7 @@ il.add_child(chi)
 **Discuss with a neighbor (or on Ed):**
 :::
 
-On your lab worksheets, draw the trees that we created in the above chunk of code.
+On some scratch paper, draw the trees that we created in the above chunk of code.
 
 ::::
 
@@ -546,7 +562,7 @@ Now, write code that will count the number of nodes in a larger tree.
 "Hint 1: What is the minimum number of *children* a single, non-leaf node will have? Initialize a variable named `rv` that uses this quantity. "
 ```
 
-```{rnum_cities2-hint-2, echo=FALSE}
+```{r num_cities2-hint-2, echo=FALSE}
 "Hint 2: How many children does the single node actually have? Count these nodes and add them to `rv`. "
 ```
 
