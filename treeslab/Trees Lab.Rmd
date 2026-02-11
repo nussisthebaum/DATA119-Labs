@@ -129,7 +129,7 @@ question(
   answer("If there are 2 needles in a bundle, go on page 8.", correct = TRUE),
   answer("If the needles are 6 inches to 9 inches, rather stiff, it is LOBLOLLY PINE.", correct = TRUE),
   allow_retry = TRUE, 
-  message = "Correct! These are ALL nodes."
+  postmessage = "Correct! These are ALL nodes."
 )
 ```
 
@@ -205,7 +205,7 @@ There is no built-in `Tree` class in Python, but we can write a class ourself. A
 
 What code would you write to save `name` as an attribute of the tree? Ignore the fact that you would need to define the class, you can just write a single line of code. 
 
-```{python name, exercise = TRUE}
+```{python name, exercise = TRUE, exercise.eval = FALSE}
         ...name = ...
 ```
 
@@ -450,7 +450,7 @@ Now, write a conditional statement comparing the answers to your previous two qu
 grade_this_code()
 ```
 
-Now, write code that will count the number of nodes in a larger tree. 
+Now, write code that will count the number of cities in a larger tree. 
 
 ```{python num_nodes2, exercise = TRUE}
 
@@ -696,30 +696,30 @@ Now, combine the base case and the recursive case into a single `num_cities` met
 grade_this_code()
 ```
 
-Notice that we could write this function without using recursion. Give it a try:
+<!-- Notice that we could write this function without using recursion. Give it a try: -->
 
-```{python tree_sum4, exercise = TRUE}
+<!-- ```{python tree_sum4, exercise = TRUE} -->
 
-```
+<!-- ``` -->
 
-```{python tree_sum4-solution, message = FALSE, warning = FALSE, echo = FALSE}
-    def tree_sum(self):
-        if len(self.children) == 0:
-            return self.value
-  
-        rv = 0
-        for child in self.children:
-            rv += child.tree.sum()
-            
-        self.value = rv
-        return rv
-```
+<!-- ```{python tree_sum4-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+<!--     def tree_sum(self): -->
+<!--         if len(self.children) == 0: -->
+<!--             return self.value -->
 
-```{r tree_sum4-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
+<!--         rv = 0 -->
+<!--         for child in self.children: -->
+<!--             rv += child.value -->
 
-Which should we choose? This is partly a subjective choice, and people will follow their preferences. It may help to write as much as you can without recursion first, so you can get farther in the problem before you introduce a confusing technique.
+<!--         self.value = rv -->
+<!--         return rv -->
+<!-- ``` -->
+
+<!-- ```{r tree_sum4-code-check, message = FALSE, warning = FALSE} -->
+<!-- grade_this_code() -->
+<!-- ``` -->
+
+<!-- Which should we choose? This is partly a subjective choice, and people will follow their preferences. It may help to write as much as you can without recursion first, so you can get farther in the problem before you introduce a confusing technique. -->
 
 ## Final `Tree` Class
 
