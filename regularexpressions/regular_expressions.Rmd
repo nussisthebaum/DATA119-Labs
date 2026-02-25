@@ -337,11 +337,11 @@ pat = r"___"
 pat
 ```
 
-```{r a2_step1_pat-hint1, echo=FALSE, message=FALSE}
+```{r a2_step1_pat-hint-1, echo=FALSE, message=FALSE}
 "Hint 1: Capture everything after `Potion:` up to `(qty:`"
 ```
 
-```{r a2_step1_pat-hint2, echo=FALSE, message=FALSE}
+```{r a2_step1_pat-hint-2, echo=FALSE, message=FALSE}
 "Hint 2: Use a LAZY group"
 ```
 
@@ -357,11 +357,11 @@ names = ___
 names
 ```
 
-```{r a2_names-hint1, echo=FALSE, message=FALSE}
+```{r a2_names-hint-1, echo=FALSE, message=FALSE}
 "Hint1: If you get one giant match, your group may be greedy instead of lazy."
 ```
 
-```{r a2_names-hint2, echo=FALSE, message=FALSE}
+```{r a2_names-hint-2, echo=FALSE, message=FALSE}
 "Hint2: Use re.findall()"
 ```
 
