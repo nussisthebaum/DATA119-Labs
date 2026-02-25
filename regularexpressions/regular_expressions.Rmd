@@ -1016,7 +1016,7 @@ Now we create a “soup” object:
 ```{python d1_parse2, exercise=TRUE, message=FALSE}
 from bs4 import BeautifulSoup
 
-soup = BeautifulSoup(HTML_SNIPPET, "lxml")
+soup = BeautifulSoup(HTML_SNIPPET, "html.parser")
 soup
 ```
 
