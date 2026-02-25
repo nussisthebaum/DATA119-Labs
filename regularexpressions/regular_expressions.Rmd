@@ -446,7 +446,7 @@ pat
 
 Step 2: Use the pattern
 
-```{python a4_sub, exercise=TRUE, message=FALSE, exercise.setup="a4_step_pat"}
+```{python a4_sub, exercise=TRUE, message=FALSE, exercise.setup="a4_step1_pat"}
 redacted = ___
 redacted
 ```
