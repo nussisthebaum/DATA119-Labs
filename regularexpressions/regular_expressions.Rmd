@@ -35,7 +35,7 @@ tags$div(
 
 ```{python setup_py, context="setup", echo=FALSE, message=FALSE, warning=FALSE}
 import re
-from bs4 import BeautifulSoup
+from beautifulsoup4 import BeautifulSoup
 
 SPELLBOOK = """
 Potion: fizz-berry tonic (qty: 12) [tag: FZ-120]
@@ -150,10 +150,10 @@ First, predict what `findall` returns:
 ```{r mcq_cap_predict, echo=FALSE}
 question(
   "Which pattern will return ONLY the digits (like \'12\', \'3\', \'27\') when used with `re.findall`?",
-  answer('"r\"qty:\\s*\\d+\""'),
-  answer('"r\"qty:\\s*(\\d+)\""', correct=TRUE),
-  answer('"r\"(qty:)\\s*\\d+\""'),
-  answer('"r\"(qty:\\s*\\d+)\""'),
+  answer('r\"qty:\\s*\\d+\"'),
+  answer('r\"qty:\\s*(\\d+)\"', correct=TRUE),
+  answer('r\"(qty:)\\s*\\d+\"'),
+  answer('r\"(qty:\\s*\\d+)\"'),
   allow_retry = TRUE
 )
 ```
@@ -257,7 +257,7 @@ pat
 
 Step 2: Use the pattern:
 
-```{python a1_qty, exercise=TRUE, message=FALSE}
+```{python a1_qty, exercise=TRUE, message=FALSE, exercise.setup="a_step1_pat"}
 qty = ___
 qty = [int(x) for x in qty] # What does this do?
 qty
@@ -307,7 +307,7 @@ pat
 
 Step 2: Use the pattern
 
-```{python a2_names, exercise=TRUE, message=FALSE}
+```{python a2_names, exercise=TRUE, message=FALSE, exercise.setup="a2_step1_pat"}
 names = ___
 names
 ```
@@ -401,7 +401,7 @@ question(
 
 ```{r mcq_fullmatch, echo=FALSE}
 question(
-  "Why is re.fullmatch() usually best for validation?",
+  "Why is `re.fullmatch()` usually best for validation?",
   answer("It finds all matches, not just one"),
   answer("It requires the ENTIRE string to match the pattern", correct=TRUE),
   answer("It automatically ignores case"),
@@ -416,7 +416,7 @@ Now, we are going to use regex for transformation
 
 ```{r mcq_sub, echo=FALSE}
 question(
-  "What does re.sub(pattern, repl, text) return?",
+  "What does `re.sub(pattern, repl, text)` return?",
   answer("A list of matches"),
   answer("A new string with replacements applied", correct=TRUE),
   answer("A boolean (True/False)"),
@@ -446,7 +446,7 @@ pat
 
 Step 2: Use the pattern
 
-```{python a4_sub, exercise=TRUE, message=FALSE}
+```{python a4_sub, exercise=TRUE, message=FALSE, exercise.setup="a4_step_pat"}
 redacted = ___
 redacted
 ```
@@ -847,81 +847,192 @@ Example pattern (mini coaster):
 
 If you wanted, you could validate patterns like this with your regex solution.
 
-## What is web scraping?
+## What is Web Scraping?
 
-**Web scraping** usually means:
+When we talk about **web scraping**, we usually mean:
 
-- downloading HTML (the text a website sends your browser)
-- extracting the pieces you care about (names, prices, links, tables)
+1. Downloading the HTML that a website sends to your browser  
+2. Extracting the pieces we care about (names, prices, links, tables, etc.)
 
-HTML is *structured* (nested tags). That’s why scraping usually uses:
 
-1. **An HTML parser** (reads the structure / nesting)  
-2. **Regex** (for small patterns inside text, like prices or IDs)
+**First: What is HTML?**
 
-Using regex alone is often not enough when when we need to dig through a lot of nested tags.
+When you visit a website, your browser receives HTML (HyperText Markup Language).
 
-Today you are NOT scraping a real website. We are practicing with a small HTML snippet so you can see the idea.
+HTML is structured using *tags*.
 
-Step 1: Use a parser to get structure. A very common tool for parsing HTML is the module `Beautiful Soup` which we can install using:
- `pip install beautifulsoup4` 
-and import using:
- `from bs4 import BeautifulSoup`.
+Example:
 
-First, lets look at our HTML:
+```html
+<div class="product">
+  <h2>Wizard Hat</h2>
+  <span class="price">$19.99</span>
+  <a href="/buy/hat-123">Buy</a>
+</div>
+```
+
+Let’s break that down:
+
+- `<div> ... </div>` -> a *container*
+- `<h2>` -> a heading tag
+- `<span>` -> inline container
+- `<a>` -> a link
+
+Tags can also have **attributes**, like:
+
+- `class="product"`
+- `href="/buy/hat-123"`
+
+So HTML has:
+
+- Tags (structure)
+- Attributes (metadata)
+- Nested elements (structure inside structure)
+
+This nesting is why HTML is easier to parse with a **parser** instead of regex alone.
+
+**Why Not Just Regex Everything?**
+
+Regex works great for:
+
+- prices like `$19.99`
+- IDs like `hat-123`
+- dates like `2026-03-05`
+
+But regex struggles with:
+
+- nested tags
+- deeply structured layouts
+- messy real-world HTML
+
+So the standard workflow is:
+
+1. Use an HTML parser to understand structure  
+2. Use regex for tiny patterns inside extracted text  
+
+## Parsing HTML with `BeautifulSoup`
+
+A very common HTML parsing tool in Python is `BeautifulSoup`.
+
+To install it:
+
+```
+pip install beautifulsoup4
+```
+
+To use it:
+
+```python
+from bs4 import BeautifulSoup
+```
+
+BeautifulSoup reads raw HTML and turns it into a **tree structure** you can navigate.
+
+Let’s Look at Our HTML
 
 ```{python d1_parse, exercise=TRUE, message=FALSE}
 print(HTML_SNIPPET)
 ```
 
-Now, we can use `BeautifulSoup()` to parse our HTML. We will use the `lxml` parser (don't worry about what this is or why we use it).
+Now we create a “soup” object:
 
 ```{python d1_parse2, exercise=TRUE, message=FALSE}
-soup = BeautifulSoup(HTML_SNIPPET, 'lxml')
+from bs4 import BeautifulSoup
+
+soup = BeautifulSoup(HTML_SNIPPET, "lxml")
 soup
 ```
 
-```{python d1_parse3, exercise=TRUE, message=FALSE}
-print(soup.body)
-print(soup.span)
-print(soup.span['class'])
-print(soup.a)
-print(soup.a['href'])
-print(soup.h2)
+Think of `soup` as a structured version of the HTML.
+
+BeautifulSoup lets us access tags directly.
+
+```{python d1_parse3, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+print(soup.h2)              # first <h2>
+print(soup.span)            # first <span>
+print(soup.a)               # first <a>
+print(soup.a["href"])       # attribute access
+print(soup.span["class"])   # class attribute
 ```
 
-```{python d1_parse4, exercise=TRUE, message=FALSE}
-soup.findall(span)
+Important: `soup.h2` gives the *first* `<h2>` tag. To get **all** tags, we use `.find_all()`.
+
+```{python d1_parse4, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+soup.find_all("span")
 ```
 
-```{python d1_parse5, exercise=TRUE, message=FALSE}
-soup.select(span)
+Notice we pass the tag name as a string.
+
+
+For example, let's try to extract all links from our HTML.
+
+Links are created with `<a>` tags and stored in the `href` attribute.
+
+```{python d1_parse6, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+for link in soup.find_all("a"):
+    print(f"Link: {link['href']}")
 ```
 
-Extract and print all links in our `HTML_SNIPPET`:
+We can also select by class instead of tag. Classes are very common in HTML.
 
-```{python d1_parse6, exercise=TRUE, message=FALSE}
-for link in ___:
-    print(f"Link: {___}")
+If you see:
+
+```html
+<div class="product">
 ```
 
-```{python d1_parse7}
-# Selecting a specific element by class
-main_heading = soup.select_one(".main").get_text()
-print(f"Main Heading Text: {main_heading}")
+You can select it using CSS-style selectors:
 
-
-p = ProductParser()
-p.feed(HTML_SNIPPET)
-products = p.products
-len(products), products[0]
+```{python}
+products = soup.select(".product")
+products
 ```
 
-Step 2: Use regex for a tiny pattern
+- `"."` means class
+- `"#"` would mean ID
 
-Use regex to extract prices from out parsed HTML.
+To get text:
 
-```{python d2_prices, exercise=TRUE, message=FALSE}
+```python
+products[0].get_text()
+```
+
+Your Turn: Extract All Product Names
+
+Each product name is inside an `<h2>` tag.
+
+```{python d1_names, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+for tag in ___:
+    print(___)
+```
+
+```{python d1_names-solution, echo=FALSE, message=FALSE, warning=FALSE}
+for tag in soup.find_all("h2"):
+    print(tag.get_text())
+```
+
+```{r d1_names-check, message=FALSE, warning=FALSE}
+grade_this({
+  student <- get_exercise_result()$result
+  
+  expected <- c("Wizard Hat", "Crystal Yarn", "Enchanted Hook")
+  
+  if (is.null(student)) {
+    incorrect(random_encouragement())
+  } else if (identical(as.character(student), expected)) {
+    correct(random_praise())
+  } else {
+    incorrect("Make sure you are looping over `soup.find_all('h2')` and using `.get_text()`.")
+  }
+})
+```
+
+
+Now that we understand structure, we use regex for small things.
+
+For example, now try to extract prices for the products.
+
+```{python d2_prices, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
 price_pat = r"___"
 prices = re.findall(___, HTML_SNIPPET)
 prices
@@ -954,13 +1065,23 @@ question(
 )
 ```
 
-Step 3: Validate IDs (SKUs) from already-parsed data
+Now we can combine parsing + regex.
 
-Write a pattern to match valid SKUs and a list comprehension to create a list of product SKUs for validation. Valid SKUs have letters, a hyphen, and then digits. There can be any number of letters or digits.
+We already parsed the structure. Now we validate IDs using regex.
 
-```{python d3_sku, exercise=TRUE, message=FALSE}
+Valid SKUs:
+
+- letters
+- hyphen
+- digits
+- any length
+
+Example: `hat-123`
+
+```{python d3_sku, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
 sku_pat = r"___"
-skus = ___
+products = ___
+skus = ___ #use a list comprehension
 [(s, re.fullmatch(sku_pat, s) is not None) for s in skus]
 ```
 
@@ -983,8 +1104,8 @@ grade_this({
 
 :::: {.discussionbox}
 ::: {.center}
-**Exit ticket:**
+**Exit ticket**
 :::
-In one sentence: what does the parser do, and what does regex do?
+In one sentence:  
+What does the parser do, and what does regex do?
 ::::
-
