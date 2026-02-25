@@ -182,7 +182,7 @@ no_group = re.findall(r"qty:\s*\d+", SPELLBOOK)
 one_group = re.findall(r"qty:\s*(\d+)", SPELLBOOK)
 
 # 3) two capture groups (tuples!)
-two_groups = re.findall(r"(qty:\s*(\d+))\s*[tag:\s*([A-Z]{2}-\d{3})]", SPELLBOOK)
+two_groups = re.findall(r"(qty:\s*\(\d+\))\s*[tag:\s*([A-Z]{2}-\d{3})]", SPELLBOOK)
 
 no_group, one_group, two_groups
 ```
