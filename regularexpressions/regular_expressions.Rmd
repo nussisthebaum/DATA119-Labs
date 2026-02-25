@@ -146,9 +146,9 @@ Example: `(ab)+` means repeat the chunk `ab`, not repeat `b` only.
 
 **Important:** capturing changes what `findall` returns
 
-- No groups -> list of whole matches (strings)
-- 1 group -> list of captured strings
-- multiple groups -> list of tuples (one per match)
+- No groups -> list of whole matches (`strings`)
+- 1 group -> list of captured `strings`
+- multiple groups -> list of `tuples` (one per match)
 
 ## Regex Warm-ups
 
@@ -158,20 +158,20 @@ We’ll use this text throughout:
 print(SPELLBOOK)
 ```
 
-First, predict what `findall` returns:
+First, predict what `findall()` returns:
 
 ```{r mcq_cap_predict, echo=FALSE}
 question(
   "Which pattern will return ONLY the digits (like \'12\', \'3\', \'27\') when used with `re.findall`?",
-  answer('r\"qty:\\s*\\d+\"'),
-  answer('r\"qty:\\s*(\\d+)\"', correct=TRUE),
-  answer('r\"(qty:)\\s*\\d+\"'),
-  answer('r\"(qty:\\s*\\d+)\"'),
+  answer(qty:\\s*\\d+\),
+  answer(qty:\\s*(\\d+)\, correct=TRUE),
+  answer((qty:)\\s*\\d+\),
+  answer((qty:\\s*\\d+)\),
   allow_retry = TRUE
 )
 ```
 
-Now, see how capture groups change `findall`:
+Now, see how capture groups change `findall()`:
 
 ```{python cap_demo, exercise=TRUE, message=FALSE}
 # Try the three patterns below and compare outputs.
@@ -431,8 +431,8 @@ Now, we are going to use regex for transformation
 question(
   "What does `re.sub(pattern, repl, text)` return?",
   answer("A list of matches"),
-  answer("A new string with replacements applied", correct=TRUE),
-  answer("A boolean (True/False)"),
+  answer("A new `string` with replacements applied", correct=TRUE),
+  answer("A boolean (`True`/`False`)"),
   answer("A match object"),
   allow_retry = TRUE
 )
@@ -742,12 +742,14 @@ In lines like:
 `Round N: (sc A, op) x B (K)` where `op` is `inc` or `dec`
 
 You can read that as:
+
 - Do `(sc A, op)` a total of `B` times
 - Each repeat **creates stitches**:
   - If `op` is `inc`: `A + 2` stitches (A single crochets + 2 stitches from an increase)
   - If `op` is `dec`: `A + 1` stitches (A single crochets + 1 stitch from a decrease)
 
 So the expected total after repeating is:
+
 - if `op` is `inc`: `K = B * (A + 2)`
 - if `op` is `dec`: `K = B * (A + 1)`
 
