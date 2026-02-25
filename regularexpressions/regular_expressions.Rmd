@@ -175,14 +175,14 @@ Now, see how capture groups change `findall()`:
 
 ```{python cap_demo, exercise=TRUE, message=FALSE}
 # Try the three patterns below and compare outputs.
-# 1) no capture group
+# 1) no capture group -> list of full matches
 no_group = re.findall(r"qty:\s*\d+", SPELLBOOK)
 
-# 2) one capture group
+# 2) one capture group -> list of just the captured digits (strings)
 one_group = re.findall(r"qty:\s*(\d+)", SPELLBOOK)
 
-# 3) two capture groups (tuples!)
-two_groups = re.findall(r"(qty:\s*\(\d+\))\s*[tag:\s*([A-Z]{2}-\d{3})]", SPELLBOOK)
+# 3) two capture groups -> list of tuples: (qty_digits, tag_code)
+two_groups = re.findall(r"qty:\s*(\d+)\s*\\[tag:\s*([A-Z]{2}-\d{3})\\]", SPELLBOOK)
 
 no_group, one_group, two_groups
 ```
