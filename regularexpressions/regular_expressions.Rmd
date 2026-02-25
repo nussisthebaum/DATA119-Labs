@@ -954,16 +954,15 @@ question_numeric(
   "Enter the number of HTML elements:",
   answer_fn(function(value) {
     if (value == 4) {
-      correct(randompraise)
+      correct(random_praise())
     } else {
-      incorrect("Hint: Count opening/closing tag pairs. Do not count `<!DOCTYPE>`.")
+      incorrect(paste(random_encouragement(), "Hint: Count opening/closing tag pairs. Do not count `<!DOCTYPE>`."))
     }
   }, label = "Is the number even?"),
   allow_retry = TRUE,
   step = 1
 )
 ```
-
 
 So HTML has:
 
