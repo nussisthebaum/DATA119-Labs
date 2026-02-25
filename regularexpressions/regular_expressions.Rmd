@@ -622,10 +622,7 @@ output$cw_ui <- renderUI({
       tags$h4(title),
       tags$ol(lapply(clues, function(x) {
         tags$li(
-          tags$b(paste0(x$num, ". ")),
-          x$clue,
-          tags$div(style="margin-top:0.2rem;",
-                   tags$code(x$pat))
+          x$clue
         )
       }))
     )
