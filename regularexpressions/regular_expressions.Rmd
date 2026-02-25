@@ -952,10 +952,15 @@ How many elements does the following example contain?
 ```{r num_elements, echo=FALSE}
 question_numeric(
   "Enter the number of HTML elements:",
-  correct = 4,
-  tolerance = 0,
+  answer_fn(function(value) {
+    if (value == 4) {
+      correct(randompraise)
+    } else {
+      incorrect("Hint: Count opening/closing tag pairs. Do not count `<!DOCTYPE>`.")
+    }
+  }, label = "Is the number even?"),
   allow_retry = TRUE,
-  post_message = "Hint: Count opening/closing tag pairs. Do not count `<!DOCTYPE>`."
+  step = 1
 )
 ```
 
