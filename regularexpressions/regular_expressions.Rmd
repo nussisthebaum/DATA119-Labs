@@ -99,7 +99,20 @@ By the end of this tutorial, you should be able to:
 
 Regular expressions are a language for describing patterns in text. 
 
-If you need to review regex patternss, please refer back to the Week 8 Lecture Slides.
+As a reminder, here is a list of special characters in regex:
+
+* `+` (one or more)
+* `*` (zero or more)
+* `[]` (range)
+* `()` (grouping things together)
+* `{}` (quantifying of digits)
+* `$` (end of line)
+* `^` (beginning of line)
+* `|` (or) 
+* `\` (escaping)
+* `?` (optional)
+
+If you need to review more complex regex patternss, please refer back to the Week 8 Lecture Slides.
 
 When you’re stuck, ask two questions:
 
@@ -859,6 +872,10 @@ When we talk about **web scraping**, we usually mean:
 
 When you visit a website, your browser receives HTML (HyperText Markup Language).
 
+* All HTML documents must start with a document type declaration: `<!DOCTYPE html>`.
+* The HTML document itself begins with `<html>` and ends with `</html>`.
+* The visible part of the HTML document is between `<body>` and `</body>`.
+
 HTML is structured using *tags*.
 
 Example:
@@ -882,6 +899,66 @@ Tags can also have **attributes**, like:
 
 - `class="product"`
 - `href="/buy/hat-123"`
+
+An HTML **element** is defined by a start tag, some content, and an end tag.
+
+The HTML element is everything from the start tag to the end tag:
+
+```html
+<tagname>Content goes here...</tagname>
+```
+
+Examples of some HTML elements:
+
+```html
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+```
+
+\HTML headings are defined with the `<h1>` to `<h6>` tags.
+
+* `<h1>` defines the most important heading. 
+* `<h6>` defines the least important heading: 
+
+```html
+<h1>This is heading 1</h1>
+<h2>This is heading 2</h2>
+<h3>This is heading 3</h3>
+```
+
+A **paragraph** always starts on a new line, and is usually a block of text. Browsers automatically add some white space (a margin) before and after a paragraph. HTML paragraphs are defined with the `<p>` tag:
+
+```html
+<p>This is a paragraph.</p>
+<p>This is another paragraph.</p>
+```
+
+
+HTML elements can be **nested** (this means that elements can contain other elements). **All HTML documents consist of nested HTML elements.**
+
+How many elements does the following example contain?
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+
+</body>
+</html>
+```
+```{r num_elements, echo=FALSE}
+question_numeric(
+  "Enter the number of HTML elements:",
+  correct = 4,
+  tolerance = 0,
+  allow_retry = TRUE,
+  post_message = "Hint: Count opening/closing tag pairs. Do not count `<!DOCTYPE>`."
+)
+```
+
 
 So HTML has:
 
@@ -983,7 +1060,7 @@ If you see:
 
 You can select it using CSS-style selectors:
 
-```{python}
+```{python d1_parse7, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
 products = soup.select(".product")
 products
 ```
@@ -993,7 +1070,7 @@ products
 
 To get text:
 
-```python
+```{python d1_parse8, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
 products[0].get_text()
 ```
 
