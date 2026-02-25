@@ -7,7 +7,7 @@ output:
 runtime: shiny_prerendered
 ---
 
-```{r setup, include=FALSE. context="setup"}
+```{r setup, include=FALSE, context="setup"}
 knitr::opts_chunk$set(error = TRUE, paged.print = FALSE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
