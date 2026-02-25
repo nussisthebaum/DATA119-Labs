@@ -36,6 +36,7 @@ tags$div(
 ```{python setup_py, context="setup", echo=FALSE, message=FALSE, warning=FALSE}
 import re
 from html.parser import HTMLParser
+from bs4 import BeautifulSoup
 
 SPELLBOOK = """
 Potion: fizz-berry tonic (qty: 12) [tag: FZ-120]
