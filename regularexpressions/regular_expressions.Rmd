@@ -1,0 +1,991 @@
+---
+title: "Regex + HTML for Web Scraping"
+output:
+  learnr::tutorial:
+    css: css/custom-styles.css
+    df_print: default
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE, paged.print = FALSE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+library(htmltools)
+library(sortable)
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.timelimit = 30)
+
+`%||%` <- function(x, y) if (is.null(x)) y else x
+```
+
+```{r header, echo=FALSE}
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$h1("Regex + HTML for Web Scraping", class = "pageTitle")
+  )
+)
+```
+
+```{python setup_py, context="setup", echo=FALSE, message=FALSE, warning=FALSE}
+import re
+from html.parser import HTMLParser
+
+SPELLBOOK = """
+Potion: fizz-berry tonic (qty: 12) [tag: FZ-120]
+Potion: moon-milk elixir (qty: 3) [tag: MM-007]
+Potion: emberroot tea (qty: 27) [tag: ER-451]
+Deliver: Tower-7 by 2026-03-05
+"""
+
+PATTERN_GOOD = [
+  "Round 1: MR, 6 sc",
+  "Round 2: inc around (12)",
+  "Round 3: (sc 1, inc) x 6 (18)",
+  "Round 4-6: sc around (18)",
+  "Round 7: (sc 2, dec) x 6 (18)",
+  "FO"
+]
+
+PATTERN_BAD = [
+  "Round 1 MR, 6 sc",                 # missing colon
+  "Round 2: inc around 12",           # missing parentheses
+  "Round 3: (sc one, inc) x 6 (18)",  # non-numeric
+  "Round 4-6: sc around (eighteen)",  # non-numeric
+  "Round 7: (sc 2, dec) x 6 (17)",    # inconsistent total
+  "Fasten off"                        # FO only
+]
+
+HTML_SNIPPET = """
+<div class="product">
+  <h2>Wizard Hat</h2>
+  <span class="price">$19.99</span>
+  <span class="rating">4.7</span>
+  <a href="/buy/hat-123" data-sku="hat-123">Buy</a>
+</div>
+<div class="product">
+  <h2>Crystal Yarn</h2>
+  <span class="price">$7.50</span>
+  <span class="rating">4.9</span>
+  <a href="/buy/yarn-888" data-sku="yarn-888">Buy</a>
+</div>
+<div class="product featured">
+  <h2>Enchanted Hook</h2>
+  <span class="price">$12.00</span>
+  <span class="rating">4.2</span>
+  <a href="/buy/hook-404" data-sku="hook-404">Buy</a>
+</div>
+"""
+
+class ProductParser(HTMLParser):
+
+    def __init__(self):
+        super().__init__()
+        self.products = []
+        self._in_h2 = False
+        self._in_price = False
+        self._in_rating = False
+        self._cur = {"name": None, "price": None, "rating": None, "sku": None, "href": None}
+
+    def handle_starttag(self, tag, attrs):
+        d = dict(attrs)
+        if tag.lower() == "div" and "class" in d and "product" in d["class"]:
+            self._cur = {"name": None, "price": None, "rating": None, "sku": None, "href": None}
+        if tag.lower() == "h2":
+            self._in_h2 = True
+        if tag.lower() == "span" and d.get("class") == "price":
+            self._in_price = True
+        if tag.lower() == "span" and d.get("class") == "rating":
+            self._in_rating = True
+        if tag.lower() == "a" and "data-sku" in d:
+            self._cur["sku"] = d.get("data-sku")
+            self._cur["href"] = d.get("href")
+
+    def handle_data(self, data):
+        txt = data.strip()
+        if not txt:
+            return
+        if self._in_h2:
+            self._cur["name"] = txt
+        if self._in_price:
+            self._cur["price"] = txt
+        if self._in_rating:
+            self._cur["rating"] = txt
+
+    def handle_endtag(self, tag):
+        if tag.lower() == "h2":
+            self._in_h2 = False
+        if tag.lower() == "span":
+            self._in_price = False
+            self._in_rating = False
+        if tag.lower() == "div":
+            if self._cur.get("name") and self._cur.get("price") and self._cur.get("sku"):
+                self.products.append(self._cur)
+```
+
+## Goals
+
+By the end of this tutorial, you should be able to:
+
+1. Read a regex and describe what it matches.
+2. Use regex for three common jobs:
+   - **Extraction** (find pieces in text)
+   - **Validation** (check a format)
+   - **Transformation** (replace/reformat)
+3. Explain what “web scraping” is at a high level
+
+## A mental model for regex
+
+Regular expressions are a language for describing patterns in text. 
+
+If you need to review regex patters, please refer back to the Week 8 Lecture Slides.
+
+When you’re stuck, ask two questions:
+
+1. **What job am I doing?**
+   - Extraction / Validation / Transformation
+2. **What “anchor text” surrounds what I want?**
+   - Words like `quantity:` or punctuation like parentheses, hyphens, commas, etc.
+
+## Capture groups
+
+Capture groups are parentheses in regex: `( ... )`
+
+They do two useful things:
+
+1. They let you “pull out” a sub-piece.
+
+Example pattern: `qty:\s*(\d+)`
+
+- `qty:` matches literally
+- `\s*` matches optional whitespace
+- `(\d+)` matches digits **and captures them**
+
+So in Python:
+
+- `re.findall("qty:\s*(\d+)", text)` returns just the digits because they are captured.
+- If there are no capture groups, `findall` returns the whole match.
+
+2. They let you treat a chunk as one unit.
+
+Example: `(ab)+` means repeat the chunk `ab`, not repeat `b` only.
+
+**Important: capturing changes what `findall` returns**
+
+- No groups -> list of whole matches (strings)
+- 1 group -> list of captured strings
+- multiple groups -> list of tuples (one per match)
+
+## Regex Warm-ups
+
+We’ll use this text throughout:
+
+```{python}
+print(SPELLBOOK)
+```
+
+First, predict what `findall` returns:
+
+```{r mcq_cap_predict, echo=FALSE}
+question(
+  "Which pattern will return ONLY the digits (like \"12\", \"3\", \"27\") when used with re.findall?",
+  answer("r\"qty:\\s*\\d+\""),
+  answer("r\"qty:\\s*(\\d+)\"", correct=TRUE),
+  answer("r\"(qty:)\\s*\\d+\""),
+  answer("r\"(qty:\\s*\\d+)\""),
+  allow_retry = TRUE
+)
+```
+
+Now, see how capture groups change `findall`:
+
+```{python cap_demo, exercise=TRUE, message=FALSE}
+# Try the three patterns below and compare outputs.
+# 1) no capture group
+no_group = re.findall(r"qty:\s*\d+", SPELLBOOK)
+
+# 2) one capture group
+one_group = re.findall(r"qty:\s*(\d+)", SPELLBOOK)
+
+# 3) two capture groups (tuples!)
+two_groups = re.findall(r"\(qty:\s*(\d+)\)\s*\[tag:\s*([A-Z]{2}-\d{3})\]", SPELLBOOK)
+
+no_group, one_group, two_groups
+```
+
+```{r cap_demo-hint, echo=FALSE}
+"Hint: Run this cell. Compare the outputs: no groups vs 1 group vs 2 groups. Notice how 2 groups produces tuples."
+```
+
+```{python cap_demo-solution, echo=FALSE, message=FALSE}
+no_group = re.findall(r"qty:\s*\d+", SPELLBOOK)
+one_group = re.findall(r"qty:\s*(\d+)", SPELLBOOK)
+two_groups = re.findall(r"\(qty:\s*(\d+)\)\s*\[tag:\s*([A-Z]{2}-\d{3})\]", SPELLBOOK)
+no_group, one_group, two_groups
+```
+
+```{r cap_demo-check, message=FALSE, warning=FALSE}
+grade_this({
+  student <- get_exercise_result()$result
+  if (is.null(student) || length(student) != 3) {
+    incorrect("Make sure you return: (no_group, one_group, two_groups)")
+  } else {
+    ng <- student[[1]]
+    og <- student[[2]]
+    tg <- student[[3]]
+
+    ok1 <- identical(as.character(ng), c("qty: 12","qty: 3","qty: 27"))
+    ok2 <- identical(as.character(og), c("12","3","27"))
+    tg_str <- paste(as.character(tg), collapse=" ")
+    ok3 <- grepl("12", tg_str) && grepl("FZ-120", tg_str) && grepl("27", tg_str) && grepl("ER-451", tg_str)
+
+    if (ok1 && ok2 && ok3) correct(paste(random_praise(), "Nice—capture group behavior unlocked."))
+    else incorrect("Compare what findall returns with 0 vs 1 vs 2 capture groups.")
+  }
+})
+```
+
+:::: {.notebox}
+::: {.center}
+**Tip**
+:::
+If your output “looks wrong,” check whether you accidentally added (or forgot) parentheses.
+::::
+
+```{r mcq_groups_output, echo=FALSE}
+question(
+  "If your regex has exactly ONE capture group, re.findall returns:",
+  answer("A list of full matches"),
+  answer("A list of captured strings", correct=TRUE),
+  answer("A list of tuples"),
+  answer("A single string"),
+  allow_retry = TRUE
+)
+```
+
+```{r mcq_findall, echo=FALSE}
+question(
+  "If a regex has TWO capture groups, what does re.findall return?",
+  answer("A list of full matches as strings"),
+  answer("A list of captured strings"),
+  answer("A list of tuples (one tuple per match)", correct=TRUE),
+  answer("A single tuple"),
+  allow_retry = TRUE
+)
+```
+
+## Practice Extraction
+
+We want to extract quantities from `SPELLBOOK` as integers.
+
+Step 1: Write the pattern:
+
+```{python a1_step1_pat, exercise=TRUE, message=FALSE}
+pat = r"___"
+pat
+```
+
+```{r a1_step1_pat-hint, echo=FALSE, message=FALSE}
+"Hint: You want digits after `qty:`. Use a capture group for digits: (\\d+). Include optional whitespace: \\s*."
+```
+
+```{python a1_step1_pat-solution, echo=FALSE, message=FALSE}
+pat = r"qty:\s*(\d+)"
+pat
+```
+
+Step 2: Use the pattern:
+
+```{python a1_qty, exercise=TRUE, message=FALSE}
+qty = ___
+qty = [int(x) for x in qty] # What does this do?
+qty
+```
+
+```{r a1_qty-hint, echo=FALSE, message=FALSE}
+"Hint: Use re.findall()"
+```
+
+```{python a1_qty-solution, echo=FALSE, message=FALSE}
+qty = re.findall(pat, SPELLBOOK)
+qty = [int(x) for x in qty]
+qty
+```
+
+```{r a1_qty-check, message=FALSE, warning=FALSE}
+grade_this({
+  student <- get_exercise_result()$result
+  expected <- c(12L, 3L, 27L)
+  if (is.null(student)) incorrect(random_encouragement())
+  else if (identical(as.integer(student), expected)) correct(random_praise())
+  else incorrect("Hint: capture digits after `qty:` using (\\d+).")
+})
+```
+
+Now, let's extract potion names.
+
+Step 1: Write the pattern
+
+```{python a2_step1_pat, exercise=TRUE, message=FALSE}
+pat = r"___"
+pat
+```
+
+```{r a2_step1_pat-hint1, echo=FALSE, message=FALSE}
+"Hint 1: Capture everything after `Potion:` up to `(qty:`"
+```
+
+```{r a2_step1_pat-hint2, echo=FALSE, message=FALSE}
+"Hint 2: Use a LAZY group"
+```
+
+```{python a2_step1_pat-solution, echo=FALSE, message=FALSE}
+pat = r"Potion:\s*(.*?)\s*\(qty:"
+pat
+```
+
+Step 2: Use the pattern
+
+```{python a2_names, exercise=TRUE, message=FALSE}
+names = ___
+names
+```
+
+```{r a2_names-hint1, echo=FALSE, message=FALSE}
+"Hint1: If you get one giant match, your group may be greedy instead of lazy."
+```
+
+```{r a2_names-hint2, echo=FALSE, message=FALSE}
+"Hint2: Use re.findall()"
+```
+
+```{python a2_names-solution, echo=FALSE, message=FALSE}
+names = re.findall(pat, SPELLBOOK)
+names
+```
+
+```{r a2_names-check, message=FALSE, warning=FALSE}
+grade_this({
+  student <- get_exercise_result()$result
+  expected <- c("fizz-berry tonic", "moon-milk elixir", "emberroot tea")
+  if (is.null(student)) incorrect(random_encouragement())
+  else if (identical(as.character(student), expected)) correct(random_praise())
+  else incorrect("Hint: use a lazy capture `(.*?)` up to `(qty:`.")
+})
+```
+
+```{r a2_q, echo=FALSE}
+question(
+  "What does the `?` do in `(.*?)`?",
+  answer("Makes it greedy"),
+  answer("Makes it lazy/non-greedy", correct = TRUE),
+  answer("Matches a literal question mark"),
+  allow_retry = TRUE,
+  post_message = "You found the first secret word: PANCAKE."
+)
+```
+
+## Practice Validation
+
+Continuing our work with SPELLBOOK. Write a function named `is_tag` to validate tags like `FZ-120`. A valid tag is: two CAPITAL letters, a hyphen, and three digits. Your function should return `True` if the input is a valid tag.
+
+```{python a3_tag, exercise=TRUE, message=FALSE}
+___
+
+tests = ["FZ-120","MM-007","ER-451","fz-120","ABC-123","AA-12"]
+[(t, is_tag(t)) for t in tests]
+```
+
+```{python a3_tag-solution, echo=FALSE, message=FALSE, warning=FALSE}
+def is_tag(s):
+    return re.fullmatch(r"[A-Z]{2}-\d{3}", s) is not None
+
+tests = ["FZ-120","MM-007","ER-451","fz-120","ABC-123","AA-12"]
+[(t, is_tag(t)) for t in tests]
+```
+
+```{r a3_tag-check, message=FALSE, warning=FALSE}
+grade_this({
+  student <- get_exercise_result()$result
+  expected <- list(
+    list("FZ-120", TRUE),
+    list("MM-007", TRUE),
+    list("ER-451", TRUE),
+    list("fz-120", FALSE),
+    list("ABC-123", FALSE),
+    list("AA-12", FALSE)
+  )
+  if (is.null(student)) incorrect("Make sure the test results print.")
+  else {
+    norm <- function(x) paste0(as.character(x[[1]]), ":", as.character(x[[2]]))
+    if (identical(vapply(student, norm, ""), vapply(expected, norm, ""))) {
+      correct(paste(random_praise(), "You found the second secret word: KITE"))
+    } else {
+      incorrect("Pattern should be `[A-Z]{2}-\\d{3}`.")
+    }
+  }
+})
+```
+
+```{r mcq_escape, echo=FALSE}
+question(
+  "In regex, why do we write `\\d` instead of just `d`?",
+  answer("Because `d` means digit"),
+  answer("Because `\\d` is a special token meaning “digit”", correct=TRUE),
+  answer("Because backslashes make patterns case-insensitive"),
+  answer("Because Python requires it for all letters"),
+  allow_retry = TRUE
+)
+```
+
+```{r mcq_fullmatch, echo=FALSE}
+question(
+  "Why is re.fullmatch() usually best for validation?",
+  answer("It finds all matches, not just one"),
+  answer("It requires the ENTIRE string to match the pattern", correct=TRUE),
+  answer("It automatically ignores case"),
+  answer("It returns a list"),
+  allow_retry = TRUE
+)
+```
+
+## Practice Transformation 
+
+Now, we are going to use regex for transformation
+
+```{r mcq_sub, echo=FALSE}
+question(
+  "What does re.sub(pattern, repl, text) return?",
+  answer("A list of matches"),
+  answer("A new string with replacements applied", correct=TRUE),
+  answer("A boolean (True/False)"),
+  answer("A match object"),
+  allow_retry = TRUE
+)
+```
+
+Let's redact the delivery date in `SPELLBOOK` by replacing it with "[DATE]".
+
+
+Step 1: Write the pattern
+
+```{python a4_step1_pat, exercise=TRUE, message=FALSE}
+pat = r"___"
+pat
+```
+
+```{r a4_step1_pat-hint, echo=FALSE, message=FALSE}
+"Hint: Remember, hyphens are literal."
+```
+
+```{python a4_step1_pat-solution, echo=FALSE, message=FALSE}
+pat = r"\d{4}-\d{2}-\d{2}"
+pat
+```
+
+Step 2: Use the pattern
+
+```{python a4_sub, exercise=TRUE, message=FALSE}
+redacted = ___
+redacted
+```
+
+```{r a4_sub-hint, echo=FALSE, message=FALSE}
+"Hint: Use re.sub()"
+```
+
+```{python a4_sub-solution, echo=FALSE, message=FALSE}
+redacted = re.sub(pat, "[DATE]", SPELLBOOK)
+redacted
+```
+
+```{r a4_sub-check, message=FALSE, warning=FALSE}
+grade_this({
+  student <- get_exercise_result()$result
+  if (is.null(student)) incorrect(random_encouragement())
+  else if (grepl("\\[DATE\\]", as.character(student)) && !grepl("2026-03-05", as.character(student))) {
+    correct(random_praise())
+  } else {
+    incorrect("Make sure the original date disappears and [DATE] appears.")
+  }
+})
+```
+
+## Using Flags
+
+Functions from `re` allow you to set `flags` which alter how the pattern is interpreted. Think of these flags as modifiers. You can find a full list of available flags [here](https://docs.python.org/3/library/re.html#flags).
+
+Use a flag to find all potions regardless of the text-case.
+
+```{python a5_flags, exercise=TRUE, message=FALSE}
+hits = re.findall(r"potion", SPELLBOOK, flags=___)
+len(hits)
+```
+
+```{python a5_flags-solution, echo=FALSE, message=FALSE, warning=FALSE}
+hits = re.findall(r"potion", SPELLBOOK, flags=re.IGNORECASE)
+len(hits)
+```
+
+```{r a5_flags-check, message=FALSE, warning=FALSE}
+grade_this({
+  student <- get_exercise_result()$result
+  if (is.null(student)) incorrect(random_encouragement())
+  else if (as.integer(student) == 3L) correct(paste(random_praise(), "You found the third secret word: BANJO"))
+  else incorrect("Expected 3.")
+})
+```
+
+## Regex Crossword
+
+```{r crossword_setup, echo=FALSE, context="server"}
+CW_N <- 7
+cw_correct <- reactiveVal(FALSE)
+
+# One cell input
+cw_cell <- function(r, c) {
+  id <- paste0("cw_", r, "_", c)
+  tags$td(
+    style="width:36px;height:36px;border:1px solid #bbb;text-align:center;",
+    tags$input(
+      id=id, type="text", maxlength="1",
+      style="width:32px;height:32px;text-align:center;font-size:18px;border:none;outline:none;text-transform:uppercase;"
+    )
+  )
+}
+
+ROW_CLUES <- list(
+  list(num=1, clue="Row 1: starts with A, ends with S; 4th letter is H",                 pat="^A..H..S$"),
+  list(num=2, clue="Row 2: 7 letters; has MB in positions 3–4",                          pat="^..MB...$"),
+  list(num=3, clue="Row 3: begins CAP; 4th letter is T or X; ends URE",                  pat="^CAP[TX]URE$"),
+  list(num=4, clue="Row 4: begins GROUP; 6th is B or P; ends Y",                         pat="^GROUP[BP]Y$"),
+  list(num=5, clue="Row 5: begins TOKEN; 6th is S or X; ends X",                         pat="^TOKEN[XS]X$"),
+  list(num=6, clue="Row 6: begins FLAG; 5th is S; 6th is R or E; ends E",                pat="^FLAGS[RE]E$"),
+  list(num=7, clue="Row 7: begins PAR; 4th is S or T; ends ERS",                         pat="^PAR[ST]ERS$")
+)
+
+COL_CLUES <- list(
+  list(
+    num=1,
+    clue="Col 1: starts with A; 2nd is N or U; 3rd is C/D/E/F; 4th is one of (C/G/H); 5th is T/U/V/W; 6th is F or L; ends P or R",
+    pat="^A[NU][CDEF][CGH][TUVW][FL][PR]$"
+  ),
+  list(
+    num=2,
+    clue="Col 2: starts with N; 2nd is any vowel except A; 3rd is A; 4th is R; 5th is O or P; 6th is L or R; ends A",
+    pat="^N[EIUO]AR[OP][LR]A$"
+  ),
+  list(
+    num=3,
+    clue="Col 3: starts with C; 2nd is M or N; 3rd is P; 4th is O or R; 5th is K or N; 6th is A or E; ends R",
+    pat="^C[MN]P[OR][KN][AE]R$"
+  ),
+  list(
+    num=4,
+    clue="Col 4: starts H; 2nd is B or D; 3rd is T or S; 4th is U; 5th is a vowel; 6th is G or H; ends S",
+    pat="^H[BD][TS]U[AEIOU][GH]S$"
+  ),
+  list(
+    num=5,
+    clue="Col 5: starts with O; 2nd is E or A; 3rd is U; 4th is P; 5th is N or M; 6th is S; ends E",
+    pat="^O[EA]UP[NM]SE$"
+  ),
+  list(
+    num=6,
+    clue="Col 6: three R's, then B, then NOT a vowel, then two R's (quantifiers + negated class)",
+    pat="^R{3}B[^AEIOU]R{2}$"
+  ),
+  list(
+    num=7,
+    clue="Col 7: starts with two S's; 3rd is E; 4th is Y or T; 5th is X or Z; 6th is E; ends S",
+    pat="^S{2}E[YT][XZ]ES$"
+  )
+)
+
+output$cw_ui <- renderUI({
+  grid <- tags$table(
+    lapply(seq_len(CW_N), function(r) {
+      tags$tr(lapply(seq_len(CW_N), function(c) cw_cell(r, c)))
+    })
+  )
+
+  clue_block <- function(title, clues) {
+    tags$div(
+      tags$h4(title),
+      tags$ol(lapply(clues, function(x) {
+        tags$li(
+          tags$b(paste0(x$num, ". ")),
+          x$clue,
+          tags$div(style="margin-top:0.2rem;",
+                   tags$code(x$pat))
+        )
+      }))
+    )
+  }
+
+  tagList(
+    tags$p("Fill the 7×7 grid with letters. A submission is correct only if EVERY row and EVERY column matches its regex."),
+    grid,
+    tags$div(style="display:flex; gap:2rem; align-items:flex-start; flex-wrap:wrap;",
+      clue_block("Row constraints", ROW_CLUES),
+      clue_block("Column constraints", COL_CLUES)
+    )
+  )
+})
+
+observeEvent(input$cw_check, {
+  mat <- matrix("", nrow=CW_N, ncol=CW_N)
+
+  for (r in seq_len(CW_N)) {
+    for (c in seq_len(CW_N)) {
+      val <- toupper(trimws(input[[paste0("cw_", r, "_", c)]] %||% ""))
+      mat[r, c] <- val
+    }
+  }
+
+  if (any(mat == "")) {
+    cw_correct(FALSE)
+    output$cw_feedback <- renderText("Fill all squares first")
+    return()
+  }
+
+  rows <- apply(mat, 1, paste0, collapse="")
+  cols <- apply(mat, 2, paste0, collapse="")
+
+  row_ok <- vapply(seq_len(CW_N), function(i) grepl(ROW_CLUES[[i]]$pat, rows[i], perl=TRUE), logical(1))
+  col_ok <- vapply(seq_len(CW_N), function(i) grepl(COL_CLUES[[i]]$pat, cols[i], perl=TRUE), logical(1))
+
+  all_ok <- all(row_ok) && all(col_ok)
+  cw_correct(all_ok)
+
+  if (all_ok) {
+    output$cw_feedback <- renderText(paste(random_praise(), "Crossword solved!"))
+  } else {
+    bad_rows <- which(!row_ok)
+    bad_cols <- which(!col_ok)
+    msg <- c(random_encouragement())
+    if (length(bad_rows)) msg <- c(msg, paste0("Rows failing: ", paste(bad_rows, collapse=", ")))
+    if (length(bad_cols)) msg <- c(msg, paste0("Cols failing: ", paste(bad_cols, collapse=", ")))
+    output$cw_feedback <- renderText(paste(msg, collapse=" | "))
+  }
+})
+```
+
+```{r crossword_ui, echo=FALSE}
+uiOutput("cw_ui")
+actionButton("cw_check", "Check crossword")
+verbatimTextOutput("cw_feedback")
+```
+
+## Cheat Sheet
+
+```{r unlock_ui, echo=FALSE}
+uiOutput("unlock_section")
+```
+
+```{r unlock_server, context="server", echo=FALSE}
+
+output$unlock_section <- renderUI({
+  all_ok <- isTRUE(cw_correct())
+
+  if (!all_ok) {
+    return(tags$div(
+      class="notebox",
+      tags$h3("🔒 Cheat Sheet Locked"),
+      tags$p("Unlock requirements: Crossword Solved")
+    ))
+  }
+
+  tags$div(
+    class="notebox",
+    tags$h3("Regex Cheat Sheet"),
+
+    tags$h4("How to decide what regex to write"),
+    tags$ol(
+      tags$li(tags$b("Name the job:"), " extraction, validation, or transformation."),
+      tags$li(tags$b("Find the anchor text:"), " words/punctuation around what you want."),
+      tags$li(tags$b("Start simple:"), " get it working, then tighten it."),
+      tags$li(tags$b("Add groups intentionally:"), " don’t add parentheses “just because.”"),
+      tags$li(tags$b("Test good + bad cases:"), " validation especially needs both.")
+    ),
+
+    tags$h4("Common tokens"),
+    tags$ul(
+      tags$li(tags$code("."), " any char (except newline unless DOTALL)"),
+      tags$li(tags$code("\\\\d"), " digit; ", tags$code("\\\\w"), " word; ", tags$code("\\\\s"), " whitespace"),
+      tags$li(tags$code("[abc]"), " any of a,b,c; ", tags$code("[A-Z]"), " uppercase; ", tags$code("[^...]"), " NOT in set"),
+      tags$li(tags$code("^"), " start; ", tags$code("$"), " end; ", tags$code("\\\\b"), " word boundary"),
+      tags$li(tags$code("*"), " 0+; ", tags$code("+"), " 1+; ", tags$code("?"), " 0/1; ", tags$code("{m,n}"), " repeats"),
+      tags$li(tags$code("|"), " OR (alternation)")
+    ),
+
+    tags$h4("Greedy vs lazy"),
+    tags$ul(
+      tags$li(tags$code(".*"), " greedy"),
+      tags$li(tags$code(".*?"), " lazy/non-greedy")
+    ),
+
+    tags$h4("Python `re` toolbox"),
+    tags$ul(
+      tags$li(tags$code("re.findall(pat, text)"), " → list of matches (or tuples if multiple groups)"),
+      tags$li(tags$code("re.fullmatch(pat, s)"), " → match or None (best for validation)"),
+      tags$li(tags$code("re.sub(pat, repl, text)"), " → replaced string"),
+      tags$li(tags$code("re.search(pat, text)"), " → first match anywhere")
+    ),
+
+    tags$h4("Useful Flags"),
+    tags$ul(
+      tags$li(tags$code("re.IGNORECASE"), " case-insensitive"),
+      tags$li(tags$code("re.MULTILINE"), " ^ and $ work per line"),
+      tags$li(tags$code("re.DOTALL"), " . matches newline"),
+      tags$li(tags$code("re.VERBOSE"), " readable multi-line regex with comments")
+    )
+  )
+})
+```
+
+## Validate a crochet pattern
+
+This section is crochet-themed, but you do **not** need to know how to crochet.
+
+A crochet pattern is a structured set of instructions. Here we treat it like a mini language with:
+- **Words/tokens** like `Round`, `MR`, `sc`, `inc`, `dec`, `FO`
+- **Numbers**:
+  - `N` = round number (an integer)
+  - `K` = a total count (an integer shown in parentheses)
+  - `A` and `B` = integers used in a repeating instruction
+
+We accept ONLY these formats:
+
+1. `Round N: MR, K sc`
+2. `Round N: inc around (K)`
+3. `Round N: (sc A, inc) x B (K)`
+4. `Round N-M: sc around (K)`
+5. `Round N: (sc A, dec) x B (K)`
+6. `FO`
+
+In lines like:
+
+`Round N: (sc A, op) x B (K)` where `op` is `inc` or `dec`
+
+You can read that as:
+- Do `(sc A, op)` a total of `B` times
+- Each repeat **creates stitches**:
+  - If `op` is `inc`: `A + 2` stitches (A single crochets + 2 stitches from an increase)
+  - If `op` is `dec`: `A + 1` stitches (A single crochets + 1 stitch from a decrease)
+
+So the expected total after repeating is:
+- if `op` is `inc`: `K = B * (A + 2)`
+- if `op` is `dec`: `K = B * (A + 1)`
+
+Regex checks the shape, but Python can check the arithmetic rule.
+
+```{python c1_validate, exercise=TRUE, message=FALSE}
+def is_valid_line(s):
+    pattern = r"___"
+    used = ___
+    if not used:
+        return False
+
+    gd = used.groupdict()
+
+    # Only some formats have A, B, K, op to check.
+    if gd.get("A") and gd.get("B") and gd.get("K") and gd.get("op"):
+        A = int(gd["A"])
+        B = int(gd["B"])
+        K = int(gd["K"])
+        op = gd["op"]
+        expected = ___
+        return K == expected
+
+    return True
+
+tests_good = [(line, is_valid_line(line)) for line in PATTERN_GOOD]
+tests_bad  = [(line, is_valid_line(line)) for line in PATTERN_BAD]
+tests_good, tests_bad
+```
+
+```{r c1_validate-hint, echo=FALSE, message=FALSE, warning=FALSE}
+"Hint: This pattern is a BIG alternation (A|B|C|...). Start by matching ONE format first."
+```
+
+```{python c1_validate-solution, echo=FALSE, message=FALSE, warning=FALSE}
+def is_valid_line(s):
+    pattern = (
+        r"(?:(Round (?P<R1>\d+): MR, (?P<K1>\d+) sc))"
+        r"|(?:(Round (?P<R2>\d+): inc around \((?P<K2>\d+)\)))"
+        r"|(?:(Round (?P<R3>\d+): \(sc (?P<A>\d+), (?P<op>inc|dec)\) x (?P<B>\d+) \((?P<K>\d+)\)))"
+        r"|(?:(Round (?P<R4>\d+)-(?P<R5>\d+): sc around \((?P<K3>\d+)\)))"
+        r"|(?:(FO))"
+    )
+    used = re.fullmatch(pattern, s)
+    if not used:
+        return False
+
+    gd = used.groupdict()
+    if gd.get("A") and gd.get("B") and gd.get("K") and gd.get("op"):
+        A = int(gd["A"]); B = int(gd["B"]); K = int(gd["K"])
+        op = gd["op"]
+        expected = B * (A + 2) if op == "inc" else B * (A + 1)
+        return K == expected
+    return True
+
+tests_good = [(line, is_valid_line(line)) for line in PATTERN_GOOD]
+tests_bad  = [(line, is_valid_line(line)) for line in PATTERN_BAD]
+tests_good, tests_bad
+```
+
+```{r c1_validate-check, message=FALSE, warning=FALSE}
+grade_this({
+  student <- get_exercise_result()$result
+  if (is.null(student) || length(student) != 2) {
+    incorrect("Make sure your last line outputs: (tests_good, tests_bad)")
+  } else {
+    good <- student[[1]]
+    bad  <- student[[2]]
+    good_ok <- all(vapply(good, function(x) isTRUE(x[[2]]), logical(1)))
+    bad_ok  <- all(vapply(bad,  function(x) identical(x[[2]], FALSE), logical(1)))
+
+    if (good_ok && bad_ok) {
+      correct(paste(random_praise(), "You found the fifth secret word: OCTOPUS"))
+    } else {
+      incorrect("Close! Ensure all good lines are True and all bad lines are False (including the consistency check).")
+    }
+  }
+})
+```
+
+```{r cw_q, echo=FALSE}
+question(
+  "Why are `^` and `$` useful in validation regex?",
+  answer("They anchor to start/end so extra characters don’t sneak in", correct = TRUE),
+  answer("They match digits"),
+  answer("They make regex faster automatically"),
+  allow_retry = TRUE,
+  post_message = "You found the fourth secret word: MARSHMALLOW"
+)
+```
+
+### Optional: a real crochet pattern (for fun)
+
+This is a simple “flat circle” coaster-style pattern written in common shorthand. This is just to show that real patterns are structured text:
+
+- MR = magic ring
+- sc = single crochet
+- inc = increase
+- sl st = slip stitch
+- ch = chain
+- FO = fasten off
+
+**Example pattern (mini coaster):**
+1. Round 1: MR, 6 sc (6)
+2. Round 2: inc around (12)
+3. Round 3: (sc 1, inc) x 6 (18)
+4. Round 4: (sc 2, inc) x 6 (24)
+5. Finish: sl st, FO
+
+If you wanted, you could validate patterns like this with your regex solution.
+
+## What is web scraping?
+
+**Web scraping** usually means:
+
+- downloading HTML (the text a website sends your browser)
+- extracting the pieces you care about (names, prices, links, tables)
+
+HTML is *structured* (nested tags). That’s why scraping usually uses:
+
+1. **An HTML parser** (reads the structure / nesting)  
+2. **Regex** (for small patterns inside text, like prices or IDs)
+
+Today you are NOT scraping a real website. We are practicing with a small HTML snippet so you can see the idea.
+
+Step 1: Use a parser to get structure
+
+```{python d1_parse, exercise=TRUE, message=FALSE}
+print(HTML_SNIPPET)
+```
+
+```{python d1_parse2, exercise=TRUE, message=FALSE}
+p = ProductParser()
+p.feed(HTML_SNIPPET)
+products = p.products
+len(products), products[0]
+```
+
+Step 2: Use regex for a tiny pattern
+
+Use regex to extract prices from out parsed HTML.
+
+```{python d2_prices, exercise=TRUE, message=FALSE}
+price_pat = r"___"
+prices = re.findall(___, HTML_SNIPPET)
+prices
+```
+
+```{python d2_prices-solution, echo=FALSE, message=FALSE, warning=FALSE}
+price_pat = r"\$\d+\.\d{2}"
+prices = re.findall(price_pat, HTML_SNIPPET)
+prices
+```
+
+```{r d2_prices-check, message=FALSE, warning=FALSE}
+grade_this({
+  student <- get_exercise_result()$result
+  expected <- c("$19.99", "$7.50", "$12.00")
+  if (is.null(student)) incorrect(random_encouragement())
+  else if (identical(as.character(student), expected)) correct(random_praise())
+  else incorrect("Try `\\$\\d+\\.\\d{2}`.")
+})
+```
+
+```{r mcq_dollar, echo=FALSE}
+question(
+  "Why do we write `\\$` in a regex for prices?",
+  answer("Because `$` is a special anchor token in regex unless escaped", correct=TRUE),
+  answer("Because `\\$` means “any digit”"),
+  answer("Because Python requires escaping for all punctuation"),
+  answer("Because it makes the regex case-insensitive"),
+  allow_retry = TRUE
+)
+```
+
+Step 3: Validate IDs (SKUs) from already-parsed data
+
+Write a pattern to match valid SKUs and a list comprehension to create a list of product SKUs for validation. Valid SKUs have letters, a hyphen, and then digits. There can be any number of letters or digits.
+
+```{python d3_sku, exercise=TRUE, message=FALSE}
+sku_pat = r"___"
+skus = ___
+[(s, re.fullmatch(sku_pat, s) is not None) for s in skus]
+```
+
+```{python d3_sku-solution, echo=FALSE, message=FALSE, warning=FALSE}
+sku_pat = r"[a-z]+-\d+"
+skus = [d["sku"] for d in products]
+[(s, re.fullmatch(sku_pat, s) is not None) for s in skus]
+```
+
+```{r d3_sku-check, message=FALSE, warning=FALSE}
+grade_this({
+  student <- get_exercise_result()$result
+  if (is.null(student)) incorrect(random_encouragement())
+  else {
+    ok <- all(vapply(student, function(x) isTRUE(x[[2]]), logical(1)))
+    if (ok) correct(random_praise()) else incorrect("Pattern should match letters-hyphen-digits.")
+  }
+})
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Exit ticket:**
+:::
+In one sentence: what does the parser do, and what does regex do?
+::::
