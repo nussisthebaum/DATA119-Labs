@@ -182,42 +182,11 @@ no_group = re.findall(r"qty:\s*\d+", SPELLBOOK)
 one_group = re.findall(r"qty:\s*(\d+)", SPELLBOOK)
 
 # 3) two capture groups (tuples!)
-two_groups = re.findall(r"\(qty:\s*(\d+)\)\s*\[tag:\s*([A-Z]{2}-\d{3})\]", SPELLBOOK)
+two_groups = re.findall(r"(qty:\s*(\d+))\s*[tag:\s*([A-Z]{2}-\d{3})]", SPELLBOOK)
 
 no_group, one_group, two_groups
 ```
 
-```{r cap_demo-hint, echo=FALSE}
-"Hint: Run this cell. Compare the outputs: no groups vs 1 group vs 2 groups. Notice how 2 groups produces tuples."
-```
-
-```{python cap_demo-solution, echo=FALSE, message=FALSE}
-no_group = re.findall(r"qty:\s*\d+", SPELLBOOK)
-one_group = re.findall(r"qty:\s*(\d+)", SPELLBOOK)
-two_groups = re.findall(r"\(qty:\s*(\d+)\)\s*\[tag:\s*([A-Z]{2}-\d{3})\]", SPELLBOOK)
-no_group, one_group, two_groups
-```
-
-```{r cap_demo-check, message=FALSE, warning=FALSE}
-grade_this({
-  student <- get_exercise_result()$result
-  if (is.null(student) || length(student) != 3) {
-    incorrect("Make sure you return: (no_group, one_group, two_groups)")
-  } else {
-    ng <- student[[1]]
-    og <- student[[2]]
-    tg <- student[[3]]
-
-    ok1 <- identical(as.character(ng), c("qty: 12","qty: 3","qty: 27"))
-    ok2 <- identical(as.character(og), c("12","3","27"))
-    tg_str <- paste(as.character(tg), collapse=" ")
-    ok3 <- grepl("12", tg_str) && grepl("FZ-120", tg_str) && grepl("27", tg_str) && grepl("ER-451", tg_str)
-
-    if (ok1 && ok2 && ok3) correct(paste(random_praise(), "Nice—capture group behavior unlocked."))
-    else incorrect("Compare what findall returns with 0 vs 1 vs 2 capture groups.")
-  }
-})
-```
 
 :::: {.notebox}
 ::: {.center}
