@@ -7,7 +7,7 @@ output:
 runtime: shiny_prerendered
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE. context="setup"}
 knitr::opts_chunk$set(error = TRUE, paged.print = FALSE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
@@ -82,51 +82,6 @@ HTML_SNIPPET = """
   <a href="/buy/hook-404" data-sku="hook-404">Buy</a>
 </div>
 """
-
-class ProductParser(HTMLParser):
-
-    def __init__(self):
-        super().__init__()
-        self.products = []
-        self._in_h2 = False
-        self._in_price = False
-        self._in_rating = False
-        self._cur = {"name": None, "price": None, "rating": None, "sku": None, "href": None}
-
-    def handle_starttag(self, tag, attrs):
-        d = dict(attrs)
-        if tag.lower() == "div" and "class" in d and "product" in d["class"]:
-            self._cur = {"name": None, "price": None, "rating": None, "sku": None, "href": None}
-        if tag.lower() == "h2":
-            self._in_h2 = True
-        if tag.lower() == "span" and d.get("class") == "price":
-            self._in_price = True
-        if tag.lower() == "span" and d.get("class") == "rating":
-            self._in_rating = True
-        if tag.lower() == "a" and "data-sku" in d:
-            self._cur["sku"] = d.get("data-sku")
-            self._cur["href"] = d.get("href")
-
-    def handle_data(self, data):
-        txt = data.strip()
-        if not txt:
-            return
-        if self._in_h2:
-            self._cur["name"] = txt
-        if self._in_price:
-            self._cur["price"] = txt
-        if self._in_rating:
-            self._cur["rating"] = txt
-
-    def handle_endtag(self, tag):
-        if tag.lower() == "h2":
-            self._in_h2 = False
-        if tag.lower() == "span":
-            self._in_price = False
-            self._in_rating = False
-        if tag.lower() == "div":
-            if self._cur.get("name") and self._cur.get("price") and self._cur.get("sku"):
-                self.products.append(self._cur)
 ```
 
 ## Goals
@@ -144,7 +99,7 @@ By the end of this tutorial, you should be able to:
 
 Regular expressions are a language for describing patterns in text. 
 
-If you need to review regex patters, please refer back to the Week 8 Lecture Slides.
+If you need to review regex patternss, please refer back to the Week 8 Lecture Slides.
 
 When you’re stuck, ask two questions:
 
@@ -176,7 +131,7 @@ So in Python:
 
 Example: `(ab)+` means repeat the chunk `ab`, not repeat `b` only.
 
-**Important: capturing changes what `findall` returns**
+**Important:** capturing changes what `findall` returns
 
 - No groups -> list of whole matches (strings)
 - 1 group -> list of captured strings
@@ -194,11 +149,11 @@ First, predict what `findall` returns:
 
 ```{r mcq_cap_predict, echo=FALSE}
 question(
-  "Which pattern will return ONLY the digits (like \"12\", \"3\", \"27\") when used with re.findall?",
-  answer("r\"qty:\\s*\\d+\""),
-  answer("r\"qty:\\s*(\\d+)\"", correct=TRUE),
-  answer("r\"(qty:)\\s*\\d+\""),
-  answer("r\"(qty:\\s*\\d+)\""),
+  "Which pattern will return ONLY the digits (like \'12\', \'3\', \'27\') when used with `re.findall`?",
+  answer('"r\"qty:\\s*\\d+\""'),
+  answer('"r\"qty:\\s*(\\d+)\""', correct=TRUE),
+  answer('"r\"(qty:)\\s*\\d+\""'),
+  answer('"r\"(qty:\\s*\\d+)\""'),
   allow_retry = TRUE
 )
 ```
@@ -260,7 +215,7 @@ If your output “looks wrong,” check whether you accidentally added (or forgo
 
 ```{r mcq_groups_output, echo=FALSE}
 question(
-  "If your regex has exactly ONE capture group, re.findall returns:",
+  "If your regex has exactly ONE capture group, `re.findall` returns:",
   answer("A list of full matches"),
   answer("A list of captured strings", correct=TRUE),
   answer("A list of tuples"),
@@ -787,7 +742,7 @@ Regex checks the shape, but Python can check the arithmetic rule.
 
 ```{python c1_validate, exercise=TRUE, message=FALSE}
 def is_valid_line(s):
-    pattern = r"___"
+    pattern = ___
     used = ___
     if not used:
         return False
@@ -882,7 +837,8 @@ This is a simple “flat circle” coaster-style pattern written in common short
 - ch = chain
 - FO = fasten off
 
-**Example pattern (mini coaster):**
+Example pattern (mini coaster):
+
 1. Round 1: MR, 6 sc (6)
 2. Round 2: inc around (12)
 3. Round 3: (sc 1, inc) x 6 (18)
@@ -903,15 +859,58 @@ HTML is *structured* (nested tags). That’s why scraping usually uses:
 1. **An HTML parser** (reads the structure / nesting)  
 2. **Regex** (for small patterns inside text, like prices or IDs)
 
+Using regex alone is often not enough when when we need to dig through a lot of nested tags.
+
 Today you are NOT scraping a real website. We are practicing with a small HTML snippet so you can see the idea.
 
-Step 1: Use a parser to get structure
+Step 1: Use a parser to get structure. A very common tool for parsing HTML is the module `Beautiful Soup` which we can install using:
+ `pip install beautifulsoup4` 
+and import using:
+ `from bs4 import BeautifulSoup`.
+
+First, lets look at our HTML:
 
 ```{python d1_parse, exercise=TRUE, message=FALSE}
 print(HTML_SNIPPET)
 ```
 
+Now, we can use `BeautifulSoup()` to parse our HTML. We will use the `lxml` parser (don't worry about what this is or why we use it).
+
 ```{python d1_parse2, exercise=TRUE, message=FALSE}
+soup = BeautifulSoup(HTML_SNIPPET, 'lxml')
+soup
+```
+
+```{python d1_parse3, exercise=TRUE, message=FALSE}
+print(soup.body)
+print(soup.span)
+print(soup.span['class'])
+print(soup.a)
+print(soup.a['href'])
+print(soup.h2)
+```
+
+```{python d1_parse4, exercise=TRUE, message=FALSE}
+soup.findall(span)
+```
+
+```{python d1_parse5, exercise=TRUE, message=FALSE}
+soup.select(span)
+```
+
+Extract and print all links in our `HTML_SNIPPET`:
+
+```{python d1_parse6, exercise=TRUE, message=FALSE}
+for link in ___:
+    print(f"Link: {___}")
+```
+
+```{python d1_parse7}
+# Selecting a specific element by class
+main_heading = soup.select_one(".main").get_text()
+print(f"Main Heading Text: {main_heading}")
+
+
 p = ProductParser()
 p.feed(HTML_SNIPPET)
 products = p.products
