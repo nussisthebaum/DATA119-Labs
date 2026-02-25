@@ -561,50 +561,52 @@ cw_cell <- function(r, c) {
 }
 
 ROW_CLUES <- list(
-  list(num=1, clue="Row 1: starts with A, ends with S; 4th letter is H",                 pat="^A..H..S$"),
-  list(num=2, clue="Row 2: 7 letters; has MB in positions 3–4",                          pat="^..MB...$"),
-  list(num=3, clue="Row 3: begins CAP; 4th letter is T or X; ends URE",                  pat="^CAP[TX]URE$"),
-  list(num=4, clue="Row 4: begins GROUP; 6th is B or P; ends Y",                         pat="^GROUP[BP]Y$"),
-  list(num=5, clue="Row 5: begins TOKEN; 6th is S or X; ends X",                         pat="^TOKEN[XS]X$"),
-  list(num=6, clue="Row 6: begins FLAG; 5th is S; 6th is R or E; ends E",                pat="^FLAGS[RE]E$"),
-  list(num=7, clue="Row 7: begins PAR; 4th is S or T; ends ERS",                         pat="^PAR[ST]ERS$")
+  list(clue="Row 1: starts with A, ends with S; 4th letter is H"),
+  list(clue="Row 2: 7 letters; has MB in positions 3–4"),
+  list(clue="Row 3: begins CAP; 4th letter is T or X; ends URE"),
+  list(clue="Row 4: begins GROUP; 6th is B or P; ends Y"),
+  list(clue="Row 5: begins TOKEN; 6th is S or X; ends X"),
+  list(clue="Row 6: begins FLAG; 5th is S; 6th is R or E; ends E"),
+  list(clue="Row 7: begins PAR; 4th is S or T; ends ERS")
 )
+
+# pat="^A..H..S$"
+# pat="^..MB...$"
+# pat="^CAP[TX]URE$"
+# pat="^GROUP[BP]Y$"
+# pat="^TOKEN[XS]X$"
+# pat="^FLAGS[RE]E$"
+# pat="^PAR[ST]ERS$"
+
+# pat="^A[NU][CDEF][CGH][TUVW][FL][PR]$"
+# pat="^N[EIUO]AR[OP][LR]A$"
+# pat="^C[MN]P[OR][KN][AE]R$""
+# pat="^H[BD][TS]U[AEIOU][GH]S$"
+# pat="^O[EA]UP[NM]SE$"
+# pat="^R{3}B[^AEIOU]R{2}$"
+# pat="^S{2}E[YT][XZ]ES$"
 
 COL_CLUES <- list(
   list(
-    num=1,
-    clue="Col 1: starts with A; 2nd is N or U; 3rd is C/D/E/F; 4th is one of (C/G/H); 5th is T/U/V/W; 6th is F or L; ends P or R",
-    pat="^A[NU][CDEF][CGH][TUVW][FL][PR]$"
+    clue="Col 1: starts with A; 2nd is N or U; 3rd is C/D/E/F; 4th is one of (C/G/H); 5th is T/U/V/W; 6th is F or L; ends P or R"
   ),
   list(
-    num=2,
-    clue="Col 2: starts with N; 2nd is any vowel except A; 3rd is A; 4th is R; 5th is O or P; 6th is L or R; ends A",
-    pat="^N[EIUO]AR[OP][LR]A$"
+    clue="Col 2: starts with N; 2nd is any vowel except A; 3rd is A; 4th is R; 5th is O or P; 6th is L or R; ends A"
   ),
   list(
-    num=3,
-    clue="Col 3: starts with C; 2nd is M or N; 3rd is P; 4th is O or R; 5th is K or N; 6th is A or E; ends R",
-    pat="^C[MN]P[OR][KN][AE]R$"
+    clue="Col 3: starts with C; 2nd is M or N; 3rd is P; 4th is O or R; 5th is K or N; 6th is A or E; ends R"
   ),
   list(
-    num=4,
-    clue="Col 4: starts H; 2nd is B or D; 3rd is T or S; 4th is U; 5th is a vowel; 6th is G or H; ends S",
-    pat="^H[BD][TS]U[AEIOU][GH]S$"
+    clue="Col 4: starts H; 2nd is B or D; 3rd is T or S; 4th is U; 5th is a vowel; 6th is G or H; ends S"
   ),
   list(
-    num=5,
-    clue="Col 5: starts with O; 2nd is E or A; 3rd is U; 4th is P; 5th is N or M; 6th is S; ends E",
-    pat="^O[EA]UP[NM]SE$"
+    clue="Col 5: starts with O; 2nd is E or A; 3rd is U; 4th is P; 5th is N or M; 6th is S; ends E"
   ),
   list(
-    num=6,
-    clue="Col 6: three R's, then B, then NOT a vowel, then two R's (quantifiers + negated class)",
-    pat="^R{3}B[^AEIOU]R{2}$"
+    clue="Col 6: three R's, then B, then NOT a vowel, then two R's (quantifiers + negated class)"
   ),
   list(
-    num=7,
-    clue="Col 7: starts with two S's; 3rd is E; 4th is Y or T; 5th is X or Z; 6th is E; ends S",
-    pat="^S{2}E[YT][XZ]ES$"
+    clue="Col 7: starts with two S's; 3rd is E; 4th is Y or T; 5th is X or Z; 6th is E; ends S"
   )
 )
 
