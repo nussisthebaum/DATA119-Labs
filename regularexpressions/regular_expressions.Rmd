@@ -257,7 +257,7 @@ pat
 
 Step 2: Use the pattern:
 
-```{python a1_qty, exercise=TRUE, message=FALSE, exercise.setup="a_step1_pat"}
+```{python a1_qty, exercise=TRUE, message=FALSE, exercise.setup="a1_step1_pat"}
 qty = ___
 qty = [int(x) for x in qty] # What does this do?
 qty
