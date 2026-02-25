@@ -182,7 +182,7 @@ no_group = re.findall(r"qty:\s*\d+", SPELLBOOK)
 one_group = re.findall(r"qty:\s*(\d+)", SPELLBOOK)
 
 # 3) two capture groups -> list of tuples: (qty_digits, tag_code)
-two_groups = re.findall(r"qty:\s*(\d+)\s*\\[tag:\s*([A-Z]{2}-\d{3})\\]", SPELLBOOK)
+two_groups = re.findall(r"qty:\s*(\d+)\s*" + r"\[" + r"tag:\s*([A-Z]{2}-\d{3})" + r"\]", SPELLBOOK)
 
 no_group, one_group, two_groups
 ```
@@ -198,10 +198,10 @@ If your output “looks wrong,” check whether you accidentally added (or forgo
 ```{r mcq_groups_output, echo=FALSE}
 question(
   "If your regex has exactly ONE capture group, `re.findall` returns:",
-  answer("A list of full matches"),
-  answer("A list of captured strings", correct=TRUE),
-  answer("A list of tuples"),
-  answer("A single string"),
+  answer("A `list` of full matches"),
+  answer("A `list` of captured `strings`", correct=TRUE),
+  answer("A `list` of `tuples`"),
+  answer("A single `string`"),
   allow_retry = TRUE
 )
 ```
