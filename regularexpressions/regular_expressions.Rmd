@@ -163,10 +163,10 @@ First, predict what `findall()` returns:
 ```{r mcq_cap_predict, echo=FALSE}
 question(
   "Which pattern will return ONLY the digits (like \'12\', \'3\', \'27\') when used with `re.findall`?",
-  answer(qty:\\s*\\d+\),
-  answer(qty:\\s*(\\d+)\, correct=TRUE),
-  answer((qty:)\\s*\\d+\),
-  answer((qty:\\s*\\d+)\),
+  answer('qty:\\s*\\d+'),
+  answer('qty:\\s*(\\d+)', correct=TRUE),
+  answer('(qty:)\\s*\\d+'),
+  answer('(qty:\\s*\\d+)'),
   allow_retry = TRUE
 )
 ```
