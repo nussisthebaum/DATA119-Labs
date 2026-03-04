@@ -82,6 +82,18 @@ HTML_SNIPPET = """
   <a href="/buy/hook-404" data-sku="hook-404">Buy</a>
 </div>
 """
+
+# Try the three patterns below and compare outputs.
+# 1) no capture group -> list of full matches
+no_group = re.findall(r"qty:\s*\d+", SPELLBOOK)
+
+# 2) one capture group -> list of just the captured digits (strings)
+one_group = re.findall(r"qty:\s*(\d+)", SPELLBOOK)
+
+# 3) two capture groups -> list of tuples: (qty_digits, tag_code)
+two_groups = re.findall(r"qty:\s*(\d+)\s*" + r"\[" + r"tag:\s*([A-Z]{2}-\d{3})" + r"\]", SPELLBOOK)
+# Please ignore the seemingly unnecessary concatenation here. It is for display purposes only.
+
 ```
 
 ## Goals 
