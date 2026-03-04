@@ -84,7 +84,7 @@ HTML_SNIPPET = """
 """
 ```
 
-## Goals
+## Goals 
 
 By the end of this tutorial, you should be able to:
 
