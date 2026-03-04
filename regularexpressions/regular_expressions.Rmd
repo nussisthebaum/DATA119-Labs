@@ -7,8 +7,8 @@ output:
 runtime: shiny_prerendered
 ---
 
-```{r setup, include=FALSE, context="setup"}
-knitr::opts_chunk$set(error = TRUE, paged.print = FALSE)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
 library(learnr)
@@ -18,7 +18,7 @@ library(htmltools)
 library(sortable)
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.timelimit = 30)
+tutorial_options(exercise.completion = FALSE)
 
 `%||%` <- function(x, y) if (is.null(x)) y else x
 ```
@@ -33,7 +33,7 @@ tags$div(
 )
 ```
 
-```{python setup_py, context="setup", echo=FALSE, message=FALSE, warning=FALSE}
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE, output = FALSE}
 import re
 from bs4 import BeautifulSoup
 
