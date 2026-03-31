@@ -35,8 +35,18 @@ tags$div(
 )
 ```
 
-```{python setup_py, context="setup", echo = FALSE}
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
 my_string = "hello world"
+s = "Welcome to DATA 120 this quarter!"
+raw = "   DATA SCIENCE is AWESOME!!!   "
+messy = "  The   quick   brown    fox   jumps  "
+path = "/Users/amanda/Data120/Homework/Winter26/Data-120-W26-HW1.pdf"
+csv_data = """date,city,temp,condition
+2026-01-12,Chicago,7F,cloudy
+2026-01-13,New York,32F,snowy
+2026-01-14,Los Angeles,65F,sunny"""
+note = "We will discuss regression, not regressions, and not regression-based models."
+text = "Lab 3: due in 7 days (estimated time: 45 minutes)."
 
 ```
 
@@ -56,13 +66,13 @@ For this lab, we do not need any additional packages or modules. In fact, we dis
 
 ## Strings are Sequences
 
-Recall, a **string** is a data type that represents a sequence of characters, such as letters, numbers, or punctuation. Strings in Python are written inside quotation marks — single (' '), double (" "), or triple (''' ''' or """ """). For more information about creating and displaying strings, see [this textbook chapter](https://ds1.datascience.uchicago.edu/03/4/Strings.html).
+Recall, a **string** is a data type that represents a sequence of characters, such as letters, numbers, or punctuation. Strings in Python are written inside quotation marks — single (`' '`), double (`" "`), or triple (`''' '''` or `""" """`). For more information about creating and displaying strings, see [this textbook chapter](https://ds1.datascience.uchicago.edu/03/4/Strings.html).
 
 We will talk more about **sequences** later, but for now, think back to when you learned about **lists** in Data 118. Each element in a list has an **index** that is used to refer to that element. You can think of a string as a list of characters where each character has an index.
 
 Python is a **0-indexed language** meaning that counting starts at 0 rather than 1. For example, the string below contains 11 characters.
 
-```{python demo1, exercise=TRUE}
+```{python demo1, exercise=TRUE, exercise.eval = FALSE}
 my_string = "hello world"
 
 len(my_string)
