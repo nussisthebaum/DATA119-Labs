@@ -39,18 +39,7 @@ tags$div(
 ```
 
 ```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
-my_string = "hello world"
-s = "Welcome to DATA 120 this quarter!"
-raw = "   DATA SCIENCE is AWESOME!!!   "
-messy = "  The   quick   brown    fox   jumps  "
-path = "/Users/amanda/Data120/Homework/Winter26/Data-120-W26-HW1.pdf"
-csv_data = """date,city,temp,condition
-2026-01-12,Chicago,7F,cloudy
-2026-01-13,New York,32F,snowy
-2026-01-14,Los Angeles,65F,sunny"""
-note = "We will discuss regression, not regressions, and not regression-based models."
-text = "Lab 3: due in 7 days (estimated time: 45 minutes)."
-
+x = 1
 ```
 
 ## Goals
@@ -114,6 +103,7 @@ course
 
 ```{python ex1-solution, echo=FALSE}
 s = "Welcome to DATA 120 this quarter!"
+
 course = s[11:19]
 course
 ```
@@ -209,6 +199,7 @@ grade_this({
 ### Exercise 3
 
 Create `normalized` so that:
+
 - words are separated by a single space
 - there should be no leading or trailing whitespace
 
@@ -246,6 +237,7 @@ grade_this({
 ### Exercise 4
 
 From `path`, create:
+
 - `filename`: the name of the file
 - `stem`: the name of the file excluding the extension
 - `ext`: the file extension excluding the `.`
@@ -291,13 +283,13 @@ grade_this({
 })
 ```
 
-### Exercise 6
+### Exercise 5
 
 The string below contains a CSV with a header row, containing weather data.
 
 Ignore the header row and create a list called `sentences` containing one sentence per data row. Remember, you can add to a list using `.append()`.
 
-Each element of `sentences` should have the format: "On <this date> in <this city>, it was <this temperature> and <this weather condition>."
+Each element of `sentences` should have the format: `"On <this date> in <this city>, it was <this temperature> and <this weather condition>."`
 
 ```{python ex6, exercise=TRUE}
 csv_data = """date,city,temp,condition
@@ -392,11 +384,12 @@ Modify your code so that the date appears as 'Month Day, Year'. For example, 'Ma
 
 ## Custom String Processing
 
-### Exercise 7
+### Exercise 6
 
 Replace **only** the standalone word `"regression"` with `"linear regression"`.
 
 Do NOT change:
+
 - `"regressions"`
 - `"regression-based"`
 
@@ -464,7 +457,7 @@ grade_this({
 })
 ```
 
-### Exercise 8 (no regex)
+### Exercise 7 (no regex)
 
 Extract all integers from the string below into a list `nums`.
 
