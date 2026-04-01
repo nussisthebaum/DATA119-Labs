@@ -75,7 +75,7 @@ We will talk more about **sequences** later, but for now, think back to when you
 
 Python is a **0-indexed language** meaning that counting starts at 0 rather than 1. For example, the string below contains 11 characters.
 
-```{python demo1, exercise=TRUE, exercise.eval = FALSE}
+```{python demo1, exercise=TRUE}
 my_string = "hello world"
 
 len(my_string)
@@ -120,11 +120,22 @@ course
 
 ```{r ex1-check, context="server"}
 grade_this({
-  if (is.null(.result)) {
+  message("checker running")
+  message("is.null(.result): ", is.null(.result))
+
+  null_xptr <- tryCatch(reticulate::py_is_null_xptr(.result), error = function(e) NA)
+  message("py_is_null_xptr(.result): ", null_xptr)
+
+  res <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
+  if (is.null(res)) {
     fail("Replace the `...` with your slice and make sure the last line is `course`.")
   }
-
-  res <- reticulate::py_to_r(.result)
 
   if (identical(res, "DATA 120")) {
     pass("Nice work! You correctly extracted `DATA 120` using slicing.")
