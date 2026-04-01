@@ -39,6 +39,7 @@ tags$div(
 ```
 
 ```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
+my_string = "hello world"
 x = 1
 ```
 
