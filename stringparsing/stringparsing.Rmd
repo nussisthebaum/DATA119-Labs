@@ -14,6 +14,9 @@ library(learnr)
 library(gradethis)
 library(reticulate)
 
+message("RETICULATE_PYTHON = ", Sys.getenv("RETICULATE_PYTHON"))
+print(py_config())
+
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.blanks = "\\.{3}")
 ```
