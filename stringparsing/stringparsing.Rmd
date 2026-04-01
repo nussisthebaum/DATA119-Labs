@@ -513,7 +513,7 @@ grade_this({
 
   res <- reticulate::py_to_r(.result)
 
-  if (identical(res, c(3, 7, 45))) {
+ if (all.equal(as.numeric(res), c(3, 7, 45)) == TRUE) {
     pass(random_praise())
   } else {
     fail(random_encouragement())
