@@ -1,0 +1,39 @@
+---
+title: "Untitled"
+format: beamer
+editor: visual
+---
+
+# Introduction to DATA119 Labs
+
+## Motivation
+
+## Example
+
+## Research Questions
+
+# RQ1
+
+## RQ1
+
+## how many students
+
+## required labs
+
+## Lessons Learned
+
+# RQ2
+
+## RQ2
+
+# RQ3
+
+## RQ3
+
+# DEbrief
+
+## What would I change
+
+## Future plans
+
+
