@@ -129,7 +129,7 @@ question(
   answer("If there are 2 needles in a bundle, go on page 8.", correct = TRUE),
   answer("If the needles are 6 inches to 9 inches, rather stiff, it is LOBLOLLY PINE.", correct = TRUE),
   allow_retry = TRUE, 
-  postmessage = "Correct! These are ALL nodes."
+  post_message = "Correct! These are ALL nodes."
 )
 ```
 

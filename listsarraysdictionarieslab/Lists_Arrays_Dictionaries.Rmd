@@ -59,27 +59,23 @@ Python and its libraries provide many ways to group data together.   Some import
 
 - Lists, Tuples, Sets, Dictionaries (built-in to Python)
 
-- Arrays (found in the `NumPy` library)
+- Arrays (found in the [`numpy` library](https://numpy.org/doc/))
 
-- DataFrames (in `Pandas`)
+- DataFrames (in [`pandas`](https://pandas.pydata.org/docs/))
 
 
-The above are listed in order of increasing functionality and sophistication
-
-In general you should use the simplest one that meets your needs.
+The above are listed in order of increasing functionality and sophistication. In general you should use the simplest one that meets your needs.
 
 
 ## Sequences (built into Python)
 
-
 Sequences are a basic type of structure to group data. You don't need to import any additional libraries to use them.
-
 
 ### Lists
 
 A **list** is an ordered sequence of values that can be changed.
 
-You can create a list by using square brackets "[]". Each element is separated by commas.
+You can create a list by using square brackets "`[]`". Each element is separated by commas.
 
 #### Let's create a list!
 
@@ -154,7 +150,7 @@ question(
   answer("Texas"),
   answer("Georgia"),
   answer("Washinton D.C."),
-  answer("An Error", correct = TRUE),
+  answer("An Error", correct = TRUE, message = "Even though this list has a length of six, there is no element at index 6 since Python uses zero-based indexing."),
   allow_retry = TRUE
 )
 ```
