@@ -195,7 +195,7 @@ question(
 )
 ```
 
-Now, see how capture groups change `re.`findall()`:
+Now, see how capture groups change `re.findall()`:
 
 ```{python cap_demo, exercise=TRUE, message=FALSE, exercise.diagnostics = TRUE}
 # Try the three patterns below and compare outputs.
@@ -262,6 +262,16 @@ pat = r"qty:\s*(\d+)"
 pat
 ```
 
+```{r a1_step1_pat-check, context='server'}
+grade_this({
+  student <- reticulate::py_to_r(.result)
+  expected <- "qty:\\s*(\\d+)"
+  if (is.null(student)) fail(random_encouragement())
+  else if (identical(as.character(student), expected)) pass(random_praise())
+  else fail(random_encouragement())
+})
+```
+
 Step 2: Use the pattern:
 
 ```{python a1_qty, exercise=TRUE, message=FALSE}
@@ -280,15 +290,13 @@ qty = [int(x) for x in qty]
 qty
 ```
 
-```{r a1_qty-check, context='setup'}
+```{r a1_qty-check, context='server'}
 grade_this({
   student <- reticulate::py_to_r(.result)
-  print(student)
   expected <- c(12L, 3L, 27L)
-  print(expected)
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.integer(student), expected)) pass(random_praise())
-  else fail("Hint: capture digits after `qty:` using (\\d+).")
+  else fail(random_encouragement())
 })
 ```
 
@@ -314,6 +322,16 @@ pat2 = r"Potion:\s*(.*?)\s*\(qty:"
 pat2
 ```
 
+```{r a2_step1_pat-check, context='server'}
+grade_this({
+  student <- reticulate::py_to_r(.result)
+  expected <- "Potion:\\s*(.*?)\\s*\\(qty:"
+  if (is.null(student)) fail(random_encouragement())
+  else if (identical(as.character(student), expected)) pass(random_praise())
+  else fail(random_encouragement())
+})
+```
+
 Step 2: Use the pattern
 
 ```{python a2_names, exercise=TRUE, message=FALSE}
@@ -334,13 +352,13 @@ names = re.findall(pat2, SPELLBOOK)
 names
 ```
 
-```{r a2_names-check, message=FALSE, warning=FALSE}
+```{r a2_names-check, context='server'}
 grade_this({
   student <- reticulate::py_to_r(.result)
   expected <- c("fizz-berry tonic", "moon-milk elixir", "emberroot tea")
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
-  else fail("Hint: use a lazy capture `(.*?)` up to `(qty:`.")
+  else fail(random_encouragement())
 })
 ```
 
@@ -434,7 +452,7 @@ question(
 )
 ```
 
-Let's redact the delivery date in `SPELLBOOK` by replacing it with "[DATE]".
+Let's redact the delivery date in `SPELLBOOK` by replacing it with `"[DATE]"`.
 
 
 Step 1: Write the pattern
@@ -451,6 +469,16 @@ pat3
 ```{python a4_step1_pat-solution, echo=FALSE, message=FALSE}
 pat3 = r"\d{4}-\d{2}-\d{2}"
 pat3
+```
+
+```{r a4_step1_pat-check, context='server'}
+grade_this({
+  student <- reticulate::py_to_r(.result)
+  expected <- "\\d{4}-\\d{2}-\\d{2}"
+  if (is.null(student)) fail(random_encouragement())
+  else if (identical(as.character(student), expected)) pass(random_praise())
+  else fail(random_encouragement())
+})
 ```
 
 Step 2: Use the pattern
@@ -725,6 +753,7 @@ output$unlock_section <- renderUI({
 This section is crochet-themed, but you do **not** need to know how to crochet.
 
 A crochet pattern is a structured set of instructions. Here we treat it like a mini language with:
+
 - **Words/tokens** like `Round`, `MR`, `sc`, `inc`, `dec`, `FO`
 - **Numbers**:
   - `N` = round number (an integer)
@@ -813,7 +842,7 @@ tests_bad  = [(line, is_valid_line(line)) for line in PATTERN_BAD]
 tests_good, tests_bad
 ```
 
-```{r c1_validate-check, message=FALSE, warning=FALSE}
+```{r c1_validate-check, context='server'}
 grade_this({
   student <- reticulate::py_to_r(.result)
   if (is.null(student) || length(student) != 2) {
@@ -895,7 +924,7 @@ Example:
 
 Let’s break that down:
 
-- `<div> ... </div>` -> a *container*
+- `<div> ... </div>` -> a container
 - `<h2>` -> a heading tag
 - `<span>` -> inline container
 - `<a>` -> a link
@@ -1008,11 +1037,11 @@ pip install beautifulsoup4
 
 To use it:
 
-```python
+```{python imports2, exercise=TRUE, message=FALSE}
 from bs4 import BeautifulSoup
 ```
 
-BeautifulSoup reads raw HTML and turns it into a **tree structure** you can navigate.
+`BeautifulSoup` reads raw HTML and turns it into a **tree structure** you can navigate.
 
 Let’s Look at Our HTML
 
@@ -1088,16 +1117,24 @@ Your Turn: Extract All Product Names
 Each product name is inside an `<h2>` tag.
 
 ```{python d1_names, exercise=TRUE, message=FALSE}
+names = []
+
 for tag in ___:
-    print(___)
+    names.append(___)
+
+names
 ```
 
 ```{python d1_names-solution, echo=FALSE, message=FALSE, warning=FALSE}
+names = []
+
 for tag in soup.find_all("h2"):
-    print(tag.get_text())
+    names.append(tag.get_text())
+
+names
 ```
 
-```{r d1_names-check, message=FALSE, warning=FALSE}
+```{r d1_names-check, context='server'}
 grade_this({
   student <- reticulate::py_to_r(.result)
   
@@ -1130,13 +1167,13 @@ prices = re.findall(price_pat, HTML_SNIPPET)
 prices
 ```
 
-```{r d2_prices-check, message=FALSE, warning=FALSE}
+```{r d2_prices-check, context='server'}
 grade_this({
   student <- reticulate::py_to_r(.result)
   expected <- c("$19.99", "$7.50", "$12.00")
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
-  else fail("Try `\\$\\d+\\.\\d{2}`.")
+  else fail(random_encouragement())
 })
 ```
 
@@ -1166,14 +1203,15 @@ Example: `hat-123`
 
 ```{python d3_sku, exercise=TRUE, message=FALSE}
 sku_pat = r"___"
-products = ___
+products = soup.select(".product")
 skus = ___ #use a list comprehension
 [(s, re.fullmatch(sku_pat, s) is not None) for s in skus]
 ```
 
 ```{python d3_sku-solution, echo=FALSE, message=FALSE, warning=FALSE}
 sku_pat = r"[a-z]+-\d+"
-skus = [d["sku"] for d in products]
+products = soup.select(".product")
+skus = [p.find("a")["data-sku"] for p in products]
 [(s, re.fullmatch(sku_pat, s) is not None) for s in skus]
 ```
 
