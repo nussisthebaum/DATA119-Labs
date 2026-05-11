@@ -34,7 +34,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 180)
+tutorial_options(exercise.completion = FALSE, exercise.timelimit = 180)
 ```
 
 ```{python setup_py, include=FALSE}
@@ -227,9 +227,9 @@ grade_result({
 0.58*0.58*0.58
 ```
 
-```{r bern2-code-check, message = FALSE, warning = FALSE}
+```{r bern2-check, message = FALSE, warning = FALSE}
 grade_result({
-  pass_if(~ all.equal(.result, 0.58*0.58*0.58, tolerance = 0.0001))
+  pass_if(~ all.equal(reticulate::py_to_r(.result), 0.58*0.58*0.58, tolerance = 0.0001))
 })
 ```
 
