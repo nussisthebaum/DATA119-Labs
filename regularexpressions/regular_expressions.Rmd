@@ -94,6 +94,14 @@ one_group = re.findall(r"qty:\s*(\d+)", SPELLBOOK)
 two_groups = re.findall(r"qty:\s*(\d+)\s*" + r"\[" + r"tag:\s*([A-Z]{2}-\d{3})" + r"\]", SPELLBOOK)
 # Please ignore the seemingly unnecessary concatenation here. It is for display purposes only.
 
+pat = r"qty:\s*(\d+)"
+pat2 = r"Potion:\s*(.*?)\s*\(qty:"
+pat3 = r"\d{4}-\d{2}-\d{2}"
+soup = BeautifulSoup(HTML_SNIPPET, "html.parser")
+products = soup.select(".product")
+price_pat = r"\$\d+\.\d{2}"
+sku_pat = r"[a-z]+-\d+"
+skus = [d["sku"] for d in products]
 ```
 
 ## Goals 
@@ -256,7 +264,7 @@ pat
 
 Step 2: Use the pattern:
 
-```{python a1_qty, exercise=TRUE, message=FALSE, exercise.setup="a1_step1_pat"}
+```{python a1_qty, exercise=TRUE, message=FALSE}
 qty = ___
 qty = [int(x) for x in qty] # What does this do?
 qty
@@ -274,7 +282,7 @@ qty
 
 ```{r a1_qty-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- get_exercise_result()$result
+  student <- reticulate::py_to_r(.result)
   expected <- c(12L, 3L, 27L)
   if (is.null(student)) incorrect(random_encouragement())
   else if (identical(as.integer(student), expected)) correct(random_praise())
@@ -287,8 +295,8 @@ Now, let's extract potion names.
 Step 1: Write the pattern
 
 ```{python a2_step1_pat, exercise=TRUE, message=FALSE}
-pat = r"___"
-pat
+pat2 = r"___"
+pat2
 ```
 
 ```{r a2_step1_pat-hint-1, echo=FALSE, message=FALSE}
@@ -300,13 +308,13 @@ pat
 ```
 
 ```{python a2_step1_pat-solution, echo=FALSE, message=FALSE}
-pat = r"Potion:\s*(.*?)\s*\(qty:"
-pat
+pat2 = r"Potion:\s*(.*?)\s*\(qty:"
+pat2
 ```
 
 Step 2: Use the pattern
 
-```{python a2_names, exercise=TRUE, message=FALSE, exercise.setup="a2_step1_pat"}
+```{python a2_names, exercise=TRUE, message=FALSE}
 names = ___
 names
 ```
@@ -320,13 +328,13 @@ names
 ```
 
 ```{python a2_names-solution, echo=FALSE, message=FALSE}
-names = re.findall(pat, SPELLBOOK)
+names = re.findall(pat2, SPELLBOOK)
 names
 ```
 
 ```{r a2_names-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- get_exercise_result()$result
+  student <- reticulate::py_to_r(.result)
   expected <- c("fizz-berry tonic", "moon-milk elixir", "emberroot tea")
   if (is.null(student)) incorrect(random_encouragement())
   else if (identical(as.character(student), expected)) correct(random_praise())
@@ -366,7 +374,7 @@ tests = ["FZ-120","MM-007","ER-451","fz-120","ABC-123","AA-12"]
 
 ```{r a3_tag-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- get_exercise_result()$result
+  student <- reticulate::py_to_r(.result)
   expected <- list(
     list("FZ-120", TRUE),
     list("MM-007", TRUE),
@@ -430,8 +438,8 @@ Let's redact the delivery date in `SPELLBOOK` by replacing it with "[DATE]".
 Step 1: Write the pattern
 
 ```{python a4_step1_pat, exercise=TRUE, message=FALSE}
-pat = r"___"
-pat
+pat3 = r"___"
+pat3
 ```
 
 ```{r a4_step1_pat-hint, echo=FALSE, message=FALSE}
@@ -439,13 +447,13 @@ pat
 ```
 
 ```{python a4_step1_pat-solution, echo=FALSE, message=FALSE}
-pat = r"\d{4}-\d{2}-\d{2}"
-pat
+pat3 = r"\d{4}-\d{2}-\d{2}"
+pat3
 ```
 
 Step 2: Use the pattern
 
-```{python a4_sub, exercise=TRUE, message=FALSE, exercise.setup="a4_step1_pat"}
+```{python a4_sub, exercise=TRUE, message=FALSE}
 redacted = ___
 redacted
 ```
@@ -455,13 +463,13 @@ redacted
 ```
 
 ```{python a4_sub-solution, echo=FALSE, message=FALSE}
-redacted = re.sub(pat, "[DATE]", SPELLBOOK)
+redacted = re.sub(pat3, "[DATE]", SPELLBOOK)
 redacted
 ```
 
 ```{r a4_sub-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- get_exercise_result()$result
+  student <- reticulate::py_to_r(.result)
   if (is.null(student)) incorrect(random_encouragement())
   else if (grepl("\\[DATE\\]", as.character(student)) && !grepl("2026-03-05", as.character(student))) {
     correct(random_praise())
@@ -489,7 +497,7 @@ len(hits)
 
 ```{r a5_flags-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- get_exercise_result()$result
+  student <- reticulate::py_to_r(.result)
   if (is.null(student)) incorrect(random_encouragement())
   else if (as.integer(student) == 3L) correct(paste(random_praise(), "You found the third secret word: BANJO"))
   else incorrect("Expected 3.")
@@ -805,7 +813,7 @@ tests_good, tests_bad
 
 ```{r c1_validate-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- get_exercise_result()$result
+  student <- reticulate::py_to_r(.result)
   if (is.null(student) || length(student) != 2) {
     incorrect("Make sure your last line outputs: (tests_good, tests_bad)")
   } else {
@@ -1023,7 +1031,7 @@ Think of `soup` as a structured version of the HTML.
 
 BeautifulSoup lets us access tags directly.
 
-```{python d1_parse3, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+```{python d1_parse3, exercise=TRUE, message=FALSE}
 print(soup.h2)              # first <h2>
 print(soup.span)            # first <span>
 print(soup.a)               # first <a>
@@ -1033,7 +1041,7 @@ print(soup.span["class"])   # class attribute
 
 Important: `soup.h2` gives the *first* `<h2>` tag. To get **all** tags, we use `.find_all()`.
 
-```{python d1_parse4, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+```{python d1_parse4, exercise=TRUE, message=FALSE}
 soup.find_all("span")
 ```
 
@@ -1044,7 +1052,7 @@ For example, let's try to extract all links from our HTML.
 
 Links are created with `<a>` tags and stored in the `href` attribute.
 
-```{python d1_parse6, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+```{python d1_parse6, exercise=TRUE, message=FALSE}
 for link in soup.find_all("a"):
     print(f"Link: {link['href']}")
 ```
@@ -1059,7 +1067,7 @@ If you see:
 
 You can select it using CSS-style selectors:
 
-```{python d1_parse7, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+```{python d1_parse7, exercise=TRUE, message=FALSE}
 products = soup.select(".product")
 products
 ```
@@ -1069,7 +1077,7 @@ products
 
 To get text:
 
-```{python d1_parse8, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+```{python d1_parse8, exercise=TRUE, message=FALSE}
 products[0].get_text()
 ```
 
@@ -1077,7 +1085,7 @@ Your Turn: Extract All Product Names
 
 Each product name is inside an `<h2>` tag.
 
-```{python d1_names, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+```{python d1_names, exercise=TRUE, message=FALSE}
 for tag in ___:
     print(___)
 ```
@@ -1089,7 +1097,7 @@ for tag in soup.find_all("h2"):
 
 ```{r d1_names-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- get_exercise_result()$result
+  student <- reticulate::py_to_r(.result)
   
   expected <- c("Wizard Hat", "Crystal Yarn", "Enchanted Hook")
   
@@ -1108,7 +1116,7 @@ Now that we understand structure, we use regex for small things.
 
 For example, now try to extract prices for the products.
 
-```{python d2_prices, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+```{python d2_prices, exercise=TRUE, message=FALSE}
 price_pat = r"___"
 prices = re.findall(___, HTML_SNIPPET)
 prices
@@ -1122,7 +1130,7 @@ prices
 
 ```{r d2_prices-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- get_exercise_result()$result
+  student <- reticulate::py_to_r(.result)
   expected <- c("$19.99", "$7.50", "$12.00")
   if (is.null(student)) incorrect(random_encouragement())
   else if (identical(as.character(student), expected)) correct(random_praise())
@@ -1154,7 +1162,7 @@ Valid SKUs:
 
 Example: `hat-123`
 
-```{python d3_sku, exercise=TRUE, message=FALSE, exercise.setup="d1_parse2"}
+```{python d3_sku, exercise=TRUE, message=FALSE}
 sku_pat = r"___"
 products = ___
 skus = ___ #use a list comprehension
@@ -1169,7 +1177,7 @@ skus = [d["sku"] for d in products]
 
 ```{r d3_sku-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- get_exercise_result()$result
+  student <- reticulate::py_to_r(.result)
   if (is.null(student)) incorrect(random_encouragement())
   else {
     ok <- all(vapply(student, function(x) isTRUE(x[[2]]), logical(1)))
