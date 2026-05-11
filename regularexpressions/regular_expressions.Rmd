@@ -280,13 +280,15 @@ qty = [int(x) for x in qty]
 qty
 ```
 
-```{r a1_qty-check, message=FALSE, warning=FALSE}
+```{r a1_qty-check, context='setup'}
 grade_this({
   student <- reticulate::py_to_r(.result)
+  print(student)
   expected <- c(12L, 3L, 27L)
-  if (is.null(student)) incorrect(random_encouragement())
-  else if (identical(as.integer(student), expected)) correct(random_praise())
-  else incorrect("Hint: capture digits after `qty:` using (\\d+).")
+  print(expected)
+  if (is.null(student)) fail(random_encouragement())
+  else if (identical(as.integer(student), expected)) pass(random_praise())
+  else fail("Hint: capture digits after `qty:` using (\\d+).")
 })
 ```
 
@@ -336,9 +338,9 @@ names
 grade_this({
   student <- reticulate::py_to_r(.result)
   expected <- c("fizz-berry tonic", "moon-milk elixir", "emberroot tea")
-  if (is.null(student)) incorrect(random_encouragement())
-  else if (identical(as.character(student), expected)) correct(random_praise())
-  else incorrect("Hint: use a lazy capture `(.*?)` up to `(qty:`.")
+  if (is.null(student)) fail(random_encouragement())
+  else if (identical(as.character(student), expected)) pass(random_praise())
+  else fail("Hint: use a lazy capture `(.*?)` up to `(qty:`.")
 })
 ```
 
@@ -383,13 +385,13 @@ grade_this({
     list("ABC-123", FALSE),
     list("AA-12", FALSE)
   )
-  if (is.null(student)) incorrect("Make sure the test results print.")
+  if (is.null(student)) fail("Make sure the test results print.")
   else {
     norm <- function(x) paste0(as.character(x[[1]]), ":", as.character(x[[2]]))
     if (identical(vapply(student, norm, ""), vapply(expected, norm, ""))) {
-      correct(paste(random_praise(), "You found the second secret word: KITE"))
+      pass(paste(random_praise(), "You found the second secret word: KITE"))
     } else {
-      incorrect("Pattern should be `[A-Z]{2}-\\d{3}`.")
+      fail("Pattern should be `[A-Z]{2}-\\d{3}`.")
     }
   }
 })
@@ -470,11 +472,11 @@ redacted
 ```{r a4_sub-check, message=FALSE, warning=FALSE}
 grade_this({
   student <- reticulate::py_to_r(.result)
-  if (is.null(student)) incorrect(random_encouragement())
+  if (is.null(student)) fail(random_encouragement())
   else if (grepl("\\[DATE\\]", as.character(student)) && !grepl("2026-03-05", as.character(student))) {
-    correct(random_praise())
+    pass(random_praise())
   } else {
-    incorrect("Make sure the original date disappears and [DATE] appears.")
+    fail("Make sure the original date disappears and [DATE] appears.")
   }
 })
 ```
@@ -498,9 +500,9 @@ len(hits)
 ```{r a5_flags-check, message=FALSE, warning=FALSE}
 grade_this({
   student <- reticulate::py_to_r(.result)
-  if (is.null(student)) incorrect(random_encouragement())
-  else if (as.integer(student) == 3L) correct(paste(random_praise(), "You found the third secret word: BANJO"))
-  else incorrect("Expected 3.")
+  if (is.null(student)) fail(random_encouragement())
+  else if (as.integer(student) == 3L) pass(paste(random_praise(), "You found the third secret word: BANJO"))
+  else fail("Expected 3.")
 })
 ```
 
@@ -815,7 +817,7 @@ tests_good, tests_bad
 grade_this({
   student <- reticulate::py_to_r(.result)
   if (is.null(student) || length(student) != 2) {
-    incorrect("Make sure your last line outputs: (tests_good, tests_bad)")
+    fail("Make sure your last line outputs: (tests_good, tests_bad)")
   } else {
     good <- student[[1]]
     bad  <- student[[2]]
@@ -823,9 +825,9 @@ grade_this({
     bad_ok  <- all(vapply(bad,  function(x) identical(x[[2]], FALSE), logical(1)))
 
     if (good_ok && bad_ok) {
-      correct(paste(random_praise(), "You found the fifth secret word: OCTOPUS"))
+      pass(paste(random_praise(), "You found the fifth secret word: OCTOPUS"))
     } else {
-      incorrect("Close! Ensure all good lines are True and all bad lines are False (including the consistency check).")
+      fail("Close! Ensure all good lines are True and all bad lines are False (including the consistency check).")
     }
   }
 })
@@ -957,9 +959,9 @@ question_numeric(
   "Enter the number of HTML elements:",
   answer_fn(function(value) {
     if (value == 4) {
-      correct(random_praise())
+      pass(random_praise())
     } else {
-      incorrect(paste(random_encouragement(), "Hint: Count opening/closing tag pairs. Do not count `<!DOCTYPE>`."))
+      fail(paste(random_encouragement(), "Hint: Count opening/closing tag pairs. Do not count `<!DOCTYPE>`."))
     }
   }, label = "Is the number even?"),
   allow_retry = TRUE,
@@ -1102,11 +1104,11 @@ grade_this({
   expected <- c("Wizard Hat", "Crystal Yarn", "Enchanted Hook")
   
   if (is.null(student)) {
-    incorrect(random_encouragement())
+    fail(random_encouragement())
   } else if (identical(as.character(student), expected)) {
-    correct(random_praise())
+    pass(random_praise())
   } else {
-    incorrect("Make sure you are looping over `soup.find_all('h2')` and using `.get_text()`.")
+    fail("Make sure you are looping over `soup.find_all('h2')` and using `.get_text()`.")
   }
 })
 ```
@@ -1132,9 +1134,9 @@ prices
 grade_this({
   student <- reticulate::py_to_r(.result)
   expected <- c("$19.99", "$7.50", "$12.00")
-  if (is.null(student)) incorrect(random_encouragement())
-  else if (identical(as.character(student), expected)) correct(random_praise())
-  else incorrect("Try `\\$\\d+\\.\\d{2}`.")
+  if (is.null(student)) fail(random_encouragement())
+  else if (identical(as.character(student), expected)) pass(random_praise())
+  else fail("Try `\\$\\d+\\.\\d{2}`.")
 })
 ```
 
@@ -1178,10 +1180,10 @@ skus = [d["sku"] for d in products]
 ```{r d3_sku-check, message=FALSE, warning=FALSE}
 grade_this({
   student <- reticulate::py_to_r(.result)
-  if (is.null(student)) incorrect(random_encouragement())
+  if (is.null(student)) fail(random_encouragement())
   else {
     ok <- all(vapply(student, function(x) isTRUE(x[[2]]), logical(1)))
-    if (ok) correct(random_praise()) else incorrect("Pattern should match letters-hyphen-digits.")
+    if (ok) pass(random_praise()) else fail("Pattern should match letters-hyphen-digits.")
   }
 })
 ```
