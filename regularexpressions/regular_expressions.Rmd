@@ -33,7 +33,7 @@ tags$div(
 )
 ```
 
-```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE, output = FALSE}
+```{python setup_py, context="setup", include = FALSE}
 import re
 from bs4 import BeautifulSoup
 
@@ -141,20 +141,20 @@ They do two useful things:
 
 1. They let you “pull out” a sub-piece.
 
-Example pattern: `qty:\s*(\d+)`
-
-- `qty:` matches literally
-- `\s*` matches optional whitespace
-- `(\d+)` matches digits **and captures them**
-
-So in Python:
-
-- `re.findall("qty:\s*(\d+)", text)` returns just the digits because they are captured.
-- If there are no capture groups, `findall` returns the whole match.
+    Example pattern: `qty:\s*(\d+)`
+    
+    - `qty:` matches literally
+    - `\s*` matches optional whitespace
+    - `(\d+)` matches digits **and captures them**
+    
+    So in Python:
+    
+    - `re.findall("qty:\s*(\d+)", text)` returns just the digits because they are captured.
+    - If there are no capture groups, `findall` returns the whole match.
 
 2. They let you treat a chunk as one unit.
 
-Example: `(ab)+` means repeat the chunk `ab`, not repeat `b` only.
+    Example: `(ab)+` means repeat the chunk `ab`, not repeat `b` only.
 
 **Important:** capturing changes what `findall` returns
 
@@ -164,13 +164,17 @@ Example: `(ab)+` means repeat the chunk `ab`, not repeat `b` only.
 
 ## Regex Warm-ups
 
+First, we should make sure `re` is imported.
+
+```{python imports, exercise=TRUE, message=FALSE}
+import re
+```
+
 We’ll use this text throughout:
 
 ```{python}
 print(SPELLBOOK)
 ```
-
-First, predict what `findall()` returns:
 
 ```{r mcq_cap_predict, echo=FALSE}
 question(
@@ -183,7 +187,7 @@ question(
 )
 ```
 
-Now, see how capture groups change `findall()`:
+Now, see how capture groups change `re.`findall()`:
 
 ```{python cap_demo, exercise=TRUE, message=FALSE, exercise.diagnostics = TRUE}
 # Try the three patterns below and compare outputs.
@@ -210,7 +214,7 @@ If your output “looks wrong,” check whether you accidentally added (or forgo
 
 ```{r mcq_groups_output, echo=FALSE}
 question(
-  "If your regex has exactly ONE capture group, `re.findall` returns:",
+  "If your regex has exactly ONE capture group, `re.findall()` returns:",
   answer("A `list` of full matches"),
   answer("A `list` of captured `strings`", correct=TRUE),
   answer("A `list` of `tuples`"),
@@ -221,7 +225,7 @@ question(
 
 ```{r mcq_findall, echo=FALSE}
 question(
-  "If a regex has TWO capture groups, what does re.findall return?",
+  "If a regex has TWO capture groups, what does `re.findall()` return?",
   answer("A list of full matches as strings"),
   answer("A list of captured strings"),
   answer("A list of tuples (one tuple per match)", correct=TRUE),
