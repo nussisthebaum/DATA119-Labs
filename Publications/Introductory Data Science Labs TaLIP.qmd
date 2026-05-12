@@ -1,14 +1,16 @@
 ---
 title: "Introductory Data Science Labs"
-author: "Amy Nussbaum, Amanda Jotte, Atticus Ginsborg"
+author: "A. Nussbaum, A. Jotte, A. Ginsborg"
 date: "2026-05-01"
 format: 
   beamer:
     theme: "Berkeley"
     colortheme: "beaver"
+    colorlinks: true
+    toccolor: "black"
     slide_level: 2
+    latex-auto-install: false
 classoption: "aspectratio=169, t"
-latex-auto-install: true
 header-includes:
   - \setlength{\topsep}{0pt}
   - \setlength{\partopsep}{0pt}
@@ -18,17 +20,19 @@ header-includes:
   - \def\endcols{\end{columns}}
   - \AtBeginSubsection{}
   - \AtBeginSection{}
-  - \usepackage{xcolor}
   - \usepackage{booktabs}
+  - \usepackage{enumitem}
   - \usepackage{multirow}
-urlcolor: blue
+  - \usepackage{multicol}
+  - \usepackage{xcolor}
+  - \setlist[itemize]{noitemsep, topsep=0pt, label=\textbullet}
+cache: true
 ---
-
-<!-- cache: true -->
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, tidy = TRUE)
+options(tinytex.tlmgr_update = FALSE)
+
 library(reticulate)
 
 use_condaenv("/Users/amynussbaum/Library/r-miniconda-arm64/envs/r-reticulate/bin/python")
@@ -73,29 +77,117 @@ usage_non_shiny <- get_usage_static(client,
 
 ## Abstract
 
+\vspace{10mm}
+
 > Lab materials provide students opportunities for practice in new domains. However, existing tools for implementing interactive data science labs require installing software, which distracts from core lessons. We leverage R’s instructional ecosystem for browser-based, self-guided Python tutorials for data science courses. These tutorials require minimal setup, ideal for use across different classroom modalities. R’s framework can be successfully adapted for Python labs, lowering barriers to entry and strengthening student learning of core data science concepts.
+
+## Data Science as an Emerging Field
+
+The field of data science has rapidly expanded in recent years, and approaches to *designing introductory data science course materials* vary widely, depending on the background of the instructor (Hardin et al., 2015). 
+
+* Statistics departments: R and its extensive range of pedagogical tools
+* Computer Science departments: Python 
+* Still others: language agnostic 
+
+## Tools for Designing Course Materials
+
+* Python-based courses rely on Jupyter for interactive work. 
+* R's more mature teaching libraries do not run in Jupyter.
+* Comparable Python tools either:
+  + Do not work as well, or 
+  + Are unfamiliar to statistics faculty new to teaching Python (Brunner & Kim, 2016). 
+
+Answer: Shiny Apps, written in R to teach Python, combined with PositCloud 
+
+* Simple, interactive assignments, 
+* Lowering barriers for beginners (Çetinkaya-Rundel and Rundel, 2018; Stoudt et al., 2022). 
 
 ## Motivation 
 
+Consider teaching a group of students how to create a histogram:
 
+\begin{multicols}{2}
 
-## Tools 
+\scriptsize
 
+\begin{itemize}
+  \item[\scriptsize \textbullet] Show students what a Jupyter notebook is and how it works (i.e., the difference between code and markdown cells, shortcuts, etc.).
+  \item[\scriptsize \textbullet] Open a Jupyter notebook. Either:
+  \begin{itemize}
+    \item[\tiny \textbullet] \tiny Open a terminal and launch an empty notebook. 
+    \begin{itemize}
+      \item[\tiny \textbullet] \tiny Show students what the terminal is.
+      \item[\tiny \textbullet] \tiny Show students how to change their directories.
+    \end{itemize}
+    \item[\tiny \textbullet] \tiny Download and install Anaconda Navigator.
+  \end{itemize}
+  \item[\scriptsize \textbullet] \scriptsize Install relevant graphics modules.
+   \begin{itemize}
+     \item[\tiny \textbullet] \tiny Show students what the terminal is.
+     \item[\tiny \textbullet] \tiny Show students how to install packages.
+    \end{itemize}
+  \item[\scriptsize \textbullet] \scriptsize Load data into your workspace.
+    \begin{itemize}
+      \item[\tiny \textbullet] \tiny Download the dataset.
+      \item[\tiny \textbullet] \tiny Save the dataset in the same directory as the notebook.
+      \begin{itemize}
+        \item[\tiny \textbullet] \tiny Review the file structure of your computer to understand how to navigate to a new directory.
+      \end{itemize}
+    \end{itemize}
+  \item[\scriptsize \textbullet] \scriptsize \textbf{Actually make the histogram.}
+\end{itemize}
 
+\normalsize
 
-## Example
+\vspace{5mm}
+
+\begin{itemize}
+  \item[\normalsize \textbullet] Click on a link. 
+  \item[\normalsize \textbullet] Sign into the website. 
+  \item[\normalsize \textbullet] \textbf{Actually make the histogram.}
+  \item[]
+  \item[]
+  \item[]
+  \item[]
+  \item[]
+  \item[] 
+  \item[]
+  \item[] 
+  \item[]
+  \item[] 
+\end{itemize}
+
+\end{multicols}
+
+## Example 1: Histogram
+
+![](histogram_ex.png){width=80%, fig-align="center"}
+
+## Example 2: Question Types
+
+![](questions.png){width=80%, fig-align="center"}
+
+## Example 3: Responses
+
+![](questions_filled.png){width=80%, fig-align="center"}
 
 ## Research Questions
 
-* *RQ1*: Can frameworks developed for R-based courses be adapted for teaching data science in Python? 
-* *RQ2*: Do browser-based, interactive labs improve understanding of data science concepts? 
-* *RQ3*: Do such labs reduce barriers for students from non-coding backgrounds and increase confidence and self-efficacy?
+\vspace{10mm}
+
+* **RQ1**: Can frameworks developed for R-based courses be adapted for teaching data science in Python? 
+* **RQ2**: Do browser-based, interactive labs improve understanding of data science concepts? 
+* **RQ3**: Do such labs reduce barriers for students from non-coding backgrounds and increase confidence and self-efficacy?
 
 # RQ1
 
 ## RQ1
 
+\vspace{10mm}
+
 Can frameworks developed for R-based courses be adapted for teaching data science in Python? 
+
+\vspace{10mm}
 
 > Yes! With some caveats--but mostly yes.
 
@@ -196,7 +288,7 @@ kable(usage_byl_119, format = "latex", escape = FALSE, booktabs = TRUE,
 
 ## DATA119: Usage by Time
 
-```{r, echo = FALSE, fig.height = 4, fig.width=8, fig.align = "center"}
+```{r, echo = FALSE, eval = FALSE, fig.height = 4, fig.width=8, fig.align = "center"}
 ggplot(usage_119, aes(x = time_spent/60, y = title)) + 
   geom_boxplot(color = "#800000") + 
   geom_vline(xintercept = 50, color = "gray20") + 
@@ -209,8 +301,91 @@ ggplot(usage_119, aes(x = time_spent/60, y = title)) +
   #ggtitle("DATA119 Tutorial Usage by Time")
 ```
 
-## Usage for Lab 2: Correlation and Simple Linear Regression
+```{r, echo = FALSE, fig.height = 3.85, fig.width=8, fig.align = "center"}
+usage_119_byq <- usage_119 |>
+  group_by(quarter, quarter_day, title) |>
+  summarise(usage = n()) |>
+  filter(quarter_day > 0) |> 
+  mutate(quarter = factor(quarter, levels = c("Winter 2025", "Spring 2025", 
+                                              "Sept. 2025", "Autumn 2025", 
+                                              "Winter 2026", "Spring 2026"))) |>
+  filter(quarter != "Sept. 2025")
 
+usage_119_byq |>
+  mutate(
+    #title = str_replace(title, "Data 119 Lab ", "") |>
+      #str_replace(" -", ":"),
+    title = as.factor(title),
+    quarter_day = as.integer(quarter_day),
+    quarter =
+      str_replace(quarter, "Winter", "WI") |>
+      str_replace("Spring", "SP") |>
+      str_replace("Autumn", "AU") |>
+      str_replace("20", "")
+  ) |>
+  uncount(usage) |>
+  ggplot(aes(x = quarter_day, y = title, color = quarter)) +
+  geom_count(
+    position = position_dodge(width = 1),
+    aes(alpha = after_stat(log(n)))
+  ) +
+  labs(
+    y = "Data 119 Lab",
+    x = "Day in Quarter"#,
+    #caption = "Plot by Ryan McShane"
+  ) +
+  scale_x_continuous(breaks = scales::breaks_width(7, offset = 0)) + 
+  scale_y_discrete("", limits = rev, 
+                   labels = rev(c("Lab 1", "Lab 2", "Lab 3", "Lab 3.5", "Lab 4",
+                              "Lab 5", "Lab 6", "Lab 7", "Lab 8", "Lab 9"))) +
+  scale_color_manual(
+    name = "Quarter",
+    values = c(
+      "WI 25" = "#A4343A",
+      "SP 25" = "#DE7C00",
+      "AU 25" = "#275D38",
+      "WI 26" = "#007396",
+      "SP 26" = "#59315F"
+  )) +
+  scale_alpha_continuous(range = c(0.2, 1)) +
+  guides(alpha = "none") +
+  theme(
+    plot.caption = element_text(margin = margin(t = -15, unit = "pt")),
+    plot.caption.position = "plot"
+  )
+```
+
+## Usage for Lab 1: Data Wrangling
+
+```{r, echo = FALSE, eval = TRUE, fig.height = 3.85, fig.width=8, fig.align = "center"}
+# ggplot(usage_119_byq, aes(x = quarter_day, y = usage, color = quarter)) +
+#   geom_line() +
+#   facet_wrap(vars(title), ncol = 2, dir = "v") + 
+#   scale_color_manual(name = "Quarter",
+#                      values = c("Winter 2025" = "#A4343A", "Spring 2025" = "#DE7C00",
+#                                 #"Sept. 2025" = "#EAAA00", 
+#                                 "Autumn 2025" = "#275D38", 
+#                                 "Winter 2026" = "#007396", "Spring 2026" = "#59315F")) + 
+#   scale_x_continuous("Day of the Quarter") + 
+#   scale_y_continuous("Usage (meaningful hits)") + 
+#   theme(legend.position = "bottom") + 
+#   ggtitle("DATA119 Tutorial Usage over the Quarter")
+
+usage_lab1 <- usage_119_byq |>
+  filter(title == "Data 119 Lab 1 - Data Wrangling")
+
+ggplot(usage_lab1, aes(x = quarter_day, y = usage, color = quarter)) +
+  geom_line() +
+  scale_color_manual(name = "Quarter",
+                     values = c("Winter 2025" = "#A4343A", "Spring 2025" = "#DE7C00",
+                                #"Sept. 2025" = "#EAAA00",
+                                "Autumn 2025" = "#275D38",
+                                "Winter 2026" = "#007396", "Spring 2026" = "#59315F")) +
+  scale_x_continuous("Day of the Quarter") +
+  scale_y_continuous("Usage (meaningful hits)") +
+  theme(legend.position = "bottom") #+
+  #ggtitle("DATA119 Tutorial Usage over the Quarter")
+```
 
 ## DATA120 Tutorials
 
@@ -284,9 +459,48 @@ ggplot(usage_120, aes(x = time_spent/60, y = title)) +
 
 ## RQ2
 
+\vspace{10mm}
+
+Do browser-based, interactive labs improve understanding of data science concepts? 
+
+\vspace{10mm}
+
+> Tentatively yes--we need more data.
+
+## Anecdata
+
+In courses without required lab sections, we noticed:
+
+* More student questions that could have been answered by reviewing tutorials
+* Delayed understanding, leading to a slightly slower pace in the course, and
+* Decreased server performance when students were all trying to complete the lab extremely quickly before the deadline. 
+
+## Winter 2026 Statistics
+
+* **How successful do you think you were in Data 119?**
+  + 1: Neutral
+  + 7: Mostly Successful
+  + 3: Very Successful
+  
+\vspace{3mm}  
+  
+* **How would your answer to the previous question have changed without the DATA119 labs?**
+  + 2: My answer would have changed a little bit, I would have felt more successful.
+  + 4: My answer would not have changed at all. 
+  + 4: My answer would have changed a little bit, I would have felt less successful. 
+  + 1: My answer would have changed a lot, I would have felt much less successful.
+
 # RQ3
 
 ## RQ3
+
+\vspace{10mm}
+
+Do such labs reduce barriers for students from non-coding backgrounds and increase confidence and self-efficacy?
+
+\vspace{10mm}
+
+> Not enough data just yet--we will need to continue collection.
 
 # Future Work
 
@@ -294,19 +508,22 @@ ggplot(usage_120, aes(x = time_spent/60, y = title)) +
 
 Server performance matters!
 
->
+> Sometimes the website crashes, and there is nothing we can do about it, but we still have to stay until the end of the session.
 
-Fixes and Future Plans
+
+ >  The biggest challenge was the one or two weeks when it lagged and we were not allowed to leave and couldn't even work on it.
+
+Fixes and Future Plans:
 
 * Individual fine-tuning on each tutorial to improve performance
-*  Reconfiguring server settings to clear up memory
+* Reconfiguring server settings to clear up memory
 * Migration to a new, larger, Data Science Institute-owned server over the summer. 
 
 ## Lessons Learned 2
 
 * Recruitment is hard!
   + Two sections of DATA119 in Winter 2026 with 44 and 19 students
-  + Ultimately, only 9 participants completed the pre- and post-quarter surveys. 
+  + Ultimately, only 11 participants completed the pre- and post-quarter surveys. 
   
 Fixes and Future Plans
 
@@ -314,5 +531,22 @@ Fixes and Future Plans
 * Canvas announcements with links
   
 ## Future plans
+
+* Adjusting all labs to grade on results rather than exact match code. 
+* Adjusting grading (currently completion based, but relatively easy to breeze through)
+* Ongoing data collection for DATA119 Labs
+* Factor Analysis for validating constructs in pre- and post-quarter surveys
+* Revision and improvements to DATA120 Labs
+* Creation of DATA118 Labs
+
+## Acknowledgments
+
+* Thank you to the Data Science Institute for some initial summer funding to get the tutorials up and running, as well as to the Physical Sciences Division for a grant from the College Innovation Funds to convert more material and improve the initial versions of the tutorials. 
+
+* Thank you to Dr. Amanda Jotte--the work became so much easier once I talked a second person into joining me in my hair-brained scheme. 
+
+* Thank you to Atticus Ginsborg for all his help with getting our IRB proposal reviewed and study recruitment.
+
+* A huge and massive thank you to Bennett Hunter for their help in hosting these tutorials virtually--without Bennett, these labs would not have been possible. 
 
 
