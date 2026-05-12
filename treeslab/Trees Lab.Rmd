@@ -18,7 +18,7 @@ library(tidyverse)
 
 ## Package Requirements  for Content
 
-## Requirements for Answer Checking
+## Requirements for Answer Checking 
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
