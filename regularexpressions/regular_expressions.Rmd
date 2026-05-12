@@ -264,7 +264,13 @@ pat
 
 ```{r a1_step1_pat-check, context='server'}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   expected <- "qty:\\s*(\\d+)"
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
@@ -292,7 +298,13 @@ qty
 
 ```{r a1_qty-check, context='server'}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   expected <- c(12L, 3L, 27L)
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.integer(student), expected)) pass(random_praise())
@@ -324,7 +336,13 @@ pat2
 
 ```{r a2_step1_pat-check, context='server'}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   expected <- "Potion:\\s*(.*?)\\s*\\(qty:"
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
@@ -354,7 +372,13 @@ names
 
 ```{r a2_names-check, context='server'}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   expected <- c("fizz-berry tonic", "moon-milk elixir", "emberroot tea")
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
@@ -394,7 +418,13 @@ tests = ["FZ-120","MM-007","ER-451","fz-120","ABC-123","AA-12"]
 
 ```{r a3_tag-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   expected <- list(
     list("FZ-120", TRUE),
     list("MM-007", TRUE),
@@ -473,7 +503,13 @@ pat3
 
 ```{r a4_step1_pat-check, context='server'}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   expected <- "\\d{4}-\\d{2}-\\d{2}"
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
@@ -499,7 +535,13 @@ redacted
 
 ```{r a4_sub-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   if (is.null(student)) fail(random_encouragement())
   else if (grepl("\\[DATE\\]", as.character(student)) && !grepl("2026-03-05", as.character(student))) {
     pass(random_praise())
@@ -527,7 +569,13 @@ len(hits)
 
 ```{r a5_flags-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   if (is.null(student)) fail(random_encouragement())
   else if (as.integer(student) == 3L) pass(paste(random_praise(), "You found the third secret word: BANJO"))
   else fail("Expected 3.")
@@ -805,7 +853,13 @@ tests_good, tests_bad
 
 ```{r c1_validate-check, context='server'}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   if (is.null(student) || length(student) != 2) {
     fail("Make sure your last line outputs: (tests_good, tests_bad)")
   } else {
@@ -1097,7 +1151,13 @@ names
 
 ```{r d1_names-check, context='server'}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   
   expected <- c("Wizard Hat", "Crystal Yarn", "Enchanted Hook")
   
@@ -1130,7 +1190,13 @@ prices
 
 ```{r d2_prices-check, context='server'}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   expected <- c("$19.99", "$7.50", "$12.00")
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
@@ -1178,7 +1244,13 @@ skus = [p.find("a")["data-sku"] for p in products]
 
 ```{r d3_sku-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- reticulate::py_to_r(.result)
+  student <- tryCatch(
+    reticulate::py_to_r(.result),
+    error = function(e) {
+      message("py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
   if (is.null(student)) fail(random_encouragement())
   else {
     ok <- all(vapply(student, function(x) isTRUE(x[[2]]), logical(1)))
