@@ -630,7 +630,7 @@ grade_this({
 })
 ```
 
-## Regex Crossword
+<!--## Regex Crossword
 
 ```{r crossword_setup, echo=FALSE, context="server"}
 CW_N <- 7
@@ -804,6 +804,7 @@ output$unlock_section <- renderUI({
   )
 })
 ```
+-->
 
 ## Validate a crochet pattern
 
