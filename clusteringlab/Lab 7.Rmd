@@ -767,7 +767,7 @@ Note that this number doesn't really have a scale! We have no idea if it is good
 
 25. We used $K=6$ arbitrarily, but of course we need to choose it. As I mentioned in class, we will need to write a loop and create the elbow plot to justify the choice of $K$. Consider the code below:
 
-```{python looped, exercise = FALSE, message = FALSE}
+```{python looped, exercise = FALSE, message = FALSE, echo = TRUE, eval = FALSE}
 inertias = []
 
 for i in range(1,16):
