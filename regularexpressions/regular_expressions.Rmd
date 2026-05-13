@@ -104,7 +104,7 @@ tutorial_options(exercise.completion = FALSE)
 # }
 
 safe_py_to_r <- function(x) {
-  if (is.null(x)) return(NULL)
+  if (is.null(x)) fail("I couldn't read your Python result. Run the exercise again, then submit.")
 
   tryCatch(
     reticulate::py_to_r(x),
@@ -358,7 +358,7 @@ pat = r"qty:\s*(\d+)"
 pat
 ```
 
-```{r a1_step1_pat-check, context='server'}
+```{r a1_step1_pat-check}
 grade_this({
   student <- safe_py_to_r(.result)
   expected <- "qty:\\s*(\\d+)"
@@ -386,7 +386,7 @@ qty = [int(x) for x in qty]
 qty
 ```
 
-```{r a1_qty-check, context='server'}
+```{r a1_qty-check}
 grade_this({
   student <- safe_py_to_r(.result)
   expected <- c(12L, 3L, 27L)
@@ -418,7 +418,7 @@ pat2 = r"Potion:\s*(.*?)\s*\(qty:"
 pat2
 ```
 
-```{r a2_step1_pat-check, context='server'}
+```{r a2_step1_pat-check}
 grade_this({
   student <- safe_py_to_r(.result)
   expected <- "Potion:\\s*(.*?)\\s*\\(qty:"
@@ -448,7 +448,7 @@ names = re.findall(pat2, SPELLBOOK)
 names
 ```
 
-```{r a2_names-check, context='server'}
+```{r a2_names-check}
 grade_this({
   student <- safe_py_to_r(.result)
   expected <- c("fizz-berry tonic", "moon-milk elixir", "emberroot tea")
@@ -567,7 +567,7 @@ pat3 = r"\d{4}-\d{2}-\d{2}"
 pat3
 ```
 
-```{r a4_step1_pat-check, context='server'}
+```{r a4_step1_pat-check}
 grade_this({
   student <- safe_py_to_r(.result)
   expected <- "\\d{4}-\\d{2}-\\d{2}"
@@ -900,7 +900,7 @@ tests_bad  = [(line, is_valid_line(line)) for line in PATTERN_BAD]
 tests_good, tests_bad
 ```
 
-```{r c1_validate-check, context='server'}
+```{r c1_validate-check}
 grade_this({
   student <- safe_py_to_r(.result)
   if (is.null(student) || length(student) != 2) {
@@ -1190,7 +1190,7 @@ for tag in soup.find_all("h2"):
 names
 ```
 
-```{r d1_names-check, context='server'}
+```{r d1_names-check}
 grade_this({
   student <- safe_py_to_r(.result)
   
@@ -1223,7 +1223,7 @@ prices = re.findall(price_pat, HTML_SNIPPET)
 prices
 ```
 
-```{r d2_prices-check, context='server'}
+```{r d2_prices-check}
 grade_this({
   student <- safe_py_to_r(.result)
   expected <- c("$19.99", "$7.50", "$12.00")
