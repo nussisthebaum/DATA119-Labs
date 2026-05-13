@@ -21,6 +21,105 @@ gradethis_setup()
 tutorial_options(exercise.completion = FALSE)
 
 `%||%` <- function(x, y) if (is.null(x)) y else x
+
+ensure_python_env <- function() {
+  ok <- tryCatch({
+    reticulate::py_available(initialize = TRUE)
+  }, error = function(e) FALSE)
+
+  if (!ok) {
+    stop("Python is not available to reticulate.")
+  }
+
+  reticulate::py_run_string('
+import re
+from bs4 import BeautifulSoup
+
+SPELLBOOK = """
+Potion: fizz-berry tonic (qty: 12) [tag: FZ-120]
+Potion: moon-milk elixir (qty: 3) [tag: MM-007]
+Potion: emberroot tea (qty: 27) [tag: ER-451]
+Deliver: Tower-7 by 2026-03-05
+"""
+
+PATTERN_GOOD = [
+  "Round 1: MR, 6 sc",
+  "Round 2: inc around (12)",
+  "Round 3: (sc 1, inc) x 6 (18)",
+  "Round 4-6: sc around (18)",
+  "Round 7: (sc 2, dec) x 6 (18)",
+  "FO"
+]
+
+PATTERN_BAD = [
+  "Round 1 MR, 6 sc",                 # missing colon
+  "Round 2: inc around 12",           # missing parentheses
+  "Round 3: (sc one, inc) x 6 (18)",  # non-numeric
+  "Round 4-6: sc around (eighteen)",  # non-numeric
+  "Round 7: (sc 2, dec) x 6 (17)",    # inconsistent total
+  "Fasten off"                        # FO only
+]
+
+HTML_SNIPPET = """
+<div class="product">
+  <h2>Wizard Hat</h2>
+  <span class="price">$19.99</span>
+  <span class="rating">4.7</span>
+  <a href="/buy/hat-123" data-sku="hat-123">Buy</a>
+</div>
+<div class="product">
+  <h2>Crystal Yarn</h2>
+  <span class="price">$7.50</span>
+  <span class="rating">4.9</span>
+  <a href="/buy/yarn-888" data-sku="yarn-888">Buy</a>
+</div>
+<div class="product featured">
+  <h2>Enchanted Hook</h2>
+  <span class="price">$12.00</span>
+  <span class="rating">4.2</span>
+  <a href="/buy/hook-404" data-sku="hook-404">Buy</a>
+</div>
+"""
+
+# Try the three patterns below and compare outputs.
+# 1) no capture group -> list of full matches
+no_group = re.findall(r"qty:\s*\d+", SPELLBOOK)
+
+# 2) one capture group -> list of just the captured digits (strings)
+one_group = re.findall(r"qty:\s*(\d+)", SPELLBOOK)
+
+# 3) two capture groups -> list of tuples: (qty_digits, tag_code)
+two_groups = re.findall(r"qty:\s*(\d+)\s*" + r"\[" + r"tag:\s*([A-Z]{2}-\d{3})" + r"\]", SPELLBOOK)
+# Please ignore the seemingly unnecessary concatenation here. It is for display purposes only.
+
+pat = r"qty:\s*(\d+)"
+pat2 = r"Potion:\s*(.*?)\s*\(qty:"
+pat3 = r"\d{4}-\d{2}-\d{2}"
+soup = BeautifulSoup(HTML_SNIPPET, "html.parser")
+products = soup.select(".product")
+price_pat = r"\$\d+\.\d{2}"
+sku_pat = r"[a-z]+-\d+"
+skus = [d.find("a")["data-sku"] for d in products]
+')
+}
+
+safe_py_to_r <- function(x) {
+  if (is.null(x)) return(NULL)
+
+  ok <- ensure_python_env()
+  if (!ok) return(NULL)
+
+  tryCatch(
+    reticulate::py_to_r(x),
+    error = function(e) {
+      message("safe_py_to_r error: ", conditionMessage(e))
+      NULL
+    }
+  )
+}
+
+ensure_python_env()
+
 ```
 
 ```{r header, echo=FALSE}
@@ -101,7 +200,7 @@ soup = BeautifulSoup(HTML_SNIPPET, "html.parser")
 products = soup.select(".product")
 price_pat = r"\$\d+\.\d{2}"
 sku_pat = r"[a-z]+-\d+"
-skus = [d["sku"] for d in products]
+skus = [d.find("a")["data-sku"] for d in products]
 ```
 
 ## Goals 
@@ -264,13 +363,7 @@ pat
 
 ```{r a1_step1_pat-check, context='server'}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   expected <- "qty:\\s*(\\d+)"
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
@@ -298,13 +391,7 @@ qty
 
 ```{r a1_qty-check, context='server'}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   expected <- c(12L, 3L, 27L)
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.integer(student), expected)) pass(random_praise())
@@ -336,13 +423,7 @@ pat2
 
 ```{r a2_step1_pat-check, context='server'}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   expected <- "Potion:\\s*(.*?)\\s*\\(qty:"
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
@@ -372,13 +453,7 @@ names
 
 ```{r a2_names-check, context='server'}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   expected <- c("fizz-berry tonic", "moon-milk elixir", "emberroot tea")
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
@@ -418,13 +493,7 @@ tests = ["FZ-120","MM-007","ER-451","fz-120","ABC-123","AA-12"]
 
 ```{r a3_tag-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   expected <- list(
     list("FZ-120", TRUE),
     list("MM-007", TRUE),
@@ -503,13 +572,7 @@ pat3
 
 ```{r a4_step1_pat-check, context='server'}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   expected <- "\\d{4}-\\d{2}-\\d{2}"
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
@@ -535,13 +598,7 @@ redacted
 
 ```{r a4_sub-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   if (is.null(student)) fail(random_encouragement())
   else if (grepl("\\[DATE\\]", as.character(student)) && !grepl("2026-03-05", as.character(student))) {
     pass(random_praise())
@@ -569,13 +626,7 @@ len(hits)
 
 ```{r a5_flags-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   if (is.null(student)) fail(random_encouragement())
   else if (as.integer(student) == 3L) pass(paste(random_praise(), "You found the third secret word: BANJO"))
   else fail("Expected 3.")
@@ -853,13 +904,7 @@ tests_good, tests_bad
 
 ```{r c1_validate-check, context='server'}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   if (is.null(student) || length(student) != 2) {
     fail("Make sure your last line outputs: (tests_good, tests_bad)")
   } else {
@@ -1067,8 +1112,6 @@ print(HTML_SNIPPET)
 Now we create a “soup” object:
 
 ```{python d1_parse2, exercise=TRUE, message=FALSE}
-from bs4 import BeautifulSoup
-
 soup = BeautifulSoup(HTML_SNIPPET, "html.parser")
 soup
 ```
@@ -1151,13 +1194,7 @@ names
 
 ```{r d1_names-check, context='server'}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   
   expected <- c("Wizard Hat", "Crystal Yarn", "Enchanted Hook")
   
@@ -1190,13 +1227,7 @@ prices
 
 ```{r d2_prices-check, context='server'}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   expected <- c("$19.99", "$7.50", "$12.00")
   if (is.null(student)) fail(random_encouragement())
   else if (identical(as.character(student), expected)) pass(random_praise())
@@ -1244,13 +1275,7 @@ skus = [p.find("a")["data-sku"] for p in products]
 
 ```{r d3_sku-check, message=FALSE, warning=FALSE}
 grade_this({
-  student <- tryCatch(
-    reticulate::py_to_r(.result),
-    error = function(e) {
-      message("py_to_r error: ", conditionMessage(e))
-      NULL
-    }
-  )
+  student <- safe_py_to_r(.result)
   if (is.null(student)) fail(random_encouragement())
   else {
     ok <- all(vapply(student, function(x) isTRUE(x[[2]]), logical(1)))
