@@ -765,9 +765,9 @@ grade_this_code()
 
 Note that this number doesn't really have a scale! We have no idea if it is good or bad just by looking at it. To figure that out, we would need to compare it to the `inertia_` of a clustering object run with some other value of $K$. 
 
-25. We used $K=6$ arbitrarily, but of course we need to choose it. As I mentioned in class, we will need to write a loop and create the elbow plot to justify the choice of $K$. Fill in the loop below to get the inertia for values of $K$ from 1 to 15 (I'm picking a large number because the data is so large, in smaller datasets you may not need to go so far). Please note that since it is a loop with a lot of repeated calculations, this cell in particular WILL take a long time to run! As will 26 and 27 since they are related. 
+25. We used $K=6$ arbitrarily, but of course we need to choose it. As I mentioned in class, we will need to write a loop and create the elbow plot to justify the choice of $K$. Consider the code below:
 
-```{python looped, exercise = TRUE, message = FALSE}
+```{python looped, exercise = FALSE, message = FALSE}
 inertias = []
 
 for i in range(1,16):
@@ -776,16 +776,32 @@ for i in range(1,16):
     inertias.append(___)
 ```
 
-```{python looped-solution, message = FALSE, warning = FALSE, echo = FALSE}
-inertias = []
+This code shows most of the loop we need to get the inertia for values of $K$ from 1 to 15 (I'm picking a large number because the data is so large, in smaller datasets you may not need to go so far). 
 
-for i in range(1,16):
-    kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 1145)
-    kmeans.fit(epi)
-    inertias.append(kmeans.inertia_)
+```{r q_inertia_alt, echo=FALSE}
+question("What should you be appending to the list of `inertias`?",
+         answer("`kmeans`"),
+         answer("`kmeans.inertia`"),
+         answer("`kmeans.inertia_`", correct = TRUE),
+         answer("`inertia"), 
+         answer("`inertia_`"), 
+         allow_retry = TRUE)
 ```
 
-```{r looped-code-check, message = FALSE, warning = FALSE}
+Please note that since it is a loop with a lot of repeated calculations, this cell in particular would take a long time to run--similar loops in your personal Jupyter notebooks will also take a while!
+
+<!--  As will 26 and 27 since they are related. -->
+
+```{python looped-solution, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+#inertias = []
+
+#for i in range(1,16):
+#    kmeans = KMeans(n_clusters=i, n_init = 5, random_state = 1145)
+#    kmeans.fit(epi)
+#    inertias.append(kmeans.inertia_)
+```
+
+```{r looped-code-check, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
 grade_this_code()
 ```
 
