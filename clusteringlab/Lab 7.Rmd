@@ -783,7 +783,7 @@ question("What should you be appending to the list of `inertias`?",
          answer("`kmeans`"),
          answer("`kmeans.inertia`"),
          answer("`kmeans.inertia_`", correct = TRUE),
-         answer("`inertia"), 
+         answer("`inertia`"), 
          answer("`inertia_`"), 
          allow_retry = TRUE)
 ```
