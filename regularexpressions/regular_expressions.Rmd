@@ -912,7 +912,7 @@ grade_this({
     bad_ok  <- all(vapply(bad,  function(x) identical(x[[2]], FALSE), logical(1)))
 
     if (good_ok && bad_ok) {
-      pass(paste(random_praise(), "You found the fifth secret word: OCTOPUS"))
+      pass(paste(random_praise(), "You found the fourth secret word: OCTOPUS"))
     } else {
       fail("Close! Ensure all good lines are True and all bad lines are False (including the consistency check).")
     }
@@ -927,7 +927,7 @@ question(
   answer("They match digits"),
   answer("They make regex faster automatically"),
   allow_retry = TRUE,
-  post_message = "You found the fourth secret word: MARSHMALLOW"
+  post_message = "You found the fifth secret word: MARSHMALLOW"
 )
 ```
 
