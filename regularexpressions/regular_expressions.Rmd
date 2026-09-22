@@ -213,984 +213,984 @@ no_group, one_group, two_groups
 ```
 
 
-:::: {.notebox}
-::: {.center}
-**Tip**
-:::
-If your output “looks wrong,” check whether you accidentally added (or forgot) parentheses.
-::::
-
-```{r mcq_groups_output, echo=FALSE}
-question(
-  "If your regex has exactly ONE capture group, `re.findall()` returns:",
-  answer("A `list` of full matches"),
-  answer("A `list` of captured `strings`", correct=TRUE),
-  answer("A `list` of `tuples`"),
-  answer("A single `string`"),
-  allow_retry = TRUE
-)
-```
-
-```{r mcq_findall, echo=FALSE}
-question(
-  "If a regex has TWO capture groups, what does `re.findall()` return?",
-  answer("A list of full matches as strings"),
-  answer("A list of captured strings"),
-  answer("A list of tuples (one tuple per match)", correct=TRUE),
-  answer("A single tuple"),
-  allow_retry = TRUE
-)
-```
-
-## Practice Extraction
-
-We want to extract quantities from `SPELLBOOK` as integers.
-
-Step 1: Write the pattern:
-
-```{python a1_step1_pat, exercise=TRUE, message=FALSE}
-pat = r"___"
-pat
-```
-
-```{r a1_step1_pat-hint, echo=FALSE, message=FALSE}
-"Hint: You want digits after `qty:`. Use a capture group for digits: (\\d+). Include optional whitespace: \\s*."
-```
-
-```{python a1_step1_pat-solution, echo=FALSE, message=FALSE}
-pat = r"qty:\s*(\d+)"
-pat
-```
-
-```{r a1_step1_pat-check, context='server'}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  expected <- "qty:\\s*(\\d+)"
-  if (is.null(student)) fail(random_encouragement())
-  else if (identical(as.character(student), expected)) pass(random_praise())
-  else fail(random_encouragement())
-})
-```
-
-Step 2: Use the pattern:
-
-```{python a1_qty, exercise=TRUE, message=FALSE}
-qty = ___
-qty = [int(x) for x in qty] # What does this do?
-qty
-```
-
-```{r a1_qty-hint, echo=FALSE, message=FALSE}
-"Hint: Use re.findall()"
-```
-
-```{python a1_qty-solution, echo=FALSE, message=FALSE}
-qty = re.findall(pat, SPELLBOOK)
-qty = [int(x) for x in qty]
-qty
-```
-
-```{r a1_qty-check, context='server'}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  expected <- c(12L, 3L, 27L)
-  if (is.null(student)) fail(random_encouragement())
-  else if (identical(as.integer(student), expected)) pass(random_praise())
-  else fail(random_encouragement())
-})
-```
-
-Now, let's extract potion names.
-
-Step 1: Write the pattern
-
-```{python a2_step1_pat, exercise=TRUE, message=FALSE}
-pat2 = r"___"
-pat2
-```
-
-```{r a2_step1_pat-hint-1, echo=FALSE, message=FALSE}
-"Hint 1: Capture everything after `Potion:` up to `(qty:`"
-```
-
-```{r a2_step1_pat-hint-2, echo=FALSE, message=FALSE}
-"Hint 2: Use a LAZY group"
-```
-
-```{python a2_step1_pat-solution, echo=FALSE, message=FALSE}
-pat2 = r"Potion:\s*(.*?)\s*\(qty:"
-pat2
-```
-
-```{r a2_step1_pat-check, context='server'}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  expected <- "Potion:\\s*(.*?)\\s*\\(qty:"
-  if (is.null(student)) fail(random_encouragement())
-  else if (identical(as.character(student), expected)) pass(random_praise())
-  else fail(random_encouragement())
-})
-```
-
-Step 2: Use the pattern
-
-```{python a2_names, exercise=TRUE, message=FALSE}
-names = ___
-names
-```
-
-```{r a2_names-hint-1, echo=FALSE, message=FALSE}
-"Hint1: If you get one giant match, your group may be greedy instead of lazy."
-```
-
-```{r a2_names-hint-2, echo=FALSE, message=FALSE}
-"Hint2: Use re.findall()"
-```
-
-```{python a2_names-solution, echo=FALSE, message=FALSE}
-names = re.findall(pat2, SPELLBOOK)
-names
-```
-
-```{r a2_names-check, context='server'}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  expected <- c("fizz-berry tonic", "moon-milk elixir", "emberroot tea")
-  if (is.null(student)) fail(random_encouragement())
-  else if (identical(as.character(student), expected)) pass(random_praise())
-  else fail(random_encouragement())
-})
-```
-
-```{r a2_q, echo=FALSE}
-question(
-  "What does the `?` do in `(.*?)`?",
-  answer("Makes it greedy"),
-  answer("Makes it lazy/non-greedy", correct = TRUE),
-  answer("Matches a literal question mark"),
-  allow_retry = TRUE,
-  post_message = "You found the first secret word: PANCAKE."
-)
-```
-
-## Practice Validation
-
-Continuing our work with SPELLBOOK. Write a function named `is_tag` to validate tags like `FZ-120`. A valid tag is: two CAPITAL letters, a hyphen, and three digits. Your function should return `True` if the input is a valid tag.
-
-```{python a3_tag, exercise=TRUE, message=FALSE}
-___
-
-tests = ["FZ-120","MM-007","ER-451","fz-120","ABC-123","AA-12"]
-[(t, is_tag(t)) for t in tests]
-```
-
-```{python a3_tag-solution, echo=FALSE, message=FALSE, warning=FALSE}
-def is_tag(s):
-    return re.fullmatch(r"[A-Z]{2}-\d{3}", s) is not None
-
-tests = ["FZ-120","MM-007","ER-451","fz-120","ABC-123","AA-12"]
-[(t, is_tag(t)) for t in tests]
-```
-
-```{r a3_tag-check, message=FALSE, warning=FALSE}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  expected <- list(
-    list("FZ-120", TRUE),
-    list("MM-007", TRUE),
-    list("ER-451", TRUE),
-    list("fz-120", FALSE),
-    list("ABC-123", FALSE),
-    list("AA-12", FALSE)
-  )
-  if (is.null(student)) fail("Make sure the test results print.")
-  else {
-    norm <- function(x) paste0(as.character(x[[1]]), ":", as.character(x[[2]]))
-    if (identical(vapply(student, norm, ""), vapply(expected, norm, ""))) {
-      pass(paste(random_praise(), "You found the second secret word: KITE"))
-    } else {
-      fail("Pattern should be `[A-Z]{2}-\\d{3}`.")
-    }
-  }
-})
-```
-
-```{r mcq_escape, echo=FALSE}
-question(
-  "In regex, why do we write `\\d` instead of just `d`?",
-  answer("Because `d` means digit"),
-  answer("Because `\\d` is a special token meaning “digit”", correct=TRUE),
-  answer("Because backslashes make patterns case-insensitive"),
-  answer("Because Python requires it for all letters"),
-  allow_retry = TRUE
-)
-```
-
-```{r mcq_fullmatch, echo=FALSE}
-question(
-  "Why is `re.fullmatch()` usually best for validation?",
-  answer("It finds all matches, not just one"),
-  answer("It requires the ENTIRE string to match the pattern", correct=TRUE),
-  answer("It automatically ignores case"),
-  answer("It returns a list"),
-  allow_retry = TRUE
-)
-```
-
-## Practice Transformation 
-
-Now, we are going to use regex for transformation
-
-```{r mcq_sub, echo=FALSE}
-question(
-  "What does `re.sub(pattern, repl, text)` return?",
-  answer("A list of matches"),
-  answer("A new `string` with replacements applied", correct=TRUE),
-  answer("A boolean (`True`/`False`)"),
-  answer("A match object"),
-  allow_retry = TRUE
-)
-```
-
-Let's redact the delivery date in `SPELLBOOK` by replacing it with `"[DATE]"`.
-
-
-Step 1: Write the pattern
-
-```{python a4_step1_pat, exercise=TRUE, message=FALSE}
-pat3 = r"___"
-pat3
-```
-
-```{r a4_step1_pat-hint, echo=FALSE, message=FALSE}
-"Hint: Remember, hyphens are literal."
-```
-
-```{python a4_step1_pat-solution, echo=FALSE, message=FALSE}
-pat3 = r"\d{4}-\d{2}-\d{2}"
-pat3
-```
-
-```{r a4_step1_pat-check, context='server'}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  expected <- "\\d{4}-\\d{2}-\\d{2}"
-  if (is.null(student)) fail(random_encouragement())
-  else if (identical(as.character(student), expected)) pass(random_praise())
-  else fail(random_encouragement())
-})
-```
-
-Step 2: Use the pattern
-
-```{python a4_sub, exercise=TRUE, message=FALSE}
-redacted = ___
-redacted
-```
-
-```{r a4_sub-hint, echo=FALSE, message=FALSE}
-"Hint: Use re.sub()"
-```
-
-```{python a4_sub-solution, echo=FALSE, message=FALSE}
-redacted = re.sub(pat3, "[DATE]", SPELLBOOK)
-redacted
-```
-
-```{r a4_sub-check, message=FALSE, warning=FALSE}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  if (is.null(student)) fail(random_encouragement())
-  else if (grepl("\\[DATE\\]", as.character(student)) && !grepl("2026-03-05", as.character(student))) {
-    pass(random_praise())
-  } else {
-    fail("Make sure the original date disappears and [DATE] appears.")
-  }
-})
-```
-
-## Using Flags
-
-Functions from `re` allow you to set `flags` which alter how the pattern is interpreted. Think of these flags as modifiers. You can find a full list of available flags [here](https://docs.python.org/3/library/re.html#flags).
-
-Use a flag to find all potions regardless of the text-case.
-
-```{python a5_flags, exercise=TRUE, message=FALSE}
-hits = re.findall(r"potion", SPELLBOOK, flags=___)
-len(hits)
-```
-
-```{python a5_flags-solution, echo=FALSE, message=FALSE, warning=FALSE}
-hits = re.findall(r"potion", SPELLBOOK, flags=re.IGNORECASE)
-len(hits)
-```
-
-```{r a5_flags-check, message=FALSE, warning=FALSE}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  if (is.null(student)) fail(random_encouragement())
-  else if (as.integer(student) == 3L) pass(paste(random_praise(), "You found the third secret word: BANJO"))
-  else fail("Expected 3.")
-})
-```
-
-## Regex Crossword
-
-```{r crossword_setup, echo=FALSE, context="server"}
-CW_N <- 7
-cw_correct <- reactiveVal(FALSE)
-
-# One cell input
-cw_cell <- function(r, c) {
-  id <- paste0("cw_", r, "_", c)
-  tags$td(
-    style="width:36px;height:36px;border:1px solid #bbb;text-align:center;",
-    tags$input(
-      id=id, type="text", maxlength="1",
-      style="width:32px;height:32px;text-align:center;font-size:18px;border:none;outline:none;text-transform:uppercase;"
-    )
-  )
-}
-
-ROW_CLUES <- list(
-  list(pat="^A..H..S$"),
-  list(pat="^.UMB...$"),
-  list(pat="^CAP[TX]URE$"),
-  list(pat="^GROUP[BP]Y$"),
-  list(pat="^TO(K|C)EN[SX]X$"),
-  list(pat="^FLA(G|P)S[RE]E$"),
-  list(pat="^PAR[ST]ERS$")
-)
-
-COL_CLUES <- list(
-  list(pat="^A[NU]CGTFP$"),
-  list(pat="^N[EIUO]AROLA$"),
-  list(pat="^C[MN]POKAR$"),
-  list(pat="^H[BD]TUEGS$"),
-  list(pat="^O[EA]UPNSE$"),
-  list(pat="^R{3}BSR{2}$"),
-  list(pat="^S{2}EYXES$")
-)
-
-output$cw_ui <- renderUI({
-  grid <- tags$table(
-    lapply(seq_len(CW_N), function(r) {
-      tags$tr(lapply(seq_len(CW_N), function(c) cw_cell(r, c)))
-    })
-  )
-
-  clue_block <- function(title, clues) {
-  tags$div(
-    tags$h4(title),
-    tags$ol(lapply(clues, function(x) {
-      tags$li(tags$code(x$pat))
-    }))
-  )
-  }
-  
-  tagList(
-    tags$p("Fill the 7×7 grid with letters. A submission is correct only if EVERY row and EVERY column matches its regex."),
-    grid,
-    tags$div(style="display:flex; gap:2rem; align-items:flex-start; flex-wrap:wrap;",
-      clue_block("Row constraints", ROW_CLUES),
-      clue_block("Column constraints", COL_CLUES)
-    )
-  )
-})
-
-observeEvent(input$cw_check, {
-  mat <- matrix("", nrow=CW_N, ncol=CW_N)
-
-  for (r in seq_len(CW_N)) {
-    for (c in seq_len(CW_N)) {
-      val <- toupper(trimws(input[[paste0("cw_", r, "_", c)]] %||% ""))
-      mat[r, c] <- val
-    }
-  }
-
-  if (any(mat == "")) {
-    cw_correct(FALSE)
-    output$cw_feedback <- renderText("Fill all squares first")
-    return()
-  }
-
-  rows <- apply(mat, 1, paste0, collapse="")
-  cols <- apply(mat, 2, paste0, collapse="")
-
-  row_ok <- vapply(seq_len(CW_N), function(i) grepl(ROW_CLUES[[i]]$pat, rows[i], perl=TRUE), logical(1))
-  col_ok <- vapply(seq_len(CW_N), function(i) grepl(COL_CLUES[[i]]$pat, cols[i], perl=TRUE), logical(1))
-
-  all_ok <- all(row_ok) && all(col_ok)
-  cw_correct(all_ok)
-
-  if (all_ok) {
-    output$cw_feedback <- renderText(paste(random_praise(), "Crossword solved!"))
-  } else {
-    bad_rows <- which(!row_ok)
-    bad_cols <- which(!col_ok)
-    msg <- c(random_encouragement())
-    if (length(bad_rows)) msg <- c(msg, paste0("Rows failing: ", paste(bad_rows, collapse=", ")))
-    if (length(bad_cols)) msg <- c(msg, paste0("Cols failing: ", paste(bad_cols, collapse=", ")))
-    output$cw_feedback <- renderText(paste(msg, collapse=" | "))
-  }
-})
-```
-
-```{r crossword_ui, echo=FALSE}
-uiOutput("cw_ui")
-actionButton("cw_check", "Check crossword")
-verbatimTextOutput("cw_feedback")
-```
-
-## Cheat Sheet
-
-```{r unlock_ui, echo=FALSE}
-uiOutput("unlock_section")
-```
-
-```{r unlock_server, context="server", echo=FALSE}
-
-output$unlock_section <- renderUI({
-  all_ok <- isTRUE(cw_correct())
-
-  if (!all_ok) {
-    return(tags$div(
-      class="notebox",
-      tags$h3("🔒 Cheat Sheet Locked"),
-      tags$p("Unlock requirements: Crossword Solved")
-    ))
-  }
-
-  tags$div(
-    class="notebox",
-    tags$h3("Regex Cheat Sheet"),
-
-    tags$h4("How to decide what regex to write"),
-    tags$ol(
-      tags$li(tags$b("Name the job:"), " extraction, validation, or transformation."),
-      tags$li(tags$b("Find the anchor text:"), " words/punctuation around what you want."),
-      tags$li(tags$b("Start simple:"), " get it working, then tighten it."),
-      tags$li(tags$b("Add groups intentionally:"), " don’t add parentheses “just because.”"),
-      tags$li(tags$b("Test good + bad cases:"), " validation especially needs both.")
-    ),
-
-    tags$h4("Common tokens"),
-    tags$ul(
-      tags$li(tags$code("."), " any char (except newline unless DOTALL)"),
-      tags$li(tags$code("\\\\d"), " digit; ", tags$code("\\\\w"), " word; ", tags$code("\\\\s"), " whitespace"),
-      tags$li(tags$code("[abc]"), " any of a,b,c; ", tags$code("[A-Z]"), " uppercase; ", tags$code("[^...]"), " NOT in set"),
-      tags$li(tags$code("^"), " start; ", tags$code("$"), " end; ", tags$code("\\\\b"), " word boundary"),
-      tags$li(tags$code("*"), " 0+; ", tags$code("+"), " 1+; ", tags$code("?"), " 0/1; ", tags$code("{m,n}"), " repeats"),
-      tags$li(tags$code("|"), " OR (alternation)")
-    ),
-
-    tags$h4("Greedy vs lazy"),
-    tags$ul(
-      tags$li(tags$code(".*"), " greedy"),
-      tags$li(tags$code(".*?"), " lazy/non-greedy")
-    ),
-
-    tags$h4("Python `re` toolbox"),
-    tags$ul(
-      tags$li(tags$code("re.findall(pat, text)"), " → list of matches (or tuples if multiple groups)"),
-      tags$li(tags$code("re.fullmatch(pat, s)"), " → match or None (best for validation)"),
-      tags$li(tags$code("re.sub(pat, repl, text)"), " → replaced string"),
-      tags$li(tags$code("re.search(pat, text)"), " → first match anywhere")
-    ),
-
-    tags$h4("Useful Flags"),
-    tags$ul(
-      tags$li(tags$code("re.IGNORECASE"), " case-insensitive"),
-      tags$li(tags$code("re.MULTILINE"), " ^ and $ work per line"),
-      tags$li(tags$code("re.DOTALL"), " . matches newline"),
-      tags$li(tags$code("re.VERBOSE"), " readable multi-line regex with comments")
-    )
-  )
-})
-```
-
-## Validate a crochet pattern
-
-This section is crochet-themed, but you do **not** need to know how to crochet.
-
-A crochet pattern is a structured set of instructions. Here we treat it like a mini language with:
-
-- **Words/tokens** like `Round`, `MR`, `sc`, `inc`, `dec`, `FO`
-- **Numbers**:
-  - `N` = round number (an integer)
-  - `K` = a total count (an integer shown in parentheses)
-  - `A` and `B` = integers used in a repeating instruction
-
-We accept ONLY these formats:
-
-1. `Round N: MR, K sc`
-2. `Round N: inc around (K)`
-3. `Round N: (sc A, inc) x B (K)`
-4. `Round N-M: sc around (K)`
-5. `Round N: (sc A, dec) x B (K)`
-6. `FO`
-
-In lines like:
-
-`Round N: (sc A, op) x B (K)` where `op` is `inc` or `dec`
-
-You can read that as:
-
-- Do `(sc A, op)` a total of `B` times
-- Each repeat **creates stitches**:
-  - If `op` is `inc`: `A + 2` stitches (A single crochets + 2 stitches from an increase)
-  - If `op` is `dec`: `A + 1` stitches (A single crochets + 1 stitch from a decrease)
-
-So the expected total after repeating is:
-
-- if `op` is `inc`: `K = B * (A + 2)`
-- if `op` is `dec`: `K = B * (A + 1)`
-
-Regex checks the shape, but Python can check the arithmetic rule.
-
-```{python c1_validate, exercise=TRUE, message=FALSE}
-def is_valid_line(s):
-    pattern = ___
-    used = ___
-    if not used:
-        return False
-
-    gd = used.groupdict()
-
-    # Only some formats have A, B, K, op to check.
-    if gd.get("A") and gd.get("B") and gd.get("K") and gd.get("op"):
-        A = int(gd["A"])
-        B = int(gd["B"])
-        K = int(gd["K"])
-        op = gd["op"]
-        expected = ___
-        return K == expected
-
-    return True
-
-tests_good = [(line, is_valid_line(line)) for line in PATTERN_GOOD]
-tests_bad  = [(line, is_valid_line(line)) for line in PATTERN_BAD]
-tests_good, tests_bad
-```
-
-```{r c1_validate-hint, echo=FALSE, message=FALSE, warning=FALSE}
-"Hint: This pattern is a BIG alternation (A|B|C|...). Start by matching ONE format first."
-```
-
-```{python c1_validate-solution, echo=FALSE, message=FALSE, warning=FALSE}
-def is_valid_line(s):
-    pattern = (
-        r"(?:(Round (?P<R1>\d+): MR, (?P<K1>\d+) sc))"
-        r"|(?:(Round (?P<R2>\d+): inc around \((?P<K2>\d+)\)))"
-        r"|(?:(Round (?P<R3>\d+): \(sc (?P<A>\d+), (?P<op>inc|dec)\) x (?P<B>\d+) \((?P<K>\d+)\)))"
-        r"|(?:(Round (?P<R4>\d+)-(?P<R5>\d+): sc around \((?P<K3>\d+)\)))"
-        r"|(?:(FO))"
-    )
-    used = re.fullmatch(pattern, s)
-    if not used:
-        return False
-
-    gd = used.groupdict()
-    if gd.get("A") and gd.get("B") and gd.get("K") and gd.get("op"):
-        A = int(gd["A"]); B = int(gd["B"]); K = int(gd["K"])
-        op = gd["op"]
-        expected = B * (A + 2) if op == "inc" else B * (A + 1)
-        return K == expected
-    return True
-
-tests_good = [(line, is_valid_line(line)) for line in PATTERN_GOOD]
-tests_bad  = [(line, is_valid_line(line)) for line in PATTERN_BAD]
-tests_good, tests_bad
-```
-
-```{r c1_validate-check, context='server'}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  if (is.null(student) || length(student) != 2) {
-    fail("Make sure your last line outputs: (tests_good, tests_bad)")
-  } else {
-    good <- student[[1]]
-    bad  <- student[[2]]
-    good_ok <- all(vapply(good, function(x) isTRUE(x[[2]]), logical(1)))
-    bad_ok  <- all(vapply(bad,  function(x) identical(x[[2]], FALSE), logical(1)))
-
-    if (good_ok && bad_ok) {
-      pass(paste(random_praise(), "You found the fifth secret word: OCTOPUS"))
-    } else {
-      fail("Close! Ensure all good lines are True and all bad lines are False (including the consistency check).")
-    }
-  }
-})
-```
-
-```{r cw_q, echo=FALSE}
-question(
-  "Why are `^` and `$` useful in validation regex?",
-  answer("They anchor to start/end so extra characters don’t sneak in", correct = TRUE),
-  answer("They match digits"),
-  answer("They make regex faster automatically"),
-  allow_retry = TRUE,
-  post_message = "You found the fourth secret word: MARSHMALLOW"
-)
-```
-
-### Optional: a real crochet pattern (for fun)
-
-This is a simple “flat circle” coaster-style pattern written in common shorthand. This is just to show that real patterns are structured text:
-
-- MR = magic ring
-- sc = single crochet
-- inc = increase
-- sl st = slip stitch
-- ch = chain
-- FO = fasten off
-
-Example pattern (mini coaster):
-
-1. Round 1: MR, 6 sc (6)
-2. Round 2: inc around (12)
-3. Round 3: (sc 1, inc) x 6 (18)
-4. Round 4: (sc 2, inc) x 6 (24)
-5. Finish: sl st, FO
-
-If you wanted, you could validate patterns like this with your regex solution.
-
-## What is Web Scraping?
-
-When we talk about **web scraping**, we usually mean:
-
-1. Downloading the HTML that a website sends to your browser  
-2. Extracting the pieces we care about (names, prices, links, tables, etc.)
-
-
-**First: What is HTML?**
-
-When you visit a website, your browser receives HTML (HyperText Markup Language).
-
-* All HTML documents must start with a document type declaration: `<!DOCTYPE html>`.
-* The HTML document itself begins with `<html>` and ends with `</html>`.
-* The visible part of the HTML document is between `<body>` and `</body>`.
-
-HTML is structured using *tags*.
-
-Example:
-
-```html
-<div class="product">
-  <h2>Wizard Hat</h2>
-  <span class="price">$19.99</span>
-  <a href="/buy/hat-123">Buy</a>
-</div>
-```
-
-Let’s break that down:
-
-- `<div> ... </div>` -> a container
-- `<h2>` -> a heading tag
-- `<span>` -> inline container
-- `<a>` -> a link
-
-Tags can also have **attributes**, like:
-
-- `class="product"`
-- `href="/buy/hat-123"`
-
-An HTML **element** is defined by a start tag, some content, and an end tag.
-
-The HTML element is everything from the start tag to the end tag:
-
-```html
-<tagname>Content goes here...</tagname>
-```
-
-Examples of some HTML elements:
-
-```html
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
-```
-
-\HTML headings are defined with the `<h1>` to `<h6>` tags.
-
-* `<h1>` defines the most important heading. 
-* `<h6>` defines the least important heading: 
-
-```html
-<h1>This is heading 1</h1>
-<h2>This is heading 2</h2>
-<h3>This is heading 3</h3>
-```
-
-A **paragraph** always starts on a new line, and is usually a block of text. Browsers automatically add some white space (a margin) before and after a paragraph. HTML paragraphs are defined with the `<p>` tag:
-
-```html
-<p>This is a paragraph.</p>
-<p>This is another paragraph.</p>
-```
-
-
-HTML elements can be **nested** (this means that elements can contain other elements). **All HTML documents consist of nested HTML elements.**
-
-How many elements does the following example contain?
-
-```html
-<!DOCTYPE html>
-<html>
-<body>
-
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
-
-</body>
-</html>
-```
-```{r num_elements, echo=FALSE}
-question_numeric(
-  "Enter the number of HTML elements:",
-  answer_fn(function(value) {
-    if (value == 4) {
-      pass(random_praise())
-    } else {
-      fail(paste(random_encouragement(), "Hint: Count opening/closing tag pairs. Do not count `<!DOCTYPE>`."))
-    }
-  }, label = "Is the number even?"),
-  allow_retry = TRUE,
-  step = 1
-)
-```
-
-So HTML has:
-
-- Tags (structure)
-- Attributes (metadata)
-- Nested elements (structure inside structure)
-
-This nesting is why HTML is easier to parse with a **parser** instead of regex alone.
-
-**Why Not Just Regex Everything?**
-
-Regex works great for:
-
-- prices like `$19.99`
-- IDs like `hat-123`
-- dates like `2026-03-05`
-
-But regex struggles with:
-
-- nested tags
-- deeply structured layouts
-- messy real-world HTML
-
-So the standard workflow is:
-
-1. Use an HTML parser to understand structure  
-2. Use regex for tiny patterns inside extracted text  
-
-## Parsing HTML with `BeautifulSoup`
-
-A very common HTML parsing tool in Python is `BeautifulSoup`.
-
-To install it:
-
-```
-pip install beautifulsoup4
-```
-
-To use it:
-
-```{python imports2, exercise=TRUE, message=FALSE}
-from bs4 import BeautifulSoup
-```
-
-`BeautifulSoup` reads raw HTML and turns it into a **tree structure** you can navigate.
-
-Let’s Look at Our HTML
-
-```{python d1_parse, exercise=TRUE, message=FALSE}
-print(HTML_SNIPPET)
-```
-
-Now we create a “soup” object:
-
-```{python d1_parse2, exercise=TRUE, message=FALSE}
-from bs4 import BeautifulSoup
-
-soup = BeautifulSoup(HTML_SNIPPET, "html.parser")
-soup
-```
-
-Think of `soup` as a structured version of the HTML.
-
-BeautifulSoup lets us access tags directly.
-
-```{python d1_parse3, exercise=TRUE, message=FALSE}
-print(soup.h2)              # first <h2>
-print(soup.span)            # first <span>
-print(soup.a)               # first <a>
-print(soup.a["href"])       # attribute access
-print(soup.span["class"])   # class attribute
-```
-
-Important: `soup.h2` gives the *first* `<h2>` tag. To get **all** tags, we use `.find_all()`.
-
-```{python d1_parse4, exercise=TRUE, message=FALSE}
-soup.find_all("span")
-```
-
-Notice we pass the tag name as a string.
-
-
-For example, let's try to extract all links from our HTML.
-
-Links are created with `<a>` tags and stored in the `href` attribute.
-
-```{python d1_parse6, exercise=TRUE, message=FALSE}
-for link in soup.find_all("a"):
-    print(f"Link: {link['href']}")
-```
-
-We can also select by class instead of tag. Classes are very common in HTML.
-
-If you see:
-
-```html
-<div class="product">
-```
-
-You can select it using CSS-style selectors:
-
-```{python d1_parse7, exercise=TRUE, message=FALSE}
-products = soup.select(".product")
-products
-```
-
-- `"."` means class
-- `"#"` would mean ID
-
-To get text:
-
-```{python d1_parse8, exercise=TRUE, message=FALSE}
-products[0].get_text()
-```
-
-Your Turn: Extract All Product Names
-
-Each product name is inside an `<h2>` tag.
-
-```{python d1_names, exercise=TRUE, message=FALSE}
-names = []
-
-for tag in ___:
-    names.append(___)
-
-names
-```
-
-```{python d1_names-solution, echo=FALSE, message=FALSE, warning=FALSE}
-names = []
-
-for tag in soup.find_all("h2"):
-    names.append(tag.get_text())
-
-names
-```
-
-```{r d1_names-check, context='server'}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  
-  expected <- c("Wizard Hat", "Crystal Yarn", "Enchanted Hook")
-  
-  if (is.null(student)) {
-    fail(random_encouragement())
-  } else if (identical(as.character(student), expected)) {
-    pass(random_praise())
-  } else {
-    fail("Make sure you are looping over `soup.find_all('h2')` and using `.get_text()`.")
-  }
-})
-```
-
-
-Now that we understand structure, we use regex for small things.
-
-For example, now try to extract prices for the products.
-
-```{python d2_prices, exercise=TRUE, message=FALSE}
-price_pat = r"___"
-prices = re.findall(___, HTML_SNIPPET)
-prices
-```
-
-```{python d2_prices-solution, echo=FALSE, message=FALSE, warning=FALSE}
-price_pat = r"\$\d+\.\d{2}"
-prices = re.findall(price_pat, HTML_SNIPPET)
-prices
-```
-
-```{r d2_prices-check, context='server'}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  expected <- c("$19.99", "$7.50", "$12.00")
-  if (is.null(student)) fail(random_encouragement())
-  else if (identical(as.character(student), expected)) pass(random_praise())
-  else fail(random_encouragement())
-})
-```
-
-```{r mcq_dollar, echo=FALSE}
-question(
-  "Why do we write `\\$` in a regex for prices?",
-  answer("Because `$` is a special anchor token in regex unless escaped", correct=TRUE),
-  answer("Because `\\$` means “any digit”"),
-  answer("Because Python requires escaping for all punctuation"),
-  answer("Because it makes the regex case-insensitive"),
-  allow_retry = TRUE
-)
-```
-
-Now we can combine parsing + regex.
-
-We already parsed the structure. Now we validate IDs using regex.
-
-Valid SKUs:
-
-- letters
-- hyphen
-- digits
-- any length
-
-Example: `hat-123`
-
-```{python d3_sku, exercise=TRUE, message=FALSE}
-sku_pat = r"___"
-products = soup.select(".product")
-skus = ___ #use a list comprehension
-[(s, re.fullmatch(sku_pat, s) is not None) for s in skus]
-```
-
-```{python d3_sku-solution, echo=FALSE, message=FALSE, warning=FALSE}
-sku_pat = r"[a-z]+-\d+"
-products = soup.select(".product")
-skus = [p.find("a")["data-sku"] for p in products]
-[(s, re.fullmatch(sku_pat, s) is not None) for s in skus]
-```
-
-```{r d3_sku-check, message=FALSE, warning=FALSE}
-grade_this({
-  student <- reticulate::py_to_r(.result)
-  if (is.null(student)) fail(random_encouragement())
-  else {
-    ok <- all(vapply(student, function(x) isTRUE(x[[2]]), logical(1)))
-    if (ok) pass(random_praise()) else fail("Pattern should match letters-hyphen-digits.")
-  }
-})
-```
-
-:::: {.discussionbox}
-::: {.center}
-**Exit ticket**
-:::
-In one sentence:  
-What does the parser do, and what does regex do?
-::::
+<!-- :::: {.notebox} -->
+<!-- ::: {.center} -->
+<!-- **Tip** -->
+<!-- ::: -->
+<!-- If your output “looks wrong,” check whether you accidentally added (or forgot) parentheses. -->
+<!-- :::: -->
+
+<!-- ```{r mcq_groups_output, echo=FALSE} -->
+<!-- question( -->
+<!--   "If your regex has exactly ONE capture group, `re.findall()` returns:", -->
+<!--   answer("A `list` of full matches"), -->
+<!--   answer("A `list` of captured `strings`", correct=TRUE), -->
+<!--   answer("A `list` of `tuples`"), -->
+<!--   answer("A single `string`"), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{r mcq_findall, echo=FALSE} -->
+<!-- question( -->
+<!--   "If a regex has TWO capture groups, what does `re.findall()` return?", -->
+<!--   answer("A list of full matches as strings"), -->
+<!--   answer("A list of captured strings"), -->
+<!--   answer("A list of tuples (one tuple per match)", correct=TRUE), -->
+<!--   answer("A single tuple"), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ## Practice Extraction -->
+
+<!-- We want to extract quantities from `SPELLBOOK` as integers. -->
+
+<!-- Step 1: Write the pattern: -->
+
+<!-- ```{python a1_step1_pat, exercise=TRUE, message=FALSE} -->
+<!-- pat = r"___" -->
+<!-- pat -->
+<!-- ``` -->
+
+<!-- ```{r a1_step1_pat-hint, echo=FALSE, message=FALSE} -->
+<!-- "Hint: You want digits after `qty:`. Use a capture group for digits: (\\d+). Include optional whitespace: \\s*." -->
+<!-- ``` -->
+
+<!-- ```{python a1_step1_pat-solution, echo=FALSE, message=FALSE} -->
+<!-- pat = r"qty:\s*(\d+)" -->
+<!-- pat -->
+<!-- ``` -->
+
+<!-- ```{r a1_step1_pat-check, context='server'} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   expected <- "qty:\\s*(\\d+)" -->
+<!--   if (is.null(student)) fail(random_encouragement()) -->
+<!--   else if (identical(as.character(student), expected)) pass(random_praise()) -->
+<!--   else fail(random_encouragement()) -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- Step 2: Use the pattern: -->
+
+<!-- ```{python a1_qty, exercise=TRUE, message=FALSE} -->
+<!-- qty = ___ -->
+<!-- qty = [int(x) for x in qty] # What does this do? -->
+<!-- qty -->
+<!-- ``` -->
+
+<!-- ```{r a1_qty-hint, echo=FALSE, message=FALSE} -->
+<!-- "Hint: Use re.findall()" -->
+<!-- ``` -->
+
+<!-- ```{python a1_qty-solution, echo=FALSE, message=FALSE} -->
+<!-- qty = re.findall(pat, SPELLBOOK) -->
+<!-- qty = [int(x) for x in qty] -->
+<!-- qty -->
+<!-- ``` -->
+
+<!-- ```{r a1_qty-check, context='server'} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   expected <- c(12L, 3L, 27L) -->
+<!--   if (is.null(student)) fail(random_encouragement()) -->
+<!--   else if (identical(as.integer(student), expected)) pass(random_praise()) -->
+<!--   else fail(random_encouragement()) -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- Now, let's extract potion names. -->
+
+<!-- Step 1: Write the pattern -->
+
+<!-- ```{python a2_step1_pat, exercise=TRUE, message=FALSE} -->
+<!-- pat2 = r"___" -->
+<!-- pat2 -->
+<!-- ``` -->
+
+<!-- ```{r a2_step1_pat-hint-1, echo=FALSE, message=FALSE} -->
+<!-- "Hint 1: Capture everything after `Potion:` up to `(qty:`" -->
+<!-- ``` -->
+
+<!-- ```{r a2_step1_pat-hint-2, echo=FALSE, message=FALSE} -->
+<!-- "Hint 2: Use a LAZY group" -->
+<!-- ``` -->
+
+<!-- ```{python a2_step1_pat-solution, echo=FALSE, message=FALSE} -->
+<!-- pat2 = r"Potion:\s*(.*?)\s*\(qty:" -->
+<!-- pat2 -->
+<!-- ``` -->
+
+<!-- ```{r a2_step1_pat-check, context='server'} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   expected <- "Potion:\\s*(.*?)\\s*\\(qty:" -->
+<!--   if (is.null(student)) fail(random_encouragement()) -->
+<!--   else if (identical(as.character(student), expected)) pass(random_praise()) -->
+<!--   else fail(random_encouragement()) -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- Step 2: Use the pattern -->
+
+<!-- ```{python a2_names, exercise=TRUE, message=FALSE} -->
+<!-- names = ___ -->
+<!-- names -->
+<!-- ``` -->
+
+<!-- ```{r a2_names-hint-1, echo=FALSE, message=FALSE} -->
+<!-- "Hint1: If you get one giant match, your group may be greedy instead of lazy." -->
+<!-- ``` -->
+
+<!-- ```{r a2_names-hint-2, echo=FALSE, message=FALSE} -->
+<!-- "Hint2: Use re.findall()" -->
+<!-- ``` -->
+
+<!-- ```{python a2_names-solution, echo=FALSE, message=FALSE} -->
+<!-- names = re.findall(pat2, SPELLBOOK) -->
+<!-- names -->
+<!-- ``` -->
+
+<!-- ```{r a2_names-check, context='server'} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   expected <- c("fizz-berry tonic", "moon-milk elixir", "emberroot tea") -->
+<!--   if (is.null(student)) fail(random_encouragement()) -->
+<!--   else if (identical(as.character(student), expected)) pass(random_praise()) -->
+<!--   else fail(random_encouragement()) -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- ```{r a2_q, echo=FALSE} -->
+<!-- question( -->
+<!--   "What does the `?` do in `(.*?)`?", -->
+<!--   answer("Makes it greedy"), -->
+<!--   answer("Makes it lazy/non-greedy", correct = TRUE), -->
+<!--   answer("Matches a literal question mark"), -->
+<!--   allow_retry = TRUE, -->
+<!--   post_message = "You found the first secret word: PANCAKE." -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ## Practice Validation -->
+
+<!-- Continuing our work with SPELLBOOK. Write a function named `is_tag` to validate tags like `FZ-120`. A valid tag is: two CAPITAL letters, a hyphen, and three digits. Your function should return `True` if the input is a valid tag. -->
+
+<!-- ```{python a3_tag, exercise=TRUE, message=FALSE} -->
+<!-- ___ -->
+
+<!-- tests = ["FZ-120","MM-007","ER-451","fz-120","ABC-123","AA-12"] -->
+<!-- [(t, is_tag(t)) for t in tests] -->
+<!-- ``` -->
+
+<!-- ```{python a3_tag-solution, echo=FALSE, message=FALSE, warning=FALSE} -->
+<!-- def is_tag(s): -->
+<!--     return re.fullmatch(r"[A-Z]{2}-\d{3}", s) is not None -->
+
+<!-- tests = ["FZ-120","MM-007","ER-451","fz-120","ABC-123","AA-12"] -->
+<!-- [(t, is_tag(t)) for t in tests] -->
+<!-- ``` -->
+
+<!-- ```{r a3_tag-check, message=FALSE, warning=FALSE} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   expected <- list( -->
+<!--     list("FZ-120", TRUE), -->
+<!--     list("MM-007", TRUE), -->
+<!--     list("ER-451", TRUE), -->
+<!--     list("fz-120", FALSE), -->
+<!--     list("ABC-123", FALSE), -->
+<!--     list("AA-12", FALSE) -->
+<!--   ) -->
+<!--   if (is.null(student)) fail("Make sure the test results print.") -->
+<!--   else { -->
+<!--     norm <- function(x) paste0(as.character(x[[1]]), ":", as.character(x[[2]])) -->
+<!--     if (identical(vapply(student, norm, ""), vapply(expected, norm, ""))) { -->
+<!--       pass(paste(random_praise(), "You found the second secret word: KITE")) -->
+<!--     } else { -->
+<!--       fail("Pattern should be `[A-Z]{2}-\\d{3}`.") -->
+<!--     } -->
+<!--   } -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- ```{r mcq_escape, echo=FALSE} -->
+<!-- question( -->
+<!--   "In regex, why do we write `\\d` instead of just `d`?", -->
+<!--   answer("Because `d` means digit"), -->
+<!--   answer("Because `\\d` is a special token meaning “digit”", correct=TRUE), -->
+<!--   answer("Because backslashes make patterns case-insensitive"), -->
+<!--   answer("Because Python requires it for all letters"), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ```{r mcq_fullmatch, echo=FALSE} -->
+<!-- question( -->
+<!--   "Why is `re.fullmatch()` usually best for validation?", -->
+<!--   answer("It finds all matches, not just one"), -->
+<!--   answer("It requires the ENTIRE string to match the pattern", correct=TRUE), -->
+<!--   answer("It automatically ignores case"), -->
+<!--   answer("It returns a list"), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ## Practice Transformation  -->
+
+<!-- Now, we are going to use regex for transformation -->
+
+<!-- ```{r mcq_sub, echo=FALSE} -->
+<!-- question( -->
+<!--   "What does `re.sub(pattern, repl, text)` return?", -->
+<!--   answer("A list of matches"), -->
+<!--   answer("A new `string` with replacements applied", correct=TRUE), -->
+<!--   answer("A boolean (`True`/`False`)"), -->
+<!--   answer("A match object"), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- Let's redact the delivery date in `SPELLBOOK` by replacing it with `"[DATE]"`. -->
+
+
+<!-- Step 1: Write the pattern -->
+
+<!-- ```{python a4_step1_pat, exercise=TRUE, message=FALSE} -->
+<!-- pat3 = r"___" -->
+<!-- pat3 -->
+<!-- ``` -->
+
+<!-- ```{r a4_step1_pat-hint, echo=FALSE, message=FALSE} -->
+<!-- "Hint: Remember, hyphens are literal." -->
+<!-- ``` -->
+
+<!-- ```{python a4_step1_pat-solution, echo=FALSE, message=FALSE} -->
+<!-- pat3 = r"\d{4}-\d{2}-\d{2}" -->
+<!-- pat3 -->
+<!-- ``` -->
+
+<!-- ```{r a4_step1_pat-check, context='server'} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   expected <- "\\d{4}-\\d{2}-\\d{2}" -->
+<!--   if (is.null(student)) fail(random_encouragement()) -->
+<!--   else if (identical(as.character(student), expected)) pass(random_praise()) -->
+<!--   else fail(random_encouragement()) -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- Step 2: Use the pattern -->
+
+<!-- ```{python a4_sub, exercise=TRUE, message=FALSE} -->
+<!-- redacted = ___ -->
+<!-- redacted -->
+<!-- ``` -->
+
+<!-- ```{r a4_sub-hint, echo=FALSE, message=FALSE} -->
+<!-- "Hint: Use re.sub()" -->
+<!-- ``` -->
+
+<!-- ```{python a4_sub-solution, echo=FALSE, message=FALSE} -->
+<!-- redacted = re.sub(pat3, "[DATE]", SPELLBOOK) -->
+<!-- redacted -->
+<!-- ``` -->
+
+<!-- ```{r a4_sub-check, message=FALSE, warning=FALSE} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   if (is.null(student)) fail(random_encouragement()) -->
+<!--   else if (grepl("\\[DATE\\]", as.character(student)) && !grepl("2026-03-05", as.character(student))) { -->
+<!--     pass(random_praise()) -->
+<!--   } else { -->
+<!--     fail("Make sure the original date disappears and [DATE] appears.") -->
+<!--   } -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- ## Using Flags -->
+
+<!-- Functions from `re` allow you to set `flags` which alter how the pattern is interpreted. Think of these flags as modifiers. You can find a full list of available flags [here](https://docs.python.org/3/library/re.html#flags). -->
+
+<!-- Use a flag to find all potions regardless of the text-case. -->
+
+<!-- ```{python a5_flags, exercise=TRUE, message=FALSE} -->
+<!-- hits = re.findall(r"potion", SPELLBOOK, flags=___) -->
+<!-- len(hits) -->
+<!-- ``` -->
+
+<!-- ```{python a5_flags-solution, echo=FALSE, message=FALSE, warning=FALSE} -->
+<!-- hits = re.findall(r"potion", SPELLBOOK, flags=re.IGNORECASE) -->
+<!-- len(hits) -->
+<!-- ``` -->
+
+<!-- ```{r a5_flags-check, message=FALSE, warning=FALSE} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   if (is.null(student)) fail(random_encouragement()) -->
+<!--   else if (as.integer(student) == 3L) pass(paste(random_praise(), "You found the third secret word: BANJO")) -->
+<!--   else fail("Expected 3.") -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- ## Regex Crossword -->
+
+<!-- ```{r crossword_setup, echo=FALSE, context="server"} -->
+<!-- CW_N <- 7 -->
+<!-- cw_correct <- reactiveVal(FALSE) -->
+
+<!-- # One cell input -->
+<!-- cw_cell <- function(r, c) { -->
+<!--   id <- paste0("cw_", r, "_", c) -->
+<!--   tags$td( -->
+<!--     style="width:36px;height:36px;border:1px solid #bbb;text-align:center;", -->
+<!--     tags$input( -->
+<!--       id=id, type="text", maxlength="1", -->
+<!--       style="width:32px;height:32px;text-align:center;font-size:18px;border:none;outline:none;text-transform:uppercase;" -->
+<!--     ) -->
+<!--   ) -->
+<!-- } -->
+
+<!-- ROW_CLUES <- list( -->
+<!--   list(pat="^A..H..S$"), -->
+<!--   list(pat="^.UMB...$"), -->
+<!--   list(pat="^CAP[TX]URE$"), -->
+<!--   list(pat="^GROUP[BP]Y$"), -->
+<!--   list(pat="^TO(K|C)EN[SX]X$"), -->
+<!--   list(pat="^FLA(G|P)S[RE]E$"), -->
+<!--   list(pat="^PAR[ST]ERS$") -->
+<!-- ) -->
+
+<!-- COL_CLUES <- list( -->
+<!--   list(pat="^A[NU]CGTFP$"), -->
+<!--   list(pat="^N[EIUO]AROLA$"), -->
+<!--   list(pat="^C[MN]POKAR$"), -->
+<!--   list(pat="^H[BD]TUEGS$"), -->
+<!--   list(pat="^O[EA]UPNSE$"), -->
+<!--   list(pat="^R{3}BSR{2}$"), -->
+<!--   list(pat="^S{2}EYXES$") -->
+<!-- ) -->
+
+<!-- output$cw_ui <- renderUI({ -->
+<!--   grid <- tags$table( -->
+<!--     lapply(seq_len(CW_N), function(r) { -->
+<!--       tags$tr(lapply(seq_len(CW_N), function(c) cw_cell(r, c))) -->
+<!--     }) -->
+<!--   ) -->
+
+<!--   clue_block <- function(title, clues) { -->
+<!--   tags$div( -->
+<!--     tags$h4(title), -->
+<!--     tags$ol(lapply(clues, function(x) { -->
+<!--       tags$li(tags$code(x$pat)) -->
+<!--     })) -->
+<!--   ) -->
+<!--   } -->
+
+<!--   tagList( -->
+<!--     tags$p("Fill the 7×7 grid with letters. A submission is correct only if EVERY row and EVERY column matches its regex."), -->
+<!--     grid, -->
+<!--     tags$div(style="display:flex; gap:2rem; align-items:flex-start; flex-wrap:wrap;", -->
+<!--       clue_block("Row constraints", ROW_CLUES), -->
+<!--       clue_block("Column constraints", COL_CLUES) -->
+<!--     ) -->
+<!--   ) -->
+<!-- }) -->
+
+<!-- observeEvent(input$cw_check, { -->
+<!--   mat <- matrix("", nrow=CW_N, ncol=CW_N) -->
+
+<!--   for (r in seq_len(CW_N)) { -->
+<!--     for (c in seq_len(CW_N)) { -->
+<!--       val <- toupper(trimws(input[[paste0("cw_", r, "_", c)]] %||% "")) -->
+<!--       mat[r, c] <- val -->
+<!--     } -->
+<!--   } -->
+
+<!--   if (any(mat == "")) { -->
+<!--     cw_correct(FALSE) -->
+<!--     output$cw_feedback <- renderText("Fill all squares first") -->
+<!--     return() -->
+<!--   } -->
+
+<!--   rows <- apply(mat, 1, paste0, collapse="") -->
+<!--   cols <- apply(mat, 2, paste0, collapse="") -->
+
+<!--   row_ok <- vapply(seq_len(CW_N), function(i) grepl(ROW_CLUES[[i]]$pat, rows[i], perl=TRUE), logical(1)) -->
+<!--   col_ok <- vapply(seq_len(CW_N), function(i) grepl(COL_CLUES[[i]]$pat, cols[i], perl=TRUE), logical(1)) -->
+
+<!--   all_ok <- all(row_ok) && all(col_ok) -->
+<!--   cw_correct(all_ok) -->
+
+<!--   if (all_ok) { -->
+<!--     output$cw_feedback <- renderText(paste(random_praise(), "Crossword solved!")) -->
+<!--   } else { -->
+<!--     bad_rows <- which(!row_ok) -->
+<!--     bad_cols <- which(!col_ok) -->
+<!--     msg <- c(random_encouragement()) -->
+<!--     if (length(bad_rows)) msg <- c(msg, paste0("Rows failing: ", paste(bad_rows, collapse=", "))) -->
+<!--     if (length(bad_cols)) msg <- c(msg, paste0("Cols failing: ", paste(bad_cols, collapse=", "))) -->
+<!--     output$cw_feedback <- renderText(paste(msg, collapse=" | ")) -->
+<!--   } -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- ```{r crossword_ui, echo=FALSE} -->
+<!-- uiOutput("cw_ui") -->
+<!-- actionButton("cw_check", "Check crossword") -->
+<!-- verbatimTextOutput("cw_feedback") -->
+<!-- ``` -->
+
+<!-- ## Cheat Sheet -->
+
+<!-- ```{r unlock_ui, echo=FALSE} -->
+<!-- uiOutput("unlock_section") -->
+<!-- ``` -->
+
+<!-- ```{r unlock_server, context="server", echo=FALSE} -->
+
+<!-- output$unlock_section <- renderUI({ -->
+<!--   all_ok <- isTRUE(cw_correct()) -->
+
+<!--   if (!all_ok) { -->
+<!--     return(tags$div( -->
+<!--       class="notebox", -->
+<!--       tags$h3("🔒 Cheat Sheet Locked"), -->
+<!--       tags$p("Unlock requirements: Crossword Solved") -->
+<!--     )) -->
+<!--   } -->
+
+<!--   tags$div( -->
+<!--     class="notebox", -->
+<!--     tags$h3("Regex Cheat Sheet"), -->
+
+<!--     tags$h4("How to decide what regex to write"), -->
+<!--     tags$ol( -->
+<!--       tags$li(tags$b("Name the job:"), " extraction, validation, or transformation."), -->
+<!--       tags$li(tags$b("Find the anchor text:"), " words/punctuation around what you want."), -->
+<!--       tags$li(tags$b("Start simple:"), " get it working, then tighten it."), -->
+<!--       tags$li(tags$b("Add groups intentionally:"), " don’t add parentheses “just because.”"), -->
+<!--       tags$li(tags$b("Test good + bad cases:"), " validation especially needs both.") -->
+<!--     ), -->
+
+<!--     tags$h4("Common tokens"), -->
+<!--     tags$ul( -->
+<!--       tags$li(tags$code("."), " any char (except newline unless DOTALL)"), -->
+<!--       tags$li(tags$code("\\\\d"), " digit; ", tags$code("\\\\w"), " word; ", tags$code("\\\\s"), " whitespace"), -->
+<!--       tags$li(tags$code("[abc]"), " any of a,b,c; ", tags$code("[A-Z]"), " uppercase; ", tags$code("[^...]"), " NOT in set"), -->
+<!--       tags$li(tags$code("^"), " start; ", tags$code("$"), " end; ", tags$code("\\\\b"), " word boundary"), -->
+<!--       tags$li(tags$code("*"), " 0+; ", tags$code("+"), " 1+; ", tags$code("?"), " 0/1; ", tags$code("{m,n}"), " repeats"), -->
+<!--       tags$li(tags$code("|"), " OR (alternation)") -->
+<!--     ), -->
+
+<!--     tags$h4("Greedy vs lazy"), -->
+<!--     tags$ul( -->
+<!--       tags$li(tags$code(".*"), " greedy"), -->
+<!--       tags$li(tags$code(".*?"), " lazy/non-greedy") -->
+<!--     ), -->
+
+<!--     tags$h4("Python `re` toolbox"), -->
+<!--     tags$ul( -->
+<!--       tags$li(tags$code("re.findall(pat, text)"), " → list of matches (or tuples if multiple groups)"), -->
+<!--       tags$li(tags$code("re.fullmatch(pat, s)"), " → match or None (best for validation)"), -->
+<!--       tags$li(tags$code("re.sub(pat, repl, text)"), " → replaced string"), -->
+<!--       tags$li(tags$code("re.search(pat, text)"), " → first match anywhere") -->
+<!--     ), -->
+
+<!--     tags$h4("Useful Flags"), -->
+<!--     tags$ul( -->
+<!--       tags$li(tags$code("re.IGNORECASE"), " case-insensitive"), -->
+<!--       tags$li(tags$code("re.MULTILINE"), " ^ and $ work per line"), -->
+<!--       tags$li(tags$code("re.DOTALL"), " . matches newline"), -->
+<!--       tags$li(tags$code("re.VERBOSE"), " readable multi-line regex with comments") -->
+<!--     ) -->
+<!--   ) -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- ## Validate a crochet pattern -->
+
+<!-- This section is crochet-themed, but you do **not** need to know how to crochet. -->
+
+<!-- A crochet pattern is a structured set of instructions. Here we treat it like a mini language with: -->
+
+<!-- - **Words/tokens** like `Round`, `MR`, `sc`, `inc`, `dec`, `FO` -->
+<!-- - **Numbers**: -->
+<!--   - `N` = round number (an integer) -->
+<!--   - `K` = a total count (an integer shown in parentheses) -->
+<!--   - `A` and `B` = integers used in a repeating instruction -->
+
+<!-- We accept ONLY these formats: -->
+
+<!-- 1. `Round N: MR, K sc` -->
+<!-- 2. `Round N: inc around (K)` -->
+<!-- 3. `Round N: (sc A, inc) x B (K)` -->
+<!-- 4. `Round N-M: sc around (K)` -->
+<!-- 5. `Round N: (sc A, dec) x B (K)` -->
+<!-- 6. `FO` -->
+
+<!-- In lines like: -->
+
+<!-- `Round N: (sc A, op) x B (K)` where `op` is `inc` or `dec` -->
+
+<!-- You can read that as: -->
+
+<!-- - Do `(sc A, op)` a total of `B` times -->
+<!-- - Each repeat **creates stitches**: -->
+<!--   - If `op` is `inc`: `A + 2` stitches (A single crochets + 2 stitches from an increase) -->
+<!--   - If `op` is `dec`: `A + 1` stitches (A single crochets + 1 stitch from a decrease) -->
+
+<!-- So the expected total after repeating is: -->
+
+<!-- - if `op` is `inc`: `K = B * (A + 2)` -->
+<!-- - if `op` is `dec`: `K = B * (A + 1)` -->
+
+<!-- Regex checks the shape, but Python can check the arithmetic rule. -->
+
+<!-- ```{python c1_validate, exercise=TRUE, message=FALSE} -->
+<!-- def is_valid_line(s): -->
+<!--     pattern = ___ -->
+<!--     used = ___ -->
+<!--     if not used: -->
+<!--         return False -->
+
+<!--     gd = used.groupdict() -->
+
+<!--     # Only some formats have A, B, K, op to check. -->
+<!--     if gd.get("A") and gd.get("B") and gd.get("K") and gd.get("op"): -->
+<!--         A = int(gd["A"]) -->
+<!--         B = int(gd["B"]) -->
+<!--         K = int(gd["K"]) -->
+<!--         op = gd["op"] -->
+<!--         expected = ___ -->
+<!--         return K == expected -->
+
+<!--     return True -->
+
+<!-- tests_good = [(line, is_valid_line(line)) for line in PATTERN_GOOD] -->
+<!-- tests_bad  = [(line, is_valid_line(line)) for line in PATTERN_BAD] -->
+<!-- tests_good, tests_bad -->
+<!-- ``` -->
+
+<!-- ```{r c1_validate-hint, echo=FALSE, message=FALSE, warning=FALSE} -->
+<!-- "Hint: This pattern is a BIG alternation (A|B|C|...). Start by matching ONE format first." -->
+<!-- ``` -->
+
+<!-- ```{python c1_validate-solution, echo=FALSE, message=FALSE, warning=FALSE} -->
+<!-- def is_valid_line(s): -->
+<!--     pattern = ( -->
+<!--         r"(?:(Round (?P<R1>\d+): MR, (?P<K1>\d+) sc))" -->
+<!--         r"|(?:(Round (?P<R2>\d+): inc around \((?P<K2>\d+)\)))" -->
+<!--         r"|(?:(Round (?P<R3>\d+): \(sc (?P<A>\d+), (?P<op>inc|dec)\) x (?P<B>\d+) \((?P<K>\d+)\)))" -->
+<!--         r"|(?:(Round (?P<R4>\d+)-(?P<R5>\d+): sc around \((?P<K3>\d+)\)))" -->
+<!--         r"|(?:(FO))" -->
+<!--     ) -->
+<!--     used = re.fullmatch(pattern, s) -->
+<!--     if not used: -->
+<!--         return False -->
+
+<!--     gd = used.groupdict() -->
+<!--     if gd.get("A") and gd.get("B") and gd.get("K") and gd.get("op"): -->
+<!--         A = int(gd["A"]); B = int(gd["B"]); K = int(gd["K"]) -->
+<!--         op = gd["op"] -->
+<!--         expected = B * (A + 2) if op == "inc" else B * (A + 1) -->
+<!--         return K == expected -->
+<!--     return True -->
+
+<!-- tests_good = [(line, is_valid_line(line)) for line in PATTERN_GOOD] -->
+<!-- tests_bad  = [(line, is_valid_line(line)) for line in PATTERN_BAD] -->
+<!-- tests_good, tests_bad -->
+<!-- ``` -->
+
+<!-- ```{r c1_validate-check, context='server'} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   if (is.null(student) || length(student) != 2) { -->
+<!--     fail("Make sure your last line outputs: (tests_good, tests_bad)") -->
+<!--   } else { -->
+<!--     good <- student[[1]] -->
+<!--     bad  <- student[[2]] -->
+<!--     good_ok <- all(vapply(good, function(x) isTRUE(x[[2]]), logical(1))) -->
+<!--     bad_ok  <- all(vapply(bad,  function(x) identical(x[[2]], FALSE), logical(1))) -->
+
+<!--     if (good_ok && bad_ok) { -->
+<!--       pass(paste(random_praise(), "You found the fifth secret word: OCTOPUS")) -->
+<!--     } else { -->
+<!--       fail("Close! Ensure all good lines are True and all bad lines are False (including the consistency check).") -->
+<!--     } -->
+<!--   } -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- ```{r cw_q, echo=FALSE} -->
+<!-- question( -->
+<!--   "Why are `^` and `$` useful in validation regex?", -->
+<!--   answer("They anchor to start/end so extra characters don’t sneak in", correct = TRUE), -->
+<!--   answer("They match digits"), -->
+<!--   answer("They make regex faster automatically"), -->
+<!--   allow_retry = TRUE, -->
+<!--   post_message = "You found the fourth secret word: MARSHMALLOW" -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- ### Optional: a real crochet pattern (for fun) -->
+
+<!-- This is a simple “flat circle” coaster-style pattern written in common shorthand. This is just to show that real patterns are structured text: -->
+
+<!-- - MR = magic ring -->
+<!-- - sc = single crochet -->
+<!-- - inc = increase -->
+<!-- - sl st = slip stitch -->
+<!-- - ch = chain -->
+<!-- - FO = fasten off -->
+
+<!-- Example pattern (mini coaster): -->
+
+<!-- 1. Round 1: MR, 6 sc (6) -->
+<!-- 2. Round 2: inc around (12) -->
+<!-- 3. Round 3: (sc 1, inc) x 6 (18) -->
+<!-- 4. Round 4: (sc 2, inc) x 6 (24) -->
+<!-- 5. Finish: sl st, FO -->
+
+<!-- If you wanted, you could validate patterns like this with your regex solution. -->
+
+<!-- ## What is Web Scraping? -->
+
+<!-- When we talk about **web scraping**, we usually mean: -->
+
+<!-- 1. Downloading the HTML that a website sends to your browser   -->
+<!-- 2. Extracting the pieces we care about (names, prices, links, tables, etc.) -->
+
+
+<!-- **First: What is HTML?** -->
+
+<!-- When you visit a website, your browser receives HTML (HyperText Markup Language). -->
+
+<!-- * All HTML documents must start with a document type declaration: `<!DOCTYPE html>`. -->
+<!-- * The HTML document itself begins with `<html>` and ends with `</html>`. -->
+<!-- * The visible part of the HTML document is between `<body>` and `</body>`. -->
+
+<!-- HTML is structured using *tags*. -->
+
+<!-- Example: -->
+
+<!-- ```html -->
+<!-- <div class="product"> -->
+<!--   <h2>Wizard Hat</h2> -->
+<!--   <span class="price">$19.99</span> -->
+<!--   <a href="/buy/hat-123">Buy</a> -->
+<!-- </div> -->
+<!-- ``` -->
+
+<!-- Let’s break that down: -->
+
+<!-- - `<div> ... </div>` -> a container -->
+<!-- - `<h2>` -> a heading tag -->
+<!-- - `<span>` -> inline container -->
+<!-- - `<a>` -> a link -->
+
+<!-- Tags can also have **attributes**, like: -->
+
+<!-- - `class="product"` -->
+<!-- - `href="/buy/hat-123"` -->
+
+<!-- An HTML **element** is defined by a start tag, some content, and an end tag. -->
+
+<!-- The HTML element is everything from the start tag to the end tag: -->
+
+<!-- ```html -->
+<!-- <tagname>Content goes here...</tagname> -->
+<!-- ``` -->
+
+<!-- Examples of some HTML elements: -->
+
+<!-- ```html -->
+<!-- <h1>My First Heading</h1> -->
+<!-- <p>My first paragraph.</p> -->
+<!-- ``` -->
+
+<!-- \HTML headings are defined with the `<h1>` to `<h6>` tags. -->
+
+<!-- * `<h1>` defines the most important heading.  -->
+<!-- * `<h6>` defines the least important heading:  -->
+
+<!-- ```html -->
+<!-- <h1>This is heading 1</h1> -->
+<!-- <h2>This is heading 2</h2> -->
+<!-- <h3>This is heading 3</h3> -->
+<!-- ``` -->
+
+<!-- A **paragraph** always starts on a new line, and is usually a block of text. Browsers automatically add some white space (a margin) before and after a paragraph. HTML paragraphs are defined with the `<p>` tag: -->
+
+<!-- ```html -->
+<!-- <p>This is a paragraph.</p> -->
+<!-- <p>This is another paragraph.</p> -->
+<!-- ``` -->
+
+
+<!-- HTML elements can be **nested** (this means that elements can contain other elements). **All HTML documents consist of nested HTML elements.** -->
+
+<!-- How many elements does the following example contain? -->
+
+<!-- ```html -->
+<!-- <!DOCTYPE html> -->
+<!-- <html> -->
+<!-- <body> -->
+
+<!-- <h1>My First Heading</h1> -->
+<!-- <p>My first paragraph.</p> -->
+
+<!-- </body> -->
+<!-- </html> -->
+<!-- ``` -->
+<!-- ```{r num_elements, echo=FALSE} -->
+<!-- question_numeric( -->
+<!--   "Enter the number of HTML elements:", -->
+<!--   answer_fn(function(value) { -->
+<!--     if (value == 4) { -->
+<!--       pass(random_praise()) -->
+<!--     } else { -->
+<!--       fail(paste(random_encouragement(), "Hint: Count opening/closing tag pairs. Do not count `<!DOCTYPE>`.")) -->
+<!--     } -->
+<!--   }, label = "Is the number even?"), -->
+<!--   allow_retry = TRUE, -->
+<!--   step = 1 -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- So HTML has: -->
+
+<!-- - Tags (structure) -->
+<!-- - Attributes (metadata) -->
+<!-- - Nested elements (structure inside structure) -->
+
+<!-- This nesting is why HTML is easier to parse with a **parser** instead of regex alone. -->
+
+<!-- **Why Not Just Regex Everything?** -->
+
+<!-- Regex works great for: -->
+
+<!-- - prices like `$19.99` -->
+<!-- - IDs like `hat-123` -->
+<!-- - dates like `2026-03-05` -->
+
+<!-- But regex struggles with: -->
+
+<!-- - nested tags -->
+<!-- - deeply structured layouts -->
+<!-- - messy real-world HTML -->
+
+<!-- So the standard workflow is: -->
+
+<!-- 1. Use an HTML parser to understand structure   -->
+<!-- 2. Use regex for tiny patterns inside extracted text   -->
+
+<!-- ## Parsing HTML with `BeautifulSoup` -->
+
+<!-- A very common HTML parsing tool in Python is `BeautifulSoup`. -->
+
+<!-- To install it: -->
+
+<!-- ``` -->
+<!-- pip install beautifulsoup4 -->
+<!-- ``` -->
+
+<!-- To use it: -->
+
+<!-- ```{python imports2, exercise=TRUE, message=FALSE} -->
+<!-- from bs4 import BeautifulSoup -->
+<!-- ``` -->
+
+<!-- `BeautifulSoup` reads raw HTML and turns it into a **tree structure** you can navigate. -->
+
+<!-- Let’s Look at Our HTML -->
+
+<!-- ```{python d1_parse, exercise=TRUE, message=FALSE} -->
+<!-- print(HTML_SNIPPET) -->
+<!-- ``` -->
+
+<!-- Now we create a “soup” object: -->
+
+<!-- ```{python d1_parse2, exercise=TRUE, message=FALSE} -->
+<!-- from bs4 import BeautifulSoup -->
+
+<!-- soup = BeautifulSoup(HTML_SNIPPET, "html.parser") -->
+<!-- soup -->
+<!-- ``` -->
+
+<!-- Think of `soup` as a structured version of the HTML. -->
+
+<!-- BeautifulSoup lets us access tags directly. -->
+
+<!-- ```{python d1_parse3, exercise=TRUE, message=FALSE} -->
+<!-- print(soup.h2)              # first <h2> -->
+<!-- print(soup.span)            # first <span> -->
+<!-- print(soup.a)               # first <a> -->
+<!-- print(soup.a["href"])       # attribute access -->
+<!-- print(soup.span["class"])   # class attribute -->
+<!-- ``` -->
+
+<!-- Important: `soup.h2` gives the *first* `<h2>` tag. To get **all** tags, we use `.find_all()`. -->
+
+<!-- ```{python d1_parse4, exercise=TRUE, message=FALSE} -->
+<!-- soup.find_all("span") -->
+<!-- ``` -->
+
+<!-- Notice we pass the tag name as a string. -->
+
+
+<!-- For example, let's try to extract all links from our HTML. -->
+
+<!-- Links are created with `<a>` tags and stored in the `href` attribute. -->
+
+<!-- ```{python d1_parse6, exercise=TRUE, message=FALSE} -->
+<!-- for link in soup.find_all("a"): -->
+<!--     print(f"Link: {link['href']}") -->
+<!-- ``` -->
+
+<!-- We can also select by class instead of tag. Classes are very common in HTML. -->
+
+<!-- If you see: -->
+
+<!-- ```html -->
+<!-- <div class="product"> -->
+<!-- ``` -->
+
+<!-- You can select it using CSS-style selectors: -->
+
+<!-- ```{python d1_parse7, exercise=TRUE, message=FALSE} -->
+<!-- products = soup.select(".product") -->
+<!-- products -->
+<!-- ``` -->
+
+<!-- - `"."` means class -->
+<!-- - `"#"` would mean ID -->
+
+<!-- To get text: -->
+
+<!-- ```{python d1_parse8, exercise=TRUE, message=FALSE} -->
+<!-- products[0].get_text() -->
+<!-- ``` -->
+
+<!-- Your Turn: Extract All Product Names -->
+
+<!-- Each product name is inside an `<h2>` tag. -->
+
+<!-- ```{python d1_names, exercise=TRUE, message=FALSE} -->
+<!-- names = [] -->
+
+<!-- for tag in ___: -->
+<!--     names.append(___) -->
+
+<!-- names -->
+<!-- ``` -->
+
+<!-- ```{python d1_names-solution, echo=FALSE, message=FALSE, warning=FALSE} -->
+<!-- names = [] -->
+
+<!-- for tag in soup.find_all("h2"): -->
+<!--     names.append(tag.get_text()) -->
+
+<!-- names -->
+<!-- ``` -->
+
+<!-- ```{r d1_names-check, context='server'} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+
+<!--   expected <- c("Wizard Hat", "Crystal Yarn", "Enchanted Hook") -->
+
+<!--   if (is.null(student)) { -->
+<!--     fail(random_encouragement()) -->
+<!--   } else if (identical(as.character(student), expected)) { -->
+<!--     pass(random_praise()) -->
+<!--   } else { -->
+<!--     fail("Make sure you are looping over `soup.find_all('h2')` and using `.get_text()`.") -->
+<!--   } -->
+<!-- }) -->
+<!-- ``` -->
+
+
+<!-- Now that we understand structure, we use regex for small things. -->
+
+<!-- For example, now try to extract prices for the products. -->
+
+<!-- ```{python d2_prices, exercise=TRUE, message=FALSE} -->
+<!-- price_pat = r"___" -->
+<!-- prices = re.findall(___, HTML_SNIPPET) -->
+<!-- prices -->
+<!-- ``` -->
+
+<!-- ```{python d2_prices-solution, echo=FALSE, message=FALSE, warning=FALSE} -->
+<!-- price_pat = r"\$\d+\.\d{2}" -->
+<!-- prices = re.findall(price_pat, HTML_SNIPPET) -->
+<!-- prices -->
+<!-- ``` -->
+
+<!-- ```{r d2_prices-check, context='server'} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   expected <- c("$19.99", "$7.50", "$12.00") -->
+<!--   if (is.null(student)) fail(random_encouragement()) -->
+<!--   else if (identical(as.character(student), expected)) pass(random_praise()) -->
+<!--   else fail(random_encouragement()) -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- ```{r mcq_dollar, echo=FALSE} -->
+<!-- question( -->
+<!--   "Why do we write `\\$` in a regex for prices?", -->
+<!--   answer("Because `$` is a special anchor token in regex unless escaped", correct=TRUE), -->
+<!--   answer("Because `\\$` means “any digit”"), -->
+<!--   answer("Because Python requires escaping for all punctuation"), -->
+<!--   answer("Because it makes the regex case-insensitive"), -->
+<!--   allow_retry = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- Now we can combine parsing + regex. -->
+
+<!-- We already parsed the structure. Now we validate IDs using regex. -->
+
+<!-- Valid SKUs: -->
+
+<!-- - letters -->
+<!-- - hyphen -->
+<!-- - digits -->
+<!-- - any length -->
+
+<!-- Example: `hat-123` -->
+
+<!-- ```{python d3_sku, exercise=TRUE, message=FALSE} -->
+<!-- sku_pat = r"___" -->
+<!-- products = soup.select(".product") -->
+<!-- skus = ___ #use a list comprehension -->
+<!-- [(s, re.fullmatch(sku_pat, s) is not None) for s in skus] -->
+<!-- ``` -->
+
+<!-- ```{python d3_sku-solution, echo=FALSE, message=FALSE, warning=FALSE} -->
+<!-- sku_pat = r"[a-z]+-\d+" -->
+<!-- products = soup.select(".product") -->
+<!-- skus = [p.find("a")["data-sku"] for p in products] -->
+<!-- [(s, re.fullmatch(sku_pat, s) is not None) for s in skus] -->
+<!-- ``` -->
+
+<!-- ```{r d3_sku-check, message=FALSE, warning=FALSE} -->
+<!-- grade_this({ -->
+<!--   student <- reticulate::py_to_r(.result) -->
+<!--   if (is.null(student)) fail(random_encouragement()) -->
+<!--   else { -->
+<!--     ok <- all(vapply(student, function(x) isTRUE(x[[2]]), logical(1))) -->
+<!--     if (ok) pass(random_praise()) else fail("Pattern should match letters-hyphen-digits.") -->
+<!--   } -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- :::: {.discussionbox} -->
+<!-- ::: {.center} -->
+<!-- **Exit ticket** -->
+<!-- ::: -->
+<!-- In one sentence:   -->
+<!-- What does the parser do, and what does regex do? -->
+<!-- :::: -->
