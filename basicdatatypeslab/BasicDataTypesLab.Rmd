@@ -33,7 +33,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Python Data Storage", class = "pageTitle")
+    tags$h1("Basic Data Types in Python", class = "pageTitle")
   )
 )
 ```
@@ -60,7 +60,6 @@ The goal of this tutorial is to introduce you to the style of tutorials we will 
 - Floats
 - Booleans
 - Strings
-
 
 ## How does this tutorial work?
 
