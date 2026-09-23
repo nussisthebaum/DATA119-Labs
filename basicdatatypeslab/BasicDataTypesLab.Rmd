@@ -75,7 +75,7 @@ Now, click on the light blue "Run Code" button in the top right corner of the ce
 
 You can type anything into the cell, but usually, you should be typing code to answer to a question we are asking. For example, write some code to answer the question "What is two plus two" in the cell below:
 
-```{python ex2, exercise=TRUE}
+```{python ex2, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -91,7 +91,7 @@ This time, you should see a light "Submit Answer" button in the top right corner
 
 Now, right some code that will tell you anything BUT the answer to the question "What is two plus two."
 
-```{python ex3, exercise=TRUE}
+```{python ex3, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -107,7 +107,7 @@ Click on the "Submit Answer" button. This time, you should see a red box saying 
 
 Sometimes, the cells expect your code to match ours exactly. For example, edit the code in the cell below to give the answer to $2+2 -3 + 3$ and click on the "Submit Answer" button.
 
-```{python ex4, exercise=TRUE}
+```{python ex4, exercise=TRUE, exercise.setup="setup_py"}
 2+2
 ```
 
@@ -123,7 +123,7 @@ Even though `2+2` and `2+2-3+3` give the same value, `4`, the tutorial is tellin
 
 <!-- For example, write a line of code below that should yield a result of `4`. -->
 
-<!-- ```{python ex5, exercise=TRUE} -->
+<!-- ```{python ex5, exercise=TRUE, exercise.setup="setup_py"} -->
 <!-- 2+2 -->
 <!-- ``` -->
 
@@ -164,7 +164,7 @@ Remember that syntax is "the arrangement of words and phrases to create well-for
 
 The syntax highlighting on my slides is different from the syntax highlighting in this tutorial, which may be different from the syntax highlighting you are using. Let's take a quick look at the syntax highlighting in your tutorial.
 
-```{python ex6, exercise=TRUE}
+```{python ex6, exercise=TRUE, exercise.setup="setup_py"}
 2+2
 ```
 
@@ -187,7 +187,7 @@ We know from lecture that `2` is an `int`--in this tutorial, `ints` appear blue.
 
 Now, write a number that has a decimal point in the cell below. 
 
-```{python ex7, exercise=TRUE}
+```{python ex7, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -209,7 +209,7 @@ We know that numbers with decimal points are stored as `floats`. Here, we can se
 
 Edit the code in the following cell so that the string uses your name instead of mine.
 
-```{python ex7_5, exercise=TRUE}
+```{python ex7_5, exercise=TRUE, exercise.setup="setup_py"}
 "Hello, my name is Professor Nussbaum."
 ```
 
@@ -232,7 +232,7 @@ We can see that in these tutorials, strings appear as green.
 
 Finally, edit the cell below so that it contains a Boolean (refer back to your notes if you can't remember what those are).
 
-```{python ex8, exercise=TRUE}
+```{python ex8, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -265,7 +265,7 @@ Remember that numbers are stored as either `ints` or `floats` in Python. An `int
 
 Edit the code below to find the types of the numbers:
 
-```{python ex9, exercise=TRUE}
+```{python ex9, exercise=TRUE, exercise.setup="setup_py"}
 18
 22.7
 ```
@@ -316,7 +316,7 @@ Other types have more specific methods, but for ints and floats, we are happy us
 
 Use the cell below to experiment with the operators until you understand what each of them does. 
 
-```{python ex10, exercise=TRUE}
+```{python ex10, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -331,7 +331,7 @@ Use the cell below to experiment with the operators until you understand what ea
 
 Use the cell below to experiment with the comparison operators until you understand what each of them does. 
 
-```{python ex11_0, exercise=TRUE}
+```{python ex11_0, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -352,7 +352,7 @@ Consider the heights in centimeters of the following Star Wars characters:
 
 Using the `+` and `/` operators, as well as the parentheses, write a line of code to calculate the average. 
 
-```{python ex11, exercise=TRUE}
+```{python ex11, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -375,7 +375,7 @@ As we have said, there are not many `int`- and `float`-specific methods, but the
 
 Convert the integer 172 to a float using one of these functions in the cell below:
 
-```{python ex12, exercise=TRUE}
+```{python ex12, exercise=TRUE, exercise.setup="setup_py"}
 172
 ```
 
@@ -419,7 +419,7 @@ Sometimes, to make it easier to track our work, we use something called variable
 
 Consider the following code:
 
-```{python ex13, exercise=TRUE}
+```{python ex13, exercise=TRUE, exercise.setup="setup_py"}
 Chewbacca = 238
 ```
 
@@ -435,7 +435,7 @@ In this case, the variable name is `Chewbacca`. Notice that it appears in black!
 
 This time, if you click on the "Run Code" button, it looks like nothing happens. That's not technically true--we corrected the height by re-storing the value, but we can't necessarily see what happened. Another built-in function is the `print()` function. Click on the "Run Code" button below, and then edit Chewbacca's height--does the output change at all?
 
-```{python ex14, exercise=TRUE}
+```{python ex14, exercise=TRUE, exercise.setup="setup_py"}
 Chewbacca = 238
 print(Chewbacca)
 ```
@@ -458,7 +458,7 @@ Now, add some code to assign heights to the rest of our characters, Luke Skywalk
 * Han Solo--180cm, and 
 * Chewbacca--238cm
 
-```{python ex15, exercise=TRUE}
+```{python ex15, exercise=TRUE, exercise.setup="setup_py"}
 Chewbacca = 228
 Luke = ...
 C3P0 = ...
@@ -509,7 +509,7 @@ Now let's practice working with Booleans using our variables, `Chewbacca`, `Luke
 
 Is Luke taller than Leia? Write a line of code using the right comparison operator and the variable names. 
 
-```{python ex16, exercise=TRUE}
+```{python ex16, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -523,7 +523,7 @@ grade_this_code()
 
 Is Chewbacca taller than Han Solo? Write a line of code using the right comparison operator and the variable names. 
 
-```{python ex17, exercise=TRUE}
+```{python ex17, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -539,7 +539,7 @@ It can be helpful to combine some of these comparisons using Python's [logical o
 
 Is Leia taller than *either* of the droids, R2-D2 or C-3PO?
 
-```{python ex18, exercise=TRUE}
+```{python ex18, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -553,7 +553,7 @@ grade_this_code()
 
 Is Chewbacca taller than *both* of the droids, R2-D2 or C-3PO?
 
-```{python ex19, exercise=TRUE}
+```{python ex19, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -571,7 +571,7 @@ Saving the most complicated for last! Unlike `int`s, `float`s, and Booleans, str
 
 First, let's create a variable for Leia Organa's full name:
 
-```{python ex20, exercise=TRUE}
+```{python ex20, exercise=TRUE, exercise.setup="setup_py"}
 Leia_fullname = "Leia Organa"
 ```
 
@@ -582,7 +582,7 @@ A few things:
 
 Strings are the same whether you use double or single quotes to define them. Write a line of code to see if `Leia_fullname` is the same as `'Leia Organa'` using a comparison operator. 
 
-```{python ex21, exercise=TRUE}
+```{python ex21, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -598,7 +598,7 @@ Make sure you are careful to use the single equals sign, `=`, when assigning var
 
 Now, write a line of code using a comparison operator to see if `Leia_fullname` is equal to `"leia organa"`.
 
-```{python ex22, exercise=TRUE}
+```{python ex22, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -612,7 +612,7 @@ grade_this_code()
 
 Python does not consider two strings to be the same unless they match exactly. This is where some of the methods come in. The `.lower()` method should convert all of the characters in a string to lowercase. Try and use it with our variable name in the cell below. Save the lowercase version as a new variable, `Leia_lower`, and check to see if it is equal to `"leia organa"`.
 
-```{python ex23, exercise=TRUE}
+```{python ex23, exercise=TRUE, exercise.setup="setup_py"}
 leia_lower = Leia_fullname...
 ...
 ```
@@ -635,7 +635,7 @@ Now, use the `.capitalize()` method to try and undo what you just did.
 Will `.capitalize()` undo what you did completely? If not, what do you think it will do?
 ::::
 
-```{python ex24, exercise=TRUE}
+```{python ex24, exercise=TRUE, exercise.setup="setup_py"}
 leia_lower...
 ...
 ```
@@ -665,13 +665,13 @@ question(
 
 So far, we have only considered fairly short strings, but they can be relatively long, as well! Consider Princess Leia's message to Obi-Wan Kenobi in *A New Hope*. 
 
-```{python ex25, exercise=TRUE}
+```{python ex25, exercise=TRUE, exercise.setup="setup_py"}
 message = "General Kenobi. Years ago you served my father in the Clone Wars. Now he begs you to help him in his struggle against the Empire. I regret that I am unable to present my father's request to you in person, but my ship has fallen under attack, and I'm afraid my mission to bring you to Alderaan has failed. I have placed information vital to the survival of the Rebellion into the memory systems of this R2 unit. My father will know how to retrieve it. You must see this droid safely delivered to him on Alderaan. This is our most desperate hour. Help me, Obi-Wan Kenobi. You're my only hope."
 ```
 
 We might be interested in locating shorter strings within larger strings. For example, we could examine the contents of `message` to find how many times the shorter string `"Kenobi"` appears, but the longer the string, the more difficult this task will be. Instead, let's consider the `.count()` method.
 
-```{python ex26, exercise=TRUE}
+```{python ex26, exercise=TRUE, exercise.setup="setup_py"}
 message.count("Kenobi")
 ```
 
@@ -692,13 +692,13 @@ This method is different than many we have seen, because we have to pass what is
 Go back to the string methods table and find an interesting method. See if you can use it with `message`. 
 ::::
 
-```{python ex27, exercise=TRUE}
+```{python ex27, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
 In addition to having specific methods, some of the operators we are already familiar with operate differently with strings. Consider the following cells. What happens if you add the two strings together?
 
-```{python ex28, exercise=TRUE}
+```{python ex28, exercise=TRUE, exercise.setup="setup_py"}
 obiwan = "These aren't the droids you're looking for."
 stormtrooper = "These aren't the droids we're looking for."
 ```
@@ -717,7 +717,7 @@ When used with strings, the `+` is the concatenation operator. It pastes the two
 
 What happens if you use the multiplication operator, `*`, with `message_short`? Multiply it by 3. 
 
-```{python ex29, exercise=TRUE}
+```{python ex29, exercise=TRUE, exercise.setup="setup_py"}
 message_short = "Help me, Obi-Wan Kenobi. You're my only hope."
 ```
 
@@ -732,7 +732,7 @@ grade_this_code()
 
 You should notice that the multiplication operator will repeat the string (in this case, three times). What happens if you multiply by 1.5 instead?
 
-```{python ex30, exercise=TRUE}
+```{python ex30, exercise=TRUE, exercise.setup="setup_py"}
 message_short = "Help me, Obi-Wan Kenobi. You're my only hope."
 message_short*3
 ```
