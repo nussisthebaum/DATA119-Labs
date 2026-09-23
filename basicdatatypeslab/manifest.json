@@ -10,7 +10,7 @@
     "has_parameters": false
   },
   "python": {
-    "version": "3.8.16",
+    "version": "3.10",
     "requires": null,
     "package_manager": {
       "name": "pip",
