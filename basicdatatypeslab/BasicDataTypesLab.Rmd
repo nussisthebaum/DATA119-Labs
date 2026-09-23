@@ -1,0 +1,750 @@
+---
+title: "Basic Data Types" 
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, message = FALSE, warning = FALSE, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+#install.packages(c("RcppTOML", "here", "withr"))
+
+library(shiny)
+library(gradethis)
+library(learnr)
+library(reticulate)
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.blanks = "\\.{3}")
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Python Data Storage", class = "pageTitle")
+  )
+)
+```
+
+```{python setup_py, context="setup", echo = FALSE}
+Chewbacca = 228
+Luke = 172
+C3PO = 167
+R2D2 = 96
+Leia = 150
+Han = 180
+
+Leia_fullname = "Leia Organa"
+leia_lower = "leia organa"
+
+message = "General Kenobi. Years ago you served my father in the Clone Wars. Now he begs you to help him in his struggle against the Empire. I regret that I am unable to present my father's request to you in person, but my ship has fallen under attack, and I'm afraid my mission to bring you to Alderaan has failed. I have placed information vital to the survival of the Rebellion into the memory systems of this R2 unit. My father will know how to retrieve it. You must see this droid safely delivered to him on Alderaan. This is our most desperate hour. Help me, Obi-Wan Kenobi. You're my only hope."
+```
+
+## Goals
+
+The goal of this tutorial is to introduce you to the style of tutorials we will be using to learn to program and to review some of what you've learned about basic data types in Python. We will cover:
+
+- Ints
+- Floats
+- Booleans
+- Strings
+
+
+## How does this tutorial work?
+
+Before we ask you to start working in a Jupyter notebook, we will ask you to complete this tutorial in a web browser so you can get used to one thing at a time. 
+
+Below is an example of a *cell*. Type some basic Python code into a cell. Remember that Python uses built-in operators to do math calculations if you can't think of anything else to type. 
+
+```{python ex1, exercise=TRUE}
+
+```
+
+Now, click on the light blue "Run Code" button in the top right corner of the cell. Hopefully, you should see some output in a separate box just below the cell. 
+
+You can type anything into the cell, but usually, you should be typing code to answer to a question we are asking. For example, write some code to answer the question "What is two plus two" in the cell below:
+
+```{python ex2, exercise=TRUE}
+
+```
+
+```{python ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+2+2
+```
+
+```{r ex2-check, context="server"}
+grade_this_code()
+```
+
+This time, you should see a light "Submit Answer" button in the top right corner of the cell. Click on it--what do you see? If you wrote something like `2+2`, you should see a green box saying that you got the right answer. 
+
+Now, right some code that will tell you anything BUT the answer to the question "What is two plus two."
+
+```{python ex3, exercise=TRUE}
+
+```
+
+```{python ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+2+2
+```
+
+```{r ex3-check, context="server"}
+grade_this_code()
+```
+
+Click on the "Submit Answer" button. This time, you should see a red box saying that your answer was incorrect. Most of the time, this means that you should revisit your code--you can submit the answer multiple times until you get the right answer. For now, you can move on!
+
+Sometimes, the cells expect your code to match ours exactly. For example, edit the code in the cell below to give the answer to $2+2 -3 + 3$ and click on the "Submit Answer" button.
+
+```{python ex4, exercise=TRUE}
+2+2
+```
+
+```{python ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+2+2
+```
+
+```{r ex4-check, context="server"}
+grade_this_code()
+```
+
+Even though `2+2` and `2+2-3+3` give the same value, `4`, the tutorial is telling you that you didn't get the right answer because your code is not an exact match. In this class, we will usually use exact code matching so that you can learn the basics, but there might be times where there are multiple ways to get the right answer. You are always welcome to experiment and ask us for help! 
+
+<!-- For example, write a line of code below that should yield a result of `4`. -->
+
+<!-- ```{python ex5, exercise=TRUE} -->
+<!-- 2+2 -->
+<!-- ``` -->
+
+<!-- ```{python ex5-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+<!-- 4 -->
+<!-- ``` -->
+
+<!-- ```{r ex5-check, context="server"} -->
+<!-- grade_this({ -->
+<!--   if (is.null(.result)) { -->
+<!--     fail("Make sure to write your line of code!") -->
+<!--   } -->
+
+<!--   res <- reticulate::py_to_r(.result) -->
+
+<!--   ex5_ans = 4 -->
+
+<!--   if (identical(res, ex5_ans)) { -->
+<!--     pass(random_praise()) -->
+<!--   } else { -->
+<!--     fail(random_encouragement()) -->
+<!--   } -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- :::: {.discussionbox} -->
+<!-- ::: {.center} -->
+<!-- **Discuss with a neighbor (or on Ed):** -->
+<!-- ::: -->
+<!-- What code did you write that gives `4` as an answer? Is it different from what your neighbors wrote? -->
+<!-- :::: -->
+
+Sometimes, you might see a yellow box with a strange error. If you do, please know that you are likely not making a mistake and we need to fix the issue on the back end. If you see something like this, please let your instructor know!
+
+## Syntax Highlighting
+
+Remember that syntax is "the arrangement of words and phrases to create well-formed sentences in a language", a.k.a., coding grammar. Syntax highlighting displays code in different colors and fonts to help programmers identify different pieces of code quickly. 
+
+The syntax highlighting on my slides is different from the syntax highlighting in this tutorial, which may be different from the syntax highlighting you are using. Let's take a quick look at the syntax highlighting in your tutorial.
+
+```{python ex6, exercise=TRUE}
+2+2
+```
+
+```{r q1, echo=FALSE}
+question(
+  "What colors do you see? Check all that apply:",
+  answer("Black"),
+  answer("Blue", correct = TRUE, "Great! The twos should both appear as blue."),
+  answer("Gray", correct = TRUE, "The plus should appear as gray."),
+  answer("Green"),
+  answer("Purple"),
+  answer("Red"),
+  answer("Yellow"),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the first secret word: PREVENT. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+)
+```
+
+We know from lecture that `2` is an `int`--in this tutorial, `ints` appear blue. We also know that the `+` is an operator. In this tutorial, operators appear gray. 
+
+Now, write a number that has a decimal point in the cell below. 
+
+```{python ex7, exercise=TRUE}
+
+```
+
+```{r q2, echo=FALSE}
+question(
+  "What colors do you see? Check all that apply:",
+  answer("Black"),
+  answer("Blue", correct = TRUE),
+  answer("Gray"),
+  answer("Green"),
+  answer("Purple"),
+  answer("Red"),
+  answer("Yellow"),
+  allow_retry = TRUE
+)
+```
+
+We know that numbers with decimal points are stored as `floats`. Here, we can see that both types of numbers, `ints` and `floats`, appear as blue. 
+
+Edit the code in the following cell so that the string uses your name instead of mine.
+
+```{python ex7_5, exercise=TRUE}
+"Hello, my name is Professor Nussbaum."
+```
+
+```{r q3, echo=FALSE}
+question(
+  "What colors do you see? Check all that apply:",
+  answer("Black"),
+  answer("Blue"),
+  answer("Gray"),
+  answer("Green", correct = TRUE, "Great! Strings should appear as green."),
+  answer("Purple"),
+  answer("Red"),
+  answer("Yellow"),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the second secret word: FINE. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+)
+```
+
+We can see that in these tutorials, strings appear as green. 
+
+Finally, edit the cell below so that it contains a Boolean (refer back to your notes if you can't remember what those are).
+
+```{python ex8, exercise=TRUE}
+
+```
+
+```{r q3_5, echo=FALSE}
+question(
+  "What colors do you see? Check all that apply:",
+  answer("Black"),
+  answer("Blue", correct = TRUE, "Great! Booleans should also appear as blue."),
+  answer("Gray"),
+  answer("Green"),
+  answer("Purple"),
+  answer("Red"),
+  answer("Yellow"),
+  allow_retry = TRUE
+)
+```
+
+Booleans are an ever so slightly lighter blue in these tutorials. We will review more syntax highlighting as we learn more Python, but for know, remember that you should be able to look at some code and understand either from the context (e.g., Is the code a number? Does it have a decimal place?) or from the syntax highlighting what kind of object weare working with.
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+Open an empty Jupyter notebook and check to see what colors `ints`, `floats`, strings and Booleans are on your own computer. Is it the same color as your neighbor?
+::::
+
+## Ints and Floats
+
+Remember that numbers are stored as either `ints` or `floats` in Python. An `int` never has a decimal point; a `float` always does. Remember also that the `type()` function will tell us what kind of object we are working with. 
+
+Edit the code below to find the types of the numbers:
+
+```{python ex9, exercise=TRUE}
+18
+22.7
+```
+
+```{python ex9-solution, message = FALSE, warning = FALSE, echo = FALSE}
+type(18)
+type(22.7)
+```
+
+```{r ex9-check, context="server"}
+grade_this_code()
+```
+
+```{r q4, echo=FALSE}
+question(
+  "What is the type of `18`?",
+  answer("`Boolean`"),
+  answer("`int`", correct = TRUE),
+  answer("`float`"),
+  answer("`str`, the abbreviation for string"),
+  allow_retry = TRUE
+)
+```
+
+```{r q5, echo=FALSE}
+question(
+  "What is the type of `22.7`?",
+  answer("`Boolean`"),
+  answer("`int`"),
+  answer("`float`", correct = TRUE, message = "Your tutorial or computer may also say something like `float64`--the 64 refers to how many bits of memory we want to use or precise we want to be."),
+  answer("`str`, the abbreviation for string"),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the third secret word: SEAL. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+)
+```
+
+Other types have more specific methods, but for ints and floats, we are happy using simple operators or comparison operators. 
+
+| Operation | Operator | Example | Output |
+|:---------:|:-----:|:------:|------:|
+| Addition | `+` | `2+3` |   `5`   |
+| Subtraction | `-` | `2-3` |   `-1`   |
+| Multiplication | `*` | `2*3` |   `6`   |
+| Division | `/` | `7/3` |   `2.33`   |
+| Floor Division | `//` | `7//3` |   `2`   |
+| Remainder (mod) | `%` | `7//3` |   `1`   |
+| Exponentiation | `^` | `2^0.5` |   `1.41421`   |
+
+Use the cell below to experiment with the operators until you understand what each of them does. 
+
+```{python ex10, exercise=TRUE}
+
+```
+
+| Comparison | Operator | True Example | False Example |
+|:---------:|:-----:|:------:|------:|
+| Less than | `<` | `2 < 3` |   `2<2`   |
+| Greater than | `>` | `3 > 2` |   `3>3`   |
+| Less than or equal | `<=` | `2 <=2 ` |   ` 3<=2 `   |
+| Greater than or equal | `>=` | `3 >= 3` |   `2 >= 3`   |
+| Exactly equal | `==` | `3  == 3` |   `3 == 2`   |
+| Not Equal | `!=` | `3 != 2` |   `3 != 3`   |
+
+Use the cell below to experiment with the comparison operators until you understand what each of them does. 
+
+```{python ex11_0, exercise=TRUE}
+
+```
+
+We can use multiple operators, as well as the parentheses, to carry out more advanced calculations. For example, some of you may be familiar with the average or mean:
+
+$$\bar{x} = \frac{x_1 + x_2 + ... + x_n}{n}$$
+
+In other words, to find the average of a variable, you add all the numbers up and divide by the number of observations. 
+
+Consider the heights in centimeters of the following Star Wars characters: 
+
+* Luke Skywalker--172cm
+* C-3PO--167cm
+* R2-D2--96cm
+* Leia Organa--150cm
+* Han Solo--180cm, and 
+* Chewbacca--238cm
+
+Using the `+` and `/` operators, as well as the parentheses, write a line of code to calculate the average. 
+
+```{python ex11, exercise=TRUE}
+
+```
+
+```{python ex11-solution, message = FALSE, warning = FALSE, echo = FALSE}
+(172+167+96+150+180+238)/6
+```
+
+```{r ex11-check}
+grade_this_code()
+```
+
+As we have said, there are not many `int`- and `float`-specific methods, but there are some built-in functions in Python that make working with numbers easier:
+
+| Function | Description |
+|:---------:|:-----:|
+| `abs()` | Returns the absolute value of a number |
+| `float()` | Returns (or converts an object to) a floating point number |
+| `int()` | Returns (or converts an object to) an integer number |
+| `round()` | Rounds a number |
+
+Convert the integer 172 to a float using one of these functions in the cell below:
+
+```{python ex12, exercise=TRUE}
+172
+```
+
+```{python ex12-solution, message = FALSE, warning = FALSE, echo = FALSE}
+float(172)
+```
+
+```{r ex12-check}
+grade_this_code()
+```
+
+```{r q6, echo=FALSE}
+question(
+  "Take a closer look at your code. What color is used to highlight a built-in function?",
+  answer("Black"),
+  answer("Blue"),
+  answer("Gray", correct = TRUE, "Just like an operator, the built-in functions should appear as gray."),
+  answer("Green"),
+  answer("Purple"),
+  answer("Red"),
+  answer("Yellow"),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the fourth secret word: FLEXIBLE. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+)
+```
+
+The table above is a shortened version of a much [larger table with built-in functions](https://www.w3schools.com/python/python_ref_functions.asp). 
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+Click on the link to the larger table. Can you spot any other functions that might be useful?
+::::
+
+## Variable Assignment
+
+Let's revisit the heights of the Star Wars characters. Consider Chewbacca in particular--it turns out that his height is 228cm, not 238. If we were correcting a data analysis, we would have to re-type in all those numbers. However, if you were handing it off to a colleague or if enough time had passed, you may not remember exactly why you wrote what you wrote. 
+
+Sometimes, to make it easier to track our work, we use something called variable assignment. Variable assignment helps us store values to work with using a variable name and the assignment operator, `=`. 
+
+Consider the following code:
+
+```{python ex13, exercise=TRUE}
+Chewbacca = 238
+```
+
+```{python ex13-solution, message = FALSE, warning = FALSE, echo = FALSE}
+Chewbacca = 228
+```
+
+```{r ex13-check}
+grade_this_code()
+```
+
+In this case, the variable name is `Chewbacca`. Notice that it appears in black! Now, edit the code above so that `Chewbacca` is equal to 228, not 238. 
+
+This time, if you click on the "Run Code" button, it looks like nothing happens. That's not technically true--we corrected the height by re-storing the value, but we can't necessarily see what happened. Another built-in function is the `print()` function. Click on the "Run Code" button below, and then edit Chewbacca's height--does the output change at all?
+
+```{python ex14, exercise=TRUE}
+Chewbacca = 238
+print(Chewbacca)
+```
+
+```{python ex14-solution, message = FALSE, warning = FALSE, echo = FALSE}
+Chewbacca = 228
+print(Chewbacca)
+```
+
+```{r ex14-check}
+grade_this_code()
+```
+
+Now, add some code to assign heights to the rest of our characters, Luke Skywalker, C-3PO, R2-D2, Leia Organa, and Han Solo. Remember, the heights are:
+
+* Luke Skywalker--172cm
+* C-3PO--167cm
+* R2-D2--96cm
+* Leia Organa--150cm
+* Han Solo--180cm, and 
+* Chewbacca--238cm
+
+```{python ex15, exercise=TRUE}
+Chewbacca = 228
+Luke = ...
+C3P0 = ...
+R2D2 = ...
+Leia = ...
+Han = ...
+```
+
+```{python ex15-solution, message = FALSE, warning = FALSE, echo = FALSE}
+Chewbacca = 228
+Luke = 172
+C3PO = 167
+R2D2 = 96
+Leia = 150
+Han = 180
+```
+
+```{r ex15-check}
+grade_this_code()
+```
+
+Variable names *can* be anything, but it's generally good to avoid the names of the built-in functions as well as the [Python keywords](https://www.w3schools.com/python/python_ref_keywords.asp), listed below:
+
+```{python, echo = TRUE, eval = FALSE}
+False      await      else       import     pass
+None       break      except     in         raise
+True       class      finally    is         return
+and        continue   for        lambda     try
+as         def        from       nonlocal   while
+assert     del        global     not        with
+async      elif       if         or         yield
+```
+
+Note that the keywords ALSO appear as blue.
+
+## Booleans
+
+Now let's practice working with Booleans using our variables, `Chewbacca`, `Luke`, `C3P0`, `R2D2`, `Leia`, and `Han`. Remember that Booleans are commonly used with the comparison operators:
+
+| Comparison | Operator | True Example | False Example |
+|:---------:|:-----:|:------:|------:|
+| Less than | `<` | `2 < 3` |   `2<2`   |
+| Greater than | `>` | `3 > 2` |   `3>3`   |
+| Less than or equal | `<=` | `2 <=2 ` |   ` 3<=2 `   |
+| Greater than or equal | `>=` | `3 >= 3` |   `2 >= 3`   |
+| Exactly equal | `==` | `3  == 3` |   `3 == 2`   |
+| Not Equal | `!=` | `3 != 2` |   `3 != 3`   |
+
+Is Luke taller than Leia? Write a line of code using the right comparison operator and the variable names. 
+
+```{python ex16, exercise=TRUE}
+
+```
+
+```{python ex16-solution, message = FALSE, warning = FALSE, echo = FALSE}
+Luke > Leia
+```
+
+```{r ex16-check,}
+grade_this_code()
+```
+
+Is Chewbacca taller than Han Solo? Write a line of code using the right comparison operator and the variable names. 
+
+```{python ex17, exercise=TRUE}
+
+```
+
+```{python ex17-solution, message = FALSE, warning = FALSE, echo = FALSE}
+Chewbacca < Han 
+```
+
+```{r ex17-check}
+grade_this_code()
+```
+
+It can be helpful to combine some of these comparisons using Python's [logical operators](https://www.w3schools.com/python/python_operators_logical.asp). Click on the link and read about these new operators. Then, use them to complete the questions below. You may also find it helpful to use parentheses.
+
+Is Leia taller than *either* of the droids, R2-D2 or C-3PO?
+
+```{python ex18, exercise=TRUE}
+
+```
+
+```{python ex18-solution, message = FALSE, warning = FALSE, echo = FALSE}
+Leia > (R2D2 or C3PO)
+```
+
+```{r ex18-check}
+grade_this_code()
+```
+
+Is Chewbacca taller than *both* of the droids, R2-D2 or C-3PO?
+
+```{python ex19, exercise=TRUE}
+
+```
+
+```{python ex19-solution, message = FALSE, warning = FALSE, echo = FALSE}
+Chewbacca > (R2D2 and C3PO)
+```
+
+```{r ex19-check}
+grade_this_code()
+```
+
+## Strings
+
+Saving the most complicated for last! Unlike `int`s, `float`s, and Booleans, strings have LOTS of methods we can use. Remember that unlike a function, a method is a tool associated with specific type of object. 
+
+First, let's create a variable for Leia Organa's full name:
+
+```{python ex20, exercise=TRUE}
+Leia_fullname = "Leia Organa"
+```
+
+A few things:
+
+1. First, we are choosing separate variable name for Leia's full name--if we saved it as `Leia`, we would lose the information about her height. Be careful in your own work not to overwrite variables unless you really, really mean it!
+2. `Leia_fullname` is the name of a variable, whereas `"Leia Organa"` is a string stored as `Leia_fullname`. Remember that strings begin and end with quotation marks, and show up as green, whereas variable names are black. 
+
+Strings are the same whether you use double or single quotes to define them. Write a line of code to see if `Leia_fullname` is the same as `'Leia Organa'` using a comparison operator. 
+
+```{python ex21, exercise=TRUE}
+
+```
+
+```{python ex21-solution, message = FALSE, warning = FALSE, echo = FALSE}
+Leia_fullname == 'Leia Organa'
+```
+
+```{r ex21-check}
+grade_this_code()
+```
+
+Make sure you are careful to use the single equals sign, `=`, when assigning variables, and the double equals sign, `==`, when checking equality!
+
+Now, write a line of code using a comparison operator to see if `Leia_fullname` is equal to `"leia organa"`.
+
+```{python ex22, exercise=TRUE}
+
+```
+
+```{python ex22-solution, message = FALSE, warning = FALSE, echo = FALSE}
+Leia_fullname == 'leia organa'
+```
+
+```{r ex22-check}
+grade_this_code()
+```
+
+Python does not consider two strings to be the same unless they match exactly. This is where some of the methods come in. The `.lower()` method should convert all of the characters in a string to lowercase. Try and use it with our variable name in the cell below. Save the lowercase version as a new variable, `Leia_lower`, and check to see if it is equal to `"leia organa"`.
+
+```{python ex23, exercise=TRUE}
+leia_lower = Leia_fullname...
+...
+```
+
+```{python ex23-solution, message = FALSE, warning = FALSE, echo = FALSE}
+leia_lower = Leia_fullname.lower()
+leia_lower == "leia organa"
+```
+
+```{r ex23-check}
+grade_this_code()
+```
+
+Now, use the `.capitalize()` method to try and undo what you just did. 
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+Will `.capitalize()` undo what you did completely? If not, what do you think it will do?
+::::
+
+```{python ex24, exercise=TRUE}
+leia_lower...
+...
+```
+
+```{python ex24-solution, message = FALSE, warning = FALSE, echo = FALSE}
+leia_lower.capitalize()
+```
+
+```{r ex24-check}
+grade_this_code()
+```
+
+Like I said, there are many many string methods. Check out a [table of string methods](https://www.w3schools.com/python/python_strings_methods.asp)--can you find one that will do the opposite of `.lower()`?
+
+```{r q7, echo=FALSE}
+question(
+  "What is the method that will capitalize all of the letters in a string?",
+  answer("`.isnumeric()`"),
+  answer("`.replace()`"),
+  answer("`.split()`"),
+  answer("`.strip()`"),
+  answer("`.upper()`", correct = TRUE),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the fifth and final secret word: ART Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+)
+```
+
+So far, we have only considered fairly short strings, but they can be relatively long, as well! Consider Princess Leia's message to Obi-Wan Kenobi in *A New Hope*. 
+
+```{python ex25, exercise=TRUE}
+message = "General Kenobi. Years ago you served my father in the Clone Wars. Now he begs you to help him in his struggle against the Empire. I regret that I am unable to present my father's request to you in person, but my ship has fallen under attack, and I'm afraid my mission to bring you to Alderaan has failed. I have placed information vital to the survival of the Rebellion into the memory systems of this R2 unit. My father will know how to retrieve it. You must see this droid safely delivered to him on Alderaan. This is our most desperate hour. Help me, Obi-Wan Kenobi. You're my only hope."
+```
+
+We might be interested in locating shorter strings within larger strings. For example, we could examine the contents of `message` to find how many times the shorter string `"Kenobi"` appears, but the longer the string, the more difficult this task will be. Instead, let's consider the `.count()` method.
+
+```{python ex26, exercise=TRUE}
+message.count("Kenobi")
+```
+
+```{python ex26-solution, message = FALSE, warning = FALSE, echo = FALSE}
+message.count("father")
+```
+
+```{r ex26-check}
+grade_this_code()
+```
+
+This method is different than many we have seen, because we have to pass what is known as an "argument". An argument is a value that you pass into a function or method--in this case, the argument is the shorter string, `"Kenobi"`. We can change the argument. Edit the code above so that we count the number of times the string `"father"` occurs in `message`. 
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+Go back to the string methods table and find an interesting method. See if you can use it with `message`. 
+::::
+
+```{python ex27, exercise=TRUE}
+
+```
+
+In addition to having specific methods, some of the operators we are already familiar with operate differently with strings. Consider the following cells. What happens if you add the two strings together?
+
+```{python ex28, exercise=TRUE}
+obiwan = "These aren't the droids you're looking for."
+stormtrooper = "These aren't the droids we're looking for."
+```
+
+```{python ex28-solution, message = FALSE, warning = FALSE, echo = FALSE}
+obiwan = "These aren't the droids you're looking for."
+stormtrooper = "These aren't the droids we're looking for."
+obiwan + stormtrooper
+```
+
+```{r ex28-check}
+grade_this_code()
+```
+
+When used with strings, the `+` is the concatenation operator. It pastes the two messages together, exactly as they are--notice that there is no space in between the sentences in the concatenated message, even though we would normally put one there. 
+
+What happens if you use the multiplication operator, `*`, with `message_short`? Multiply it by 3. 
+
+```{python ex29, exercise=TRUE}
+message_short = "Help me, Obi-Wan Kenobi. You're my only hope."
+```
+
+```{python ex29-solution, message = FALSE, warning = FALSE, echo = FALSE}
+message_short = "Help me, Obi-Wan Kenobi. You're my only hope."
+message_short*3
+```
+
+```{r ex29-check}
+grade_this_code()
+```
+
+You should notice that the multiplication operator will repeat the string (in this case, three times). What happens if you multiply by 1.5 instead?
+
+```{python ex30, exercise=TRUE}
+message_short = "Help me, Obi-Wan Kenobi. You're my only hope."
+message_short*3
+```
+
+```{python ex30-solution, message = FALSE, warning = FALSE, echo = FALSE}
+message_short = "Help me, Obi-Wan Kenobi. You're my only hope."
+message_short*1.5
+```
+
+```{r ex30-check}
+grade_this_code()
+```
+
+You should get an error! Remember that sometimes error messages are frustrating, but they are supposed to help us debug our code. In this case, we got a `TypeError`, because we tried to multiply a string (allowed) by an object of the `float` type (not allowed). The multiplication operator only works with type `int`.

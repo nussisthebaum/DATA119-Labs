@@ -384,8 +384,8 @@ grade_this_code()
 question(
   "What is the shortest book Professor Nussbaum has read?",
   answer("The Hobbit And The Lord Of The Rings: Deluxe Pocket Boxed Set"), 
-  answer("Spitting Gold"),
-  answer("A Storm of Swords", correct = TRUE),
+  answer("Spitting Gold", correct = TRUE),
+  answer("A Storm of Swords"),
   answer("Unruly: The Ridiculous History of England's Kings and Queens"),
   allow_retry = TRUE, 
   post_message = "Congratulations! You have found the second secret word: AFFECT."
