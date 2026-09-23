@@ -67,7 +67,7 @@ Before we ask you to start working in a Jupyter notebook, we will ask you to com
 
 Below is an example of a *cell*. Type some basic Python code into a cell. Remember that Python uses built-in operators to do math calculations if you can't think of anything else to type. 
 
-```{python ex1, exercise=TRUE}
+```{python ex1, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
