@@ -312,7 +312,7 @@ Other types have more specific methods, but for ints and floats, we are happy us
 | Division | `/` | `7/3` |   `2.33`   |
 | Floor Division | `//` | `7//3` |   `2`   |
 | Remainder (mod) | `%` | `7%3` |   `1`   |
-| Exponentiation | `^` | `2^0.5` |   `1.41421`   |
+| Exponentiation | `**` | `2**0.5` |   `1.41421`   |
 
 Use the cell below to experiment with the operators until you understand what each of them does. 
 
