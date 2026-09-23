@@ -183,7 +183,7 @@ question(
 )
 ```
 
-We know from lecture that `2` is an `int`--in this tutorial, `ints` appear blue. We also know that the `+` is an operator. In this tutorial, operators appear gray. 
+We know from lecture that `2` is an `int`--in this tutorial, `int`s appear blue. We also know that the `+` is an operator. In this tutorial, operators appear gray. 
 
 Now, write a number that has a decimal point in the cell below. 
 
@@ -194,7 +194,7 @@ Now, write a number that has a decimal point in the cell below.
 ```{r q2, echo=FALSE}
 question(
   "What colors do you see? Check all that apply:",
-  answer("Black"),
+  answer("Black", correct = TRUE),
   answer("Blue", correct = TRUE),
   answer("Gray"),
   answer("Green"),
@@ -256,7 +256,7 @@ Booleans are an ever so slightly lighter blue in these tutorials. We will review
 ::: {.center}
 **Discuss with a neighbor (or on Ed):**
 :::
-Open an empty Jupyter notebook and check to see what colors `ints`, `floats`, strings and Booleans are on your own computer. Is it the same color as your neighbor?
+Open an empty Jupyter notebook and check to see what colors `int`s, `float`s, strings and Booleans are on your own computer. Is it the same color as your neighbor?
 ::::
 
 ## Ints and Floats
@@ -311,7 +311,7 @@ Other types have more specific methods, but for ints and floats, we are happy us
 | Multiplication | `*` | `2*3` |   `6`   |
 | Division | `/` | `7/3` |   `2.33`   |
 | Floor Division | `//` | `7//3` |   `2`   |
-| Remainder (mod) | `%` | `7//3` |   `1`   |
+| Remainder (mod) | `%` | `7%3` |   `1`   |
 | Exponentiation | `^` | `2^0.5` |   `1.41421`   |
 
 Use the cell below to experiment with the operators until you understand what each of them does. 
@@ -319,6 +319,8 @@ Use the cell below to experiment with the operators until you understand what ea
 ```{python ex10, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
+
+Don't forget, there are also the comparison operators:
 
 | Comparison | Operator | True Example | False Example |
 |:---------:|:-----:|:------:|------:|
@@ -413,9 +415,9 @@ Click on the link to the larger table. Can you spot any other functions that mig
 
 ## Variable Assignment
 
-Let's revisit the heights of the Star Wars characters. Consider Chewbacca in particular--it turns out that his height is 228cm, not 238. If we were correcting a data analysis, we would have to re-type in all those numbers. However, if you were handing it off to a colleague or if enough time had passed, you may not remember exactly why you wrote what you wrote. 
+Let's revisit the heights of the Star Wars characters. Consider Chewbacca in particular--it turns out that his height is 228cm, not 238. If we were correcting a data analysis, we would have to re-type in all those numbers to find the correct mean. However, if you were handing it off to a colleague or if enough time had passed, you may not remember exactly why you wrote what you wrote. 
 
-Sometimes, to make it easier to track our work, we use something called variable assignment. Variable assignment helps us store values to work with using a variable name and the assignment operator, `=`. 
+Sometimes, to make it easier to track our work, we use something called *variable assignment*. Variable assignment helps us store values to work with using a variable name and the *assignment operator*, `=`. 
 
 Consider the following code:
 
@@ -456,7 +458,7 @@ Now, add some code to assign heights to the rest of our characters, Luke Skywalk
 * R2-D2--96cm
 * Leia Organa--150cm
 * Han Solo--180cm, and 
-* Chewbacca--238cm
+* Chewbacca--228cm
 
 ```{python ex15, exercise=TRUE, exercise.setup="setup_py"}
 Chewbacca = 228
@@ -521,7 +523,7 @@ Luke > Leia
 grade_this_code()
 ```
 
-Is Chewbacca taller than Han Solo? Write a line of code using the right comparison operator and the variable names. 
+Is Chewbacca shorter than Han Solo? Write a line of code using the right comparison operator and the variable names. 
 
 ```{python ex17, exercise=TRUE, exercise.setup="setup_py"}
 
@@ -659,7 +661,7 @@ question(
   answer("`.strip()`"),
   answer("`.upper()`", correct = TRUE),
   allow_retry = TRUE, 
-  post_message = "Congratulations! You have found the fifth and final secret word: ART Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+  post_message = "Congratulations! You have found the fifth and final secret word: ART. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 )
 ```
 
