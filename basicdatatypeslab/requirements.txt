@@ -78,7 +78,6 @@ platformdirs==4.2.0
 plotly==5.24.1
 plotnine==0.12.4
 pooch==1.7.0
-protobuf==4.21.12
 psutil==6.0.0
 pyarrow==11.0.0
 pyasn1==0.5.1
@@ -111,11 +110,6 @@ SQLAlchemy==1.4.49
 statsmodels==0.14.1
 sympy==1.13.3
 tenacity==9.0.0
-tensorboard==2.11.2
-tensorboard-data-server==0.6.1
-tensorboard-plugin-wit==1.8.1
-tensorflow==2.11.0
-tensorflow-estimator==2.11.0
 termcolor==2.4.0
 threadpoolctl==3.4.0
 torch==1.13.1
