@@ -338,11 +338,38 @@ print(dir(list))
 
 Create a list with at least 4 items. (Recall items can be a string, int, float.) Name the list `my_list`.
 
-```{python ex1-setup, exercise=TRUE, exercise.eval=TRUE}
+```{python ex1-setup, exercise=TRUE, exercise.eval=TRUE, exercise.setup = "setup_py"}
 
 ```
 
 5. Remove the $2^{nd}$ and $3^{rd}$ elements. You may want to check the documentation for list functions and methods!
+
+```{r servercode, context="server", echo = FALSE, eval = FALSE}
+q7_correct_poll <- reactivePoll(500, session,
+  checkFunc = function() get_tutorial_state()$ex1$submitted,
+  valueFunc = function() get_tutorial_state()$q7$correct
+)
+
+output$q7_table_output <- renderUI({
+  print(get_tutorial_state())
+  if (isTRUE(q7_correct_poll())) {
+    tagList(
+      p("Your answers from Question 7 can be fed into the following table (in red):"),
+      HTML(
+        kable(sim_table, format = "html", escape = FALSE, booktabs = TRUE,
+              caption = "Maximal Intercluster Similarity", align = "c", linesep = "") %>%
+          kable_styling(position = "center") %>%
+          column_spec(3, color = "#FF0000") %>%
+          row_spec(1, color = "black")
+      )
+    )
+  } else {
+    tagList(
+      p("Answer Question 7 correctly to reveal the intercluster dissimilarity table.")
+    )
+  }
+})
+```
 
 ```{python ex2, exercise=TRUE, exercise.setup = 'ex1-setup'}
 
