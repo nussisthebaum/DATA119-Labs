@@ -682,7 +682,7 @@ Now, use the `.capitalize()` method to try and undo what you just did.
 ::: {.center}
 **Discuss with a neighbor (or on Ed):**
 :::
-Will `.capitalize()` undo what you did completely? If not, what do you think it will do?
+Will `.capitalize()` undo what you did completely? If not, what function can undo it?
 ::::
 
 ```{python ex24, exercise=TRUE, exercise.setup="setup_py"}
