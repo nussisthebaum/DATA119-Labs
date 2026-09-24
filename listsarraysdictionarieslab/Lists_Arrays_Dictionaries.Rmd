@@ -1073,13 +1073,13 @@ question_numeric(text = "What will be the result of the code above?",
 
 These are organized into rows and columns and are built row-by-row.
 
-```{python array2d, exercise=TRUE, exercise.setup="array2d"}
+```{python array2d, exercise=TRUE, exercise.setup="setup_py"}
 arr_2d = np.array([[1, 2, 3], [4, 5, 6]]) #specify first row then second
 
 print(arr_2d)
 ```
 
-```{python array2dshape, exercise=TRUE}
+```{python array2dshape, exercise=TRUE, exercise.setup="array2d"}
 arr_2d.shape #outputs (#rows, #columns)
 ```
 
