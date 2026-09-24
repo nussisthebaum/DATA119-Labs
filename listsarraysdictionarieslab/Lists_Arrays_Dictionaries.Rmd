@@ -39,6 +39,8 @@ tags$div(
 ```
 
 ```{python setup_py, context="setup", echo = FALSE}
+import numpy as np
+
 School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
 Random_stuff = ["California", 38, 3.14159] #A string, int, float
 ```
@@ -804,7 +806,7 @@ grade_this_code()
 
 Create a new tuple, `northwestern_enrollment`, knowing that Northwestern University is located in Evanston, Illinois, and has an undergraduate enrollment of 8,709. 
 
-```{python tuple_ex1, exercise=TRUE, exercise.setup = 'setup_py'} 
+```{python tuple_ex1, exercise=TRUE, exercise.setup = 'tuple8'} 
 
 ```
 
@@ -819,7 +821,7 @@ grade_this_code()
 It would be useful to store our two college-related tuples together along with any we create in the future. Create a list containing these two tuples in alphabetical order by college name. Let's call the list `tuple_list`.
 
 
-```{python tuple_ex2, exercise=TRUE, exercise.setup = 'tuple_ex1'} 
+```{python tuple_ex2, exercise=TRUE, exercise.setup = 'tuple8'} 
 tuple_list = ...
 tuple_list
 ```
@@ -871,7 +873,7 @@ np.array([1,2])
 Below, we create a list that contains integers and a string.
 
 ```{python array2, exercise=TRUE, exercise.setup = "array1"}
-tomato_list = [22, 38, 26, 35, 35,'tomato']
+tomato_list = [22, 38, 26, 35, 35, 'tomato']
 print(tomato_list)
 ```
 
@@ -890,7 +892,7 @@ An array will make sure everything is the same type.
 
 Let's create an array by converting a list to a `NumPy` array.
 
-```{python prime50, exercise=TRUE}
+```{python prime50, exercise=TRUE, exercise.setup="setup_py"}
 prime50_array = np.array([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47])
 
 print(type(prime50_array))
@@ -900,7 +902,7 @@ Extraction and slicing of one-dimensional arrays work exactly the same as lists!
 
 10. Print the second element of `prime50_array`.
 
-```{python prime50_ex1, exercise=TRUE, exercise.eval = TRUE}
+```{python prime50_ex1, exercise=TRUE, exercise.eval = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -915,7 +917,7 @@ grade_this_code()
 
 11. Print the array starting at index 1 and up to (but excluding) index 2.
 
-```{python prime50_ex2, exercise=TRUE, exercise.eval = TRUE}
+```{python prime50_ex2, exercise=TRUE, exercise.eval = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -953,11 +955,11 @@ question(
 
 Two attributes of arrays are size, which we can access using `.size`, and shape, accessed using `.shape`.
 
-```{python arraysize, exercise=TRUE}
+```{python arraysize, exercise=TRUE, exercise.setup="setup_py"}
 prime50_array.size
 ```
 
-```{python arrayshape, exercise=TRUE}
+```{python arrayshape, exercise=TRUE, exercise.setup="setup_py"}
 prime50_array.shape
 ```
 
@@ -976,7 +978,7 @@ Like lists, there are a lot of useful methods we can use on array objects. Here 
 
 We can sum arrays, but we cannot always sum a list because a list can have different data types!
 
-```{python arraysum, exercise=TRUE}
+```{python arraysum, exercise=TRUE, exercise.setup="setup_py"}
 print(prime50_array.sum())
 ```
 
@@ -984,7 +986,7 @@ print(prime50_array.sum())
 
 Notice there is often more than one way to do a common operation!
 
-```{python arraymult, exercise=TRUE}
+```{python arraymult, exercise=TRUE, exercise.setup="setup_py"}
 print(prime50_array.sum()) #sum method
 
 print(np.sum(prime50_array)) #sum function (from NumPy library)
@@ -1001,19 +1003,19 @@ print(np.mean(prime50_array)) #mean function
 
 Calling ```np.arange()``` creates a half-closed interval \[start,end) - the end value is not included
 
-```{python arange1, exercise=TRUE}
+```{python arange1, exercise=TRUE, exercise.setup="setup_py"}
 np.arange(4,10)
 ```
 
 If you leave out the start, the default is zero.
 
-```{python arange2, exercise=TRUE}
+```{python arange2, exercise=TRUE, exercise.setup="setup_py"}
 print(np.arange(10))
 ```
 
 We can specify a step size we want to increment by. If we leave out the step, the default is one
 
-```{python arange3, exercise=TRUE}
+```{python arange3, exercise=TRUE, exercise.setup="setup_py"}
 print(np.arange(1,31,2))
 ```
 
@@ -1023,7 +1025,7 @@ Element-wise operations!
 
 Take a moment to think about what the following will produce before running the cell.
 
-```{python array_ops, exercise=TRUE}
+```{python array_ops, exercise=TRUE, exercise.setup="setup_py"}
 array_1 = np.arange(10)
 array_2 = np.array([1,2,3,4,5,6,7,8,9,10])
 difference_array = array_1 - array_2
