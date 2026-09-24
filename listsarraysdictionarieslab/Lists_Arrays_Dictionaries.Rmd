@@ -974,7 +974,7 @@ Like lists, there are a lot of useful methods we can use on array objects. Here 
  -  `.nonzero()`
 
 
-(see the documentation for a complete list: https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html)
+See the [`numpy` documentation](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html) for a complete list.
 
 We can sum arrays, but we cannot always sum a list because a list can have different data types!
 
@@ -1122,7 +1122,7 @@ arr_2d[0,1] #element with row index 0 and column index 1
 
 Use the array below to answer the following questions:
 
-```{python exsetup, exercise=TRUE}
+```{python exsetup, exercise=TRUE, exercise.setup="setup_py"}
 random_number_array = np.array([32, 56, 78, 3, 15, 109, 13, 24, 58, 61, 90, 93, 45, 21, 46])
 ```
 
@@ -1171,7 +1171,7 @@ grade_this_code()
 
 18. Create an array with 60 elements that corresponds to the 60 minutes in an hour. Name it `hour`.
 
-```{python arex4, exercise=TRUE}
+```{python arex4, exercise=TRUE, exercise.setup="setup_py"}
 
 ```
 
