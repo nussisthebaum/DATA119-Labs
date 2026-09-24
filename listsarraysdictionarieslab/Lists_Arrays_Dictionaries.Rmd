@@ -666,7 +666,7 @@ grade_this_code()
 my_set_1.issubset(my_big_set)
 ```
 
-```{r set_ex5-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r set_ex5-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
