@@ -61,7 +61,7 @@ The goal of this tutorial is to introduce you to the style of tutorials we will 
 - Booleans
 - Strings
 
-## How does this tutorial work?
+## How Does This Tutorial Work?
 
 Before we ask you to start working in a Jupyter notebook, we will ask you to complete this tutorial in a web browser so you can get used to one thing at a time. 
 
@@ -346,6 +346,15 @@ question(
   "Does Python follow PEMDAS for the order of operations?",
   answer("Yes", correct = TRUE, message = "Python follows the order of operations, so parentheses are important."),
   answer("No"),
+  allow_retry = TRUE
+  )
+```
+
+```{r q11, echo=FALSE}
+question(
+  "What is the output (including the type) of `6/2`?",
+  answer("`3`, which is an `int`"),
+  answer("`3.0`, which is a `float`", correct = TRUE, message = "When you divide two integers in Python, the result is automatically converted to a float."),
   allow_retry = TRUE
   )
 ```
