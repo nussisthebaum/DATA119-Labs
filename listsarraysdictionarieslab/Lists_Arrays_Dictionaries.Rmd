@@ -680,7 +680,7 @@ grade_this_code()
 'plum' in my_big_set
 ```
 
-```{r set_ex6-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r set_ex6-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
