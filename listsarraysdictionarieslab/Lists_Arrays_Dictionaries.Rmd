@@ -916,9 +916,9 @@ print(prime50_array[1])
 grade_this_code()
 ```
 
-11. Print the array starting at index 1 and up to (but excluding) index 2.
+11. Print the `array` starting at index 1 and up to (but excluding) index 2.
 
-```{python prime50_ex2, exercise=TRUE, exercise.eval = TRUE, exercise.setup="setup_py"}
+```{python prime50_ex2, exercise=TRUE, exercise.eval = TRUE, exercise.setup="prime50"}
 
 ```
 
@@ -931,8 +931,7 @@ print(prime50_array[1:2])
 grade_this_code()
 ```
 
-
-12. Will the following give the same or different outputs?
+12. Now consider:
 
 ```python
 prime50_array[1::2]
@@ -956,11 +955,11 @@ question(
 
 Two attributes of arrays are size, which we can access using `.size`, and shape, accessed using `.shape`.
 
-```{python arraysize, exercise=TRUE, exercise.setup="setup_py"}
+```{python arraysize, exercise=TRUE, exercise.setup="prime50"}
 prime50_array.size
 ```
 
-```{python arrayshape, exercise=TRUE, exercise.setup="setup_py"}
+```{python arrayshape, exercise=TRUE, exercise.setup="prime50"}
 prime50_array.shape
 ```
 
@@ -979,7 +978,7 @@ Like lists, there are a lot of useful methods we can use on array objects. Here 
 
 We can sum arrays, but we cannot always sum a list because a list can have different data types!
 
-```{python arraysum, exercise=TRUE, exercise.setup="setup_py"}
+```{python arraysum, exercise=TRUE, exercise.setup="prime50"}
 print(prime50_array.sum())
 ```
 
@@ -987,7 +986,7 @@ print(prime50_array.sum())
 
 Notice there is often more than one way to do a common operation!
 
-```{python arraymult, exercise=TRUE, exercise.setup="setup_py"}
+```{python arraymult, exercise=TRUE, exercise.setup="prime50"}
 print(prime50_array.sum()) #sum method
 
 print(np.sum(prime50_array)) #sum function (from NumPy library)
@@ -1074,13 +1073,13 @@ question_numeric(text = "What will be the result of the code above?",
 
 These are organized into rows and columns and are built row-by-row.
 
-```{python array2d, exercise=TRUE}
+```{python array2d, exercise=TRUE, exercise.setup="array2d"}
 arr_2d = np.array([[1, 2, 3], [4, 5, 6]]) #specify first row then second
 
 print(arr_2d)
 ```
 
-```{python array2dshape, exercise=TRUE, exercise.setup='array2d'}
+```{python array2dshape, exercise=TRUE}
 arr_2d.shape #outputs (#rows, #columns)
 ```
 
