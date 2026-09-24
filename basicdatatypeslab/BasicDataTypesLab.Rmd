@@ -335,10 +335,19 @@ Other types have more specific methods, but for ints and floats, we are happy us
 | Remainder (mod) | `%` | `7%3` |   `1`   |
 | Exponentiation | `**` | `2**0.5` |   `1.41421`   |
 
-Use the cell below to experiment with the operators until you understand what each of them does. 
+Use the cell below to experiment with the operators. Try to use the operators in sequence, with and without parentheses. 
 
 ```{python ex10, exercise=TRUE, exercise.setup="setup_py"}
 
+```
+
+```{r q8, echo=FALSE}
+question(
+  "Does Python follow PEMDAS for the order of operations?",
+  answer("Yes", correct = TRUE, message = "Python follows the order of operations, so parentheses are important."),
+  answer("No"),
+  allow_retry = TRUE
+  )
 ```
 
 Don't forget, there are also the comparison operators:
@@ -352,10 +361,19 @@ Don't forget, there are also the comparison operators:
 | Exactly equal | `==` | `3  == 3` |   `3 == 2`   |
 | Not Equal | `!=` | `3 != 2` |   `3 != 3`   |
 
-Use the cell below to experiment with the comparison operators until you understand what each of them does. 
+Use the cell below to experiment with the comparison operators. Using them with `int`s and `float`s should be familiar, but you can also use them with strings and Booleans. 
 
 ```{python ex11_0, exercise=TRUE, exercise.setup="setup_py"}
 
+```
+
+```{r q9, echo=FALSE}
+question(
+  text = 'What does `"Hello" < "hello"` return?',
+  answer("True", correct = TRUE, message = 'In Python, strings are compared lexicographically (i.e., dictionary order). Since uppercase letters have lower ASCII values than lowercase letters, `"Hello"` is considered less than `"hello"`.'),
+  answer("False"),
+  allow_retry = TRUE
+)
 ```
 
 We can use multiple operators, as well as the parentheses, to carry out more advanced calculations. For example, some of you may be familiar with the average or mean:
@@ -519,7 +537,7 @@ Note that the keywords ALSO appear as blue.
 
 ## Booleans
 
-Now let's practice working with Booleans using our variables, `Chewbacca`, `Luke`, `C3P0`, `R2D2`, `Leia`, and `Han`. Remember that Booleans are commonly used with the comparison operators:
+Now let's practice working with Booleans using our variables, `Chewbacca`, `Luke`, `C3P0`, `R2D2`, `Leia`, and `Han`. Remember that Booleans are outputted by the comparison operators:
 
 | Comparison | Operator | True Example | False Example |
 |:---------:|:-----:|:------:|------:|
@@ -530,7 +548,7 @@ Now let's practice working with Booleans using our variables, `Chewbacca`, `Luke
 | Exactly equal | `==` | `3  == 3` |   `3 == 2`   |
 | Not Equal | `!=` | `3 != 2` |   `3 != 3`   |
 
-Is Luke taller than Leia? Write a line of code using the right comparison operator and the variable names. 
+Is Luke taller than Leia? Write a line of code using the right comparison operator and the variable names. This is a good time to note that our tutorial remembers the variables we assigned earlier!
 
 ```{python ex16, exercise=TRUE, exercise.setup="setup_py"}
 
