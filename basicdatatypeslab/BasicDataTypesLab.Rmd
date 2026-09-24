@@ -166,23 +166,27 @@ The syntax highlighting on my slides is different from the syntax highlighting i
 
 ```{python ex6, exercise=TRUE, exercise.setup="setup_py"}
 2+2
+"Hello, my name is Professor Nussbaum."
+7.7
+True
 ```
 
 ```{r q1, echo=FALSE}
 question(
   "What colors do you see? Check all that apply:",
   answer("Black"),
-  answer("Blue", correct = TRUE, "Great! The twos should both appear as blue."),
+  answer("Dark Blue", correct = TRUE, "Great! The 2's and 7.7 should appear as dark blue."),
   answer("Gray", correct = TRUE, "The plus should appear as gray."),
-  answer("Green"),
+  answer("Green", correct = TRUE, "Our sentence should appear as green."),
   answer("Purple"),
   answer("Red"),
+  answer("Light Blue", correct = TRUE, "True should appear as light blue."),
   answer("Yellow"),
   allow_retry = TRUE, 
   post_message = "Congratulations! You have found the first secret word: PREVENT. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 )
 ```
-
+<!-- 
 We know from lecture that `2` is an `int`--in this tutorial, `int`s appear blue. We also know that the `+` is an operator. In this tutorial, operators appear gray. 
 
 Now, write a number that has a decimal point in the cell below. 
@@ -194,7 +198,7 @@ Now, write a number that has a decimal point in the cell below.
 ```{r q2, echo=FALSE}
 question(
   "What colors do you see? Check all that apply:",
-  answer("Black", correct = TRUE),
+  answer("Black"),
   answer("Blue", correct = TRUE),
   answer("Gray"),
   answer("Green"),
@@ -250,7 +254,24 @@ question(
 )
 ```
 
-Booleans are an ever so slightly lighter blue in these tutorials. We will review more syntax highlighting as we learn more Python, but for know, remember that you should be able to look at some code and understand either from the context (e.g., Is the code a number? Does it have a decimal place?) or from the syntax highlighting what kind of object weare working with.
+Booleans are an ever so slightly lighter blue in these tutorials. We will review more syntax highlighting as we learn more Python, but for know, remember that you should be able to look at some code and understand either from the context (e.g., Is the code a number? Does it have a decimal place?) or from the syntax highlighting what kind of object weare working with. -->
+
+
+Our 4 lines of code are not colored differently just for fun--the colors are meant to help us identify something.
+
+```{r q4_5, echo=FALSE}
+question(
+  "What do you think the colors are meant to sgnify? Check all that apply:",
+  answer("Longer inputs are green."),
+  answer("Numbers are dark blue.", correct = TRUE, "Correct! ints and floats appear as dark blue."),
+  answer("All capitalized inputs are light blue."),
+  answer("Strings are green.", correct = TRUE, " Strings appear as green."),
+  answer("Gray is used for errors."),
+  answer("True and False are light blue.", correct = TRUE, "Booleans appear as light blue."),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: FINE. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+)
+```
 
 :::: {.discussionbox}
 ::: {.center}
@@ -261,7 +282,7 @@ Open an empty Jupyter notebook and check to see what colors `int`s, `float`s, st
 
 ## Ints and Floats
 
-Remember that numbers are stored as either `ints` or `floats` in Python. An `int` never has a decimal point; a `float` always does. Remember also that the `type()` function will tell us what kind of object we are working with. 
+Remember that numbers can be stored as `ints` or `floats` in Python. An `int` is a number without a decimal point; a `float` usually has a decimal point (or is stored in scientific notation). Remember also that the `type()` function will tell us what kind of object we are working with. 
 
 Edit the code below to find the types of the numbers:
 
@@ -297,7 +318,7 @@ question(
   answer("`int`"),
   answer("`float`", correct = TRUE, message = "Your tutorial or computer may also say something like `float64`--the 64 refers to how many bits of memory we want to use or precise we want to be."),
   answer("`str`, the abbreviation for string"),
-  allow_retry = TRUE, 
+  allow_retry = TRUE,
   post_message = "Congratulations! You have found the third secret word: SEAL. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 )
 ```
