@@ -535,13 +535,13 @@ print(type(Random_set))
 
 We can also find the size of a set:
 
-```{python set8, exercise=TRUE, exercise.setup = 'set2'}
+```{python set8, exercise=TRUE, exercise.setup = 'set6'}
 len(Random_set)
 ```
 
 #### Accessing values from a set
 
-Sets are unordered. Therefore, elements of a set are not assigned any indices. This means that you cannot access an element in a set by indexing! 
+Sets are *unordered.* Therefore, elements of a set are not assigned any indices. This means that you cannot access an element in a set by indexing! 
 
 #### Operations and manipulation on sets
 
@@ -652,7 +652,7 @@ grade_this_code()
 my_big_set = my_set_1 | my_set_2
 ```
 
-```{r set_ex4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r set_ex4-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
