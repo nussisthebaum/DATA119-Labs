@@ -242,9 +242,7 @@ We can:
 * Count how many items have a specific value.
 * Sort elements.
 
-How do we do this? By using *methods*. 
-
-*Methods* are particular built-in functions that work on objects in Python. There are specific methods that work for all *list* objects!
+How do we do this? By using *methods*. *Methods* are particular built-in functions that work on objects in Python. There are specific methods that work for all *list* objects!
 
 List methods take the form:
 
@@ -252,7 +250,7 @@ List methods take the form:
 list.method()
 ```
 
-Built-in functions can also be applied to objects in Python. Recall they take the form:
+Built-in functions can also be applied to objects (including lists) in Python. Recall that a function applied to a list will take the form:
 
 ```python
 function_name(list)
@@ -280,12 +278,12 @@ Note we didn't assign the result to `School_locations`, but this **automatically
 
 Let's make a copy of our list so we can see how this works.
 
-```{python append3, exercise=TRUE, exercise.setup = 'append1'}
+```{python append3, exercise=TRUE, exercise.setup = 'append2'}
 School_location_og = School_locations.copy()
 School_location_og
 ```
 
-4. Append the number 2023 to our list and then view the list. Note even though the list contains only strings, I can append an integer as lists accept any data type.
+4. Append the number 2023 to `School_locations` and then view the list. Note even though the list contains only strings, I can append an integer as lists accept any data type.
 
 ```{python append4, exercise=TRUE, exercise.setup = 'append2'}
 ...
