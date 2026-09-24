@@ -350,7 +350,7 @@ Create a list with at least 4 items. (Recall items can be a string, int, float.)
 del my_list[1:2]
 ```
 
-```{r ex2-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r ex2-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -364,7 +364,7 @@ grade_this_code()
 my_list.append(316)
 ```
 
-```{r ex3-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r ex3-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -378,7 +378,7 @@ grade_this_code()
 my_list.insert("Math is fun", 2)
 ```
 
-```{r ex4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r ex4-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -408,7 +408,7 @@ new_list.reverse()
 new_list
 ```
 
-```{r ex5-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r ex5-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -572,7 +572,7 @@ Your turn! Try adding `'butter'` to `grocery_set`.
 grocery_set.add('butter')
 ```
 
-```{r set10-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r set10-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -638,7 +638,7 @@ print(dir(grocery_set))
 my_set_1.isdisjoint(my_set_2)
 ```
 
-```{r set_ex3-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r set_ex3-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -782,7 +782,7 @@ Write a line of code to count how many times `'Illinois'` occurs in `uc_enrollme
 uc_enrollment.count("Illinois")
 ```
 
-```{r tuple7-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r tuple7-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -796,7 +796,7 @@ Write a line of code to find which index represents `'Illinois'` in `uc_enrollme
 uc_enrollment.index("Illinois")
 ```
 
-```{r tuple8-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r tuple8-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -812,7 +812,7 @@ Create a new tuple, `northwestern_enrollment`, knowing that Northwestern Univers
 northwestern_enrollment = ("Northwestern University", "Evanston", "Illinois", 8709)
 ```
 
-```{r tuple_ex1-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r tuple_ex1-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -829,7 +829,7 @@ tuple_list = [uc_enrollment, northwestern_enrollment]
 tuple_list
 ```
 
-```{r tuple_ex2-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r tuple_ex2-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -909,7 +909,7 @@ print(prime50_array[1])
 
 ```
 
-```{r prime50_ex1-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r prime50_ex1-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -924,7 +924,7 @@ print(prime50_array[1:2])
 
 ```
 
-```{r prime50_ex2-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r prime50_ex2-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -1134,7 +1134,7 @@ random_number_array = np.array([32, 56, 78, 3, 15, 109, 13, 24, 58, 61, 90, 93, 
 np.delete(random_number_array, [1,2])
 ```
 
-```{r arex1-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r arex1-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -1148,7 +1148,7 @@ grade_this_code()
 random_number_array.min()
 ```
 
-```{r arex2-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r arex2-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -1163,7 +1163,7 @@ np.sort(random_number_array)[3]
 #or np.partition(random_number_array,3)[3]
 ```
 
-```{r arex3-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r arex3-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -1177,7 +1177,7 @@ grade_this_code()
 hour = np.arange(60)
 ```
 
-```{r arex4-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r arex4-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -1191,7 +1191,7 @@ grade_this_code()
 hour[3::5]
 ```
 
-```{r arex5-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r arex5-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
@@ -1303,7 +1303,7 @@ Pick a few states of interest and find their homicide number (use code here...do
 len(homicide_dict.keys())
 ```
 
-```{r dict-code-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r dict-check, message = FALSE, warning = FALSE, echo = FALSE}
 grade_this_code()
 ```
 
