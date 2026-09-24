@@ -18,7 +18,7 @@ library(learnr)
 library(reticulate)
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.blanks = "\\.{3}")
+tutorial_options(exercise.completion = FALSE, exercise.blanks = "\\.{3}", exercise.reveal_solution = FALSE)
 ```
 
 ```{r header, echo = FALSE}
