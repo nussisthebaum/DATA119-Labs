@@ -1136,7 +1136,7 @@ random_number_array = np.array([32, 56, 78, 3, 15, 109, 13, 24, 58, 61, 90, 93, 
 np.delete(random_number_array, [1,2])
 ```
 
-```{r arex1-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r arex1-check}
 grade_this_code()
 ```
 
@@ -1150,7 +1150,7 @@ grade_this_code()
 random_number_array.min()
 ```
 
-```{r arex2-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r arex2-check}
 grade_this_code()
 ```
 
