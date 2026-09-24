@@ -338,13 +338,13 @@ print(dir(list))
 
 Create a list with at least 4 items. (Recall items can be a string, int, float.) Name the list `my_list`.
 
-```{python ex1, exercise=TRUE}
+```{python ex1-setup, exercise=TRUE, exercise.eval=TRUE}
 
 ```
 
-5. Remove the 2nd and 3rd elements. You may want to check the documentation for list functions and methods!
+5. Remove the $2^{nd}$ and $3^{rd}$ elements. You may want to check the documentation for list functions and methods!
 
-```{python ex2, exercise=TRUE, exercise.setup = 'ex1'}
+```{python ex2, exercise=TRUE, exercise.setup = 'ex1-setup'}
 
 ```
 
@@ -352,7 +352,7 @@ Create a list with at least 4 items. (Recall items can be a string, int, float.)
 del my_list[1:2]
 ```
 
-```{r ex2-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r ex2-code-check}
 grade_this_code()
 ```
 
