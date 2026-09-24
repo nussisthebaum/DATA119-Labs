@@ -306,6 +306,8 @@ grade_this({
   
   School_locations_ans = c("California", "Illinois", "North Carolina", "Texas", "tomato", "Georgia", "Washington D.C.", "Michigan", 2023)
 
+    ## py_to_r of this list gives an R list, not a vector. adding unlist()
+
   if (identical(res, School_locations_ans)) {
     pass(random_praise())
   } else {
