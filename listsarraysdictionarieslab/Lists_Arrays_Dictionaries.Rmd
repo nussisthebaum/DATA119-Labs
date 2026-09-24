@@ -144,12 +144,12 @@ School_locations[6]
 ```{r q1, echo=FALSE}
 question(
   "What will be the result of running the code above?",
-  answer("`California`"),
-  answer("`Illinois`"),
-  answer("`North Carolina`"),
-  answer("`Texas`"),
-  answer("`Georgia`"),
-  answer("`Washinton D.C.`"),
+  answer("`'California'`"),
+  answer("`'Illinois'`"),
+  answer("`'North Carolina'`"),
+  answer("`'Texas'`"),
+  answer("`'Georgia'`"),
+  answer("`'Washinton D.C.'`"),
   answer("An error", correct = TRUE, message = "Even though this list has a length of six, there is no element at index 6 since Python uses zero-based indexing."),
   allow_retry = TRUE
 )
@@ -190,13 +190,12 @@ School_locations[:]
 question(
   "What will be the result of running the code above?",
   answer("`[]`"),
-  answer("`[California, Washington D.C.]`"),
-  answer("`[California, Illinois, North Carolina, Texas, Georgia, Washington D.C.]`", correct = TRUE),
+  answer("`['California', 'Washington D.C.']`"),
+  answer("`['California', 'Illinois', 'North Carolina', 'Texas', 'Georgia', 'Washington D.C.']`", correct = TRUE),
   answer("An error"),
   allow_retry = TRUE
 )
 ```
-
 
 #### Default Settings: List Slicing
 
@@ -220,13 +219,13 @@ School_locations[:3:3]
 ```{r q3, echo=FALSE}
 question(
   "What will be the result of running the code above?",
-  answer("[]"),
-  answer("[California]", correct = TRUE),
-  answer("[California, Texas]"),
-  answer("[North Carolina, Washington D.C.]"),
-  answer("[North Carolina]"),
-  answer("[California, Illinois, North Carolina, Texas, Georgia, Washington D.C.]"),
-  answer("An Error"),
+  answer("`[]`"),
+  answer("`['California']`", correct = TRUE),
+  answer("`['California', 'Texas']`"),
+  answer("`['North Carolina', 'Washington D.C.']`"),
+  answer("`['North Carolina']`"),
+  answer("`['California', 'Illinois', 'North Carolina', 'Texas', 'Georgia', 'Washington D.C.']`"),
+  answer("An error"),
   allow_retry = TRUE
 )
 ```
