@@ -69,7 +69,7 @@ Python and its libraries provide many ways to group data together.   Some import
 The above are listed in order of increasing functionality and sophistication. In general you should use the simplest one that meets your needs.
 
 
-## Sequences (built into Python)
+## Sequences: Lists, Sets, and Tuples (built into Python)
 
 Sequences are a basic type of structure to group data. You don't need to import any additional libraries to use them.
 
@@ -244,7 +244,7 @@ We can:
 
 How do we do this? By using *methods*. 
 
-*Methods* are particular built-in functions that work on objects in python. There are specific methods that work for all *list* objects!
+*Methods* are particular built-in functions that work on objects in Python. There are specific methods that work for all *list* objects!
 
 List methods take the form:
 
@@ -814,7 +814,7 @@ Create a new tuple, `northwestern_enrollment`, knowing that Northwestern Univers
 northwestern_enrollment = ("Northwestern University", "Evanston", "Illinois", 8709)
 ```
 
-```{r tuple_ex1-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r tuple_ex1-check}
 grade_this_code()
 ```
 
@@ -831,11 +831,11 @@ tuple_list = [uc_enrollment, northwestern_enrollment]
 tuple_list
 ```
 
-```{r tuple_ex2-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r tuple_ex2-check}
 grade_this_code()
 ```
 
-## Grouping Data using Arrays
+## Arrays
 
 Arrays (from the `NumPy` library) are another way to collect data. Like a list, they contain a sequence of values. But, unlike a list, all elements of an array must have the same data type. This is because `NumPy` arrays were built for efficient computation. They can perform operations on all elements in one step. They can also do element-wise computation. This means that, for example, if you add two arrays together, the result will be an array where the element at each index is the sum of the elements at the index in the two original arrays. For this reason, when two arrays are added (or subtracted, multiplied, or divided) they must have the same size.
 
@@ -1136,7 +1136,7 @@ random_number_array = np.array([32, 56, 78, 3, 15, 109, 13, 24, 58, 61, 90, 93, 
 np.delete(random_number_array, [1,2])
 ```
 
-```{r arex1-check}
+```{r arex1-code-check}
 grade_this_code()
 ```
 
@@ -1193,23 +1193,19 @@ grade_this_code()
 hour[3::5]
 ```
 
-```{r arex5-check, message = FALSE, warning = FALSE, echo = FALSE}
+```{r arex5-check}
 grade_this_code()
 ```
 
-## Another Built-in Collection of Data: Dictionaries
+## Dictionaries
 
-A **dictionary** is a set of "key: value" pairs where each key is unique.
-
-We can create a dictionary with curly brackets "{}"
-
-Entries of a dictionary are of the form "key: value"
+A **dictionary** is a set of "key: value" pairs where each key is unique. We can create a dictionary with curly brackets "`{}`". Entries of a dictionary are of the form "key: value".
 
 ```{python likert, exercise=TRUE}
 survey_dict = {0: "Strongly Disagree", 1: "Disagree", 2: "No opinion", 3: "Agree", 4: "Strongly Agree"}
 ```
 
-We can access values of a dictionary by their key. (This is why all keys must be unique!)
+We can extract values of a dictionary by their key--this is why all keys must be unique!
 
 ```{python keys, exercise=TRUE, exercise.setup = "likert"}
 survey_dict[1]
@@ -1253,7 +1249,7 @@ We can also determine if keys are contained in the dictionary
 
 Keep in mind, keys do not all need to be the same type...although it may make more sense to keep them that way.
 
-```{python likert2, exercise=TRUE}
+```{python likert2, exercise=TRUE, exercise.setup = "setup_py"}
 survey_dict_2 = {"Strongly Disagree": 0 , "Disagree": 1 , 2: "No opinion", 3: "Agree", 4: "Strongly Agree"}
 ```
 
@@ -1319,7 +1315,7 @@ grade_this_code()
 ::::
 
 
-## Grouping Data with DataFrames
+## Introduction to DataFrames
 
 One of the most commonly used collections of data in data science is the DataFrame. DataFrames come from the `pandas` library which we will talk in more detail in later labs! For now, here is a quick introduction.
 
@@ -1327,15 +1323,17 @@ One of the most commonly used collections of data in data science is the DataFra
 
 There are different collections of data in Python because each works well in different contexts. We've already talked about lists and arrays:
 
-Method 1: (Using lists from python (no import `numpy` needed))
-- list of lists
-- Hard to manipulate
+Method 1: (Using lists from Python (no import `numpy` needed))
+
+* list of lists
+* Hard to manipulate
 
 
-Method 2: (Using np.array)
-- All values of same data type
-- Easy to do math and matrix manipulations
-- No row column names
+Method 2: (Using `np.array`)
+
+* All values of same data type
+* Easy to do math and matrix manipulations
+* No row column names
 
 DataFrames are useful if we have multiple observations of data of different types.
 
@@ -1351,11 +1349,12 @@ As an exercise, what data type would you use for each?
 Each person that you survey provides a different 'observation' of those 3 pieces of information. Picture a DataFrame as a table with rows and columns. Each row corresponds to a different person being surveyed and each column corresponds to their answer to a particular question. Each column contains the same data type within that column but individual columns can be of different data types. Here are some useful elements of DataFrames:
 
 Method 3: (Using `pandas` DataFrames)
-- Different columns can have different types
-- Easy to manipulate by name
-- row and column names built in!
-- Rows are "individuals" or "instances"
-- Columns are attributes of those individuals
+
+* Different columns can have different types
+* Easy to manipulate by name
+* row and column names built in!
+* Rows are "individuals" or "instances"
+* Columns are attributes of those individuals
 
 ### Storing Data in 3 ways
 
@@ -1371,13 +1370,13 @@ list_of_lists=[['Pizza','Pierogi','Ramen'],  #fav food
 list_of_lists
 ```
 
-```{python ar2d, exercise=TRUE}
+```{python ar2d, exercise=TRUE, exercise.setup = "setup_py"}
 np.array([['Pizza','Pierogi','Ramen'],  #fav food
                [0,22,-3.1415],  #fav number
                [1234, 4456, 5882]]) #student id
 ```
 
-```{python datfram, exercise=TRUE}
+```{python datfram, exercise=TRUE, exercise.setup = "setup_py"}
 #ignore this code for now!
 import pandas as pd
 df = pd.DataFrame(
@@ -1390,4 +1389,4 @@ df
 
 ## Wrapping Up
 
-In this activity, we learned about lists, arrays, dictionaries, sets, and tuples and were introduced to the concept of DataFrames. In future activities we will build on these concepts until you feel comfortable working with and manipulating large groups of data.
+In this activity, we learned about lists, `array`s, dictionaries, sets, and tuples and were introduced to the concept of DataFrames. In future activities we will build on these concepts until you feel comfortable working with and manipulating large groups of data.
