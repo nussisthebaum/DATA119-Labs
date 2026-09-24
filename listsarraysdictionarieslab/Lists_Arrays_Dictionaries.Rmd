@@ -610,7 +610,7 @@ toast_set.issubset(grocery_set)
 
 Use the built-in function ```dir()```.
 
-```{python dir2, exercise=TRUE}
+```{python dir2, exercise=TRUE, exercise.setup = 'ex12'}
 print(dir(grocery_set))
 ```
 
@@ -618,7 +618,7 @@ print(dir(grocery_set))
 
 1. Create a set with at least 4 fruits. Name the set `my_set_1`.
 
-```{python set_ex1, exercise=TRUE}
+```{python set_ex1, exercise=TRUE, exercise.setup = 'setup_py'}
 
 ```
 
@@ -757,10 +757,10 @@ stanford_enrollment[2]
 ```{r q9, echo=FALSE}
 question(
   "What will be the result of running the code above?",
-  answer("Stanford University"),
-  answer("Stanford"),
-  answer("California", correct = TRUE),
-  answer("7554"),
+  answer("`'Stanford University'`"),
+  answer("`'Stanford'`"),
+  answer("`'California'`", correct = TRUE),
+  answer("`7554`"),
   allow_retry = TRUE
 )
 ```
@@ -804,7 +804,7 @@ grade_this_code()
 
 Create a new tuple, `northwestern_enrollment`, knowing that Northwestern University is located in Evanston, Illinois, and has an undergraduate enrollment of 8,709. 
 
-```{python tuple_ex1, exercise=TRUE} 
+```{python tuple_ex1, exercise=TRUE, exercise.setup = 'setup_py'} 
 
 ```
 
@@ -819,7 +819,7 @@ grade_this_code()
 It would be useful to store our two college-related tuples together along with any we create in the future. Create a list containing these two tuples in alphabetical order by college name. Let's call the list `tuple_list`.
 
 
-```{python tuple_ex2, exercise=TRUE} 
+```{python tuple_ex2, exercise=TRUE, exercise.setup = 'tuple_ex1'} 
 tuple_list = ...
 tuple_list
 ```
