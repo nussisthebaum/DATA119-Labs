@@ -845,10 +845,11 @@ Lists are more flexible
   - Can contain elements of different types
     
 `NumPy` arrays have some advantages
-  - size - they take up less computer memory than lists
-  - performance - faster access than lists
-  - functionality - linear algebra functions built-in
-  - can be multiple dimensions
+
+* Size - they take up less computer memory than lists.
+* Performance - faster access than lists.
+* Functionality - linear algebra functions built-in.
+* Can be multiple dimensions.
 
 ### Creating an array
 
@@ -886,7 +887,7 @@ print(tomato_array)
 
 A list can have different types, but an array will default to one. So you can see all `int`s were changed to `string`s (notice the single quotes around the numbers).
 
-An array will make sure everything is the same type.
+An `array` will make sure everything is the same type.
 
 ### Exploring arrays
 
@@ -902,7 +903,7 @@ Extraction and slicing of one-dimensional arrays work exactly the same as lists!
 
 10. Print the second element of `prime50_array`.
 
-```{python prime50_ex1, exercise=TRUE, exercise.eval = TRUE, exercise.setup="setup_py"}
+```{python prime50_ex1, exercise=TRUE, exercise.eval = TRUE, exercise.setup="prime50"}
 
 ```
 
