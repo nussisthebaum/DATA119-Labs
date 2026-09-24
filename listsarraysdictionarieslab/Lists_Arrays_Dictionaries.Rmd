@@ -79,14 +79,14 @@ You can create a list by using square brackets "`[]`". Each element is separated
 
 #### Let's create a list!
 
-```{python list1, exercise=TRUE}
+```{python list1, exercise=TRUE, exercise.setup="setup_py"}
 School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
 School_locations
 ```
 
 ##### Lists can have different data types!
 
-```{python list2, exercise=TRUE}
+```{python list2, exercise=TRUE, exercise.setup="setup_py"}
 Random_stuff = ["California", 38, 3.14159] #A string, int, float
 Random_stuff
 ```
