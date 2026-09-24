@@ -610,7 +610,7 @@ toast_set.issubset(grocery_set)
 
 Use the built-in function ```dir()```.
 
-```{python dir2, exercise=TRUE, exercise.setup = 'ex12'}
+```{python dir2, exercise=TRUE, exercise.setup = 'set12'}
 print(dir(grocery_set))
 ```
 
