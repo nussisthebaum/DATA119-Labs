@@ -302,11 +302,11 @@ grade_this({
     fail("Replace the `...` with your code and make sure the last line is `School_locations`.")
   }
 
-  res <- reticulate::py_to_r(.result)
+  res <- unlist(reticulate::py_to_r(.result))
   
   School_locations_ans = c("California", "Illinois", "North Carolina", "Texas", "tomato", "Georgia", "Washington D.C.", "Michigan", 2023)
 
-    ## py_to_r of this list gives an R list, not a vector. adding unlist()
+    ## py_to_r of this list gives an R list, not a vector. adding unlist() to res
 
   if (identical(res, School_locations_ans)) {
     pass(random_praise())
