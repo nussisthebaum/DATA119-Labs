@@ -233,23 +233,24 @@ question(
 #### Operations and manipulation on lists
 
 We can: 
-- Insert items into lists!
-    - at either end
-    - in the middle      
-- Count how many items have a specific value
-- Sort elements
 
-How do we do this? By using methods. 
+* Insert items into lists!
+    + At either end
+    + In the middle      
+* Count how many items have a specific value.
+* Sort elements.
+
+How do we do this? By using *methods*. 
 
 *Methods* are particular built-in functions that work on objects in python. There are specific methods that work for all *list* objects!
 
-Methods take the form:
+List methods take the form:
 
 ```python
 list.method()
 ```
 
-Built-in functions can also be applied to objects in python. Recall they take the form:
+Built-in functions can also be applied to objects in Python. Recall they take the form:
 
 ```python
 function_name(list)
@@ -259,7 +260,7 @@ function_name(list)
 
 You can append an item to the end of a list:
 
-```{python append1, exercise=TRUE}
+```{python append1, exercise=TRUE, exercise.setup="setup_py"}
 School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
 
 School_locations.append('Michigan')
@@ -273,7 +274,7 @@ School_locations.insert(4,'tomato')
 School_locations
 ```
 
-Note we didn't assign the result to `School_locations`, but this automatically changes/overwrites the object.
+Note we didn't assign the result to `School_locations`, but this **automatically changes/overwrites** the object.
 
 Let's make a copy of our list so we can see how this works.
 
@@ -325,7 +326,7 @@ Use online [documentation](https://docs.python.org/3/tutorial/datastructures.htm
 
 Or use the built-in function ```dir()```.
 
-```{python dir, exercise=TRUE}
+```{python dir, exercise=TRUE, exercise.setup = 'append3'}
 print(dir(School_locations))
 
 print(dir(list))
@@ -528,7 +529,7 @@ Random_set
 
 Remember that we can call `type()` on an object, including sets, to see type it is!
 
-```{python set7, exercise=TRUE, exercise.setup = 'set2'}
+```{python set7, exercise=TRUE, exercise.setup = 'set6'}
 print(type(Random_set))
 ```
 
