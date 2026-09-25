@@ -555,7 +555,7 @@ grocery_set - fruits_set
 
 ```{r q7, echo=FALSE}
 question(
-  "Again, let `dairy_set = {'milk', 'cheese', 'cream'}`. What will union of `dairy_set - grocery_set` be?",
+  "Again, let `dairy_set = {'milk', 'cheese', 'cream'}`. What will `dairy_set - grocery_set` be?",
   answer("`None`"),
   answer("`{'cream'}`", correct = TRUE),
   answer("`{'milk', 'cheese'}`"),
@@ -729,7 +729,20 @@ grade_this_code()
 ```
 
 ```{r set_ex6-check, message = FALSE, warning = FALSE, echo = FALSE}
-grade_this_code()
+grade_this({
+  if (is.null(.result)) {
+    fail("Make sure your last line returns the answer (don't wrap it in `print()`).")
+  }
+
+  res <- reticulate::py_to_r(.result)
+  expected <- reticulate::py_to_r(reticulate::py_eval("'plum' in my_big_set"))
+
+  if (identical(as.logical(res), expected)) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 ### Tuples
