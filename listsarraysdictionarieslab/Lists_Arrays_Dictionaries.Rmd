@@ -863,7 +863,7 @@ grade_this_code()
 
 #### Nested sequences
 
-Create a new tuple, `northwestern_enrollment`, knowing that Northwestern University is located in Evanston, Illinois, and has an undergraduate enrollment of 8,709. 
+Create a new tuple, `northwestern_enrollment`, in the same form as `uc_enrollment`, knowing that Northwestern University is located in Evanston, Illinois, and has an undergraduate enrollment of 8,709. 
 
 ```{python tuple_ex1, exercise=TRUE, exercise.setup = 'tuple8'} 
 
@@ -874,24 +874,52 @@ northwestern_enrollment = ("Northwestern University", "Evanston", "Illinois", 87
 ```
 
 ```{r tuple_ex1-check}
-grade_this_code()
+grade_this({
+  if (!reticulate::py_has_attr(reticulate::py, "northwestern_enrollment")) {
+    fail("Make sure you name your tuple `northwestern_enrollment`.")
+  }
+
+  correct <- reticulate::py_to_r(reticulate::py_eval(
+    'northwestern_enrollment == ("Northwestern University", "Evanston", "Illinois", 8709)'
+  ))
+
+  if (isTRUE(correct)) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 It would be useful to store our two college-related tuples together along with any we create in the future. Create a list containing these two tuples in alphabetical order by college name. Let's call the list `tuple_list`.
 
 
-```{python tuple_ex2, exercise=TRUE, exercise.setup = 'tuple8'} 
+```{python tuple_ex2, exercise=TRUE, exercise.setup = 'tuple_ex1'}
 tuple_list = ...
 tuple_list
 ```
 
 ```{python tuple_ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
-tuple_list = [uc_enrollment, northwestern_enrollment]
+tuple_list = [northwestern_enrollment, uc_enrollment]
 tuple_list
 ```
 
 ```{r tuple_ex2-check}
-grade_this_code()
+grade_this({
+  if (!reticulate::py_has_attr(reticulate::py, "tuple_list")) {
+    fail("Make sure you name your list `tuple_list`.")
+  }
+
+  correct <- reticulate::py_to_r(reticulate::py_eval(
+    "tuple_list == [northwestern_enrollment, uc_enrollment]"
+  ))
+
+  if (isTRUE(correct)) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 ## Arrays
