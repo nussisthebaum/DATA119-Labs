@@ -1223,8 +1223,23 @@ random_number_array = np.array([32, 56, 78, 3, 15, 109, 13, 24, 58, 61, 90, 93, 
 np.delete(random_number_array, [1,2])
 ```
 
-```{r arex1-code-check}
-grade_this_code()
+```{r arex1-check}
+grade_this({
+  res <- if (is.null(.result)) {
+    reticulate::py_to_r(reticulate::py_eval("random_number_array"))
+  } else {
+    reticulate::py_to_r(.result)
+  }
+
+  expected <- c(32, 3, 15, 109, 13, 24, 58, 61, 90, 93, 45, 21, 46)
+
+  if (length(res) == length(expected) &&
+      isTRUE(all.equal(as.numeric(res), expected))) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 16. Use a method to find the minimum value in the array
@@ -1270,7 +1285,7 @@ hour = np.arange(60)
 grade_this_code()
 ```
 
-19. Starting (and including) minute 4, extract every 5th element.
+19. Starting at minute 4 (i.e., index 3), extract every 5th element.
 
 ```{python arex5, exercise=TRUE, exercise.setup='arex4'}
 
@@ -1281,7 +1296,24 @@ hour[3::5]
 ```
 
 ```{r arex5-check}
-grade_this_code()
+grade_this({
+  if (!reticulate::py_has_attr(reticulate::py, "hour")) {
+    fail("Go back to the previous exercise and create the `hour` array first.")
+  }
+  if (is.null(.result)) {
+    fail("Make sure the last line of your code returns the extracted values.")
+  }
+
+  res <- as.numeric(reticulate::py_to_r(.result))
+  expected <- as.numeric(reticulate::py_to_r(reticulate::py_eval("hour[3::5]")))
+
+  if (length(res) == length(expected) &&
+      isTRUE(all.equal(res, expected))) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 ## Dictionaries
@@ -1357,11 +1389,11 @@ print(dir(survey_dict_2))
 ```
 
 ```{python methods2, exercise=TRUE, exercise.setup = "likert2"}
-survey_dict.keys()
+survey_dict_2.keys()
 ```
 
 ```{python methods3, exercise=TRUE, exercise.setup = "likert2"}
-survey_dict.items()
+survey_dict_2.items()
 ```
 
 ### Working with Dictionaries
