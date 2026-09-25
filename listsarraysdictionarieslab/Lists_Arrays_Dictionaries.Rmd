@@ -342,7 +342,7 @@ Create a list with at least 4 items. (Recall items can be a string, int, float.)
 
 ```
 
-5. Remove the $2^{nd}$ and $3^{rd}$ elements. You may want to check the documentation for list functions and methods!
+5. Remove the $2^{nd}$ and $3^{rd}$ elements. You may want to check the documentation for list functions and methods! Because of how we are parsing your solutions, please leave the `my list` line as is!
 
 ```{r servercode, context="server", echo = FALSE, eval = FALSE}
 q7_correct_poll <- reactivePoll(500, session,
@@ -370,17 +370,36 @@ output$q7_table_output <- renderUI({
   }
 })
 ```
+```{python ex2-setup, exercise.setup = 'ex1-setup'}
+my_list_before = list(my_list)
+```
 
-```{python ex2, exercise=TRUE, exercise.setup = 'ex1-setup'}
+```{python ex2, exercise=TRUE, exercise.setup = 'ex2-setup'}
 
+my_list
 ```
 
 ```{python ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
-del my_list[1:2]
+del my_list[1:3]
 ```
 
-```{r ex2-code-check}
-grade_this_code()
+```{r ex2-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this({
+  if (is.null(.result)) {
+    fail("Make sure the last line of your code is `my_list`.")
+  }
+  before <- unlist(reticulate::py$my_list_before)
+  after  <- unlist(reticulate::py_to_r(.result))
+
+  if (length(before) < 4) {
+    fail("Go back and make sure `my_list` has at least 4 items.")
+  }
+  if (identical(after, before[-c(2, 3)])) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 6. Append 316 to the end of the list.
@@ -404,7 +423,7 @@ grade_this_code()
 ```
 
 ```{python ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
-my_list.insert("Math is fun", 2)
+my_list.insert(2, "Math is fun")
 ```
 
 ```{r ex4-check, message = FALSE, warning = FALSE, echo = FALSE}
@@ -536,7 +555,7 @@ grocery_set - fruits_set
 
 ```{r q7, echo=FALSE}
 question(
-  "Again, let `dairy_set = {'milk', 'cheese', 'cream'}`. What will union of `dairy_set - grocery_set` be?",
+  "Again, let `dairy_set = {'milk', 'cheese', 'cream'}`. What will `dairy_set - grocery_set` be?",
   answer("`None`"),
   answer("`{'cream'}`", correct = TRUE),
   answer("`{'milk', 'cheese'}`"),
@@ -710,7 +729,20 @@ grade_this_code()
 ```
 
 ```{r set_ex6-check, message = FALSE, warning = FALSE, echo = FALSE}
-grade_this_code()
+grade_this({
+  if (is.null(.result)) {
+    fail("Make sure your last line returns the answer (don't wrap it in `print()`).")
+  }
+
+  res <- reticulate::py_to_r(.result)
+  expected <- reticulate::py_to_r(reticulate::py_eval("'plum' in my_big_set"))
+
+  if (identical(as.logical(res), expected)) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 ### Tuples
@@ -831,7 +863,7 @@ grade_this_code()
 
 #### Nested sequences
 
-Create a new tuple, `northwestern_enrollment`, knowing that Northwestern University is located in Evanston, Illinois, and has an undergraduate enrollment of 8,709. 
+Create a new tuple, `northwestern_enrollment`, in the same form as `uc_enrollment`, knowing that Northwestern University is located in Evanston, Illinois, and has an undergraduate enrollment of 8,709. 
 
 ```{python tuple_ex1, exercise=TRUE, exercise.setup = 'tuple8'} 
 
@@ -842,24 +874,52 @@ northwestern_enrollment = ("Northwestern University", "Evanston", "Illinois", 87
 ```
 
 ```{r tuple_ex1-check}
-grade_this_code()
+grade_this({
+  if (!reticulate::py_has_attr(reticulate::py, "northwestern_enrollment")) {
+    fail("Make sure you name your tuple `northwestern_enrollment`.")
+  }
+
+  correct <- reticulate::py_to_r(reticulate::py_eval(
+    'northwestern_enrollment == ("Northwestern University", "Evanston", "Illinois", 8709)'
+  ))
+
+  if (isTRUE(correct)) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 It would be useful to store our two college-related tuples together along with any we create in the future. Create a list containing these two tuples in alphabetical order by college name. Let's call the list `tuple_list`.
 
 
-```{python tuple_ex2, exercise=TRUE, exercise.setup = 'tuple8'} 
+```{python tuple_ex2, exercise=TRUE, exercise.setup = 'tuple_ex1'}
 tuple_list = ...
 tuple_list
 ```
 
 ```{python tuple_ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
-tuple_list = [uc_enrollment, northwestern_enrollment]
+tuple_list = [northwestern_enrollment, uc_enrollment]
 tuple_list
 ```
 
 ```{r tuple_ex2-check}
-grade_this_code()
+grade_this({
+  if (!reticulate::py_has_attr(reticulate::py, "tuple_list")) {
+    fail("Make sure you name your list `tuple_list`.")
+  }
+
+  correct <- reticulate::py_to_r(reticulate::py_eval(
+    "tuple_list == [northwestern_enrollment, uc_enrollment]"
+  ))
+
+  if (isTRUE(correct)) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 ## Arrays
@@ -1163,8 +1223,23 @@ random_number_array = np.array([32, 56, 78, 3, 15, 109, 13, 24, 58, 61, 90, 93, 
 np.delete(random_number_array, [1,2])
 ```
 
-```{r arex1-code-check}
-grade_this_code()
+```{r arex1-check}
+grade_this({
+  res <- if (is.null(.result)) {
+    reticulate::py_to_r(reticulate::py_eval("random_number_array"))
+  } else {
+    reticulate::py_to_r(.result)
+  }
+
+  expected <- c(32, 3, 15, 109, 13, 24, 58, 61, 90, 93, 45, 21, 46)
+
+  if (length(res) == length(expected) &&
+      isTRUE(all.equal(as.numeric(res), expected))) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 16. Use a method to find the minimum value in the array
@@ -1210,7 +1285,7 @@ hour = np.arange(60)
 grade_this_code()
 ```
 
-19. Starting (and including) minute 4, extract every 5th element.
+19. Starting at minute 4 (i.e., index 3), extract every 5th element.
 
 ```{python arex5, exercise=TRUE, exercise.setup='arex4'}
 
@@ -1221,7 +1296,24 @@ hour[3::5]
 ```
 
 ```{r arex5-check}
-grade_this_code()
+grade_this({
+  if (!reticulate::py_has_attr(reticulate::py, "hour")) {
+    fail("Go back to the previous exercise and create the `hour` array first.")
+  }
+  if (is.null(.result)) {
+    fail("Make sure the last line of your code returns the extracted values.")
+  }
+
+  res <- as.numeric(reticulate::py_to_r(.result))
+  expected <- as.numeric(reticulate::py_to_r(reticulate::py_eval("hour[3::5]")))
+
+  if (length(res) == length(expected) &&
+      isTRUE(all.equal(res, expected))) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 ## Dictionaries
@@ -1297,11 +1389,11 @@ print(dir(survey_dict_2))
 ```
 
 ```{python methods2, exercise=TRUE, exercise.setup = "likert2"}
-survey_dict.keys()
+survey_dict_2.keys()
 ```
 
 ```{python methods3, exercise=TRUE, exercise.setup = "likert2"}
-survey_dict.items()
+survey_dict_2.items()
 ```
 
 ### Working with Dictionaries
