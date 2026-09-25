@@ -342,7 +342,7 @@ Create a list with at least 4 items. (Recall items can be a string, int, float.)
 
 ```
 
-5. Remove the $2^{nd}$ and $3^{rd}$ elements. You may want to check the documentation for list functions and methods!
+5. Remove the $2^{nd}$ and $3^{rd}$ elements. You may want to check the documentation for list functions and methods! Because of how we are parsing your solutions, please leave the `my list` line as is!
 
 ```{r servercode, context="server", echo = FALSE, eval = FALSE}
 q7_correct_poll <- reactivePoll(500, session,
@@ -370,17 +370,36 @@ output$q7_table_output <- renderUI({
   }
 })
 ```
+```{python ex2-setup, exercise.setup = 'ex1-setup'}
+my_list_before = list(my_list)
+```
 
-```{python ex2, exercise=TRUE, exercise.setup = 'ex1-setup'}
+```{python ex2, exercise=TRUE, exercise.setup = 'ex2-setup'}
 
+my_list
 ```
 
 ```{python ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
-del my_list[1:2]
+del my_list[1:3]
 ```
 
-```{r ex2-code-check}
-grade_this_code()
+```{r ex2-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this({
+  if (is.null(.result)) {
+    fail("Make sure the last line of your code is `my_list`.")
+  }
+  before <- unlist(reticulate::py$my_list_before)
+  after  <- unlist(reticulate::py_to_r(.result))
+
+  if (length(before) < 4) {
+    fail("Go back and make sure `my_list` has at least 4 items.")
+  }
+  if (identical(after, before[-c(2, 3)])) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
 6. Append 316 to the end of the list.
@@ -404,7 +423,7 @@ grade_this_code()
 ```
 
 ```{python ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
-my_list.insert("Math is fun", 2)
+my_list.insert(2, "Math is fun")
 ```
 
 ```{r ex4-check, message = FALSE, warning = FALSE, echo = FALSE}
