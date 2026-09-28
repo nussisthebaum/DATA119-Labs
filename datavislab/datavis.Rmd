@@ -339,7 +339,7 @@ grade_this_code(
 Sometimes when we are plotting multiple data series, it can be useful to include a legend. 
 To do so, we often have to add a label argument to each individual plot.
 
-7. Edit the code below so that the first line plot receives the label of 'Oak Street Beach' and the second of 'Foster Beach' in a new legend located in the lower center of the graph. If you're stuck check out the [Legend documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html).
+7. Edit the code below so that the first line plot is given the label 'Oak Street Beach' and the second 'Foster Beach' in a new legend located in the lower center of the graph. If you're stuck check out the [legend documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html).
 
 ```{python beach-line-overlaid-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="beach-temp-line-setup"}
 beach_day_max_foster = beach[beach['Station Name'] == 'Foster'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
@@ -369,11 +369,14 @@ grade_this_code(
 
 ## Building on Matplotlib: Pandas and Seaborn
 
-Because making visualizations is such a key part of the data science workflow `pandas` has methods for data frames that call the `matplotlib` package behind the scene simplifying the graphing process. Since the `pandas` graphing methods are built on top of `matplotlib` all the customization you just saw earlier still works. 
+Because making visualizations is such a key part of the data science workflow, `pandas` has methods for data frames that call the `matplotlib` package behind the scenes, simplifying the graphing process. 
 
-All of the graphs we've discussed can be made from a data frame using `df.plot.graph_name(**args)`. If you're not sure how to implement a particular graph check out the **Plotting** section of the [pandas cheatsheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf) or the [pandas plotting documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html). Below you'll recreate some of the graphs from earlier to see how we can harness the power of combining pandas and matplotlib.
+All of the graphs we've discussed can be made from a dataframe using `df.plot.graph_name(**args)`. 
+If you're not sure how to implement a particular graph check out the **Plotting** section of the [pandas cheatsheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf) or the [pandas plotting documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html). 
+Below you'll recreate some of the earlier graphs to harness the power of combining pandas and matplotlib.
 
-Before you start on the remaining exercises here is an example to see how `pandas` implements a basic bar chart differently than `matplotlib`. Note the need to create a series or DataFrame first.
+Before you start on the remaining exercises, here is an example to see how `pandas` implements a basic bar chart differently than `matplotlib`. 
+Note the need to create a series or DataFrame first.
 
 ```{python pandas-basic-bar, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
 grade_categories = ["A", "B", "C", "D","F"]
@@ -382,19 +385,20 @@ grades = pd.DataFrame({"Grades" : grade_categories, "# Students" : students_per_
 grades.plot.bar("Grades", '# Students')
 ```
 
-As you can see for data that is already stored in a list it may be easier to just use `matplotlib` directly. However, using pandas also automatically added a x-axis label, a legend label, and allowed us to just reference columns from a dataframe directly making for a much smoother process when our data is already in a dataframe. 
+For data that is already stored in a list, it may be easier to just use `matplotlib` directly. However, using pandas also automatically added a x-axis label, a legend label, and allowed us to just reference columns from a dataframe directly, making for a much smoother process when our data is already in a dataframe. 
 
-8. Recreate the bar chart displaying the average wind recorded at each weather station in 2024 using the dataframe created for you below. Make sure it has the same labels as question 6. As a challenge do it all in one line with the xaxis tick marks rotated to 0 degrees for clearer visibility.
+8. Recreate the bar chart displaying the average wind recorded at each weather station in 2024 using the dataframe created for you below. 
+Make sure it has the same labels as Question 6. If you would like a challenge, do it all in one line with the x-axis labels rotated to 0 degrees for better visibility.
 
 
 ```{python beach-avg-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 beach_year_avg = beach.drop(columns=['Month', 'Hour', 'Day of Year']).groupby("Station Name").mean().reset_index()
 ```
 ```{python beach-avg-wind-bar-pandas, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-avg-pandas-setup"}
-...
-...
-...
-...
+
+
+
+
 ```
 ```{python beach-avg-wind-bar-pandas-solution, message = FALSE,warning = FALSE, echo = FALSE}
 beach_year_avg.plot.bar("Station Name", "Wind Speed", xlabel="Beach Name", ylabel="Avg Wind", title="Average Wind by Beach in 2024", rot=0)
@@ -414,11 +418,12 @@ grade_this_code(
 )
 ```
 
-Notice how while we still needed to manipulate the dataframe prior to graphing. Once our dataframe was ready we didn't need to extract the data as series like previously and could plot directly.
+Notice that though we needed to manipulate the dataframe prior to graphing, once we did so, we could plot directly without extracting the data as series.
 
-Let's keep practicing this time with histograms. 
+Let's keep practicing, this time with histograms. 
 
-9. Reproduce the histogram from question 3 with the updated title and labels. This time change the color to `"green"`. Use the dataframe prepared for you below.
+9. Reproduce the histogram from Question 3 with the updated title and labels. This time change the color  of the bars to `"green"`. 
+Use the dataframe prepared for you below.
 
 ```{python beach-max-wind-hist-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 no_outlier_wind = beach[beach['Maximum Wind Speed'] < 100][['Maximum Wind Speed']] # dealing with weird outliers
@@ -442,9 +447,11 @@ grade_this_code(
 )
 ```
 
-Notice how we didn't even have to pass any data to `.hist`! As long as you want to plot every column in the dataframe calling `df.hist` will be enough because by default the plotting methods within pandas attempt to plot every variable in the dataframe where possible. Let's put this to our advantage to make a overlaid histogram.
+Notice how we didn't even have to pass any data to `.hist`! As long as you want to plot every column in the dataframe, calling `df.hist` is sufficient.
+Let's use this to our advantage to make a overlaid histogram.
 
-10. Make an overlaid histogram of both the maximum and hourly wind distributions. Let `Matplotlib` generate the colors automatically and use 10 bins. Use the updated `no_outlier_wind` data frame created below.
+10. Make an overlaid histogram of both the maximum and hourly wind distributions. Let Matplotlib generate the colors automatically and use 10 bins. 
+Use the updated `no_outlier_wind` data frame created below.
 
 
 ```{python beach-overlaid-wind-hist-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
@@ -469,7 +476,7 @@ grade_this_code(
 )
 ```
 
-While it's easy to overlay histograms and bar charts in `pandas` it can be more challenging to do so with line plots. That's where packages like `seaborn` which further build on `matplotlib` and `pandas` can be helpful. Check out the [seaborn documentation](https://seaborn.pydata.org/generated/seaborn.lineplot.html) then try the following question.
+While it's easy to overlay histograms and bar charts in `pandas`, it can be more challenging to do so with line plots. That's where packages like `seaborn` which further build on `matplotlib` and `pandas` can be helpful. Check out the [seaborn documentation](https://seaborn.pydata.org/generated/seaborn.lineplot.html), then try the following question.
 
 11. Recreate the overlaid line plot from question 7 using seaborn. Let the legend go where ever seaborn thinks is best.
 
@@ -489,9 +496,9 @@ grade_this_code(
 )
 ```
 
-For one last challenge with seaborn we'll take a look at scatterplots. Checkout the [relevant documentation](https://seaborn.pydata.org/generated/scatterplot.html) if you want a hint.
+For one last challenge with seaborn, we'll take a look at scatterplots. Checkout the [relevant documentation](https://seaborn.pydata.org/generated/scatterplot.html) if you want a hint.
 
-12. Create a scatterplot to visualize the relationship between wind speed and air temperature with different shape points by beach.
+12. Create a scatterplot to visualize the relationship between wind speed and air temperature, using differently shaped points for each beach.
 
 ```{python beach-scatter-overlaid-seaborn, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 sns._____(data=beach, ______)
@@ -509,18 +516,19 @@ grade_this_code(
 )
 ```
 
-As we can see from this there is a clear error with the readings being done at Foster beach last year. Doing these sort of quick summative graphs early in the data exploration process can make it simpler to identify issues with data quality before conducting more analysis.
+As we can see from this plot, there is a clear error with the readings at Foster Beach last year. 
+Plotting these sorts of graphs early in the data exploration process can make it simpler to identify data quality issues before conducting more analysis.
 
 
 ## Grammar of Graphics Approach
 
-So far we have used `Matplotlib`, `Pandas`, and `Seaborn` to create graphs with varying degrees of control over the image being created. You should hopefully be familiar with the different methods used to create **bar charts**, **line charts**, **scatter plots**, and **histograms** as well as basic customization. Now we are going to shift towards utilizing the grammar of graphics and packages like `altair` and `plotnine` to create graphs. 
+So far we have used `Matplotlib`, `Pandas`, and `Seaborn`, which have afforded us varying degrees of control over the image being created. 
+Now we are going to shift towards utilizing the grammar of graphics and packages like `altair` and `plotnine` to create graphs. 
 
-Below we'll reproduce some of the graphs so you can get some exposure to how to so using the grammar of graphics. Before we do that though let's discuss what makes the **grammar of graphics** approach different.
+Below we'll reproduce some of our graphs using the grammar of graphics. The key idea behind this approach is that every plot can be broken down into the **dataset**, the **mapping** between features of the dataset and visuals, and the **geometry** used to encode the observations. 
+The grammar of graphics also has some nuance surrounding the coordinates and scales of the plot that we don't have time to address here. If you're interested, check out Leland Wilkinson's book *The Grammar of Graphics*.
 
-The key idea behind the grammar of graphics is that every single plot can be broken down into the **dataset**, the **mapping** between features of the dataset and visuals on the graph, and the **geometry** used to encode the observations in your graph. The grammar of graphics also has some nuance surrounding the coordinates and scales of the plot that we unfortunately can't address here. If you're interested check out Leland Wilkinson's book the *Grammar of Graphics*.
-
-For the remainder of this section scroll through and run the code. As you run the code compare it to the earlier approaches and focus on how we're able to do the same tasks with a different library.
+For the remainder of this section, simply run the code. As you do so, compare it to the earlier approaches and focus on how we're able to do the same tasks with a different library.
 
 ### Building Up a Bar Chart
 
@@ -531,11 +539,13 @@ p9.ggplot(beach, p9.aes(x = 'Station Name', y='Wind Speed')).show()
 Once we've done that we can use the `stat_summary` method to do all the computation we want for the bar chart. This makes the process much smoother than doing the computations separately. Note we assign `geom`="bar" for bar charts.
 
 ```{python beach-bar-p9, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="packages"}
-(p9.ggplot(beach, p9.aes(x = 'Station Name', y='Wind Speed')) +
-stat_summary(fun=np.mean, geom='bar', fill='skyblue', color='black') +
-labs(title="Average Wind by Beach")
+plot = p9.ggplot(beach, p9.aes(x='Station Name', y='Wind Speed')) + \
+    p9.stat_summary(fun_y=np.mean, geom='bar', fill='skyblue', color='black') + \
+    p9.labs(title="Average Wind by Beach")
+
+plot
 ```
-Finally, as you can see above we used `labs` to add a title and the `fill` and `color` arguments to adjust the appearance of the graph. Feel free to experiment with those arguments to get the graph looking how you prefer. 
+In the above plot we used `labs` to add a title, and the `fill` and `color` arguments to adjust the appearance of the graph. 
+Feel free to experiment with those arguments to get the graph looking how you prefer. 
 
-If you're really into colors check out this [list of color options](https://matplotlib.org/stable/gallery/color/named_colors.html) from Matplotlib and see if you can go back and change colors in matplotlib and seaborn as well! 
-
+If you're really into colors check out this [list of color options](https://matplotlib.org/stable/gallery/color/named_colors.html) from Matplotlib!
