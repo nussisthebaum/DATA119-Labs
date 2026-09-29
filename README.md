@@ -82,12 +82,12 @@ This repo contains data and .Rmd files for interactive Shiny labs to teach DATA 
       )
     )
   ```
-4. Make sure all necessary Python modules are listed in the `requirements.txt` file along with version numbers
+4. Make sure all necessary Python modules are listed in the `requirements.txt` file along with version numbers. Remove unnecessary packages to avoid dependency conflicts. 
 5. Navigate to the correct directory in R and then run `rsconnect::writeManifest()`
 6. In the `manifest.json` file, add the following after `metadata` and before `packages`:
   ```
    "python": {
-        "version": "3.9.21",
+        "version": "3.10.16",
         "package_manager": {
           "name": "pip",
           "version": "21.2.4",
