@@ -1,0 +1,592 @@
+---
+title: "Data Frames Lab"
+output: 
+  learnr::tutorial:
+    css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+
+## Package Requirements for Lab  
+
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+## Package Requirements for Lab 
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+library(shinyjs)
+
+## Package Requirements for Content
+
+library(ggplot2)
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30)
+```
+
+```{r header, echo=FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Data Frames and `pandas`", class = "pageTitle")
+  )
+)
+```
+
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
+import numpy as np
+import pandas as pd
+
+starwars = pd.read_csv("./data/starwars.csv", index_col = 0)
+
+pilots = pd.read_csv("./data/pilots.csv", index_col = 0)
+pilots_small = pilots.loc[(pd.notna(pilots["vehicles"])) | (pd.notna(pilots["starships"]))]
+
+ep1 = pd.read_csv("./data/the_phantom_menace.csv", index_col = 0)
+ep2 = pd.read_csv("./data/attack_of_the_clones.csv", index_col = 0)
+ep3 = pd.read_csv("./data/revenge_of_the_sith.csv", index_col = 0)
+ep4 = pd.read_csv("./data/a_new_hope.csv", index_col = 0)
+ep5 = pd.read_csv("./data/the_empire_strikes_back.csv", index_col = 0)
+ep6 = pd.read_csv("./data/return_of_the_jedi.csv", index_col = 0)
+ep7 = pd.read_csv("./data/the_force_awakens.csv", index_col = 0)
+```
+
+## Goals
+
+* To continue practicing with `pandas`, including learning the attributes of a data frame, methods for data frames, and `pandas` functions. 
+* To carry out basic exploratory data analysis with aggregation functions and `.groupby()`. 
+* To examine relationships between variables using `pivot_table()`.
+* To join data frames using `.merge()`.
+
+## Setup
+
+For this lab we will be using the `pandas` library in Python, as well as a new dataset containing information on various Star Wars characters from Episodes I-VII. We have several data frames to use as a part of the larger dataset--run the cell below to setup the environment.
+
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+import pandas as pd
+
+# To download any of these data files 
+# go to https://posit.ds.uchicago.edu/correlationlab/www/<name of file here>.csv
+
+starwars = pd.read_csv("./data/starwars.csv")
+```
+
+## Basic `pandas`
+
+First, let's review some basic `pandas` using the `starwars` data frame. `starwars` includes the following variables:
+
+* `name`: Name of the character
+* `height`: Height (cm)
+* `mass`: Weight (kg)
+* `hair_color`, `skin_color`, `eye_color`: Hair, skin, and eye colors
+* `birth_year`: Year born (BBY = Before Battle of Yavin)
+* `sex`: The biological sex of the character, namely male, female, hermaphroditic, or none (as in the case for Droids).
+* `gender`: The gender role or gender identity of the character as determined by their personality or the way they were programmed (as in the case for Droids).
+* `homeworld`: Name of homeworld
+* `species`: Name of species
+
+```{r q1, echo=FALSE}
+question("1. What data frame attribute can confirm the names of these columns?",
+         answer("`.columns`", correct = TRUE),
+         answer("`.dtypes`", ),
+         answer("`.index`"),
+         answer("`.shape`", ),
+         answer("`.size`"),
+         allow_retry = TRUE #,
+         #post_message = "Congratulations! You have found the first secret word: SUPPRESS."
+         )
+```
+
+2. Now, write a line of code to access the column names. Remember, an attribute follows the object with no parentheses. 
+
+```{python ex2, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars.columns
+```
+
+```{r ex2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q3, echo=FALSE}
+question("3. What data frame attribute can help you find the number of observations in `starwars`?",
+         answer("`.columns`"),
+         answer("`.dtypes`", ),
+         answer("`.index`"),
+         answer("`.shape`", correct = TRUE, message = "You're right, but you also need to remember how to decipher the output!"),
+         answer("`.size`", message = "Careful--you're close, but this is not the correct answer."),
+         allow_retry = TRUE #,
+         #post_message = "Congratulations! You have found the first secret word: SUPPRESS."
+         )
+```
+
+4. Now, write a line of code to help you find the number of observations. 
+
+```{python ex4, exercise = TRUE, message = FALSE}
+
+```
+
+```{r q5, echo=FALSE}
+question("5. How many observations are there in `starwars`?",
+         answer("11", message = "This is the number of columns, not the number of rows/observations."),
+         answer("87", correct = TRUE),
+         answer("1044", message = "Check to make sure you used the right attribute!"),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the first secret word: VEHICLE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         )
+```
+
+Now let's find out what the `.dtypes` attribute does:
+
+```{python ex_dtypes, exercise = TRUE, message = FALSE}
+starwars.dtypes
+```
+
+Discuss:
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Can you tell what the `.dtypes` attribute is doing? How might you confirm your guess?
+
+::::
+
+Remember, you can always look at the documentation for a function, method, or attribute--including [the documentation for `.dtypes`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dtypes.html). Read through to confirm your guess. Hopefully you and your neighbors have found that this attribute is a `Series` (a special data type used to build data frames) of the various columns. Remember also that the data types can tell us something about the kinds of variables we have. 
+
+```{r q6, echo=FALSE}
+question("6. Which of the variables in `starwars` are numeric? Select all that apply.",
+         answer("`name`"),
+         answer("`height`", correct = TRUE),
+         answer("`mass`", correct = TRUE),
+         answer("`hair_color`"),
+         answer("`skin_color`"),
+         answer("`eye_color`"),
+         answer("`birth_year`", correct = TRUE),
+         answer("`sex`"),
+         answer("`gender`"),
+         answer("`homeworld`"),
+         answer("`species`"),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the second secret word: URGE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         )
+```
+
+7. Categorical variables are usually saved as strings, but all I can see is `object`. Let's investigate further--using square brackets, extract the `name` column. 
+
+```{python ex7, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex7-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars["name"]
+```
+
+```{r ex7-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+8. Now, apply the `type()` function to the extracted column.
+
+```{python ex8, exercise = TRUE, message = FALSE}
+starwars["name"]
+```
+
+```{python ex8-solution, message = FALSE, warning = FALSE, echo = FALSE}
+type(starwars["name"])
+```
+
+```{r ex8-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+9. Because it's part of the data frame, `name` is saved as a `Series`! But, we can still confirm that the `Series` is made up of strings. Extract first element of the extracted column and apply the `type()` function
+
+```{python ex9, exercise = TRUE, message = FALSE}
+starwars["name"]
+```
+
+```{python ex9-solution, message = FALSE, warning = FALSE, echo = FALSE}
+type(starwars["name"][0])
+```
+
+```{r ex9-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+You should finally see that this is a string, but also, you should see that we can use multiple square brackets to break down an object into smaller and smaller pieces.
+
+10. Write a line of code to select all of the numeric variables. 
+
+```{python ex10, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex10-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars[["height", "mass", "birth_year"]]
+```
+
+```{r ex10-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+11. Write a line of code to extract the eleventh row of the data frame. 
+
+```{python ex11, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex11-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars[10:11]
+```
+
+```{r ex11-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Remember that when indexing with square brackets in Python, the first index is inclusive and the second is exclusive. So, to extract one row, you use something like `[row of interest:row of interest + 1]`, and it will only give the one row. However, you can also adjust the indices to select whole chunks of data at the same time. 
+
+12. Change your code to select the tenth through nineteenth rows of the data frame. 
+
+```{python ex12, exercise = TRUE, message = FALSE}
+starwars[10:11]
+```
+
+```{python ex12-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars[9:20]
+```
+
+```{r ex12-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Don't forget, we can also subset the data frame using row extraction in conjunction with a logical operator to select the observations that meet a certain criteria. 
+
+```{r q13, echo=FALSE}
+question("13. Which statement below tests to see if a character is a Droid?",
+         answer("`starwars['species'] = Droid`"),
+         answer("`starwars['species'] == Droid`"),
+         answer("`starwars['species'] = 'Droid'`"),
+         answer("`starwars['species'] == 'Droid'`", correct = TRUE),
+         allow_retry = TRUE #,
+         #post_message = "Congratulations! You have found the second secret word: URGE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         )
+```
+
+14. Now, using your answer as well as `.loc`, extract the rows of `starwars` where the character is a Droid.
+
+```{python ex14, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex14-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars.loc[starwars["species"] == "Droid"]
+```
+
+```{r ex14-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+15. Finally, write a line of code that will sort the data frame according to the character's mass. Write your code so that the largest masses appear first. 
+
+```{python ex15, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex15-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars.sort_values("mass", ascending = False)
+```
+
+```{r ex15-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q16, echo=FALSE}
+question("16. Which character has the largest mass?",
+         answer("Captain Phasma"),
+         answer("Jabba Desilijic Tiure", correct = TRUE),
+         answer("Yarael Poof"),
+         answer("Yoda"),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the third secret word: SLIPPERY. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         )
+```
+
+## `.groupby()`
+
+Now let's do some exploratory data analysis with `.groupby()` and our aggregation functions. Remember the functions we like to use:
+
+* `.count()`: The number of observations 
+* `.mean()`: The average of the observations
+* `.min()`: The smallest observation
+* `.max()`: The largest observation
+
+17. Write a line of code to find out how many of each species there are in the data frame. 
+
+```{python ex17, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex17-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars.groupby("species").count()
+```
+
+```{r ex17-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+18. Remember that this is a lot of repeated output, and we can fix it by re-indexing. Write a line of code to reset the index and shorten the output. 
+
+```{python ex18, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex18-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars.groupby('species').count().reset_index()
+```
+
+```{r ex18-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+19. Save your result as a new data frame, `starwars_species`, and write a new line of code to give the number of species with more than one character in the *Star Wars* universe. You may have to use more than one line of code. 
+
+```{python ex19, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex19-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars_species = starwars.groupby('species').count()["name"].reset_index()
+starwars_species.loc[starwars_species["name"] > 1].shape[0]
+```
+
+```{r ex19-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+20. Using the original `starwars` game, write a single line of code to calculate the means for all the numeric variables for each of the species. Normally we would not do this for very very small groups (e.g., one observation), but for now, it's okay. 
+
+```{python ex20, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex20-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars.groupby("species").mean(numeric_only = True)
+```
+
+```{r ex20-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+## `.pivot()`
+
+Let's transition to working with pivot tables. 
+
+21. Write a line of code to compare the eye and hair colors of the *Star Wars* characters. Eye color should be in the rows of your pivot table.
+
+```{python ex21, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex21-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pd.pivot_table(starwars, index = ["eye_color"], columns = ["hair_color"], 
+                        values = ["name"], aggfunc = "count")
+```
+
+```{r ex21-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q22, echo=FALSE}
+question("22. How many characters have black eyes and no hair?",
+         answer("1.0"),
+         answer("3.0"),
+         answer("9.0", correct = TRUE),
+         answer("`NaN`"),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the fourth secret word: BRONZE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         )
+```
+
+This is what is known as a "sparse" table--lots of categories with no values, and only a few with actual numbers. Let's take a look at a smaller table. 
+
+23. Write a line of code to compare heights grouped by sex and species. Feel free to use the default aggregation function. `species` should be in the rows of your table. 
+
+```{python ex23, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex23-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pd.pivot_table(starwars, index = ["species"], columns = ["sex"], 
+                        values = ["height"], aggfunc = "mean")
+```
+
+```{r ex23-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+## `.merge()`
+
+Finally, let's consider `.merge()`. I have two variables in the `pilots` data frame--a string containing all vehicles a character has driven, and a string containing all starships a character has driven. 
+
+```{r, echo = FALSE, eval = FALSE}
+vehicles_string <- rep(0, length(starwars$vehicles))
+
+for (i in 1:length(starwars$vehicles)){
+  vehicles_string[i] <- paste(unlist(starwars$vehicles[i]), collapse = ", ")
+}
+
+starships_string <- rep(0, length(starwars$starships))
+
+for (i in 1:length(starwars$starships)){
+  starships_string[i] <- paste(unlist(starwars$starships[i]), collapse = ", ")
+}
+
+pilots <- data.frame(cbind(starwars$name, vehicles_string, starships_string))
+colnames(pilots) <- c("name", "vehicles", "starships")
+
+write.csv(pilots, file = "/Users/amynussbaum/Documents/U of C/Courses/DATA119-Labs/dataframeslab/data/pilots.csv")
+```
+
+```{python ex_pilots, exercise = TRUE, message = FALSE}
+pilots = pd.read_csv("./data/pilots.csv", index_col = 0)
+```
+
+24. Confirm that `pilots` has at least one column in common with `starwars`. 
+
+```{python ex24, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex24-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pilots.columns
+```
+
+```{r ex24-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q25, echo=FALSE}
+question("25. Which column do `pilots` and `starwars` have in common?",
+         answer("`height`"),
+         answer("`name`", correct = TRUE),
+         answer("`vehicles`"),
+         answer("`starships`"),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the fifth and final secret word: NERVE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         )
+```
+
+26. Join `pilots` and `starwars` into one data frame called `starwars_big`. 
+
+```{python ex26, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex26-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars_big = pd.merge(starwars, pilots)
+```
+
+```{r ex26-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+There are quite a few cells in the data frame with missing values (`NaN`). Let's try to address that. 
+
+27. If a character has not driven any vehicles, they will have an empty string `""` in the `vehicles` column in the `pilots` data frame (same with `starships`). Write a line of code to take a subset of `pilots` where the characters are only included if they have driven at least one vehicle or at least one starship (Hint: It may be easier to use the `pandas` function `notna()`). Save the subset as `pilots_small`.
+ 
+```{python ex27, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex27-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pilots_small = pilots.loc[(pd.notna(pilots["vehicles"])) | (pd.notna(pilots["starships"]))]
+```
+
+```{r ex27-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+28. Now, join `pilots_small` to `starwars` in such a way that ONLY the characters who have driven a vehicle or starship remain in the dataset. Call this dataframe `starwars_pilots`.
+
+```{python ex28, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex28-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars_pilots = pd.merge(pilots_small, starwars, how = 'left')
+```
+
+```{r ex28-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now that we have learned how to join two data frames that have a column in common, let's take a look at how to add multiple data frames together when they all have the same columns. For example, I have seven smaller data frames containing all of the characters that appear in Episodes I-VII. 
+
+```{python eps, exercise = TRUE, message = FALSE}
+ep1 = pd.read_csv("./data/the_phantom_menace.csv", index_col = 0)
+ep2 = pd.read_csv("./data/attack_of_the_clones.csv", index_col = 0)
+ep3 = pd.read_csv("./data/revenge_of_the_sith.csv", index_col = 0)
+ep4 = pd.read_csv("./data/a_new_hope.csv", index_col = 0)
+ep5 = pd.read_csv("./data/the_empire_strikes_back.csv", index_col = 0)
+ep6 = pd.read_csv("./data/return_of_the_jedi.csv", index_col = 0)
+ep7 = pd.read_csv("./data/the_force_awakens.csv", index_col = 0)
+```
+
+Similarly to strings and lists, we can concatenate data frames together. The function to do so is `concat()`. `concat()` accepts a list of data frames to be concatenated. 
+
+29. Concatenate the `ep1` and `ep2` data frames.
+
+```{python ex29, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex29-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pd.concat([ep1, ep2])
+```
+
+```{r ex29-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+30. You can also provide a longer list to concatenate more data frames simultaneously. Concatenate all seven of the smaller `epx` data frames.
+
+```{python ex30, exercise = TRUE, message = FALSE}
+
+```
+
+```{python ex30-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pd.concat([ep1, ep2, ep3, ep4, ep5, ep6, ep7])
+```
+
+```{r ex30-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
