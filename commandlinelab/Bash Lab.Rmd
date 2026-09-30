@@ -565,11 +565,11 @@ cd data
 Once you think you have solved the mystery, replace `John Doe` below with the name of the suspect and run the code!
 
 ```{bash setup-directory2}
-cd data/mystery
+cd data
 ```
 
 ```{bash ex7, exercise = TRUE, exercise.setup = "setup-directory2"}
-cd data/mystery
+cd data
 echo "John Doe" | $(command -v md5 || command -v md5sum) | grep -qif /dev/stdin encoded && echo CORRECT\! GREAT WORK, GUMSHOE. || echo SORRY, TRY AGAIN.
 ```
 
