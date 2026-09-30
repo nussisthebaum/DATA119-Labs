@@ -573,7 +573,7 @@ cd data/mystery
 ```
 
 ```{bash ex7, exercise = TRUE, exercise.setup = "setup-directory2"}
-cd data/mystery
+cd data
 echo "John Doe" | $(command -v md5 || command -v md5sum) | grep -qif /dev/stdin encoded && echo CORRECT\! GREAT WORK, GUMSHOE. || echo SORRY, TRY AGAIN.
 ```
 
