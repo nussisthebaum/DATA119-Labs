@@ -121,7 +121,7 @@ len(Random_stuff)
 
 Each element of a sequence is assigned an index corresponding to its position where **indices start at 0**. We can access an element by calling the sequence or list and putting in square brackets the element we want!
 
-```{python listvals1, exercise=TRUE}
+```{python listvals1, exercise=TRUE, exercise.setup = 'setup_py'}
 School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
 School_locations[1]
 ```
