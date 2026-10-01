@@ -71,7 +71,7 @@ Below is an example of a *cell*. Type some basic Python code into a cell. Rememb
 
 ```
 
-Now, click on the light blue "Run Code" button in the top right corner of the cell. Hopefully, you should see some output in a separate box just below the cell. 
+Now, click on the light blue "Run Code" button at the top of the cell. Hopefully, you should see some output in a separate box just below the cell. 
 
 You can type anything into the cell, but usually, you should be typing code to answer to a question we are asking. For example, write some code to answer the question "What is two plus two" in the cell below:
 
@@ -87,9 +87,9 @@ You can type anything into the cell, but usually, you should be typing code to a
 grade_this_code()
 ```
 
-This time, you should see a light "Submit Answer" button in the top right corner of the cell. Click on it--what do you see? If you wrote something like `2+2`, you should see a green box saying that you got the right answer. 
+This time, you should see a light "Submit Answer" button at the top of the cell. Click on it--what do you see? If you wrote something like `2+2`, you should see a green box saying that you got the right answer. 
 
-Now, right some code that will tell you anything BUT the answer to the question "What is two plus two."
+Now, write some code that will tell you anything BUT the answer to the question "What is two plus two."
 
 ```{python ex3, exercise=TRUE, exercise.setup="setup_py"}
 
@@ -263,7 +263,7 @@ Our 4 lines of code are not colored differently just for fun--the colors are mea
 question(
   "What do you think the colors are meant to sgnify? Check all that apply:",
   answer("Longer inputs are green."),
-  answer("Numbers are dark blue.", correct = TRUE, "Correct! ints and floats appear as dark blue."),
+  answer("Numbers are dark blue.", correct = TRUE, "Correct! `ints` and `floats` appear as dark blue."),
   answer("All capitalized inputs are light blue."),
   answer("Strings are green.", correct = TRUE, " Strings appear as green."),
   answer("Gray is used for errors."),
@@ -365,7 +365,7 @@ Don't forget, there are also the comparison operators:
 |:---------:|:-----:|:------:|------:|
 | Less than | `<` | `2 < 3` |   `2<2`   |
 | Greater than | `>` | `3 > 2` |   `3>3`   |
-| Less than or equal | `<=` | `2 <=2 ` |   ` 3<=2 `   |
+| Less than or equal | `<=` | `2 <= 2 ` |   ` 3 <= 2 `   |
 | Greater than or equal | `>=` | `3 >= 3` |   `2 >= 3`   |
 | Exactly equal | `==` | `3  == 3` |   `3 == 2`   |
 | Not Equal | `!=` | `3 != 2` |   `3 != 3`   |
@@ -379,8 +379,8 @@ Use the cell below to experiment with the comparison operators. Using them with 
 ```{r q9, echo=FALSE}
 question(
   text = 'What does `"Hello" < "hello"` return?',
-  answer("True", correct = TRUE, message = 'In Python, strings are compared lexicographically (i.e., dictionary order). Since uppercase letters have lower ASCII values than lowercase letters, `"Hello"` is considered less than `"hello"`.'),
-  answer("False"),
+  answer("`True`", correct = TRUE, message = 'In Python, strings are compared lexicographically (i.e., dictionary order). Since uppercase letters have lower ASCII values than lowercase letters, `"Hello"` is considered less than `"hello"`.'),
+  answer("`False`"),
   allow_retry = TRUE
 )
 ```
@@ -532,15 +532,15 @@ grade_this_code()
 
 Variable names *can* be anything, but it's generally good to avoid the names of the built-in functions as well as the [Python keywords](https://www.w3schools.com/python/python_ref_keywords.asp), listed below:
 
-```{python, echo = TRUE, eval = FALSE}
-False      await      else       import     pass
-None       break      except     in         raise
-True       class      finally    is         return
-and        continue   for        lambda     try
-as         def        from       nonlocal   while
-assert     del        global     not        with
-async      elif       if         or         yield
-```
+| | | | | |
+|:---:|:---:|:---:|:---:|:---:|
+| `False` | `await` | `else` | `import` | `pass` |
+| `None` | `break` | `except` | `in` | `raise` |
+| `True` | `class` | `finally` | `is` | `return` |
+| `and` | `continue` | `for` | `lambda` | `try` |
+| `as` | `def` | `from` | `nonlocal` | `while` |
+| `assert` | `del` | `global` | `not` | `with` |
+| `async` | `elif` | `if` | `or` | `yield` |
 
 Note that the keywords ALSO appear as blue.
 
@@ -587,7 +587,7 @@ grade_this_code()
 
 It can be helpful to combine some of these comparisons using Python's [logical operators](https://www.w3schools.com/python/python_operators_logical.asp). Click on the link and read about these new operators. Then, use them to complete the questions below. You may also find it helpful to use parentheses.
 
-Is Leia taller than *either* of the droids, R2-D2 or C-3PO?
+Is Leia taller than *either* of the droids, R2-D2 or C-3PO? 
 
 ```{python ex18, exercise=TRUE, exercise.setup="setup_py"}
 
