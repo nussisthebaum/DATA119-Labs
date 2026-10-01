@@ -19,7 +19,7 @@ library(reticulate)
 #reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
-#reticulate::py_install(c('numpy', 'pandas', 'plotnine', 'seaborn', 'altair', 'matplotlib'))
+reticulate::py_install(c('numpy', 'pandas', 'plotnine', 'seaborn', 'altair', 'matplotlib'))
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
@@ -62,24 +62,25 @@ The goals of this lab are:
 
 ## Visualization Theory
 
-A clear graphic can convey the results of data science work quicker and more effectively than nearly any other approach. How to design and implement the optimal graphic for each scenario has been and is continuously studied today. Every element of visualizations from the color palette to the type of graph you choose and everything in between has an important impact on the ability of a graph to convey the point you want to make.
+A clear graphic can convey the results of data science work more quickly and effectively than nearly any other approach. The way to design and implement the optimal graphic is the subject of continued research. Every element of a visualization, from the color palette to the graph type has an impact on its ability to communicate the intended information.
 
 ### Overview
 
-In this lab you'll be introduced to two of the main frameworks for visualization used in Python. First, to the object oriented approach used by `Matplotlib` and later the Grammar of Graphics approach used by libraries like `plotnine` and `altair`. We'll also briefly look at `seaborn` which is a hybrid of the two frameworks (note it also allows for a full grammar of graphics approach we won't discuss in this lab).
+In this lab you'll be introduced to two of the main frameworks for visualization used in Python. First, to the object-oriented approach used by `Matplotlib` and later the Grammar of Graphics approach used by libraries like `plotnine` and `altair`. We'll also briefly look at `seaborn` which is a hybrid of the two frameworks.
 
 ### Matplotlib Paradigm
-Matplotlib takes an object oriented approach that is akin to a painter. First you choose the size of your (virtual) canvas, then you choose what specific points, lines, and polygons to draw on the canvas, and finally you add finishing touches like titles, labels, legends, and styling. To simplify things for common graphs there are methods so you can simply ask for a bar chart to be made with the data you provide and all the bars will be drawn rather than you having to draw each one one by one. An advantage of Matplotlib is it gives you fine grained control if you did ever want to draw bars one by one though the downside of this is all data has to be preprocessed before being used for graphing.
-
-Matplotlib is one of the most commonly used packages for creating visualizations with python in academia and will be the package we focus on in this lab.
+Matplotlib takes an object-oriented approach that is akin to creating a painting. First you choose the size of your (virtual) canvas, then which specific points, lines, and polygons to draw on the canvas, and finally add finishing touches like titles, labels, legends, and styling. 
+Common graph types like bar charts, line plots, and scatter plots have dedicated methods which take the data you provide as input, and produce the completed visualization. Though it may seem tedious, one advantage of Matplotlib is that it gives you fine-grained control for every element of your visualization. 
+Since Matplotlib is one of the most commonly used packages for creating visualizations with Python, it will be the focus of this lab.
 
 ### Grammar of Graphics Paradigm
-By contrast, the Grammar of Graphics approach is more like ordering a painting from an artist. You tell it the data set to use, what type of graph you'd like, any particular coloring and scaling, and then the implementation of the grammar of graphics you're using such as `plotnine` or `altair` will take care of the rest. An advantage of the grammar of graphics is the clarity that is enforced by it's clear structure; however, you lose some of the fine grained control available in object oriented approaches like `Matplotlib`. This approach is based on the visualization theory developed by Leland Wilkerson and implemented popularly in R with ggplot2 by Hadley Wickham.
+By contrast, the Grammar of Graphics approach is more like commissioning a painting from an artist. You simply tell it the data set to use, what type of graph you'd like, any particular coloring and scaling, and then the implementation (such as `plotnine` or `altair`) will take care of the rest. An advantage of Grammar of Graphics is the clarity that is enforced by its clear structure; however, you lose some of the fine-grained control available in object-oriented approaches like `Matplotlib`. 
+This approach is based on the visualization theory developed by Leland Wilkerson, and implemented popularly in R with ggplot2 by Hadley Wickham.
 
 ## Setup
 
-This lab will use both `pandas` and `python`. For graphing we'll primarily use `matplotlib`. We'll also see some `seaborn`, `altair`, and `plotnine`
-To explore these libraries we'll be using a cleaned version of the dataset obtained from the [Chicago Open Data Portal](https://data.cityofchicago.org/Parks-Recreation/Beach-Weather-Stations-Automated-Sensors/k7hf-8y75/about_data), which contains data generated by three beach weather stations in Chicago. Our version of the data only contains records from 2024. Run this cell to load the packages and DataFrame.
+This lab will use `Python` and the package `pandas`. For graphing we'll primarily use `matplotlib`. We'll also see some `seaborn`, `altair`, and `plotnine`.
+To explore these libraries, we'll be using a cleaned version of the dataset obtained from the [Chicago Open Data Portal](https://data.cityofchicago.org/Parks-Recreation/Beach-Weather-Stations-Automated-Sensors/k7hf-8y75/about_data), which contains data generated by three beach weather stations in Chicago. Our version of the data only contains records from 2024. Run this cell to load the packages and DataFrame.
 
 ```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 # data manipulation
@@ -122,10 +123,10 @@ daily_temp_foster = beach_day_max_foster['Air Temperature]
 
 ## Graphing with Matplotlib
 
-Below you will be walked through the key components of Matplotlib. As you explore it may be useful to check out [Matplotlib's quick start guide](https://matplotlib.org/stable/users/explain/quick_start.html) or other parts of it's documentation for more details.
+Below you will be walked through the key components of Matplotlib. As you explore, it may be useful to check out [Matplotlib's quick start guide](https://matplotlib.org/stable/users/explain/quick_start.html) or other parts of its documentation for more details.
 
 ### Choosing your canvas: Figures and Axes
-In Matplotlib the **figure** is the core element which sets the overall size of our canvas and also keeps track of everything being added to the canvas. Our **axes** are how we specify where on our figure we want our visualization to happen.   
+In Matplotlib the **figure** is the core element which sets the overall size of our canvas, and keeps track of everything being added to the canvas. Our **axes** are how we specify where on our figure we want our visualization to happen.   
 
 Below you'll see a quick example of setting up the figure and axes before making a scatterplot. Feel free to experiment with the figure and axes by changing the `width`, `height`, `left_start`, `bottom_start`, `width_start`, and `height_start` variables.
 
@@ -139,28 +140,32 @@ ax = fig.add_axes((left_start, bottom_start, width_start, height_start), frame_o
 ax.scatter([1,2,3], [1,2,3])
 plt.show()
 ```
-Often we'll just let Matplotlib use the default figure with an axes spanning the entire figure size. Here's an example of that below using `subplots`
+Often we'll just let Matplotlib use the default figure with an axes spanning the entire figure size. Here's an example of that below using `subplots`.
 ```{python subplots, exercise = TRUE, message = FALSE,exercise.eval=FALSE, exercise.setup="packages"}
 fig, ax = plt.subplots()
 ax.scatter([1,2,3], [1,2,3])
 plt.show()
 ```
-Alternatively we can just create a plot without explicitly setting a figure or axes though Matplotlib will be making them in the background automatically!
+Alternatively we can just create a plot without explicitly setting a figure or axes, though Matplotlib will be making them in the background automatically!
 ```{python no-figure, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
 plt.scatter([1,2,3], [1,2,3]) 
 # note how we have to do plt not ax.scatter
 # this is because the axes hasn't been created when we call .scatter
 plt.show()
 ```
-Throughout the rest of this notebook we'll let Matplotlib handle making the figures and axes by default but knowing they exist and how to manipulate them can be useful as you explore more complicated graphing techniques. Checkout this [part of the documentation](https://matplotlib.org/stable/users/explain/axes/index.html) if you want to learn more about figures and axes!
-
+Throughout the rest of this notebook we'll let Matplotlib handle making the figures and axes by default, but knowing they exist and how to manipulate them can be useful as you explore more complicated graphing techniques. 
+Check out this [part of the documentation](https://matplotlib.org/stable/users/explain/axes/index.html) if you want to learn more about figures and axes!
 
 ### Common Graphs
 
-As Data Scientists it is important we choose the right graph for the right data. As you practice making the different graphs below make sure to keep track of which graphs are best with which types of data.
+As data scientists, it is important we choose the appropriate graph types for our data. 
+As you practice making the different graphs below, think critically about which types of data each graph is best suited for. 
 
 #### Bar Chart
-A Bar Chart is useful for displaying summaries or distributions of categorical information. It often has the individual categories on the x-axis with the height on the y-axis of each bar indicating the summary information for each category. In Matplotlib the simplest way to make a bar chart is by using `plt.bar` and providing a collection of labels as the first argument (`x`) and a collection of summary information as the second argument (`height`). Here is an example to see how it works looking at a made up grade distribution.
+A bar chart is useful for displaying summaries or distributions of categorical information. 
+Category names are often written on the x-axis, with the height of each bar indicating the desired summary information for each category on the y-axis. 
+In Matplotlib, the simplest way to make a bar chart is by using `plt.bar`. We provide a collection of labels as the first argument (`x`) and a collection of summary information as the second argument (`height`). 
+Below is an example using a synthetic grade distribution.
 
 ```{python basic-bar, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
 grade_categories = ["A", "B", "C", "D","F"]
@@ -168,7 +173,8 @@ students_per_category = [14, 10, 5, 2, 1]
 plt.bar(x=grade_categories, height=students_per_category)
 ```
 
-1. We have stored the names of the Beach Weather stations in `stations` and their average wind reading for 2024 in `wind_avg`. Make a bar chart displaying the average wind recorded at each weather station in 2024.
+1. Assume we have stored the names of the Beach Weather stations in `stations` and their average wind reading for 2024 in `wind_avg`. 
+Write one line of code to make a bar chart displaying the average wind recorded at each weather station in 2024.
 ```{python beach-avg-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
 beach_year_avg = beach.drop(columns=['Month', 'Hour', 'Day of Year']).groupby("Station Name").mean().reset_index()
 stations = beach_year_avg['Station Name']
@@ -187,10 +193,12 @@ grade_this_code(
 )
 ```
 
-Bar Charts can help us quickly compare between different categories. Checkout the [Matplotlib Bar Chart Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html) to see more ways to customize your bar charts.
+Bar charts can help us quickly compare between different categories. Checkout the [Matplotlib Bar Chart Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html) to see more ways to customize your bar charts.
 
 #### Histogram
-Histograms are useful when we want to look at the distribution of 1-dimensional numerical data. By breaking numbers into bins then plotting the count or percentage of data in each bin they make it easy to see an entire distribution at a glance. In Matplotlib the simplest way to make a histogram is with `plt.hist(x, bins, density)` where x is the data to be plotted, bins is the number of bins or a list with the start and stop points for all the bins, and density is False for counts and True to see densities. Play around with the bins and density arguments below to see how they effect the histogram. 
+Histograms are useful when we want to look at the distribution of 1-dimensional numerical data. By separating the data into bins, then plotting the count or percentage of data in each bin, we can visualize an entire distribution at a glance. 
+In Matplotlib, the simplest way to make a histogram is with `plt.hist(x, bins, density)` where `x` is the data to be plotted, `bins` is the number of bins, and `density` changes the value shown on the y-axis. 
+Play around with the bins and density arguments below to see how they effect the histogram. 
 
 ```{python basic-hist, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
 np.random.seed(42) # for consistent samples
@@ -199,16 +207,16 @@ plt.hist(x=numbers, bins=10, density=False) # making the graph
 ```
 
 ```{r bins-impact, echo=FALSE}
-question("2. As you increase the number of bins what is the impact on the histogram? CHECK ALL THAT APPLY",
+question("2. As you increase the number of bins, what is the impact on the histogram? CHECK ALL THAT APPLY",
          answer("Nothing happens"),
          answer("The bins are wider"),
          answer("The bins are narrower", correct=TRUE),
-         answer("There is less blank space"),
-         answer("There is more blank space", correct=TRUE), 
+         answer("There is less white space"),
+         answer("There is more white space", correct=TRUE), 
         allow_retry = TRUE,
   random_answer_order = TRUE)
 ```
-3. Make your own count histogram with 10 bins using the hourly maximum wind readings which have been stored for you in the variable `max_wind`.
+3. Make your own count histogram with 10 bins using the hourly maximum wind readings which have been stored for you in the variable `max_wind`. You can skip the density argument.
 ```{python beach-hist-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="packages"}
 max_wind = beach[beach['Maximum Wind Speed'] < 100]['Maximum Wind Speed'] # dealing with weird outliers
 hourly_wind = beach[beach['Maximum Wind Speed'] < 100]['Wind Speed']
@@ -230,7 +238,9 @@ grade_this_code(
 As you've seen histograms are a powerful tool to quickly summarize 1-D numerical data. Checkout the [Matplotlib histogram documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html) to see more ways to fine tune your histograms.
 
 #### Scatterplot
-So far we have looked at single dimensional data. However, sometimes we may want to look at the relationship between two dimensions (variables) of our data. A Scatterplot is useful for quickly seeing that relationship. A Scatterplot is made up of points where each point (x,y) is the x value and y value for a particular record in our dataset. In Matplotlib the simplest way to make a scatterplot is by using `plt.scatter(x,y)` and providing a collection of data as the first argument (`x`) and a collection of different data for the same records in the same order as the second argument (`y`). Here is an example to see how it works looking at two randomly generated samples.
+So far, we have looked at single dimensional data. However, it is often useful to look at the relationship between two dimensions (or variables) of our data. A scatterplot can help us quickly visualize that relationship, by plotting each `(x,y)` pair of values on a 2-D plane. 
+In Matplotlib, the simplest way to make a scatterplot is by using `plt.scatter(x,y)` and providing a collection of data as the first argument (`x`) and a collection of different data for the same records in the same order as the second argument (`y`). 
+Below is an example to see how it works, looking at two randomly generated samples of data.
 
 ```{python basic-scatter, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
 np.random.seed(42) # for consistency
@@ -256,10 +266,15 @@ grade_this_code(
 )
 ```
 
-Scatterplots can help us quickly identify relationships (or the lack thereof) between different variables in a dataset. They are also a useful tool for exploratory data analysis as we can see above with the plot revealing a point which was erroneously collected. Checkout the [Matplotlib Scatterplot Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html) to see more ways to customize your scatterplots (i.e. coloring, resizing, or changing the shape of your points).
+As expected, these two variables have a positive correlation. 
+Beyond seeing relationships between variables, scatterplots can be used for exploratory data analysis. There is an outlier in our plot above, which reveals a point which was erroneously collected. Checkout the [Matplotlib Scatterplot Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html) to see more ways to customize your scatterplots (i.e., coloring, resizing, or changing the shape of your points).
 
-#### Line Chart
-Line charts are also used when we want to look at the relationship between two dimensions (variables) of our data. However, unlike a Scatterplot lineplots always have the x-axis convey some measure of sequential data and therefore a line plot is useful for quickly seeing relationships over time. A Scatterplot is made up of points connected by lines to their closest neighboring point where each point (x,y) is the (temporal) x value and y value for a particular record in our dataset. In Matplotlib the simplest way to make a line plot is by using `plt.plot(x,y)` and providing a collection of data as the first argument and a collection of different data for the same records in the same order as the second argument. Note you can also plot single points this way by making x and y both single numbers. Here is an example to see how it works looking at a graph of the sine function.
+#### Line Plot
+Line plots are also used when we want to look at the relationship between two variables in our data. However, unlike scatterplots, line plots typically use the x-axis to convey some measure of sequential data, and therefore are often used to display relationships over time. 
+A line plot is made up of points connected to their closest neighbor (sequentially) by a line segment. 
+In Matplotlib, the simplest way to make a line plot is by using `plt.plot(x,y)` and providing a collection of data as the first argument and a collection of different data for the same records in the same order as the second argument. 
+Note that you can also plot single points this way by making x and y both single numbers. 
+Here is an example graphing the sine function.
 
 ```{python basic-line, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
 x = np.arange(-4, 4, 0.2)
@@ -291,23 +306,21 @@ grade_this_code(
 )
 ```
 
-Line Plots can help us quickly identify temporal relationships (or the lack thereof) between different variables in a dataset. Checkout the [Matplotlib Line Plot Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html) to see more ways to customize your line plots (i.e. coloring, resizing, or changing the style of your lines).
+Line plots can help us quickly identify temporal relationships (or the lack thereof) between different variables in a dataset. Checkout the [Matplotlib Line Plot Documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html) to see more ways to customize your line plots (i.e. coloring, resizing, or changing the style of your lines).
 
 
 ### Finishing Touches: Labels, Legends, and Tick marks
-So far we have focused on simply making the graphs; however, no visualization is complete without an informative title and labels. At times it can also be useful to customize your tick marks, add a legend or other changes around the graph itself to ensure the graphs conveys the right message.
+So far we have focused on simply making the graphs; however, no visualization is complete without an informative title and labels. 
+At times it can also be useful to customize your tick marks, add a legend, or make other changes around the graph itself to ensure a clear and informative visualization.
 
-There are too many different ways to customize graphs in Matplotlib to show here but below you'll practice how to add axis labels, a title, and a legend as well as how to modify tick marks. To see more customization options check out [this section of the quickstart guide](https://matplotlib.org/stable/users/explain/quick_start.html#styling-artists)
+Below you'll practice how to add axis labels, a title, and a legend as well as how to modify tick marks. To see more customization options check out [this section of the quickstart guide](https://matplotlib.org/stable/users/explain/quick_start.html#styling-artists).
 
-After we've made a figure or one has been generated automatically through making a graph we can add an x-axis label with `plt.xlabel('text')`, a y-axis label with `plt.ylabel('text')`. To add a title we can do `plt.title('text')`.
+After we've made a figure manually, or one has been generated automatically for us through built-in functions,we can add an x-axis label with `plt.xlabel('text')`, a y-axis label with `plt.ylabel('text')`, and a title we can do `plt.title('text')`.
 
-6. Add the title `Average Wind by Beach in 2024`, and the y-axis label as `Avg Wind` and the x-axis label as `Beach Name` to the bar chart we made earlier.
+6. Add the title `Average Wind by Beach in 2024`, the y-axis label `Avg Wind`, and the x-axis label `Beach Name` to the bar chart we made earlier. Copy and paste the prior code here, and add to it.
 
 ```{python beach-avg-wind-bar-labeled, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="main-setup"}
-...
-...
-...
-...
+
 ```
 
 ```{python beach-avg-wind-bar-labeled-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -323,9 +336,10 @@ grade_this_code(
 )
 ```
 
-Sometimes when we have more encodings on a single plot it can be useful to include a legend to explain what is what. To do so we often have to add a label argument to each individual plot.
+Sometimes when we are plotting multiple data series, it can be useful to include a legend. 
+To do so, we often have to add a label argument to each individual plot.
 
-7. Edit the code below so that the first line plot receives the label of 'Oak Street Beach' and the second of 'Foster Beach' in a new legend located in the lower center of the graph. If you're stuck check out the [Legend documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html).
+7. Edit the code below so that the first line plot is given the label 'Oak Street Beach' and the second 'Foster Beach' in a new legend located in the lower center of the graph. If you're stuck check out the [legend documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.legend.html).
 
 ```{python beach-line-overlaid-setup, include=FALSE, exercise = FALSE, message = FALSE, exercise.setup="beach-temp-line-setup"}
 beach_day_max_foster = beach[beach['Station Name'] == 'Foster'][['Day of Year', 'Air Temperature']].groupby('Day of Year').max().reset_index().sort_values('Day of Year')
@@ -355,11 +369,14 @@ grade_this_code(
 
 ## Building on Matplotlib: Pandas and Seaborn
 
-Because making visualizations is such a key part of the data science workflow `pandas` has methods for data frames that call the `matplotlib` package behind the scene simplifying the graphing process. Since the `pandas` graphing methods are built on top of `matplotlib` all the customization you just saw earlier still works. 
+Because making visualizations is such a key part of the data science workflow, `pandas` has methods for data frames that call the `matplotlib` package behind the scenes, simplifying the graphing process. 
 
-All of the graphs we've discussed can be made from a data frame using `df.plot.graph_name(**args)`. If you're not sure how to implement a particular graph check out the **Plotting** section of the [pandas cheatsheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf) or the [pandas plotting documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html). Below you'll recreate some of the graphs from earlier to see how we can harness the power of combining pandas and matplotlib.
+All of the graphs we've discussed can be made from a dataframe using `df.plot.graph_name(**args)`. 
+If you're not sure how to implement a particular graph check out the **Plotting** section of the [pandas cheatsheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf) or the [pandas plotting documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html). 
+Below you'll recreate some of the earlier graphs to harness the power of combining pandas and matplotlib.
 
-Before you start on the remaining exercises here is an example to see how `pandas` implements a basic bar chart differently than `matplotlib`. Note the need to create a series or DataFrame first.
+Before you start on the remaining exercises, here is an example to see how `pandas` implements a basic bar chart differently than `matplotlib`. 
+Note the need to create a series or DataFrame first.
 
 ```{python pandas-basic-bar, exercise = TRUE, message = FALSE, exercise.eval=FALSE, exercise.setup="packages"}
 grade_categories = ["A", "B", "C", "D","F"]
@@ -368,19 +385,20 @@ grades = pd.DataFrame({"Grades" : grade_categories, "# Students" : students_per_
 grades.plot.bar("Grades", '# Students')
 ```
 
-As you can see for data that is already stored in a list it may be easier to just use `matplotlib` directly. However, using pandas also automatically added a x-axis label, a legend label, and allowed us to just reference columns from a dataframe directly making for a much smoother process when our data is already in a dataframe. 
+For data that is already stored in a list, it may be easier to just use `matplotlib` directly. However, using pandas also automatically added a x-axis label, a legend label, and allowed us to just reference columns from a dataframe directly, making for a much smoother process when our data is already in a dataframe. 
 
-8. Recreate the bar chart displaying the average wind recorded at each weather station in 2024 using the dataframe created for you below. Make sure it has the same labels as question 6. As a challenge do it all in one line with the xaxis tick marks rotated to 0 degrees for clearer visibility.
+8. Recreate the bar chart displaying the average wind recorded at each weather station in 2024 using the dataframe created for you below. 
+Make sure it has the same labels as Question 6. If you would like a challenge, do it all in one line with the x-axis labels rotated to 0 degrees for better visibility.
 
 
 ```{python beach-avg-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 beach_year_avg = beach.drop(columns=['Month', 'Hour', 'Day of Year']).groupby("Station Name").mean().reset_index()
 ```
 ```{python beach-avg-wind-bar-pandas, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="beach-avg-pandas-setup"}
-...
-...
-...
-...
+
+
+
+
 ```
 ```{python beach-avg-wind-bar-pandas-solution, message = FALSE,warning = FALSE, echo = FALSE}
 beach_year_avg.plot.bar("Station Name", "Wind Speed", xlabel="Beach Name", ylabel="Avg Wind", title="Average Wind by Beach in 2024", rot=0)
@@ -400,11 +418,12 @@ grade_this_code(
 )
 ```
 
-Notice how while we still needed to manipulate the dataframe prior to graphing. Once our dataframe was ready we didn't need to extract the data as series like previously and could plot directly.
+Notice that though we needed to manipulate the dataframe prior to graphing, once we did so, we could plot directly without extracting the data as series.
 
-Let's keep practicing this time with histograms. 
+Let's keep practicing, this time with histograms. 
 
-9. Reproduce the histogram from question 3 with the updated title and labels. This time change the color to `"green"`. Use the dataframe prepared for you below.
+9. Reproduce the histogram from Question 3 with the updated title and labels. This time change the color  of the bars to `"green"`. 
+Use the dataframe prepared for you below.
 
 ```{python beach-max-wind-hist-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 no_outlier_wind = beach[beach['Maximum Wind Speed'] < 100][['Maximum Wind Speed']] # dealing with weird outliers
@@ -428,9 +447,11 @@ grade_this_code(
 )
 ```
 
-Notice how we didn't even have to pass any data to `.hist`! As long as you want to plot every column in the dataframe calling `df.hist` will be enough because by default the plotting methods within pandas attempt to plot every variable in the dataframe where possible. Let's put this to our advantage to make a overlaid histogram.
+Notice how we didn't even have to pass any data to `.hist`! As long as you want to plot every column in the dataframe, calling `df.hist` is sufficient.
+Let's use this to our advantage to make a overlaid histogram.
 
-10. Make an overlaid histogram of both the maximum and hourly wind distributions. Let `Matplotlib` generate the colors automatically and use 10 bins. Use the updated `no_outlier_wind` data frame created below.
+10. Make an overlaid histogram of both the maximum and hourly wind distributions. Let Matplotlib generate the colors automatically and use 10 bins. 
+Use the updated `no_outlier_wind` data frame created below.
 
 
 ```{python beach-overlaid-wind-hist-pandas-setup, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
@@ -455,7 +476,7 @@ grade_this_code(
 )
 ```
 
-While it's easy to overlay histograms and bar charts in `pandas` it can be more challenging to do so with line plots. That's where packages like `seaborn` which further build on `matplotlib` and `pandas` can be helpful. Check out the [seaborn documentation](https://seaborn.pydata.org/generated/seaborn.lineplot.html) then try the following question.
+While it's easy to overlay histograms and bar charts in `pandas`, it can be more challenging to do so with line plots. That's where packages like `seaborn` which further build on `matplotlib` and `pandas` can be helpful. Check out the [seaborn documentation](https://seaborn.pydata.org/generated/seaborn.lineplot.html), then try the following question.
 
 11. Recreate the overlaid line plot from question 7 using seaborn. Let the legend go where ever seaborn thinks is best.
 
@@ -475,9 +496,9 @@ grade_this_code(
 )
 ```
 
-For one last challenge with seaborn we'll take a look at scatterplots. Checkout the [relevant documentation](https://seaborn.pydata.org/generated/scatterplot.html) if you want a hint.
+For one last challenge with seaborn, we'll take a look at scatterplots. Checkout the [relevant documentation](https://seaborn.pydata.org/generated/scatterplot.html) if you want a hint.
 
-12. Create a scatterplot to visualize the relationship between wind speed and air temperature with different shape points by beach.
+12. Create a scatterplot to visualize the relationship between wind speed and air temperature, using differently shaped points for each beach.
 
 ```{python beach-scatter-overlaid-seaborn, include=TRUE, exercise = TRUE, message = FALSE, exercise.setup="packages"}
 sns._____(data=beach, ______)
@@ -495,18 +516,19 @@ grade_this_code(
 )
 ```
 
-As we can see from this there is a clear error with the readings being done at Foster beach last year. Doing these sort of quick summative graphs early in the data exploration process can make it simpler to identify issues with data quality before conducting more analysis.
+As we can see from this plot, there is a clear error with the readings at Foster Beach last year. 
+Plotting these sorts of graphs early in the data exploration process can make it simpler to identify data quality issues before conducting more analysis.
 
 
 ## Grammar of Graphics Approach
 
-So far we have used `Matplotlib`, `Pandas`, and `Seaborn` to create graphs with varying degrees of control over the image being created. You should hopefully be familiar with the different methods used to create **bar charts**, **line charts**, **scatter plots**, and **histograms** as well as basic customization. Now we are going to shift towards utilizing the grammar of graphics and packages like `altair` and `plotnine` to create graphs. 
+So far we have used `Matplotlib`, `Pandas`, and `Seaborn`, which have afforded us varying degrees of control over the image being created. 
+Now we are going to shift towards utilizing the grammar of graphics and packages like `altair` and `plotnine` to create graphs. 
 
-Below we'll reproduce some of the graphs so you can get some exposure to how to so using the grammar of graphics. Before we do that though let's discuss what makes the **grammar of graphics** approach different.
+Below we'll reproduce some of our graphs using the grammar of graphics. The key idea behind this approach is that every plot can be broken down into the **dataset**, the **mapping** between features of the dataset and visuals, and the **geometry** used to encode the observations. 
+The grammar of graphics also has some nuance surrounding the coordinates and scales of the plot that we don't have time to address here. If you're interested, check out Leland Wilkinson's book *The Grammar of Graphics*.
 
-The key idea behind the grammar of graphics is that every single plot can be broken down into the **dataset**, the **mapping** between features of the dataset and visuals on the graph, and the **geometry** used to encode the observations in your graph. The grammar of graphics also has some nuance surrounding the coordinates and scales of the plot that we unfortunately can't address here. If you're interested check out Leland Wilkinson's book the *Grammar of Graphics*.
-
-For the remainder of this section scroll through and run the code. As you run the code compare it to the earlier approaches and focus on how we're able to do the same tasks with a different library.
+For the remainder of this section, simply run the code. As you do so, compare it to the earlier approaches and focus on how we're able to do the same tasks with a different library.
 
 ### Building Up a Bar Chart
 
@@ -517,11 +539,13 @@ p9.ggplot(beach, p9.aes(x = 'Station Name', y='Wind Speed')).show()
 Once we've done that we can use the `stat_summary` method to do all the computation we want for the bar chart. This makes the process much smoother than doing the computations separately. Note we assign `geom`="bar" for bar charts.
 
 ```{python beach-bar-p9, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="packages"}
-(p9.ggplot(beach, p9.aes(x = 'Station Name', y='Wind Speed')) +
-stat_summary(fun=np.mean, geom='bar', fill='skyblue', color='black') +
-labs(title="Average Wind by Beach")
+plot = p9.ggplot(beach, p9.aes(x='Station Name', y='Wind Speed')) + \
+    p9.stat_summary(fun_y=np.mean, geom='bar', fill='skyblue', color='black') + \
+    p9.labs(title="Average Wind by Beach")
+
+plot
 ```
-Finally, as you can see above we used `labs` to add a title and the `fill` and `color` arguments to adjust the appearance of the graph. Feel free to experiment with those arguments to get the graph looking how you prefer. 
+In the above plot we used `labs` to add a title, and the `fill` and `color` arguments to adjust the appearance of the graph. 
+Feel free to experiment with those arguments to get the graph looking how you prefer. 
 
-If you're really into colors check out this [list of color options](https://matplotlib.org/stable/gallery/color/named_colors.html) from Matplotlib and see if you can go back and change colors in matplotlib and seaborn as well! 
-
+If you're really into colors check out this [list of color options](https://matplotlib.org/stable/gallery/color/named_colors.html) from Matplotlib!
