@@ -357,7 +357,7 @@ grade_this({
 ```
 
 
-Remove the $2^{nd}$ and $3^{rd}$ elements. You may want to check the documentation for list functions and methods! Because of how we are parsing your solutions, please leave the `my list` line as is!
+Remove the $2^{nd}$ and $3^{rd}$ elements. You may want to check the documentation for list functions and methods! Because of how we are parsing your solutions, please leave the `my_list` line as is!
 
 ```{python ex2, exercise=TRUE, exercise.setup = 'ex1'}
 
@@ -903,6 +903,124 @@ grade_this({
 })
 ```
 
+## Dictionaries
+
+A **dictionary** is a set of "key: value" pairs where each key is unique. We can create a dictionary with curly brackets "`{}`". Entries of a dictionary are of the form "key: value".
+
+```{python likert, exercise=TRUE}
+survey_dict = {0: "Strongly Disagree", 1: "Disagree", 2: "No opinion", 3: "Agree", 4: "Strongly Agree"}
+```
+
+We can extract values of a dictionary by their key--this is why all keys must be unique!
+
+```{python keys, exercise=TRUE, exercise.setup = "likert"}
+survey_dict[1]
+```
+
+Dictionaries are useful for storing and extracting data! Think of them like an address book where you look up someone's address by finding their name.
+
+A few useful operations with dictionaries:
+
+ - Add an entry
+
+ - Delete an entry
+
+We can delete pairs:
+
+```{python delkeys, exercise=TRUE, exercise.setup = "likert"}
+del survey_dict[1]
+survey_dict
+```
+
+Or add new pairs:
+
+```{python addkeys, exercise=TRUE, exercise.setup = "delkeys"}
+survey_dict['new_key'] = 'new value'
+survey_dict
+```
+
+We can also determine if keys are contained in the dictionary
+
+```{python findkeys1, exercise=TRUE, exercise.setup = "addkeys"}
+3 in survey_dict
+```
+
+```{python findkeys2, exercise=TRUE, exercise.setup = "addkeys"}
+"Disagree" in survey_dict
+```
+
+```{python findkeys3, exercise=TRUE, exercise.setup = "addkeys"}
+'new_key' in survey_dict
+```
+
+Keep in mind, keys do not all need to be the same type...although it may make more sense to keep them that way.
+
+```{python likert2, exercise=TRUE, exercise.setup = "setup_py"}
+survey_dict_2 = {"Strongly Disagree": 0 , "Disagree": 1 , 2: "No opinion", 3: "Agree", 4: "Strongly Agree"}
+```
+
+```{python likert3, exercise=TRUE, exercise.setup = "likert2"}
+survey_dict_2["Disagree"]
+```
+
+```{python likert4, exercise=TRUE, exercise.setup = "likert2"}
+list(survey_dict_2)
+```
+
+### Dictionary Methods
+
+There are methods that you can use on dictionaries, just like with lists and arrays. Here are a few:
+
+```{python methods, exercise=TRUE, exercise.setup = "likert2"}
+print(dir(survey_dict_2))
+```
+
+```{python methods2, exercise=TRUE, exercise.setup = "likert2"}
+survey_dict_2.keys()
+```
+
+```{python methods3, exercise=TRUE, exercise.setup = "likert2"}
+survey_dict_2.items()
+```
+
+### Working with Dictionaries
+
+Below is a dictionary containing total number of homicides in the United States in 2021, by state. (Published by Statistal Research Department, Oct 14, 2022). Note Washington D.C. is included as 'District of Columbia'.
+
+```{python homdict, exercise=TRUE}
+homicide_dict = {'Texas': 2064, 'North Carolina': 928, 'Ohio': 824, 'Michigan': 747, 'Georgia': 728, 'Tennessee': 672, 'Missouri': 593, 'Virginia': 562, 'South Carolina': 548, 'Illinois': 514, 'Pennsylvania': 510, 'Louisiana': 447, 'Indiana': 438, 'Alabama': 370, 'Kentucky': 365, 'Colorado': 358, 'Washington': 325, 'Arkansas': 321, 'Wisconsin': 315, 'Oklahoma': 284, 'Nevada': 232, 'Minnesota': 203, 'Arizona': 190, 'Oregon': 188, 'New Mexico': 169, 'Mississippi': 149, 'Connecticut': 148, 'Maryland': 138, 'New Jersey': 137, 'Massachusetts': 132, 'New York': 124, 'California': 123, 'District of Columbia': 109, 'West Virginia': 95, 'Delaware': 94, 'Kansas': 87, 'Utah': 85, 'Iowa': 70, 'Rhode Island': 38, 'Idaho': 36, 'Montana': 31, 'South Dakota': 26, 'Nebraska': 25, 'Alaska': 18, 'Maine': 18, 'Wyoming': 17, 'New Hampshire': 14, 'North Dakota': 14, 'Vermont': 8, 'Hawaii': 6}
+```
+
+Pick a few states of interest and find their homicide number (use code here...do not just manually search the dictionary!)
+
+```{python homdict2, exercise=TRUE, exercise.setup = "homdict"}
+
+```
+
+20.   Find the number of keys in the dictionary.
+
+```{python dict, exercise=TRUE, exercise.setup='homdict'}
+
+```
+
+```{python dict-solution, message = FALSE, warning = FALSE, echo = FALSE}
+len(homicide_dict.keys())
+```
+
+```{r dict-check, message = FALSE, warning = FALSE, echo = FALSE}
+grade_this_code()
+```
+
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+1. Does this imply all 50 states are included here?
+2. What are some limitations to this data?
+::::
+
+
 ## Arrays
 
 Arrays (from the `NumPy` library) are another way to collect data. Like a list, they contain a sequence of values. But, unlike a list, all elements of an array must have the same data type. This is because `NumPy` arrays were built for efficient computation. They can perform operations on all elements in one step. They can also do element-wise computation. This means that, for example, if you add two arrays together, the result will be an array where the element at each index is the sum of the elements at the index in the two original arrays. For this reason, when two arrays are added (or subtracted, multiplied, or divided) they must have the same size.
@@ -1296,123 +1414,6 @@ grade_this({
   }
 })
 ```
-
-## Dictionaries
-
-A **dictionary** is a set of "key: value" pairs where each key is unique. We can create a dictionary with curly brackets "`{}`". Entries of a dictionary are of the form "key: value".
-
-```{python likert, exercise=TRUE}
-survey_dict = {0: "Strongly Disagree", 1: "Disagree", 2: "No opinion", 3: "Agree", 4: "Strongly Agree"}
-```
-
-We can extract values of a dictionary by their key--this is why all keys must be unique!
-
-```{python keys, exercise=TRUE, exercise.setup = "likert"}
-survey_dict[1]
-```
-
-Dictionaries are useful for storing and extracting data! Think of them like an address book where you look up someone's address by finding their name.
-
-A few useful operations with dictionaries:
-
- - Add an entry
-
- - Delete an entry
-
-We can delete pairs:
-
-```{python delkeys, exercise=TRUE, exercise.setup = "likert"}
-del survey_dict[1]
-survey_dict
-```
-
-Or add new pairs:
-
-```{python addkeys, exercise=TRUE, exercise.setup = "delkeys"}
-survey_dict['new_key'] = 'new value'
-survey_dict
-```
-
-We can also determine if keys are contained in the dictionary
-
-```{python findkeys1, exercise=TRUE, exercise.setup = "addkeys"}
-3 in survey_dict
-```
-
-```{python findkeys2, exercise=TRUE, exercise.setup = "addkeys"}
-"Disagree" in survey_dict
-```
-
-```{python findkeys3, exercise=TRUE, exercise.setup = "addkeys"}
-'new_key' in survey_dict
-```
-
-Keep in mind, keys do not all need to be the same type...although it may make more sense to keep them that way.
-
-```{python likert2, exercise=TRUE, exercise.setup = "setup_py"}
-survey_dict_2 = {"Strongly Disagree": 0 , "Disagree": 1 , 2: "No opinion", 3: "Agree", 4: "Strongly Agree"}
-```
-
-```{python likert3, exercise=TRUE, exercise.setup = "likert2"}
-survey_dict_2["Disagree"]
-```
-
-```{python likert4, exercise=TRUE, exercise.setup = "likert2"}
-list(survey_dict_2)
-```
-
-### Dictionary Methods
-
-There are methods that you can use on dictionaries, just like with lists and arrays. Here are a few:
-
-```{python methods, exercise=TRUE, exercise.setup = "likert2"}
-print(dir(survey_dict_2))
-```
-
-```{python methods2, exercise=TRUE, exercise.setup = "likert2"}
-survey_dict_2.keys()
-```
-
-```{python methods3, exercise=TRUE, exercise.setup = "likert2"}
-survey_dict_2.items()
-```
-
-### Working with Dictionaries
-
-Below is a dictionary containing total number of homicides in the United States in 2021, by state. (Published by Statistal Research Department, Oct 14, 2022). Note Washington D.C. is included as 'District of Columbia'.
-
-```{python homdict, exercise=TRUE}
-homicide_dict = {'Texas': 2064, 'North Carolina': 928, 'Ohio': 824, 'Michigan': 747, 'Georgia': 728, 'Tennessee': 672, 'Missouri': 593, 'Virginia': 562, 'South Carolina': 548, 'Illinois': 514, 'Pennsylvania': 510, 'Louisiana': 447, 'Indiana': 438, 'Alabama': 370, 'Kentucky': 365, 'Colorado': 358, 'Washington': 325, 'Arkansas': 321, 'Wisconsin': 315, 'Oklahoma': 284, 'Nevada': 232, 'Minnesota': 203, 'Arizona': 190, 'Oregon': 188, 'New Mexico': 169, 'Mississippi': 149, 'Connecticut': 148, 'Maryland': 138, 'New Jersey': 137, 'Massachusetts': 132, 'New York': 124, 'California': 123, 'District of Columbia': 109, 'West Virginia': 95, 'Delaware': 94, 'Kansas': 87, 'Utah': 85, 'Iowa': 70, 'Rhode Island': 38, 'Idaho': 36, 'Montana': 31, 'South Dakota': 26, 'Nebraska': 25, 'Alaska': 18, 'Maine': 18, 'Wyoming': 17, 'New Hampshire': 14, 'North Dakota': 14, 'Vermont': 8, 'Hawaii': 6}
-```
-
-Pick a few states of interest and find their homicide number (use code here...do not just manually search the dictionary!)
-
-```{python homdict2, exercise=TRUE, exercise.setup = "homdict"}
-
-```
-
-20.   Find the number of keys in the dictionary.
-
-```{python dict, exercise=TRUE, exercise.setup='homdict'}
-
-```
-
-```{python dict-solution, message = FALSE, warning = FALSE, echo = FALSE}
-len(homicide_dict.keys())
-```
-
-```{r dict-check, message = FALSE, warning = FALSE, echo = FALSE}
-grade_this_code()
-```
-
-
-:::: {.discussionbox}
-::: {.center}
-**Discuss with a neighbor (or on Ed):**
-:::
-1. Does this imply all 50 states are included here?
-2. What are some limitations to this data?
-::::
 
 
 ## Introduction to DataFrames
