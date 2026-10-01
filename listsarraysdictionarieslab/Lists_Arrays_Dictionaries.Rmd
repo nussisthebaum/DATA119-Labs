@@ -69,11 +69,7 @@ Python and its libraries provide many ways to group data together.   Some import
 The above are listed in order of increasing functionality and sophistication. In general you should use the simplest one that meets your needs.
 
 
-## Sequences: Lists, Sets, and Tuples (built into Python)
-
-Sequences are a basic type of structure to group data. You don't need to import any additional libraries to use them.
-
-### Lists
+## Lists
 
 A **list** is an ordered sequence of values that can be changed.
 
