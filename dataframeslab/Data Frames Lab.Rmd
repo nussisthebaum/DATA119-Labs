@@ -64,7 +64,7 @@ import pandas as pd
 starwars = pd.read_csv("./data/starwars.csv", index_col = 0)
 
 pilots = pd.read_csv("./data/pilots.csv", index_col = 0)
-pilots_small = pilots.loc[(pd.notna(pilots["vehicles"])) | (pd.notna(pilots["starships"]))]
+pilots_small = pilots.loc[(pilots["vehicles"].notna()) | (pilots["starships"].notna())]
 
 ep1 = pd.read_csv("./data/the_phantom_menace.csv", index_col = 0)
 ep2 = pd.read_csv("./data/attack_of_the_clones.csv", index_col = 0)
@@ -163,6 +163,15 @@ question("5. How many observations are there in `starwars`?",
          )
 ```
 
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Note that while we are asking you to use an attribute to find the number of observations in the data frame, we can also find the number of observations using the `len()` function. See if you can make it work, and discuss the difference in output with your neighbors. 
+
+::::
+
 Now let's find out what the `.dtypes` attribute does:
 
 ```{python ex_dtypes, exercise = TRUE, message = FALSE}
@@ -217,7 +226,7 @@ grade_this_code()
 8. Now, apply the `type()` function to the extracted column.
 
 ```{python ex8, exercise = TRUE, message = FALSE}
-starwars["name"]
+
 ```
 
 ```{python ex8-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -231,11 +240,11 @@ grade_this_code()
 9. Because it's part of the data frame, `name` is saved as a `Series`! But, we can still confirm that the `Series` is made up of strings. Extract first element of the extracted column and apply the `type()` function
 
 ```{python ex9, exercise = TRUE, message = FALSE}
-starwars["name"]
+
 ```
 
 ```{python ex9-solution, message = FALSE, warning = FALSE, echo = FALSE}
-type(starwars["name"][0])
+type(starwars["name"].iloc[0])
 ```
 
 ```{r ex9-code-check, message = FALSE, warning = FALSE}
@@ -265,7 +274,7 @@ grade_this_code()
 ```
 
 ```{python ex11-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars[10:11]
+starwars.iloc[10,:]
 ```
 
 ```{r ex11-code-check, message = FALSE, warning = FALSE}
@@ -281,7 +290,7 @@ starwars[10:11]
 ```
 
 ```{python ex12-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars[9:20]
+starwars[9:19]
 ```
 
 ```{r ex12-code-check, message = FALSE, warning = FALSE}
@@ -377,6 +386,15 @@ starwars.groupby('species').count().reset_index()
 grade_this_code()
 ```
 
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Note that while we are asking you to use `.groupby()` to complete these problems, we can also `.value_counts()`. See if you can make it work, and discuss the difference in output with your neighbors. 
+
+::::
+
 19. Save your result as a new data frame, `starwars_species`, and write a new line of code to give the number of species with more than one character in the *Star Wars* universe. You may have to use more than one line of code. 
 
 ```{python ex19, exercise = TRUE, message = FALSE}
@@ -392,7 +410,7 @@ starwars_species.loc[starwars_species["name"] > 1].shape[0]
 grade_this_code()
 ```
 
-20. Using the original `starwars` game, write a single line of code to calculate the means for all the numeric variables for each of the species. Normally we would not do this for very very small groups (e.g., one observation), but for now, it's okay. 
+20. Using the original `starwars` data frame, write a single line of code to calculate the means for all the numeric variables for each of the species. Normally we would not do this for very very small groups (e.g., one observation), but for now, it's okay. 
 
 ```{python ex20, exercise = TRUE, message = FALSE}
 
@@ -480,7 +498,7 @@ write.csv(pilots, file = "/Users/amynussbaum/Documents/U of C/Courses/DATA119-La
 pilots = pd.read_csv("./data/pilots.csv", index_col = 0)
 ```
 
-24. Confirm that `pilots` has at least one column in common with `starwars`. 
+24. Confirm that `pilots` has at least one column in common with `starwars` by accessing the correct attribute from `pilots`--then, look at the two sets of output to compare (no reason to write a logical condition).
 
 ```{python ex24, exercise = TRUE, message = FALSE}
 
@@ -505,14 +523,14 @@ question("25. Which column do `pilots` and `starwars` have in common?",
          )
 ```
 
-26. Join `pilots` and `starwars` into one data frame called `starwars_big`. 
+26. Join `pilots` to `starwars` into one data frame called `starwars_big`. 
 
 ```{python ex26, exercise = TRUE, message = FALSE}
 
 ```
 
 ```{python ex26-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars_big = pd.merge(starwars, pilots)
+starwars_big = starwars.merge(pilots)
 ```
 
 ```{r ex26-code-check, message = FALSE, warning = FALSE}
@@ -528,7 +546,7 @@ There are quite a few cells in the data frame with missing values (`NaN`). Let's
 ```
 
 ```{python ex27-solution, message = FALSE, warning = FALSE, echo = FALSE}
-pilots_small = pilots.loc[(pd.notna(pilots["vehicles"])) | (pd.notna(pilots["starships"]))]
+pilots_small = pilots.loc[(pilots["vehicles"].notna()) | (pilots["starships"].notna())]
 ```
 
 ```{r ex27-code-check, message = FALSE, warning = FALSE}
@@ -542,7 +560,7 @@ grade_this_code()
 ```
 
 ```{python ex28-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars_pilots = pd.merge(pilots_small, starwars, how = 'left')
+starwars_pilots = pilots_small.merge(starwars, how = 'left')
 ```
 
 ```{r ex28-code-check, message = FALSE, warning = FALSE}
