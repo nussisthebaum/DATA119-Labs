@@ -261,7 +261,7 @@ Our 4 lines of code are not colored differently just for fun--the colors are mea
 
 ```{r q4_5, echo=FALSE}
 question(
-  "What do you think the colors are meant to sgnify? Check all that apply:",
+  "What do you think the colors are meant to signify? Check all that apply:",
   answer("Longer inputs are green."),
   answer("Numbers are dark blue.", correct = TRUE, "Correct! `ints` and `floats` appear as dark blue."),
   answer("All capitalized inputs are light blue."),
@@ -363,8 +363,8 @@ Don't forget, there are also the comparison operators:
 
 | Comparison | Operator | True Example | False Example |
 |:---------:|:-----:|:------:|------:|
-| Less than | `<` | `2 < 3` |   `2<2`   |
-| Greater than | `>` | `3 > 2` |   `3>3`   |
+| Less than | `<` | `2 < 3` |   `2 < 2`   |
+| Greater than | `>` | `3 > 2` |   `3 > 3`   |
 | Less than or equal | `<=` | `2 <= 2 ` |   ` 3 <= 2 `   |
 | Greater than or equal | `>=` | `3 >= 3` |   `2 >= 3`   |
 | Exactly equal | `==` | `3  == 3` |   `3 == 2`   |
