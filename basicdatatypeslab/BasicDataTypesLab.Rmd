@@ -18,6 +18,9 @@ library(learnr)
 library(reticulate)
 
 gradethis_setup()
+# Run exercises in the main R process. learnr's default forked evaluator (used on Linux
+# servers like Posit) hangs with reticulate/Python, which fills the fork limit and disconnects.
+options(tutorial.exercise.evaluator = learnr:::inline_evaluator)
 tutorial_options(exercise.completion = FALSE, exercise.blanks = "\\.{3}", exercise.reveal_solution = FALSE)
 ```
 
