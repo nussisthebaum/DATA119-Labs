@@ -18,6 +18,9 @@ library(learnr)
 library(reticulate)
 
 gradethis_setup()
+# Run exercises in the main R process. learnr's default forked evaluator (used on Linux
+# servers like Posit) hangs with reticulate/Python, which fills the fork limit and disconnects.
+options(tutorial.exercise.evaluator = learnr:::inline_evaluator)
 tutorial_options(exercise.completion = FALSE, exercise.blanks = "\\.{3}", exercise.reveal_solution = FALSE)
 ```
 
@@ -598,19 +601,7 @@ Leia > (R2D2 or C3PO)
 ```
 
 ```{r ex18-check}
-grade_this({
-  if (is.null(.result)) {
-    fail("Make sure your last line returns the comparison result (don't assign it to a variable).")
-  }
-  if (!grepl("or", .user_code)) {
-    fail("Make sure to use the `or` operator.")
-  }
-  if (isTRUE(reticulate::py_to_r(.result))) {
-    pass(random_praise())
-  } else {
-    fail(random_encouragement())
-  }
-})
+grade_this_code()
 ```
 
 Is Chewbacca taller than *both* of the droids, R2-D2 or C-3PO?
@@ -624,19 +615,7 @@ Chewbacca > (R2D2 and C3PO)
 ```
 
 ```{r ex19-check}
-grade_this({
-  if (is.null(.result)) {
-    fail("Make sure your last line returns the comparison result (don't assign it to a variable).")
-  }
-  if (!grepl("and", .user_code)) {
-    fail("Make sure to use the `and` operator.")
-  }
-  if (isTRUE(reticulate::py_to_r(.result))) {
-    pass(random_praise())
-  } else {
-    fail(random_encouragement())
-  }
-})
+grade_this_code()
 ```
 
 ## Strings
@@ -744,9 +723,6 @@ message = "General Kenobi. Years ago you served my father in the Clone Wars. Now
 ```
 
 We might be interested in locating shorter strings within larger strings. For example, we could examine the contents of `message` to find how many times the shorter string `"Kenobi"` appears, but the longer the string, the more difficult this task will be. Instead, let's consider the `.count()` method.
-This method is different than many we have seen, because we have to pass what is known as an "argument". An argument is a value that you pass into a function or method--in this case, the argument is the shorter string, `"Kenobi"`. 
-
-We can change the argument. Edit the code below so that we count the number of times the string `"father"` occurs in `message`. 
 
 ```{python ex26, exercise=TRUE, exercise.setup="setup_py"}
 message.count("Kenobi")
@@ -760,6 +736,7 @@ message.count("father")
 grade_this_code()
 ```
 
+This method is different than many we have seen, because we have to pass what is known as an "argument". An argument is a value that you pass into a function or method--in this case, the argument is the shorter string, `"Kenobi"`. We can change the argument. Edit the code above so that we count the number of times the string `"father"` occurs in `message`. 
 
 :::: {.discussionbox}
 ::: {.center}
@@ -777,7 +754,6 @@ In addition to having specific methods, some of the operators we are already fam
 ```{python ex28, exercise=TRUE, exercise.setup="setup_py"}
 obiwan = "These aren't the droids you're looking for."
 stormtrooper = "These aren't the droids we're looking for."
-...
 ```
 
 ```{python ex28-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -796,7 +772,6 @@ What happens if you use the multiplication operator, `*`, with `message_short`? 
 
 ```{python ex29, exercise=TRUE, exercise.setup="setup_py"}
 message_short = "Help me, Obi-Wan Kenobi. You're my only hope."
-...
 ```
 
 ```{python ex29-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -812,7 +787,7 @@ You should notice that the multiplication operator will repeat the string (in th
 
 ```{python ex30, exercise=TRUE, exercise.setup="setup_py"}
 message_short = "Help me, Obi-Wan Kenobi. You're my only hope."
-...
+message_short*3
 ```
 
 ```{python ex30-solution, message = FALSE, warning = FALSE, echo = FALSE}
