@@ -129,3 +129,7 @@ a:hover {
 .notebox .center {
     text-align: center;
 }
+
+html { counter-reset: cell; }
+.tutorial-exercise { counter-increment: cell; }
+.tutorial-exercise .panel-heading::after { content: " [" counter(cell) "]"; }
