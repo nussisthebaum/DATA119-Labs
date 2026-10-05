@@ -51,6 +51,10 @@ my_list = ["classify", "evaluate", "great", "dorm", "inside"]
 northwestern_enrollment = ("Northwestern University", "Evanston", "Illinois", 8709)
 
 hour = np.arange(60)
+
+my_set_1 = {'apple', 'banana', 'cherry', 'date'}
+my_set_2 = {'elderberry', 'fig', 'grape', 'honeydew'}
+my_big_set = my_set_1 | my_set_2
 ```
 
 ## Goals
@@ -667,21 +671,16 @@ print(dir(grocery_set))
 
 #### Let's play with sets!
 
-1. Create a set with at least 4 fruits. Name the set `my_set_1`.
+Use the following two sets for the exercises below:
 
-```{python set_ex1, exercise=TRUE, exercise.setup = 'setup_py'}
-
+```python
+my_set_1 = {'apple', 'banana', 'cherry', 'date'}
+my_set_2 = {'elderberry', 'fig', 'grape', 'honeydew'}
 ```
 
-2. Create another set with at least 4 distinct fruits. Name the set `my_set_2`.
+1. Confirm that these sets have no elements in common, i.e., are *disjoint*. You may want to look up a new method!
 
-```{python set_ex2, exercise=TRUE, exercise.setup = 'set_ex1'}
-
-```
-
-3. Confirm that these sets have no elements in common, i.e., are *disjoint*. You may want to look up a new method!
-
-```{python set_ex3, exercise=TRUE, exercise.setup = 'set_ex2'}
+```{python set_ex3, exercise=TRUE, exercise.setup = 'setup_py'}
 
 ```
 
@@ -690,12 +689,21 @@ my_set_1.isdisjoint(my_set_2)
 ```
 
 ```{r set_ex3-check, message = FALSE, warning = FALSE, echo = FALSE}
-grade_this_code()
+grade_this({
+  if (is.null(.result)) {
+    fail("Make sure your last line returns a value (don't assign it to a variable).")
+  }
+  if (isTRUE(reticulate::py_to_r(.result))) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
-4. Create a new set that contains all of the elements in `my_set_1` and `my_set_2`. Call this set `my_big_set`. 
+2. Create a new set that contains all of the elements in `my_set_1` and `my_set_2`. Call this set `my_big_set`.
 
-```{python set_ex4, exercise=TRUE, exercise.setup = 'set_ex2'}
+```{python set_ex4, exercise=TRUE, exercise.setup = 'setup_py'}
 
 ```
 
@@ -704,10 +712,20 @@ my_big_set = my_set_1 | my_set_2
 ```
 
 ```{r set_ex4-check, message = FALSE, warning = FALSE, echo = FALSE}
-grade_this_code()
+grade_this({
+  if (!reticulate::py_has_attr(reticulate::py, "my_big_set")) {
+    fail("Make sure you assign the result to a variable called `my_big_set`.")
+  }
+  correct <- reticulate::py_to_r(reticulate::py_eval("my_big_set == (my_set_1 | my_set_2)"))
+  if (isTRUE(correct)) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
-5. Confirm that `my_set_1` is a subset of `my_big_set`. 
+3. Confirm that `my_set_1` is a subset of `my_big_set`.
 
 ```{python set_ex5, exercise=TRUE, exercise.setup = 'set_ex4'}
 
@@ -718,10 +736,19 @@ my_set_1.issubset(my_big_set)
 ```
 
 ```{r set_ex5-check, message = FALSE, warning = FALSE, echo = FALSE}
-grade_this_code()
+grade_this({
+  if (is.null(.result)) {
+    fail("Make sure your last line returns a value (don't assign it to a variable).")
+  }
+  if (isTRUE(reticulate::py_to_r(.result))) {
+    pass(random_praise())
+  } else {
+    fail(random_encouragement())
+  }
+})
 ```
 
-6. Write a line of code to see if `'plum'` is in `my_big_set`.
+4. Write a line of code to see if `'plum'` is in `my_big_set`.
 
 ```{python set_ex6, exercise=TRUE, exercise.setup = 'set_ex4'}
 
