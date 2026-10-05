@@ -339,7 +339,7 @@ print(dir(list))
 
 Create a list with the following words as strings: classify, evaluate, great, dorm, inside. Name the list `my_list`.
 
-```{python ex1, exercise=TRUE}
+```{python ex1, exercise=TRUE, exercise.setup="setup_py"}
 my_list
 ```
 
@@ -430,7 +430,7 @@ question(
 
 Given list ```number_list = [1,2,3,4,5,6,7]```, create a new list ```new_list = [6,4,2]``` in 2 lines of code. 
 
-```{python ex5, exercise=TRUE, exercise.eval = TRUE}
+```{python ex5, exercise=TRUE, exercise.eval = TRUE, exercise.setup = 'setup_py'}
 number_list = [1,2,3,4,5,6,7]
 
 ```
