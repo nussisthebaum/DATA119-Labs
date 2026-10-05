@@ -40,6 +40,7 @@ tags$div(
 
 ```{python setup_py, context="setup", echo = FALSE}
 import numpy as np
+import pandas as pd
 
 School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
 Random_stuff = ["California", 38, 3.14159] #A string, int, float
@@ -1437,7 +1438,7 @@ grade_this({
 
 ## Introduction to DataFrames
 
-One of the most commonly used collections of data in data science is the DataFrame. DataFrames come from the `pandas` library which we will talk in more detail in later labs! For now, here is a quick introduction.
+One of the most commonly used collections of data in data science is the DataFrame. DataFrames come from the `pandas` library which we will talk in more detail next week! For now, here is a quick introduction.
 
 ### Different objects for different goals
 
