@@ -340,7 +340,7 @@ print(dir(list))
 Create a list with the following words as strings: classify, evaluate, great, dorm, inside. Name the list `my_list`.
 
 ```{python ex1, exercise=TRUE}
-
+my_list
 ```
 
 ```{r ex1-check, message = FALSE, warning = FALSE, echo = FALSE}
@@ -365,6 +365,7 @@ grade_this({
 Remove the $2^{nd}$ and $3^{rd}$ elements. You may want to check the documentation for list functions and methods! Because of how we are parsing your solutions, please leave the `my_list` line as is!
 
 ```{python ex2, exercise=TRUE, exercise.setup = 'ex1'}
+...
 
 my_list
 ```
