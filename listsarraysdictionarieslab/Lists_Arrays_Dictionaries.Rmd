@@ -42,7 +42,6 @@ tags$div(
 
 ```{python setup_py, context="setup", echo = FALSE}
 import numpy as np
-import pandas as pd
 
 School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
 Random_stuff = ["California", 38, 3.14159] #A string, int, float
@@ -1463,79 +1462,6 @@ grade_this({
     fail(random_encouragement())
   }
 })
-```
-
-
-## Introduction to DataFrames
-
-One of the most commonly used collections of data in data science is the DataFrame. DataFrames come from the `pandas` library which we will talk in more detail next week! For now, here is a quick introduction.
-
-### Different objects for different goals
-
-There are different collections of data in Python because each works well in different contexts. We've already talked about lists and arrays:
-
-Method 1: (Using lists from Python (no import `numpy` needed))
-
-* list of lists
-* Hard to manipulate
-
-
-Method 2: (Using `np.array`)
-
-* All values of same data type
-* Easy to do math and matrix manipulations
-* No row column names
-
-DataFrames are useful if we have multiple observations of data of different types.
-
-Imagine you are conducting a survey. On this survey you ask about a person's height in inches, favorite fruit, and whether they own a dog. Each of these pieces of information would be stored in Python using a different data type.
-
-:::: {.discussionbox}
-::: {.center}
-**Discuss with a neighbor (or on Ed):**
-:::
-As an exercise, what data type would you use for each?
-::::
-
-Each person that you survey provides a different 'observation' of those 3 pieces of information. Picture a DataFrame as a table with rows and columns. Each row corresponds to a different person being surveyed and each column corresponds to their answer to a particular question. Each column contains the same data type within that column but individual columns can be of different data types. Here are some useful elements of DataFrames:
-
-Method 3: (Using `pandas` DataFrames)
-
-* Different columns can have different types
-* Easy to manipulate by name
-* row and column names built in!
-* Rows are "individuals" or "instances"
-* Columns are attributes of those individuals
-
-### Storing Data in 3 ways
-
-Suppose we take a survey of student ID, favorite number, and favorite food.
-
-We can store this data as a list of lists, a 2-dimensional array, or a DataFrame.
-
-```{python lofl, exercise=TRUE}
-list_of_lists=[['Pizza','Pierogi','Ramen'],  #fav food
-               [0,22,-3.1415],  #fav number
-               [1234, 4456, 5882]]   #Student ID
-
-list_of_lists
-```
-
-```{python ar2d, exercise=TRUE, exercise.setup = "setup_py"}
-np.array([['Pizza','Pierogi','Ramen'],  #fav food
-               [0,22,-3.1415],  #fav number
-               [1234, 4456, 5882]]) #student id
-```
-
-```{python datfram, exercise=TRUE, exercise.setup = "setup_py"}
-#ignore this code for now!
-import pandas as pd
-df = pd.DataFrame(
-    { 1:['Pizza','Pierogi','Ramen'],  #fav food
-      2:[0,22,-3.1415], #fav number
-     3:[1234, 4456, 5882]}) #id
-
-df
 ```
 
 ## Wrapping Up
