@@ -11,6 +11,7 @@ knitr::opts_chunk$set(error = TRUE)
 knitr::knit_engines$set(python = reticulate::eng_python)
 
 #install.packages(c("RcppTOML", "here", "withr"))
+#install.packages(c("RcppTOML", "here", "withr"))
 
 library(shiny)
 library(gradethis)
@@ -19,6 +20,8 @@ library(reticulate)
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.blanks = "\\.{3}", exercise.reveal_solution = FALSE)
+
+reticulate::py_run_string("import pandas as pd")
 ```
 
 ```{r header, echo = FALSE}
@@ -40,7 +43,6 @@ tags$div(
 
 ```{python setup_py, context="setup", echo = FALSE}
 import numpy as np
-import pandas as pd
 
 School_locations = ["California", "Illinois", "North Carolina", "Texas", "Georgia", "Washington D.C."]
 Random_stuff = ["California", 38, 3.14159] #A string, int, float
