@@ -682,7 +682,7 @@ print(dir(grocery_set))
 
 ```
 
-```{python set_ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+```{python set_ex3-solution, eval=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
 my_set_1.isdisjoint(my_set_2)
 ```
 
@@ -696,7 +696,7 @@ grade_this_code()
 
 ```
 
-```{python set_ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+```{python set_ex4-solution, eval=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
 my_big_set = my_set_1 | my_set_2
 ```
 
@@ -710,7 +710,7 @@ grade_this_code()
 
 ```
 
-```{python set_ex5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+```{python set_ex5-solution, eval=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
 my_set_1.issubset(my_big_set)
 ```
 
@@ -724,7 +724,7 @@ grade_this_code()
 
 ```
 
-```{python set_ex6-solution, message = FALSE, warning = FALSE, echo = FALSE}
+```{python set_ex6-solution, eval=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
 'plum' in my_big_set
 ```
 
