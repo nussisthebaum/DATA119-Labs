@@ -161,7 +161,9 @@ question(
   answer("`'Georgia'`"),
   answer("`'Washinton D.C.'`"),
   answer("An error", correct = TRUE, message = "Even though this list has a length of six, there is no element at index 6 since Python uses zero-based indexing."),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the first secret word: MEMBER. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+
 )
 ```
 
@@ -431,7 +433,9 @@ question(
   "Did your above operations change your original list, or create a copy?",
   answer("Change Original", correct = TRUE),
   answer("Create a Copy"),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: ROTTEN. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+
 )
 ```
 
@@ -567,7 +571,9 @@ question(
   answer("`{'cream'}`", correct = TRUE),
   answer("`{'milk', 'cheese'}`"),
   answer("`{'cream', 'cheese', 'apple', 'milk', 'egg'}`"),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the third secret word: TRENCH. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+
 )
 ```
 
@@ -852,7 +858,9 @@ question(
   answer("`'Stanford'`"),
   answer("`'California'`", correct = TRUE),
   answer("`7554`"),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the fourth secret word: SISTER. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+
 )
 ```
 
@@ -1179,7 +1187,9 @@ question(
   "Will the code above give the same or different outputs?",
   answer("Same", message = "Not quite. Remember that the default starting index is  0."),
   answer("Different", correct = TRUE),
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the final secret word: THEORY. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+
 )
 ```
 
