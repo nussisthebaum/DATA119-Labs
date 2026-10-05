@@ -131,7 +131,7 @@ Suppose we take a survey of student ID, favorite number, and favorite food.
 
 We can store this data as a list of lists, a 2-dimensional array, or a DataFrame.
 
-```{python lofl, exercise=TRUE}
+```{python lofl, exercise=TRUE, exercise.setup = "setup_py"}
 list_of_lists=[['Pizza','Pierogi','Ramen'],  #fav food
                [0,22,-3.1415],  #fav number
                [1234, 4456, 5882]]   #Student ID
@@ -161,7 +161,7 @@ df
 
 For this lab we will be using the `pandas` library in Python, as well as a new dataset containing information on various Star Wars characters from Episodes I-VII. We have several data frames to use as a part of the larger dataset--run the cell below to setup the environment.
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup_py"}
 import pandas as pd
 
 # To download any of these data files 
