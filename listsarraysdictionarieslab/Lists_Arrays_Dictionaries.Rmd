@@ -162,7 +162,7 @@ question(
   answer("`'Washinton D.C.'`"),
   answer("An error", correct = TRUE, message = "Even though this list has a length of six, there is no element at index 6 since Python uses zero-based indexing."),
   allow_retry = TRUE,
-  post_message = "Congratulations! You have found the first secret word: MEMBER. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+  post_message = "Congratulations! You have found the first secret word: MEMBER. Enter this word in the Lab 2 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 
 )
 ```
@@ -434,7 +434,7 @@ question(
   answer("Change Original", correct = TRUE),
   answer("Create a Copy"),
   allow_retry = TRUE,
-  post_message = "Congratulations! You have found the second secret word: ROTTEN. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+  post_message = "Congratulations! You have found the second secret word: ROTTEN. Enter this word in the Lab 2 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 
 )
 ```
@@ -572,7 +572,7 @@ question(
   answer("`{'milk', 'cheese'}`"),
   answer("`{'cream', 'cheese', 'apple', 'milk', 'egg'}`"),
   allow_retry = TRUE,
-  post_message = "Congratulations! You have found the third secret word: TRENCH. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+  post_message = "Congratulations! You have found the third secret word: TRENCH. Enter this word in the Lab 2 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 
 )
 ```
@@ -859,7 +859,7 @@ question(
   answer("`'California'`", correct = TRUE),
   answer("`7554`"),
   allow_retry = TRUE,
-  post_message = "Congratulations! You have found the fourth secret word: SISTER. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+  post_message = "Congratulations! You have found the fourth secret word: SISTER. Enter this word in the Lab 2 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 
 )
 ```
@@ -1188,7 +1188,7 @@ question(
   answer("Same", message = "Not quite. Remember that the default starting index is  0."),
   answer("Different", correct = TRUE),
   allow_retry = TRUE,
-  post_message = "Congratulations! You have found the final secret word: THEORY. Enter this word in the Lab 1 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+  post_message = "Congratulations! You have found the final secret word: THEORY. Enter this word in the Lab 2 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 
 )
 ```
@@ -1358,6 +1358,11 @@ arr_2d[:,2] #all of the rows, column at index 2
 arr_2d[0,1] #element with row index 0 and column index 1
 ```
 
+## Wrapping Up
+
+In this activity, we learned about lists, `array`s, dictionaries, sets, and tuples and were introduced to the concept of DataFrames. In future activities we will build on these concepts until you feel comfortable working with and manipulating large groups of data.
+
+
 <!-- 
 ### Let's Play with Arrays!
 
@@ -1471,6 +1476,3 @@ grade_this({
 ``` -->
 
 
-## Wrapping Up
-
-In this activity, we learned about lists, `array`s, dictionaries, sets, and tuples and were introduced to the concept of DataFrames. In future activities we will build on these concepts until you feel comfortable working with and manipulating large groups of data.
