@@ -1200,18 +1200,13 @@ prime50_array.shape
 
 ### Arrays have useful methods
 
-Like lists, there are a lot of useful methods we can use on array objects. Here are a couple:
-
- -  `.sum()`
-    
- -  `.mean()`
-
- -  `.nonzero()`
+Like lists, there are a lot of useful methods we can use on array objects. 
+But unlike lists, we can always sum the elements in an array, since they are all numbers.
 
 
-See the [`numpy` documentation](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html) for a complete list.
+See the [`numpy` documentation](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html) for a complete list of methods.
 
-We can sum arrays, but we cannot always sum a list because a list can have different data types!
+
 
 ```{python arraysum, exercise=TRUE, exercise.setup="prime50"}
 print(prime50_array.sum())
@@ -1353,6 +1348,7 @@ arr_2d[:,2] #all of the rows, column at index 2
 arr_2d[0,1] #element with row index 0 and column index 1
 ```
 
+<!-- 
 ### Let's Play with Arrays!
 
 Use the array below to answer the following questions:
@@ -1462,7 +1458,8 @@ grade_this({
     fail(random_encouragement())
   }
 })
-```
+``` -->
+
 
 ## Wrapping Up
 
