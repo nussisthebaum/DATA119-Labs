@@ -444,20 +444,7 @@ new_list
 ```
 
 ```{r ex5-check, message = FALSE, warning = FALSE, echo = FALSE}
-grade_this({
-  if (!reticulate::py_has_attr(reticulate::py, "new_list")) {
-    fail("Make sure you assign your result to a variable called `new_list`.")
-  }
-
-  res <- as.numeric(unlist(reticulate::py_to_r(reticulate::py_eval("new_list"))))
-  expected <- c(6, 4, 2)
-
-  if (length(res) == length(expected) && isTRUE(all.equal(res, expected))) {
-    pass(random_praise())
-  } else {
-    fail(random_encouragement())
-  }
-})
+grade_this_code()
 ```
 
 
