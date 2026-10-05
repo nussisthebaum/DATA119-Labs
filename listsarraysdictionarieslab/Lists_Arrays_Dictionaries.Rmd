@@ -57,6 +57,7 @@ my_set_2 = {'elderberry', 'fig', 'grape', 'honeydew'}
 my_big_set = my_set_1 | my_set_2
 ```
 
+
 ## Goals
 
 The goal of this lab is review some of what you've learned about coding in Python. We will cover:
