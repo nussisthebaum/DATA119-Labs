@@ -49,21 +49,21 @@ student_majors <-  sample(possible_majors, 500, replace = TRUE) |>
     tibble(major = _) |>
     rowwise() |>
     mutate(
-        taking_DATA118 = if_else(
+        DATA118 = as.logical(if_else(
             major == "DATA",
             rbinom(n = 1, size = 1, prob = 0.4),
             rbinom(n = 1, size = 1, prob = 0.2)
-        ),
-        taking_DATA119 = if_else(
+        )),
+        DATA119 = as.logical(if_else(
             major == "DATA",
             rbinom(n = 1, size = 1, prob = 0.36),
             rbinom(n = 1, size = 1, prob = 0.15)
-        ),
-        taking_DATA120 = if_else(
+        )),
+        DATA120 = as.logical(if_else(
             major == "DATA",
             rbinom(n = 1, size = 1, prob = 0.20),
             rbinom(n = 1, size = 1, prob = 0.04)
-        )
+        ))
     )
 
 #write.csv(student_majors, "/Users/amynussbaum/Documents/U of C/Courses/DATA119-Labs/probabilitypracticelab/data/students.csv")
@@ -181,7 +181,7 @@ student_majors.groupby("major").count()
 grade_this_code()
 ```
 
-Now, use this cell, as well as your `.groupby()` statement, to calculate the probabilities described in the cells below.
+Now, use this cell, as well as your `.groupby()` statement, to calculate the probabilities described in the questions below.
 
 ```{python calculate1, exercise = TRUE, message = FALSE}
 
@@ -212,11 +212,11 @@ question_numeric(text = "What is the probability a student is a DATA or an ECON 
 **Discuss with a neighbor (or on Ed):**
 :::
 
-How would your answer to the previous question change if this university allowed students to have more than one major?
+How would your approach to answering the previous question change if this university allowed students to have more than one major?
 
 ::::
 
-Confirm that the probability that a student's major is `OTHER` using the Complement Rule.
+Confirm that the probability that a student's major is `Other` using the Complement Rule.
 
 ```{python ex7, exercise = TRUE, message = FALSE}
 
@@ -229,6 +229,100 @@ Confirm that the probability that a student's major is `OTHER` using the Complem
 ```{r ex7-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
+
+## Venn Diagrams
+
+Now, consider the remaining three variables, `DATA118`, `DATA119`, and `DATA120`, which are all Booleans describing whether each of the students are enrolled in DATA118, 119, or 120. This data is visualized in the Venn Diagram below.
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(ggvenn)
+
+ggvenn(student_majors, c("DATA118", "DATA119", "DATA120"), 
+       fill_color = c("#DE7C00", "#275D38", "#59315F"), 
+       set_name_size = 5,
+       show_percentage = FALSE) 
+```
+
+Now, use this cell, as well as the `student_majors` data frame and the Venn Diagram, to calculate the probabilities described in the questions below.
+
+```{python calculate2, exercise = TRUE, message = FALSE}
+
+```
+
+```{r q8, echo=FALSE}
+question_numeric(text = "What is the probability that a student is enrolled in DATA118?",
+         answer("0.224", correct = TRUE),
+         allow_retry = TRUE,
+         min = 0, 
+         max = 1,
+         step = 0.001
+         )
+```
+
+```{r q9, echo=FALSE}
+question_numeric(text = "What is the probability that a student is enrolled in DATA119?",
+         answer("0.160", correct = TRUE),
+         allow_retry = TRUE,
+         min = 0, 
+         max = 1,
+         step = 0.001
+         )
+```
+
+```{r q10, echo=FALSE}
+question(text = "True or False: The event that a student is enrolled in DATA118 and the event that a student is enrolled in DATA119 are mutually exclusive.",
+         answer("True", message = "Careful! If the two events were mutually exclusive, the probability of them occurring together would be zero. Please double-check the Venn Diagram."),
+         answer("False", correct = TRUE, message = "Well done! Make sure you are able to justify your response."),
+         allow_retry = TRUE
+         )
+```
+
+If the event that a student is enrolled in DATA118 and the event that a student is enrolled in DATA119 were independent, what would the probability of a student taking DATA118 and DATA119 be? Use the cell below to calculate your response. 
+
+```{python ex11, exercise = TRUE, message = FALSE}
+
+```
+
+```{r q11, echo=FALSE}
+question_numeric(text = "What is the probability of a student taking DATA118 and DATA119, assuming these two events are independent? Round to three decimal places.",
+         answer("0.036", correct = TRUE),
+         allow_retry = TRUE,
+         min = 0, 
+         max = 1,
+         step = 0.001
+         )
+```
+
+```{r q12, echo=FALSE}
+question_numeric(text = "What is the probability of a student taking DATA118 and DATA119, according to the Venn Diagram? Round to three decimal places.",
+         answer("0.046", correct = TRUE),
+         allow_retry = TRUE,
+         min = 0, 
+         max = 1,
+         step = 0.001
+         )
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Are the answers to the two previous questions different enough to convince you that taking DATA118 and 119 are dependent? How different would they have to be before you started to believe there is some type of relationship between the two classes?
+
+::::
+
+```{r q13, echo=FALSE}
+question_numeric(text = "According to the Venn Diagram, what is the probability that a student is taking at least one of DATA118, 119, and 120? Round to three decimal places.",
+         answer("0.368", correct = TRUE),
+         allow_retry = TRUE,
+         min = 0, 
+         max = 1,
+         step = 0.001
+         )
+```
+
+## Contingency Tables
 
 
 <!-- ## Probability Distributions -->
