@@ -4,6 +4,7 @@ output:
    learnr::tutorial:
       css: css/custom-styles.css
 runtime: shiny_prerendered
+fig-align: center
 ---
 
 ```{r setup, include=FALSE}
@@ -65,9 +66,18 @@ import math
 
 ## What is a bug?
 
-**Debugging** is the process of identifying and fixing 'bugs' in your code. A **bug** is computer science term for an error. This is *thought* to come from ["The 1947 Moth Incident"](https://en.wikipedia.org/wiki/Bug_(engineering)), in which a literal bug got stuck inside the computer, causing a malfunction. 
+**Debugging** is the process of identifying and fixing 'bugs' in your code. A **bug** is computer science term for an error. This is thought have been popularized from ["The 1947 Moth Incident"](https://en.wikipedia.org/wiki/Bug_(engineering)), which involved a literal bug.
 
-Insert image here. 
+![Log Book With Computer Bug [Photograph]](./images/NMAH-92-13130.jpg){fig-alt="An image of a moth taped into a log book." fig-align="center" width=90%}
+
+\vspace{5mm}
+
+From the Smithsonian National Museum of American History:
+
+> In 1947, engineers working on the Mark II computer at Harvard University found a moth stuck in one of the components. They taped the insect in their logbook and labeled it "first actual case of bug being found." The words "bug" and "debug" soon became a standard part of the language of computer programmers. Among those working on the Mark II in 1947 was mathematician and computer programmer Grace Hopper, who later became a Navy rear admiral. This log book was probably not Hopper's, but she and the rest of the Mark II team helped popularize the use of the term computer bug and the related phrase "debug."
+
+IBM/Harvard University (1947). Log Book With Computer Bug [Photograph]. Smithsonian National Museum of American History. [https://americanhistory.si.edu/collections/object/nmah_334663](https://americanhistory.si.edu/collections/object/nmah_334663)
+
 
 Bugs may either
 
