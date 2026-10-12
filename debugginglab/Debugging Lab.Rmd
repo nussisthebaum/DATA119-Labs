@@ -45,6 +45,11 @@ tags$div(
 )
 ```
 
+```{python setup_py, include=FALSE}
+import math
+import numpy as np
+```
+
 ## Goals
 
 The goal of this lab is to learn about common error messages and practice debugging your code.
@@ -60,42 +65,44 @@ import math
 
 ## What is a bug?
 
-**Debugging** - the process of identifying and fixing 'bugs' in your code
+**Debugging** is the process of identifying and fixing 'bugs' in your code. A **bug** is computer science term for an error. This is *thought* to come from ["The 1947 Moth Incident"](https://en.wikipedia.org/wiki/Bug_(engineering)), in which a literal bug got stuck inside the computer, causing a malfunction. 
 
-**Bug** - computer science term for an error
+Insert image here. 
 
-These may either
-- cause your code to produce an error message or
-- cause your code to produce incorrect results (**logical errors**)
+Bugs may either
+
+* Cause your code to produce an error message, or
+* Cause your code to produce incorrect results (**logical errors**).
 
 ## Error Messages
 
-There are many types of error messages you might encounter when using Python.
+There are many specific types of error messages you might encounter when using Python that can generally be sorted into two main types:
 
-In general there are two main types:
-
-- **Syntax Errors** - made before execution
-    - SyntaxError
+* **Syntax Errors** - made before execution
+    + `SyntaxError`
     
-- **Exceptions** - made during execution
-    - NameError
-    - IndexError
-    - AttributeError
-    - KeyError
-    - ImportError
-    - TypeError
-    - ValueError
-    - ModuleNotFoundError
-    - ...
+* **Exceptions** - made during execution
+    + `NameError`
+    + `IndexError`
+    + `AttributeError`
+    + `KeyError`
+    + `ImportError`
+    + `TypeError`
+    + `ValueError`
+    + `ModuleNotFoundError`
+    + ...
+
+When one of these errors occurs, Python will return an error message. We are very used to thinking of errors as a bad thing, but while programming, you may come to actually appreciate error messages, as they can help you go back and rewrite your code to run correctly.
     
 ## Syntax Errors
 
-You will see a message starting with `SyntaxError`
+If your code includes a syntax error, you will see a message starting with `SyntaxError`.
 
-Typically includes:
-- file name or cell input number
-- line number
-- arrows pointing to the issue
+These messages typically include:
+
+* A file name or cell input number, 
+* A line number, and
+* An arrow (or arrows) pointing to the issue.
 
 The issue could be that something is missing...
 
@@ -111,40 +118,35 @@ for i in [1,2],
     print(i+8)
 ```
 
-Sometimes, the software you are using will try to warn you about syntax errors ahead of time using red or yellow lines underneath problematic parts of your code. This does not show up in this lab setup, but if you copy and past the code below into Jupyter or VSCode, you will see these lines.
+Sometimes, the software you are using will try to warn you about syntax errors ahead of time using red or yellow lines underneath problematic parts of your code. This does not show up in this lab setup, but if you copy and past the code below into an IDE like Jupyter or VSCode, you will see these lines.
 
 ```{python syntax3, exercise=TRUE, exercise.eval = FALSE}
 mean([1,2,3,4)
 ```
 
-When Python sees a for-loop, it expects to see a colon. When it sees an open bracket, it expects to see a closed bracket.
+These errors occur any time we make a mistake with regards to the rules that define how Python code is written. For example, when Python sees a `for`-loop, it expects to see a colon `:`. When it sees an open bracket `[`, it expects to see a closed bracket `]`. If your syntax is not correct, Python does not execute the code. Once your code is free of syntax errors, it will be executed.
 
-It does not execute the code if the syntax is incorrect
-
-Sometimes you may get special types of `SyntaxErrors` 
-
-A common one is the `IndentationError` - occurs when you don't have the proper indentation in a for-loop, function, etc
+Sometimes you may get special types of `SyntaxErrors`. A common one is the `IndentationError`, which occurs when you don't have the proper indentation in a for-loop, function, etc
 
 ```{python syntax4, exercise=TRUE, exercise.eval = FALSE}
 for i in [1,2]:
 print(i+1)
 ```
 
-Once your code is free of syntax errors, it will be executed.
-
-During execution, you could receive other error messages known as exceptions.
+Other times, the `SyntaxErrors` can be very vague and unhelpful. It can be useful to use the line numbers to identify where the error is, even if you don't know exactly what the error is. Then, we recommend looking closely at the various "punctuation marks" to see what is missing or incorrect.
 
 ## Exceptions
 
-You will see a message starting with the exception type (eg `NameError`)
+During code execution, you could receive other error messages known as exceptions. You will see a message starting with the exception type (e.g., a `NameError`).
 
 Typically includes:
-- file name or cell input number
-- line number
-- a brief explanation
-- **traceback** - the context in which the exception occurred 
-    - usually in the form of a few lines of code
-    - more common when you write functions
+
+* A file name or cell input number,
+* A line number, 
+* A brief explanation, and
+* **traceback** - the context in which the exception occurred 
+    + Usually in the form of a few lines of code.
+    + More common when you write functions.
 
 The exception type should give you clues as to what went wrong. 
 
@@ -170,19 +172,15 @@ c = a + b
 
 Let's walk through some exception types and what they mean...
 
-We've already seen `NameError` and `TypeError`
+We've already seen `NameError` and `TypeError`. 
 
-`NameError`s occur when you try to use a variable name that hasn't been assigned yet
-
-- common when running cells out of order or when you've restarted your Kernel
-
-`TypeError`s occur when you use the wrong data type for whatever function or operand you are using
-
-- common when you don't know the datatype of a DataFrame column (ie "2016" looks like 2016)
-
-Can be useful to use functions like `type()` or `dtype()`
-- `type()` gives you the data type but, if used on a collection of data, will only give you the type of container (ie array, series, ...)
-- `dtype()` gives you the data type of the *elements* inside the container
+* `NameError`s occur when you try to use a variable name that hasn't been assigned yet. 
+  + This is very common when running cells in your Jupyter notebook out of order or when you've restarted your Kernel
+* `TypeError`s occur when you use the wrong data type for whatever function or operand you are using. 
+  + These are common when you don't know the datatype of a `DataFrame` column (i.e., `"2016"` looks like `2016`). 
+  + When addressing `TypeErrors`, it can be useful to use functions like `type()` or `dtype()`:
+    - `type()` gives you the data type but, if used on a collection of data, will only give you the type of container (ie `array`, `Series`, ...).
+    - `dtype()` gives you the data type of the *elements* inside the container
 
 ```{python types, exercise=TRUE, exercise.eval=FALSE}
 print(type("2016"), type(np.array([1, 2, 3])), np.array([1, 2, 3]).dtype)
@@ -190,14 +188,13 @@ print(type("2016"), type(np.array([1, 2, 3])), np.array([1, 2, 3]).dtype)
 
 ### Lookup Errors
 
-`IndexError` and `KeyError` are both types of exceptions called `LookupErrors`
+`IndexError`s and `KeyError`s are both types of exceptions called `LookupErrors`. They occur when you try to access a dictionary with a key that is invalid, use an invalid index for an array or DataFrame, etc. 
 
-They occur when you try to access a dictionary with a key that is invalid or use an invalid index for an array or DataFrame etc
+`IndexError`s and `KeyError`s commonly occur when: 
 
-Common when: 
-- you use groupby and forget you have a new index
-- you forget Python indexes start at 0
-- if you just mistype 
+* You use `.groupby()` or otherwise manipulate a Data Frame and forget you have a new index.
+* You forget Python indexes start at `0`.
+* You just mistype the key or index.
 
 ```{python lookup1, exercise=TRUE, exercise.eval = FALSE}
 my_dict = {"a":1, "b":2, "c":3}
@@ -209,13 +206,9 @@ my_list = [1,2,3]
 my_list[3]
 ```
 
-We will discuss two more common error types, but keep in mind that there are more.
+### Other Common Error Types
 
-These all come from base Python, but imported modules can have their own error types as well!
-
-`AttributeError`s occur when there has been a failure to set or access an attribute
-- common when the object you're working with does not actually have that attribute
-- can happen if you forget parentheses on a method
+`AttributeError`s occur when there has been a failure to set or access an attribute for some object. `AttributeErrors` commonnly occur when the object you're working with does not actually have that attribute--don't forget that attributes are characteristics specific to a particular type of object (like a list, or a data frame, etc.). They can also happen if you forget parentheses on a method--first, check to make sure you've included all of the necessary characters, then, check to make sure your object is the type that you think it is.
 
 ```{python lookup3, exercise=TRUE, exercise.eval = FALSE, exercise.setup = 'lookup2'}
 my_list.size
@@ -225,8 +218,7 @@ my_list.size
 my_list.mean
 ```
 
-`ValueError`s occur when an invalid value is given to a function or operand.
-- common when using mathematical functions
+`ValueError`s occur when an invalid value is given to a function or operand. These are common when using mathematical functions.
 
 ```{python lookup5, exercise=TRUE, exercise.eval = FALSE}
 import math
@@ -237,11 +229,11 @@ math.sqrt(-1)
 float("number")
 ```
 
+These all come from base Python, but imported modules can have their own error types as well! You may encounter more as you learn about more modules and more programming techniques, but the error types we've covered should give you a pretty solid basis for debugging.
+
 ### Logical Errors
 
-Sometimes your code does not encounter an exception, but you don't get the output that you expected. 
-
-This is common, especially when writing your own functions (which you will do tomorrow)
+Sometimes your code does not encounter an exception, but you don't get the output that you expected. This is very common, especially when writing your own functions! Unfortunately, Python won't return an error message here--it is up to you to test and examine your code until you are comfortable with the output it is producing.
 
 Here is an example:
 
@@ -261,9 +253,7 @@ my_min(np.array([6,3,2,5]))
 my_min(np.array([23,47,13,78]))
 ```
 
-This function isn't giving me the answer I would expect...
-
-I need to look at the code inside my function to see what is wrong
+This function isn't giving me the answer I would expect... I need to look at the code inside my function to see what is wrong. 
 
 ```
 smallest = 10
@@ -273,13 +263,14 @@ for number in my_array:
 ```
 
 It can be useful to do a few things when trying to debug code:
+
 1) Think through the logic without worrying about the code itself. Should this approach work?
-    - Sometimes we write 'pseudocode' or draw diagrams
+    + Sometimes we write 'pseudocode' or draw diagrams
 2) Add print statements to see what is happening throughout the code
-    - Where are things changing?
-    - It works as expected until which line?
-    - If you are using conditionals, is the condition ever met?
-    - If you are using loops, is the loop working the way you expect?
+    + Where are things changing?
+    + It works as expected until which line?
+    + If you are using conditionals, is the condition ever met?
+    + If you are using loops, is the loop working the way you expect?
     
 
 ```{python logical3, exercise=TRUE, exercise.eval = FALSE}
@@ -298,14 +289,12 @@ my_min(np.array([23,47,13,78]))
 ```
 
 From my print statements, I can tell
-- the loop is iterating over the array correctly
-- the smallest number is always 10
-- the condition for my if-statement was never met
 
-10 is smaller than all of the numbers in my array so `smallest` never gets set to anything else
+* The loop is iterating over the array correctly,
+* The smallest number is always 10, and 
+* The condition for my `if`-statement was never met.
 
-we should initialize `smallest` to be something much larger than 10
-
+10 is smaller than all of the numbers in my array so `smallest` never gets set to anything else! We should initialize `smallest` to be something much larger than 10.
 
 ```{python logical5, exercise=TRUE, exercise.eval = FALSE}
 def my_min(my_array):
@@ -318,6 +307,7 @@ def my_min(my_array):
 
 my_min(np.array([23,47,13,78]))
 ```
+
 
 ## Error Types Activity
 
@@ -380,7 +370,8 @@ question("How would you fix this error?",
   answer("Replace the square brackets (`[]`) with parentheses (`()`)."),
   answer("Replace `Washington` with `washington` because the keys in the dictionary should all be in lowercase."),
   answer("Add `.loc` after `state_capitals`, because it really should be stored as a DataFrame."),
-  random_answer_order = TRUE)
+  random_answer_order = TRUE, 
+  post_message = "Congratulations! You have found the first secret word: PAN. Enter this word in the Debugging Lab assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit.")
 ```
 
 2. 
@@ -417,7 +408,8 @@ question("How would you fix this error?",
   answer("Add a second open bracket (`[`)."),
   answer("Replace the brackets with parentheses (`()`), because `state_capitals` should be a function."),
   answer("Add a comma after `Virginia`, because we are indexing by rows."),
-  random_answer_order = TRUE)
+  random_answer_order = TRUE, 
+  post_message = "Congratulations! You have found the second secret word: JACKET. Enter this word in the Debugging Lab assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit.")
 ```
 
 3. 
@@ -455,7 +447,8 @@ question("How would you fix this error?",
   answer("Use an operator other than the plus sign (`+`) for correct string/integer concatenation."),
   answer("Rewrite the entire phrase as a string, there is no need to concatenate three separate pieces.", message = "While this would work in this specific situation, it would not work in others where the sentence depends on the output of other code in your script. Therefore, it isn't the best solution!"),
   answer("Convert `There are` and ` in the US` to be integers using `int()`."),
-  random_answer_order = TRUE)
+  random_answer_order = TRUE, 
+  post_message = "Congratulations! You have found the third secret word: TRAINER. Enter this word in the Debugging Lab assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit.")
 ```
 
 4. 
@@ -496,7 +489,8 @@ question("How would you fix this error?",
   answer("Change the index, `50`, to `49`, because Python uses zero-based indexing."),
   answer("Change `.iloc` to `.loc`."),
   answer("Use `orient = index` in `to_dict()`."),
-  random_answer_order = TRUE)
+  random_answer_order = TRUE, 
+  post_message = "Congratulations! You have found the fourth secret word: LOUD. Enter this word in the Debugging Lab assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit.")
 ```
 
 5. 
@@ -533,7 +527,8 @@ question("How would you fix this error?",
   answer("Use `capitals_df.shape()`, because `.shape()` is the method for a DataFrame that will calculate the dimensions.", message = "Careful! `.shape` is an attribute; there is no such `.shape()` method."),
   answer("Use `len(capitals_df)`, because `len()` is a function and not a method."),
   answer("Use `capitals_df.length()`, because `.len()` is not the right method name."),
-  random_answer_order = TRUE)
+  random_answer_order = TRUE, 
+  post_message = "Congratulations! You have found the fifth and final secret word: HOSTILITY. Enter this word in the Debugging Lab assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit.")
 ```
 
 
