@@ -220,7 +220,7 @@ question("Which of the variables in `starwars` are numeric? Select all that appl
          )
 ```
 
-Categorical variables are usually saved as strings, but all I can see is `object`. Let's investigate further. 
+Categorical variables are usually saved as strings, but all we can see is `object`. Let's investigate further. 
 Using square brackets, extract the `name` column. 
 
 **Important note:** Throughout this lab, please use double quotes instead of single quotes when dealing with strings: e.g., "this" not 'this'.
@@ -675,7 +675,7 @@ Write one line of code to check this using `.equals()`.
 ```
 
 ```{python ex36-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars_pilots.equals(starwars_pilots_methods)
+starwars_pilots.equals(starwars_pilots_method)
 ```
 
 ```{r ex36-code-check, message = FALSE, warning = FALSE}
@@ -683,7 +683,7 @@ grade_this_code()
 ```
 
 
-Now that we have learned how to join two data frames that have a column in common, let's take a look at how to add multiple data frames together when they all have the same columns. For example, I have seven smaller data frames containing all of the characters that appear in Episodes I-VII. 
+Now that we have learned how to join two data frames that have a column in common, let's take a look at how to add multiple data frames together when they all have the same columns. For example, we have seven smaller data frames containing all of the characters that appear in Episodes I-VII. 
 
 ```{python eps, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 ep1 = pd.read_csv("./data/the_phantom_menace.csv", index_col = 0)
