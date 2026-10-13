@@ -169,7 +169,7 @@ question("3. Which data frame attribute can help you find the number of observat
 
 Use the method you chose above on our data frame.
 
-```{python ex4, exercise = TRUE, message = FALSE, exercise.setup = setup_py}
+```{python ex4, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
