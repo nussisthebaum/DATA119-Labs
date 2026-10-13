@@ -214,8 +214,7 @@ question("Which of the variables in `starwars` are numeric? Select all that appl
          answer("`gender`"),
          answer("`homeworld`"),
          answer("`species`"),
-         allow_retry = TRUE,
-         post_message = "Congratulations! You have found the second secret word: URGE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         allow_retry = TRUE
          )
 ```
 
@@ -367,38 +366,26 @@ question("Which character has the largest mass?",
 
 ## `.groupby()`
 
-Now let's do some exploratory data analysis with `.groupby()` and our aggregation functions. Remember the functions we like to use:
+Now let's do some exploratory data analysis with `.groupby()` and our aggregation functions. 
+Recall that the basic syntax is: `df.groupby("column_name")["value_column"].func()`.
+We like to use the following functions:
 
 * `.count()`: The number of observations 
 * `.mean()`: The average of the observations
 * `.min()`: The smallest observation
 * `.max()`: The largest observation
 
-Write a line of code to find out how many of each species there are in the data frame. 
+Write a line of code to find out how many of each species there are in the data frame. Since everyone likely is labeled with a name, let's use `name` as the `value_column`.
 
 ```{python ex17, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
 ```{python ex17-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars.groupby("species").count()
+starwars.groupby("species")["name"].count()
 ```
 
 ```{r ex17-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-Remember that this is a lot of repeated output, and we can fix it by re-indexing. Write a line of code to reset the index and shorten the output. 
-
-```{python ex18, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-
-```
-
-```{python ex18-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars.groupby("species").count().reset_index()
-```
-
-```{r ex18-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
@@ -407,23 +394,37 @@ grade_this_code()
 **Discuss with a neighbor (or on Ed):**
 :::
 
-Note that while we are asking you to use `.groupby()` to complete these problems, we can also `.value_counts()`. See if you can make it work, and discuss the difference in output with your neighbors. 
+Note that while we are asking you to use `.groupby()` to complete these problems, we can also `.value_counts()`. 
+See if you can make it work, and discuss the difference in output with your neighbors. 
 
 ::::
 
-Save your result as a new data frame, `starwars_species`, and write a new line of code to give the number of species with more than one character in the *Star Wars* universe. You may have to use more than one line of code. 
+Save your result as a new data frame, `starwars_species`. 
+Right below it, write one new line of code to give us the number of species with more than one character in the *Star Wars* universe. 
+
 
 ```{python ex19, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
 ```{python ex19-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars_species = starwars.groupby("species").count()["name"].reset_index()
+starwars_species = pd.DataFrame(starwars.groupby("species")["name"].count())
 starwars_species.loc[starwars_species["name"] > 1].shape[0]
 ```
 
 ```{r ex19-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
+```
+
+```{r q17, echo=FALSE}
+question("How many species are there with more than one character?",
+         answer(37),
+         answer(8, correct = TRUE),
+         answer(3),
+         answer(5),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the second secret word: URGE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         )
 ```
 
 Using the original `starwars` data frame, write a single line of code to calculate the means for all the numeric variables for each of the species. Normally we would not do this for very very small groups (e.g., one observation), but for now, it's okay. 
