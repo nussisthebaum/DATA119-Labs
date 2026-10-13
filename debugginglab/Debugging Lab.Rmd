@@ -539,7 +539,7 @@ question("How would you fix this error?",
 
 Now, you try! Find and fix the syntax errors, exceptions, and logical errors in the code blocks below.
 
-Debug this combination of shapes and colors.
+Debug this combination of shapes and colors. Recall that a standard indent in Python is 4 spaces.
 
 ```{python q1, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 shapes = ["circle", "square", "rectangle", "triangle", "rhombus",]
