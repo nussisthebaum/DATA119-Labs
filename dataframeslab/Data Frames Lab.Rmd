@@ -53,7 +53,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Data Frames and `pandas`", class = "pageTitle")
+    tags$h1("Data Frames", class = "pageTitle")
   )
 )
 ```
@@ -78,7 +78,7 @@ ep7 = pd.read_csv("./data/the_force_awakens.csv", index_col = 0)
 
 ## Goals
 
-* To continue practicing with `pandas`, including learning the attributes of a data frame, methods for data frames, and `pandas` functions. 
+* To continue practicing with data frames, including their attributes, methods, and `pandas` functions. 
 * To carry out basic exploratory data analysis with aggregation functions and `.groupby()`. 
 * To examine relationships between variables using `pivot_table()`.
 * To join data frames using `.merge()`.
@@ -93,70 +93,28 @@ One of the most commonly used collections of data in data science is the DataFra
 
 There are different collections of data in Python because each works well in different contexts. We've already talked about lists and arrays:
 
-Method 1: (Using lists from Python (no import `numpy` needed))
+Method 1: Lists (built-in to Python)
 
-* list of lists
-* Hard to manipulate
+* Ordered and indexed
+* Powerful built-in methods for sequences of data
+* Flexible data types
 
 
-Method 2: (Using `np.array`)
+Method 2: Arrays (must import `numpy`)
 
 * All values of same data type
-* Easy to do math and matrix manipulations
-* No row column names
+* Optimized for mathematical and matrix manipulations
+* No row or column names
 
-DataFrames are useful if we have multiple observations of data of different types.
+DataFrames two-dimensional tabular data structures that are especially useful if we have multiple observations of data of different types, or if we'd like for the data to be labeled.
 
-Imagine you are conducting a survey. On this survey you ask about a person's height in inches, favorite fruit, and whether they own a dog. Each of these pieces of information would be stored in Python using a different data type.
-
-:::: {.discussionbox}
-::: {.center}
-**Discuss with a neighbor (or on Ed):**
-:::
-As an exercise, what data type would you use for each?
-::::
-
-Each person that you survey provides a different 'observation' of those 3 pieces of information. Picture a DataFrame as a table with rows and columns. Each row corresponds to a different person being surveyed and each column corresponds to their answer to a particular question. Each column contains the same data type within that column but individual columns can be of different data types. Here are some useful elements of DataFrames:
-
-Method 3: (Using `pandas` DataFrames)
+Method 3: Data frames (must import `pandas`)
 
 * Different columns can have different types
 * Easy to manipulate by name
-* row and column names built in!
-* Rows are "individuals" or "instances"
+* Row and column names are built in
+* Rows are "instances" as a `Series` object
 * Columns are attributes of those individuals
-
-### Storing Data in 3 ways
-
-Suppose we take a survey of student ID, favorite number, and favorite food.
-
-We can store this data as a list of lists, a 2-dimensional array, or a DataFrame.
-
-```{python lofl, exercise=TRUE, exercise.setup = "setup_py"}
-list_of_lists=[['Pizza','Pierogi','Ramen'],  #fav food
-               [0,22,-3.1415],  #fav number
-               [1234, 4456, 5882]]   #Student ID
-
-list_of_lists
-```
-
-```{python ar2d, exercise=TRUE, exercise.setup = "setup_py"}
-np.array([['Pizza','Pierogi','Ramen'],  #fav food
-               [0,22,-3.1415],  #fav number
-               [1234, 4456, 5882]]) #student id
-```
-
-```{python datfram, exercise=TRUE, exercise.setup = "setup_py"}
-#ignore this code for now!
-import pandas as pd
-df = pd.DataFrame(
-    { 1:['Pizza','Pierogi','Ramen'],  #fav food
-      2:[0,22,-3.1415], #fav number
-     3:[1234, 4456, 5882]}) #id
-
-df
-```
-
 
 ## Setup
 
