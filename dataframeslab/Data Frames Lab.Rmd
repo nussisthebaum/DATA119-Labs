@@ -188,31 +188,21 @@ question("5. How many observations are there in `starwars`?",
 **Discuss with a neighbor (or on Ed):**
 :::
 
-Note that while we are asking you to use an attribute to find the number of observations in the data frame, we can also find the number of observations using the `len()` function. See if you can make it work, and discuss the difference in output with your neighbors. 
+In the exercise above we asked you to use an attribute to find the number of observations in the data frame. It is also possible to use a function we have seen before. Can you guess what it is? Try to use it and discuss the difference in output with your neighbors. 
 
 ::::
 
 Now let's find out what the `.dtypes` attribute does:
 
-```{python ex_dtypes, exercise = TRUE, message = FALSE}
+```{python ex_dtypes, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 starwars.dtypes
 ```
 
-Discuss:
-
-:::: {.discussionbox}
-::: {.center}
-**Discuss with a neighbor (or on Ed):**
-:::
-
-Can you tell what the `.dtypes` attribute is doing? How might you confirm your guess?
-
-::::
-
-Remember, you can always look at the documentation for a function, method, or attribute--including [the documentation for `.dtypes`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dtypes.html). Read through to confirm your guess. Hopefully you and your neighbors have found that this attribute is a `Series` (a special data type used to build data frames) of the various columns. Remember also that the data types can tell us something about the kinds of variables we have. 
+Remember that you can always look at the documentation for a function, method, or attribute--including [the documentation for `.dtypes`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dtypes.html).
+Hopefully after reading, you have found that this attribute is a `Series` object that describes the data found in each column.
 
 ```{r q6, echo=FALSE}
-question("6. Which of the variables in `starwars` are numeric? Select all that apply.",
+question("Which of the variables in `starwars` are numeric? Select all that apply.",
          answer("`name`"),
          answer("`height`", correct = TRUE),
          answer("`mass`", correct = TRUE),
@@ -229,9 +219,9 @@ question("6. Which of the variables in `starwars` are numeric? Select all that a
          )
 ```
 
-7. Categorical variables are usually saved as strings, but all I can see is `object`. Let's investigate further--using square brackets, extract the `name` column. 
+Categorical variables are usually saved as strings, but all I can see is `object`. Let's investigate further. Using square brackets, extract the `name` column. 
 
-```{python ex7, exercise = TRUE, message = FALSE}
+```{python ex7, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -243,9 +233,9 @@ starwars["name"]
 grade_this_code()
 ```
 
-8. Now, apply the `type()` function to the extracted column.
+Now, apply the `type()` function to the extracted column.
 
-```{python ex8, exercise = TRUE, message = FALSE}
+```{python ex8, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -257,9 +247,9 @@ type(starwars["name"])
 grade_this_code()
 ```
 
-9. Because it's part of the data frame, `name` is saved as a `Series`! But, we can still confirm that the `Series` is made up of strings. Extract first element of the extracted column and apply the `type()` function
+Because it's a column of the data frame, `name` is saved as a `Series` object! But, we can still confirm that the `Series` is made up of strings. Extract first element of the extracted column and apply the `type()` function.
 
-```{python ex9, exercise = TRUE, message = FALSE}
+```{python ex9, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -271,11 +261,11 @@ type(starwars["name"].iloc[0])
 grade_this_code()
 ```
 
-You should finally see that this is a string, but also, you should see that we can use multiple square brackets to break down an object into smaller and smaller pieces.
+You should finally see that this is indeed a string.
 
-10. Write a line of code to select all of the numeric variables. 
+Now, write a line of code using double square brackets to select all of the numeric variables. Keep them in the same order as the original data frame.
 
-```{python ex10, exercise = TRUE, message = FALSE}
+```{python ex10, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -287,9 +277,9 @@ starwars[["height", "mass", "birth_year"]]
 grade_this_code()
 ```
 
-11. Write a line of code to extract the eleventh row of the data frame. 
+Write a line of code to extract the eleventh row of the data frame. Specify that we are selecting all columns.
 
-```{python ex11, exercise = TRUE, message = FALSE}
+```{python ex11, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -301,12 +291,11 @@ starwars.iloc[10,:]
 grade_this_code()
 ```
 
-Remember that when indexing with square brackets in Python, the first index is inclusive and the second is exclusive. So, to extract one row, you use something like `[row of interest:row of interest + 1]`, and it will only give the one row. However, you can also adjust the indices to select whole chunks of data at the same time. 
+Remember that when indexing with square brackets in Python, the first index is inclusive and the second is exclusive.
+Write a line of code to select the tenth through nineteenth rows of the data frame. When we say the "tenth" row, we mean the row in the 9-index spot.
 
-12. Change your code to select the tenth through nineteenth rows of the data frame. 
+```{python ex12, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
-```{python ex12, exercise = TRUE, message = FALSE}
-starwars[10:11]
 ```
 
 ```{python ex12-solution, message = FALSE, warning = FALSE, echo = FALSE}
@@ -320,7 +309,7 @@ grade_this_code()
 Don't forget, we can also subset the data frame using row extraction in conjunction with a logical operator to select the observations that meet a certain criteria. 
 
 ```{r q13, echo=FALSE}
-question("13. Which statement below tests to see if a character is a Droid?",
+question("Which statement below tells us if each observation is a Droid?",
          answer("`starwars['species'] = Droid`"),
          answer("`starwars['species'] == Droid`"),
          answer("`starwars['species'] = 'Droid'`"),
@@ -330,9 +319,9 @@ question("13. Which statement below tests to see if a character is a Droid?",
          )
 ```
 
-14. Now, using your answer as well as `.loc`, extract the rows of `starwars` where the character is a Droid.
+Now, using your answer as well as `.loc`, extract the rows of `starwars` where the character is a Droid.
 
-```{python ex14, exercise = TRUE, message = FALSE}
+```{python ex14, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -344,9 +333,10 @@ starwars.loc[starwars["species"] == "Droid"]
 grade_this_code()
 ```
 
-15. Finally, write a line of code that will sort the data frame according to the character's mass. Write your code so that the largest masses appear first. 
+Finally, write a line of code that will sort the data frame according to the character's mass. 
+Write your code so that the largest masses appear first. 
 
-```{python ex15, exercise = TRUE, message = FALSE}
+```{python ex15, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
