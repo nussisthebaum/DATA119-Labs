@@ -66,6 +66,8 @@ starwars = pd.read_csv("./data/starwars.csv", index_col = 0)
 
 pilots = pd.read_csv("./data/pilots.csv", index_col = 0)
 pilots_small = pilots.loc[(pilots["vehicles"].notna()) | (pilots["starships"].notna())]
+starwars_pilots = pd.merge(pilots_small, starwars, how = "left")
+starwars_pilots_method = pilots_small.merge(starwars, how = "left")
 
 ep1 = pd.read_csv("./data/the_phantom_menace.csv", index_col = 0)
 ep2 = pd.read_csv("./data/attack_of_the_clones.csv", index_col = 0)
@@ -660,8 +662,7 @@ grade_this_code()
 Thus far, we have only shown you how to use `merge()` as a function. However, we can also use it as a method, where it acts on one of the data frames explicitly. 
 Take a look at this example:
 
-
-```{python ex35, exercise = FALSE, message = FALSE, exercise.setup = "setup_py"}
+```{python ex_methods, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 starwars_pilots_method = pilots_small.merge(starwars, how = "left")
 ```
 
