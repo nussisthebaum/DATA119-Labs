@@ -554,7 +554,7 @@ question("What is the average height of a female human (in cm)?",
 
 ## `.merge()`
 
-Finally, let's consider `.merge()`. I have two variables in the `pilots` data frame--a string containing all vehicles a character has driven, and a string containing all starships a character has driven. 
+Finally, let's consider `.merge()`. We have two variables in the `pilots` data frame--a string containing all vehicles a character has driven, and a string containing all starships a character has driven. 
 
 ```{r, echo = FALSE, eval = FALSE}
 vehicles_string <- rep(0, length(starwars$vehicles))
@@ -579,14 +579,15 @@ write.csv(pilots, file = "/Users/amynussbaum/Documents/U of C/Courses/DATA119-La
 pilots = pd.read_csv("./data/pilots.csv", index_col = 0)
 ```
 
-Confirm that `pilots` has at least one column in common with `starwars` by accessing the correct attribute from `pilots`--then, look at the two sets of output to compare (no reason to write a logical condition).
+Write one line to confirm which columns `pilots` has in common with `starwars`.
+To do this, make both column `Series` into sets, and then take the intersection. Return to last week's tutorial if you forgot about sets!
 
 ```{python ex24, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
 ```{python ex24-solution, message = FALSE, warning = FALSE, echo = FALSE}
-pilots.columns
+set(pilots.columns) & set(starwars.columns)
 ```
 
 ```{r ex24-code-check, message = FALSE, warning = FALSE}
@@ -604,23 +605,30 @@ question("Which column do `pilots` and `starwars` have in common?",
          )
 ```
 
-Join `pilots` to `starwars` into one data frame called `starwars_big`. 
+Merge `pilots` and `starwars` into one data frame called `starwars_big` using `pd.merge()`. 
+No need to add any additional arguments.
+
 
 ```{python ex26, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
 ```{python ex26-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars_big = starwars.merge(pilots)
+starwars_big = pd.merge(pilots, starwars)
 ```
 
 ```{r ex26-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-There are quite a few cells in the data frame with missing values (`NaN`). Let's try to address that. 
+If we take a look, there are quite a few cells in the data frame with missing values (`NaN`). 
 
-If a character has not driven any vehicles, they will have an empty string `""` in the `vehicles` column in the `pilots` data frame (same with `starships`). Write a line of code to take a subset of `pilots` where the characters are only included if they have driven at least one vehicle or at least one starship (Hint: It may be easier to use the `pandas` function `notna()`). Save the subset as `pilots_small`.
+If a character has not driven any vehicles, they will have an empty string `""` in the `vehicles` column in the `pilots` data frame (same with `starships`). 
+Write a line of code to take a subset of `pilots` where the characters are only included if they have driven at least one vehicle or at least one starship 
+Save the subset as `pilots_small`.
+
+*Hint:* Use the `pandas` function `notna()` in conjunction with a binary operator. 
+
  
 ```{python ex27, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
@@ -634,23 +642,49 @@ pilots_small = pilots.loc[(pilots["vehicles"].notna()) | (pilots["starships"].no
 grade_this_code()
 ```
 
-Now, join `pilots_small` to `starwars` in such a way that ONLY the characters who have driven a vehicle or starship remain in the dataset. Call this dataframe `starwars_pilots`.
+Now, merge `pilots_small` and `starwars` in such a way that ONLY the characters who have driven a vehicle or starship remain in the dataset. 
+Call this dataframe `starwars_pilots`.
 
 ```{python ex28, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
 ```{python ex28-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars_pilots = pilots_small.merge(starwars, how = "left")
+starwars_pilots = pd.merge(pilots_small, starwars, how = "left")
 ```
 
 ```{r ex28-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
+Thus far, we have only shown you how to use `merge()` as a function. However, we can also use it as a method, where it acts on one of the data frames explicitly. 
+Take a look at this example:
+
+
+```{python ex35, exercise = FALSE, message = FALSE, exercise.setup = "setup_py"}
+starwars_pilots_method = pilots_small.merge(starwars, how = "left")
+```
+
+Both data frames: `starwars_pilots` and `starwars_pilots_method` should be identical. 
+Write one line of code to check this using `.equals()`.
+
+
+```{python ex36, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex36-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars_pilots.equals(starwars_pilots_methods)
+```
+
+```{r ex36-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+
 Now that we have learned how to join two data frames that have a column in common, let's take a look at how to add multiple data frames together when they all have the same columns. For example, I have seven smaller data frames containing all of the characters that appear in Episodes I-VII. 
 
-```{python eps, exercise = TRUE, message = FALSE}
+```{python eps, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 ep1 = pd.read_csv("./data/the_phantom_menace.csv", index_col = 0)
 ep2 = pd.read_csv("./data/attack_of_the_clones.csv", index_col = 0)
 ep3 = pd.read_csv("./data/revenge_of_the_sith.csv", index_col = 0)
