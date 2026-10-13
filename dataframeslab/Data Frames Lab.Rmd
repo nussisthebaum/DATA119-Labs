@@ -123,13 +123,13 @@ For this lab we will be using the `pandas` library in Python, as well as a new d
 ```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup_py"}
 import pandas as pd
 
-# To download any of these data files 
-# go to https://posit.ds.uchicago.edu/correlationlab/www/<name of file here>.csv
+# To download any of these data files go to 
+# https://posit.ds.uchicago.edu/correlationlab/www/<name of file here>.csv
 
 starwars = pd.read_csv("./data/starwars.csv")
 ```
 
-## Basic `pandas`
+## Basic data frame attributes and methods
 
 First, let's review some basic `pandas` using the `starwars` data frame. `starwars` includes the following variables:
 
@@ -138,13 +138,13 @@ First, let's review some basic `pandas` using the `starwars` data frame. `starwa
 * `mass`: Weight (kg)
 * `hair_color`, `skin_color`, `eye_color`: Hair, skin, and eye colors
 * `birth_year`: Year born (BBY = Before Battle of Yavin)
-* `sex`: The biological sex of the character, namely male, female, hermaphroditic, or none (as in the case for Droids).
-* `gender`: The gender role or gender identity of the character as determined by their personality or the way they were programmed (as in the case for Droids).
+* `sex`: The biological sex of the character, namely male, female, hermaphroditic, or none (as is the case for Droids)
+* `gender`: The gender role or gender identity of the character as determined by their personality or the way they were programmed (as is the case for Droids)
 * `homeworld`: Name of homeworld
 * `species`: Name of species
 
 ```{r q1, echo=FALSE}
-question("1. What data frame attribute can confirm the names of these columns?",
+question("1. Which data frame attribute can confirm the names of these columns?",
          answer("`.columns`", correct = TRUE),
          answer("`.dtypes`", ),
          answer("`.index`"),
@@ -155,22 +155,8 @@ question("1. What data frame attribute can confirm the names of these columns?",
          )
 ```
 
-2. Now, write a line of code to access the column names. Remember, an attribute follows the object with no parentheses. 
-
-```{python ex2, exercise = TRUE, message = FALSE}
-
-```
-
-```{python ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars.columns
-```
-
-```{r ex2-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
 ```{r q3, echo=FALSE}
-question("3. What data frame attribute can help you find the number of observations in `starwars`?",
+question("3. Which data frame attribute can help you find the number of observations in `starwars`?",
          answer("`.columns`"),
          answer("`.dtypes`", ),
          answer("`.index`"),
@@ -181,9 +167,9 @@ question("3. What data frame attribute can help you find the number of observati
          )
 ```
 
-4. Now, write a line of code to help you find the number of observations. 
+Use the method you chose above on our data frame.
 
-```{python ex4, exercise = TRUE, message = FALSE}
+```{python ex4, exercise = TRUE, message = FALSE, exercise.setup = setup.py}
 
 ```
 
