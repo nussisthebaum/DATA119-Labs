@@ -355,7 +355,7 @@ grade_this_code()
 ```
 
 ```{r q16, echo=FALSE}
-question("16. Which character has the largest mass?",
+question("Which character has the largest mass?",
          answer("Captain Phasma"),
          answer("Jabba Desilijic Tiure", correct = TRUE),
          answer("Yarael Poof"),
@@ -374,9 +374,9 @@ Now let's do some exploratory data analysis with `.groupby()` and our aggregatio
 * `.min()`: The smallest observation
 * `.max()`: The largest observation
 
-17. Write a line of code to find out how many of each species there are in the data frame. 
+Write a line of code to find out how many of each species there are in the data frame. 
 
-```{python ex17, exercise = TRUE, message = FALSE}
+```{python ex17, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -388,9 +388,9 @@ starwars.groupby("species").count()
 grade_this_code()
 ```
 
-18. Remember that this is a lot of repeated output, and we can fix it by re-indexing. Write a line of code to reset the index and shorten the output. 
+Remember that this is a lot of repeated output, and we can fix it by re-indexing. Write a line of code to reset the index and shorten the output. 
 
-```{python ex18, exercise = TRUE, message = FALSE}
+```{python ex18, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -411,9 +411,9 @@ Note that while we are asking you to use `.groupby()` to complete these problems
 
 ::::
 
-19. Save your result as a new data frame, `starwars_species`, and write a new line of code to give the number of species with more than one character in the *Star Wars* universe. You may have to use more than one line of code. 
+Save your result as a new data frame, `starwars_species`, and write a new line of code to give the number of species with more than one character in the *Star Wars* universe. You may have to use more than one line of code. 
 
-```{python ex19, exercise = TRUE, message = FALSE}
+```{python ex19, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -426,9 +426,9 @@ starwars_species.loc[starwars_species["name"] > 1].shape[0]
 grade_this_code()
 ```
 
-20. Using the original `starwars` data frame, write a single line of code to calculate the means for all the numeric variables for each of the species. Normally we would not do this for very very small groups (e.g., one observation), but for now, it's okay. 
+Using the original `starwars` data frame, write a single line of code to calculate the means for all the numeric variables for each of the species. Normally we would not do this for very very small groups (e.g., one observation), but for now, it's okay. 
 
-```{python ex20, exercise = TRUE, message = FALSE}
+```{python ex20, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -444,9 +444,9 @@ grade_this_code()
 
 Let's transition to working with pivot tables. 
 
-21. Write a line of code to compare the eye and hair colors of the *Star Wars* characters. Eye color should be in the rows of your pivot table.
+Write a line of code to compare the eye and hair colors of the *Star Wars* characters. Eye color should be in the rows of your pivot table.
 
-```{python ex21, exercise = TRUE, message = FALSE}
+```{python ex21, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -472,9 +472,9 @@ question("22. How many characters have black eyes and no hair?",
 
 This is what is known as a "sparse" table--lots of categories with no values, and only a few with actual numbers. Let's take a look at a smaller table. 
 
-23. Write a line of code to compare heights grouped by sex and species. Feel free to use the default aggregation function. `species` should be in the rows of your table. 
+Write a line of code to compare heights grouped by sex and species. Feel free to use the default aggregation function. `species` should be in the rows of your table. 
 
-```{python ex23, exercise = TRUE, message = FALSE}
+```{python ex23, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -514,9 +514,9 @@ write.csv(pilots, file = "/Users/amynussbaum/Documents/U of C/Courses/DATA119-La
 pilots = pd.read_csv("./data/pilots.csv", index_col = 0)
 ```
 
-24. Confirm that `pilots` has at least one column in common with `starwars` by accessing the correct attribute from `pilots`--then, look at the two sets of output to compare (no reason to write a logical condition).
+Confirm that `pilots` has at least one column in common with `starwars` by accessing the correct attribute from `pilots`--then, look at the two sets of output to compare (no reason to write a logical condition).
 
-```{python ex24, exercise = TRUE, message = FALSE}
+```{python ex24, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -529,7 +529,7 @@ grade_this_code()
 ```
 
 ```{r q25, echo=FALSE}
-question("25. Which column do `pilots` and `starwars` have in common?",
+question("Which column do `pilots` and `starwars` have in common?",
          answer("`height`"),
          answer("`name`", correct = TRUE),
          answer("`vehicles`"),
@@ -539,9 +539,9 @@ question("25. Which column do `pilots` and `starwars` have in common?",
          )
 ```
 
-26. Join `pilots` to `starwars` into one data frame called `starwars_big`. 
+Join `pilots` to `starwars` into one data frame called `starwars_big`. 
 
-```{python ex26, exercise = TRUE, message = FALSE}
+```{python ex26, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -555,9 +555,9 @@ grade_this_code()
 
 There are quite a few cells in the data frame with missing values (`NaN`). Let's try to address that. 
 
-27. If a character has not driven any vehicles, they will have an empty string `""` in the `vehicles` column in the `pilots` data frame (same with `starships`). Write a line of code to take a subset of `pilots` where the characters are only included if they have driven at least one vehicle or at least one starship (Hint: It may be easier to use the `pandas` function `notna()`). Save the subset as `pilots_small`.
+If a character has not driven any vehicles, they will have an empty string `""` in the `vehicles` column in the `pilots` data frame (same with `starships`). Write a line of code to take a subset of `pilots` where the characters are only included if they have driven at least one vehicle or at least one starship (Hint: It may be easier to use the `pandas` function `notna()`). Save the subset as `pilots_small`.
  
-```{python ex27, exercise = TRUE, message = FALSE}
+```{python ex27, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -569,9 +569,9 @@ pilots_small = pilots.loc[(pilots["vehicles"].notna()) | (pilots["starships"].no
 grade_this_code()
 ```
 
-28. Now, join `pilots_small` to `starwars` in such a way that ONLY the characters who have driven a vehicle or starship remain in the dataset. Call this dataframe `starwars_pilots`.
+Now, join `pilots_small` to `starwars` in such a way that ONLY the characters who have driven a vehicle or starship remain in the dataset. Call this dataframe `starwars_pilots`.
 
-```{python ex28, exercise = TRUE, message = FALSE}
+```{python ex28, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -597,9 +597,9 @@ ep7 = pd.read_csv("./data/the_force_awakens.csv", index_col = 0)
 
 Similarly to strings and lists, we can concatenate data frames together. The function to do so is `concat()`. `concat()` accepts a list of data frames to be concatenated. 
 
-29. Concatenate the `ep1` and `ep2` data frames.
+Concatenate the `ep1` and `ep2` data frames.
 
-```{python ex29, exercise = TRUE, message = FALSE}
+```{python ex29, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
@@ -611,9 +611,9 @@ pd.concat([ep1, ep2])
 grade_this_code()
 ```
 
-30. You can also provide a longer list to concatenate more data frames simultaneously. Concatenate all seven of the smaller `epx` data frames.
+You can also provide a longer list to concatenate more data frames simultaneously. Concatenate all seven of the smaller `epx` data frames.
 
-```{python ex30, exercise = TRUE, message = FALSE}
+```{python ex30, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
