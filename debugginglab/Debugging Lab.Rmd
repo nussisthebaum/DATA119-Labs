@@ -26,7 +26,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.reveal_solution = FALSE)
 ```
 
 ```{r header, echo = FALSE}
@@ -41,7 +41,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Data 119 - Debugging Your Code", class = "pageTitle")
+    tags$h1("Debugging Your Code", class = "pageTitle")
   )
 )
 ```
@@ -331,8 +331,6 @@ For example,
 
 The code in this chunk would raise a `ZeroDivision` error because you cannot divide by zero. To fix it, you might replace the zero with some other integer or float value. 
 
-1. 
-
 ```{python, echo = TRUE, eval = FALSE}
 state_capitals = {"Illinois": "Springfield", 
                   "Massachusetts": "Boston",
@@ -384,7 +382,6 @@ question("How would you fix this error?",
   post_message = "Congratulations! You have found the first secret word: PAN. Enter this word in the Debugging Lab assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit.")
 ```
 
-2. 
 
 ```{python, echo = TRUE, eval = FALSE}
 state_capitals["Virginia"]]
@@ -422,7 +419,6 @@ question("How would you fix this error?",
   post_message = "Congratulations! You have found the second secret word: JACKET. Enter this word in the Debugging Lab assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit.")
 ```
 
-3. 
 
 ```{python, echo = TRUE, eval = FALSE}
 states = 50
@@ -461,7 +457,6 @@ question("How would you fix this error?",
   post_message = "Congratulations! You have found the third secret word: TRAINER. Enter this word in the Debugging Lab assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit.")
 ```
 
-4. 
 
 ```{python, echo = TRUE, eval = FALSE}
 capitals_data = {'Capital': ["Springfield", "Boston", "Austin", "Richmond"]}
@@ -502,8 +497,6 @@ question("How would you fix this error?",
   random_answer_order = TRUE, 
   post_message = "Congratulations! You have found the fourth secret word: LOUD. Enter this word in the Debugging Lab assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit.")
 ```
-
-5. 
 
 ```{python, echo = TRUE, eval = FALSE}
 capitals_df.len()
@@ -546,9 +539,7 @@ question("How would you fix this error?",
 
 Now, you try! Find and fix the syntax errors, exceptions, and logical errors in the code blocks below.
 
-No peaking at the answers!!
-
-1. Debug this combination of shapes and colors.
+Debug this combination of shapes and colors.
 
 ```{python q1, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 shapes = ["circle", "square", "rectangle", "triangle", "rhombus",]
@@ -570,7 +561,7 @@ for i in range(5):
 grade_this_code()
 ```  
     
-2. Debug this set of factorials.
+Debug this set of factorials.
     
 ```{python q2, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 number = 5
@@ -596,7 +587,7 @@ print(f"The factorial of {number} is {factorial}")
 grade_this_code()
 ```  
 
-3. Debug this sum of even numbers.
+Debug this sum of even numbers.
 
 ```{python q3, exercise=TRUE, exercise.eval = TRUE, warning = FALSE, message = FALSE, exercise.setup = "setup-packages"}
 numbers = [1 2, 3, 4, 5, 6, 7, 8, 9, 10]
