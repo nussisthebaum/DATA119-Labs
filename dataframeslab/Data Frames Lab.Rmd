@@ -459,7 +459,7 @@ starwars_species_mass.loc[starwars_species_mass["mass"] < 100].sort_values("mass
 grade_this_code()
 ```
 
-## `.pivot()`
+## Pivot tables
 
 Let's transition to working with pivot tables. 
 Recall that when working with pivot tables we provide `DataFrame`, `index`, `columns`, `values`, and `aggfunc` arguments.
@@ -481,13 +481,12 @@ grade_this_code()
 ```
 
 ```{r q22, echo=FALSE}
-question("22. How many characters have black eyes and no hair?",
+question("How many characters have black eyes and no hair?",
          answer("1.0"),
          answer("3.0"),
          answer("9.0", correct = TRUE),
          answer("`NaN`"),
-         allow_retry = TRUE,
-         post_message = "Congratulations! You have found the fourth secret word: BRONZE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         allow_retry = TRUE
          )
 ```
 
@@ -510,6 +509,8 @@ grade_this_code()
 ```
 
 This helped us a lot! It dropped all NaN values, and put it back in a tabular form.
+
+Also take note of the warning given to us by Python. There isn't an issue with running the code now, but there will be in the future.
 
 
 :::: {.discussionbox}
@@ -538,6 +539,17 @@ pd.pivot_table(starwars, index = ["species"], columns = ["sex"],
 
 ```{r ex23-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
+```
+
+```{r q33, echo=FALSE}
+question("What is the average height of a female human (in cm)?",
+         answer(213.00),
+         answer(182.39),
+         answer(163.57, correct = TRUE),
+         answer("`NaN`"),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the fourth secret word: BRONZE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         )
 ```
 
 ## `.merge()`
