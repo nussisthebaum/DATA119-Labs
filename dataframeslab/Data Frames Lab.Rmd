@@ -360,7 +360,7 @@ question("Which character has the largest mass?",
          answer("Yarael Poof"),
          answer("Yoda"),
          allow_retry = TRUE,
-         post_message = "Congratulations! You have found the third secret word: SLIPPERY. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         post_message = "Congratulations! You have found the second secret word: SLIPPERY. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
          )
 ```
 
@@ -409,7 +409,7 @@ Right below it, write one new line of code to give us the number of species with
 
 ```{python ex19-solution, message = FALSE, warning = FALSE, echo = FALSE}
 starwars_species = pd.DataFrame(starwars.groupby("species")["name"].count())
-starwars_species.loc[starwars_species["name"] > 1].shape[0]
+len(starwars_species.loc[starwars_species["name"] > 1])
 ```
 
 ```{r ex19-code-check, message = FALSE, warning = FALSE}
@@ -423,7 +423,7 @@ question("How many species are there with more than one character?",
          answer(3),
          answer(5),
          allow_retry = TRUE,
-         post_message = "Congratulations! You have found the second secret word: URGE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         post_message = "Congratulations! You have found the third secret word: URGE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
          )
 ```
 
@@ -462,8 +462,10 @@ grade_this_code()
 ## `.pivot()`
 
 Let's transition to working with pivot tables. 
+Recall that when working with pivot tables we provide `DataFrame`, `index`, `columns`, `values`, and `aggfunc` arguments.
 
-Write a line of code to compare the eye and hair colors of the *Star Wars* characters. Eye color should be in the rows of your pivot table.
+Write a line of code to count the number of characters with each eye and hair color combination. 
+Eye color should be in the rows of your pivot table. Use "name" in the `values` argument.
 
 ```{python ex21, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
@@ -489,9 +491,41 @@ question("22. How many characters have black eyes and no hair?",
          )
 ```
 
-This is what is known as a "sparse" table--lots of categories with no values, and only a few with actual numbers. Let's take a look at a smaller table. 
+This is what is known as a "sparse" table--lots of categories with no values, and only a few with actual numbers. 
+Let's assign our pivot table to a data frame called `pivot_df`, and use a method called `.stack()` on it.
 
-Write a line of code to compare heights grouped by sex and species. Feel free to use the default aggregation function. `species` should be in the rows of your table. 
+```{python ex32, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex32-solution, message = FALSE, warning = FALSE, echo = FALSE}
+pivot_df = pd.pivot_table(starwars, index = ["eye_color"], columns = ["hair_color"], 
+                        values = ["name"], aggfunc = "count")
+
+pivot_df.stack()
+```
+
+```{r ex32-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+This helped us a lot! It dropped all NaN values, and put it back in a tabular form.
+
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+In the exercise above, we asked you to use `.stack()` on a pivot table to make it more readable. Could we have used `.groupby()` on the original `starwars` data frame instead? Would there be any difference in output?
+
+::::
+
+
+Now let's take a look at a smaller, less sparse table. 
+
+Write a line of code to create a pivot table that compares mean heights grouped by sex and species. 
+`species` should be in the rows of your table. 
 
 ```{python ex23, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
