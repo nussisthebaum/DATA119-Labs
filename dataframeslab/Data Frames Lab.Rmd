@@ -575,7 +575,7 @@ colnames(pilots) <- c("name", "vehicles", "starships")
 write.csv(pilots, file = "/Users/amynussbaum/Documents/U of C/Courses/DATA119-Labs/dataframeslab/data/pilots.csv")
 ```
 
-```{python ex_pilots, exercise = TRUE, message = FALSE}
+```{python ex_pilots, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 pilots = pd.read_csv("./data/pilots.csv", index_col = 0)
 ```
 
