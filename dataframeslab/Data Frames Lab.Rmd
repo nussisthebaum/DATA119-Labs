@@ -129,7 +129,7 @@ import pandas as pd
 starwars = pd.read_csv("./data/starwars.csv")
 ```
 
-## Basic data frame attributes and methods
+## Data frame attributes
 
 First, let's review some basic `pandas` using the `starwars` data frame. `starwars` includes the following variables:
 
@@ -144,7 +144,7 @@ First, let's review some basic `pandas` using the `starwars` data frame. `starwa
 * `species`: Name of species
 
 ```{r q1, echo=FALSE}
-question("1. Which data frame attribute can confirm the names of these columns?",
+question("Which data frame attribute can confirm the names of these columns?",
          answer("`.columns`", correct = TRUE),
          answer("`.dtypes`", ),
          answer("`.index`"),
@@ -156,7 +156,7 @@ question("1. Which data frame attribute can confirm the names of these columns?"
 ```
 
 ```{r q3, echo=FALSE}
-question("3. Which data frame attribute can help you find the number of observations in `starwars`?",
+question("Which data frame attribute can help you find the number of observations in `starwars`?",
          answer("`.columns`"),
          answer("`.dtypes`", ),
          answer("`.index`"),
@@ -174,7 +174,7 @@ Use the method you chose above on our data frame.
 ```
 
 ```{r q5, echo=FALSE}
-question("5. How many observations are there in `starwars`?",
+question("How many observations are there in `starwars`?",
          answer("11", message = "This is the number of columns, not the number of rows/observations."),
          answer("87", correct = TRUE),
          answer("1044", message = "Check to make sure you used the right attribute!"),
@@ -219,7 +219,10 @@ question("Which of the variables in `starwars` are numeric? Select all that appl
          )
 ```
 
-Categorical variables are usually saved as strings, but all I can see is `object`. Let's investigate further. Using square brackets, extract the `name` column. 
+Categorical variables are usually saved as strings, but all I can see is `object`. Let's investigate further. 
+Using square brackets, extract the `name` column. 
+
+**Important note:** Throughout this lab, please use double quotes instead of single quotes when dealing with strings: e.g., "this" not 'this'.
 
 ```{python ex7, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
@@ -247,7 +250,9 @@ type(starwars["name"])
 grade_this_code()
 ```
 
-Because it's a column of the data frame, `name` is saved as a `Series` object! But, we can still confirm that the `Series` is made up of strings. Extract first element of the extracted column and apply the `type()` function.
+Because it's a column of the data frame, `name` is saved as a `Series` object! 
+But, we can still confirm that the `Series` is made up of strings. 
+Write a line of code that checks the type of the first element in the column. Extract the column first, and then the row.
 
 ```{python ex9, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
@@ -292,14 +297,15 @@ grade_this_code()
 ```
 
 Remember that when indexing with square brackets in Python, the first index is inclusive and the second is exclusive.
-Write a line of code to select the tenth through nineteenth rows of the data frame. When we say the "tenth" row, we mean the row in the 9-index spot.
+Write a line of code using `iloc` to select the tenth through nineteenth rows of the data frame. 
+For this question, do not specify that we are selecting every column; `pandas` does this by default.
 
 ```{python ex12, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
 ```{python ex12-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars[9:19]
+starwars.iloc[9:19]
 ```
 
 ```{r ex12-code-check, message = FALSE, warning = FALSE}
@@ -310,10 +316,10 @@ Don't forget, we can also subset the data frame using row extraction in conjunct
 
 ```{r q13, echo=FALSE}
 question("Which statement below tells us if each observation is a Droid?",
-         answer("`starwars['species'] = Droid`"),
-         answer("`starwars['species'] == Droid`"),
-         answer("`starwars['species'] = 'Droid'`"),
-         answer("`starwars['species'] == 'Droid'`", correct = TRUE),
+         answer("`starwars["species"] = Droid`"),
+         answer("`starwars["species"] == Droid`"),
+         answer("`starwars["species"] = "Droid"`"),
+         answer("`starwars["species"] == "Droid"`", correct = TRUE),
          allow_retry = TRUE #,
          #post_message = "Congratulations! You have found the second secret word: URGE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
          )
@@ -389,7 +395,7 @@ grade_this_code()
 ```
 
 ```{python ex18-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars.groupby('species').count().reset_index()
+starwars.groupby("species").count().reset_index()
 ```
 
 ```{r ex18-code-check, message = FALSE, warning = FALSE}
@@ -412,7 +418,7 @@ Note that while we are asking you to use `.groupby()` to complete these problems
 ```
 
 ```{python ex19-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars_species = starwars.groupby('species').count()["name"].reset_index()
+starwars_species = starwars.groupby("species").count()["name"].reset_index()
 starwars_species.loc[starwars_species["name"] > 1].shape[0]
 ```
 
@@ -570,7 +576,7 @@ grade_this_code()
 ```
 
 ```{python ex28-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars_pilots = pilots_small.merge(starwars, how = 'left')
+starwars_pilots = pilots_small.merge(starwars, how = "left")
 ```
 
 ```{r ex28-code-check, message = FALSE, warning = FALSE}
