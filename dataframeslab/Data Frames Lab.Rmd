@@ -427,17 +427,35 @@ question("How many species are there with more than one character?",
          )
 ```
 
-Using the original `starwars` data frame, write a single line of code to calculate the means for all the numeric variables for each of the species. Normally we would not do this for very very small groups (e.g., one observation), but for now, it's okay. 
+Using the original `starwars` data frame, write a single line of code to calculate the mean mass for each of the species. 
+Normally we would not do this for very very small groups (e.g., one observation), but for now, it's okay. 
 
 ```{python ex20, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
 ```
 
 ```{python ex20-solution, message = FALSE, warning = FALSE, echo = FALSE}
-starwars.groupby("species").mean(numeric_only = True)
+starwars.groupby("species")["mass"].mean()
 ```
 
 ```{r ex20-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Save your result as a new data frame, `starwars_species_mass`. 
+Then, write one line of code to sort the species that have an average mass of less than 100 kg from most to least massive.
+
+```{python ex31, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex31-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars_species_mass = pd.DataFrame(starwars.groupby("species")["mass"].mean())
+starwars_species_mass.loc[starwars_species_mass["mass"] < 100].sort_values("mass", ascending = False)
+
+```
+
+```{r ex31-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
