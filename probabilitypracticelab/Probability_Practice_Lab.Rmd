@@ -111,7 +111,7 @@ The goals of this lab are:
 
 For this lab we will be using  `math`, `numpy`, and `pandas`.
 
-```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
 import math
 import numpy as np
 import pandas as pd
@@ -121,7 +121,7 @@ import pandas as pd
 
 Consider a fictitious university similar to the University of Chicago in many ways--however, a policy of this university is that students may choose one and only one major. We have a data frame with information from 500 of this university's students. 
 
-```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
 # To download this file go to https://posit.ds.uchicago.edu/probabilitypracticelab/www/students.csv
 
 student_majors = pd.read_csv("./data/students.csv")
@@ -129,7 +129,7 @@ student_majors = pd.read_csv("./data/students.csv")
 
 Use this cell to carry out some exploratory data analysis using either built-in Python functions or `pandas`-specific methods and attributes. You will need to explore the `student_majors` data frame to answer the following questions. 
 
-```{python explore, exercise = TRUE, message = FALSE}
+```{python explore, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -168,12 +168,12 @@ question("Describe the sample space of student majors at this university.",
 
 Now, use `.groupby()` on `student_majors` to find the counts of each major. 
 
-```{python ex4, exercise = TRUE, message = FALSE}
+```{python ex4, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
 ```{python ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
-student_majors.groupby("major").count()
+student_majors.groupby("major")["SID"].count()
 ```
 
 ```{r ex4-code-check, message = FALSE, warning = FALSE}
@@ -182,7 +182,7 @@ grade_this_code()
 
 Now, use this cell, as well as your `.groupby()` statement, to calculate the probabilities described in the questions below.
 
-```{python calculate1, exercise = TRUE, message = FALSE}
+```{python calculate1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -217,7 +217,7 @@ How would your approach to answering the previous question change if this univer
 
 Confirm that the probability that a student's major is `Other` using the Complement Rule.
 
-```{python ex7, exercise = TRUE, message = FALSE}
+```{python ex7, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -244,7 +244,7 @@ ggvenn(student_majors, c("DATA118", "DATA119", "DATA120"),
 
 Now, use this cell, as well as the `student_majors` data frame and the Venn Diagram, to calculate the probabilities described in the questions below.
 
-```{python calculate2, exercise = TRUE, message = FALSE}
+```{python calculate2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -278,7 +278,7 @@ question(text = "True or False: The event that a student is enrolled in DATA118 
 
 If the event that a student is enrolled in DATA118 and the event that a student is enrolled in DATA119 were independent, what would the probability of a student taking DATA118 and DATA119 be? Use the cell below to calculate your response. 
 
-```{python ex11, exercise = TRUE, message = FALSE}
+```{python ex11, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -332,7 +332,7 @@ Although we don't need a contingency table to calculate these kinds of probabili
 
 Create a pivot table with majors in the rows of the pivot table and whether or not a student is taking DATA118 in the columns. You should be counting the students, not taking the means or using any other aggregating function.
 
-```{python ex13, exercise = TRUE, message = FALSE}
+```{python ex13, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -346,7 +346,7 @@ grade_this_code()
 
 As it turns out, there are some ways to improve our pivot table. Check out the documentation for [`pivot_table()`](https://pandas.pydata.org/docs/reference/api/pandas.pivot_table.html). Then, add the argument `margins = True` to your line from the previous exercise. 
 
-```{python ex14, exercise = TRUE, message = FALSE}
+```{python ex14, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -369,7 +369,7 @@ Between the documentation and the output of your last line of code, what does ad
 
 Now let's focus on finding the probability that a student is taking DATA118 conditioned on their major. Use this cell, as well as your pivot table, to calculate the probabilities described in the questions below.
 
-```{python calculate3, exercise = TRUE, message = FALSE}
+```{python calculate3, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -446,7 +446,7 @@ Are these two probabilities the same or different? What do you think that says a
 
 Use this cell, as well as your pivot table, to calculate the probabilities described in the questions below.
 
-```{python calculate4, exercise = TRUE, message = FALSE}
+```{python calculate4, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -492,7 +492,7 @@ Is $P($ `DATA` $|$ `DATA118` $)$ the same as $P($ `DATA118` $|$ `DATA` $)$? Shou
 
 Finally, use this cell, as well as your pivot table, to calculate some even more complicated probabilities described in the questions below.
 
-```{python calculate5, exercise = TRUE, message = FALSE}
+```{python calculate5, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -532,7 +532,7 @@ So far, we have mostly worked with categorical variables (e.g., a student's majo
 
 Create a new column in the `student_majors` data frame representing the number of Introductory Data Science courses (118, 119, 120) a student could be taking. Call the variable `no_classes`. 
 
-```{python ex27, exercise = TRUE, message = FALSE}
+```{python ex27, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -579,7 +579,7 @@ You might have looked at the column to see what values are in the sample space, 
 
 Now use `.groupby()` to find the distribution. 
 
-```{python ex29, exercise = TRUE, message = FALSE, exercise.setup = "ex27"}
+```{python ex29, exercise = TRUE, message = FALSE, exercise.setup = "ex27", exercise.setup="setup_py"}
 
 ```
 
@@ -593,7 +593,7 @@ grade_this_code()
 
 Use this cell, as well as the results of your `.groupby()` statement, to calculate the probabilities described in the questions below.
 
-```{python calculate6, exercise = TRUE, message = FALSE}
+```{python calculate6, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
