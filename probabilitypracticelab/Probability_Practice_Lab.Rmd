@@ -34,7 +34,9 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.timelimit = 180)
+tutorial_options(exercise.completion = FALSE, exercise.timelimit = 180, 
+                 exercise.reveal_solution = TRUE
+)
 
 set.seed(735)
 
@@ -166,23 +168,23 @@ question("Describe the sample space of student majors at this university.",
          )
 ```
 
-Now, use `.groupby()` on `student_majors` to find the counts of each major. 
+Now, use `.groupby()` on `student_majors` to find the counts of each major. Be sure to view on the `"SID"` column, and save your new object as `major_dist`. 
 
 ```{python ex4, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
 ```{python ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
-student_majors.groupby("major")["SID"].count()
+major_dist = student_majors.groupby("major")["SID"].count()
 ```
 
 ```{r ex4-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-Now, use this cell, as well as your `.groupby()` statement, to calculate the probabilities described in the questions below.
+Now, use this cell, as well as your `major_dist` object, to calculate the probabilities described in the questions below.
 
-```{python calculate1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+```{python calculate1, exercise = TRUE, message = FALSE, exercise.setup="ex4"}
 
 ```
 
@@ -215,14 +217,30 @@ How would your approach to answering the previous question change if this univer
 
 ::::
 
-Confirm that the probability that a student's major is `Other` using the Complement Rule.
+Using `major_dist` and a conditional statement, confirm that the probability that a student's major is `Other` using the Complement Rule.
 
-```{python ex7, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+```{python ex7, exercise = TRUE, message = FALSE, exercise.setup="ex4"}
 
 ```
 
 ```{python ex7-solution, message = FALSE, warning = FALSE, echo = FALSE}
-1 - (50 + 46 + 127 + 54 + 46)/500 == 177/500
+1 - sum(major_dist.loc[major_dist.index != "Other"])/sum(major_dist) == sum(major_dist.loc[major_dist.index == "Other"])/sum(major_dist)
+```
+
+```{r ex7-hint-1}
+## Did you type in raw numbers like 500, or did you use `sum()` on your `student_majors` object?
+```
+
+```{r ex7-hint-2}
+## Did you select rows in the data frame using .loc?
+```
+
+```{r ex7-hint-3}
+## Did you use a conditional operator to find the rows with "Other" majors?
+```
+
+```{r ex7-hint-4}
+## Did you use a different conditional operator to find the rows with anything but "Other" majors?
 ```
 
 ```{r ex7-code-check, message = FALSE, warning = FALSE}
@@ -330,7 +348,7 @@ $$P(A|B) = \frac{P(A \; \& \; B)}{P(B)}$$
 
 Although we don't need a contingency table to calculate these kinds of probabilities, they are a helpful way to visualize different events. Recall that `.pivot_table()` is one way to create a contingency table.
 
-Create a pivot table with majors in the rows of the pivot table and whether or not a student is taking DATA118 in the columns. You should be counting the students, not taking the means or using any other aggregating function.
+Create a pivot table with majors in the rows of the pivot table and whether or not a student is taking DATA118 in the columns. Be sure to use the `"SID"` column as the `values`. You should be counting the students, not taking the means or using any other aggregating function.
 
 ```{python ex13, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -344,14 +362,14 @@ pd.pivot_table(student_majors, index = ["major"], columns = ["DATA118"], values 
 grade_this_code()
 ```
 
-As it turns out, there are some ways to improve our pivot table. Check out the documentation for [`pivot_table()`](https://pandas.pydata.org/docs/reference/api/pandas.pivot_table.html). Then, add the argument `margins = True` to your line from the previous exercise. 
+As it turns out, there are some ways to improve our pivot table. Check out the documentation for [`pivot_table()`](https://pandas.pydata.org/docs/reference/api/pandas.pivot_table.html). Then, add the argument `margins = True` to your line from the previous exercise. Save this new pivot_table as `majors_x_118`. 
 
 ```{python ex14, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
 ```{python ex14-solution, message = FALSE, warning = FALSE, echo = FALSE}
-pd.pivot_table(student_majors, index = ["major"], columns = ["DATA118"], values = ["SID"], aggfunc = "count", margins = True)
+majors_x_118 = pd.pivot_table(student_majors, index = ["major"], columns = ["DATA118"], values = ["SID"], aggfunc = "count", margins = True)
 ```
 
 ```{r ex14-code-check, message = FALSE, warning = FALSE}
@@ -367,9 +385,25 @@ Between the documentation and the output of your last line of code, what does ad
 
 ::::
 
-Now let's focus on finding the probability that a student is taking DATA118 conditioned on their major. Use this cell, as well as your pivot table, to calculate the probabilities described in the questions below.
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
 
-```{python calculate3, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+Another very similar function that you could use to create a pivot table is `pd.crosstabs()`. Check out the documentation to see how you might be able to use it. 
+
+::::
+
+<!-- If you're feeling tired of picking a column to set as the `.values`, check out the following line of code: -->
+
+<!-- ```{python ex14-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
+<!-- majors_x_118 = pd.pivot_table(student_majors, index = ["major"], columns = ["DATA118"], values = student_majors.index, aggfunc = "count", margins = True) -->
+<!-- ``` -->
+
+
+Now let's focus on finding the probability that a student is taking DATA118 conditioned on their major. Use this cell, as well as `student_x_majors`, to calculate the probabilities described in the questions below.
+
+```{python calculate3, exercise = TRUE, message = FALSE, exercise.setup="ex14"}
 
 ```
 
@@ -444,9 +478,9 @@ Are these two probabilities the same or different? What do you think that says a
 
 ::::
 
-Use this cell, as well as your pivot table, to calculate the probabilities described in the questions below.
+Use this cell, as well as `student_x_majors`, to calculate the probabilities described in the questions below.
 
-```{python calculate4, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+```{python calculate4, exercise = TRUE, message = FALSE, exercise.setup="ex14"}
 
 ```
 
@@ -577,23 +611,23 @@ You might have looked at the column to see what values are in the sample space, 
 
 ::::
 
-Now use `.groupby()` to find the distribution. 
+Now use `.groupby()` to find the distribution.  Be sure to view on the `"SID"` column, and save your new object as `classes_dist`. 
 
 ```{python ex29, exercise = TRUE, message = FALSE, exercise.setup = "ex27", exercise.setup="setup_py"}
 
 ```
 
 ```{python ex29-solution, message = FALSE, warning = FALSE, echo = FALSE}
-student_majors.groupby()["SID"]
+classes_dist = student_majors.groupby()["SID"]
 ```
 
 ```{r ex29-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-Use this cell, as well as the results of your `.groupby()` statement, to calculate the probabilities described in the questions below.
+Use this cell, as well as `classes_dist`, to calculate the probabilities described in the questions below.
 
-```{python calculate6, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+```{python calculate6, exercise = TRUE, message = FALSE, exercise.setup="ex29"}
 
 ```
 
