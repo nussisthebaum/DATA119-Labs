@@ -1,0 +1,12 @@
+"","name","height","mass","hair_color","skin_color","eye_color","birth_year","sex","gender","homeworld","species"
+"1","Luke Skywalker",172,77,"blond","fair","blue",19,"male","masculine","Tatooine","Human"
+"2","R2-D2",96,32,NA,"white, blue","red",33,"none","masculine","Naboo","Droid"
+"3","Leia Organa",150,49,"brown","light","brown",19,"female","feminine","Alderaan","Human"
+"4","Chewbacca",228,112,"brown","unknown","blue",200,"male","masculine","Kashyyyk","Wookiee"
+"5","Han Solo",180,80,"brown","fair","brown",29,"male","masculine","Corellia","Human"
+"6","Ackbar",180,83,"none","brown mottle","orange",41,"male","masculine","Mon Cala","Mon Calamari"
+"7","Finn",NA,NA,"black","dark","dark",NA,"male","masculine",NA,"Human"
+"8","Rey",NA,NA,"brown","light","hazel",NA,"female","feminine",NA,"Human"
+"9","Poe Dameron",NA,NA,"brown","light","brown",NA,"male","masculine",NA,"Human"
+"10","BB8",NA,NA,"none","none","black",NA,"none","masculine",NA,"Droid"
+"11","Captain Phasma",NA,NA,"unknown","unknown","unknown",NA,NA,NA,NA,NA

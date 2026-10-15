@@ -1,0 +1,157 @@
+---
+title: "Functions and Control Flow"
+output: 
+  learnr::tutorial:
+    css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+## Package Requirements for Lab 
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+library(shinyjs)
+
+## Package Requirements for Content
+
+library(ggplot2)
+
+custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 30, exercise.reveal_solution = FALSE)
+
+```
+
+```{r header, echo=FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Functions and Control Flow", class = "pageTitle")
+  )
+)
+```
+
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
+import numpy as np
+import pandas as pd
+
+```
+
+## Goals
+
+* To become familiar working with basic functions and writing our own.
+* To explore using functions as arguments to other functions.
+* To implement control flow in our code to alter the linear path of code execution:
+  * Conditionals: `if, elif, else` blocks
+  * Iteration: `for` and `while` loops
+
+
+## Introduction to Functions and Control Flow
+
+Up until this point, we have been writing code that executes linearly: Python reads our code line by line, without skipping or repeating any.
+
+In this lab, we explore how to write Python code that repeats certain blocks, or skips them when they are not necessary. 
+You might be wondering why we might want to do this. Consider the following scenarios:
+
+* I am a researcher who runs experiments and calculates field-specific summary statistics at the end of each experiment. I don't want to repeat the code for my statistic calculation every time an experiment ends. 
+* I am writing code to automate sending birthday texts. However, I only want this code to execute **if** I haven't already sent a birthday text that day.
+* I would like to print every element of a (very long) list, each on a new line, without explicitly writing code for each print statement.
+
+All of these problems can be solved either with functions, control statements, or a combination of the two!
+
+Beyond saving our own time and sanity, writing code that uses functions and control statements (conditionals and iteration) is a good organizational practice.
+One important facet of writing code is to consider its complexity -- we want our code to be easily understood by anyone who looks over it.
+Functions and control statements, alongside other standard practices like informative variable naming and documenting our code with comments, help us produce code that is easy to hand off to another person (or our future selves).
+
+## Setup
+
+For this lab, we will continue to work with our Starwars dataset below.
+
+```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup_py"}
+import pandas as pd
+
+# To download any of these data files go to 
+# https://posit.ds.uchicago.edu/correlationlab/www/<name of file here>.csv
+
+starwars = pd.read_csv("./data/starwars.csv")
+```
+
+## Function Basics
+
+
+```{r q1, echo=FALSE}
+question("Which data frame attribute can confirm the names of these columns?",
+         answer("`.columns`", correct = TRUE),
+         answer("`.dtypes`", ),
+         answer("`.index`"),
+         answer("`.shape`", ),
+         answer("`.size`"),
+         allow_retry = TRUE #,
+         #post_message = "Congratulations! You have found the first secret word: SUPPRESS."
+         )
+
+```
+
+
+```{r q5, echo=FALSE}
+question("How many observations are there in `starwars`?",
+         answer("11", message = "This is the number of columns, not the number of rows/observations."),
+         answer("87", correct = TRUE),
+         answer("1044", message = "Check to make sure you used the right attribute!"),
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the first secret word: VEHICLE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         )
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+In the exercise above we asked you to use an attribute to find the number of observations in the data frame. It is also possible to use a function we have seen before. Can you guess what it is? Try to use it and discuss the difference in output with your neighbors. 
+
+::::
+
+```{python ex_dtypes, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+starwars.dtypes
+```
+
+```{python ex30, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex30-solution, message = FALSE, warning = FALSE, echo = FALSE}
+starwars
+```
+
+```{r ex30-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+## `lambda` Functions and Functions as Objects
+
+## Conditional Statements
+
+## Iteration
+

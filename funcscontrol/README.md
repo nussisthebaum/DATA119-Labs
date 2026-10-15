@@ -1,0 +1,7 @@
+# Secret words:
+
+VEHICLE
+SLIPPERY
+URGE
+BRONZE
+NERVE
