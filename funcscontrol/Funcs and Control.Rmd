@@ -21,7 +21,28 @@ library(shinyjs)
 
 library(ggplot2)
 
-custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+# Exercises graded on the value of a variable instead of the exact code.
+# Add an entry here (label = list(var, value)) to opt an exercise in; any
+# exercise not listed is graded by exact code match against its -solution chunk.
+value_checks <- list(
+  ex1 = list(var = "profit", value = 415.2)
+)
+
+custom_checker <- function(label, user_code, solution_code, check_code, envir_result, evaluate_result, envir_prep, last_value, stage, ...) {
+  # (learnr doesn't pass the last value of Python chunks, so we run the code)
+  if (label %in% names(value_checks)) {
+    if (stage != "check") return()
+    spec <- value_checks[[label]]
+    result <- tryCatch(
+      reticulate::py_to_r(reticulate::py_run_string(user_code, local = TRUE, convert = FALSE)[[spec$var]]),
+      error = function(e) NULL
+    )
+    if (is.numeric(result) && length(result) == 1 && isTRUE(all.equal(result, spec$value))) {
+      return(list(message = random_praise(), correct = TRUE))
+    }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+  # Exact code checking (requires a <label>-solution chunk and <label>-code-check chunk)
   if (stage == "code_check") {
       if (user_code == solution_code){
           return(list(message = random_praise(), correct = TRUE))
@@ -56,18 +77,20 @@ tags$div(
 import numpy as np
 import pandas as pd
 
+starwars = pd.read_csv("./data/starwars.csv")
+ 
 ```
 
 ## Goals
 
 * To become familiar working with basic functions and writing our own.
 * To explore using functions as arguments to other functions.
-* To implement control flow in our code to alter the linear path of code execution:
-  * Conditionals: `if, elif, else` blocks
+* To implement control flow in our code, which alters the linear path of code execution through:
+  * Conditional statements: `if, elif, else` blocks
   * Iteration: `for` and `while` loops
 
 
-## Introduction to Functions and Control Flow
+## Introduction and Motivation
 
 Up until this point, we have been writing code that executes linearly: Python reads our code line by line, without skipping or repeating any.
 
@@ -82,19 +105,32 @@ All of these problems can be solved either with functions, control statements, o
 
 Beyond saving our own time and sanity, writing code that uses functions and control statements (conditionals and iteration) is a good organizational practice.
 One important facet of writing code is to consider its complexity -- we want our code to be easily understood by anyone who looks over it.
-Functions and control statements, alongside other standard practices like informative variable naming and documenting our code with comments, help us produce code that is easy to hand off to another person (or our future selves).
+Functions and control statements, alongside other good practices like informative variable naming and documenting our code with comments, help us produce code that is easy to hand off to another person (or our future selves).
 
 ## Setup
 
-For this lab, we will continue to work with our Starwars dataset below.
+Consider the following example on movie theater finances:
 
-```{python setup1, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup_py"}
-import pandas as pd
+* Profit: defined as revenue (money from ticket sales) -- cost (studio fees)
+* Revenue: calculated from ticket price multiplied by the number of attendees
+* Cost: $\$180$ studio fee plus four cents for every attendee
 
-# To download any of these data files go to 
-# https://posit.ds.uchicago.edu/correlationlab/www/<name of file here>.csv
+Mathematically, this means:
+ 
+ 
+$$\text{profit} = \text{price} \times (\text{attendees}) - (180 + 0.04\times\text{attendees})$$
 
-starwars = pd.read_csv("./data/starwars.csv")
+So, if tickets cost $5 and we have 120 attendees, we can calculate the profit. Translate the information above into Python code in the following chunk:
+
+```{python ex1, exercise = TRUE}
+revenue = ...
+cost = ... 
+profit = ...
+profit
+```
+
+```{r ex1-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 ## Function Basics
