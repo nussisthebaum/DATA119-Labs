@@ -23,10 +23,12 @@ library(ggplot2)
 
 # Exercises graded on a value instead of the exact code.
 # Add an entry here to opt an exercise in, using either list(var, value) to check
-# a variable or list(expr, value) to check a Python expression; any exercise not
-# listed is graded by exact code match against its -solution chunk.
+# variables (var and value can be vectors to check several at once) or
+# list(expr, value) to check a Python expression; any exercise not listed is
+# graded by exact code match against its -solution chunk.
 value_checks <- list(
   ex1 = list(var = "profit", value = 415.2),
+  ex2 = list(var = c("STUDIO_FEE", "COST_PER_ATTENDEE"), value = c(180, 0.04)),
   ex7 = list(expr = "estimate_attendees(4)", value = 160),
   # Weighted sums so one expression checks several cases at once
   ex8 = list(expr = 'get_ticket_price("Wednesday") + 10 * get_ticket_price("Saturday") + 100 * get_ticket_price("Monday")', value = 563),
@@ -48,11 +50,15 @@ custom_checker <- function(label, user_code, solution_code, check_code, envir_re
       var <- "__check_result__"
       code <- paste0(user_code, "\n", var, " = ", spec$expr)
     }
-    result <- tryCatch(
-      reticulate::py_to_r(reticulate::py_run_string(code, local = TRUE, convert = FALSE)[[var]]),
-      error = function(e) NULL
-    )
-    if (is.numeric(result) && length(result) == 1 && isTRUE(all.equal(result, spec$value))) {
+    result <- tryCatch({
+      user_vars <- reticulate::py_run_string(code, local = TRUE, convert = FALSE)
+      vapply(var, function(v) {
+        x <- reticulate::py_to_r(user_vars[[v]])
+        if (!is.numeric(x) || length(x) != 1) stop("not a single number")
+        as.numeric(x)
+      }, numeric(1), USE.NAMES = FALSE)
+    }, error = function(e) NULL)
+    if (is.numeric(result) && isTRUE(all.equal(result, spec$value))) {
       return(list(message = random_praise(), correct = TRUE))
     }
     return(list(message = random_encouragement(), correct = FALSE))
@@ -220,8 +226,8 @@ STUDIO_FEE = 180
 COST_PER_ATTENDEE = 0.04
 ```
 
-```{r ex2-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex2-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 
