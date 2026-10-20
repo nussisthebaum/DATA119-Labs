@@ -222,7 +222,7 @@ Notice that the information from our motivating example depends on many variable
 
 First let's consider our constants: the studio fee and cost per attendee. Even though these values are likely to stay fixed over time, it is good practice to define them using variables in our code. This is both for readibility and ease of change.
 
-According to our [Python style guide](https://uchicago-cs.github.io/student-resource-guide/style-guide/python.html), we write named constants in all capital letters at the top of our file, so it's easy to find them and understand what they are when reading code. Also remember that we prefer to write decimal values with leading zeros: `0.8` is preferred to `.8`.
+Check out the [Python style guide](https://uchicago-cs.github.io/student-resource-guide/style-guide/python.html) that we use in DATA120. According to this guide, it is best practice to write named constants in all capital letters at the top of our file, so it's easy to find them and understand what they are when reading code. Also, we prefer to write decimal values with leading zeros: `0.8` is preferred to `.8`.
 
 Let's do so below:
 
@@ -617,6 +617,16 @@ def get_attendance_model(day):
 ```
 
 Note that this code only works if we created the weekend and weekday models earlier!
+
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+We wrote our code chunk above without an `else` statement. Was that a mistake? Do we need one here? 
+
+::::
 
 
 #### Step 3: putting it together
