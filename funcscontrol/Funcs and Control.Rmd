@@ -24,16 +24,19 @@ library(ggplot2)
 # Exercises graded on a value instead of the exact code.
 # Add an entry here to opt an exercise in, using either list(var, value) to check
 # variables (var and value can be vectors to check several at once) or
-# list(expr, value) to check a Python expression; any exercise not listed is
-# graded by exact code match against its -solution chunk.
+# list(expr, value) to check a Python expression. Add defines = "name" to an expr
+# check to require the student's code to define that name itself (needed when
+# setup_py already defines it). Any exercise not listed is graded by exact code
+# match against its -solution chunk.
 value_checks <- list(
   ex1 = list(var = "profit", value = 415.2),
   ex2 = list(var = c("STUDIO_FEE", "COST_PER_ATTENDEE"), value = c(180, 0.04)),
-  ex7 = list(expr = "estimate_attendees(4)", value = 160),
+  ex6 = list(expr = "calculate_cost(0) + 1000 * calculate_cost(100)", value = 184180, defines = "calculate_cost"),
+  ex7 = list(expr = "estimate_attendees(4)", value = 160, defines = "estimate_attendees"),
   # Weighted sums so one expression checks several cases at once
-  ex8 = list(expr = 'get_ticket_price("Wednesday") + 10 * get_ticket_price("Saturday") + 100 * get_ticket_price("Monday")', value = 563),
-  ex9 = list(expr = 'get_attendance_model("Saturday")(4) + 1000 * get_attendance_model("Monday")(4)', value = 160250),
-  ex10 = list(expr = 'daily_profit("Monday") + daily_profit("Wednesday") + daily_profit("Saturday")', value = 1541.2),
+  ex8 = list(expr = 'get_ticket_price("Wednesday") + 10 * get_ticket_price("Saturday") + 100 * get_ticket_price("Monday")', value = 563, defines = "get_ticket_price"),
+  ex9 = list(expr = 'get_attendance_model("Saturday")(4) + 1000 * get_attendance_model("Monday")(4)', value = 160250, defines = "get_attendance_model"),
+  ex10 = list(expr = 'daily_profit("Monday") + daily_profit("Wednesday") + daily_profit("Saturday")', value = 1541.2, defines = "daily_profit"),
   ex11 = list(var = "total", value = 3500.8),
   ex13 = list(var = "total", value = 14833.6),
   ex14 = list(var = "best_price", value = 4)
@@ -52,6 +55,9 @@ custom_checker <- function(label, user_code, solution_code, check_code, envir_re
     }
     result <- tryCatch({
       user_vars <- reticulate::py_run_string(code, local = TRUE, convert = FALSE)
+      for (name in spec$defines) {
+        if (!reticulate::py_to_r(user_vars$`__contains__`(name))) stop(name, " not defined by student")
+      }
       vapply(var, function(v) {
         x <- reticulate::py_to_r(user_vars[[v]])
         if (!is.numeric(x) || length(x) != 1) stop("not a single number")
@@ -336,8 +342,8 @@ calculate_cost = ...
 calculate_cost = lambda num_attendees: STUDIO_FEE + COST_PER_ATTENDEE * num_attendees
 ```
 
-```{r ex6-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex6-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Recall that we assumed every `$1` discount from our `$5` ticket price brings in `40` more people, starting from `120` attendees. Write a `lambda` function called `estimate_attendees` that takes `ticket_price` and returns the expected number of attendees.
@@ -374,7 +380,7 @@ question("Which of the following are true about `lambda` functions?",
 In Python, *everything* is an object: integers, strings, lists, data frames... and functions too! 
 This means a function can be treated like any other value. We can check its type, assign it to a new variable, or store it in a list.
 
-```{python func-object}
+```{python func-object, setup = "setup_py"}
 print(type(calculate_profit))
 
 profit_function = calculate_profit
