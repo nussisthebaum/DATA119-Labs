@@ -567,12 +567,16 @@ def get_ticket_price(day):
         return REGULAR_PRICE
 ```
 
+<div id="ex8-hint">
+**Hint:** For the `elif` condition, use `in` to check whether `day` is one of the days in the `WEEKEND` list. For example, `"Sunday" in ["Saturday", "Sunday"]` is `True`.
+</div>
+
 ```{r ex8-check, message = FALSE, warning = FALSE}
 # Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 ```{r q7, echo=FALSE}
-question('Using the function above, what does `get_ticket_price("wednesday")` return?',
+question('Answer this question without running any code: what will `get_ticket_price("wednesday")` return?',
          answer("`3`"),
          answer("`5`", correct = TRUE, message = 'String comparisons are case-sensitive, so `"wednesday" == "Wednesday"` is `False`. None of the conditions are met, so we fall through to the `else` block.'),
          answer("`6`"),
