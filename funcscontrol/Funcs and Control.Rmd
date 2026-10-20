@@ -160,6 +160,10 @@ def daily_profit(day):
 
 ```
 
+```{python setup_py_render, ref.label = "setup_py", include = FALSE}
+# learnr only runs setup_py inside exercises, so this reruns the same code for the regular chunks
+```
+
 ## Goals
 
 * To become familiar working with basic functions and writing our own.
@@ -380,7 +384,7 @@ question("Which of the following are true about `lambda` functions?",
 In Python, *everything* is an object: integers, strings, lists, data frames... and functions too! 
 This means a function can be treated like any other value. We can check its type, assign it to a new variable, or store it in a list.
 
-```{python func-object, setup = "setup_py"}
+```{python func-object}
 print(type(calculate_profit))
 
 profit_function = calculate_profit
@@ -399,7 +403,7 @@ question("What is stored in `x` after running `x = calculate_profit`?",
          answer("Nothing, because this line raises an error since no arguments were given"),
          answer("The string `'calculate_profit'`"),
          allow_retry = TRUE,
-         post_message = "Congratulations! You have found the second third word: TONGUE."
+         post_message = "Congratulations! You have found the third secret word: TONGUE."
          )
 ```
 
@@ -562,7 +566,7 @@ question('Using the function above, what does `get_ticket_price("wednesday")` re
          answer("`6`"),
          answer("An error"),
          allow_retry = TRUE,
-         post_message = "Congratulations! You have found the final secret word: REFORM."
+         post_message = "Congratulations! You have found the fourth secret word: REFORM."
          )
 ```
 
