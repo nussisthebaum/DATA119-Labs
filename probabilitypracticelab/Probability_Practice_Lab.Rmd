@@ -24,7 +24,103 @@ library(latex2exp)
 # Optional: Install necessary Python packages if not already installed
 # reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
 
-custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+# Exercises graded on a value instead of the exact code.
+# Add an entry here to opt an exercise in, using list(var) to check a variable,
+# list(expr) to check a Python expression, or list(last_value = TRUE) to check the
+# student's last line. The result is compared against the same thing computed from
+# the exercise's -solution chunk; add value = ... to compare against a fixed number
+# instead. Add defines = "name" to require the student's code to define that name
+# itself. Any exercise not listed is graded by exact code match against its
+# -solution chunk.
+value_checks <- list(
+  ex4 = list(var = "major_dist"),
+  ex7 = list(last_value = TRUE),
+  ex13 = list(last_value = TRUE),
+  ex14 = list(var = "majors_x_118"),
+  # .copy() so the solution (run after the student's code) can't change the student's result
+  ex27 = list(expr = 'student_majors["no_classes"].copy()'),
+  ex29 = list(var = "classes_dist")
+)
+
+# Compares a student's result to the expected one. Data frames and series match
+# if they have the same row labels and counts, ignoring their names, row order,
+# and the outer level of the column labels (so values = "SID" and
+# values = ["SID"] both work).
+values_match_py <- '
+import numpy as np
+import pandas as pd
+
+def values_match(actual, expected):
+    if isinstance(expected, (pd.Series, pd.DataFrame)):
+        actual, expected = [
+            x.squeeze(axis=1) if isinstance(x, pd.DataFrame) and x.shape[1] == 1 else x
+            for x in (actual, expected)
+        ]
+        if type(actual) is not type(expected):
+            return False
+        actual, expected = actual.sort_index(), expected.sort_index()
+        if list(actual.index) != list(expected.index):
+            return False
+        if isinstance(expected, pd.DataFrame):
+            last_level = lambda cols: [c[-1] if isinstance(c, tuple) else c for c in cols]
+            if last_level(actual.columns) != last_level(expected.columns):
+                return False
+        try:
+            return bool(np.allclose(actual.to_numpy(dtype=float), expected.to_numpy(dtype=float), equal_nan=True))
+        except (TypeError, ValueError):
+            return False
+    try:
+        return bool(np.isclose(float(actual), float(expected)))
+    except (TypeError, ValueError):
+        return False
+'
+
+custom_checker <- function(label, user_code, solution_code, check_code, envir_result, evaluate_result, envir_prep, last_value, stage, ...) {
+  # (learnr doesn't pass the last value of Python chunks, so we run the code)
+  if (label %in% names(value_checks)) {
+    if (stage != "check") return()
+    spec <- value_checks[[label]]
+    get_result <- function(code) {
+      var <- spec$var
+      if (!is.null(spec$expr)) {
+        var <- "__check_result__"
+        code <- paste0(code, "\n", var, " = ", spec$expr)
+      }
+      if (isTRUE(spec$last_value)) {
+        ast <- reticulate::import("ast")
+        body <- ast$parse(code)$body
+        last <- body[[length(body)]]
+        if (inherits(last, "ast.Assign") && length(last$targets) == 1 && inherits(last$targets[[1]], "ast.Name")) {
+          # Last line is `name = expr`, so read `name`
+          var <- last$targets[[1]]$id
+        } else if (inherits(last, "ast.Expr")) {
+          # Rewrite the last line `expr` as `__check_result__ = (expr)` so we can read it
+          before <- strsplit(code, "\n")[[1]][seq_len(last$lineno - 1)]
+          var <- "__check_result__"
+          code <- paste(c(before, paste0(var, " = (", ast$get_source_segment(code, last), ")")), collapse = "\n")
+        } else {
+          stop("last line is not an expression")
+        }
+      }
+      code_vars <- reticulate::py_run_string(code, local = TRUE, convert = FALSE)
+      for (name in c(spec$defines, var)) {
+        if (!reticulate::py_to_r(code_vars$`__contains__`(name))) stop(name, " not defined")
+      }
+      code_vars[[var]]
+    }
+    correct <- tryCatch({
+      values_match <- reticulate::py_run_string(values_match_py, local = TRUE, convert = FALSE)[["values_match"]]
+      # Student's code runs first, so if it modifies shared data the solution can't fill it in for them
+      actual <- get_result(user_code)
+      expected <- if (is.null(spec$value)) get_result(solution_code) else reticulate::r_to_py(spec$value)
+      isTRUE(reticulate::py_to_r(values_match(actual, expected)))
+    }, error = function(e) FALSE)
+    if (correct) {
+      return(list(message = random_praise(), correct = TRUE))
+    }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+  # Exact code checking (requires a <label>-solution chunk and <label>-code-check chunk)
   if (stage == "code_check") {
       if (user_code == solution_code){
           return(list(message = random_praise(), correct = TRUE))
@@ -34,7 +130,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.timelimit = 180, 
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 180,
                  exercise.reveal_solution = FALSE
 )
 
@@ -77,6 +173,19 @@ import numpy as np
 import pandas as pd
 
 student_majors = pd.read_csv("./data/students.csv")
+
+# Objects built in earlier exercises, so later exercises can use them
+major_dist = student_majors.groupby("major")["SID"].count()
+majors_x_118 = pd.pivot_table(student_majors, index = ["major"], columns = ["DATA118"], values = ["SID"], aggfunc = "count", margins = True)
+```
+
+```{python setup_no_classes, include=FALSE, exercise.setup="setup_py"}
+# Adds the no_classes column from ex27 (kept out of setup_py so ex27 starts without it)
+student_majors["no_classes"] = student_majors[["DATA118", "DATA119", "DATA120"]].sum(axis=1)
+```
+
+```{python setup_classes_dist, include=FALSE, exercise.setup="setup_no_classes"}
+classes_dist = student_majors.groupby("no_classes")["SID"].count()
 ```
 
 ```{r header, echo = FALSE}
@@ -178,8 +287,8 @@ Now, use `.groupby()` on `student_majors` to find the counts of each major. Be s
 major_dist = student_majors.groupby("major")["SID"].count()
 ```
 
-```{r ex4-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex4-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Now, use this cell, as well as your `major_dist` object, to calculate the probabilities described in the questions below.
@@ -219,7 +328,7 @@ How would your approach to answering the previous question change if this univer
 
 Using `major_dist` and a conditional statement, confirm that the probability that a student's major is `Other` using the Complement Rule.
 
-```{python ex7, exercise = TRUE, message = FALSE, exercise.setup="ex4"}
+```{python ex7, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -243,8 +352,8 @@ Using `major_dist` and a conditional statement, confirm that the probability tha
 ## Did you use a different conditional operator to find the rows with anything but "Other" majors?
 ```
 
-```{r ex7-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex7-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 ## Venn Diagrams
@@ -358,8 +467,8 @@ Create a pivot table with majors in the rows of the pivot table and whether or n
 pd.pivot_table(student_majors, index = ["major"], columns = ["DATA118"], values = ["SID"], aggfunc = "count")
 ```
 
-```{r ex13-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex13-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 As it turns out, there are some ways to improve our pivot table. Check out the documentation for [`pivot_table()`](https://pandas.pydata.org/docs/reference/api/pandas.pivot_table.html). Then, add the argument `margins = True` to your line from the previous exercise. Save this new pivot_table as `majors_x_118`. 
@@ -372,8 +481,8 @@ As it turns out, there are some ways to improve our pivot table. Check out the d
 majors_x_118 = pd.pivot_table(student_majors, index = ["major"], columns = ["DATA118"], values = ["SID"], aggfunc = "count", margins = True)
 ```
 
-```{r ex14-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex14-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 :::: {.discussionbox}
@@ -586,8 +695,8 @@ Create a new column in the `student_majors` data frame representing the number o
 student_majors["no_classes"] = student_majors[["DATA118", "DATA119", "DATA120"]].sum(axis=1)
 ```
 
-```{r ex27-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex27-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 ```{r q28, echo=FALSE}
@@ -613,21 +722,21 @@ You might have looked at the column to see what values are in the sample space, 
 
 Now use `.groupby()` to find the distribution.  Be sure to view on the `"SID"` column, and save your new object as `classes_dist`. 
 
-```{python ex29, exercise = TRUE, message = FALSE, exercise.setup = "ex27", exercise.setup="setup_py"}
+```{python ex29, exercise = TRUE, message = FALSE, exercise.setup="setup_no_classes"}
 
 ```
 
 ```{python ex29-solution, message = FALSE, warning = FALSE, echo = FALSE}
-classes_dist = student_majors.groupby()["SID"]
+classes_dist = student_majors.groupby("no_classes")["SID"].count()
 ```
 
-```{r ex29-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex29-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Use this cell, as well as `classes_dist`, to calculate the probabilities described in the questions below.
 
-```{python calculate6, exercise = TRUE, message = FALSE, exercise.setup="ex29"}
+```{python calculate6, exercise = TRUE, message = FALSE, exercise.setup="setup_classes_dist"}
 
 ```
 
