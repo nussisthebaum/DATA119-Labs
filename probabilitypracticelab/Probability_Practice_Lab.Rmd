@@ -293,7 +293,7 @@ major_dist = student_majors.groupby("major")["SID"].count()
 
 Now, use this cell, as well as your `major_dist` object, to calculate the probabilities described in the questions below.
 
-```{python calculate1, exercise = TRUE, message = FALSE, exercise.setup="ex4"}
+```{python calculate1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -510,9 +510,9 @@ Another very similar function that you could use to create a pivot table is `pd.
 <!-- ``` -->
 
 
-Now let's focus on finding the probability that a student is taking DATA118 conditioned on their major. Use this cell, as well as `student_x_majors`, to calculate the probabilities described in the questions below.
+Now let's focus on finding the probability that a student is taking DATA118 conditioned on their major. Use this cell, as well as `majors_x_118`, to calculate the probabilities described in the questions below.
 
-```{python calculate3, exercise = TRUE, message = FALSE, exercise.setup="ex14"}
+```{python calculate3, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -587,9 +587,9 @@ Are these two probabilities the same or different? What do you think that says a
 
 ::::
 
-Use this cell, as well as `student_x_majors`, to calculate the probabilities described in the questions below.
+Use this cell, as well as `majors_x_118`, to calculate the probabilities described in the questions below.
 
-```{python calculate4, exercise = TRUE, message = FALSE, exercise.setup="ex14"}
+```{python calculate4, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
