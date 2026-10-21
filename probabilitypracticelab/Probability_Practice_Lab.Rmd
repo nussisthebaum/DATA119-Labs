@@ -35,7 +35,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.timelimit = 180, 
-                 exercise.reveal_solution = TRUE
+                 exercise.reveal_solution = FALSE
 )
 
 set.seed(735)
