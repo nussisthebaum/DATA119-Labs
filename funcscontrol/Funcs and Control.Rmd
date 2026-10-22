@@ -26,8 +26,9 @@ library(ggplot2)
 # variables (var and value can be vectors to check several at once) or
 # list(expr, value) to check a Python expression. Add defines = "name" to an expr
 # check to require the student's code to define that name itself (needed when
-# setup_py already defines it). Any exercise not listed is graded by exact code
-# match against its -solution chunk.
+# setup_py already defines it). Use list(last_value = TRUE, value) to check the
+# value of the student's last line, for exercises that end in a bare expression.
+# Any exercise not listed is graded by exact code match against its -solution chunk.
 value_checks <- list(
   ex1 = list(var = "profit", value = 415.2),
   ex2 = list(var = c("STUDIO_FEE", "COST_PER_ATTENDEE"), value = c(180, 0.04)),
@@ -38,6 +39,7 @@ value_checks <- list(
   ex9 = list(expr = 'get_attendance_model("Saturday")(4) + 1000 * get_attendance_model("Monday")(4)', value = 160250, defines = "get_attendance_model"),
   ex10 = list(expr = 'daily_profit("Monday") + daily_profit("Wednesday") + daily_profit("Saturday")', value = 1541.2, defines = "daily_profit"),
   ex11 = list(var = "total", value = 3500.8),
+  ex12 = list(last_value = TRUE, value = 453.6),
   ex13 = list(var = "total", value = 14833.6),
   ex14 = list(var = "best_price", value = 4)
 )
@@ -54,6 +56,16 @@ custom_checker <- function(label, user_code, solution_code, check_code, envir_re
       code <- paste0(user_code, "\n", var, " = ", spec$expr)
     }
     result <- tryCatch({
+      if (isTRUE(spec$last_value)) {
+        # Rewrite the last line `expr` as `__check_result__ = (expr)` so we can read it
+        ast <- reticulate::import("ast")
+        body <- ast$parse(user_code)$body
+        last <- body[[length(body)]]
+        if (!inherits(last, "ast.Expr")) stop("last line is not an expression")
+        before <- strsplit(user_code, "\n")[[1]][seq_len(last$lineno - 1)]
+        var <- "__check_result__"
+        code <- paste(c(before, paste0(var, " = (", ast$get_source_segment(user_code, last), ")")), collapse = "\n")
+      }
       user_vars <- reticulate::py_run_string(code, local = TRUE, convert = FALSE)
       for (name in spec$defines) {
         if (!reticulate::py_to_r(user_vars$`__contains__`(name))) stop(name, " not defined by student")
@@ -434,8 +446,8 @@ Try running calling `profit_at_price` with `ticket_price = 4`, and use our funct
 profit_at_price(4, estimate_attendees)
 ```
 
-```{r ex12-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex12-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Now, let's say that on weekends, the theater is busier: `200` people come at `$5`, and each `$1` discount brings in `50` more. 
@@ -555,12 +567,16 @@ def get_ticket_price(day):
         return REGULAR_PRICE
 ```
 
+<div id="ex8-hint">
+**Hint:** For the `elif` condition, use `in` to check whether `day` is one of the days in the `WEEKEND` list. For example, `"Sunday" in ["Saturday", "Sunday"]` is `True`.
+</div>
+
 ```{r ex8-check, message = FALSE, warning = FALSE}
 # Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 ```{r q7, echo=FALSE}
-question('Using the function above, what does `get_ticket_price("wednesday")` return?',
+question('Answer this question without running any code: what will `get_ticket_price("wednesday")` return?',
          answer("`3`"),
          answer("`5`", correct = TRUE, message = 'String comparisons are case-sensitive, so `"wednesday" == "Wednesday"` is `False`. None of the conditions are met, so we fall through to the `else` block.'),
          answer("`6`"),
