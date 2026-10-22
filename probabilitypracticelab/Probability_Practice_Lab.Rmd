@@ -217,30 +217,34 @@ How would your approach to answering the previous question change if this univer
 
 ::::
 
-Using `major_dist` and a conditional statement, confirm that the probability that a student's major is `Other` using the Complement Rule.
+Using `major_dist` and some comparison operators, confirm that the probability that a student's major is `Other` using the Complement Rule.
 
 ```{python ex7, exercise = TRUE, message = FALSE, exercise.setup="ex4"}
 
 ```
 
 ```{python ex7-solution, message = FALSE, warning = FALSE, echo = FALSE}
-1 - sum(major_dist.loc[major_dist.index != "Other"])/sum(major_dist) == sum(major_dist.loc[major_dist.index == "Other"])/sum(major_dist)
+sum(major_dist.loc[major_dist.index == "Other"])/sum(major_dist) == 1 - sum(major_dist.loc[major_dist.index != "Other"])/sum(major_dist)
 ```
 
 ```{r ex7-hint-1}
-## Did you type in raw numbers like 500, or did you use `sum()` on your `student_majors` object?
+## Don't forget to look up the Complement Rule if you need.
 ```
 
 ```{r ex7-hint-2}
-## Did you select rows in the data frame using .loc?
+## Did you type in raw numbers like 500, or did you use `sum()` on your `student_majors` object?
 ```
 
 ```{r ex7-hint-3}
-## Did you use a conditional operator to find the rows with "Other" majors?
+## Did you select rows in the data frame using .loc?
 ```
 
 ```{r ex7-hint-4}
-## Did you use a different conditional operator to find the rows with anything but "Other" majors?
+## Did you use a comparison operator to find the rows with "Other" majors?
+```
+
+```{r ex7-hint-5}
+## Did you use a different comparison operator to find the rows with anything but "Other" majors?
 ```
 
 ```{r ex7-code-check, message = FALSE, warning = FALSE}
@@ -564,26 +568,30 @@ question_numeric(text = "What is the probability that a student is NOT a DATA ma
 
 So far, we have mostly worked with categorical variables (e.g., a student's major, whether or not they are taking a particular class, etc.). However, we are often more interested in calculating probabilities associated with a **random variable**, where random variables are defined as a variable or process with a numerical outcome. We usually represent random variables with a capital letter, such as $X, Y,$ or $Z$.
 
-Create a new column in the `student_majors` data frame representing the number of Introductory Data Science courses (118, 119, 120) a student could be taking. Call the variable `no_classes`. 
+Create a new column in the `student_majors` data frame representing the number of Introductory Data Science courses (118, 119, 120) a student could be taking at this university. Call the variable `number_classes`. 
 
 ```{python ex27, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
 ```{r ex27-hint-1}
-## You may want to look up the `.sum()` method for data frames. 
+## Don't forget that to find the number of introductory DATA courses a student at this university is taking, you can add the variables in the DATA118, DATA119, and DATA120 columns.
 ```
 
 ```{r ex27-hint-2}
-## You looked up `.sum()`, but did you specify the axis correctly?
+## You may want to look up the `.sum()` method for data frames. 
 ```
 
 ```{r ex27-hint-3}
+## You looked up `.sum()`, but did you specify the axis correctly?
+```
+
+```{r ex27-hint-4}
 ## You looked up `.sum()` and specified the axis correctly, but are you summing too many things?
 ```
 
 ```{python ex27-solution, message = FALSE, warning = FALSE, echo = FALSE}
-student_majors["no_classes"] = student_majors[["DATA118", "DATA119", "DATA120"]].sum(axis=1)
+student_majors["number_classes"] = student_majors[["DATA118", "DATA119", "DATA120"]].sum(axis=1)
 ```
 
 ```{r ex27-code-check, message = FALSE, warning = FALSE}
@@ -591,7 +599,7 @@ grade_this_code()
 ```
 
 ```{r q28, echo=FALSE}
-question("Describe the sample space of student majors at this university.",
+question("Describe the sample space of the number of introductory DATA courses a student could be taking at this university.",
          answer("$S = \\{0, 1, 2, 3 \\}$"),
          answer("$S = \\{0, 1, 2, ..., 497, 498, 499\\}$"),
          answer("$S = \\{$ `major`, `DATA118` `DATA119`, `DATA120` $\\}$"),
