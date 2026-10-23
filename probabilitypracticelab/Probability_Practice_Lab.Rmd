@@ -38,7 +38,7 @@ value_checks <- list(
   ex13 = list(last_value = TRUE),
   ex14 = list(var = "majors_x_118"),
   # .copy() so the solution (run after the student's code) can't change the student's result
-  ex27 = list(expr = 'student_majors["no_classes"].copy()'),
+  ex27 = list(expr = 'student_majors["num_classes"].copy()'),
   ex29 = list(var = "classes_dist")
 )
 
@@ -189,13 +189,13 @@ major_dist = student_majors.groupby("major")["SID"].count()
 majors_x_118 = pd.pivot_table(student_majors, index = ["major"], columns = ["DATA118"], values = ["SID"], aggfunc = "count", margins = True)
 ```
 
-```{python setup_no_classes, include=FALSE, exercise.setup="setup_py"}
-# Adds the no_classes column from ex27 (kept out of setup_py so ex27 starts without it)
-student_majors["no_classes"] = student_majors[["DATA118", "DATA119", "DATA120"]].sum(axis=1)
+```{python setup_num_classes, include=FALSE, exercise.setup="setup_py"}
+# Adds the num_classes column from ex27 (kept out of setup_py so ex27 starts without it)
+student_majors["nnum_classes"] = student_majors[["DATA118", "DATA119", "DATA120"]].sum(axis=1)
 ```
 
-```{python setup_classes_dist, include=FALSE, exercise.setup="setup_no_classes"}
-classes_dist = student_majors.groupby("no_classes")["SID"].count()
+```{python setup_classes_dist, include=FALSE, exercise.setup="setup_num_classes"}
+num_classes_dist = student_majors.groupby("num_classes")["SID"].count()
 ```
 
 ```{r header, echo = FALSE}
@@ -336,7 +336,19 @@ How would your approach to answering the previous question change if this univer
 
 ::::
 
-Using `major_dist` and some comparison operators, confirm that the probability that a student's major is `Other` using the Complement Rule.
+```{r q6-5, echo=FALSE}
+question("What is the complement of the event `major == 'Other'`?",
+         answer("$S = \\{0, 1, 2, ..., 497, 498, 499\\}$"),
+         answer("$S = \\{1, 2, 3, ..., 498, 499, 500\\}$"),
+         answer("$S = \\{$ `major`, `DATA118` `DATA119`, `DATA120` $\\}$"),
+         answer("$S = \\{$ `BIOS`, `DATA`, `ECON`, `MATH`, `PLSC` $\\}$", correct = TRUE),
+         answer("$S = \\{$ `BIOS`, `DATA`, `ECON`, `MATH`, `PLSC`, `Other` $\\}$"),
+         allow_retry = TRUE#,
+         #post_message = "Congratulations! You have found the first secret word: ZONE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         )
+```
+
+Using `major_dist` and some comparison operators, confirm the Complement Rule using a student's major, a.k.a., confirm that the students with `major == "Other"` is equal to the number of students without a named major in the dataset.
 
 ```{python ex7, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -524,7 +536,7 @@ Another very similar function that you could use to create a pivot table is `pd.
 <!-- ``` -->
 
 
-Now let's focus on finding the probability that a student is taking DATA118 conditioned on their major. Use this cell, as well as `majors_x_118`, to calculate the probabilities described in the questions below.
+Now let's focus on finding the probability that a student is taking DATA118 conditioned on their major. Use this cell, as well as `majors_x_118`, to calculate the probabilities described in the questions below. Remember that we can use counts to calculate conditional probabilities and that the denominators in $P(A \; \& \; B)$ and $P(B)$ will cancel each other out.
 
 ```{python calculate3, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -541,7 +553,7 @@ question(text = "If you were to calculate the probability that a student is taki
          )
 ```
 
-```{r q16, echo=FALSE}
+```{r q16, echo=FALSE, eval = FALSE}
 question_numeric(text = "If you were to calculate the probability that a student is taking DATA118 given that they are a DATA major, what value would you use as the denominator?",
          answer("46", correct = TRUE),
          allow_retry = TRUE,
@@ -572,7 +584,7 @@ question(text = "If you were to calculate the probability that a student is taki
          )
 ```
 
-```{r q19, echo=FALSE}
+```{r q19, echo=FALSE, eval = FALSE}
 question_numeric(text = "If you were to calculate the probability that a student is taking DATA118 given that they are a BIOS major, what value would you use as the numerator?",
          answer("7", correct = TRUE),
          allow_retry = TRUE,
@@ -597,9 +609,10 @@ question_numeric(text = "What is the probability that a student is taking DATA11
 **Discuss with a neighbor (or on Ed):**
 :::
 
-Are these two probabilities the same or different? What do you think that says about the independence of the variables `major` and `DATA118`?
+Are $P($ `DATA118` $|$ `BIOS`$)$ and $P($ `DATA118` $|$ `DATA`$)$ the same or different? What do you think that says about the independence of the variables `major` and `DATA118`?
 
 ::::
+
 
 Use this cell, as well as `majors_x_118`, to calculate the probabilities described in the questions below.
 
@@ -618,7 +631,7 @@ question(text = "If you were to calculate the probability that a student is a DA
          )
 ```
 
-```{r q22, echo=FALSE}
+```{r q22, echo=FALSE, eval = FALSE}
 question_numeric(text = "If you were to calculate the probability that a student is a DATA major given that they are taking DATA118, what value would you use as the denominator?",
          answer("112", correct = TRUE),
          allow_retry = TRUE,
@@ -685,9 +698,9 @@ question_numeric(text = "What is the probability that a student is NOT a DATA ma
 
 ## Introducing Numeric Variables
 
-So far, we have mostly worked with categorical variables (e.g., a student's major, whether or not they are taking a particular class, etc.). However, we are often more interested in calculating probabilities associated with a **random variable**, where random variables are defined as a variable or process with a numerical outcome. We usually represent random variables with a capital letter, such as $X, Y,$ or $Z$.
+So far, we have mostly worked with categorical variables (e.g., a student's major, whether or not they are taking a particular class, etc.). However, we are often more interested in calculating probabilities associated with a **random variable**, where random variables are defined as a variable or process with a numerical outcome.
 
-Create a new column in the `student_majors` data frame representing the number of Introductory Data Science courses (118, 119, 120) a student could be taking at this university. Call the variable `number_classes`. 
+Create a new column in the `student_majors` data frame representing the number of Introductory Data Science courses (118, 119, 120) a student is taking at this university. Call the new column `num_classes`. 
 
 ```{python ex27, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -706,11 +719,11 @@ Create a new column in the `student_majors` data frame representing the number o
 ```
 
 ```{r ex27-hint-4}
-## You looked up `.sum()` and specified the axis correctly, but are you summing too many things?
+## You looked up `.sum()` and specified the axis correctly, but are you summing the correct columns?
 ```
 
 ```{python ex27-solution, message = FALSE, warning = FALSE, echo = FALSE}
-student_majors["number_classes"] = student_majors[["DATA118", "DATA119", "DATA120"]].sum(axis=1)
+student_majors["num_classes"] = student_majors[["DATA118", "DATA119", "DATA120"]].sum(axis=1)
 ```
 
 ```{r ex27-check, message = FALSE, warning = FALSE}
@@ -719,13 +732,13 @@ student_majors["number_classes"] = student_majors[["DATA118", "DATA119", "DATA12
 
 ```{r q28, echo=FALSE}
 question("Describe the sample space of the number of introductory DATA courses a student could be taking at this university.",
-         answer("$S = \\{0, 1, 2, 3 \\}$"),
+         answer("$S = \\{0, 1, 2, 3 \\}$", correct = TRUE),
          answer("$S = \\{0, 1, 2, ..., 497, 498, 499\\}$"),
          answer("$S = \\{$ `major`, `DATA118` `DATA119`, `DATA120` $\\}$"),
          answer("$S = \\{$ `BIOS`, `DATA`, `ECON`, `MATH`, `PLSC` $\\}$"),
-         answer("$S = \\{$ `BIOS`, `DATA`, `ECON`, `MATH`, `PLSC`, `Other` $\\}$", correct = TRUE),
-         allow_retry = TRUE#,
-         #post_message = "Congratulations! You have found the first secret word: ZONE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         answer("$S = \\{$ `BIOS`, `DATA`, `ECON`, `MATH`, `PLSC`, `Other` $\\}$"),
+         allow_retry = TRUE,
+         post_message = "Because the number of introductory DATA courses a student is taking has numeric values $\\{0, 1, 2, 3 \\}$, we could assign `num_classes` to a random variable."
          )
 ```
 
@@ -738,14 +751,14 @@ You might have looked at the column to see what values are in the sample space, 
 
 ::::
 
-Now use `.groupby()` to find the distribution.  Be sure to view on the `"SID"` column, and save your new object as `classes_dist`. 
+Now use `.groupby()` to find the distribution.  Be sure to view on the `"SID"` column, and save your new object as `num_classes_dist`. 
 
-```{python ex29, exercise = TRUE, message = FALSE, exercise.setup="setup_no_classes"}
+```{python ex29, exercise = TRUE, message = FALSE, exercise.setup="setup_num_classes"}
 
 ```
 
 ```{python ex29-solution, message = FALSE, warning = FALSE, echo = FALSE}
-classes_dist = student_majors.groupby("no_classes")["SID"].count()
+num_classes_dist = student_majors.groupby("num_classes")["SID"].count()
 ```
 
 ```{r ex29-check, message = FALSE, warning = FALSE}
