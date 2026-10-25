@@ -304,7 +304,7 @@ question("What kind of variable is `major`?",
          answer("Continuous (Numeric)", message = "Check the data type--is it consistent with a numeric variable?"),
          answer("Nominal (Categorical)", correct = TRUE),
          allow_retry = TRUE,
-         post_message = "Congratulations! You have found the first secret word: ZONE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         post_message = "Congratulations! You have found the first secret word: PREACH."
          )
 ```
 
@@ -376,8 +376,8 @@ question("What is the complement of the event `major == 'Other'`?",
          answer("$S = \\{$ `major`, `DATA118` `DATA119`, `DATA120` $\\}$"),
          answer("$S = \\{$ `BIOS`, `DATA`, `ECON`, `MATH`, `PLSC` $\\}$", correct = TRUE),
          answer("$S = \\{$ `BIOS`, `DATA`, `ECON`, `MATH`, `PLSC`, `Other` $\\}$"),
-         allow_retry = TRUE#,
-         #post_message = "Congratulations! You have found the first secret word: ZONE. Enter this word in the Lab 3 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the second secret word: EMBARK."
          )
 ```
 
@@ -474,7 +474,8 @@ question_numeric(text = "What is the probability of a student taking DATA118 and
          allow_retry = TRUE,
          min = 0, 
          max = 1,
-         step = 0.001
+         step = 0.001,
+         post_message = "Congratulations! You have found the third secret word: VACUUM."
          )
 ```
 
@@ -582,7 +583,8 @@ question(text = "If you were to calculate the probability that a student is taki
          answer("The event that a student is a BIOS major."),
          answer("The event that a student is a DATA major.", correct = TRUE),
          answer("The event that a student is included in the data frame."),
-         allow_retry = TRUE
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the fourth secret word: LATEST."
          )
 ```
 
@@ -818,7 +820,8 @@ question_numeric(text = "What is the probability that a student is not taking an
 question(text = "True or False: The event that a student is taking two introductory DATA courses and the event that a student is taking three introductory DATA courses are mutually exclusive.",
          answer("True", correct = TRUE),
          answer("False", message = "Careful! If the two events were not mutually exclusive, the probability of them occurring together would be non-zero."),
-         allow_retry = TRUE
+         allow_retry = TRUE,
+         post_message = "Congratulations! You have found the final secret word: SUBWAY."
          )
 ```
 
