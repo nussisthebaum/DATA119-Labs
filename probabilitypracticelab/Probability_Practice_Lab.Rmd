@@ -30,16 +30,19 @@ library(latex2exp)
 # student's last line. The result is compared against the same thing computed from
 # the exercise's -solution chunk; add value = ... to compare against a fixed number
 # instead. Add defines = "name" to require the student's code to define that name
-# itself. Any exercise not listed is graded by exact code match against its
-# -solution chunk.
+# itself. Add structure = c(...) to also require the code to have a certain shape
+# (see check_structure below for the rules). Any exercise not listed is graded by
+# exact code match against its -solution chunk.
 value_checks <- list(
   ex4 = list(var = "major_dist"),
-  ex7 = list(last_value = TRUE),
+  # Last line must compare two different expressions with ==, and the code must build the
+  # complement (with != or ~) and use it in arithmetic (e.g. 1 - P(not Other)), so a bare True fails
+  ex7 = list(last_value = TRUE, structure = c("last_eq", "complement", "arithmetic")),
   ex13 = list(last_value = TRUE),
   ex14 = list(var = "majors_x_118"),
   # .copy() so the solution (run after the student's code) can't change the student's result
   ex27 = list(expr = 'student_majors["num_classes"].copy()'),
-  ex29 = list(var = "classes_dist")
+  ex29 = list(var = "num_classes_dist")
 )
 
 # Python helpers for custom_checker (done in Python so they work the same on every
@@ -81,6 +84,29 @@ def get_result(code, var=None, expr=None, last_value=False, defines=()):
             raise NameError(name + " not defined")
     return user_vars[var]
 
+def check_structure(code, rules=()):
+    # Returns "" if the code follows every rule, otherwise a message saying what is missing
+    import ast
+    tree = ast.parse(code)
+    nodes = list(ast.walk(tree))
+    for rule in rules:
+        if rule == "last_eq":
+            last = tree.body[-1] if tree.body else None
+            value = last.value if isinstance(last, ast.Expr) else None
+            if not (isinstance(value, ast.Compare) and len(value.ops) == 1 and isinstance(value.ops[0], ast.Eq)):
+                return "Your code should use == to compare the two sides of the Complement Rule."
+            if ast.dump(value.left) == ast.dump(value.comparators[0]):
+                return "The two sides of your == should be calculated in different ways."
+        elif rule == "complement":
+            if not any(isinstance(n, ast.NotEq) or (isinstance(n, ast.UnaryOp) and isinstance(n.op, ast.Invert)) for n in nodes):
+                return "Use a comparison operator like != to find the students who are not in the event."
+        elif rule == "arithmetic":
+            if not any(isinstance(n, ast.BinOp) and isinstance(n.op, (ast.Sub, ast.Add)) for n in nodes):
+                return "The Complement Rule relates an event to its complement through subtraction, e.g. 1 - P(not A)."
+        else:
+            raise ValueError("unknown structure rule: " + rule)
+    return ""
+
 def values_match(actual, expected):
     import numpy as np
     import pandas as pd
@@ -113,6 +139,13 @@ custom_checker <- function(label, user_code, solution_code, check_code, envir_re
   if (label %in% names(value_checks)) {
     if (stage != "check") return()
     spec <- value_checks[[label]]
+    structure_msg <- tryCatch({
+      helpers <- reticulate::py_run_string(checker_py, local = TRUE, convert = FALSE)
+      reticulate::py_to_r(helpers$check_structure(user_code, as.list(spec$structure)))
+    }, error = function(e) "")
+    if (nzchar(structure_msg)) {
+      return(list(message = paste(random_encouragement(), structure_msg), correct = FALSE))
+    }
     correct <- tryCatch({
       helpers <- reticulate::py_run_string(checker_py, local = TRUE, convert = FALSE)
       get_result <- function(code) {
@@ -191,7 +224,7 @@ majors_x_118 = pd.pivot_table(student_majors, index = ["major"], columns = ["DAT
 
 ```{python setup_num_classes, include=FALSE, exercise.setup="setup_py"}
 # Adds the num_classes column from ex27 (kept out of setup_py so ex27 starts without it)
-student_majors["nnum_classes"] = student_majors[["DATA118", "DATA119", "DATA120"]].sum(axis=1)
+student_majors["num_classes"] = student_majors[["DATA118", "DATA119", "DATA120"]].sum(axis=1)
 ```
 
 ```{python setup_classes_dist, include=FALSE, exercise.setup="setup_num_classes"}
@@ -765,7 +798,7 @@ num_classes_dist = student_majors.groupby("num_classes")["SID"].count()
 # Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
-Use this cell, as well as `classes_dist`, to calculate the probabilities described in the questions below.
+Use this cell, as well as `num_classes_dist`, to calculate the probabilities described in the questions below.
 
 ```{python calculate6, exercise = TRUE, message = FALSE, exercise.setup="setup_classes_dist"}
 
