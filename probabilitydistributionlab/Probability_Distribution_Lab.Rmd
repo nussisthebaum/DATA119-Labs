@@ -102,12 +102,22 @@ You may already be familiar with probability distributions defined in some sort 
 
 ![](/images/Probability Distribution Chart.pdf)
 
+https://docs.scipy.org/doc/scipy/reference/stats.html
+
 Even though you won't be formally introduced to many of these distributions, the following generally apply:
 
 * Distributions are generally appropriate in certain situations and not appropriate in others. It is your job to pick something that will work well! 
 * Distributions will generally be described by either a **P**robability **M**ass **F**unction, abbreviated as **PMF** (in the case of discrete variables) or a **P**robability **D**istribution **F**unction, abbreviated as **PDF** (in the case of continuous variables). 
 * Distributions will be characterized by parameters, like the mean and standard deviation. Usually, we use Greek letters to indicate that a value is a parameter, like $\mu$ for the mean and $\sigma$ for the standard deviation. 
 * Distributions almost always have an expected value and variance (if not, they are known as degenerate distributions). You can (and probably will!) calculate the expected value and variance by hand, but sometimes there are formulas based on the parameters. You can look these formulas up to use them if the distribution is well known--it is often much easier to use them. 
+
+`scipy` has a lot of tools for working with known distributions, including the following methods: 
+
+* pmf/pdf
+* cdf
+* ppf
+* rvs
+
 
 ## Bernoulli Distribution
 
@@ -739,7 +749,7 @@ grade_result({
 **Discuss with a neighbor:**
 :::
 
-Who did better in the triathlon, relative to their sex/age group? Hpw do you know?
+Who did better in the triathlon, relative to their sex/age group? How do you know?
 ::::
 
 ## More Practice Questions
@@ -895,7 +905,7 @@ grade_result({
 })
 ```
 
-### Dogs in Apartments
+### Dogs in Apartments (delete for 118)
 
 In a certain apartment complex, residents are allowed to have dogs. The rate of dogs in the apartment complex is 4 per building. 
 
@@ -1060,37 +1070,37 @@ grade_result({
 })
 ```
 
-When meeting a group of new people (all Americans), what is the probability that I meet the first person who did not read a single book last year during my fifth meeting?
+<!-- When meeting a group of new people (all Americans), what is the probability that I meet the first person who did not read a single book last year during my fifth meeting? -->
 
-```{python books3, exercise = TRUE}
+<!-- ```{python books3, exercise = TRUE} -->
 
-```
+<!-- ``` -->
 
-```{python books3-solution, message = FALSE, warning = FALSE}
-geom.pmf(5, 0.25)
-```
+<!-- ```{python books3-solution, message = FALSE, warning = FALSE} -->
+<!-- geom.pmf(5, 0.25) -->
+<!-- ``` -->
 
-```{r books3-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, dgeom(4, prob = 0.25)))
-})
-```
+<!-- ```{r books3-check, message = FALSE, warning = FALSE} -->
+<!-- grade_result({ -->
+<!--   pass_if(~ all.equal(.result, dgeom(4, prob = 0.25))) -->
+<!-- }) -->
+<!-- ``` -->
 
-How many Americans should I expect to meet before meeting one who did not read a single book last year?
+<!-- How many Americans should I expect to meet before meeting one who did not read a single book last year? -->
 
-```{python books4, exercise = TRUE}
+<!-- ```{python books4, exercise = TRUE} -->
 
-```
+<!-- ``` -->
 
-```{python books4-solution, message = FALSE, warning = FALSE}
-1/0.25
-```
+<!-- ```{python books4-solution, message = FALSE, warning = FALSE} -->
+<!-- 1/0.25 -->
+<!-- ``` -->
 
-```{r books4-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 1/0.25))
-})
-```
+<!-- ```{r books4-check, message = FALSE, warning = FALSE} -->
+<!-- grade_result({ -->
+<!--   pass_if(~ all.equal(.result, 1/0.25)) -->
+<!-- }) -->
+<!-- ``` -->
 
 In a group of 10 people, what is the probability that exactly three did not read a single book last year?
 
@@ -1126,7 +1136,7 @@ grade_result({
 })
 ```
 
-### San Antonio Spurs
+### San Antonio Spurs (delete for 118)
 
 In the 2019-2020 NBA season prior to the break, the San Antonio Spurs scored an average of 28.25 points per quarter (4 quarters of 12 minutes each per one game). Let $S$ be a random variable describing the number of points scored in a quarter.
 
