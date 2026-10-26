@@ -98,25 +98,33 @@ To calculate a probability, we need to know the random variable's **probability 
 
 <!--  (for review, see the Introduction to Probability Lab).  -->
 
-You may already be familiar with probability distributions defined in some sort of table. More often, we are interested in looking at the variable and seeing if it fits a known probability distribution. This lab will cover a few specific distributions, like the Bernoulli, Binomial, Geometric, Poisson, and Normal distributions, but there are many, MANY more! For example, view the following chart:
+You are hopefully already be familiar with probability distributions defined in some sort of table, covered in our [Probability Practice lab](https://posit-new.ds.uchicago.edu/probabilitypractice/). More often, we are interested in looking at the variable and seeing if it fits a **known probability distribution**. This lab will cover a few specific distributions, like the Bernoulli, Binomial, and Normal distributions, but there are many, MANY more! For example, view the following chart:
 
 ![](/images/Probability Distribution Chart.pdf)
-
-https://docs.scipy.org/doc/scipy/reference/stats.html
 
 Even though you won't be formally introduced to many of these distributions, the following generally apply:
 
 * Distributions are generally appropriate in certain situations and not appropriate in others. It is your job to pick something that will work well! 
 * Distributions will generally be described by either a **P**robability **M**ass **F**unction, abbreviated as **PMF** (in the case of discrete variables) or a **P**robability **D**istribution **F**unction, abbreviated as **PDF** (in the case of continuous variables). 
 * Distributions will be characterized by parameters, like the mean and standard deviation. Usually, we use Greek letters to indicate that a value is a parameter, like $\mu$ for the mean and $\sigma$ for the standard deviation. 
-* Distributions almost always have an expected value and variance (if not, they are known as degenerate distributions). You can (and probably will!) calculate the expected value and variance by hand, but sometimes there are formulas based on the parameters. You can look these formulas up to use them if the distribution is well known--it is often much easier to use them. 
+* Distributions almost always have an expected value and variance (if not, they are known as degenerate distributions). You can calculate the expected value and variance by hand using the formulas we learned in class, but sometimes there are shortcut formulas based on the parameters. You can look these formulas up to use them if the distribution is well known--it is often much easier to use them. 
 
-`scipy` has a lot of tools for working with known distributions, including the following methods: 
+The `scipy.stats` module has a lot of tools for working with known distributions. To work with the distributions in `scipy.stats`, you first need to define a distribution object using something called a class (more on this in DATA120):
 
-* pmf/pdf
-* cdf
-* ppf
-* rvs
+```{python, echo = TRUE}
+my_bernoulli_variable = stats.bernoulli(p = 0.5)
+my_binomial_variable = stats.binom(n = 20, p = 0.5)
+my_normal_variable = stats.norm(loc = 0, scale = 1)
+```
+
+Once you have defined your object, you can use the following methods: 
+
+* `.pmf()`/`.pdf()`: Returns probabilities calculated using the `p`robability `m`ass `f`unction (defined for discrete variables only) or the output of the `p`robability `d`istribution `f`unction (defined for continuous variables only) for a specific random variable.
+* `.cdf()`: Returns the `c`umulative `d`istribution `f`unction, which calculates probabilities for a range of values of a specific random variable. 
+* `.ppf()`: Returns the `p`ercent `p`oint `f`unction for a specific random variable, a.k.a., the percentiles of that random variable's distribution.
+* `.rvs()`: Generates `r`andom `v`ariate`s` of a specific random variable. 
+
+We will introduce you to the `bernoulli`, `binom`, and `norm` distribution objects, but `scipy.stats` has many more, including some mentioned in the above Probability Distribution Chart. You can learn more about them in the [`scipy.stats` documentation](https://docs.scipy.org/doc/scipy/reference/stats.html)--take a look, and remember your new favorite distribution and when to use it for later...
 
 
 ## Bernoulli Distribution
@@ -178,8 +186,13 @@ Typically, this information is summarized in a table, like the following:
 Support | PMF | $E(X)$ | $Var(X)$
 --------|----|--------|---------
 $x \in \{0, 1\}$ | $P(x) = \begin{cases} 1-p & \text{if } x = 0 \\ p  & \text{if } x = 1 \\ 0  & \text{otherwise} \end{cases}$ | $p$ | $p(1-p)$ 
+The distribution object we use for a Bernoulli random variable can be created with `bernoulli`:
 
-Now, let's practice some Bernoulli probability questions:
+```{python, echo = TRUE}
+my_bernoulli_variable = stats.bernoulli(p = 0.5)
+```
+
+Note that you do have to supply the probability of success `p`. Now, let's practice some Bernoulli probability questions:
 
 Suppose I work at a bakery that sells two types of pies: apple and pumpkin. The pies are boxed in such a way that I must open the box to identify what type of pie is inside. I know the probability that a randomly selected pie is an apple pie is 42\%. Assume any samples are randomly selected, and assume that I am opening randomly selected boxes.
 
@@ -265,7 +278,13 @@ Here, $\binom{n}{k}$ is read as $n$ choose $k$, where the choose function is def
 
 $$ \binom{n}{k} = \frac{n!}{k!(n-k)!}$$
 
-Now, let's practice some Binomial distribution questions. 
+The distribution object we use for a Binomial random variable can be created with `binom`:
+
+```{python, echo = TRUE}
+my_binomial_variable = stats.binom(p = 0.5)
+```
+
+Note that you do have to supply the number of trials `n` and the probability of success `p`. Now, let's practice some Binomial probability questions:
 
 I am still working at the same bakery from the previous section. I have 27 boxes--what is the probability that 17 of them contain pumpkin pies? Hint: for the choose function, you can use `math.comb(n,k)`.
 
@@ -460,7 +479,7 @@ grade_result({
 })
 ```
 
-## Geometric Distribution
+## Geometric Distribution (delete for 118)
 
 Geometric distributions are appropriate when the random variable is the number of trials until you find a single success. Again, each trial can only be a success or failure, and the sequence of trials must be independent. Note that unlike the Binomial distribution, the number of trials is not fixed--you are waiting until you get a success. 
 
@@ -575,7 +594,7 @@ grade_result({
 })
 ```
 
-## Poisson Distribution
+## Poisson Distribution (delete for 118)
 
 Unlike the Binomial and Geometric distributions, Poisson distributions are characterized by a rate parameter, $\lambda$. Typically, the Poisson distribution describes the number of events in a fixed unit of time or space (the number of spam texts you receive per one day, the number of defects in a square yard of material, etc.)
 
@@ -671,8 +690,13 @@ Two notes:
 * Like any continuous distribution, the probability of observing a single value is exactly and always 0. We are typically looking at finding the probability of a range of values, i.e., $P(X<0)$, $P(X>3)$, $P(-1<X<1)$.
 * To find probabilities associated with a range of values, you need to integrate the PDF over a certain range. The PDF for the normal distribution CANNOT be integrated by hand! Instead, you need to use the CDF (**C**umulative **D**istribution **F**unction), which is easiest to find with `scipy.stats.norm` (read [the documentation for `scipy.stats.norm` here](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html)).
 
-Now, let's practice some Normal distribution questions:
+The distribution object we use for a Normal random variable can be created with `norm`:
 
+```{python, echo = TRUE}
+my_normal_variable = stats.norm(p = 0.5)
+```
+
+Note that you do have to supply the mean $\mu$ using the argument `loc` (for location) and the standard deviation $\sigma$ using the argument `scale`. Now, let's practice some Normal distribution questions:
 
 In triathlons, it is common for racers to be placed into age and gender groups. Friends Leo and Mary both completed the Hermosa Beach Triathlon, where Leo competed in the Men, Ages 30 - 34 group while Mary competed in the Women, Ages 25 - 29 group. Leo completed the race in 1:22:28 (4948 seconds), while Mary completed the race in 1:31:53 (5513 seconds). Obviously Leo finished faster, but they are curious about how they did within their respective groups. Can you help them? Here is some information on the performance of their groups:
 
@@ -701,7 +725,6 @@ question("28. Write the distribution for the finishing triathlon times for Women
   random_answer_order = TRUE
 )
 ```
-
 
 29. What percent of the triathletes did Leo finish faster than in his group?
 
@@ -986,7 +1009,7 @@ grade_result({
 })
 ```
 
-What is the probability that she makes her first free throw on her third shot?
+What is the probability that she makes her first free throw on her third shot? (DELETE FOR 118)
 
 ```{python freethrows2, exercise = TRUE}
 
@@ -1002,7 +1025,7 @@ grade_result({
 })
 ```
 
-What is the probability that she makes her first free throw some time after her third shot?
+What is the probability that she makes her first free throw some time after her third shot? (DELETE FOR 118)
 
 ```{python freethrows3, exercise = TRUE}
 
@@ -1018,7 +1041,7 @@ grade_result({
 })
 ```
 
-What is the probability that it takes her no more than two shots to make her first free throw?
+What is the probability that it takes her no more than two shots to make her first free throw? (DELETE FOR 118)
 
 ```{python freethrows4, exercise = TRUE}
 
