@@ -51,6 +51,21 @@ from scipy.stats import poisson
 from scipy.stats import norm
 ```
 
+```{python setup_page, include=FALSE}
+# learnr only runs setup_py inside exercises, so the non-exercise chunks need their own imports
+import math
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy.stats
+from scipy import stats
+
+from scipy.stats import binom
+from scipy.stats import geom
+from scipy.stats import poisson
+from scipy.stats import norm
+```
+
 ```{r header, echo = FALSE}
 library(htmltools)
 
@@ -84,7 +99,8 @@ import math
 import numpy as np
 import pandas as pd
 import plotnine as p9
-import scipy.stats
+import scipy
+from scipy import stats
 ```
 
 ## Probability Distributions
@@ -280,7 +296,7 @@ $$ \binom{n}{k} = \frac{n!}{k!(n-k)!}$$
 The distribution object we use for a Binomial random variable can be created with `binom`:
 
 ```{python, echo = TRUE}
-my_binomial_variable = stats.binom(p = 0.5)
+my_binomial_variable = stats.binom(n = 20, p = 0.5)
 ```
 
 Note that you do have to supply the number of trials `n` and the probability of success `p`. Now, let's practice some Binomial probability questions:
@@ -692,7 +708,7 @@ Two notes:
 The distribution object we use for a Normal random variable can be created with `norm`:
 
 ```{python, echo = TRUE}
-my_normal_variable = stats.norm(p = 0.5)
+my_normal_variable = stats.norm(loc = 0, scale = 1)
 ```
 
 Note that you do have to supply the mean $\mu$ using the argument `loc` (for location) and the standard deviation $\sigma$ using the argument `scale`. Now, let's practice some Normal distribution questions:
