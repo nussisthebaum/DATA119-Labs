@@ -379,8 +379,7 @@ question_numeric(
   min = 0,
   max = 1,
   step = 0.001,
-  allow_retry = TRUE, 
-  post_message = "Congratulations! You have found the second secret word: HARBOR."
+  allow_retry = TRUE
 )
 ```
 
@@ -450,7 +449,7 @@ question_numeric(
   max = 27,
   step = 1,
   allow_retry = TRUE, 
-  post_message = "Congratulations! You have found the third secret word: VOLUNTEER."
+  post_message = "Congratulations! You have found the second secret word: VOLUNTEER."
 )
 ```
 
@@ -521,7 +520,8 @@ question_numeric(
   min = 0,
   max = 1,
   step = 0.001,
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the third secret word: CHOICE."
 )
 ```
 
@@ -660,7 +660,8 @@ question_numeric(
   min = 0,
   max = 100,
   step = 0.1,
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the fourth secret word: INVITE."
 )
 ```
 
@@ -769,7 +770,8 @@ question_numeric(
   min = 0,
   max = 1,
   step = 0.001,
-  allow_retry = TRUE
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the final secret word: BITTER."
 )
 ```
 
