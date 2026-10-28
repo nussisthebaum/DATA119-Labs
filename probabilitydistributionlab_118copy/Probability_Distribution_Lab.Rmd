@@ -124,7 +124,7 @@ We already discussed simple probability distributions, which are often presented
 Regardless of which distribution we are talking about, the following rules generally apply:
 
 * Specific distributions are generally appropriate in certain situations and not in others. It is your job to pick something that will work well! 
-* Distributions will generally be described by either a **P**robability **M**ass **F**unction, abbreviated as **PMF** (in the case of discrete variables) or a **P**robability **D**istribution **F**unction, abbreviated as **PDF** (in the case of continuous variables). 
+* Distributions will generally be described by either a **P**robability **M**ass **F**unction, abbreviated as **PMF** (in the case of discrete variables) or a **P**robability **D**ensity **F**unction, abbreviated as **PDF** (in the case of continuous variables). 
 * Distributions will be characterized by parameters, like the mean ($\mu$) and standard deviation ($\sigma$). 
 * Distributions almost always have an expected value and variance (if not, they are known as degenerate distributions). You can calculate the expected value and variance by hand using the formulas we learned in class, but sometimes there are shortcut formulas based on the parameters. You can look these formulas up to use them if the distribution is well known--it is often much easier to use them. 
 
