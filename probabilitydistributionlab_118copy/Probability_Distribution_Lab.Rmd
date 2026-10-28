@@ -240,10 +240,6 @@ question_numeric(
 )
 ```
 
-```{python bern_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
-```
-
 ```{r q3, echo=FALSE}
 question_numeric(
   "What is the probability of finding apple pies in three randomly selected boxes? Round to three decimal places.",
@@ -296,8 +292,6 @@ my_binomial_variable = stats.binom(n = 20, p = 0.5)
 ```
 
 Note that you do have to supply the number of trials `n` and the probability of success `p`. Now, let's practice some Binomial probability questions:
-
-I am still working at the same bakery from the previous section. I have 27 boxes--what is the probability that 17 of them contain pumpkin pies? Hint: for the choose function, you can use `math.comb(n,k)`.
 
 ```{r q5, echo=FALSE}
 question_numeric(
@@ -372,7 +366,13 @@ question_numeric(
 )
 ```
 
-DISCUSSION: Do your answers match the values in the previous section? Why or why not?
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor:**
+:::
+
+Do your answers match the values in the previous section? Why or why not?
+::::
 
 We may also want to calculate probabilities for a range of values. Because the values are mutually exclusive, we can simply add probabilities together.
 
@@ -522,8 +522,6 @@ When practicing these questions, make sure you are asking yourself what distribu
 
 The yield of a box of cake mix is normally distributed with a mean of 4.75 cups of batter and a standard deviation of 0.25 cups. 
 
-Write this distribution in mathematical notation. 
-
 ```{r cakebatter1, echo=FALSE}
 question("Write this distribution in mathematical notation.",
   answer("$N(4.75, 0.25)$", correct = TRUE),
@@ -639,30 +637,9 @@ question_numeric(
 )
 ```
 
-### Freethrows
-
-Assume that a basketball player has a 76.3\% chance of making a free throw.
-
-Use the cell below to calculate the answer to the question below.
-
-```{python freethrows_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
-```
-
-```{r freethrows1, echo=FALSE}
-question_numeric(
-  "How many free throws should we expect her to shoot before making one? Round to three decimal places.",
-  answer(1.311, correct = TRUE),
-  min = 0,
-  max = 10,
-  step = 0.001,
-  allow_retry = TRUE
-)
-```
-
 ### Bookworms
 
-One in four Americans did not read a single book last year. 
+One in four Americans did not read a single book last year 😔.
 
 Use the cell below to calculate the answers to the questions below.
 
