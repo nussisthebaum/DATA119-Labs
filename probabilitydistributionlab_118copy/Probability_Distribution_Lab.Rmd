@@ -22,7 +22,7 @@ library(reticulate)
 #reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
-# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+reticulate::py_install(c('numpy', 'pandas', 'plotnine', 'scipy'))
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
@@ -76,7 +76,7 @@ The goals of this lab are:
 
 ## Setup
 
-For this lab we will be using  `math`, n`numpy`, `plotnine`, `pandas`, `scipy.stats` ...
+For this lab we will be using  `math`, `numpy`, `plotnine`, `pandas`, `scipy.stats` ...
 
 ```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 import math
