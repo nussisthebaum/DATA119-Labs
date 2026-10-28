@@ -478,45 +478,32 @@ question("Write the distribution for the finishing triathlon times for Women Age
 )
 ```
 
-What percent of the triathletes did Leo finish faster than in his group?
+Use the cell below to calculate the answers to the questions below.
 
-```{python norm1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-from scipy.stats import norm
-
-```
-
-```{python norm1-solution, message = FALSE, warning = FALSE, echo = FALSE}
-from scipy.stats import norm
-
-1 - norm.cdf(4948, loc = 4313, scale = 583)
-```
-
-```{r norm1-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 1 - pnorm(4948, mean = 4313, sd = 583), tolerance = 0.0001))
-})
-```
-
-What percent of the triathletes did Mary finish faster than in her group?
-
-```{python norm2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
-
+```{python norm_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
-```{python norm2-solution, message = FALSE, warning = FALSE, echo = FALSE}
-1 - norm.cdf(5513, loc = 5261, scale = 807)
+```{r q15, echo=FALSE}
+question_numeric(
+  "What percent of the triathletes did Leo finish faster than in his group? Give your answer as a percent, rounded to one decimal place.",
+  answer(13.8, correct = TRUE),
+  min = 0,
+  max = 100,
+  step = 0.1,
+  allow_retry = TRUE
+)
 ```
 
-```{r norm2-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 1 - pnorm(5513, mean = 5261, sd = 807), tolerance = 0.0001))
-})
-```
-
-```{r}
-
+```{r q16, echo=FALSE}
+question_numeric(
+  "What percent of the triathletes did Mary finish faster than in her group? Give your answer as a percent, rounded to one decimal place.",
+  answer(37.7, correct = TRUE),
+  min = 0,
+  max = 100,
+  step = 0.1,
+  allow_retry = TRUE
+)
 ```
 
 :::: {.discussionbox}
@@ -548,370 +535,181 @@ question("Write this distribution in mathematical notation.",
 )
 ```
 
-What is the probability that a box of cake mix yields less than 4.15 cups of batter?
+Use the cell below to calculate the answers to the questions below.
 
-```{python cakebatter2, exercise = TRUE, exercise.setup="setup_py"}
-pnorm()
-```
-
-```{python cakebatter2-solution, message = FALSE, warning = FALSE}
-pnorm(4.15, mean = 4.75, sd = 0.25)
-```
-
-```{r cakebatter2-check, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, pnorm(4.15, mean = 4.75, sd = 0.25)))
-})
-```
-
-What is the probability that the box of cake mix yielded more than 5.2 cups of batter? 
-
-```{python cakebatter3, exercise = TRUE, exercise.setup="setup_py"}
+```{python cakebatter_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
-```{python cakebatter3-solution, warning = FALSE}
-1 - pnorm(5.2, mean = 4.75, sd = 0.25)
+```{r cakebatter2, echo=FALSE}
+question_numeric(
+  "What is the probability that a box of cake mix yields less than 4.15 cups of batter? Round to three decimal places.",
+  answer(0.008, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
-```{r cakebatter3-check}
-grade_result({
-  pass_if(~ all.equal(.result, 1 - pnorm(5.2, mean = 4.75, sd = 0.25)))
-})
+```{r cakebatter3, echo=FALSE}
+question_numeric(
+  "What is the probability that the box of cake mix yielded more than 5.2 cups of batter? Round to three decimal places.",
+  answer(0.036, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
-What is the probability that the box of cake mix yields between 4.25 and 4.85 cups of batter?
-
-```{python cakebatter4, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{python cakebatter4-solution, message = FALSE, warning = FALSE}
-pnorm(4.85, mean = 4.75, sd = 0.25) - pnorm(4.25, mean = 4.75, sd = 0.25)
-```
-
-```{python cakebatter4-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, pnorm(4.85, mean = 4.75, sd = 0.25) - pnorm(4.25, mean = 4.75, sd = 0.25)))
-})
+```{r cakebatter4, echo=FALSE}
+question_numeric(
+  "What is the probability that the box of cake mix yields between 4.25 and 4.85 cups of batter? Round to three decimal places.",
+  answer(0.633, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
 ### Coffee Drinkers
 
 A 2017 study shows that 64\% of Americans drink coffee every day.
 
-In a group of 14 people, how many are expected to drink coffee every day? \textcolor{red}{Hint: what distribution should you be using to answer this question?}
+Use the cell below to calculate the answers to the questions below. Hint: what distribution should you be using to answer these questions?
 
-```{python coffee1, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{python coffee1-solution, message = FALSE, warning = FALSE}
-14*0.64
-```
-
-```{r coffee1-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 14*0.64))
-})
-```
-
-In the same group of 14 Americans, what is the probability that exactly 9 drink coffee every day?
-
-```{python coffee2, exercise = TRUE, exercise.setup="setup_py"}
+```{python coffee_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
-```{python coffee2-solution, message = FALSE, warning = FALSE}
-binom.pmf(9, 14, 0.64)
+```{r coffee1, echo=FALSE}
+question_numeric(
+  "In a group of 14 people, how many are expected to drink coffee every day? Round to two decimal places.",
+  answer(8.96, correct = TRUE),
+  min = 0,
+  max = 14,
+  step = 0.01,
+  allow_retry = TRUE
+)
 ```
 
-```{r coffee2-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, dbinom(9, size = 14, prob = 0.64)))
-})
+```{r coffee2, echo=FALSE}
+question_numeric(
+  "In the same group of 14 Americans, what is the probability that exactly 9 drink coffee every day? Round to three decimal places.",
+  answer(0.218, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
-What is the probability that at least ten drink coffee every day?
-
-```{python coffee3, exercise = TRUE, exercise.setup="setup_py"}
-
+```{r coffee3, echo=FALSE}
+question_numeric(
+  "What is the probability that at least ten drink coffee every day? Round to three decimal places.",
+  answer(0.392, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
-```{python coffee3-solution, message = FALSE, warning = FALSE}
-1 - binom.cdf(9, 14, 0.64)
+```{r coffee4, echo=FALSE}
+question_numeric(
+  "What is the probability that at most 7 drink coffee every day? Round to three decimal places.",
+  answer(0.206, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
-```{python coffee3-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 1 - pbinom(9, size = 14, prob = 0.64)))
-})
-```
-
-What is the probability that at most 7 drink coffee every day?
-
-```{python coffee4, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{python coffee4-solution, message = FALSE, warning = FALSE}
-binom.cdf(7, 14, 0.64)
-```
-
-```{r coffee4-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, pbinom(7, size = 14, prob = 0.64)))
-})
-```
-
-What is the probability that between 3 and 8 drink coffee every day?
-
-```{python coffee5, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{python coffee5-solution, message = FALSE, warning = FALSE}
-binom.cdf(8, 14, 0.64) - binom.cdf(2, 14, 0.64)
-```
-
-```{python coffee5-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, pbinom(8, size = 14, prob = 0.64) - pbinom(2, size = 14, prob = 0.64)))
-})
+```{r coffee5, echo=FALSE}
+question_numeric(
+  "What is the probability that between 3 and 8 drink coffee every day? Round to three decimal places.",
+  answer(0.390, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
 ### Freethrows
 
-Assume that a basketball player has a 76.3\% chance of making a free throw. How many free throws should we expect her to shoot before making one? 
+Assume that a basketball player has a 76.3\% chance of making a free throw.
 
-```{python freethrows1, exercise = TRUE, exercise.setup="setup_py"}
+Use the cell below to calculate the answer to the question below.
 
-```
-
-```{python freethrows1-solution, message = FALSE, warning = FALSE}
-1/0.763
-```
-
-```{r freethrows1-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 1/0.763))
-})
-```
-
-What is the probability that she makes her first free throw on her third shot? (DELETE FOR 118)
-
-```{python freethrows2, exercise = TRUE, exercise.setup="setup_py"}
+```{python freethrows_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
-```{python freethrows2-solution, message = FALSE, warning = FALSE}
-geom.pmf(3, 0.763)
-```
-
-```{r freethrows2-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, dgeom(2, prob = 0.763)))
-})
-```
-
-What is the probability that she makes her first free throw some time after her third shot? (DELETE FOR 118)
-
-```{python freethrows3, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{python freethrows3-solution, message = FALSE, warning = FALSE}
-1 - geom.cdf(3, 0.763)
-```
-
-```{r freethrows3-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 1 - pgeom(2, prob = 0.763)))
-})
-```
-
-What is the probability that it takes her no more than two shots to make her first free throw? (DELETE FOR 118)
-
-```{python freethrows4, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{python freethrows4-solution, message = FALSE, warning = FALSE}
-geom.cdf(2, 0.763)
-```
-
-```{r freethrows4-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, pgeom(1, prob = 0.763)))
-})
+```{r freethrows1, echo=FALSE}
+question_numeric(
+  "How many free throws should we expect her to shoot before making one? Round to three decimal places.",
+  answer(1.311, correct = TRUE),
+  min = 0,
+  max = 10,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
 ### Bookworms
 
 One in four Americans did not read a single book last year. 
 
-What is the probability, $p$, that a randomly chosen American did not read a single book last year?
+Use the cell below to calculate the answers to the questions below.
 
-```{python books1, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{python books1-solution, message = FALSE, warning = FALSE}
-1/4
-```
-
-```{r books1-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 1/4))
-})
-```
-
-In a group of 24 Americans, how many are expected to have not read a single book last year?
-
-```{python books2, exercise = TRUE, exercise.setup="setup_py"}
+```{python books_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
-```{python books2-solution, message = FALSE, warning = FALSE}
-24*0.25
-```
-
-```{r books2-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 24*0.25))
-})
-```
-
-<!-- When meeting a group of new people (all Americans), what is the probability that I meet the first person who did not read a single book last year during my fifth meeting? -->
-
-<!-- ```{python books3, exercise = TRUE} -->
-
-<!-- ``` -->
-
-<!-- ```{python books3-solution, message = FALSE, warning = FALSE} -->
-<!-- geom.pmf(5, 0.25) -->
-<!-- ``` -->
-
-<!-- ```{r books3-check, message = FALSE, warning = FALSE} -->
-<!-- grade_result({ -->
-<!--   pass_if(~ all.equal(.result, dgeom(4, prob = 0.25))) -->
-<!-- }) -->
-<!-- ``` -->
-
-<!-- How many Americans should I expect to meet before meeting one who did not read a single book last year? -->
-
-<!-- ```{python books4, exercise = TRUE} -->
-
-<!-- ``` -->
-
-<!-- ```{python books4-solution, message = FALSE, warning = FALSE} -->
-<!-- 1/0.25 -->
-<!-- ``` -->
-
-<!-- ```{r books4-check, message = FALSE, warning = FALSE} -->
-<!-- grade_result({ -->
-<!--   pass_if(~ all.equal(.result, 1/0.25)) -->
-<!-- }) -->
-<!-- ``` -->
-
-In a group of 10 people, what is the probability that exactly three did not read a single book last year?
-
-```{python books5, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{python books5-solution, message = FALSE, warning = FALSE}
-binom.pmf(3, 10, 0.25)
-
-dbinom(3, size = 10, prob = 0.25)
-```
-
-```{r books5-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, dbinom(3, size = 10, prob = 0.25)))
-})
-```
-
-In a group of 19 people, what is the probability that no more than 3 people did not read a single book last year?
-
-```{python books6, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{r books6-solution, message = FALSE, warning = FALSE}
-binom.cdf(3, 19, 0.25)
-```
-
-```{r books6-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, pbinom(3, size = 19, prob = 0.25)))
-})
-```
-
-### San Antonio Spurs (delete for 118)
-
-In the 2019-2020 NBA season prior to the break, the San Antonio Spurs scored an average of 28.25 points per quarter (4 quarters of 12 minutes each per one game). Let $S$ be a random variable describing the number of points scored in a quarter.
-
-```{python spurs1, echo=FALSE, eval = F}
-question("What distribution is most appropriate to use to calculate the probability of scoring more than 32 points in a quarter?",
-  answer("Poisson", correct = TRUE),
-  answer("Binomial"),
-  answer("Geometric"),
-  answer("Bernoulli"), 
-  allow_retry = T,
-  random_answer_order = TRUE
+```{r books1, echo=FALSE}
+question_numeric(
+  "What is the probability, $p$, that a randomly chosen American did not read a single book last year? Round to two decimal places.",
+  answer(0.25, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.01,
+  allow_retry = TRUE
 )
 ```
 
-What are the expected value and the standard deviation of this distribution? Save them as `exp_val` and `sd`.
-
-```{python spurs2, exercise = TRUE, exercise.setup="setup_py"}
-exp_val =
-sd =
+```{r books2, echo=FALSE}
+question_numeric(
+  "In a group of 24 Americans, how many are expected to have not read a single book last year?",
+  answer(6, correct = TRUE),
+  min = 0,
+  max = 24,
+  step = 1,
+  allow_retry = TRUE
+)
 ```
 
-```{python spurs2-solution, message = FALSE, warning = FALSE}
-exp_val = 28.25
-sd = sqrt(28.25)
+```{r books5, echo=FALSE}
+question_numeric(
+  "In a group of 10 people, what is the probability that exactly three did not read a single book last year? Round to three decimal places.",
+  answer(0.250, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
-```{r spurs2-check, message = FALSE, warning = FALSE}
-grade_this({
-  pass_if(~ all.equal(reticulate::py$exp_val, 28.25), "Fantastic!")
-})
+```{r books6, echo=FALSE}
+question_numeric(
+  "In a group of 19 people, what is the probability that no more than 3 people did not read a single book last year? Round to three decimal places.",
+  answer(0.263, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
-
-What is the probability that the San Antonio Spurs scored more than 32 points in a quarter?
-
-```{python spurs3, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{python spurs3-solution, message = FALSE, warning = FALSE}
-1 - poisson.cdf(32, 28.25)
-```
-
-```{r spurs3-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.py_result, 1 - poisson.cdf(32, 28.25))), 
-})
-```
-
-What is the probability that the San Antonio Spurs score between 24 and 28 points in a quarter (including both 24 and 28)?
-
-```{python spurs4, exercise = TRUE, exercise.setup="setup_py"}
-
-```
-
-```{python spurs4-solution, message = FALSE, warning = FALSE}
-sum([poisson.pmf(x, 28.25) for x in [24, 25, 26, 27, 28]])
-```
-
-```{r spurs4-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, sum(dpois(24:28, lambda = 28.25))))
-})
-```
-
-
-
