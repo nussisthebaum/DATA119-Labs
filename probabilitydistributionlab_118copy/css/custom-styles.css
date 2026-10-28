@@ -132,3 +132,49 @@ a:hover {
 html { counter-reset: cell; }
 .tutorial-exercise { counter-increment: cell; }
 .tutorial-exercise .panel-heading::after { content: " [" counter(cell) "]"; }
+/* Distribution summary tables (Support | PMF/PDF | E(X) | Var(X)) */
+.disttable table {
+    width: auto;
+    margin: 20px auto;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+.disttable table > thead > tr > th {
+    background-color: #800000;
+    color: white;
+    text-align: center;
+    padding: 8px 20px;
+    border: none;
+}
+
+.disttable table > tbody > tr > td {
+    background-color: #f9f9f9;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px 20px;
+}
+
+
+/* Distribution summary tables (Support | PMF/PDF | E(X) | Var(X)) */
+.disttable table {
+    width: auto;
+    margin: 20px auto;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+.disttable table > thead > tr > th {
+    background-color: #800000;
+    color: white;
+    text-align: center;
+    padding: 8px 20px;
+    border: none;
+}
+
+.disttable table > tbody > tr > td {
+    background-color: #f9f9f9;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px 20px;
+}

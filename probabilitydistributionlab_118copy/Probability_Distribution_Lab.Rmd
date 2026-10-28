@@ -24,7 +24,141 @@ library(reticulate)
 # Optional: Install necessary Python packages if not already installed
 #reticulate::py_install(c('numpy', 'pandas', 'plotnine', 'scipy'))
 
-custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+# Exercises graded on a value instead of the exact code.
+# Add an entry here to opt an exercise in, using list(var) to check a variable,
+# list(expr) to check a Python expression, or list(last_value = TRUE) to check the
+# student's last line. The result is compared against the same thing computed from
+# the exercise's -solution chunk; add value = ... to compare against a fixed number
+# instead. Add defines = "name" to require the student's code to define that name
+# itself. Add structure = c(...) to also require the code to have a certain shape
+# (see check_structure below for the rules). Any exercise not listed is graded by
+# exact code match against its -solution chunk.
+value_checks <- list(
+  # Last line must be an isclose() comparing two different expressions, and the code must
+  # call both .cdf() and .pmf(), so a bare True fails
+  cdf_check = list(last_value = TRUE, value = TRUE, structure = c("last_isclose", "cdf", "pmf"))
+)
+
+# Python helpers for custom_checker (done in Python so they work the same on every
+# Python version).
+# get_result runs code like learnr does (setup objects visible, new variables kept
+# separate) and returns the value being checked.
+# values_match compares a student's result to the expected one. Data frames and
+# series match if they have the same row labels and counts, ignoring their names,
+# row order, and the outer level of the column labels (so values = "SID" and
+# values = ["SID"] both work).
+checker_py <- '
+# (imports go inside the functions because py_run_string keeps top-level names local)
+def get_result(code, var=None, expr=None, last_value=False, defines=()):
+    import ast
+    import __main__
+    tree = ast.parse(code)
+    if last_value:
+        if not tree.body:
+            raise ValueError("no code")
+        last = tree.body[-1]
+        if isinstance(last, ast.Assign) and len(last.targets) == 1 and isinstance(last.targets[0], ast.Name):
+            # Last line is `name = expr`, so read `name`
+            var = last.targets[0].id
+        elif isinstance(last, ast.Expr):
+            # Rewrite the last line `expr` as `__check_result__ = expr` so we can read it
+            target = ast.Name(id="__check_result__", ctx=ast.Store())
+            tree.body[-1] = ast.copy_location(ast.Assign(targets=[target], value=last.value), last)
+            ast.fix_missing_locations(tree)
+            var = "__check_result__"
+        else:
+            raise ValueError("last line is not an expression")
+    user_vars = {}
+    exec(compile(tree, "<exercise>", "exec"), __main__.__dict__, user_vars)
+    if expr is not None:
+        user_vars["__check_result__"] = eval(expr, __main__.__dict__, user_vars)
+        var = "__check_result__"
+    for name in list(defines) + [var]:
+        if name not in user_vars:
+            raise NameError(name + " not defined")
+    return user_vars[var]
+
+def check_structure(code, rules=()):
+    # Returns "" if the code follows every rule, otherwise a message saying what is missing
+    import ast
+    tree = ast.parse(code)
+    nodes = list(ast.walk(tree))
+    def calls(name):
+        # True if the code calls a function or method with this name, e.g. np.isclose() or x.cdf()
+        return any(isinstance(n, ast.Call) and getattr(n.func, "attr", getattr(n.func, "id", None)) == name for n in nodes)
+    for rule in rules:
+        if rule == "last_isclose":
+            last = tree.body[-1] if tree.body else None
+            value = last.value if isinstance(last, ast.Expr) else None
+            func = getattr(value, "func", None)
+            if not (isinstance(value, ast.Call) and getattr(func, "attr", getattr(func, "id", None)) == "isclose" and len(value.args) >= 2):
+                return "The last line of your code should use np.isclose() to compare the two calculations."
+            if ast.dump(value.args[0]) == ast.dump(value.args[1]):
+                return "The two values inside np.isclose() should be calculated in different ways."
+        elif rule in ("cdf", "pmf"):
+            if not calls(rule):
+                return "Make sure your code uses ." + rule + "()."
+        else:
+            raise ValueError("unknown structure rule: " + rule)
+    return ""
+
+def values_match(actual, expected):
+    import numpy as np
+    import pandas as pd
+    if isinstance(expected, (pd.Series, pd.DataFrame)):
+        actual, expected = [
+            x.squeeze(axis=1) if isinstance(x, pd.DataFrame) and x.shape[1] == 1 else x
+            for x in (actual, expected)
+        ]
+        if type(actual) is not type(expected):
+            return False
+        actual, expected = actual.sort_index(), expected.sort_index()
+        if list(actual.index) != list(expected.index):
+            return False
+        if isinstance(expected, pd.DataFrame):
+            last_level = lambda cols: [c[-1] if isinstance(c, tuple) else c for c in cols]
+            if last_level(actual.columns) != last_level(expected.columns):
+                return False
+        try:
+            return bool(np.allclose(actual.to_numpy(dtype=float), expected.to_numpy(dtype=float), equal_nan=True))
+        except (TypeError, ValueError):
+            return False
+    try:
+        return bool(np.isclose(float(actual), float(expected)))
+    except (TypeError, ValueError):
+        return False
+'
+
+custom_checker <- function(label, user_code, solution_code, check_code, envir_result, evaluate_result, envir_prep, last_value, stage, ...) {
+  # (learnr doesn't pass the last value of Python chunks, so we run the code)
+  if (label %in% names(value_checks)) {
+    if (stage != "check") return()
+    spec <- value_checks[[label]]
+    structure_msg <- tryCatch({
+      helpers <- reticulate::py_run_string(checker_py, local = TRUE, convert = FALSE)
+      reticulate::py_to_r(helpers$check_structure(user_code, as.list(spec$structure)))
+    }, error = function(e) "")
+    if (nzchar(structure_msg)) {
+      return(list(message = paste(random_encouragement(), structure_msg), correct = FALSE))
+    }
+    correct <- tryCatch({
+      helpers <- reticulate::py_run_string(checker_py, local = TRUE, convert = FALSE)
+      get_result <- function(code) {
+        helpers$get_result(code, var = spec$var, expr = spec$expr,
+                           last_value = isTRUE(spec$last_value), defines = as.list(spec$defines))
+      }
+      values_match <- helpers$values_match
+      # Student's code runs first, so if it modifies shared data the solution can't fill it in for them
+      actual <- get_result(user_code)
+      expected <- if (is.null(spec$value)) get_result(solution_code) else reticulate::r_to_py(spec$value)
+      isTRUE(reticulate::py_to_r(values_match(actual, expected)))
+    }, error = function(e) FALSE)
+    if (correct) {
+      return(list(message = random_praise(), correct = TRUE))
+    }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+  # Exact code checking (requires a <label>-solution chunk and <label>-code-check chunk)
   if (stage == "code_check") {
       if (user_code == solution_code){
           return(list(message = random_praise(), correct = TRUE))
@@ -34,7 +168,7 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.timelimit = 180,
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 180,
                  exercise.reveal_solution = FALSE
 )
 ```
@@ -182,55 +316,14 @@ P(x) = \begin{cases} 1-p & \text{if } x = 0 \\
                      0  & \text{otherwise} \end{cases}
 $$
 
-Remember that the expected value, denoted $E(X)$, for a discrete variable is
+We can summarize the information about this distribution in a table, like the one shown below. Refer back to our notes on expected value and variance to calculate these values yourself.
 
-$$
-\begin{aligned}
-E(X) & = x_1 \times P(X=x_1) + x_2 \times P(X=x_2) + \\
- & \; \; \; \;\; \; \; ... + x_k \times P(X=x_k) \\
-& = \sum^k_{i = 1} x_i P(X=x_i) 
-\end{aligned}
-$$ 
-
-and the variance for a discrete variable is
-
-
-$$
-\begin{aligned}
-Var(X) & = (x_1 - E(X))^2 \times P(X=x_1) + ... + (x_k - E(X))^2 \times P(X=x_k) \\
-& = \sum^k_{i = 1} (x_i - E(X))^2 P(X=x_i) \\
-& = \sigma^2
-\end{aligned}
-$$ 
-
-Using these definitions, we can plug the PMF in to derive equations for the expected value and variance of $X$, a Bernoulli variable. First, the expected value:
-
-$$
-\begin{aligned}
-E(X) & = \sum^k_{i = 1} x_i P(X=x_i) \\
-& = x_1 \times P(X=x_1) + x_2 \times P(X=x_2) \\
-& = 0 \times (1-p) + 1 \times p \\
-& = p
-\end{aligned}
-$$ 
-
-Now, the variance:
-
-$$
-\begin{aligned}
-Var(X) & = \sum^k_{i = 1} (x_i - E(X))^2 P(X=x_i) \\
-& = \sum^k_{i = 1} x_i^2 P(X=x_i) - \big(E(X)\big)^2 \\
-& = 0^2 \times (1-p) + 1^2 \times p - p^2 \\
-& = p - p^2 \\
-& = p(1-p)
-\end{aligned}
-$$ 
-
-Typically, this information is summarized in a table, like the following:
-
+::: {.disttable}
 Support | PMF | $E(X)$ | $Var(X)$
---------|----|--------|---------
-$x \in \{0, 1\}$ | $P(x) = \begin{cases} 1-p & \text{if } x = 0 \\ p  & \text{if } x = 1 \\ 0  & \text{otherwise} \end{cases}$ | $p$ | $p(1-p)$ 
+:----:|:------------:|:---:|:---:
+$x \in \{0, 1\}$ | $P(X = x) = \begin{cases} 1-p & \text{if } x = 0 \\ p & \text{if } x = 1 \end{cases}$ | $p$ | $p(1-p)$
+:::
+
 The distribution object we use for a Bernoulli random variable can be created with `bernoulli`:
 
 ```{python, echo = TRUE}
@@ -239,7 +332,7 @@ my_bernoulli_variable = stats.bernoulli(p = 0.5)
 
 Note that you do have to supply the probability of success `p`. Now, let's practice some Bernoulli probability questions:
 
-Suppose I work at a bakery that sells two types of pies: apple and pumpkin. The pies are boxed in such a way that I must open the box to identify what type of pie is inside. I know the probability that a randomly selected pie is an apple pie is 42\%. Assume any samples are randomly selected, and assume that I am opening randomly selected boxes.
+Suppose I work at a bakery that sells two types of pies: apple and pumpkin. The pies are boxed in such a way that I must open the box to identify what type of pie is inside. I know the probability that a randomly selected pie is an apple pie is 42\%. Assume any samples are randomly selected from random boxes.
 
 ```{r q1, echo=FALSE}
 question(
@@ -305,9 +398,11 @@ If the answer to ALL of these questions is yes, then you have a Binomial random 
 
 Because the random variable takes only values 0, 1, 2, 3, etc., it is a discrete variable and is described with a probability mass function (PMF). Deriving the expressions for the expected value and variance can be done by hand, but relies on some mathematical tricks--you can read about [the derivation for the expected value of the Binomial Distribution](https://proofwiki.org/wiki/Expectation_of_Binomial_Distribution) if you are interested, but otherwise, we will just report the relevant equations:
 
+::: {.disttable}
 Support | PMF | $E(X)$ | $Var(X)$
---------|----|--------|---------
-$x \in \{0, 1, ... n\}$ | $P(x) = \begin{cases} \binom{n}{k} p^k(1-p)^k & \text{if } x = 0 \\ 0  & \text{otherwise} \end{cases}$ | $np$ | $np(1-p)$ 
+:----:|:------------:|:---:|:---:
+$k \in \{0, 1, ..., n\}$ | $P(X = k) = \binom{n}{k} p^k(1-p)^{n-k}$ | $np$ | $np(1-p)$
+:::
 
 Here, $\binom{n}{k}$ is read as $n$ choose $k$, where the choose function is defined as 
 
@@ -319,7 +414,10 @@ The distribution object we use for a Binomial random variable can be created wit
 my_binomial_variable = stats.binom(n = 20, p = 0.5)
 ```
 
-Note that you do have to supply the number of trials `n` and the probability of success `p`. Now, let's practice some Binomial probability questions:
+Note that you do have to supply the number of trials `n` and the probability of success `p`. Now, let's practice some Binomial probability questions, with the same bakery from the previous section. 
+
+Let's say I have 27 boxes, and I want to figure out the probability that exactly 17 of them contain pumpkin pies. Let's consider a pumpkin pie to be a success this time.
+
 
 ```{r q5, echo=FALSE}
 question_numeric(
@@ -328,6 +426,18 @@ question_numeric(
   min = 0,
   max = 27,
   step = 1,
+  allow_retry = TRUE
+)
+```
+
+```{r q5-5, echo=FALSE}
+question_numeric(
+  "What is $p$ in this problem?",
+  answer(0.58, correct = TRUE),
+  answer(0.42, message = "Careful--what counts as a success in this problem?"),
+  min = 0,
+  max = 1,
+  step = 0.01,
   allow_retry = TRUE
 )
 ```
@@ -344,7 +454,7 @@ question_numeric(
 )
 ```
 
-Use the cell below to calculate the answers to the questions below. You can calculate them by hand with the formulas above, but there is also a special function that will carry out this work for you! You can use `scipy.stats.binom`--look at the [documentation for `scipy.stats.binom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html), and use the function to check your answers.
+Use the cell below with a `scipy.stats.binom` object to calculate the answers to the questions below. The[documentation for `scipy.stats.binom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html), alongisde the examples in the Probability Distributions section of this lab should help you choose the correct methods.
 
 ```{python bin_calc1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -402,7 +512,7 @@ question_numeric(
 Do your answers match the values in the previous section? Why or why not?
 ::::
 
-We may also want to calculate probabilities for a range of values. Because the values are mutually exclusive, we can simply add probabilities together.
+We may also want to calculate probabilities for a range of values. Because the values are mutually exclusive, we can either add probabilities together, or use another method described in the [documentation for `scipy.stats.binom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html).
 
 ```{r q11, echo=FALSE}
 question_numeric(
@@ -415,9 +525,24 @@ question_numeric(
 )
 ```
 
-You can see that this could get extremely tedious if the range is very much larger! Luckily for us, there is a special function called a **cumulative mass function** that will calculate probabilities associated with a range of values. For the Binomial distribution, that command is `binom.cdf()` (technically, it should be abbreviated `binom.cmf()`, but many computer languages get a little sloppy when naming their commands).
+Now, in the cell below, use code to check that using the method `.cdf()` is equivalent to adding up multiple individual probabilites using `.pmf()`.
 
-Re-read the documentation linked above, and use `binom.cdf()` in the cell below to confirm your answer to the previous question. Then use the cell to calculate the answers to the questions below.
+Because computers store decimals with tiny rounding errors, compare your two outputs with `np.isclose()` rather than `==`.
+
+```{python cdf_check, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{python cdf_check-solution, message = FALSE, warning = FALSE, echo = FALSE}
+apple_pies = stats.binom(n = 3, p = 0.42)
+np.isclose(apple_pies.cdf(2), apple_pies.pmf(0) + apple_pies.pmf(1) + apple_pies.pmf(2))
+```
+
+```{r cdf_check-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
+```
+
+Now use the cell below to answer the problems that follow.
 
 ```{python bin_calc2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -427,6 +552,7 @@ Re-read the documentation linked above, and use `binom.cdf()` in the cell below 
 question_numeric(
   "Now assume I have 32 pies. What is the probability that more than 23 are apple? Round to four decimal places.",
   answer(0.0002, correct = TRUE),
+  answer(0.0006, message = "Careful--does 'more than 23' include 23?"),
   min = 0,
   max = 1,
   step = 0.0001,
@@ -461,9 +587,11 @@ The Normal distribution is unlike any of the other distributions we have learned
 
 Because a normally distributed variable is a continuous variable, it is described with a probability density function (PDF). Here are the relevant equations: 
 
-Support | PMF | $E(X)$ | $Var(X)$
---------|----|--------|---------
-$x \in \mathbb{R}$ | $P(x) =  \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$ | $\lambda$ | $\lambda$ 
+::: {.disttable}
+Support | PDF | $E(X)$ | $Var(X)$
+:----:|:------------:|:---:|:---:
+$x \in \mathbb{R}$ | $f(x) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$ | $\mu$ | $\sigma^2$
+:::
 
 Two notes:
 
