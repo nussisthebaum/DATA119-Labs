@@ -223,7 +223,7 @@ question(
 )
 ```
 
-What is the probability of finding a pumpkin pie, a.k.a., a "failure", in a randomly chosen box? Use the cell below to calculate if you need.
+Use the cell below to calculate the probabilities described in the questions below.
 
 ```{python q2_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -236,12 +236,9 @@ question_numeric(
   min = 0,
   max = 1,
   step = 0.01,
-  allow_retry = TRUE, 
-  post_message = "Congratulations! You have found the second secret word: HARBOR."
+  allow_retry = TRUE
 )
 ```
-
-Use the cell below to calculate the probabilities described in the questions below.
 
 ```{python bern_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -265,11 +262,12 @@ question_numeric(
   min = 0,
   max = 1,
   step = 0.001,
-  allow_retry = TRUE
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the second secret word: HARBOR."
 )
 ```
 
-Notice that the Bernoulli distribution is not particularly interesting! So why are we covering it? Because it is a useful building block for many other distributions, like the Binomial and Geometric distributions. 
+Notice that the Bernoulli distribution is not particularly interesting! So why are we covering it? Because it is a useful building block for many other distributions, like the Binomial. 
 
 ## Binomial Distribution
 
@@ -324,172 +322,110 @@ question_numeric(
 )
 ```
 
-What is the probability that 17 of 27 boxes contain pumpkin pies?
+Use the cell below to calculate the answers to the questions below. You can calculate them by hand with the formulas above, but there is also a special function that will carry out this work for you! You can use `scipy.stats.binom`--look at the [documentation for `scipy.stats.binom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html), and use the function to check your answers.
 
-```{python bin1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
-```
-
-```{python bin1-solution, message = FALSE, warning = FALSE, echo = FALSE}
-math.comb(27,17)*(0.58**17)*(0.42**10)
-```
-
-```{r bin1-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, dbinom(17, 27, 0.58), tolerance = 0.0001))
-})
-```
-
-There is a special function that will carry out this work for you! You can use `scipy.stats.binom`--look at the [documentation for `scipy.stats.binom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html), and use the function to confirm your result from the previous question. 
-
-```{python bin2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-from scipy.stats import binom
-
+```{python bin_calc1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
-```{python bin2-solution, message = FALSE, warning = FALSE, echo = FALSE}
-from scipy.stats import binom
-
-binom.pmf(17, 27, 0.58)
+```{r q7, echo=FALSE}
+question_numeric(
+  "What is the probability that 17 of 27 boxes contain pumpkin pies? Round to three decimal places.",
+  answer(0.137, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
-```{r bin2-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, dbinom(17, 27, 0.58), tolerance = 0.0001))
-})
+```{r q8, echo=FALSE}
+question_numeric(
+  "Of my 27 pies, how many should I expect to be apple? Round to two decimal places.",
+  answer(11.34, correct = TRUE),
+  min = 0,
+  max = 27,
+  step = 0.01,
+  allow_retry = TRUE
+)
 ```
 
-Of my 27 pies, how many should I expect to be apple?
-
-```{python bin3, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
+```{r q9, echo=FALSE}
+question_numeric(
+  "Now assume I have three pies, like I did in the Bernoulli distribution section. What is the probability that all three are pumpkin? Round to three decimal places.",
+  answer(0.195, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
-```{python bin3-solution, message = FALSE, warning = FALSE, echo = FALSE}
-27*0.42
-```
-
-```{r bin3-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 27*0.42, tolerance = 0.0001))
-})
-```
-
-Now assume I have three pies, like I did in the Bernoulli distribution section. What is the probability that all three are pumpkin?
-
-```{python bin4, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
-```
-
-```{python bin4-solution, message = FALSE, warning = FALSE, echo = FALSE}
-binom.pmf(3, 3, 0.58)
-```
-
-```{r bin4-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 0.58^3, tolerance = 0.0001))
-})
-```
-
-What is the probability that all three are apple?
-
-```{python bin5, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
-```
-
-```{python bin5-solution, message = FALSE, warning = FALSE, echo = FALSE}
-binom.pmf(3, 3, 0.42)
-```
-
-```{r bin5-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, 0.42^3, tolerance = 0.0001))
-})
+```{r q10, echo=FALSE}
+question_numeric(
+  "What is the probability that all three are apple? Round to three decimal places.",
+  answer(0.074, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
 DISCUSSION: Do your answers match the values in the previous section? Why or why not?
 
-We may also want to calculate probabilities for a range of values. Because the values are mutually exclusive, we can simply add probabilities together. For example, find the probability that there are two or fewer apple pies. 
+We may also want to calculate probabilities for a range of values. Because the values are mutually exclusive, we can simply add probabilities together.
 
-```{python bin6, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
-```
-
-```{python bin6-solution, message = FALSE, warning = FALSE, echo = FALSE}
-binom.pmf(0, 3, 0.42) + binom.pmf(1, 3, 0.42) + binom.pmf(2, 3, 0.42)
-```
-
-```{r bin6-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, sum(dbinom(0:2, 3, 0.42)), tolerance = 0.0001))
-})
+```{r q11, echo=FALSE}
+question_numeric(
+  "Find the probability that there are two or fewer apple pies out of three. Round to three decimal places.",
+  answer(0.926, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
 You can see that this could get extremely tedious if the range is very much larger! Luckily for us, there is a special function called a **cumulative mass function** that will calculate probabilities associated with a range of values. For the Binomial distribution, that command is `binom.cdf()` (technically, it should be abbreviated `binom.cmf()`, but many computer languages get a little sloppy when naming their commands).
 
-Re-read the documentation linked above, and confirm your answer with `binom.cdf()`. 
+Re-read the documentation linked above, and use `binom.cdf()` in the cell below to confirm your answer to the previous question. Then use the cell to calculate the answers to the questions below.
 
-```{python bin7, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
-```
-
-```{python bin7-solution, message = FALSE, warning = FALSE, echo = FALSE}
-binom.cdf(2, 3, 0.42) 
-```
-
-```{r bin7-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, sum(dbinom(0:2, 3, 0.42)), tolerance = 0.0001))
-})
-```
-
-Now assume I have 32 pies. What is the probability that more than 23 are apple?
-
-```{python bin8, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+```{python bin_calc2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
-```{python bin8-solution, message = FALSE, warning = FALSE, echo = FALSE}
-1 - binom.cdf(23, 32, 0.42) 
+```{r q12, echo=FALSE}
+question_numeric(
+  "Now assume I have 32 pies. What is the probability that more than 23 are apple? Round to four decimal places.",
+  answer(0.0002, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.0001,
+  allow_retry = TRUE
+)
 ```
 
-```{r bin8-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, sum(dbinom(24:32, 32, 0.42)), tolerance = 0.0001))
-})
+```{r q13, echo=FALSE}
+question_numeric(
+  "What is the probability that less than 8 are apple? Round to three decimal places.",
+  answer(0.014, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 
-What is the probability that less than 8 are apple?
-
-```{python bin9, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
-```
-
-```{python bin9-solution, message = FALSE, warning = FALSE, echo = FALSE}
-binom.cdf(7, 32, 0.42) 
-```
-
-```{r bin9-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, sum(dbinom(0:7, 32, 0.42)), tolerance = 0.0001))
-})
-```
-
-What is the probability that between 13 and 18 are apple? Treat 13 and 18 inclusively, that is, include them in the range you are looking for. 
-
-```{python bin10, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
-
-```
-
-```{python bin10-solution, message = FALSE, warning = FALSE, echo = FALSE}
-binom.cdf(19, 32, 0.42) - binom.cdf(12, 32, 0.42)
-```
-
-```{r bin10-code-check, message = FALSE, warning = FALSE}
-grade_result({
-  pass_if(~ all.equal(.result, sum(dbinom(13:18, 32, 0.42)), tolerance = 0.0001))
-})
+```{r q14, echo=FALSE}
+question_numeric(
+  "What is the probability that between 13 and 18 are apple? Treat 13 and 18 inclusively, that is, include them in the range you are looking for. Round to three decimal places.",
+  answer(0.592, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
 ```
 ## Normal Distribution
 
