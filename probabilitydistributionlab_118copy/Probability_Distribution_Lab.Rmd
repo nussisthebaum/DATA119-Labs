@@ -22,7 +22,7 @@ library(reticulate)
 #reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
-reticulate::py_install(c('numpy', 'pandas', 'plotnine', 'scipy'))
+#reticulate::py_install(c('numpy', 'pandas', 'plotnine', 'scipy'))
 
 custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
   if (stage == "code_check") {
@@ -43,6 +43,7 @@ import numpy as np
 import pandas as pd
 import plotnine as p9
 import scipy.stats
+from scipy import stats
 
 from scipy.stats import binom
 from scipy.stats import geom
@@ -76,9 +77,9 @@ The goals of this lab are:
 
 ## Setup
 
-For this lab we will be using  `math`, `numpy`, `plotnine`, `pandas`, `scipy.stats` ...
+For this lab we will be using  `math`, `numpy`, `plotnine`, `pandas`, and `scipy.stats`.
 
-```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
 import math
 import numpy as np
 import pandas as pd
@@ -98,9 +99,7 @@ To calculate a probability, we need to know the random variable's **probability 
 
 <!--  (for review, see the Introduction to Probability Lab).  -->
 
-You are hopefully already be familiar with probability distributions defined in some sort of table, covered in our [Probability Practice lab](https://posit-new.ds.uchicago.edu/probabilitypractice/). More often, we are interested in looking at the variable and seeing if it fits a **known probability distribution**. This lab will cover a few specific distributions, like the Bernoulli, Binomial, and Normal distributions, but there are many, MANY more! For example, view the following chart:
-
-![](/images/Probability Distribution Chart.pdf)
+You are hopefully already familiar with probability distributions defined in some sort of table, covered in our Probability Practice lab. More often, we are interested in looking at the variable and seeing if it fits a **known probability distribution**. This lab will cover a few specific distributions, like the Bernoulli, Binomial, and Normal distributions, but there are many, MANY more! For example, check out this [interactive chart](https://www.math.wm.edu/~leemis/chart/UDR/UDR.html).
 
 Even though you won't be formally introduced to many of these distributions, the following generally apply:
 
@@ -111,7 +110,7 @@ Even though you won't be formally introduced to many of these distributions, the
 
 The `scipy.stats` module has a lot of tools for working with known distributions. To work with the distributions in `scipy.stats`, you first need to define a distribution object using something called a class (more on this in DATA120):
 
-```{python, echo = TRUE}
+```{python, echo = TRUE, }
 my_bernoulli_variable = stats.bernoulli(p = 0.5)
 my_binomial_variable = stats.binom(n = 20, p = 0.5)
 my_normal_variable = stats.norm(loc = 0, scale = 1)
@@ -208,7 +207,7 @@ question(
 
 What is the probability of finding a pumpkin pie, a.k.a., a "failure", in a randomly chosen box? Use the cell below to calculate if you need.
 
-```{python q2_calc, exercise = TRUE, message = FALSE}
+```{python q2_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -226,7 +225,7 @@ question_numeric(
 
 3. What is the probability of finding apple pies in three randomly selected boxes?
 
-```{python bern1, exercise = TRUE, message = FALSE}
+```{python bern1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -242,7 +241,7 @@ grade_result({
 
 4. What is the probability of finding pumpkin pies in three randomly selected boxes?
 
-```{python bern2, exercise = TRUE, message = FALSE}
+```{python bern2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -313,7 +312,7 @@ question_numeric(
 
 7. What is the probability that 17 of 27 boxes contain pumpkin pies?
 
-```{python bin1, exercise = TRUE, message = FALSE}
+```{python bin1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -329,7 +328,7 @@ grade_result({
 
 8. There is a special function that will carry out this work for you! You can use `scipy.stats.binom`--look at the [documentation for `scipy.stats.binom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html), and use the function to confirm your result from Question 7. 
 
-```{python bin2, exercise = TRUE, message = FALSE}
+```{python bin2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 from scipy.stats import binom
 
 
@@ -349,7 +348,7 @@ grade_result({
 
 9. Of my 27 pies, how many should I expect to be apple?
 
-```{python bin3, exercise = TRUE, message = FALSE}
+```{python bin3, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -365,7 +364,7 @@ grade_result({
 
 10. Now assume I have three pies, like I did in the Bernoulli distribution section. What is the probability that all three are pumpkin?
 
-```{python bin4, exercise = TRUE, message = FALSE}
+```{python bin4, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -381,7 +380,7 @@ grade_result({
 
 11. What is the probability that all three are apple?
 
-```{python bin5, exercise = TRUE, message = FALSE}
+```{python bin5, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -399,7 +398,7 @@ DISCUSSION: Do your answers match the values in the previous section? Why or why
 
 12. We may also want to calculate probabilities for a range of values. Because the values are mutually exclusive, we can simply add probabilities together. For example, find the probability that there are two or fewer apple pies. 
 
-```{python bin6, exercise = TRUE, message = FALSE}
+```{python bin6, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -417,7 +416,7 @@ You can see that this could get extremely tedious if the range is very much larg
 
 13. Re-read the documentation linked above, and confirm your answer with `binom.cdf()`. 
 
-```{python bin7, exercise = TRUE, message = FALSE}
+```{python bin7, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -433,7 +432,7 @@ grade_result({
 
 14. Now assume I have 32 pies. What is the probability that more than 23 are apple?
 
-```{python bin8, exercise = TRUE, message = FALSE}
+```{python bin8, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -449,7 +448,7 @@ grade_result({
 
 15. What is the probability that less than 8 are apple?
 
-```{python bin9, exercise = TRUE, message = FALSE}
+```{python bin9, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -465,7 +464,7 @@ grade_result({
 
 16. What is the probability that between 13 and 18 are apple? Treat 13 and 18 inclusively, that is, include them in the range you are looking for. 
 
-```{python bin10, exercise = TRUE, message = FALSE}
+```{python bin10, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -495,7 +494,7 @@ A husband and wife both have brown eyes but carry genes that make it possible fo
 
 17. What is the probability the first blue-eyed child they have is their third child? Assume that the eye colors of the children are independent of each other.
 
-```{python geo1, exercise = TRUE, message = FALSE}
+```{python geo1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -513,7 +512,7 @@ Note that you can actually carry out this calculation without knowing specific P
 
 18. `scipy.stats.geom` has many relevant commands for the Geometric distribution. look at the [documentation for `scipy.stats.geom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.geom.html) and confirm your answer to Question 17 using code from `scipy.stats`.
 
-```{python geo2, exercise = TRUE, message = FALSE}
+```{python geo2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 from scipy.stats import geom
 
 ```
@@ -532,7 +531,7 @@ grade_result({
 
 19. On average, how many children would such a pair of parents have before having a blue-eyed child?
 
-```{python geo3, exercise = TRUE, message = FALSE}
+```{python geo3, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -548,7 +547,7 @@ grade_result({
 
 20.  What is the standard deviation of the number of children they would expect to have until the first blue-eyed child?
 
-```{python geo4, exercise = TRUE, message = FALSE}
+```{python geo4, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -564,7 +563,7 @@ grade_result({
 
 21. What is the probability that their first child will have green eyes and the second will not? 
 
-```{python geo5, exercise = TRUE, message = FALSE}
+```{python geo5, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -580,7 +579,7 @@ grade_result({
 
 22. What is the probability that the first green eyed child will be the $4^{th}$ child?
 
-```{python geo6, exercise = TRUE, message = FALSE}
+```{python geo6, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -633,7 +632,7 @@ question_numeric(
 
 25. Would it be considered unusual if this stenographer made 4 typos in a given hour? Note: you can either use the CMF, or you can use `scipy.stats.poisson`--look at the [documentation for `scipy.stats.poisson`]https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.poisson.html). 
 
-```{python pois1, exercise = TRUE, message = FALSE}
+```{python pois1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 from scipy.stats import poisson
 
 
@@ -661,7 +660,7 @@ Is this probability small enough to be considered unusual? If not, what would yo
 
 26. Calculate the probability that this stenographer makes at most 2 typos in a given hour. Note: you can either do this by adding multiple instances of `poisson.pmf()`, or you can use `poisson.cdf()`. 
 
-```{python pois2, exercise = TRUE, message = FALSE}
+```{python pois2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 ```
 
@@ -728,7 +727,7 @@ question("28. Write the distribution for the finishing triathlon times for Women
 
 29. What percent of the triathletes did Leo finish faster than in his group?
 
-```{python norm1, exercise = TRUE, message = FALSE}
+```{python norm1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 from scipy.stats import norm
 
 ```
@@ -747,7 +746,7 @@ grade_result({
 
 30. What percent of the triathletes did Mary finish faster than in her group?
 
-```{python norm2, exercise = TRUE, message = FALSE}
+```{python norm2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
 
 
@@ -798,7 +797,7 @@ question("Write this distribution in mathematical notation.",
 
 What is the probability that a box of cake mix yields less than 4.15 cups of batter?
 
-```{python cakebatter2, exercise = TRUE}
+```{python cakebatter2, exercise = TRUE, exercise.setup="setup_py"}
 pnorm()
 ```
 
@@ -814,7 +813,7 @@ grade_result({
 
 What is the probability that the box of cake mix yielded more than 5.2 cups of batter? 
 
-```{python cakebatter3, exercise = TRUE}
+```{python cakebatter3, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -830,7 +829,7 @@ grade_result({
 
 What is the probability that the box of cake mix yields between 4.25 and 4.85 cups of batter?
 
-```{python cakebatter4, exercise = TRUE}
+```{python cakebatter4, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -850,7 +849,7 @@ A 2017 study shows that 64\% of Americans drink coffee every day.
 
 In a group of 14 people, how many are expected to drink coffee every day? \textcolor{red}{Hint: what distribution should you be using to answer this question?}
 
-```{python coffee1, exercise = TRUE}
+```{python coffee1, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -866,7 +865,7 @@ grade_result({
 
 In the same group of 14 Americans, what is the probability that exactly 9 drink coffee every day?
 
-```{python coffee2, exercise = TRUE}
+```{python coffee2, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -882,7 +881,7 @@ grade_result({
 
 What is the probability that at least ten drink coffee every day?
 
-```{python coffee3, exercise = TRUE}
+```{python coffee3, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -898,7 +897,7 @@ grade_result({
 
 What is the probability that at most 7 drink coffee every day?
 
-```{python coffee4, exercise = TRUE}
+```{python coffee4, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -914,7 +913,7 @@ grade_result({
 
 What is the probability that between 3 and 8 drink coffee every day?
 
-```{python coffee5, exercise = TRUE}
+```{python coffee5, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -945,7 +944,7 @@ question("How many dogs should I expect to be living in a building?",
 
 What is the probability that a building has at least one dog?
 
-```{python dogs2, exercise = TRUE}
+```{python dogs2, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -961,7 +960,7 @@ grade_result({
 
 What is the probability that a building has exactly five dogs?
 
-```{python dogs3, exercise = TRUE}
+```{python dogs3, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -977,7 +976,7 @@ grade_result({
 
 What is the probability that a building has no more than 3 dogs?
 
-```{python dogs4, exercise = TRUE}
+```{python dogs4, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -995,7 +994,7 @@ grade_result({
 
 Assume that a basketball player has a 76.3\% chance of making a free throw. How many free throws should we expect her to shoot before making one? 
 
-```{python freethrows1, exercise = TRUE}
+```{python freethrows1, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -1011,7 +1010,7 @@ grade_result({
 
 What is the probability that she makes her first free throw on her third shot? (DELETE FOR 118)
 
-```{python freethrows2, exercise = TRUE}
+```{python freethrows2, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -1027,7 +1026,7 @@ grade_result({
 
 What is the probability that she makes her first free throw some time after her third shot? (DELETE FOR 118)
 
-```{python freethrows3, exercise = TRUE}
+```{python freethrows3, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -1043,7 +1042,7 @@ grade_result({
 
 What is the probability that it takes her no more than two shots to make her first free throw? (DELETE FOR 118)
 
-```{python freethrows4, exercise = TRUE}
+```{python freethrows4, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -1063,7 +1062,7 @@ One in four Americans did not read a single book last year.
 
 What is the probability, $p$, that a randomly chosen American did not read a single book last year?
 
-```{python books1, exercise = TRUE}
+```{python books1, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -1079,7 +1078,7 @@ grade_result({
 
 In a group of 24 Americans, how many are expected to have not read a single book last year?
 
-```{python books2, exercise = TRUE}
+```{python books2, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -1127,7 +1126,7 @@ grade_result({
 
 In a group of 10 people, what is the probability that exactly three did not read a single book last year?
 
-```{python books5, exercise = TRUE}
+```{python books5, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -1145,7 +1144,7 @@ grade_result({
 
 In a group of 19 people, what is the probability that no more than 3 people did not read a single book last year?
 
-```{python books6, exercise = TRUE}
+```{python books6, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -1176,7 +1175,7 @@ question("What distribution is most appropriate to use to calculate the probabil
 
 What are the expected value and the standard deviation of this distribution? Save them as `exp_val` and `sd`.
 
-```{python spurs2, exercise = TRUE}
+```{python spurs2, exercise = TRUE, exercise.setup="setup_py"}
 exp_val =
 sd =
 ```
@@ -1194,7 +1193,7 @@ grade_this({
 
 What is the probability that the San Antonio Spurs scored more than 32 points in a quarter?
 
-```{python spurs3, exercise = TRUE}
+```{python spurs3, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
@@ -1210,7 +1209,7 @@ grade_result({
 
 What is the probability that the San Antonio Spurs score between 24 and 28 points in a quarter (including both 24 and 28)?
 
-```{python spurs4, exercise = TRUE}
+```{python spurs4, exercise = TRUE, exercise.setup="setup_py"}
 
 ```
 
