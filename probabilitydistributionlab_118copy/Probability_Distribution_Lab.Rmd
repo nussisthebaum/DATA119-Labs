@@ -87,10 +87,14 @@ tags$div(
 
 ## Goals
 
+In the Probability Practice lab, we calculated probabilities from tables of data. Often, though, we want to describe how a random variable behaves using a known probability distribution. In this lab, we will work with three of the most common ones: the Bernoulli, Binomial, and Normal distributions.
+
 The goals of this lab are:
 
-* To review certain probability distributions. 
-* To calculate probabilities using Python commands. 
+* To identify when the Bernoulli, Binomial, and Normal distributions are appropriate for a given situation.
+* To calculate expected values and variances for a random variable using its distribution's parameters.
+* To calculate probabilities for single values and for ranges of values, both by hand and with the PMF, PDF, and CDF methods in `scipy.stats`.
+* To use the Normal distribution to compare observations from groups with different means and standard deviations.
 
 ## Setup
 
