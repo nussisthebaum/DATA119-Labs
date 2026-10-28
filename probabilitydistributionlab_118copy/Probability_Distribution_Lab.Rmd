@@ -14,9 +14,9 @@ library(learnr)
 library(gradethis)
 library(reticulate)
 
-library(dplyr)
-library(kableExtra)
-library(latex2exp)
+#library(dplyr)
+#library(kableExtra)
+#library(latex2exp)
 
 # Set the path to the existing Python environment
 #reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
