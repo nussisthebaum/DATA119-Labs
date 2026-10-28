@@ -583,7 +583,7 @@ question_numeric(
 ```
 ## Normal Distribution
 
-The Normal distribution is unlike any of the other distributions we have learned so far, since it is the only continuous distribution. Furthermore, it is characterized by two parameters: $\mu$, the expected value or mean (sometimes referred to as the location parameter), and $\sigma$, the standard deviation (sometimes referred to as the scale parameter). There are many distributions that are well approximated by the Normal distribution, and in fact, it is the most important distribution to many statisticians. 
+The Normal distribution is unlike any of the other distributions we have learned so far, since it is **continuous**. Furthermore, it is characterized by two parameters: $\mu$, the expected value or mean (sometimes referred to as the location parameter), and $\sigma$, the standard deviation (sometimes referred to as the scale parameter). There are many distributions that are well approximated by the Normal distribution, and in fact, it is the most important distribution to many statisticians. 
 
 Because a normally distributed variable is a continuous variable, it is described with a probability density function (PDF). Here are the relevant equations: 
 
@@ -595,8 +595,8 @@ $x \in \mathbb{R}$ | $f(x) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x - \mu)^2}
 
 Two notes:
 
-* Like any continuous distribution, the probability of observing a single value is exactly and always 0. We are typically looking at finding the probability of a range of values, i.e., $P(X<0)$, $P(X>3)$, $P(-1<X<1)$.
-* To find probabilities associated with a range of values, you need to integrate the PDF over a certain range. The PDF for the normal distribution CANNOT be integrated by hand! Instead, you need to use the CDF (**C**umulative **D**istribution **F**unction), which is easiest to find with `scipy.stats.norm` (read [the documentation for `scipy.stats.norm` here](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html)).
+* Like any continuous distribution, the probability of observing a single value is exactly and always 0. We are typically looking at finding the probability of a range of values, e.g., $P(X<0)$, $P(X>3)$, $P(-1<X<1)$.
+* To find probabilities associated with a range of values, you need to *integrate* the PDF over a certain range (remember integrals from calculus?). But the PDF for the normal distribution cannot be integrated by hand! Instead, you need to use the CDF (**C**umulative **D**istribution **F**unction), which you can find in [the documentation for `scipy.stats.norm`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html).
 
 The distribution object we use for a Normal random variable can be created with `norm`:
 
@@ -606,7 +606,7 @@ my_normal_variable = stats.norm(loc = 0, scale = 1)
 
 Note that you do have to supply the mean $\mu$ using the argument `loc` (for location) and the standard deviation $\sigma$ using the argument `scale`. Now, let's practice some Normal distribution questions:
 
-In triathlons, it is common for racers to be placed into age and gender groups. Friends Leo and Mary both completed the Hermosa Beach Triathlon, where Leo competed in the Men, Ages 30 - 34 group while Mary competed in the Women, Ages 25 - 29 group. Leo completed the race in 1:22:28 (4948 seconds), while Mary completed the race in 1:31:53 (5513 seconds). Obviously Leo finished faster, but they are curious about how they did within their respective groups. Can you help them? Here is some information on the performance of their groups:
+In triathlons, it is common for racers to be placed into age and gender groups. Friends Leo and Mary both completed the Hermosa Beach Triathlon, where Leo competed in the Men, Ages 30 -- 34 group while Mary competed in the Women, Ages 25 -- 29 group. Leo completed the race in 1:22:28 (4948 seconds), while Mary completed the race in 1:31:53 (5513 seconds). Leo finished faster, but they are curious about how they did within their respective groups. Can you help them? Here is some information on the performance of their groups:
 
 * The finishing times of the Men, Ages 30 - 34 group has a mean of 4313 seconds with a standard deviation of 583 seconds.
 * The finishing times of the Women, Ages 25 - 29 group has a mean of 5261 seconds with a standard deviation of 807 seconds. 
@@ -617,7 +617,7 @@ question("Write the distribution for the finishing triathlon times for Men Ages 
   answer("$N(0, 1)$"),
   answer("$N(1, 0)$"),
   answer("$N(4313, 583)$", correct = TRUE),
-  answer("$N(583, 4313)$", correct = TRUE),
+  answer("$N(583, 4313)$", message = "Check the order--which parameter comes first?"),
   allow_retry = T,
   random_answer_order = TRUE
 )
@@ -628,13 +628,13 @@ question("Write the distribution for the finishing triathlon times for Women Age
   answer("$N(0, 1)$"),
   answer("$N(1, 0)$"),
   answer("$N(5261, 807)$", correct = TRUE),
-  answer("$N(807, 5261)$", correct = TRUE),
+  answer("$N(807, 5261)$", message = "Check the order--which parameter comes first?"),
   allow_retry = T,
   random_answer_order = TRUE
 )
 ```
 
-Use the cell below to calculate the answers to the questions below.
+Use the cell below and a `scipy.stats.norm` object to calculate the answers to the questions below.
 
 ```{python norm_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -644,6 +644,7 @@ Use the cell below to calculate the answers to the questions below.
 question_numeric(
   "What percent of the triathletes did Leo finish faster than in his group? Give your answer as a percent, rounded to one decimal place.",
   answer(13.8, correct = TRUE),
+  answer(86.2, message = "Careful--norm.cdf() gives the percent of racers who finished at or below that time. Did those racers finish faster or slower?"),
   min = 0,
   max = 100,
   step = 0.1,
@@ -655,6 +656,7 @@ question_numeric(
 question_numeric(
   "What percent of the triathletes did Mary finish faster than in her group? Give your answer as a percent, rounded to one decimal place.",
   answer(37.7, correct = TRUE),
+  answer(62.3, message = "Careful--norm.cdf() gives the percent of racers who finished at or below that time. Did those racers finish faster or slower?"),
   min = 0,
   max = 100,
   step = 0.1,
@@ -732,7 +734,7 @@ question_numeric(
 
 A 2017 study shows that 64\% of Americans drink coffee every day.
 
-Use the cell below to calculate the answers to the questions below. Hint: what distribution should you be using to answer these questions?
+Use the cell below to calculate the answers to the questions below. 
 
 ```{python coffee_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -784,7 +786,7 @@ question_numeric(
 
 ```{r coffee5, echo=FALSE}
 question_numeric(
-  "What is the probability that between 3 and 8 drink coffee every day? Round to three decimal places.",
+  "What is the probability that between 3 and 8 (inclusive) drink coffee every day? Round to three decimal places.",
   answer(0.390, correct = TRUE),
   min = 0,
   max = 1,
