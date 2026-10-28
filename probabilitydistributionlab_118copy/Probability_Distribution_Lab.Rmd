@@ -80,7 +80,7 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Practicing Probability Distributions", class = "pageTitle")
+    tags$h1("Probability Distributions", class = "pageTitle")
   )
 )
 ```
@@ -111,26 +111,24 @@ from scipy import stats
 
 ## Probability Distributions
 
-Often, we are interested in calculating probabilities associated with a **random variable**, where random variables are defined as a variable or process with a numerical outcome. We usually represent random variables with a capital letter, such as $X, Y,$ or $Z$.
+Often, we are interested in calculating probabilities associated with a **random variable**, which is a function that assigns a real number to each possible outcome of a random process. We usually represent random variables with a capital letter, such as $X, Y,$ or $Z$.
 
-To calculate a probability, we need to know the random variable's **probability distribution**. A probability distribution is a list of the random variable's possible outcomes with corresponding probabilities that satisfies three rules:
+To calculate a probability, we need to know the random variable's **probability distribution**, which described the probability of each possible outcome. The probabilities must satisfy the following rules:
 
 1. The outcomes must be disjoint. 
 2. Each probability must be between 0 and 1. 
 3. The probabilities must total 1. 
 
-<!--  (for review, see the Introduction to Probability Lab).  -->
+We already discussed simple probability distributions, which are often presented in a table. Beyond listing probabilites, we are more interested in looking at our variable and seeing if it fits a **known probability distribution**, like Bernoulli, Binomial, and Normal distributions. There are MANY more beyond these three; check out this [interactive chart](https://www.math.wm.edu/~leemis/chart/UDR/UDR.html) to explore further.
 
-You are hopefully already familiar with probability distributions defined in some sort of table, covered in our Probability Practice lab. More often, we are interested in looking at the variable and seeing if it fits a **known probability distribution**. This lab will cover a few specific distributions, like the Bernoulli, Binomial, and Normal distributions, but there are many, MANY more! For example, check out this [interactive chart](https://www.math.wm.edu/~leemis/chart/UDR/UDR.html).
+Regardless of which distribution we are talking about, the following rules generally apply:
 
-Even though you won't be formally introduced to many of these distributions, the following generally apply:
-
-* Distributions are generally appropriate in certain situations and not appropriate in others. It is your job to pick something that will work well! 
+* Specific distributions are generally appropriate in certain situations and not in others. It is your job to pick something that will work well! 
 * Distributions will generally be described by either a **P**robability **M**ass **F**unction, abbreviated as **PMF** (in the case of discrete variables) or a **P**robability **D**istribution **F**unction, abbreviated as **PDF** (in the case of continuous variables). 
-* Distributions will be characterized by parameters, like the mean and standard deviation. Usually, we use Greek letters to indicate that a value is a parameter, like $\mu$ for the mean and $\sigma$ for the standard deviation. 
+* Distributions will be characterized by parameters, like the mean ($\mu$) and standard deviation ($\sigma$). 
 * Distributions almost always have an expected value and variance (if not, they are known as degenerate distributions). You can calculate the expected value and variance by hand using the formulas we learned in class, but sometimes there are shortcut formulas based on the parameters. You can look these formulas up to use them if the distribution is well known--it is often much easier to use them. 
 
-The `scipy.stats` module has a lot of tools for working with known distributions. To work with the distributions in `scipy.stats`, you first need to define a distribution object using something called a class (more on this in DATA120):
+The `scipy.stats` module has a lot of tools for working with known distributions. Each distribution, like `stats.binom` or `stats.norm`, is an object. If you call it with the distribution's parameters, you get back a new object for that specific random variable, which you can save and reuse:
 
 ```{python, echo = TRUE, }
 my_bernoulli_variable = stats.bernoulli(p = 0.5)
@@ -140,13 +138,39 @@ my_normal_variable = stats.norm(loc = 0, scale = 1)
 
 Once you have defined your object, you can use the following methods: 
 
-* `.pmf()`/`.pdf()`: Returns probabilities calculated using the `p`robability `m`ass `f`unction (defined for discrete variables only) or the output of the `p`robability `d`istribution `f`unction (defined for continuous variables only) for a specific random variable.
+* `.pmf()`/`.pdf()`: Returns probabilities calculated using the `p`robability `m`ass `f`unction (defined for discrete variables only) or the output of the `p`robability `d`ensity `f`unction (defined for continuous variables only) for a specific random variable.
 * `.cdf()`: Returns the `c`umulative `d`istribution `f`unction, which calculates probabilities for a range of values of a specific random variable. 
 * `.ppf()`: Returns the `p`ercent `p`oint `f`unction for a specific random variable, a.k.a., the percentiles of that random variable's distribution.
-* `.rvs()`: Generates `r`andom `v`ariate`s` of a specific random variable. 
+* `.rvs()`: Generates `r`andom `v`ariate`s` of a specific random variable.
 
-We will introduce you to the `bernoulli`, `binom`, and `norm` distribution objects, but `scipy.stats` has many more, including some mentioned in the above Probability Distribution Chart. You can learn more about them in the [`scipy.stats` documentation](https://docs.scipy.org/doc/scipy/reference/stats.html)--take a look, and remember your new favorite distribution and when to use it for later...
+Here is what each method looks like for the objects we defined above:
 
+```{python, echo = TRUE}
+# P(X = 10) for 20 trials with p = 0.5
+my_binomial_variable.pmf(10)
+
+# P(X <= 10)
+my_binomial_variable.cdf(10)
+
+# The 50th percentile (median) of the distribution
+my_binomial_variable.ppf(0.5)
+
+# Height of the standard Normal PDF at 0 (a density, not a probability)
+my_normal_variable.pdf(0)
+
+# P(Z <= 1.96)
+my_normal_variable.cdf(1.96)
+
+# The value with 97.5% of the distribution below it
+my_normal_variable.ppf(0.975)
+
+# Five random draws from a Bernoulli variable (random_state makes the draws the same every time)
+my_bernoulli_variable.rvs(size = 5, random_state = 119)
+```
+
+You can also skip saving the object and pass the parameters straight to the method. For example, `my_binomial_variable.pmf(3)` and `stats.binom.pmf(3, n = 20, p = 0.5)` give the same answer.
+
+We will introduce you to the `bernoulli`, `binom`, and `norm` distribution objects, but `scipy.stats` has many more, including some mentioned in the above Probability Distribution Chart. You can learn more about them in the [`scipy.stats` documentation](https://docs.scipy.org/doc/scipy/reference/stats.html). Take a look, choose your favorite, and remember its description. This might come up later... 😉
 
 ## Bernoulli Distribution
 
