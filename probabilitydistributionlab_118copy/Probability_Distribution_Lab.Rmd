@@ -1,0 +1,852 @@
+---
+title: "Probability Distributions"
+output: 
+   learnr::tutorial:
+      css: css/custom-styles.css
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
+
+library(learnr)
+library(gradethis)
+library(reticulate)
+
+#library(dplyr)
+#library(kableExtra)
+#library(latex2exp)
+
+# Set the path to the existing Python environment
+#reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
+
+# Optional: Install necessary Python packages if not already installed
+#reticulate::py_install(c('numpy', 'pandas', 'plotnine', 'scipy'))
+
+# Exercises graded on a value instead of the exact code.
+# Add an entry here to opt an exercise in, using list(var) to check a variable,
+# list(expr) to check a Python expression, or list(last_value = TRUE) to check the
+# student's last line. The result is compared against the same thing computed from
+# the exercise's -solution chunk; add value = ... to compare against a fixed number
+# instead. Add defines = "name" to require the student's code to define that name
+# itself. Add structure = c(...) to also require the code to have a certain shape
+# (see check_structure below for the rules). Any exercise not listed is graded by
+# exact code match against its -solution chunk.
+value_checks <- list(
+  # Last line must be an isclose() comparing two different expressions, and the code must
+  # call both .cdf() and .pmf(), so a bare True fails
+  cdf_check = list(last_value = TRUE, value = TRUE, structure = c("last_isclose", "cdf", "pmf"))
+)
+
+# Python helpers for custom_checker (done in Python so they work the same on every
+# Python version).
+# get_result runs code like learnr does (setup objects visible, new variables kept
+# separate) and returns the value being checked.
+# values_match compares a student's result to the expected one. Data frames and
+# series match if they have the same row labels and counts, ignoring their names,
+# row order, and the outer level of the column labels (so values = "SID" and
+# values = ["SID"] both work).
+checker_py <- '
+# (imports go inside the functions because py_run_string keeps top-level names local)
+def get_result(code, var=None, expr=None, last_value=False, defines=()):
+    import ast
+    import __main__
+    tree = ast.parse(code)
+    if last_value:
+        if not tree.body:
+            raise ValueError("no code")
+        last = tree.body[-1]
+        if isinstance(last, ast.Assign) and len(last.targets) == 1 and isinstance(last.targets[0], ast.Name):
+            # Last line is `name = expr`, so read `name`
+            var = last.targets[0].id
+        elif isinstance(last, ast.Expr):
+            # Rewrite the last line `expr` as `__check_result__ = expr` so we can read it
+            target = ast.Name(id="__check_result__", ctx=ast.Store())
+            tree.body[-1] = ast.copy_location(ast.Assign(targets=[target], value=last.value), last)
+            ast.fix_missing_locations(tree)
+            var = "__check_result__"
+        else:
+            raise ValueError("last line is not an expression")
+    user_vars = {}
+    exec(compile(tree, "<exercise>", "exec"), __main__.__dict__, user_vars)
+    if expr is not None:
+        user_vars["__check_result__"] = eval(expr, __main__.__dict__, user_vars)
+        var = "__check_result__"
+    for name in list(defines) + [var]:
+        if name not in user_vars:
+            raise NameError(name + " not defined")
+    return user_vars[var]
+
+def check_structure(code, rules=()):
+    # Returns "" if the code follows every rule, otherwise a message saying what is missing
+    import ast
+    tree = ast.parse(code)
+    nodes = list(ast.walk(tree))
+    def calls(name):
+        # True if the code calls a function or method with this name, e.g. np.isclose() or x.cdf()
+        return any(isinstance(n, ast.Call) and getattr(n.func, "attr", getattr(n.func, "id", None)) == name for n in nodes)
+    for rule in rules:
+        if rule == "last_isclose":
+            last = tree.body[-1] if tree.body else None
+            value = last.value if isinstance(last, ast.Expr) else None
+            func = getattr(value, "func", None)
+            if not (isinstance(value, ast.Call) and getattr(func, "attr", getattr(func, "id", None)) == "isclose" and len(value.args) >= 2):
+                return "The last line of your code should use np.isclose() to compare the two calculations."
+            if ast.dump(value.args[0]) == ast.dump(value.args[1]):
+                return "The two values inside np.isclose() should be calculated in different ways."
+        elif rule in ("cdf", "pmf"):
+            if not calls(rule):
+                return "Make sure your code uses ." + rule + "()."
+        else:
+            raise ValueError("unknown structure rule: " + rule)
+    return ""
+
+def values_match(actual, expected):
+    import numpy as np
+    import pandas as pd
+    if isinstance(expected, (pd.Series, pd.DataFrame)):
+        actual, expected = [
+            x.squeeze(axis=1) if isinstance(x, pd.DataFrame) and x.shape[1] == 1 else x
+            for x in (actual, expected)
+        ]
+        if type(actual) is not type(expected):
+            return False
+        actual, expected = actual.sort_index(), expected.sort_index()
+        if list(actual.index) != list(expected.index):
+            return False
+        if isinstance(expected, pd.DataFrame):
+            last_level = lambda cols: [c[-1] if isinstance(c, tuple) else c for c in cols]
+            if last_level(actual.columns) != last_level(expected.columns):
+                return False
+        try:
+            return bool(np.allclose(actual.to_numpy(dtype=float), expected.to_numpy(dtype=float), equal_nan=True))
+        except (TypeError, ValueError):
+            return False
+    try:
+        return bool(np.isclose(float(actual), float(expected)))
+    except (TypeError, ValueError):
+        return False
+'
+
+custom_checker <- function(label, user_code, solution_code, check_code, envir_result, evaluate_result, envir_prep, last_value, stage, ...) {
+  # (learnr doesn't pass the last value of Python chunks, so we run the code)
+  if (label %in% names(value_checks)) {
+    if (stage != "check") return()
+    spec <- value_checks[[label]]
+    structure_msg <- tryCatch({
+      helpers <- reticulate::py_run_string(checker_py, local = TRUE, convert = FALSE)
+      reticulate::py_to_r(helpers$check_structure(user_code, as.list(spec$structure)))
+    }, error = function(e) "")
+    if (nzchar(structure_msg)) {
+      return(list(message = paste(random_encouragement(), structure_msg), correct = FALSE))
+    }
+    correct <- tryCatch({
+      helpers <- reticulate::py_run_string(checker_py, local = TRUE, convert = FALSE)
+      get_result <- function(code) {
+        helpers$get_result(code, var = spec$var, expr = spec$expr,
+                           last_value = isTRUE(spec$last_value), defines = as.list(spec$defines))
+      }
+      values_match <- helpers$values_match
+      # Student's code runs first, so if it modifies shared data the solution can't fill it in for them
+      actual <- get_result(user_code)
+      expected <- if (is.null(spec$value)) get_result(solution_code) else reticulate::r_to_py(spec$value)
+      isTRUE(reticulate::py_to_r(values_match(actual, expected)))
+    }, error = function(e) FALSE)
+    if (correct) {
+      return(list(message = random_praise(), correct = TRUE))
+    }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+  # Exact code checking (requires a <label>-solution chunk and <label>-code-check chunk)
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
+gradethis_setup()
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.timelimit = 180,
+                 exercise.reveal_solution = FALSE
+)
+```
+
+```{python setup_py, include=FALSE}
+import math
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy.stats
+from scipy import stats
+
+from scipy.stats import binom
+from scipy.stats import geom
+from scipy.stats import poisson
+from scipy.stats import norm
+```
+
+```{python setup_page, include=FALSE}
+# learnr only runs setup_py inside exercises, so the non-exercise chunks need their own imports
+import math
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy.stats
+from scipy import stats
+
+from scipy.stats import binom
+from scipy.stats import geom
+from scipy.stats import poisson
+from scipy.stats import norm
+```
+
+```{r header, echo = FALSE}
+library(htmltools)
+
+tags$div(
+  class = "topContainer",
+  tags$div(
+    class = "logoAndTitle",
+    tags$img(
+      src = "./images/dsi_logo.png",
+      alt = "DSI Logo",
+      class = "topLogo"
+    ),
+    tags$h1("Probability Distributions", class = "pageTitle")
+  )
+)
+```
+
+## Goals
+
+In the Probability Practice lab, we calculated probabilities from tables of data. Often, though, we want to describe how a random variable behaves using a known probability distribution. In this lab, we will work with three of the most common ones: the Bernoulli, Binomial, and Normal distributions.
+
+The goals of this lab are:
+
+* To identify when the Bernoulli, Binomial, and Normal distributions are appropriate for a given situation.
+* To calculate expected values and variances for a random variable using its distribution's parameters.
+* To calculate probabilities for single values and for ranges of values, both by hand and with the PMF, PDF, and CDF methods in `scipy.stats`.
+* To use the Normal distribution to compare observations from groups with different means and standard deviations.
+
+## Setup
+
+For this lab we will be using  `math`, `numpy`, `plotnine`, `pandas`, and `scipy.stats`.
+
+```{python setup-packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+import math
+import numpy as np
+import pandas as pd
+import plotnine as p9
+import scipy
+from scipy import stats
+```
+
+## Probability Distributions
+
+Often, we are interested in calculating probabilities associated with a **random variable**, which is a function that assigns a real number to each possible outcome of a random process. We usually represent random variables with a capital letter, such as $X, Y,$ or $Z$.
+
+To calculate a probability, we need to know the random variable's **probability distribution**, which described the probability of each possible outcome. The probabilities must satisfy the following rules:
+
+1. The outcomes must be disjoint. 
+2. Each probability must be between 0 and 1. 
+3. The probabilities must total 1. 
+
+We already discussed simple probability distributions, which are often presented in a table. Beyond listing probabilites, we are more interested in looking at our variable and seeing if it fits a **known probability distribution**, like Bernoulli, Binomial, and Normal distributions. There are MANY more beyond these three; check out this [interactive chart](https://www.math.wm.edu/~leemis/chart/UDR/UDR.html) to explore further.
+
+Regardless of which distribution we are talking about, the following rules generally apply:
+
+* Specific distributions are generally appropriate in certain situations and not in others. It is your job to pick something that will work well! 
+* Distributions will generally be described by either a **P**robability **M**ass **F**unction, abbreviated as **PMF** (in the case of discrete variables) or a **P**robability **D**ensity **F**unction, abbreviated as **PDF** (in the case of continuous variables). 
+* Distributions will be characterized by parameters, like the mean ($\mu$) and standard deviation ($\sigma$). 
+* Distributions almost always have an expected value and variance (if not, they are known as degenerate distributions). You can calculate the expected value and variance by hand using the formulas we learned in class, but sometimes there are shortcut formulas based on the parameters. You can look these formulas up to use them if the distribution is well known--it is often much easier to use them. 
+
+The `scipy.stats` module has a lot of tools for working with known distributions. Each distribution, like `stats.binom` or `stats.norm`, is an object. If you call it with the distribution's parameters, you get back a new object for that specific random variable, which you can save and reuse:
+
+```{python, echo = TRUE, }
+my_bernoulli_variable = stats.bernoulli(p = 0.5)
+my_binomial_variable = stats.binom(n = 20, p = 0.5)
+my_normal_variable = stats.norm(loc = 0, scale = 1)
+```
+
+Once you have defined your object, you can use the following methods: 
+
+* `.pmf()`/`.pdf()`: Returns probabilities calculated using the `p`robability `m`ass `f`unction (defined for discrete variables only) or the output of the `p`robability `d`ensity `f`unction (defined for continuous variables only) for a specific random variable.
+* `.cdf()`: Returns the `c`umulative `d`istribution `f`unction, which calculates probabilities for a range of values of a specific random variable. 
+* `.ppf()`: Returns the `p`ercent `p`oint `f`unction for a specific random variable, a.k.a., the percentiles of that random variable's distribution.
+* `.rvs()`: Generates `r`andom `v`ariate`s` of a specific random variable.
+
+Here is what each method looks like for the objects we defined above:
+
+```{python, echo = TRUE}
+# P(X = 10) for 20 trials with p = 0.5
+my_binomial_variable.pmf(10)
+
+# P(X <= 10)
+my_binomial_variable.cdf(10)
+
+# The 50th percentile (median) of the distribution
+my_binomial_variable.ppf(0.5)
+
+# Height of the standard Normal PDF at 0 (a density, not a probability)
+my_normal_variable.pdf(0)
+
+# P(Z <= 1.96)
+my_normal_variable.cdf(1.96)
+
+# The value with 97.5% of the distribution below it
+my_normal_variable.ppf(0.975)
+
+# Five random draws from a Bernoulli variable (random_state makes the draws the same every time)
+my_bernoulli_variable.rvs(size = 5, random_state = 119)
+```
+
+You can also skip saving the object and pass the parameters straight to the method. For example, `my_binomial_variable.pmf(3)` and `stats.binom.pmf(3, n = 20, p = 0.5)` give the same answer.
+
+We will introduce you to the `bernoulli`, `binom`, and `norm` distribution objects, but `scipy.stats` has many more, including some mentioned in the above Probability Distribution Chart. You can learn more about them in the [`scipy.stats` documentation](https://docs.scipy.org/doc/scipy/reference/stats.html). Take a look, choose your favorite, and remember its description. This might come up later... 😉
+
+## Bernoulli Distribution
+
+Bernoulli distributions are appropriate when the random variable in question can take one of two values: 1, with probability $p$, or $0$, with probability $1-p$. Because it takes only values 0 and 1, it is a discrete variable and is described with a probability mass function (PMF). Then, you can write the PMF as follows:
+
+$$
+P(x) = \begin{cases} 1-p & \text{if } x = 0 \\ 
+                     p  & \text{if } x = 1 \\ 
+                     0  & \text{otherwise} \end{cases}
+$$
+
+We can summarize the information about this distribution in a table, like the one shown below. Refer back to our notes on expected value and variance to calculate these values yourself.
+
+::: {.disttable}
+Support | PMF | $E(X)$ | $Var(X)$
+:----:|:------------:|:---:|:---:
+$x \in \{0, 1\}$ | $P(X = x) = \begin{cases} 1-p & \text{if } x = 0 \\ p & \text{if } x = 1 \end{cases}$ | $p$ | $p(1-p)$
+:::
+
+The distribution object we use for a Bernoulli random variable can be created with `bernoulli`:
+
+```{python, echo = TRUE}
+my_bernoulli_variable = stats.bernoulli(p = 0.5)
+```
+
+Note that you do have to supply the probability of success `p`. Now, let's practice some Bernoulli probability questions:
+
+Suppose I work at a bakery that sells two types of pies: apple and pumpkin. The pies are boxed in such a way that I must open the box to identify what type of pie is inside. I know the probability that a randomly selected pie is an apple pie is 42\%. Assume any samples are randomly selected from random boxes.
+
+```{r q1, echo=FALSE}
+question(
+  "What is a 'success', according to this problem?",
+  answer("The pie inside is an apple pie.", correct = TRUE),
+  answer("The pie inside is a pumpkin pie."),
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the first secret word: BANQUET."
+)
+```
+
+Use the cell below to calculate the probabilities described in the questions below.
+
+```{python q2_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{r q2, echo=FALSE}
+question_numeric(
+  "What is the probability of a pumpkin pie?",
+  answer(0.58, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
+
+```{r q3, echo=FALSE}
+question_numeric(
+  "What is the probability of finding apple pies in three randomly selected boxes? Round to three decimal places.",
+  answer(0.074, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+```{r q4, echo=FALSE}
+question_numeric(
+  "What is the probability of finding pumpkin pies in three randomly selected boxes? Round to three decimal places.",
+  answer(0.195, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+Notice that the Bernoulli distribution is not particularly interesting! So why are we covering it? Because it is a useful building block for many other distributions, like the Binomial. 
+
+## Binomial Distribution
+
+Binomial distributions are appropriate when the random variable is the number of successes in a sequence of $n$ independent trials, where each trial can only be a success or failure. This type of outcome is often described as binary, and hopefully sounds familiar to you--a single trial can be described as a Bernoulli variable! To check if something can be described with a Binomial distribution, ask yourself:
+
+1. Is the number of trials, $n$, fixed in advance?
+2. Can each trial be described only as a success or failure, and is the probability of success constant throughout all $n$ trials?
+3. Is each trial independent (that is, the outcome of one trial is not affected by the outcome of another)?
+
+If the answer to ALL of these questions is yes, then you have a Binomial random variable.
+
+Because the random variable takes only values 0, 1, 2, 3, etc., it is a discrete variable and is described with a probability mass function (PMF). Deriving the expressions for the expected value and variance can be done by hand, but relies on some mathematical tricks--you can read about [the derivation for the expected value of the Binomial Distribution](https://proofwiki.org/wiki/Expectation_of_Binomial_Distribution) if you are interested, but otherwise, we will just report the relevant equations:
+
+::: {.disttable}
+Support | PMF | $E(X)$ | $Var(X)$
+:----:|:------------:|:---:|:---:
+$k \in \{0, 1, ..., n\}$ | $P(X = k) = \binom{n}{k} p^k(1-p)^{n-k}$ | $np$ | $np(1-p)$
+:::
+
+Here, $\binom{n}{k}$ is read as $n$ choose $k$, where the choose function is defined as 
+
+$$ \binom{n}{k} = \frac{n!}{k!(n-k)!}$$
+
+The distribution object we use for a Binomial random variable can be created with `binom`:
+
+```{python, echo = TRUE}
+my_binomial_variable = stats.binom(n = 20, p = 0.5)
+```
+
+Note that you do have to supply the number of trials `n` and the probability of success `p`. Now, let's practice some Binomial probability questions, with the same bakery from the previous section. 
+
+Let's say I have 27 boxes, and I want to figure out the probability that exactly 17 of them contain pumpkin pies. Let's consider a pumpkin pie to be a success this time.
+
+
+```{r q5, echo=FALSE}
+question_numeric(
+  "What is $n$ in this problem?",
+  answer(27, correct = TRUE),
+  min = 0,
+  max = 27,
+  step = 1,
+  allow_retry = TRUE
+)
+```
+
+```{r q5-5, echo=FALSE}
+question_numeric(
+  "What is $p$ in this problem?",
+  answer(0.58, correct = TRUE),
+  answer(0.42, message = "Careful--what counts as a success in this problem?"),
+  min = 0,
+  max = 1,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
+
+```{r q6, echo=FALSE}
+question_numeric(
+  "What is $k$ in this problem?",
+  answer(17, correct = TRUE),
+  min = 0,
+  max = 27,
+  step = 1,
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the second secret word: VOLUNTEER."
+)
+```
+
+Use the cell below with a `scipy.stats.binom` object to calculate the answers to the questions below. The[documentation for `scipy.stats.binom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html), alongisde the examples in the Probability Distributions section of this lab should help you choose the correct methods.
+
+```{python bin_calc1, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{r q7, echo=FALSE}
+question_numeric(
+  "What is the probability that 17 of 27 boxes contain pumpkin pies? Round to three decimal places.",
+  answer(0.137, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+```{r q8, echo=FALSE}
+question_numeric(
+  "Of my 27 pies, how many should I expect to be apple? Round to two decimal places.",
+  answer(11.34, correct = TRUE),
+  min = 0,
+  max = 27,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
+
+```{r q9, echo=FALSE}
+question_numeric(
+  "Now assume I have three pies, like I did in the Bernoulli distribution section. What is the probability that all three are pumpkin? Round to three decimal places.",
+  answer(0.195, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+```{r q10, echo=FALSE}
+question_numeric(
+  "What is the probability that all three are apple? Round to three decimal places.",
+  answer(0.074, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor:**
+:::
+
+Do your answers match the values in the previous section? Why or why not?
+::::
+
+We may also want to calculate probabilities for a range of values. Because the values are mutually exclusive, we can either add probabilities together, or use another method described in the [documentation for `scipy.stats.binom`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html).
+
+```{r q11, echo=FALSE}
+question_numeric(
+  "Find the probability that there are two or fewer apple pies out of three. Round to three decimal places.",
+  answer(0.926, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the third secret word: CHOICE."
+)
+```
+
+Now, in the cell below, use code to check that using the method `.cdf()` is equivalent to adding up multiple individual probabilites using `.pmf()`.
+
+Because computers store decimals with tiny rounding errors, compare your two outputs with `np.isclose()` rather than `==`.
+
+```{python cdf_check, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{python cdf_check-solution, message = FALSE, warning = FALSE, echo = FALSE}
+apple_pies = stats.binom(n = 3, p = 0.42)
+np.isclose(apple_pies.cdf(2), apple_pies.pmf(0) + apple_pies.pmf(1) + apple_pies.pmf(2))
+```
+
+```{r cdf_check-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
+```
+
+Now use the cell below to answer the problems that follow.
+
+```{python bin_calc2, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{r q12, echo=FALSE}
+question_numeric(
+  "Now assume I have 32 pies. What is the probability that more than 23 are apple? Round to four decimal places.",
+  answer(0.0002, correct = TRUE),
+  answer(0.0006, message = "Careful--does 'more than 23' include 23?"),
+  min = 0,
+  max = 1,
+  step = 0.0001,
+  allow_retry = TRUE
+)
+```
+
+```{r q13, echo=FALSE}
+question_numeric(
+  "What is the probability that less than 8 are apple? Round to three decimal places.",
+  answer(0.014, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+```{r q14, echo=FALSE}
+question_numeric(
+  "What is the probability that between 13 and 18 are apple? Treat 13 and 18 inclusively, that is, include them in the range you are looking for. Round to three decimal places.",
+  answer(0.592, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+## Normal Distribution
+
+The Normal distribution is unlike any of the other distributions we have learned so far, since it is **continuous**. Furthermore, it is characterized by two parameters: $\mu$, the expected value or mean (sometimes referred to as the location parameter), and $\sigma$, the standard deviation (sometimes referred to as the scale parameter). There are many distributions that are well approximated by the Normal distribution, and in fact, it is the most important distribution to many statisticians. 
+
+Because a normally distributed variable is a continuous variable, it is described with a probability density function (PDF). Here are the relevant equations: 
+
+::: {.disttable}
+Support | PDF | $E(X)$ | $Var(X)$
+:----:|:------------:|:---:|:---:
+$x \in \mathbb{R}$ | $f(x) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$ | $\mu$ | $\sigma^2$
+:::
+
+Two notes:
+
+* Like any continuous distribution, the probability of observing a single value is exactly and always 0. We are typically looking at finding the probability of a range of values, e.g., $P(X<0)$, $P(X>3)$, $P(-1<X<1)$.
+* To find probabilities associated with a range of values, you need to *integrate* the PDF over a certain range (remember integrals from calculus?). But the PDF for the normal distribution cannot be integrated by hand! Instead, you need to use the CDF (**C**umulative **D**istribution **F**unction), which you can find in [the documentation for `scipy.stats.norm`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html).
+
+The distribution object we use for a Normal random variable can be created with `norm`:
+
+```{python, echo = TRUE}
+my_normal_variable = stats.norm(loc = 0, scale = 1)
+```
+
+Note that you do have to supply the mean $\mu$ using the argument `loc` (for location) and the standard deviation $\sigma$ using the argument `scale`. Now, let's practice some Normal distribution questions:
+
+In triathlons, it is common for racers to be placed into age and gender groups. Friends Leo and Mary both completed the Hermosa Beach Triathlon, where Leo competed in the Men, Ages 30 -- 34 group while Mary competed in the Women, Ages 25 -- 29 group. Leo completed the race in 1:22:28 (4948 seconds), while Mary completed the race in 1:31:53 (5513 seconds). Leo finished faster, but they are curious about how they did within their respective groups. Can you help them? Here is some information on the performance of their groups:
+
+* The finishing times of the Men, Ages 30 - 34 group has a mean of 4313 seconds with a standard deviation of 583 seconds.
+* The finishing times of the Women, Ages 25 - 29 group has a mean of 5261 seconds with a standard deviation of 807 seconds. 
+* The distributions of finishing times for both groups are approximately Normal. Remember: a better performance corresponds to a faster finish.
+
+```{r q27, echo=FALSE}
+question("Write the distribution for the finishing triathlon times for Men Ages 30-34 using proper notation.",
+  answer("$N(0, 1)$"),
+  answer("$N(1, 0)$"),
+  answer("$N(4313, 583)$", correct = TRUE),
+  answer("$N(583, 4313)$", message = "Check the order--which parameter comes first?"),
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+```{r q28, echo=FALSE}
+question("Write the distribution for the finishing triathlon times for Women Ages 25-29 using proper notation.",
+  answer("$N(0, 1)$"),
+  answer("$N(1, 0)$"),
+  answer("$N(5261, 807)$", correct = TRUE),
+  answer("$N(807, 5261)$", message = "Check the order--which parameter comes first?"),
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+Use the cell below and a `scipy.stats.norm` object to calculate the answers to the questions below.
+
+```{python norm_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{r q15, echo=FALSE}
+question_numeric(
+  "What percent of the triathletes did Leo finish faster than in his group? Give your answer as a percent, rounded to one decimal place.",
+  answer(13.8, correct = TRUE),
+  answer(86.2, message = "Careful--norm.cdf() gives the percent of racers who finished at or below that time. Did those racers finish faster or slower?"),
+  min = 0,
+  max = 100,
+  step = 0.1,
+  allow_retry = TRUE
+)
+```
+
+```{r q16, echo=FALSE}
+question_numeric(
+  "What percent of the triathletes did Mary finish faster than in her group? Give your answer as a percent, rounded to one decimal place.",
+  answer(37.7, correct = TRUE),
+  answer(62.3, message = "Careful--norm.cdf() gives the percent of racers who finished at or below that time. Did those racers finish faster or slower?"),
+  min = 0,
+  max = 100,
+  step = 0.1,
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the fourth secret word: INVITE."
+)
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor:**
+:::
+
+Who did better in the triathlon, relative to their sex/age group? How do you know?
+::::
+
+## More Practice Questions
+
+When practicing these questions, make sure you are asking yourself what distribution you should be using!
+
+### Cake Batter
+
+The yield of a box of cake mix is normally distributed with a mean of 4.75 cups of batter and a standard deviation of 0.25 cups. 
+
+```{r cakebatter1, echo=FALSE}
+question("Write this distribution in mathematical notation.",
+  answer("$N(4.75, 0.25)$", correct = TRUE),
+  answer("$N(0.25, 4.75)$"),
+  answer("$N(0, 1)$"),
+  answer("$N(1, 0)$"),
+  allow_retry = T,
+  random_answer_order = TRUE
+)
+```
+
+Use the cell below to calculate the answers to the questions below.
+
+```{python cakebatter_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{r cakebatter2, echo=FALSE}
+question_numeric(
+  "What is the probability that a box of cake mix yields less than 4.15 cups of batter? Round to three decimal places.",
+  answer(0.008, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+```{r cakebatter3, echo=FALSE}
+question_numeric(
+  "What is the probability that the box of cake mix yielded more than 5.2 cups of batter? Round to three decimal places.",
+  answer(0.036, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+```{r cakebatter4, echo=FALSE}
+question_numeric(
+  "What is the probability that the box of cake mix yields between 4.25 and 4.85 cups of batter? Round to three decimal places.",
+  answer(0.633, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+### Coffee Drinkers
+
+A 2017 study shows that 64\% of Americans drink coffee every day.
+
+Use the cell below to calculate the answers to the questions below. 
+
+```{python coffee_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{r coffee1, echo=FALSE}
+question_numeric(
+  "In a group of 14 people, how many are expected to drink coffee every day? Round to two decimal places.",
+  answer(8.96, correct = TRUE),
+  min = 0,
+  max = 14,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
+
+```{r coffee2, echo=FALSE}
+question_numeric(
+  "In the same group of 14 Americans, what is the probability that exactly 9 drink coffee every day? Round to three decimal places.",
+  answer(0.218, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+```{r coffee3, echo=FALSE}
+question_numeric(
+  "What is the probability that at least ten drink coffee every day? Round to three decimal places.",
+  answer(0.392, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE, 
+  post_message = "Congratulations! You have found the final secret word: BITTER."
+)
+```
+
+```{r coffee4, echo=FALSE}
+question_numeric(
+  "What is the probability that at most 7 drink coffee every day? Round to three decimal places.",
+  answer(0.206, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+```{r coffee5, echo=FALSE}
+question_numeric(
+  "What is the probability that between 3 and 8 (inclusive) drink coffee every day? Round to three decimal places.",
+  answer(0.390, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+### Bookworms
+
+One in four Americans did not read a single book last year 😔.
+
+Use the cell below to calculate the answers to the questions below.
+
+```{python books_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{r books1, echo=FALSE}
+question_numeric(
+  "What is the probability, $p$, that a randomly chosen American did not read a single book last year? Round to two decimal places.",
+  answer(0.25, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
+
+```{r books2, echo=FALSE}
+question_numeric(
+  "In a group of 24 Americans, how many are expected to have not read a single book last year?",
+  answer(6, correct = TRUE),
+  min = 0,
+  max = 24,
+  step = 1,
+  allow_retry = TRUE
+)
+```
+
+```{r books5, echo=FALSE}
+question_numeric(
+  "In a group of 10 people, what is the probability that exactly three did not read a single book last year? Round to three decimal places.",
+  answer(0.250, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
+
+```{r books6, echo=FALSE}
+question_numeric(
+  "In a group of 19 people, what is the probability that no more than 3 people did not read a single book last year? Round to three decimal places.",
+  answer(0.263, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.001,
+  allow_retry = TRUE
+)
+```
