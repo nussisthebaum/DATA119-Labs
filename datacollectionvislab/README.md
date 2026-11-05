@@ -1,0 +1,9 @@
+# Secret words
+
+BANQUET
+VOLUNTEER
+CHOICE
+INVITE
+BITTER
+
+
