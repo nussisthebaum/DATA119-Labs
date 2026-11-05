@@ -84,12 +84,7 @@ Summaries of various numerical characteristics of a population are known as **pa
 * The average weight of a tube of toothpaste, or 
 * The average grade point average of a student at the University of Chicago. 
 
-For various reasons, we can't always gather information on an entire population (known as a census). For example, it is extremely costly to count or even find every adult living in the United States, and by the time we identified every adult, we might have lost some adults (due to emigration) and gained some adults (due to immigration or even aging into the category). 
-
-If we were to weigh every tube of toothpaste, we would significantly slow down the manufacturing process, and in some cases, taking a measurement involves destroying the product (leaving nothing left to sell). 
-
-Finally, it can be difficult for researchers to collect student data due to laws like the Family Educational Rights and Privacy Act (FERPA), which dictate what information can and cannot be shared. 
-There are lots of reasons why we wouldn't be able to access an entire population, but the bottom line is that it is hard or even impossible to gather every single measurement. 
+For various reasons, we can't always gather information on an entire population (known as a census).
 
 To circumvent this issue, we usually work with a **sample** of data, where a sample is defined as a subset of the cases, subjects, or observations in a given population. We prefer our samples to be randomly selected, but sometimes, we use convenience samples--for example, using this class as a sample of all students at the University of Chicago. 
 
@@ -114,22 +109,12 @@ library(kableExtra)
 kable(notation_table, booktabs = TRUE, escape = FALSE)
 ```
 
-Statistical inference is the idea of **making inferences or drawing conclusions** about the parameters based on our samples of data, which we summarize with statistics (i.e., the sample mean, a sample proportion, etc.). There are two "flavors" of statistical inference, that you might be familiar with:
+Which of the following are true? Select all that apply. 
 
-* **Confidence Intervals** provide a range of reasonable values for a parameter given a dataset. 
-* **Hypothesis Tests** check to see if a dataset is consistent with a previously held belief or a given value for the population parameter.
-
-These two flavors are related (see the "Confidence Interval and Hypothesis Test Equivalencies" section), but this lab focuses on confidence intervals. 
-
-
-## Confidence Interval Framework
-
-We have already said that statistical inference is the idea of making or drawing conclusions about  parameters based on samples of data. Again, we very rarely know what these parameters are, which is why we need to test them! However, we might have data to calculate a statistic (like the sample average $\bar{x}$). 
-
-That being said, a statistic like $\bar{x}$ is called a **point estimate**--it is a single value. We are very unlikely to capture the exact value for the parameter (theoretically, the probability is zero). Many statisticians then prefer to use an **interval estimate**, which provides a range of values and is therefore more likely to capture the parameter of interest. Imagine that you are looking for a single red marble in an infinite sea of blue marbles. If you take one single marble, it is almost impossible to choose the red one.  If you take a large group of marbles, you are more likely to find the red one, even if you have many extra blue marbles. 
-
-In addition, an interval estimate gives us information about the variability of a statistic--that is, how much change we can expect in the statistic if we take a new sample. When we construct a confidence interval (a type of interval estimate), we are making statements about parameters (like the population mean $\mu$) that incorporate information about the **sampling variability**.  **Confidence intervals are always statements about parameters**--there is no need to build an interval for a statistic, as we know exactly what values those take on. So, more technically, a confidence interval can be thought of as a range of reasonable values for a parameter based on the sample statistics.  
-
+Parameters describe populations. 
+Statistics describe samples. 
+We usually do not have the parameter values. 
+We usually do not have the statistics. 
 
 <!-- ```{r q1, echo=FALSE} -->
 <!-- question( -->
@@ -140,6 +125,31 @@ In addition, an interval estimate gives us information about the variability of 
 <!--   post_message = "Congratulations! You have found the first secret word: FAST." -->
 <!-- ) -->
 <!-- ``` -->
+
+## Point Estimates
+
+We have already said that statistical inference is the idea of making or drawing conclusions about parameters based on samples of data. Again, we very rarely know what these parameters are, which is why we need to test them! However, we might have data to calculate a statistic (like the sample average $\bar{x}$). 
+
+That being said, a statistic like $\bar{x}$ is called a **point estimate**--it is a single value. We are very unlikely to capture the exact value for the parameter (theoretically, the probability is zero). Many statisticians then prefer to use an **interval estimate**, which provides a range of values and is therefore more likely to capture the parameter of interest. Imagine that you are looking for a single red marble in an infinite sea of blue marbles. If you take one single marble, it is almost impossible to choose the red one.  If you take a large group of marbles, you are more likely to find the red one, even if you have many extra blue marbles. 
+
+
+Mean
+
+Add median??
+
+Standard deviation
+
+## Confidence Intervals
+
+Statistical inference is the idea of **making inferences or drawing conclusions** about the parameters based on our samples of data, which we summarize with statistics (i.e., the sample mean, a sample proportion, etc.). There are two "flavors" of statistical inference, that you might be familiar with:
+
+* **Confidence Intervals** provide a range of reasonable values for a parameter given a dataset. 
+* **Hypothesis Tests** check to see if a dataset is consistent with a previously held belief or a given value for the population parameter.
+
+These two flavors are related (see the "Confidence Interval and Hypothesis Test Equivalencies" section), but this lab focuses on confidence intervals. 
+
+### Confidence Interval Framework
+In contrast to a point estimate, an interval estimate gives us information about the variability of a statistic--that is, how much change we can expect in the statistic if we take a new sample. When we construct a confidence interval (a type of interval estimate), we are making statements about parameters (like the population mean $\mu$) that incorporate information about the **sampling variability**.  **Confidence intervals are always statements about parameters**--there is no need to build an interval for a statistic, as we know exactly what values those take on. So, more technically, a confidence interval can be thought of as a range of reasonable values for a parameter based on the sample statistics.  
 
 ### Sampling Distributions
 
@@ -178,6 +188,25 @@ ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
   theme(legend.position = "bottom", legend.title = element_blank())
 ```
 
+In scipy.stats we use a t random variable. 
+
+probabilites
+
+percentiles
+
+t distributions symmetric, so generally find area between -t and t USING PERCENTILES
+
+also give graph
+
+use cell below
+
+numeric: 90% interval, XX df
+
+numeric: 95% interval, XX df
+
+numeric: 99% interval, XX df
+
+
 
 
 <!-- ```{r q2, echo=FALSE} -->
@@ -203,15 +232,15 @@ ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
 <!-- ) -->
 <!-- ``` -->
 
-### CONFIDENCE INTERVAL THEORY
+### Margin of Error
 
-Percentiles
-
-Area on both sides
+Calc standard error inspired by CLT
 
 Margin of Error
 
-### Confidence Interval and Hypothesis Test Equivalencies
+Calculate interval 
+
+### Confidence Interval and Hypothesis Test Equivalencies -> MOVE 
 
 In general, the results of a hypothesis test using a significance level of $\alpha$ should be consistent with a $100(1-\alpha)$ confidence interval based on the same dataset.
 
@@ -285,7 +314,7 @@ mcds = [293, 174, 100, 272, 207, 145, 148, 495,
         293, 139, 187, 190, 279, 225, 409, 157]
 ```
 
-What is the mean of the dataset? Hint: look up the relevant `numpy` functions for mean and standard deviation.
+What is the mean of the dataset? ~~Hint: look up the relevant `numpy` functions for mean and standard deviation.~~
 
 ```{python mean, exercise = TRUE, exercise.setup = "setup2"}
 
@@ -328,6 +357,9 @@ grade_this_code()
 ```
 
 Finally, we have to pick a confidence level. The "standard" level is 95\%, which we will use here. 
+
+90% wider
+99% wider
 
 ### Check
 
