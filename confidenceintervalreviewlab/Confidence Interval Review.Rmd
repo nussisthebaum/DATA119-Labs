@@ -571,7 +571,7 @@ answer("$\\hat{p}$, the proportion of drive-through wait times that decreased in
 
 Part of the **Prepare** step involves computing the summary statistics. The drive-through wait times in seconds from the sample of trips appears below--use this sample to answer the following questions
 
-```{python setup2, exercise = TRUE, exercise.setup="packages"}
+```{python setup2, exercise = TRUE, exercise.setup="setup_py"}
 mcds = np.array([293, 174, 100, 272, 207, 145, 148, 495,
                  348, 325, 330, 281, 257, 178, 140, 246,
                  381, 242, 195, 115, 288, 162, 261, 291,
@@ -584,7 +584,7 @@ mcds = np.array([293, 174, 100, 272, 207, 145, 148, 495,
 
 What is the mean of the dataset? Save it as `mean_mcds`.
 
-```{python mean, exercise = TRUE, exercise.setup = "setup2"}
+```{python mean, exercise = TRUE, exercise.setup = "setup_py"}
 mean_mcds = 
 ```
 
@@ -598,7 +598,7 @@ grade_this_code()
 
 What is the sample standard deviation of the dataset? Save it as `std_mcds`.
 
-```{python sd, exercise = TRUE, exercise.setup = "setup2"}
+```{python sd, exercise = TRUE, exercise.setup = "setup_py"}
 std_mcds = 
 ```
 
@@ -616,7 +616,7 @@ grade_this_code()
 
 Finally, what is the sample size?
 
-```{python n, exercise = TRUE, exercise.setup = "setup2"}
+```{python n, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
@@ -665,7 +665,7 @@ The next step is to check. For a "traditional" piece of inference like a $t$-int
 
 Create a histogram using the sample.
 
-```{python histogram, exercise = TRUE, exercise.setup = "setup2"}
+```{python histogram, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
@@ -695,7 +695,7 @@ $$\frac{s}{\sqrt{n}}$$
 
 Implement this formula in the cell below, and save the standard error as `se_mcds`.
 
-```{python se, exercise = TRUE, exercise.setup = "setup2"}
+```{python se, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
@@ -767,7 +767,7 @@ question_numeric(
 
 Now, find the value of $t$ we should be using in the interval--call it $t^*$, or `t_star`. 
 
-```{python ex30, exercise = TRUE, exercise.setup = "setup2"}
+```{python ex30, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
@@ -781,7 +781,7 @@ grade_this_code()
 
 Now, combine the `t_star` and `se_mcds` to find the margin of error. Save it as `MoE_mcds`.
 
-```{python ex31, exercise = TRUE, exercise.setup = "setup_se"}
+```{python ex31, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
@@ -795,16 +795,16 @@ grade_this_code()
 
 Now, we can calculate the final interval by adding and subtracting the margin of error from the sample mean. Carry out these calculations below:
 
-```{python ex31, exercise = TRUE, exercise.setup = "setup_se"}
+```{python ex32, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
-```{python ex31-solution, message = FALSE, warning = FALSE, echo = FALSE}
+```{python ex32-solution, message = FALSE, warning = FALSE, echo = FALSE}
 mean_mcds - MoE_mcds 
 mean_mcds + MoE_mcds 
 ```
 
-```{r ex31-code-check, message = FALSE, warning = FALSE}
+```{r ex32-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
@@ -812,7 +812,7 @@ grade_this_code()
 
 Once we have the interval, we also need to be interpreting it in the context of the problem. 
 
-```{r q32, echo=FALSE}
+```{r q33, echo=FALSE}
 question(
   "What are the correct statements regarding this interval? Select all that apply.",
   answer("We are 95% confident that the true mean drive-through wait time for all orders at the franchise owner's location is between 216 and 257 seconds.", correct = TRUE),
@@ -831,15 +831,15 @@ question(
 
 There is a somewhat faster way to build the $t$-interval, and, if you are not comfortable with the math, it can also be more user-friendly. Look up the [documentation for `t.interval()`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.t.html). Unfortunately, you do still have to calculate the mean and standard error, but since we have those, you can plug them straight into the method--make sure you look up any other arguments you may need.
 
-```{python ex33, exercise = TRUE, exercise.setup = "setup_se"}
+```{python ex34, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
-```{python ex33-solution, message = FALSE, warning = FALSE, echo = FALSE}
+```{python ex34-solution, message = FALSE, warning = FALSE, echo = FALSE}
 t.interval(0.95, 63, loc=mean_mcds, scale=se_mcds)
 ```
 
-```{r ex33-code-check, message = FALSE, warning = FALSE}
+```{r ex34-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
