@@ -1,5 +1,5 @@
 ---
-title: "Confidence Interval Review"
+title: "Confidence Intervals"
 output: 
    learnr::tutorial:
       css: css/custom-styles.css
@@ -31,6 +31,8 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 
 gradethis_setup()
 tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+
+state_x77_df <- as.data.frame(state.x77)
 ```
 
 ```{r header, echo = FALSE}
@@ -45,9 +47,46 @@ tags$div(
       alt = "DSI Logo",
       class = "topLogo"
     ),
-    tags$h1("Confidence Interval Review", class = "pageTitle")
+    tags$h1("Confidence Intervals", class = "pageTitle")
   )
 )
+```
+
+```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
+import numpy as np 
+import pandas as pd
+import scipy.stats as st 
+from scipy.stats import t
+import statistics 
+
+import matplotlib as plt
+import seaborn
+import plotnine as p9
+
+
+areas_l = [50708, 566432, 113417, 51945, 156361, 103766,  4862,   1982, 54090, 58073,
+            6425,  82677,  55748, 36097,  55941,  81787, 39650,  44930, 30920,  9891, 
+            7826,  56817,  79289, 47296,  68995, 145587, 76483, 109889,  9027,  7521,
+          121412,  47831,  48798, 69273,  40975,  68782, 96184,  44966,  1049, 30225,
+           75955,  41328, 262134, 82096,   9267,  39780, 66570,  24070, 54464, 97203]
+           
+areas_a = np.array(areas_l)
+
+state_x77_df = r.state_x77_df
+
+mcds = np.array([293, 174, 100, 272, 207, 145, 148, 495,
+                 348, 325, 330, 281, 257, 178, 140, 246,
+                 381, 242, 195, 115, 288, 162, 261, 291,
+                 397,  59, 251, 313, 175, 187, 297, 189,
+                 297, 207, 251, 284, 211, 153, 271,  89,
+                 320, 244, 201,  89, 163, 262, 181, 229,
+                 307, 221, 237, 217, 319, 237, 286, 256,
+                 293, 139, 187, 190, 279, 225, 409, 157])
+                 
+mean_mcds = np.mean(mcds)
+std_mcds = np.std(mcds, ddof = 1)
+se_mcds = std_mcds/np.sqrt(len(mcds))
+MoE_mcds = se_mcds*t_star
 ```
 
 ## Goals
@@ -56,15 +95,16 @@ The goal of this lab is to review confidence intervals, complete with an example
 
 ## Setup
 
-This lab will use `numpy` and `scipy.stats`. You may also want to use your favorite graphics packages (`matplotlib`, `seaborn`, or `plotnine`, which also requires `pandas`). Run this cell to load the packages. 
+This lab will use `numpy`, `pandas`, `scipy.stats`, and `statistics`. You may also want to use your favorite graphics packages (`matplotlib`, `seaborn`, or `plotnine`). Run this cell to load the packages. 
 
 ```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
 import numpy as np 
+import pandas as pd
 import scipy.stats as st 
+import statistics 
 
 import matplotlib as plt
 import seaborn
-import pandas as pd
 import plotnine as p9
 ```
 
@@ -84,78 +124,289 @@ Summaries of various numerical characteristics of a population are known as **pa
 * The average weight of a tube of toothpaste, or 
 * The average grade point average of a student at the University of Chicago. 
 
-For various reasons, we can't always gather information on an entire population (known as a census).
-
-To circumvent this issue, we usually work with a **sample** of data, where a sample is defined as a subset of the cases, subjects, or observations in a given population. We prefer our samples to be randomly selected, but sometimes, we use convenience samples--for example, using this class as a sample of all students at the University of Chicago. 
+For various reasons, we can't always gather information on an entire population (known as a census). Instead, we usually work with a **sample** of data, where a sample is defined as a subset of the cases, subjects, or observations in a given population. We prefer our samples to be randomly selected, but sometimes, we use convenience samples--for example, using this class as a sample of all students at the University of Chicago. 
 
 Once you have acquired a sample, you can calculate a **statistic**. A statistic describes a numerical characteristic of a sample, and the intent is to use them to estimate the population parameter. Notation-wise, it is traditional to use Greek letters ($\mu, \sigma, \beta$) to indicate a parameter, and Latin letters ($\bar{x}, s, b$) to indicate statistics. So, we would use $\bar{x}$, the sample mean, to estimate $\mu$, the population mean. Specifically, we might take a poll of every student in our class (the sample), asking everyone what their GPA is and averaging them ($\bar{x}$), and use that information to estimate the average GPA ($\mu$) for the entire university (the population).
 
-A table of parameters you might encounter appears below:
+A table of parameters you might encounter appears below. Note that some of these you will not be exposed to until DATA119--the statistics in black are the ones we will focus on in DATA118.
 
 ```{r, echo = FALSE}
-mean <- c("$\\mu$", "$\\bar{x}$")
-stddev <- c("$\\sigma$", "$s$")
-proportion <- c("$\\pi/p$", "$p/\\hat{p}$")
-correlation <- c("$\\rho$", "$R/r$")
-intercept <- c("$\\beta_0$", "$b_0$")
-slope <- c("$\\beta_1$", "$b_1$")
-
-notation_table <- rbind(mean, stddev, proportion, 
-                        correlation, intercept, slope)
-rownames(notation_table) <- c("Mean", "Standard Deviation", "Proportion", "Correlation", "Intercept", "Slope")
-colnames(notation_table) <- c("Parameter", "Statistic")
-
 library(kableExtra)
-kable(notation_table, booktabs = TRUE, escape = FALSE)
+
+mu <- c("$\\mu$", "$\\bar{x}$", "Measuring the center/location of a distribution")
+sd <- c("$\\sigma$", "$s$", "Measuring the spread/scale of a distribution")
+prop <- c("$\\pi$ or $p$", "$p$ or $\\hat{p}$", "Measuring the frequency of a binary variable")
+corr <- c("$\\rho$", "$R$ or $r$", "Measuring the relationship between two numeric variables--More in DATA119.")
+int <- c("$\\beta_0$", "$b_0$", "Linear Regression--More in DATA119")
+slope <- c("$\\beta_p$", "$b_p$", "Linear Regression--More in DATA119")
+odds <- c("$\\omega$", "$\\hat{\\omega}$", "Alternative to proportions--More in DATA119")
+odds_r <- c("$\\phi$", "$\\hat{\\phi}$", "Medical Research--More in DATA119")
+
+parm_table <- rbind(mu, sd, prop, corr, int, slope, odds, odds_r)
+colnames(parm_table) <- c("Parameter", "Statistic", "Used for")
+rownames(parm_table) <- c("Mean", "Std. Dev.", "Proportion", "Correlation", "Intercept", "Slope", "Odds", "Odds Ratio")
+
+kable(parm_table, escape = FALSE, booktabs = TRUE) %>%
+  column_spec(column = 1, width = "1in") %>%  # Set 1st column width
+  column_spec(column = 2, width = "1in")  %>%  # Set 2nd column width 
+  column_spec(column = 3, width = "1in") 
 ```
 
-Which of the following are true? Select all that apply. 
-
-Parameters describe populations. 
-Statistics describe samples. 
-We usually do not have the parameter values. 
-We usually do not have the statistics. 
-
-<!-- ```{r q1, echo=FALSE} -->
-<!-- question( -->
-<!--   "In this scenario, what are the null and alternative hypotheses?", -->
-<!--   answer("$H_0$: The defendant is innocent. vs. $H_A$: The defendant is guilty.", correct = TRUE),  -->
-<!--   answer("$H_0$: The defendant is guilty. vs. $H_A$: The defendant is innocent."), -->
-<!--   allow_retry = TRUE, -->
-<!--   post_message = "Congratulations! You have found the first secret word: FAST." -->
-<!-- ) -->
-<!-- ``` -->
+```{r q1, echo=FALSE}
+question(
+  "Which of the following are true? Select all that apply.",
+  answer("Parameters describe populations.", correct = TRUE),
+  answer("Statistics describe samples.", correct = TRUE),
+  answer("We usually do not have the parameter values.", correct = TRUE),
+  answer("We usually do not have the statistics."),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the first secret word: MULTIMEDIA. Enter this word in the Lab 9 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+)
+```
 
 ## Point Estimates
 
-We have already said that statistical inference is the idea of making or drawing conclusions about parameters based on samples of data. Again, we very rarely know what these parameters are, which is why we need to test them! However, we might have data to calculate a statistic (like the sample average $\bar{x}$). 
+We have already said that statistical inference is the idea of making or drawing conclusions about parameters based on samples of data. Again, we very rarely know what these parameters are, which is why we need to test them! However, we might have data to calculate a statistic (like the sample average $\bar{x}$). Let's review some basic statistics including the mean of a sample, $\bar{x}$, the median of a sample, the standard deviation of a sample $s$, and a sample proportion, $\hat{p}$. 
 
-That being said, a statistic like $\bar{x}$ is called a **point estimate**--it is a single value. We are very unlikely to capture the exact value for the parameter (theoretically, the probability is zero). Many statisticians then prefer to use an **interval estimate**, which provides a range of values and is therefore more likely to capture the parameter of interest. Imagine that you are looking for a single red marble in an infinite sea of blue marbles. If you take one single marble, it is almost impossible to choose the red one.  If you take a large group of marbles, you are more likely to find the red one, even if you have many extra blue marbles. 
+### Sample Mean $\bar{x}$
 
+The sample mean, $\bar{x}$, is a summary of the center of either a sample or the distribution of a random variable. The sample mean is also sometimes called the average of the dataset. 
 
-Mean
+To compute the mean of a variable, we add up all of the values and divide by the total number of observations. Formally, 
 
-Add median??
+\begin{align*}
+\bar{x} & = \frac{x_1 + x_2 + ... + x_n}{n} \\
+& \frac{1}{n} \sum_{i=1}^n x_i
+\end{align*}
 
-Standard deviation
+There are a few different ways to calculate the mean of a sample in Python--it partially depends on how you've stored the data. If you're using a list, you can either use a combination of the built-in functions `sum()` and `len()`, or you can use `mean()` from the `statistics` module.
+
+The following cell contains a list representing the areas of all 50 United States. Write an expression calculating the mean with `sum()` and `len()`, and check to see that it is equal to the result calculating the mean with `mean()` from the `statistics` module.
+
+```{python ex2, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+areas_l = [50708, 566432, 113417, 51945, 156361, 103766,  4862,   1982, 54090, 58073,
+            6425,  82677,  55748, 36097,  55941,  81787, 39650,  44930, 30920,  9891, 
+            7826,  56817,  79289, 47296,  68995, 145587, 76483, 109889,  9027,  7521,
+          121412,  47831,  48798, 69273,  40975,  68782, 96184,  44966,  1049, 30225,
+           75955,  41328, 262134, 82096,   9267,  39780, 66570,  24070, 54464, 97203]
+```
+
+```{python ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
+sum(areas_l)/len(areas_l) == statistics.mean(areas_l)
+```
+
+```{r ex2-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+You can also use the `mean()` function from `numpy` to calculate the mean of an array. Turn `areas_l` into an array called `areas_a`, and then calculate the mean.
+
+```{python ex3, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
+areas_a = np.array(areas_l)
+np.mean(areas_a)
+```
+
+```{r ex3-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Finally, don't forget that we have methods for data stored in `pandas` data frames, which most often the way we want our data stored. We have an entire data frame, `state_x77_df`, which contains many other variables. Try using `pandas`'s `.mean()` method on this data frame--what values are returned?
+
+```{python ex4, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
+state_x77_df.mean()
+```
+
+```{r ex4-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+If you wanted only the mean of the areas, you can select a column and apply the `.mean()` method--try this with the `Area` column in the cell below. 
+
+```{python ex5, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex5-solution, message = FALSE, warning = FALSE, echo = FALSE}
+state_x77_df["Area"].mean()
+```
+
+```{r ex5-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+### Sample Median
+
+The sample median (sometimes called $\tilde{x}$, but that is fairly rare) is the point at which the dataset is split in half--50% of observations below, and 50% of observations above. To related this to a concept we are already familiar with--the median is the $50^{th}$ percentile!
+
+To compute the median of a variable, we first order the values from smallest to largest:
+
+* If there are an odd number of observations, the median is the observation in the exact middle.
+* If there are an even number of observations, the median is the average of the two middle observations. 
+
+Because we are most frequently using arrays and data frames, we will skip the calculation of the median for a list of data. Instead, let's focus on finding the median using `numpy` and `pandas`. First, note that there is no *method* for calculating the median of an array, you MUST use `numpy`'s `median()` function instead. Use it to calculate the median in the cell below. 
+
+```{python ex6, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex6-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.median(areas_a)
+```
+
+```{r ex6-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+`pandas` does have a `median()` method--try using it in the cell below. 
+
+```{python ex7, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex7-solution, message = FALSE, warning = FALSE, echo = FALSE}
+state_x77_df.median()
+```
+
+```{r ex7-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+You could find the median of a single column similarly to how we found the mean--please refer to the previous section for details.
+
+Notice that the mean and the median should be measuring roughly the same thing: the center of the dataset. However, these numbers are fairly different! That has to do with **outliers**, or values that are unusually distant from the rest of the dataset. We can sometimes identify outliers using a histogram--create one for the areas of the United States in the cell below. 
+
+```{python ex8, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+Do you see any outliers in the histogram? Using what you know about the United States, which states could be considered unusually large or small?
+
+::::
+
+**Robust Statistics** are statistics that are minimally influenced by outliers. You can also say these statistics are **resistant** to outliers. The median is robust, whereas the mean is not. In datasets with large outliers, it is good practice to report the median instead of the mean to avoid having your results impacted by extreme values.
+
+### Sample Standard Deviation $s$
+
+The **standard deviation** represents the typical distance of an observation in a dataset to the mean of the dataset. To compute the standard deviation:
+
+* We find the **deviation** of every observation in the dataset by subtracting the mean from each value. 
+* We square each of the deviations and divide by $n-1$. This quantity is known as the **variance**. 
+* Finally, we take the square root of the variance. 
+
+Formally, 
+
+\begin{align*}
+s & = \sqrt{\frac{(x_1- \bar{x})^2 + (x_2 - \bar{x})^2 + ... + (x_n - \bar{x})^2}{n-1}} \\
+& \sqrt{\frac{1}{n-1} \sum_{i = 1}^n (x_i - \bar{x})^2}
+\end{align*}
+
+As you may guess, it is helpful to know both the `numpy` function and `pandas` methods for standard deviation. First, look up and apply the `numpy` function. 
+
+```{python ex9, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex9-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.std(areas_a)
+```
+
+```{r ex9-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now, look up and apply the `pandas` method. 
+
+```{python ex10, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex10-solution, message = FALSE, warning = FALSE, echo = FALSE}
+state_x77_df.std()
+```
+
+```{r ex10-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+```{r q11, echo=FALSE}
+question(
+  "True or False: The standard deviations calculated with `numpy` and `pandas` are the same.",
+  answer("True"),
+  answer("False", correct = TRUE),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: ANNIVERSARY. Enter this word in the Lab 9 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+)
+```
+
+As it turns out, `numpy` and `pandas` use slightly different formulas. Please know that the one we prefer to use is `pandas`, but we can force `numpy` to give us the preferred equation using the argument `ddof=1`. 
+
+Recalculate the standard deviation using `ddof=1`, and check to see if it is equal to the standard deviation calculated by `pandas.` 
+
+```{python ex12, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex12-solution, message = FALSE, warning = FALSE, echo = FALSE}
+np.std(areas_a, ddof=1) == state_x77_df.std()["Area"]
+```
+
+```{r ex12-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+`pandas` has one more useful method we haven't seen yet--the `.describe()` method. Apply `.describe()` to the data frame. Do you see some familiar values?
+
+```{python ex13, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex13-solution, message = FALSE, warning = FALSE, echo = FALSE}
+state_x77_df.describe()
+```
+
+```{r ex13-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+<!-- ### Sample Proportion $\hat{p}$ -->
+
+### Point Estimate Definition
+
+What do all of these values have in common? Statistics like $\bar{x}$, etc., are called **point estimates**--they are all single values or points. 
+
+Imagine that you are looking for a single red marble in an infinite sea of blue marbles. If you take one single marble, it is almost impossible to choose the red one. **Similarly, we are very unlikely to capture the exact value for the parameter (theoretically, the probability is zero)**. 
+
+If you take a large group of marbles, you are more likely to find the red one, even if you have many extra blue marbles. Many statisticians then prefer to use an **interval estimate**, which provides a range of values and is therefore more likely to capture the parameter of interest.  
 
 ## Confidence Intervals
 
 Statistical inference is the idea of **making inferences or drawing conclusions** about the parameters based on our samples of data, which we summarize with statistics (i.e., the sample mean, a sample proportion, etc.). There are two "flavors" of statistical inference, that you might be familiar with:
 
-* **Confidence Intervals** provide a range of reasonable values for a parameter given a dataset. 
-* **Hypothesis Tests** check to see if a dataset is consistent with a previously held belief or a given value for the population parameter.
+* **Confidence Intervals** provide a range of reasonable values for a parameter given a dataset.
+* **Hypothesis Tests** check to see if a dataset is consistent with a previously held belief or a given value for the population paramete (more on this next week!)
 
-These two flavors are related (see the "Confidence Interval and Hypothesis Test Equivalencies" section), but this lab focuses on confidence intervals. 
+These two flavors are related, but this lab focuses on confidence intervals. In contrast to a point estimate, an **interval estimate** gives us information about the variability of a statistic--that is, how much change we can expect in the statistic if we take a new sample. When we construct a confidence interval (a type of interval estimate), we are making statements about parameters (like the population mean $\mu$) that incorporate information about the **sampling variability**. **Confidence intervals are always statements about parameters**--there is no need to build an interval for a statistic, as we know exactly what values those take on. So, more technically, a confidence interval can be thought of as a range of reasonable values for a parameter based on the sample statistics.
 
 ### Confidence Interval Framework
-In contrast to a point estimate, an interval estimate gives us information about the variability of a statistic--that is, how much change we can expect in the statistic if we take a new sample. When we construct a confidence interval (a type of interval estimate), we are making statements about parameters (like the population mean $\mu$) that incorporate information about the **sampling variability**.  **Confidence intervals are always statements about parameters**--there is no need to build an interval for a statistic, as we know exactly what values those take on. So, more technically, a confidence interval can be thought of as a range of reasonable values for a parameter based on the sample statistics.  
 
 ### Sampling Distributions
 
-To build our confidence interval, we will need something called the **sampling distribution**. The sampling distribution tells you what values the statistic will take and how often they occur. Why do we need a sampling distribution? Remember--we are calculating the statistic from a (hopefully random) sample. However, different samples will result in different statistics, so we are expecting some variability. The sampling distribution gives us a mathematical way to describe that variability. 
+To build our confidence interval, we will need something called the **sampling distribution**. The sampling distribution tells you what values the statistic will take and how often they occur. Why do we need a sampling distribution? Remember--we are calculating the statistic from a (hopefully random) sample. However, different samples will result in different statistics, so we are expecting some variability. The sampling distribution gives us a mathematical way to describe that variability.
 
-We rely heavily on the Central Limit Theorem to find a sampling distribution. For a mean, the Central Limit Theorem states that when observations are independent and the sample size $n$ is sufficiently large, the sample average $\bar{x}$ will tend to follow a normal distribution with mean 
+We rely heavily on the Central Limit Theorem to find a sampling distribution. For a mean, the Central Limit Theorem states that when observations are independent and the sample size $n$ is sufficiently large, the sample average $\bar{x}$ will tend to follow a normal distribution with mean
 
 $$\mu_{\bar{x}} = \mu_X$$
 
@@ -169,173 +420,194 @@ $$N\bigg(\mu_X, \frac{\sigma_X}{\sqrt{n}}\bigg)$$
 
 However, if we do not know the mean $\mu_X$ for a variable, we are not very likely to know the variables standard deviation, $\sigma_X$. Often, we have to estimate $\sigma_X$ with the sample standard deviation, $s$. Because of the extra uncertainty, we usually use what is called a $t$-distribution instead of the normal distribution. The $t$-distribution has slightly thicker tails than a normal distribution, which helps us account for the extra uncertainty we introduced by using $s$ to estimate $\sigma_X$--you can see a few different $t$-distributions in the image below:
 
-```{r, echo = FALSE, fig.width=4.5}
+```{r, echo = FALSE, fig.width=8, message = FALSE, warning = FALSE}
 library(ggplot2)
 library(latex2exp)
 
 ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
-  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1), aes(color = "line1")) + 
-  stat_function(fun = dt, n = 101, args = list(df = 1), aes(color = "line2")) + 
-  stat_function(fun = dt, n = 101, args = list(df = 2), aes(color = "line3")) + 
-  stat_function(fun = dt, n = 101, args = list(df = 4), aes(color = "line4")) + 
-  stat_function(fun = dt, n = 101, args = list(df = 8), aes(color = "line5")) + 
-  stat_function(fun = dt, n = 101, args = list(df = 16), aes(color = "line6")) + 
-  stat_function(fun = dt, n = 101, args = list(df = 24), aes(color = "line7")) + 
-  xlab("") + 
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1), aes(color = "line1")) +
+  stat_function(fun = dt, n = 101, args = list(df = 1), aes(color = "line2")) +
+  stat_function(fun = dt, n = 101, args = list(df = 2), aes(color = "line3")) +
+  stat_function(fun = dt, n = 101, args = list(df = 4), aes(color = "line4")) +
+  stat_function(fun = dt, n = 101, args = list(df = 8), aes(color = "line5")) +
+  stat_function(fun = dt, n = 101, args = list(df = 16), aes(color = "line6")) +
+  stat_function(fun = dt, n = 101, args = list(df = 24), aes(color = "line7")) +
+  xlab("") +
   ylab("") +
-  scale_y_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) +
   scale_color_manual(values = c("#A4343A", "#DE7C00", "#EAAA00", "#789D4A", "#275D38", "#007396", "#59315F"), labels = unname(TeX(c("Normal", "$t_1$", "$t_2$", "$t_4$", "$t_8$", "$t_{16}$", "$t_{24}$", "$t_{32}$")))) +
   theme(legend.position = "bottom", legend.title = element_blank())
 ```
 
-In scipy.stats we use a t random variable. 
+Remember that we use `scipy.stats` to find probabilities and calculate percentiles of well-known random variables, including those that are distributed according to the $t$-distribution. Specifically, we can use `t` from `scipy.stats`:
 
-probabilites
+```{python ex14, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
+from scipy.stats import t
+```
 
-percentiles
+```{r q15, echo=FALSE}
+question(
+  "What method allows us to calculate probabilities associated with a `t` random variable?",
+  answer(".cdf()", correct = TRUE),
+  answer(".pdf()"),
+  answer(".ppf()"),
+  answer(".rvs()"),
+  allow_retry = TRUE
+)
+```
 
-t distributions symmetric, so generally find area between -t and t USING PERCENTILES
+```{r q16, echo=FALSE}
+question(
+  "What method allows us to calculate percentiles associated with a `t` random variable?",
+  answer(".cdf()"),
+  answer(".pdf()"),
+  answer(".ppf()", correct = TRUE),
+  answer(".rvs()"),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the third secret word: LAZY. Enter this word in the Lab 9 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+)
+```
 
-also give graph
+$t$-Distributions are fairly close to the standard normal distribution, as you saw in the graph above. Similarly to the standard normal, the $t$-distribution is centered around zero and is also symmetric, so $P(T < -t) = P(T > t)$. Unlike the standard normal, the $t$-distribution is defined by only one parameter known as the degrees of freedom (`df` in the methods above). The smaller the degrees of freedom, the thicker the tails of the distribution. The larger the degrees of freedom, the closer to the normal distribution.
 
-use cell below
+Typically in a confidence interval, we are trying to find the middle 95% of the values. This is equivalent to finding the $2.5^{th}$ and $97.5^{th}$ percentiles of the sampling distribution. 
 
-numeric: 90% interval, XX df
+```{r echo = F, fig.height = 4}
+ggplot(NULL, aes(c(-3,3))) +
+ geom_area(stat = "function", fun = dt, args = list(df = 4), fill = "lightgray", xlim = c(-3, 3)) +
+ geom_area(stat = "function", fun = dt, args = list(df = 4), fill = "#800000", xlim = c(qt(0.025, 4), qt(0.975, 4))) + 
+ scale_x_continuous(name = "", breaks = round(c(qt(0.025, 4), qt(0.975, 4)), 4), labels = c(unname(TeX("$-t$")), unname(TeX("$t$")))) +
+ scale_y_continuous(name = unname(TeX("$p(t)$")), limits = c(0, 0.42)) + 
+ theme(legend.position = "none", axis.text.y=element_blank(), text = element_text(size=20), axis.text.x = element_text(hjust=1))
 
-numeric: 95% interval, XX df
+```
 
-numeric: 99% interval, XX df
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
 
+Why are we finding the $2.5^{th}$ and $97.5^{th}$ percentiles when creating a 95% confidence interval? How much of the probability is on the outside of this range? Is the probability equally distributed on both sides? How do you know?
 
+::::
 
+Use the cell below to answer the following questions. 
 
-<!-- ```{r q2, echo=FALSE} -->
-<!-- question( -->
-<!--   "Say you have a p-value of 0.814. What decision would you make using a significance level of $\\alpha = 0.05$?", -->
-<!--   answer("Fail to reject the null, as the p-value is less than the significance level."),  -->
-<!--   answer("Fail to reject the null, as the p-value is greater than the significance level.", correct = TRUE), -->
-<!--   answer("Reject the null, as the p-value is less than the significance level."),  -->
-<!--   answer("Reject the null, as the p-value is greater than the significance level."), -->
-<!--   allow_retry = TRUE -->
-<!-- ) -->
-<!-- ``` -->
+```{python ex17, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
-<!-- ```{r q3, echo=FALSE} -->
-<!-- question( -->
-<!--   "Say you have a p-value of 0.079. What decision would you make using a significance level of $\\alpha = 0.10$?", -->
-<!--   answer("Fail to reject the null, as the p-value is less than the significance level."),  -->
-<!--   answer("Fail to reject the null, as the p-value is greater than the significance level."), -->
-<!--   answer("Reject the null, as the p-value is less than the significance level.", correct = TRUE),  -->
-<!--   answer("Reject the null, as the p-value is greater than the significance level."), -->
-<!--   allow_retry = TRUE, -->
-<!--   post_message = "Congratulations! You have found the second secret word: OPPONENT." -->
-<!-- ) -->
-<!-- ``` -->
+```
 
-### Margin of Error
+```{r q18, echo=FALSE}
+question_numeric(
+  "What is the $t$-score we would use in a 95% confidence interval with 4 degrees of freedom? Round to two decimals.",
+  answer(2.78, correct = TRUE),
+  min = -3.5,
+  max = 3.5,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
 
-Calc standard error inspired by CLT
+```{r q19, echo=FALSE}
+question_numeric(
+  "What is the $t$-score we would use in a 90% confidence interval with 8 degrees of freedom? Round to two decimals.",
+  answer(1.86, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
 
-Margin of Error
-
-Calculate interval 
-
-### Confidence Interval and Hypothesis Test Equivalencies -> MOVE 
-
-In general, the results of a hypothesis test using a significance level of $\alpha$ should be consistent with a $100(1-\alpha)$ confidence interval based on the same dataset.
-
-* A hypothesis test at $\alpha$ = 0.01 should support a 99\% confidence interval.
-* A hypothesis test at $\alpha$ = 0.05 should support a 95\% confidence interval.
-* A hypothesis test at $\alpha$ = 0.10 should support a 90\% confidence interval.
-
-Thus, the following statements are equivalent:
-
-* If we build a $100(1-\alpha)$ confidence interval for a parameter (e.g., $\mu$) based on a statistic (e.g., $\bar{x}$), and the null value (e.g., $\mu_0$) is included...
-* The null value ($\mu_0$) is a reasonable value for the parameter ($\mu$).
-* The p-value associated with the statistic ($\bar{x}$) will be greater than $\alpha$.
-* We would fail to reject the null hypothesis ($\mu = \mu_0$).
-
-Similarly,
-
-* If we build a $100(1-\alpha)$ confidence interval for the parameter ($\mu$), based on a statistic (e.g., $\bar{x}$), and the null value (e.g., $\mu_0$) is not included...
-* The null value ($\mu_0$) is not a reasonable value for the parameter ($\mu$).
-* The p-value associated with the statistic ($\bar{x}$) will be less than $\alpha$.
-* We would reject the null hypothesis ($\mu = \mu_0$).
+```{r q20, echo=FALSE}
+question_numeric(
+  "What is the $t$-score we would use in a 99% confidence interval with 2 degrees of freedom? Round to two decimals.",
+  answer(9.92, correct = TRUE),
+  min = 0,
+  max = 1,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
 
 ### Steps for Confidence Intervals
 
-Once you've determined a confidence interval is the correct procedure, there are four steps to completing the test:
+Once you've determined a confidence interval is the correct procedure, there are four steps to building it:
 
-1. **Prepare**. Identify the parameter of interest, identify the confidence level, and identify relevant sample statistics. 
+1. **Prepare**. Identify the parameter of interest, identify the confidence level, and identify relevant sample statistics.
 
 2. **Check**. Verify conditions to ensure a confidence interval can be used. These conditions will depend on the exact procedure, but at minimum, we are assuming that the observations are independent.
 
 3. **Calculate**. If the conditions hold, compute the standard error, the margin of error, and the resulting interval.
 
-4. **Conclude**.Evaluate the hypothesis test by comparing the p-value to $\alpha$, and *provide a conclusion in the context of the problem*. 
+4. **Conclude**. State the final confidence interval, and *provide an interpretation in the context of the problem*.
 
-This last step is super important!! We want to make sure that we can communicate the results to a general audience, and not just people that have statistical training. Make sure you include this whenever you write up a hypothesis test. 
+This last step is super important!! We want to make sure that we can communicate the results to a general audience, and not just people that have statistical training. Make sure you include this whenever you write up a confidence interval.
 
 ## Confidence Interval Example
 
 In April 2020, McDonald's [transitioned to a limited menu to simplify tasks for restaurant workers and safely serve customers during the coronavirus public health crisis](https://www.washingtonpost.com/business/2020/06/19/mcdonalds-coronavirus-menu/). By transitioning to a limited menu and simplifying tasks, the company hoped that interaction times between customers and staff would be shorter, giving the virus less time to move between hosts.
 
-A McDonald's franchise owner wished to take a data-driven approach to business, and came to you with a sample of data from the drive-through trips at their location. 
+A McDonald's franchise owner wished to take a data-driven approach to business, and came to you with a sample of data from the drive-through trips at their location.
 
 ### **Prepare**
 
-The franchise owner would like to know what a reasonable value for the true mean drive through wait time (in seconds) might be, based on the sample of their data. 
+The franchise owner would like to know what a reasonable value for the true mean drive through wait time (in seconds) might be, based on the sample of their data.
 
-```{r q4, echo=FALSE}
+```{r q24, echo=FALSE}
 question(
   "What should our confidence interval be about?",
-  answer("$\\mu$, the mean drive-through wait time for all McDonald's in the US", correct = TRUE), 
-  answer("$\\bar{x}$, the mean drive-through wait time from our sample of trips", message = "Don't forget! The interval should be about a parameter, not a statistic."), 
+  answer("$\\mu$, the mean drive-through wait time for all orders at the franchise owner's location.", correct = TRUE),
+  answer("$\\bar{x}$, the mean drive-through wait time from our sample of trips", message = "Don't forget! The interval should be about a parameter, not a statistic."),
   answer("$p$, the proportion of drive-through wait times that decreased", message = "Don't forget! Our interval is about a mean, not a proportion."),
 answer("$\\hat{p}$, the proportion of drive-through wait times that decreased in our sample"),
   random_answer_order = TRUE,
-  allow_retry = TRUE, 
-  post_message = "Congratulations! You have found the third secret word: BARRIER."
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the fourth secret word: DYNAMIC. Enter this word in the Lab 9 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 )
 ```
 
 #### Summary Statistics
 
-Part of the **Prepare** step involves computing the summary statistics. The drive-through wait times in seconds from the sample of trips appears below--use it to answer the following questions
+Part of the **Prepare** step involves computing the summary statistics. The drive-through wait times in seconds from the sample of trips appears below--use this sample to answer the following questions
 
-```{python setup2, exercise = TRUE, exercise.setup="packages"}
-mcds = [293, 174, 100, 272, 207, 145, 148, 495, 
-        348, 325, 330, 281, 257, 178, 140, 246, 
-        381, 242, 195, 115, 288, 162, 261, 291, 
-        397,  59, 251, 313, 175, 187, 297, 189, 
-        297, 207, 251, 284, 211, 153, 271,  89,
-        320, 244, 201,  89, 163, 262, 181, 229, 
-        307, 221, 237, 217, 319, 237, 286, 256, 
-        293, 139, 187, 190, 279, 225, 409, 157]
+```{python setup2, exercise = TRUE, exercise.setup="setup_py"}
+mcds = np.array([293, 174, 100, 272, 207, 145, 148, 495,
+                 348, 325, 330, 281, 257, 178, 140, 246,
+                 381, 242, 195, 115, 288, 162, 261, 291,
+                 397,  59, 251, 313, 175, 187, 297, 189,
+                 297, 207, 251, 284, 211, 153, 271,  89,
+                 320, 244, 201,  89, 163, 262, 181, 229,
+                 307, 221, 237, 217, 319, 237, 286, 256,
+                 293, 139, 187, 190, 279, 225, 409, 157])
 ```
 
-What is the mean of the dataset? ~~Hint: look up the relevant `numpy` functions for mean and standard deviation.~~
+What is the mean of the dataset? Save it as `mean_mcds`.
 
-```{python mean, exercise = TRUE, exercise.setup = "setup2"}
-
+```{python mean, exercise = TRUE, exercise.setup = "setup_py"}
+mean_mcds = 
 ```
 
 ```{python mean-solution, message = FALSE, warning = FALSE, echo = FALSE}
-np.mean(mcds)
+mean_mcds = np.mean(mcds)
 ```
 
 ```{r mean-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-What is the sample standard deviation of the dataset?
+What is the sample standard deviation of the dataset? Save it as `std_mcds`.
 
-```{python sd, exercise = TRUE, exercise.setup = "setup2"}
+```{python sd, exercise = TRUE, exercise.setup = "setup_py"}
+std_mcds = 
+```
 
+```{r sd-hint-1}
+## Don't forget to add an argument so that the function uses the right formula.
 ```
 
 ```{python sd-solution, message = FALSE, warning = FALSE, echo = FALSE}
-np.std(mcds)
+std_mcds = np.std(mcds, ddof = 1)
 ```
 
 ```{r sd-code-check, message = FALSE, warning = FALSE}
@@ -344,7 +616,7 @@ grade_this_code()
 
 Finally, what is the sample size?
 
-```{python n, exercise = TRUE, exercise.setup = "setup2"}
+```{python n, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
@@ -356,210 +628,226 @@ len(mcds)
 grade_this_code()
 ```
 
-Finally, we have to pick a confidence level. The "standard" level is 95\%, which we will use here. 
+Finally, we have to pick a confidence level. The "standard" level is 95\%, which we will use here.
 
-90% wider
-99% wider
+```{r q25, echo=FALSE}
+question(
+  "True or False: A 95% interval would be wider than a 90% interval for the same dataset.",
+  answer("True", correct = TRUE),
+  answer("False"),
+  allow_retry = TRUE
+)
+```
+
+```{r q26, echo=FALSE}
+question(
+  "True or False: A 95% interval would be wider than a 99% interval for the same dataset.",
+  answer("True"),
+  answer("False", correct = TRUE),
+  allow_retry = TRUE
+)
+```
+
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+How do you know the answers to the previous question? Make sure you can justify your response!
+
+::::
 
 ### Check
 
 The next step is to check. For a "traditional" piece of inference like a $t$-interval for the mean, we tend to check two things:
 
-1. First, we check to see if the distribution of the sample mean is normal. The best way to do this is to check the distribution of the original data, using a histogram--if the original distribution is normal, the Central Limit Theorem will kick in faster, and we can safely assume the sampling distribution is normal as well. 
+1. First, we check to see if the distribution of the sample mean is normal. The best way to do this is to check the distribution of the original data, using a histogram--if the original distribution is normal, the Central Limit Theorem will kick in faster, and we can safely assume the sampling distribution is normal as well.
 
-Create a histogram using the sample. 
+Create a histogram using the sample.
 
-```{python histogram, exercise = TRUE, exercise.setup = "setup2"}
+```{python histogram, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
-```{r q6, echo=FALSE}
+```{r q27, echo=FALSE}
 question(
   "Check all options that apply to the shape of this histogram.",
-  answer("Uniform"), 
-  answer("Unimodal", correct = TRUE), 
-  answer("Bimodal"), 
-  answer("Multimodal"), 
-  answer("Symmetric", correct = TRUE), 
-  answer("Right-Skewed"), 
-  answer("Left-Skewed"), 
+  answer("Uniform"),
+  answer("Unimodal", correct = TRUE),
+  answer("Bimodal"),
+  answer("Multimodal"),
+  answer("Symmetric", correct = TRUE),
+  answer("Right-Skewed"),
+  answer("Left-Skewed"),
   allow_retry = TRUE
 )
 ```
 
-Normal distributions are symmetric and unimodal (also often called "bell-shaped")--this data is normal, and therefore, we are safe in assuming that the sampling distribution is also normal. 
+Normal distributions are symmetric and unimodal (also often called "bell-shaped")--this data is normal, and therefore, we are safe in assuming that the sampling distribution is also normal.
 
 2. Next, we assume the data are independent from each other, that is, no one observation gives us any information about the others. There is no good way to check independence other than to look at the context of the data. In this case, the franchise owner has assured us the sample is random, and therefore, we are again safe in assuming the data is independent.
 
 ### Calculate
 
-Now, we use our formulas to calculate the standard error, margin of error, and the interval. Remember, the formula for the standard error in a $t$-test for the mean is 
+Now, we use our formulas to calculate the standard error, margin of error, and the interval. Remember, the formula for the standard error in a $t$-test for the mean is
 
 $$\frac{s}{\sqrt{n}}$$
 
 Implement this formula in the cell below, and save the standard error as `se_mcds`.
 
-```{python se, exercise = TRUE, exercise.setup = "setup2"}
+```{python se, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
 ```{python se-solution, message = FALSE, warning = FALSE, echo = FALSE}
-se_mcds = np.std(mcds)/np.sqrt(len(mcds))
+se_mcds = std_mcds/np.sqrt(len(mcds))
 ```
 
 ```{r se-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-Now we need to calculate the margin of error. Remember that the formula for the margin of error is 
+Now we need to calculate the margin of error. Remember that the formula for the margin of error is
 
 $$t^*_{df} \times \frac{s}{\sqrt{n}}$$
 
 where $t^*_{n-1}$ depends on two quantities:
 
-* The confidence level, and 
-* The degrees of freedom, $df$. 
+* The confidence level, and
+* The degrees of freedom, $df$.
 
-First, let's focus on the confidence level. Earlier, we said that we would like to use a confidence level of 95\%, which means we are looking for an interval that contains 95\% of the sampling distribution. 
+First, let's focus on the confidence level. Earlier, we said that we would like to use a confidence level of 95\%, which means we are looking for an interval that contains 95\% of the sampling distribution. From the previous section, that means we are looking for the $97.5^{th}$ percentile. 
 
-```{r q7, echo=FALSE}
+<!-- ```{r q7, echo=FALSE} -->
+<!-- question( -->
+<!--   "If 95% of the sampling distribution is contained within the interval, how much of the interval is outside of the interval?", -->
+<!--   answer("95%", message = "There should be 95% inside the interval, not outside."),  -->
+<!--   answer("5%", correct = TRUE),  -->
+<!--   answer("2.5%", message = "There should be 2.5% on either side of the interval, but 5% overall."),  -->
+<!--   answer("No way to tell."),  -->
+<!--   random_answer_order = TRUE, -->
+<!--   allow_retry = TRUE,  -->
+<!--   post_message = "Congratulations! You have found the fourth secret word: " -->
+<!-- ) -->
+<!-- ``` -->
+
+<!-- Remember that the area outside the interval should fall equally on both sides of the area inside, which is centered at the sample mean.  -->
+
+
+```{r q28, echo=FALSE}
 question(
-  "If 95% of the sampling distribution is contained within the interval, how much of the interval is outside of the interval?",
-  answer("95%", message = "There should be 95% inside the interval, not outside."), 
-  answer("5%", correct = TRUE), 
-  answer("2.5%", message = "There should be 2.5% on either side of the interval, but 5% overall."), 
-  answer("No way to tell."), 
-  random_answer_order = TRUE,
-  allow_retry = TRUE, 
-  post_message = "Congratulations! You have found the fourth secret word: "
-)
-```
-
-Remember that the area outside the interval should fall equally on both sides of the area inside, which is centered at the sample mean. 
-
-```{r q7, echo=FALSE}
-question(
-  "If 95% of the sampling distribution is contained within the interval, how much of the interval is outside of the interval?",
-  answer("95%", message = "There should be 95% inside the interval, not outside."), 
-  answer("5%", correct = TRUE), 
-  answer("2.5%", message = "There should be 2.5% on either side of the interval, but 5% overall. ."), 
-  answer("No way to tell."), 
-  random_answer_order = TRUE,
-  allow_retry = TRUE, 
-  post_message = "Congratulations! You have found the fourth secret word: "
-)
-```
-
-```{r q8, echo=FALSE}
-question(
-  "If 95% of the sampling distribution is contained within the interval, how much of the interval is on each side of the interval?",
-  answer("95%", message = "There should be 95% inside the interval, not outside."), 
-  answer("5%", message = "There should be 5% on overall, but how much on each side?"), 
-  answer("2.5%", correct = TRUE, message = "To find this answer, we divide the area outside the interval, 5%, by 2."), 
-  answer("No way to tell."), 
-  random_answer_order = TRUE,
+  "True or False: We could also use the $2.5^{th}$ percentile.",
+  answer("True", correct = TRUE),
+  answer("False"),
   allow_retry = TRUE
 )
 ```
 
-Find t*
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
 
-Use `se_mcds` and your code from the previous section to calculate the margin of error in the cell below. Save it as `MoE_mcds`.
+How do you know the answers to the previous question? Make sure you can justify your response!
 
-```{python setup_se, exercise = FALSE, echo = FALSE, exercise.setup = "setup2"}
-se_mcds = np.std(mcds)/np.sqrt(len(mcds))
+::::
+
+Now, let's focus on on the degrees of freedom. Traditionally in a $t$-interval for a single mean, the degrees of freedom is the sample size minus 1--this is why it is important to state the sample size in the Prepare step! 
+
+```{r q29, echo=FALSE}
+question_numeric(
+  "What is the correct degrees of freedom to use?",
+  answer(63, correct = TRUE),
+  min = 1,
+  max = 100,
+  step = 1,
+  allow_retry = TRUE
+)
 ```
 
-```{python t_value, exercise = TRUE, exercise.setup = "setup_se"}
+Now, find the value of $t$ we should be using in the interval--call it $t^*$, or `t_star`. 
+
+```{python ex30, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
-```{python t_value-solution, message = FALSE, warning = FALSE, echo = FALSE}
-t_mcds = (np.mean(mcds) - 284)/se_mcds
+```{python ex30-solution, message = FALSE, warning = FALSE, echo = FALSE}
+t_star = t.ppf(0.975, df = 63)
 ```
 
-```{r t_value-code-check, message = FALSE, warning = FALSE}
+```{r ex30-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-Now, we can calculate the final interval by adding and subtracting the margin of error. First, calculate the lower bound. 
+Now, combine the `t_star` and `se_mcds` to find the margin of error. Save it as `MoE_mcds`.
 
-Now, calculate the upper bound. 
+```{python ex31, exercise = TRUE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex31-solution, message = FALSE, warning = FALSE, echo = FALSE}
+MoE_mcds = se_mcds*t_star
+```
+
+```{r ex31-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
+
+Now, we can calculate the final interval by adding and subtracting the margin of error from the sample mean. Carry out these calculations below:
+
+```{python ex32, exercise = TRUE, exercise.setup = "setup_py"}
+
+```
+
+```{python ex32-solution, message = FALSE, warning = FALSE, echo = FALSE}
+mean_mcds - MoE_mcds 
+mean_mcds + MoE_mcds 
+```
+
+```{r ex32-code-check, message = FALSE, warning = FALSE}
+grade_this_code()
+```
 
 ### Conclude
 
-What is the correct interpretation of your confidence interval?
+Once we have the interval, we also need to be interpreting it in the context of the problem. 
 
-```{r q8, echo=FALSE}
+```{r q33, echo=FALSE}
 question(
-  "Based on this p-value, what would you do with the null hypothesis?",
-  answer("Accept", message = "We never say accept!"), 
-  answer("Fail to Reject"), 
-  answer("Reject", correct = TRUE), 
-  allow_retry = TRUE, 
-  post_message = "Congratulations! You have found the fifth and final secret word: CHEESE."
+  "What are the correct statements regarding this interval? Select all that apply.",
+  answer("We are 95% confident that the true mean drive-through wait time for all orders at the franchise owner's location is between 216 and 257 seconds.", correct = TRUE),
+  answer("We are 95% confident that the sample mean drive-through wait time for all orders at the franchise owner's location.", message = "Of course the sample mean is between 216 and 257--we used the sample mean to build the interval! We can be 100% confident!"),
+  answer("There is a 95% chance that the true mean drive-through wait time for all orders at the franchise owner's location is between 216 and 257 seconds.", message = "This is not what the word confident means in this case--be careful to use its proper definition."),
+  answer("If we built 100 confidence intervals using this exact procedure with different samples from the franchise owner's location, approximately 95 of them would contain true mean drive-through wait time for all McDonald's at the franchise owner's location.", correct = TRUE),
+  answer("95% of the observations are between 216 and 257 seconds."), 
+  random_answer_order = TRUE,
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the fifth and final secret word: DAIRY Enter this word in the Lab 9 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 )
 ```
 
-
-The franchise owder specifically wanted to know if their average drive-through wait time (in seconds) has decreased from the average from 2019, [284 seconds](https://www.businessinsider.com/mcdonalds-drive-thru-times-speed-up-years-of-longer-waits-2019-10). 
-
-```{r q8, echo=FALSE}
-question(
-  "Based on this interval, is 284 seconds a reasonable value for... ?",
-  answer("Accept", message = "We never say accept!"), 
-  answer("Fail to Reject"), 
-  answer("Reject", correct = TRUE), 
-  allow_retry = TRUE, 
-  post_message = "Congratulations! You have found the fifth and final secret word: CHEESE."
-)
-```
-
-What would the results of a two-sided hypothesis for 284 seconds be?
 
 ### Using `scipy.stats` Functions
 
-There is a faster way to run the $t$-test, and, if you are not comfortable with the math, it can also be more user-friendly. Look up the [documentation for `ttest_1samp`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ttest_1samp.html).
+There is a somewhat faster way to build the $t$-interval, and, if you are not comfortable with the math, it can also be more user-friendly. Look up the [documentation for `t.interval()`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.t.html). Unfortunately, you do still have to calculate the mean and standard error, but since we have those, you can plug them straight into the method--make sure you look up any other arguments you may need.
 
+```{python ex34, exercise = TRUE, exercise.setup = "setup_py"}
 
-```{r q9, echo=FALSE}
-question(
-  "What argument in `ttest_1samp` dictates the null value of the hypothesis test?",
-  answer("`a`"), 
-  answer("`popmean`", correct = TRUE), 
-  answer("`axis`"), 
-  answer("`nan_policy`"), 
-  answer("`alternative`"), 
-  answer("`keepdims`"), 
-  allow_retry = TRUE
-)
 ```
 
-```{r q10, echo=FALSE}
-question(
-  "What argument in `ttest_1samp` dictates the alternative hypothesis of the hypothesis test?",
-  answer("`a`", message = "We never say accept!"), 
-  answer("`popmean`"), 
-  answer("`axis`"), 
-  answer("`nan_policy`"), 
-  answer("`alternative`", correct = TRUE), 
-  answer("`keepdims`"), 
-  allow_retry = TRUE
-)
+```{python ex34-solution, message = FALSE, warning = FALSE, echo = FALSE}
+t.interval(0.95, 63, loc=mean_mcds, scale=se_mcds)
 ```
 
-Now, plug in the right values for all of the arguments. Do you reach the same conclusion as you found by hand?
-
-```{python ttest, exercise = TRUE, exercise.setup = "setup2"}
-st.ttest_1samp( )
-```
-
-```{python ttest-solution, message = FALSE, warning = FALSE, echo = FALSE}
-st.ttest_1samp(mcds, 284, alternative = 'less')
-```
-
-```{r ttest-code-check, message = FALSE, warning = FALSE}
+```{r ex34-code-check, message = FALSE, warning = FALSE}
 grade_this_code()
 ```
 
-There are lots of different hypothesis tests ([see some examples on Wikipedia](https://en.wikipedia.org/wiki/Category:Statistical_tests)). The details of each test, including what parameter is being tested, how we format the null and alternative hypotheses, the assumptions of each test, and the formulas for the test statistic and p-value may be different, but the overall framework is the same. You can always look up the details, but it is very helpful to be familiar with the general process. If you have any questions, we are happy to discuss!
+:::: {.discussionbox}
+::: {.center}
+**Discuss with a neighbor (or on Ed):**
+:::
+
+The drive through wait time for all McDonald's in the US in 2019 was 284 seconds. Based on this interval, do you think this is a reasonable value for the mean drive through wait time at the franchise owner's location? What makes you think so?
+
+::::

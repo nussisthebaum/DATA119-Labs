@@ -573,3 +573,26 @@ grade_this_code()
 ```
 
 There are lots of different hypothesis tests ([see some examples on Wikipedia](https://en.wikipedia.org/wiki/Category:Statistical_tests)). The details of each test, including what parameter is being tested, how we format the null and alternative hypotheses, the assumptions of each test, and the formulas for the test statistic and p-value may be different, but the overall framework is the same. You can always look up the details, but it is very helpful to be familiar with the general process. If you have any questions, we are happy to discuss!
+
+
+<!-- ### Confidence Interval and Hypothesis Test Equivalencies -> MOVE  -->
+
+<!-- In general, the results of a hypothesis test using a significance level of $\alpha$ should be consistent with a $100(1-\alpha)$ confidence interval based on the same dataset. -->
+
+<!-- * A hypothesis test at $\alpha$ = 0.01 should support a 99\% confidence interval. -->
+<!-- * A hypothesis test at $\alpha$ = 0.05 should support a 95\% confidence interval. -->
+<!-- * A hypothesis test at $\alpha$ = 0.10 should support a 90\% confidence interval. -->
+
+<!-- Thus, the following statements are equivalent: -->
+
+<!-- * If we build a $100(1-\alpha)$ confidence interval for a parameter (e.g., $\mu$) based on a statistic (e.g., $\bar{x}$), and the null value (e.g., $\mu_0$) is included... -->
+<!-- * The null value ($\mu_0$) is a reasonable value for the parameter ($\mu$). -->
+<!-- * The p-value associated with the statistic ($\bar{x}$) will be greater than $\alpha$. -->
+<!-- * We would fail to reject the null hypothesis ($\mu = \mu_0$). -->
+
+<!-- Similarly, -->
+
+<!-- * If we build a $100(1-\alpha)$ confidence interval for the parameter ($\mu$), based on a statistic (e.g., $\bar{x}$), and the null value (e.g., $\mu_0$) is not included... -->
+<!-- * The null value ($\mu_0$) is not a reasonable value for the parameter ($\mu$). -->
+<!-- * The p-value associated with the statistic ($\bar{x}$) will be less than $\alpha$. -->
+<!-- * We would reject the null hypothesis ($\mu = \mu_0$). -->
