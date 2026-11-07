@@ -34,6 +34,14 @@ library(reticulate)
 # (see check_structure below for the rules). Any exercise not listed is graded by
 # exact code match against its -solution chunk.
 value_checks <- list(
+  # Any valid SRS passes: 15 values drawn from sleep_hours without reusing any (checked
+  # by comparing value counts), sleep_mean is the mean of the student's own sample, and
+  # the code sets replace=False
+  srs_ex = list(expr = paste(
+    'int(len(sleep_sample) == 15',
+    'and not (__import__("collections").Counter(list(sleep_sample)) - __import__("collections").Counter(list(sleep_hours)))',
+    'and bool(np.isclose(sleep_mean, np.mean(sleep_sample))))'),
+    value = 1, defines = c("sleep_sample", "sleep_mean"), structure = "no_replace")
 )
 
 # Python helpers for custom_checker (done in Python so they work the same on every
@@ -94,6 +102,13 @@ def check_structure(code, rules=()):
         elif rule == "arithmetic":
             if not any(isinstance(n, ast.BinOp) and isinstance(n.op, (ast.Sub, ast.Add)) for n in nodes):
                 return "The Complement Rule relates an event to its complement through subtraction, e.g. 1 - P(not A)."
+        elif rule == "no_replace":
+            # Needs a random.choice(..., replace=False) call, so a hand-picked sample fails
+            calls = [n for n in nodes if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "choice"]
+            if not calls:
+                return "Use np.random.choice() to pick the residents at random."
+            if not any(k.arg == "replace" and isinstance(k.value, ast.Constant) and k.value.value is False for c in calls for k in c.keywords):
+                return "Make sure no resident can be picked more than once (set replace=False)."
         else:
             raise ValueError("unknown structure rule: " + rule)
     return ""
@@ -173,6 +188,19 @@ tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker,
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
+# Hours studied per week by the 100 surveyed students (Populations vs. Samples)
+study_hours = np.array([17, 35, 16, 20, 23, 24, 28, 22, 27, 12, 23, 21, 16, 20, 13, 16, 22, 17, 15, 12,
+                        27, 28, 21, 21, 6, 28, 29, 26, 28, 10, 23, 12, 33, 14, 23, 23, 17, 17, 26, 28,
+                        25, 28, 21, 16, 16, 21, 21, 37, 19, 32, 35, 21, 23, 16, 27, 22, 31, 20, 10, 27,
+                        25, 21, 16, 25, 25, 28, 13, 35, 25, 23, 32, 30, 2, 24, 12, 24, 9, 22, 27, 25,
+                        28, 26, 23, 9, 30, 27, 19, 17, 29, 18, 18, 22, 17, 35, 14, 31, 28, 26, 20, 13])
+
+# Hours of sleep last night for all 60 residents of a dorm house (Simple Random Sampling)
+sleep_hours = np.array([6.0, 7.3, 4.7, 8.7, 7.8, 6.6, 6.6, 7.4, 6.7, 6.7, 7.9, 7.6, 6.9, 6.9, 7.2,
+                        6.3, 6.5, 7.7, 6.8, 5.4, 6.4, 7.8, 6.7, 6.8, 7.8, 9.2, 6.1, 8.6, 5.5, 7.2,
+                        5.6, 8.6, 8.0, 8.4, 5.9, 7.8, 6.4, 6.5, 7.6, 8.1, 7.2, 6.2, 6.0, 8.7, 7.7,
+                        7.9, 9.6, 6.0, 10.0, 10.0, 8.9, 8.0, 6.2, 8.2, 6.5, 7.0, 6.7, 7.3, 8.5, 6.3])
 ```
 
 ```{python setup_page, include=FALSE}
@@ -201,7 +229,11 @@ tags$div(
 
 ## Goals
 
-<!-- TODO -->
+After completing this lab, you will be able to:
+
+* Describe the differences between populations and samples, and identify different sampling methods.
+* Explain the importance of experimental design and how to avoid confounding variables.
+* Create and interpret different types of plots using `matplotlib`.
 
 ## Setup
 
@@ -217,13 +249,148 @@ import matplotlib.pyplot as plt
 
 ## Sampling Populations
 
+Throughout this course we have been working with datasets that are *samples* of a larger group---we very rarely have access to the entire population.
+In this section we will discuss the differences between populations and samples, and how we might create those samples via different sampling methods.
+
+
 ### Populations vs. Samples
+
+So what is the difference between a population and a sample? A **population** is the entire group of individuals or items that we are interested in studying, while a **sample** is a subset of that population that we actually collect data from.
+
+The numerical characteristics of a population are called **parameters**, while those of a sample are called **statistics**. For example, the average height of all adults in the United States is a population parameter, while the average height of a sample of 100 adults is a sample statistic. See the table below for some common measures and their corresponding population parameters and sample statistics.
+
+::: {.disttable .stattable}
+| Measure | Population Parameter | Sample Statistic | Use |
+|:----------|:----------:|:----------:|:------------------------------|
+| Mean | $\mu$ | $\bar{x}$ | Measuring the center/location of a distribution |
+| Standard Deviation | $\sigma$ | $s$ | Measuring the spread/scale of a distribution |
+| Proportion | $\pi$ or $p$ | $p$ or $\hat{p}$ | Measuring the frequency of a binary variable |
+:::
+
+Suppose researchers at the University of Chicago want to know how many hours per week its undergraduates spend studying. To find out, a researcher goes to Regenstein Library at 10pm on a Tuesday and surveys 100 students about how many hours they study per week.
+
+```{r q1, echo=FALSE}
+question(
+  "What is the population in this scenario?",
+  answer("All undergraduates at UChicago", correct = TRUE),
+  answer("The 100 students who were surveyed in Regenstein", message = "These are the students we actually collected data from. Is that the whole group the researchers want to learn about?"),
+  answer("All students who were in Regenstein at 10pm on Tuesday", message = "The researchers want to learn about all UChicago undergraduates, not just the ones in Regenstein that night."),
+  answer("The average number of hours UChicago undergraduates study per week", message = "This is a number describing the group, not the group itself."),
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+```{r q2, echo=FALSE}
+question(
+  "What is the sample in this scenario?",
+  answer("The 100 students who were surveyed in Regenstein", correct = TRUE),
+  answer("All undergraduates at UChicago", message = "This is the whole group the researchers want to learn about. Did we collect data from all of them?"),
+  answer("All students who were in Regenstein at 10pm on Tuesday", message = "Only the 100 students who were surveyed gave us data."),
+  answer("The average number of hours studied per week among the students surveyed in Regenstein", message = "This is a number calculated from the group we collected data from, not the group itself."),
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+```{r q3, echo=FALSE}
+question(
+  "Which of the following are parameters? Select all that apply.",
+  answer("The average of weekly study hours among all UChicago undergraduates", correct = TRUE),
+  answer("The proportion of all UChicago undergraduates who study more than 30 hours per week", correct = TRUE),
+  answer("The average of weekly study hours among the students surveyed in Regenstein"),
+  answer("The proportion of students surveyed in Regenstein who study more than 20 hours per week"),
+  answer("The median of weekly study hours among the students surveyed in Regenstein"),
+  answer("The minimum of weekly study hours among the students surveyed in Regenstein"),
+  allow_retry = TRUE,
+  random_answer_order = TRUE,
+  post_message = "Congratulations! You have found the first secret word: GARLIC."
+)
+```
+
+The hours studied per week by each of the 100 surveyed students are stored in a `numpy` array called `study_hours`. Use the cell below to look at the data more closely, and calculate the sample mean $\bar{x}$ and the sample standard deviation $s$ of `study_hours`. You can use the `numpy` functions `np.mean()` and `np.std()` to calculate these values. Note that by default, `np.std()` calculates the population standard deviation, so you will need to set the parameter `ddof=1` to calculate the sample standard deviation. Take a look at this [Khan Academy lesson](https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/variance-standard-deviation-sample/a/population-and-sample-standard-deviation-review) to learn more about the difference between population and sample standard deviation.
+
+```{python stats_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+```
+
+```{r q4, echo=FALSE}
+question_numeric(
+  "What is the sample mean $\\bar{x}$ of the hours studied per week?",
+  answer(22, correct = TRUE),
+  min = 0,
+  max = 100,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
+
+```{r q5, echo=FALSE}
+question_numeric(
+  "What is the sample standard deviation $s$ of the hours studied per week? Round to two decimal places.",
+  answer(6.96, correct = TRUE),
+  answer(6.93, message = "By default, np.std() calculates the population standard deviation. Since study_hours is a sample, set ddof = 1."),
+  min = 0,
+  max = 100,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
+
 
 ### Sampling Methods
 
-### Bias
+In order to use the sample to make plausible claim about the population, we need to make sure that the sample is representative of the population. There are several different sampling methods that can be used to achieve this, which we will review in this section.
 
-<!-- TODO -->
+#### Simple Random Sampling 
+
+With this sampling method, every individual in the population has an equal chance of being selected for the sample. In practice, this can be achieved by using a random number generator or drawing names from a hat. We can implement Simple Random Sampling easily in Python using the `numpy` function `np.random.choice()`. 
+
+For this example, let's imagine that our 100 student array `study_hours` is our *population* of interest, i.e., we only care about the 100 students who were studying in Regenstein at 10 pm on a particular Tuesday night. 
+We can use the following code to take a simple random sample of 10 students from the `study_hours` array:
+
+```{python srs-example, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+# Randomly pick 10 students; replace=False means no student can be picked twice
+srs_sample = np.random.choice(study_hours, size=10, replace=False)
+
+print(srs_sample)
+print(np.mean(srs_sample))
+```
+
+Notice that if you run the code repeatedly, the sample and mean will change each time. This is because each student is equally likely to be selected, so the sample is random.
+
+```{r q6, echo=FALSE}
+question(
+  "True or False: Choosing a random starting student and then taking every 10th student in `study_hours` after them is a simple random sample.",
+  answer("True", message = "Every student does have the same 1 in 10 chance of being picked, but that isn't enough. Try again."),
+  answer("False", correct = TRUE, message = "Correct! Every sample of 10 students is not equally likely: two students who are next to each other in the array can never be in the same sample. This method is called systematic sampling."),
+  allow_retry = TRUE
+)
+```
+
+Now let's try a different population. The array `sleep_hours` contains the number of hours of sleep that each of the 60 residents of a UChicago dorm got last night. Take a simple random sample of 15 residents from `sleep_hours` and save it as `sleep_sample`. Then calculate the sample mean and save it as `sleep_mean`.
+
+```{python srs_ex, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+
+```
+
+```{python srs_ex-solution, message = FALSE, warning = FALSE, echo = FALSE}
+sleep_sample = np.random.choice(sleep_hours, size=15, replace=False)
+sleep_mean = np.mean(sleep_sample)
+```
+
+```{r srs_ex-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
+```
+
+
+* **Stratified Sampling**: The population is divided into subgroups (strata) based on certain characteristics, and a random sample is taken from each stratum. This ensures that the sample is representative of the population with respect to those characteristics.
+* **Cluster Sampling**: The population is divided into clusters (often based on geography or other natural groupings), and a random sample of clusters is selected. All individuals within the selected clusters are included in the sample.
+* **Multistage Sampling**: A combination of the above methods, where the population is divided into clusters, and then a random sample of individuals is taken from each selected cluster.
+* **Convenience Sampling**: The sample is selected based on ease of access or availability, rather than random selection. This method is often used in practice, but it can lead to biased samples that are not representative of the population.
+
+### Bias
 
 ## Experiments
 

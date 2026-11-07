@@ -178,3 +178,12 @@ html { counter-reset: cell; }
     vertical-align: middle;
     padding: 12px 20px;
 }
+
+/* Parameter vs. statistic table: narrower than the page, with a wide left-aligned Use column */
+.stattable table {
+    width: 75%;
+}
+
+.stattable table > tbody > tr > td:last-child {
+    text-align: left;
+}
