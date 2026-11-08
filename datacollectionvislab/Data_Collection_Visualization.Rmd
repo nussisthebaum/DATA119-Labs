@@ -41,7 +41,25 @@ value_checks <- list(
     'int(len(sleep_sample) == 15',
     'and not (__import__("collections").Counter(list(sleep_sample)) - __import__("collections").Counter(list(sleep_hours)))',
     'and bool(np.isclose(sleep_mean, np.mean(sleep_sample))))'),
-    value = 1, defines = c("sleep_sample", "sleep_mean"), structure = "no_replace")
+    value = 1, defines = c("sleep_sample", "sleep_mean"), structure = "no_replace"),
+  # Any valid stratified sample passes: 20 different, unchanged rows of dorm, 10 from each
+  # year, and the code uses .sample() so the rows are picked at random
+  strat_ex = list(expr = paste(
+    'int(len(strat_sample) == 20',
+    'and strat_sample.index.is_unique',
+    'and bool(strat_sample.index.isin(dorm.index).all())',
+    'and bool((strat_sample["year"].value_counts().reindex(["Freshman", "Sophomore"]) == 10).all())',
+    'and strat_sample[["year", "sleep_hours"]].equals(dorm.loc[strat_sample.index, ["year", "sleep_hours"]]))'),
+    value = 1, defines = "strat_sample", structure = "df_sample"),
+  # Any valid cluster sample passes: unchanged rows of dorm_floors making up exactly 2 whole floors
+  # (every resident on each chosen floor), and the code picks the floors at random
+  cluster_ex = list(expr = paste(
+    'int(cluster_sample.index.is_unique',
+    'and bool(cluster_sample.index.isin(dorm_floors.index).all())',
+    'and cluster_sample["floor"].nunique() == 2',
+    'and set(cluster_sample.index) == set(dorm_floors.index[dorm_floors["floor"].isin(cluster_sample["floor"])])',
+    'and cluster_sample.equals(dorm_floors.loc[cluster_sample.index]))'),
+    value = 1, defines = "cluster_sample", structure = "cluster_random")
 )
 
 # Python helpers for custom_checker (done in Python so they work the same on every
@@ -109,6 +127,25 @@ def check_structure(code, rules=()):
                 return "Use np.random.choice() to pick the residents at random."
             if not any(k.arg == "replace" and isinstance(k.value, ast.Constant) and k.value.value is False for c in calls for k in c.keywords):
                 return "Make sure no resident can be picked more than once (set replace=False)."
+        elif rule == "cluster_random":
+            calls = [n for n in nodes if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr in ("choice", "sample")]
+            if not calls:
+                return "Use np.random.choice() to pick the floors at random."
+            # np.random.choice can pick the same floor twice unless replace=False
+            for c in calls:
+                if c.func.attr == "choice" and not any(k.arg == "replace" and isinstance(k.value, ast.Constant) and k.value.value is False for k in c.keywords):
+                    return "Make sure the same floor cannot be picked twice (set replace=False)."
+        elif rule == "df_sample":
+            calls = [n for n in nodes if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "sample"]
+            if not calls:
+                return "Use .sample() to pick the residents in each year at random."
+            # replace=True can pick a resident twice (and sometimes happens not to, so check the code)
+            if any(k.arg == "replace" and not (isinstance(k.value, ast.Constant) and k.value.value is False) for c in calls for k in c.keywords):
+                return "Make sure no resident can be picked more than once (leave out replace, or set replace=False)."
+            # A plain SRS of 20 gets exactly 10 of each year about 1 time in 8, so also
+            # require the code to split the residents up by the "year" column
+            if not any(isinstance(n, ast.Constant) and n.value == "year" for n in nodes):
+                return "Use the year column to split the residents into freshmen and sophomores first."
         else:
             raise ValueError("unknown structure rule: " + rule)
     return ""
@@ -201,6 +238,17 @@ sleep_hours = np.array([6.0, 7.3, 4.7, 8.7, 7.8, 6.6, 6.6, 7.4, 6.7, 6.7, 7.9, 7
                         6.3, 6.5, 7.7, 6.8, 5.4, 6.4, 7.8, 6.7, 6.8, 7.8, 9.2, 6.1, 8.6, 5.5, 7.2,
                         5.6, 8.6, 8.0, 8.4, 5.9, 7.8, 6.4, 6.5, 7.6, 8.1, 7.2, 6.2, 6.0, 8.7, 7.7,
                         7.9, 9.6, 6.0, 10.0, 10.0, 8.9, 8.0, 6.2, 8.2, 6.5, 7.0, 6.7, 7.3, 8.5, 6.3])
+
+# The same dorm as a data frame: only freshmen (first 36 rows) and sophomores (last 24) live there
+# (Stratified Sampling)
+dorm = pd.DataFrame({
+    "year": ["Freshman"] * 36 + ["Sophomore"] * 24,
+    "sleep_hours": sleep_hours
+})
+
+# The same dorm with a floor column: 6 floors of 10 residents, each with 6 freshmen and
+# 4 sophomores (Cluster Sampling)
+dorm_floors = dorm.assign(floor=list(range(1, 7)) * 6 + list(range(1, 7)) * 4)
 ```
 
 ```{python setup_page, include=FALSE}
@@ -308,7 +356,9 @@ question(
 )
 ```
 
-The hours studied per week by each of the 100 surveyed students are stored in a `numpy` array called `study_hours`. Use the cell below to look at the data more closely, and calculate the sample mean $\bar{x}$ and the sample standard deviation $s$ of `study_hours`. You can use the `numpy` functions `np.mean()` and `np.std()` to calculate these values. Note that by default, `np.std()` calculates the population standard deviation, so you will need to set the parameter `ddof=1` to calculate the sample standard deviation. Take a look at this [Khan Academy lesson](https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/variance-standard-deviation-sample/a/population-and-sample-standard-deviation-review) to learn more about the difference between population and sample standard deviation.
+The hours studied per week by each of the 100 surveyed students are stored in a `numpy` array called `study_hours`. Use the cell below to look at the data more closely, and calculate the sample mean $\bar{x}$ and the sample standard deviation $s$ of `study_hours`. You can use the `numpy` functions `np.mean()` and `np.std()` to calculate these values. 
+
+Note that by default, `np.std()` calculates the population standard deviation, so you will need to set the parameter `ddof=1` to calculate the sample standard deviation. Take a look at this [Khan Academy lesson](https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/variance-standard-deviation-sample/a/population-and-sample-standard-deviation-review) to learn more about the difference between population and sample standard deviation.
 
 ```{python stats_calc, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 
@@ -385,12 +435,156 @@ sleep_mean = np.mean(sleep_sample)
 ```
 
 
-* **Stratified Sampling**: The population is divided into subgroups (strata) based on certain characteristics, and a random sample is taken from each stratum. This ensures that the sample is representative of the population with respect to those characteristics.
-* **Cluster Sampling**: The population is divided into clusters (often based on geography or other natural groupings), and a random sample of clusters is selected. All individuals within the selected clusters are included in the sample.
-* **Multistage Sampling**: A combination of the above methods, where the population is divided into clusters, and then a random sample of individuals is taken from each selected cluster.
-* **Convenience Sampling**: The sample is selected based on ease of access or availability, rather than random selection. This method is often used in practice, but it can lead to biased samples that are not representative of the population.
+#### Stratified Sampling 
+
+With a stratified sample, the population is divided into subgroups (strata) based on certain characteristics, and a random sample is taken from each stratum. This ensures that the sample is representative of the population with respect to those characteristics.
+
+Let's go back to the dorm from the previous question. Assume only freshmen and sophomores live in this dorm. Because students in different years might have different sleep habits, we want our sample to include the same number of students from each year. 
+
+The data frame `dorm` contains the same 60 residents as `sleep_hours`, with a `year` column that says whether each resident is a `"Freshman"` or a `"Sophomore"`, and a `sleep_hours` column with the hours of sleep they got last night. Here are the first few rows:
+
+```{python dorm-head, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+dorm.head()
+```
+
+Using the code template below, take a stratified sample of 10 freshmen and 10 sophomores from `dorm`, and save it as `strat_sample`.
+
+```{python strat_ex, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+# Split the population into strata (separate data frames)
+freshmen = ......
+sophomores = ......
+
+# Take a simple random sample from each stratum
+fresh_sample = freshmen.sample(...)
+soph_sample = sophomores.sample(...)
+
+# Combine the samples
+strat_sample = pd.concat([fresh_sample, soph_sample])
+
+```
+
+```{python strat_ex-solution, message = FALSE, warning = FALSE, echo = FALSE}
+# Split the population into strata
+freshmen = dorm[dorm["year"] == "Freshman"]
+sophomores = dorm[dorm["year"] == "Sophomore"]
+
+# Take a simple random sample from each stratum
+fresh_sample = freshmen.sample(n=10)
+soph_sample = sophomores.sample(n=10)
+
+# Combine the samples
+strat_sample = pd.concat([fresh_sample, soph_sample])
+```
+
+```{r strat_ex-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
+```
+
+```{python strat-pop-setup, include = FALSE, exercise.setup = "setup_py"}
+# Strata from strat_ex, so the cell below can use them without redoing that exercise
+freshmen = dorm[dorm["year"] == "Freshman"]
+sophomores = dorm[dorm["year"] == "Sophomore"]
+```
+
+The `freshmen` and `sophomores` data frames from your code above are available in the cell below. Use them to calculate the mean hours of sleep for all of the freshmen and all of the sophomores in the dorm.
+
+```{python strat_pop_calc, exercise = TRUE, message = FALSE, exercise.setup = "strat-pop-setup"}
+
+```
+
+```{r q7, echo=FALSE}
+question_numeric(
+  "What is the mean hours of sleep for all freshmen in the dorm? Round to two decimal places.",
+  answer(7.06, correct = TRUE),
+  answer(7.26, message = "This is the mean for everyone in the dorm. Make sure you only use the freshmen."),
+  min = 0,
+  max = 24,
+  step = 0.01,
+  allow_retry = TRUE
+)
+```
+
+```{r q8, echo=FALSE}
+question_numeric(
+  "What is the mean hours of sleep for all sophomores in the dorm? Round to two decimal places.",
+  answer(7.56, correct = TRUE),
+  answer(7.26, message = "This is the mean for everyone in the dorm. Make sure you only use the sophomores."),
+  min = 0,
+  max = 24,
+  step = 0.01,
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: DELETE."
+)
+```
+
+
+#### Cluster Sampling
+
+The population is divided into clusters (often based on geography or other natural groupings), and a random sample of clusters is selected. All individuals within the selected clusters are then included in the sample.
+
+Let's go back to our dorm. The dorm has 6 floors, numbered 1 through 6, and 10 residents live on each floor. Instead of tracking down individual residents all over the building, we could randomly choose 2 floors and survey *every* resident on those floors. Here, each floor is a cluster.
+
+The data frame `dorm_floors` contains the same residents as `dorm`, plus a `floor` column that says which floor each resident lives on. Using the code template below, randomly choose 2 of the 6 floors, then save every resident who lives on one of those floors as `cluster_sample`. The `pandas` method `.isin()` will be helpful here: `df["col"].isin(value_list)` is `True` for each row whose value in `"col"` is in `value_list`.
+
+```{python cluster_ex, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+# Randomly choose 2 of the 6 floors (the clusters)
+chosen_floors = np.random.choice(......)
+
+# Keep every resident who lives on one of the chosen floors
+cluster_sample = dorm_floors[......]
+
+```
+
+```{python cluster_ex-solution, message = FALSE, warning = FALSE, echo = FALSE}
+# Randomly choose 2 of the 6 floors (the clusters)
+chosen_floors = np.random.choice([1, 2, 3, 4, 5, 6], size=2, replace=False)
+
+# Keep every resident who lives on one of the chosen floors
+cluster_sample = dorm_floors[dorm_floors["floor"].isin(chosen_floors)]
+```
+
+```{r cluster_ex-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
+```
+
+
+Note that **multistage sampling** is a combination of the above methods, where the population is divided into clusters, and then a random sample of individuals is taken from each selected cluster.
+
+#### Convenience Sampling
+
+The sample is selected based on ease of access or availability, rather than random selection. This method is often used in practice, but it can lead to biased samples that are not representative of the population.
+
+```{r q9, echo=FALSE}
+question(
+  "Researchers want to learn some information about all UChicago undergraduates. Which of the following are convenience samples? Select all that apply.",
+  answer("Surveying the first 50 students who walk into Regenstein on a Monday morning", correct = TRUE),
+  answer("Surveying every student eating lunch in the dining hall closest to the researchers' office", correct = TRUE),
+  answer("Asking the 30 students in the researchers' own DATA 118 section to fill out the survey", correct = TRUE),
+  answer("Randomly drawing 50 student IDs from the registrar's list of all undergraduates", message = "Every undergraduate has an equal chance of being picked here, so this is a simple random sample."),
+  answer("Randomly selecting 20 students from each class year", message = "This takes a random sample from each group, so it is a stratified sample."),
+  answer("Randomly choosing 5 houses and surveying every resident in them", message = "This randomly picks whole groups and surveys everyone in them, so it is a cluster sample."),
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
 
 ### Bias
+
+We must be careful about how we sample populations. Without care, several kinds of bias can arise, including **selection bias**, **non-response bias**, **response bias**, **survivorship bias**, and **undercoverage bias**. You can read more about each of these [here](https://ds1.datascience.uchicago.edu/09/4/biases.html). Once you've done that, answer the following question.
+
+```{r q10, echo=FALSE}
+question(
+  "To learn how much UChicago undergraduates study, researchers email a survey to every undergraduate. Many students with the heaviest course loads are too busy to fill it out, so most of the responses come from students with lighter schedules. Which kind of bias does this survey suffer from?",
+  answer("Non-response bias", correct = TRUE, message = "The students who didn't respond are different in a meaningful way (they study more) from the students who did."),
+  answer("Response bias", message = "Response bias is about the answers people give being inaccurate, like underreporting embarrassing behavior. Here, the problem is who didn't answer at all."),
+  answer("Survivorship bias"),
+  answer("Undercoverage bias", message = "Undercoverage bias happens when some groups are left out of who gets surveyed. Here, every undergraduate was sent the survey."),
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+
 
 ## Experiments
 
