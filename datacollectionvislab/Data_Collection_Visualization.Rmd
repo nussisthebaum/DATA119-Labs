@@ -59,7 +59,28 @@ value_checks <- list(
     'and cluster_sample["floor"].nunique() == 2',
     'and set(cluster_sample.index) == set(dorm_floors.index[dorm_floors["floor"].isin(cluster_sample["floor"])])',
     'and cluster_sample.equals(dorm_floors.loc[cluster_sample.index]))'),
-    value = 1, defines = "cluster_sample", structure = "cluster_random")
+    value = 1, defines = "cluster_sample", structure = "cluster_random"),
+  # The heat map must use the "magma" color map and still show the floor-by-year table
+  heatmap_ex = list(expr = paste(
+    'int(heatmap.get_cmap().name == "magma"',
+    'and bool(np.allclose(heatmap.get_array(), dorm_floors.pivot_table(index="floor", columns="year", values="sleep_hours", aggfunc="mean").to_numpy())))'),
+    value = 1, defines = "heatmap"),
+  # The histogram must have 20 bins and include all 100 values of study_hours
+  hist_bins_ex = list(expr = paste(
+    'int(len(ax.patches) == 20',
+    'and sum(bar.get_height() for bar in ax.patches) == len(study_hours)',
+    'and min(bar.get_x() for bar in ax.patches) == study_hours.min())'),
+    value = 1, defines = "ax"),
+  # freshmen and sophomores must be the right rows of dorm_exams (row numbers can differ),
+  # and the 24 sophomore points must be drawn in orange (any of matplotlib's oranges)
+  scatter_color_ex = list(expr = paste(
+    'int(freshmen.reset_index(drop=True).equals(dorm_exams[dorm_exams["year"] == "Freshman"].reset_index(drop=True))',
+    'and sophomores.reset_index(drop=True).equals(dorm_exams[dorm_exams["year"] == "Sophomore"].reset_index(drop=True))',
+    'and any(np.asarray(c.get_offsets()).shape[0] == 24',
+    'and __import__("matplotlib").colors.to_hex(c.get_facecolor()[0]) in ("#ffa500", "#ff7f0e", "#ff8c00")',
+    'and sorted(map(tuple, np.asarray(c.get_offsets()).round(3).tolist())) == sorted(map(tuple, dorm_exams.loc[dorm_exams["year"] == "Sophomore", ["sleep_hours", "exam_score"]].to_numpy().round(3).tolist()))',
+    'for c in ax.collections))'),
+    value = 1, defines = c("ax", "freshmen", "sophomores"))
 )
 
 # Python helpers for custom_checker (done in Python so they work the same on every
@@ -92,7 +113,19 @@ def get_result(code, var=None, expr=None, last_value=False, defines=()):
         else:
             raise ValueError("last line is not an expression")
     user_vars = {}
-    exec(compile(tree, "<exercise>", "exec"), __main__.__dict__, user_vars)
+    # Plotting code ends in plt.show(), which could try to open a window when run here, so
+    # turn it off while the code runs and close the figures it made afterwards
+    import sys
+    pyplot = sys.modules.get("matplotlib.pyplot")
+    if pyplot is not None:
+        real_show = pyplot.show
+        pyplot.show = lambda *args, **kwargs: None
+    try:
+        exec(compile(tree, "<exercise>", "exec"), __main__.__dict__, user_vars)
+    finally:
+        if pyplot is not None:
+            pyplot.show = real_show
+            pyplot.close("all")
     if expr is not None:
         user_vars["__check_result__"] = eval(expr, __main__.__dict__, user_vars)
         var = "__check_result__"
@@ -249,6 +282,9 @@ dorm = pd.DataFrame({
 # The same dorm with a floor column: 6 floors of 10 residents, each with 6 freshmen and
 # 4 sophomores (Cluster Sampling)
 dorm_floors = dorm.assign(floor=list(range(1, 7)) * 6 + list(range(1, 7)) * 4)
+
+# The same dorm with each resident's score on their most recent exam (Scatter Plots)
+dorm_exams = dorm.assign(exam_score=[77, 81, 67, 76, 89, 76, 77, 77, 76, 74, 83, 83, 78, 83, 74, 82, 73, 81, 75, 71, 75, 86, 91, 74, 83, 78, 76, 87, 80, 88, 81, 88, 86, 83, 87, 82, 71, 77, 93, 88, 88, 83, 78, 78, 91, 80, 85, 69, 85, 91, 88, 78, 71, 82, 75, 76, 72, 77, 74, 77])
 ```
 
 ```{python setup_page, include=FALSE}
@@ -344,8 +380,8 @@ tags$div(
 
 After completing this lab, you will be able to:
 
-* Describe the differences between populations and samples, and identify different sampling methods.
-* Explain the importance of experimental design and how to avoid confounding variables.
+* Describe the differences between populations and samples, identify different sampling methods, and implement some in Python.
+* Explain the importance of experimental design and how to establish causation.
 * Create and interpret different types of plots using `matplotlib`.
 
 ## Setup
@@ -577,7 +613,8 @@ question_numeric(
   min = 0,
   max = 24,
   step = 0.01,
-  allow_retry = TRUE
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: SPHERE."
 )
 ```
 
@@ -709,7 +746,7 @@ question(
   answer("Replication", correct = TRUE, message = "With only 2 residents in each group, any difference in exam scores could easily be due to chance."),
   answer("Blocking"),
   allow_retry = TRUE,
-  post_message = "Congratulations! You have found the second secret word: DELETE."
+  post_message = "Congratulations! You have found the third secret word: DELETE."
 )
 ```
 
@@ -779,12 +816,14 @@ Every `matplotlib` plot is built from two main objects:
 The most common way to create both at once is with `plt.subplots()`. In the example below, we use the freshman and sophomore means that we calculated in the stratified sampling section to make a bar chart (more on each chart type in the next section). Notice that each line after the first one calls a method on `ax`:
 
 ```{python fig-ax-example, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
-fig, ax = plt.subplots(figsize=(6, 4))  # a 6 inch by 4 inch figure with one set of axes
 
-ax.bar(["Freshman", "Sophomore"], [7.06, 7.56])  # draw the data
-ax.set_title("Mean Hours of Sleep by Year")       # add a title
-ax.set_xlabel("Year")                             # label the x-axis
-ax.set_ylabel("Mean hours of sleep")              # label the y-axis
+# a 6 inch by 4 inch figure with one set of axes
+fig, ax = plt.subplots(figsize=(6, 4)) 
+
+ax.bar(["Freshman", "Sophomore"], [7.06, 7.56]) # draw the data
+ax.set_title("Mean Hours of Sleep by Year") # add a title
+ax.set_xlabel("Year") # label the x-axis
+ax.set_ylabel("Mean hours of sleep") # label the y-axis
 
 plt.show()
 ```
@@ -806,27 +845,286 @@ Everyone has their own preferences when it comes to visualizations, but here are
 * **Save plots as PDFs.** PDFs are vector images, meaning they stay sharp no matter how far you zoom in, and they are easy to view and add to reports. You can save a figure with `fig.savefig()`:
 
 ```python
-fig.savefig("sleep_by_year.pdf", bbox_inches="tight")  # bbox_inches="tight" trims extra white space
+# bbox_inches="tight" trims extra white space
+fig.savefig("sleep_by_year.pdf", bbox_inches="tight")  
 ```
 
-## Types of Plots in Matplotlib
+## Types of Plots in `matplotlib`
+
+In this section we will explore several common types of plots in `matplotlib`, including bar charts, histograms, box plots, scatter plots, and heat maps. For each type of plot, we will discuss when to use it, how to create it in Python, and how to interpret it.
 
 ### Bar Charts
 
-<!-- TODO -->
+A **bar chart** compares a numerical value across different categories, like the number of individuals in each group or the mean of a variable for each group. Each category gets its own bar, and the height of each bar shows its value. We already made one bar chart in the previous section; here is another that shows how many residents of our dorm are in each year:
+
+```{python bar-example, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+# Count the residents in each year
+year_counts = dorm["year"].value_counts()
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.bar(year_counts.index, year_counts.values)
+ax.set_title("Dorm Residents by Year")
+ax.set_xlabel("Year")
+ax.set_ylabel("Number of residents")
+
+plt.show()
+```
+
+The first argument to `ax.bar()` is the categories, which go along the x-axis, and the second is the height of each bar.
+
+```{r q17, echo=FALSE}
+question(
+  "Which of the following encoding channels do bar charts use to convey information?",
+  answer("Length", correct = TRUE, message = "The length (height) of each bar shows its value, so we compare categories by comparing how long their bars are."),
+  answer("Color", message = "Bars can be colored, but in a basic bar chart every bar is the same color."),
+  answer("Angle"),
+  answer("Shape", message = "Every bar has the same rectangular shape."),
+  allow_retry = TRUE,
+  random_answer_order = TRUE,
+  post_message = "Congratulations! You have found the fourth secret word: UNLIKE."
+)
+```
 
 ### Histograms
 
-<!-- TODO -->
+A **histogram** shows the distribution of a single numerical variable. The range of the data is split into equal-width intervals called **bins**, and the height of each bar is the number of values that fall in that bin. Unlike a bar chart, the bars in a histogram touch, because the x-axis is a continuous number line rather than a set of separate categories.
+
+Here is a histogram of the hours studied per week by the 100 students surveyed in Regenstein:
+
+```{python hist-example, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.hist(study_hours, edgecolor="black")  # edgecolor outlines each bar so the bins are easy to see
+ax.set_title("Hours Studied per Week")
+ax.set_xlabel("Hours studied per week")
+ax.set_ylabel("Number of students")
+
+plt.show()
+```
+
+When reading a histogram, we usually look at the **shape** of the distribution (is it symmetric, or skewed with a long tail to one side?), its **center** (where most of the values are), its **spread** (how far the values range), and any unusual values. 
+
+Run the code above to see the histogram. We didn't tell `ax.hist()` how many bins to use, so it chose a number for us.
+
+```{r q18, echo=FALSE}
+question_numeric(
+  "How many bins does the histogram above have?",
+  answer(10, correct = TRUE, message = "By default, ax.hist() splits the data into 10 bins."),
+  min = 1,
+  max = 100,
+  step = 1,
+  allow_retry = TRUE
+)
+```
+
+We can choose the number of bins ourselves with the `bins` argument. The number of bins can change how a histogram looks quite a bit: too few bins can hide the shape of the data, while too many can make it look noisy. Change the code below to make the same histogram with 20 bins. 
+
+```{python hist_bins_ex, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.hist(study_hours, edgecolor="black")
+ax.set_title("Hours Studied per Week")
+ax.set_xlabel("Hours studied per week")
+ax.set_ylabel("Number of students")
+
+plt.show()
+```
+
+```{python hist_bins_ex-solution, message = FALSE, warning = FALSE, echo = FALSE}
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.hist(study_hours, bins=20, edgecolor="black")
+ax.set_title("Hours Studied per Week")
+ax.set_xlabel("Hours studied per week")
+ax.set_ylabel("Number of students")
+
+plt.show()
+```
+
+```{r hist_bins_ex-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
+```
 
 ### Box Plots
 
-<!-- TODO -->
+A **box plot** (or box-and-whisker plot) summarizes the distribution of a numerical variable using five numbers, known as the **five-number summary**:
+
+* **Minimum**: the smallest value.
+* **First quartile ($Q_1$)**: the value that 25% of the data falls below.
+* **Median**: the middle value, which 50% of the data falls below. It is also called the second quartile.
+* **Third quartile ($Q_3$)**: the value that 75% of the data falls below.
+* **Maximum**: the largest value.
+
+The distance between the first and third quartiles, $Q_3 - Q_1$, is called the **interquartile range (IQR)**, and it measures the spread of the middle 50% of the data.
+
+We can calculate the five-number summary for `study_hours` with `numpy`:
+
+```{python five-number-example, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+print("Minimum:", np.min(study_hours))
+print("Q1:", np.percentile(study_hours, 25))
+print("Median:", np.median(study_hours))
+print("Q3:", np.percentile(study_hours, 75))
+print("Maximum:", np.max(study_hours))
+```
+
+In a box plot, the box stretches from $Q_1$ to $Q_3$, with a line inside it at the median. The lines extending from the box, called **whiskers**, reach out to the smallest and largest values that are within $1.5 \times IQR$ of the box. Any values beyond the whiskers are considered **outliers** and are drawn as individual points. (The `study_hours` data doesn't have any outliers, so here the whiskers reach all the way to the minimum and maximum.)
+
+```{python box-example, exercise = TRUE, jupyter_compat = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.boxplot(study_hours)
+ax.set_title("Hours Studied per Week")
+ax.set_ylabel("Hours studied per week")
+ax.set_xticks([1], labels=["Surveyed students"])
+
+plt.show()
+```
+
+Box plots are especially useful for comparing the distributions of several groups side by side. To do this, we pass `ax.boxplot()` a list with one set of values for each group. Here we compare the hours of sleep for freshmen and sophomores in our dorm:
+
+```{python box-groups-example, exercise = TRUE, jupyter_compat = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+freshmen_sleep = dorm[dorm["year"] == "Freshman"]["sleep_hours"]
+sophomore_sleep = dorm[dorm["year"] == "Sophomore"]["sleep_hours"]
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.boxplot([freshmen_sleep, sophomore_sleep])
+ax.set_title("Hours of Sleep by Year")
+ax.set_xlabel("Year")
+ax.set_ylabel("Hours of sleep")
+ax.set_xticks([1, 2], labels=["Freshman", "Sophomore"])
+
+plt.show()
+```
+
+```{r q19, echo=FALSE}
+question(
+  "Run the code above. The box for sophomores is taller than the box for freshmen. What can we conclude from this?",
+  answer("The middle 50% of sophomores' sleep hours is more spread out than the middle 50% of freshmen's.", correct = TRUE),
+  answer("More sophomores than freshmen live in the dorm."),
+  answer("Every sophomore slept more than every freshman."),
+  answer("The sophomores' sleep hours have more outliers."),
+  answer("The interquartile range of sophomores' sleep hours is larger than the interquartile range of freshmen's.", correct = TRUE),
+  allow_retry = TRUE,
+  random_answer_order = TRUE,
+  post_message = "Congratulations! You have found the final secret word: HICCUP."
+)
+```
 
 ### Scatter Plots
 
-<!-- TODO -->
+A **scatter plot** shows the relationship between two numerical variables. Each individual is drawn as a point, with one variable on the x-axis and the other on the y-axis. Scatter plots help us see if there is an *association* between the two variables, and if so, its direction and strength.
+
+Remember our question from the Experiments section about whether students who sleep more get better grades? The data frame `dorm_exams` contains the same residents as `dorm`, plus an `exam_score` column with each resident's score on their most recent exam. Let's plot sleep against exam scores:
+
+```{python scatter-example, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.scatter(dorm_exams["sleep_hours"], dorm_exams["exam_score"])
+ax.set_title("Hours of Sleep vs. Exam Score")
+ax.set_xlabel("Hours of sleep")
+ax.set_ylabel("Exam score")
+
+plt.show()
+```
+
+The first argument to `ax.scatter()` gives the x-coordinates of the points, and the second gives the y-coordinates. When reading a scatter plot, we look at the **direction** of the relationship (do the points trend upward or downward?), its **form** (do they follow a straight line or a curve?), and its **strength** (how closely do the points follow that trend?). Here, residents who slept more tended to score higher on their exam. But remember that this is observational data, so it shows an association, not that more sleep *causes* higher scores!
+
+We can also use color to show a third variable on a scatter plot. For example, we can draw the freshmen and sophomores in different colors to see whether the relationship between sleep and exam scores looks similar for both years. To do this, we call `ax.scatter()` once for each year, and give each call its own `color` and `label`. Then `ax.legend()` adds a key showing which color is which year.
+
+Fill in the code below so that the sophomores are drawn in orange.
+
+```{python scatter_color_ex, exercise = TRUE, jupyter_compat = TRUE, message = FALSE, exercise.setup="setup_py"}
+
+# split the population into freshmen and sophomore data frames
+freshmen = ...
+sophomores = ...
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.scatter(freshmen["sleep_hours"], freshmen["exam_score"], color="blue", label="Freshman")
+ax.scatter(sophomores["sleep_hours"], sophomores["exam_score"], ..., label="Sophomore")
+ax.set_title("Hours of Sleep vs. Exam Score")
+ax.set_xlabel("Hours of sleep")
+ax.set_ylabel("Exam score")
+ax.legend()
+
+plt.show()
+```
+
+```{python scatter_color_ex-solution, message = FALSE, warning = FALSE, echo = FALSE}
+freshmen = dorm_exams[dorm_exams["year"] == "Freshman"]
+sophomores = dorm_exams[dorm_exams["year"] == "Sophomore"]
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.scatter(freshmen["sleep_hours"], freshmen["exam_score"], color="blue", label="Freshman")
+ax.scatter(sophomores["sleep_hours"], sophomores["exam_score"], color="orange", label="Sophomore")
+ax.set_title("Hours of Sleep vs. Exam Score")
+ax.set_xlabel("Hours of sleep")
+ax.set_ylabel("Exam score")
+ax.legend()
+
+plt.show()
+```
+
+```{r scatter_color_ex-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
+```
+
+
 
 ### Heat Maps
 
-<!-- TODO -->
+Finally, a **heat map** shows a table of numbers using color, where each cell of the table is shaded based on its value. Heat maps make it easy to spot patterns across two categorical variables at once, like which combinations have the highest or lowest values.
+
+For example, we can use the `dorm_floors` data frame from the cluster sampling section to find the mean hours of sleep for each combination of floor and year. The `pandas` method `.pivot_table()` builds this table for us, with one row per floor and one column per year:
+
+```{python heatmap-example, exercise = TRUE, jupyter_compat = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+# Mean hours of sleep for each floor (rows) and year (columns)
+sleep_table = dorm_floors.pivot_table(index="floor", columns="year", values="sleep_hours", aggfunc="mean")
+
+fig, ax = plt.subplots(figsize=(5, 6))
+heatmap = ax.imshow(sleep_table, cmap="viridis", aspect="auto")
+fig.colorbar(heatmap, ax=ax, label="Mean hours of sleep")  # the key showing which color means which value
+
+ax.set_xticks(range(len(sleep_table.columns)), labels=sleep_table.columns)
+ax.set_yticks(range(len(sleep_table.index)), labels=sleep_table.index)
+ax.set_title("Mean Hours of Sleep by Floor and Year")
+ax.set_xlabel("Year")
+ax.set_ylabel("Floor")
+
+plt.show()
+```
+
+`ax.imshow()` draws each value in the table as a colored square, and `fig.colorbar()` adds a key showing which color corresponds to which value. Without a color bar, a reader has no way of knowing what the colors mean, so always include one! In the `"viridis"` color map, lighter (yellow) cells have higher values and darker (purple) cells have lower values.
+
+`matplotlib` has many other built-in color maps, which you can browse in the [`matplotlib` color map documentation](https://matplotlib.org/stable/users/explain/colors/colormaps.html). Make an addition to the code below to make the same heat map using the `"magma"` color map instead of `"viridis"`.
+
+```{python heatmap_ex, exercise = TRUE, jupyter_compat = TRUE, message = FALSE, exercise.setup="setup_py"}
+sleep_table = dorm_floors.pivot_table(index="floor", columns="year", values="sleep_hours", aggfunc="mean")
+
+fig, ax = plt.subplots(figsize=(5, 6))
+heatmap = ax.imshow(sleep_table, aspect="auto")
+fig.colorbar(heatmap, ax=ax, label="Mean hours of sleep")
+
+ax.set_xticks(range(len(sleep_table.columns)), labels=sleep_table.columns)
+ax.set_yticks(range(len(sleep_table.index)), labels=sleep_table.index)
+ax.set_title("Mean Hours of Sleep by Floor and Year")
+ax.set_xlabel("Year")
+ax.set_ylabel("Floor")
+
+plt.show()
+```
+
+```{python heatmap_ex-solution, message = FALSE, warning = FALSE, echo = FALSE}
+sleep_table = dorm_floors.pivot_table(index="floor", columns="year", values="sleep_hours", aggfunc="mean")
+
+fig, ax = plt.subplots(figsize=(5, 6))
+heatmap = ax.imshow(sleep_table, cmap="magma", aspect="auto")
+fig.colorbar(heatmap, ax=ax, label="Mean hours of sleep")
+
+ax.set_xticks(range(len(sleep_table.columns)), labels=sleep_table.columns)
+ax.set_yticks(range(len(sleep_table.index)), labels=sleep_table.index)
+ax.set_title("Mean Hours of Sleep by Floor and Year")
+ax.set_xlabel("Year")
+ax.set_ylabel("Floor")
+
+plt.show()
+```
+
+```{r heatmap_ex-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
+```
