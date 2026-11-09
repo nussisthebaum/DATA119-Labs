@@ -512,8 +512,7 @@ question_numeric(
   min = 0,
   max = 24,
   step = 0.01,
-  allow_retry = TRUE,
-  post_message = "Congratulations! You have found the second secret word: DELETE."
+  allow_retry = TRUE
 )
 ```
 
@@ -585,22 +584,114 @@ question(
 ```
 
 
-
 ## Experiments
+
+In the previous section, we focused on how to collect a sample that represents the population, so that we could describe some characteristics of that population.
+However, often we want to answer a different kind of question: not just *what* is happening, but *why*.
+
+For example, suppose we find that dorm residents who sleep more also tend to get better grades. Does getting more sleep *cause* students to do better in their classes? Or is there some other variable, like courseload, that impacts both sleep and grades? 
+To answer questions about cause and effect, we would need to run an **experiment**, where we apply a treatment (like getting 8 hours of sleep) to some individuals, and compare them to individuals who don't.
+
+However, we should note that conducting an experiment is not always feasible or ethical.
+Experiments are considered the gold standard for learning about cause and effect, but they require us to control what each person does.
+How would we make sure that students in our sleep experiment actually sleep exactly 8 hours every night, or eat exactly what we tell them to for a whole quarter?
+And for some questions, assigning a treatment would be harmful: we could never ethically tell a group of students to sleep only 4 hours a night to see whether their grades drop.
+
+In cases like these, we often rely on **observational studies** instead, where we collect data on what people already do without changing anything about their behavior.
+Observational studies can still tell us a lot, as long as we keep in mind that they show us *associations*, and we need to be careful before making conclusions about causation.
+
 
 ### Experimental Design
 
-### Causality and Confounding
+Experiments are designed to test hypotheses about cause and effect. In an experiment, we typically split participants into two groups: a **treatment group**, which receives the treatment or intervention, and a **control group**, which does not. We then compare the outcomes of the two groups to see if the treatment had an effect.
+
+A well-designed experiment should have the following characteristics:
+
+* Randomization: Participants are randomly assigned to treatment and control groups to reduce bias and ensure that the groups are comparable.
+* Control: The control group serves as a baseline for comparison, allowing us to isolate the effect of the treatment. Often, the control group receives a placebo or standard treatment, rather than none at all.
+* Replication: The experiment is repeated with multiple participants to ensure that the results are reliable and not due to chance.
+* Blocking: Participants are grouped into blocks based on certain characteristics (like age or gender) before randomization, to ensure that these characteristics are balanced across treatment and control groups.
+
+Suppose researchers want to know whether taking a 30-minute afternoon nap improves exam scores for the residents of our dorm. Each designed experiment below is missing one of the characteristics above. Choose which one in the following questions:
+
+```{r q11, echo=FALSE}
+question(
+  "Residents get to choose whether they want to be in the nap group or not.",
+  answer("Randomization", correct = TRUE, message = "Residents who choose to nap might already be different from those who don't. For example, they might have lighter course loads, which could also affect their exam scores."),
+  answer("Control"),
+  answer("Replication"),
+  answer("Blocking"),
+  allow_retry = TRUE
+)
+```
+
+```{r q12, echo=FALSE}
+question(
+  "All 60 residents take a nap every afternoon, and the researchers check whether their exam scores went up.",
+  answer("Randomization"),
+  answer("Control", correct = TRUE, message = "Without a group that doesn't nap, we can't tell whether exam scores changed because of the naps or because of something else, like the second exam being easier."),
+  answer("Replication"),
+  answer("Blocking"),
+  allow_retry = TRUE
+)
+```
+
+```{r q13, echo=FALSE}
+question(
+  "The researchers randomly assign 2 residents to the nap group and 2 residents to a control group that spends 30 minutes each afternoon resting quietly in their rooms without sleeping.",
+  answer("Randomization"),
+  answer("Control"),
+  answer("Replication", correct = TRUE, message = "With only 2 residents in each group, any difference in exam scores could easily be due to chance."),
+  answer("Blocking"),
+  allow_retry = TRUE,
+  post_message = "Congratulations! You have found the second secret word: DELETE."
+)
+```
+
+Blocking might sound familiar: it uses the same idea as one of the sampling methods we saw earlier.
+
+```{r q15, echo=FALSE}
+question(
+  "Suppose we block by class year (splitting residents into freshmen and sophomores, then randomly assigning half of each year to the nap group). Which sampling method is most similar to blocking?",
+  answer("Stratified sampling", correct = TRUE, message = "In both, we split the individuals into groups first, then randomize within each group. Stratified sampling uses this to choose who is in the sample, while blocking uses it to choose who gets the treatment."),
+  answer("Simple random sampling"),
+  answer("Cluster sampling"),
+  answer("Convenience sampling"),
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
+#### Blinding
+
+In addition to the attributes above, experiments can also be **blinded**. In a blinded experiment, participants do not know whether they are in the treatment or control group. This helps to reduce bias in their responses and behavior. An experiment can be **single-blind**, where only the participants are unaware of their group assignment, or **double-blind**, where both the participants and the researchers interacting with them are unaware of the group assignments.
+
+### Causality
+
+Establishing causality, or showing that a change in one variable directly causes a change in another variable, is a key goal of experiments. Beyond our experiments, we also need:
+
+* Theoretical justification: There should be a logical reason to believe that the treatment could cause the observed effect.
+* Temporal sequencing: The cause must occur before the effect.
+* Evidence of association: There must be a statistically significant relationship in the data between the treatment and the outcome.
+* Elimination of alternate causes: There must be no other plausible explanations for the observed effect, which is why we need to control for **confounding variables**. More on these later.
+
+```{r q16, echo=FALSE}
+question(
+  "At the end of the quarter, researchers survey the dorm residents once and find that students who report feeling more stressed also report sleeping fewer hours. One researcher argues that stress keeps students awake at night, while another argues that sleeping less makes students more stressed. Which requirement for causality is hardest to establish from this data?",
+  answer("Temporal sequencing", correct = TRUE, message = "Because the survey only measured stress and sleep at one point in time, we can't tell which one changed first, so either could be the cause."),
+  answer("Evidence of association"),
+  answer("Theoretical justification"),
+  answer("Elimination of alternate causes"),
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
 
 
 
-<!-- TODO -->
+## Introduction to Visualization in Python
 
-<!-- ============================ Data Visualization ============================ -->
 
-## Introduction to Matplotlib
-
-<!-- TODO -->
 
 ### What's in a Plot?
 
