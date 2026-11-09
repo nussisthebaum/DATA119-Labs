@@ -275,6 +275,71 @@ tags$div(
 )
 ```
 
+```{js mcq-cooldown, echo=FALSE}
+// Cooldown on the "Try Again" button of multiple choice questions (radio buttons or
+// checkboxes; numeric questions are not affected). The wait is 10 seconds after the first
+// wrong answer to a question and 10 seconds longer after each one after that, up to 60.
+// Attempts are saved in the browser so reloading the page doesn't reset the countdown.
+(function() {
+  var FIRST_WAIT = 10, EXTRA_WAIT = 10, MAX_WAIT = 60;  // seconds
+  var KEY = "mcq-cooldown:" + window.location.pathname;
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  var justSubmitted = {};
+
+  // When a multiple choice answer is submitted, note it, so that a Try Again button
+  // showing up afterwards counts as a new wrong attempt (and one that shows up after a
+  // page reload doesn't)
+  document.addEventListener("click", function(e) {
+    var btn = e.target.closest && e.target.closest('button.btn-primary[id$="-action_button"]');
+    var question = btn && btn.closest(".tutorial-question");
+    if (question && question.querySelector('input[type="radio"], input[type="checkbox"]')) {
+      justSubmitted[question.getAttribute("data-label")] = true;
+    }
+  }, true);
+
+  function startCooldown(btn) {
+    var question = btn.closest(".tutorial-question");
+    if (!question || btn.dataset.cooldown) return;
+    var id = question.getAttribute("data-label");
+    if (justSubmitted[id]) {
+      delete justSubmitted[id];
+      var attempts = (state[id] ? state[id].attempts : 0) + 1;
+      var wait = Math.min(FIRST_WAIT + EXTRA_WAIT * (attempts - 1), MAX_WAIT);
+      state[id] = { attempts: attempts, until: Date.now() + wait * 1000 };
+      save();
+    }
+    if (!state[id]) return;  // not a multiple choice question
+    btn.dataset.cooldown = "true";
+    var label = btn.textContent;
+    (function tick() {
+      var secondsLeft = Math.ceil((state[id].until - Date.now()) / 1000);
+      if (secondsLeft > 0 && document.body.contains(btn)) {
+        btn.disabled = true;
+        btn.textContent = label + " (" + secondsLeft + "s)";
+        setTimeout(tick, 250);
+      } else {
+        btn.disabled = false;
+        btn.textContent = label;
+      }
+    })();
+  }
+
+  // learnr adds a new Try Again button (yellow, btn-warning) each time an answer is wrong
+  var selector = 'button.btn-warning[id$="-action_button"]';
+  new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      m.addedNodes.forEach(function(node) {
+        if (!node.querySelectorAll) return;
+        if (node.matches(selector)) startCooldown(node);
+        node.querySelectorAll(selector).forEach(startCooldown);
+      });
+    });
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+```
+
 ## Goals
 
 After completing this lab, you will be able to:
@@ -692,14 +757,57 @@ question(
 ## Introduction to Visualization in Python
 
 
+### `matplotlib`
+
+`matplotlib` is the most widely used library for making visualizations in Python. It can make almost any kind of static plot, including line plots, bar charts, histograms, scatter plots, box plots, and heat maps, and nearly every part of a plot (colors, labels, fonts, sizes) can be customized. Many other plotting tools, like `seaborn` and the `.plot()` method in `pandas`, are built on top of `matplotlib`, so learning it will help you understand those as well.
+
+Most of the plotting functions we need live in the `pyplot` module, which is conventionally imported as `plt`:
+
+```{python import-plt, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+import matplotlib.pyplot as plt
+```
+
+If you want to see what `matplotlib` can do, check out the [`matplotlib` gallery](https://matplotlib.org/stable/gallery/index.html), which has examples of many different plots along with the code used to make them.
 
 ### What's in a Plot?
 
-<!-- TODO -->
+Every `matplotlib` plot is built from two main objects:
+
+* **Figure** (usually saved as `fig`): the entire window or page that everything is drawn on. You can think of it as a blank canvas. The figure controls things like the overall size of the image, and it is what we save when we want to export a plot.
+* **Axes** (usually saved as `ax`): an individual plot that lives on the figure, with its own x-axis, y-axis, and data. Most of the work of making a plot, like drawing the data, adding a title, and labeling the axes, is done by calling methods on `ax`.
+
+The most common way to create both at once is with `plt.subplots()`. In the example below, we use the freshman and sophomore means that we calculated in the stratified sampling section to make a bar chart (more on each chart type in the next section). Notice that each line after the first one calls a method on `ax`:
+
+```{python fig-ax-example, exercise = TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup="setup_py"}
+fig, ax = plt.subplots(figsize=(6, 4))  # a 6 inch by 4 inch figure with one set of axes
+
+ax.bar(["Freshman", "Sophomore"], [7.06, 7.56])  # draw the data
+ax.set_title("Mean Hours of Sleep by Year")       # add a title
+ax.set_xlabel("Year")                             # label the x-axis
+ax.set_ylabel("Mean hours of sleep")              # label the y-axis
+
+plt.show()
+```
+
+A single figure can also hold more than one set of axes. For example, `fig, axes = plt.subplots(1, 2)` creates a figure with two plots side by side, and `axes[0]` and `axes[1]` are the two `Axes` objects that we can draw on separately.
+
+You may also see code that calls functions directly on `plt`, like `plt.bar()` and `plt.title()`, without ever creating `fig` and `ax`. In that case, `matplotlib` creates a figure and axes for you in the background and draws on them. This is quicker for simple plots, but working with `fig` and `ax` directly gives you more control, especially when a figure has multiple plots.
 
 ### Best Practices
 
-<!-- TODO -->
+Everyone has their own preferences when it comes to visualizations, but here are some best practices that will help you make clear, effective plots:
+
+* **Choose the right type of plot for your data.** Different plots are suited to different kinds of data. For example, a bar chart compares categories, while a histogram shows the distribution of a numerical variable. We will look at several types of plots in the next section.
+* **Label everything.** Every plot should have a title and labels on both axes, including units when there are any (e.g., "Hours of sleep" rather than "sleep_hours"). If a plot shows more than one group, add a legend.
+* **Use color meaningfully.** Color should show something about the data, like which group a point belongs to, rather than just being decoration. Use the same color for the same group across all of your plots, and choose colors that are colorblind-friendly (`matplotlib`'s default colors and color maps like `"viridis"` are good choices).
+* **Don't distort the data.** For example, the y-axis of a bar chart should start at 0, since the height of each bar is meant to represent its value. Starting it higher can make small differences look much bigger than they really are.
+* **Keep it simple.** Avoid clutter like 3D effects, heavy gridlines, or extra decorations that make the data harder to read. Make sure text is large enough to read easily.
+* **Write captions.** A short caption below a plot should explain what it shows and what the reader should take away from it, so that the plot makes sense on its own.
+* **Save plots as PDFs.** PDFs are vector images, meaning they stay sharp no matter how far you zoom in, and they are easy to view and add to reports. You can save a figure with `fig.savefig()`:
+
+```python
+fig.savefig("sleep_by_year.pdf", bbox_inches="tight")  # bbox_inches="tight" trims extra white space
+```
 
 ## Types of Plots in Matplotlib
 
