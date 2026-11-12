@@ -495,7 +495,9 @@ In order to use the sample to make plausible claim about the population, we need
 
 #### Simple Random Sampling 
 
-With this sampling method, every individual in the population has an equal chance of being selected for the sample. In practice, this can be achieved by using a random number generator or drawing names from a hat. We can implement Simple Random Sampling easily in Python using the `numpy` function `np.random.choice()`. 
+With this sampling method, every individual in the population has an equal chance of being selected for the sample. 
+In practice, this can be achieved by using a random number generator or drawing names from a hat. 
+We can implement Simple Random Sampling easily in Python using the `numpy` function `np.random.choice()`. Recall that we used `random.sample()` in lecture; these functions have similar functionalities, but one difference is that `np.random.choice()` samples with replacement by default, while `random.sample()` samples without replacement by default. 
 
 For this example, let's imagine that our 100 student array `study_hours` is our *population* of interest, i.e., we only care about the 100 students who were studying in Regenstein at 10 pm on a particular Tuesday night. 
 We can use the following code to take a simple random sample of 10 students from the `study_hours` array:
@@ -587,7 +589,7 @@ freshmen = dorm[dorm["year"] == "Freshman"]
 sophomores = dorm[dorm["year"] == "Sophomore"]
 ```
 
-The `freshmen` and `sophomores` data frames from your code above are available in the cell below. Use them to calculate the mean hours of sleep for all of the freshmen and all of the sophomores in the dorm.
+The `freshmen` and `sophomores` data frames from your code above are available in the cell below. Use them to calculate the mean hours of sleep for all of the freshmen and all of the sophomores in the dorm. Recall that data fames and series have a `.mean()` method that can be used to calculate the mean of a column.
 
 ```{python strat_pop_calc, exercise = TRUE, message = FALSE, exercise.setup = "strat-pop-setup"}
 
