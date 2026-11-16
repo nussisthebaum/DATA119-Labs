@@ -4,6 +4,9 @@ output:
    learnr::tutorial:
       css: css/custom-styles.css
 runtime: shiny_prerendered
+tutorial:
+   id: "data119-data-collection-visualization"
+   version: 1.0
 ---
 
 ```{r setup, include=FALSE}
