@@ -649,21 +649,7 @@ import matplotlib.pyplot as plt
 
 ```
 
-```{r q27, echo=FALSE}
-question(
-  "Check all options that apply to the shape of this histogram.",
-  answer("Uniform"),
-  answer("Unimodal", correct = TRUE),
-  answer("Bimodal"),
-  answer("Multimodal"),
-  answer("Symmetric", correct = TRUE),
-  answer("Right-Skewed"),
-  answer("Left-Skewed"),
-  allow_retry = TRUE
-)
-```
-
-Normal distributions are symmetric and unimodal (also often called "bell-shaped")--this data is normal, and therefore, we are safe in assuming that the sampling distribution is also normal.
+Normal distributions are symmetric and unimodal (also often called "bell-shaped")--this data is approximately normal, and therefore, we are safe in assuming that the sampling distribution is also normal.
 
 2. Next, we assume the data are independent from each other, that is, no one observation gives us any information about the others. There is no good way to check independence other than to look at the context of the data. In this case, the franchise owner has assured us the sample is random, and therefore, we are again safe in assuming the data is independent.
 
