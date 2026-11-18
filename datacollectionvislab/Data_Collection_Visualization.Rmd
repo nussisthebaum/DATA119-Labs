@@ -4,6 +4,9 @@ output:
    learnr::tutorial:
       css: css/custom-styles.css
 runtime: shiny_prerendered
+tutorial:
+   id: "data119-data-collection-visualization"
+   version: 1.0
 ---
 
 ```{r setup, include=FALSE}
@@ -495,7 +498,9 @@ In order to use the sample to make plausible claim about the population, we need
 
 #### Simple Random Sampling 
 
-With this sampling method, every individual in the population has an equal chance of being selected for the sample. In practice, this can be achieved by using a random number generator or drawing names from a hat. We can implement Simple Random Sampling easily in Python using the `numpy` function `np.random.choice()`. 
+With this sampling method, every individual in the population has an equal chance of being selected for the sample. 
+In practice, this can be achieved by using a random number generator or drawing names from a hat. 
+We can implement Simple Random Sampling easily in Python using the `numpy` function `np.random.choice()`. Recall that we used `random.sample()` in lecture; these functions have similar functionalities, but one difference is that `np.random.choice()` samples with replacement by default, while `random.sample()` samples without replacement by default. 
 
 For this example, let's imagine that our 100 student array `study_hours` is our *population* of interest, i.e., we only care about the 100 students who were studying in Regenstein at 10 pm on a particular Tuesday night. 
 We can use the following code to take a simple random sample of 10 students from the `study_hours` array:
@@ -587,7 +592,7 @@ freshmen = dorm[dorm["year"] == "Freshman"]
 sophomores = dorm[dorm["year"] == "Sophomore"]
 ```
 
-The `freshmen` and `sophomores` data frames from your code above are available in the cell below. Use them to calculate the mean hours of sleep for all of the freshmen and all of the sophomores in the dorm.
+The `freshmen` and `sophomores` data frames from your code above are available in the cell below. Use them to calculate the mean hours of sleep for all of the freshmen and all of the sophomores in the dorm. Recall that data fames and series have a `.mean()` method that can be used to calculate the mean of a column.
 
 ```{python strat_pop_calc, exercise = TRUE, message = FALSE, exercise.setup = "strat-pop-setup"}
 
@@ -768,6 +773,18 @@ question(
 
 In addition to the attributes above, experiments can also be **blinded**. In a blinded experiment, participants do not know whether they are in the treatment or control group. This helps to reduce bias in their responses and behavior. An experiment can be **single-blind**, where only the participants are unaware of their group assignment, or **double-blind**, where both the participants and the researchers interacting with them are unaware of the group assignments.
 
+```{r q15b, echo=FALSE}
+question(
+  "Were any of the nap experiments in the previous section blinded?",
+  answer("No, because residents always know whether or not they took a nap.", correct = TRUE, message = "Even when the control group rests quietly instead of sleeping, residents can tell which group they are in, so none of these experiments are blinded."),
+  answer("Yes, the experiment where the control group rests quietly in their rooms is single-blind, because resting feels similar to napping."),
+  answer("Yes, the experiment where all 60 residents nap is blinded, because everyone gets the same treatment."),
+  answer("Yes, the experiments where residents are randomly assigned to groups are blinded, because the residents don't choose their group."),
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
+```
+
 ### Causality
 
 Establishing causality, or showing that a change in one variable directly causes a change in another variable, is a key goal of experiments. Beyond our experiments, we also need:
@@ -916,7 +933,11 @@ question_numeric(
 )
 ```
 
-We can choose the number of bins ourselves with the `bins` argument. The number of bins can change how a histogram looks quite a bit: too few bins can hide the shape of the data, while too many can make it look noisy. Change the code below to make the same histogram with 20 bins. 
+We can choose the number of bins ourselves with the `bins` argument. The number of bins can change how a histogram looks quite a bit: too few bins can hide the shape of the data, while too many can make it look noisy.
+If you're not sure how many bins to use, a good rule of thumb is to start with the square root of the sample size.
+
+Now, change the code below to make the same histogram with 20 bins. 
+
 
 ```{python hist_bins_ex, exercise = TRUE, message = FALSE, exercise.setup="setup_py"}
 fig, ax = plt.subplots(figsize=(6, 4))
@@ -952,7 +973,8 @@ A **box plot** (or box-and-whisker plot) summarizes the distribution of a numeri
 * **Third quartile ($Q_3$)**: the value that 75% of the data falls below.
 * **Maximum**: the largest value.
 
-The distance between the first and third quartiles, $Q_3 - Q_1$, is called the **interquartile range (IQR)**, and it measures the spread of the middle 50% of the data.
+The sample median (sometimes called $\tilde{x}$, but that is fairly rare) is the point at which the dataset is split in half--50% of observations below, and 50% of observations above. To related this to a concept we are already familiar with--the median is the $50^{th}$ percentile! 
+The distance between the first and third quartiles, $Q_3 - Q_1$, is called the **interquartile range (IQR)**, and it measures the spread of the middle 50% of the data. You can see the five-number summary and the IQR in the box plot below, which shows the hours studied per week by the 100 students surveyed in Regenstein.
 
 We can calculate the five-number summary for `study_hours` with `numpy`:
 
@@ -974,6 +996,23 @@ ax.set_ylabel("Hours studied per week")
 ax.set_xticks([1], labels=["Surveyed students"])
 
 plt.show()
+```
+
+Notice that the mean and the median are both **measures of central tendency**: they are both trying to describe the center of a dataset. However, these two numbers can sometimes be fairly different! That usually has to do with **outliers**, or values that are unusually distant from the rest of the dataset. Because the mean is calculated using every value in the dataset, a single extreme value can pull it a long way toward that outlier. The median, on the other hand, only depends on the middle value(s), so it barely changes. Box plots and histograms are good ways to spot outliers before deciding which measure of center to report.
+
+**Robust statistics** are statistics that are minimally influenced by outliers. You can also say these statistics are **resistant** to outliers. The median is robust, whereas the mean is not. In datasets with large outliers, it is good practice to report the median instead of the mean to avoid having your results impacted by extreme values.
+
+```{r q18b, echo=FALSE}
+question(
+  "Suppose one more student is added to the `study_hours` survey, but when entering their answer the researcher accidentally types 1000 hours instead of 10. Which of the following are true? Select all that apply.",
+  answer("The mean of `study_hours` would increase by a lot.", correct = TRUE),
+  answer("The median of `study_hours` would change very little, if at all.", correct = TRUE),
+  answer("The median is a better measure of the center of this new dataset than the mean.", correct = TRUE),
+  answer("The median would increase more than the mean."),
+  answer("The mean is resistant to outliers."),
+  allow_retry = TRUE,
+  random_answer_order = TRUE
+)
 ```
 
 Box plots are especially useful for comparing the distributions of several groups side by side. To do this, we pass `ax.boxplot()` a list with one set of values for each group. Here we compare the hours of sleep for freshmen and sophomores in our dorm:

@@ -4,6 +4,9 @@ output:
    learnr::tutorial:
       css: css/custom-styles.css
 runtime: shiny_prerendered
+tutorial:
+   id: "data119-confidence-intervals"
+   version: 1.0
 ---
 
 ```{r setup, include=FALSE}
@@ -18,9 +21,143 @@ library(reticulate)
 #reticulate::use_python("/opt/python/3.9.21/bin/python", required = TRUE)
 
 # Optional: Install necessary Python packages if not already installed
-# reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
+#reticulate::py_install(c('numpy', 'pandas', 'plotnine'))
 
-custom_checker <- function(label, user_code, solution_code, envir_result, evaluate_result, last_value, stage, ...) {
+# Exercises graded on a value instead of the exact code.
+# Add an entry here to opt an exercise in, using list(var) to check a variable,
+# list(expr) to check a Python expression, or list(last_value = TRUE) to check the
+# student's last line. The result is compared against the same thing computed from
+# the exercise's -solution chunk; add value = ... to compare against a fixed number
+# instead. Add defines = "name" to require the student's code to define that name
+# itself. Any exercise not listed is graded by exact code match against its
+# -solution chunk.
+value_checks <- list(
+  # The summary table from .describe() (or anything with the same values)
+  ex13 = list(last_value = TRUE),
+  mean = list(var = "mean_mcds", defines = "mean_mcds"),
+  # np.std() without ddof = 1 gives the population standard deviation, which won't match
+  sd = list(var = "std_mcds", defines = "std_mcds"),
+  n = list(last_value = TRUE),
+  se = list(var = "se_mcds", defines = "se_mcds"),
+  # The 2.5th percentile (a negative t*) works just as well as the 97.5th, so compare sizes
+  ex30 = list(expr = "abs(t_star)", defines = "t_star"),
+  ex31 = list(expr = "abs(MoE_mcds)", defines = "MoE_mcds"),
+  ex32 = list(expr = paste(
+    'int(bool(np.isclose(lower_mcds, mean_mcds - abs(MoE_mcds)))',
+    'and bool(np.isclose(upper_mcds, mean_mcds + abs(MoE_mcds))))'),
+    value = 1, defines = c("lower_mcds", "upper_mcds")),
+  # t.interval() returns a (lower, upper) tuple
+  ex34 = list(last_value = TRUE)
+)
+
+# Python helpers for custom_checker (done in Python so they work the same on every
+# Python version).
+# get_result runs code like learnr does (setup objects visible, new variables kept
+# separate) and returns the value being checked.
+# values_match compares a student's result to the expected one. Data frames and
+# series match if they have the same row labels and values, ignoring their names and
+# row order. Tuples and lists match if each of their elements match.
+checker_py <- '
+# (imports go inside the functions because py_run_string keeps top-level names local)
+def get_result(code, var=None, expr=None, last_value=False, defines=()):
+    import ast
+    import __main__
+    tree = ast.parse(code)
+    if last_value:
+        if not tree.body:
+            raise ValueError("no code")
+        last = tree.body[-1]
+        if isinstance(last, ast.Assign) and len(last.targets) == 1 and isinstance(last.targets[0], ast.Name):
+            # Last line is `name = expr`, so read `name`
+            var = last.targets[0].id
+        elif isinstance(last, ast.Expr):
+            # Rewrite the last line `expr` as `__check_result__ = expr` so we can read it
+            target = ast.Name(id="__check_result__", ctx=ast.Store())
+            tree.body[-1] = ast.copy_location(ast.Assign(targets=[target], value=last.value), last)
+            ast.fix_missing_locations(tree)
+            var = "__check_result__"
+        else:
+            raise ValueError("last line is not an expression")
+    user_vars = {}
+    # Plotting code ends in plt.show(), which could try to open a window when run here, so
+    # turn it off while the code runs and close the figures it made afterwards
+    import sys
+    pyplot = sys.modules.get("matplotlib.pyplot")
+    if pyplot is not None:
+        real_show = pyplot.show
+        pyplot.show = lambda *args, **kwargs: None
+    try:
+        exec(compile(tree, "<exercise>", "exec"), __main__.__dict__, user_vars)
+    finally:
+        if pyplot is not None:
+            pyplot.show = real_show
+            pyplot.close("all")
+    if expr is not None:
+        user_vars["__check_result__"] = eval(expr, __main__.__dict__, user_vars)
+        var = "__check_result__"
+    for name in list(defines) + [var]:
+        if name not in user_vars:
+            raise NameError(name + " not defined")
+    return user_vars[var]
+
+def values_match(actual, expected):
+    import numpy as np
+    import pandas as pd
+    if isinstance(expected, (tuple, list)):
+        if not isinstance(actual, (tuple, list, np.ndarray)) or len(actual) != len(expected):
+            return False
+        # (compared here directly: values_match cannot call itself, since py_run_string keeps its name local)
+        try:
+            return all(bool(np.isclose(float(a), float(e))) for a, e in zip(actual, expected))
+        except (TypeError, ValueError):
+            return False
+    if isinstance(expected, (pd.Series, pd.DataFrame)):
+        actual, expected = [
+            x.squeeze(axis=1) if isinstance(x, pd.DataFrame) and x.shape[1] == 1 else x
+            for x in (actual, expected)
+        ]
+        if type(actual) is not type(expected):
+            return False
+        actual, expected = actual.sort_index(), expected.sort_index()
+        if list(actual.index) != list(expected.index):
+            return False
+        if isinstance(expected, pd.DataFrame):
+            last_level = lambda cols: [c[-1] if isinstance(c, tuple) else c for c in cols]
+            if last_level(actual.columns) != last_level(expected.columns):
+                return False
+        try:
+            return bool(np.allclose(actual.to_numpy(dtype=float), expected.to_numpy(dtype=float), equal_nan=True))
+        except (TypeError, ValueError):
+            return False
+    try:
+        return bool(np.isclose(float(actual), float(expected)))
+    except (TypeError, ValueError):
+        return False
+'
+
+custom_checker <- function(label, user_code, solution_code, check_code, envir_result, evaluate_result, envir_prep, last_value, stage, ...) {
+  # (learnr doesn't pass the last value of Python chunks, so we run the code)
+  if (label %in% names(value_checks)) {
+    if (stage != "check") return()
+    spec <- value_checks[[label]]
+    correct <- tryCatch({
+      helpers <- reticulate::py_run_string(checker_py, local = TRUE, convert = FALSE)
+      get_result <- function(code) {
+        helpers$get_result(code, var = spec$var, expr = spec$expr,
+                           last_value = isTRUE(spec$last_value), defines = as.list(spec$defines))
+      }
+      values_match <- helpers$values_match
+      # Student's code runs first, so if it modifies shared data the solution can't fill it in for them
+      actual <- get_result(user_code)
+      expected <- if (is.null(spec$value)) get_result(solution_code) else reticulate::r_to_py(spec$value)
+      isTRUE(reticulate::py_to_r(values_match(actual, expected)))
+    }, error = function(e) FALSE)
+    if (correct) {
+      return(list(message = random_praise(), correct = TRUE))
+    }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+  # Exact code checking (requires a <label>-solution chunk and <label>-code-check chunk)
   if (stage == "code_check") {
       if (user_code == solution_code){
           return(list(message = random_praise(), correct = TRUE))
@@ -30,7 +167,8 @@ custom_checker <- function(label, user_code, solution_code, envir_result, evalua
 }
 
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker,
+                 exercise.reveal_solution = FALSE)
 
 state_x77_df <- as.data.frame(state.x77)
 ```
@@ -52,6 +190,73 @@ tags$div(
 )
 ```
 
+```{js mcq-cooldown, echo=FALSE}
+// Cooldown on the "Try Again" button of multiple choice questions (radio buttons or
+// checkboxes; numeric questions are not affected). The wait is 10 seconds after the first
+// wrong answer to a question and 10 seconds longer after each one after that, up to 60.
+// Attempts are saved in the browser so reloading the page doesn't reset the countdown.
+(function() {
+  var FIRST_WAIT = 10, EXTRA_WAIT = 10, MAX_WAIT = 60;  // seconds
+  // The page title is part of the key so labs served from the same address (like
+  // localhost) don't share each other's attempts
+  var KEY = "mcq-cooldown:" + window.location.pathname + ":" + document.title;
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  var justSubmitted = {};
+
+  // When a multiple choice answer is submitted, note it, so that a Try Again button
+  // showing up afterwards counts as a new wrong attempt (and one that shows up after a
+  // page reload doesn't)
+  document.addEventListener("click", function(e) {
+    var btn = e.target.closest && e.target.closest('button.btn-primary[id$="-action_button"]');
+    var question = btn && btn.closest(".tutorial-question");
+    if (question && question.querySelector('input[type="radio"], input[type="checkbox"]')) {
+      justSubmitted[question.getAttribute("data-label")] = true;
+    }
+  }, true);
+
+  function startCooldown(btn) {
+    var question = btn.closest(".tutorial-question");
+    if (!question || btn.dataset.cooldown) return;
+    var id = question.getAttribute("data-label");
+    if (justSubmitted[id]) {
+      delete justSubmitted[id];
+      var attempts = (state[id] ? state[id].attempts : 0) + 1;
+      var wait = Math.min(FIRST_WAIT + EXTRA_WAIT * (attempts - 1), MAX_WAIT);
+      state[id] = { attempts: attempts, until: Date.now() + wait * 1000 };
+      save();
+    }
+    if (!state[id]) return;  // not a multiple choice question
+    btn.dataset.cooldown = "true";
+    var label = btn.textContent;
+    (function tick() {
+      var secondsLeft = Math.ceil((state[id].until - Date.now()) / 1000);
+      if (secondsLeft > 0 && document.body.contains(btn)) {
+        btn.disabled = true;
+        btn.textContent = label + " (" + secondsLeft + "s)";
+        setTimeout(tick, 250);
+      } else {
+        btn.disabled = false;
+        btn.textContent = label;
+      }
+    })();
+  }
+
+  // learnr adds a new Try Again button (yellow, btn-warning) each time an answer is wrong
+  var selector = 'button.btn-warning[id$="-action_button"]';
+  new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      m.addedNodes.forEach(function(node) {
+        if (!node.querySelectorAll) return;
+        if (node.matches(selector)) startCooldown(node);
+        node.querySelectorAll(selector).forEach(startCooldown);
+      });
+    });
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+```
+
 ```{python setup_py, context="setup", echo = FALSE, message = FALSE, warning = FALSE}
 import numpy as np 
 import pandas as pd
@@ -59,7 +264,7 @@ import scipy.stats as st
 from scipy.stats import t
 import statistics 
 
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import seaborn
 import plotnine as p9
 
@@ -86,6 +291,7 @@ mcds = np.array([293, 174, 100, 272, 207, 145, 148, 495,
 mean_mcds = np.mean(mcds)
 std_mcds = np.std(mcds, ddof = 1)
 se_mcds = std_mcds/np.sqrt(len(mcds))
+t_star = t.ppf(0.975, df = 63)
 MoE_mcds = se_mcds*t_star
 ```
 
@@ -97,60 +303,28 @@ The goal of this lab is to review confidence intervals, complete with an example
 
 This lab will use `numpy`, `pandas`, `scipy.stats`, and `statistics`. You may also want to use your favorite graphics packages (`matplotlib`, `seaborn`, or `plotnine`). Run this cell to load the packages. 
 
-```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE}
+```{python packages, exercise=TRUE, exercise.eval = FALSE, message = FALSE, exercise.setup = "setup_py"}
 import numpy as np 
 import pandas as pd
 import scipy.stats as st 
 import statistics 
 
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import seaborn
 import plotnine as p9
 ```
 
-## Parameters and Statistics
+## A Review of Parameters and Statistics
 
 Hypothesis tests are a form of statistical inference, but before we review the specifics, let's take a step back. 
 
-Remember that a **population** is a complete group of all cases, subjects, or observations of interest. Examples of populations include
+Remember that a **population** is a complete group of all cases, subjects, or observations of interest. 
+Summaries of various numerical characteristics of a population are known as **parameters**. 
 
-* All adults living in the United States,
-* All tubes of toothpaste produced at a specific factory, or 
-* All students enrolled in at least one course at the University of Chicago. 
+For various reasons, we can't always gather information on an entire population (known as a census). Instead, we usually work with a **sample** of data, where a sample is defined as a subset of the cases, subjects, or observations in a given population.
+Once you have acquired a sample, you can calculate a **statistic**. A statistic describes a numerical characteristic of a sample, and the intent is to use them to estimate the population parameter. 
 
-Summaries of various numerical characteristics of a population are known as **parameters**. Examples of parameters corresponding to our population examples could be 
-
-* The average height of adults living in the United States, 
-* The average weight of a tube of toothpaste, or 
-* The average grade point average of a student at the University of Chicago. 
-
-For various reasons, we can't always gather information on an entire population (known as a census). Instead, we usually work with a **sample** of data, where a sample is defined as a subset of the cases, subjects, or observations in a given population. We prefer our samples to be randomly selected, but sometimes, we use convenience samples--for example, using this class as a sample of all students at the University of Chicago. 
-
-Once you have acquired a sample, you can calculate a **statistic**. A statistic describes a numerical characteristic of a sample, and the intent is to use them to estimate the population parameter. Notation-wise, it is traditional to use Greek letters ($\mu, \sigma, \beta$) to indicate a parameter, and Latin letters ($\bar{x}, s, b$) to indicate statistics. So, we would use $\bar{x}$, the sample mean, to estimate $\mu$, the population mean. Specifically, we might take a poll of every student in our class (the sample), asking everyone what their GPA is and averaging them ($\bar{x}$), and use that information to estimate the average GPA ($\mu$) for the entire university (the population).
-
-A table of parameters you might encounter appears below. Note that some of these you will not be exposed to until DATA119--the statistics in black are the ones we will focus on in DATA118.
-
-```{r, echo = FALSE}
-library(kableExtra)
-
-mu <- c("$\\mu$", "$\\bar{x}$", "Measuring the center/location of a distribution")
-sd <- c("$\\sigma$", "$s$", "Measuring the spread/scale of a distribution")
-prop <- c("$\\pi$ or $p$", "$p$ or $\\hat{p}$", "Measuring the frequency of a binary variable")
-corr <- c("$\\rho$", "$R$ or $r$", "Measuring the relationship between two numeric variables--More in DATA119.")
-int <- c("$\\beta_0$", "$b_0$", "Linear Regression--More in DATA119")
-slope <- c("$\\beta_p$", "$b_p$", "Linear Regression--More in DATA119")
-odds <- c("$\\omega$", "$\\hat{\\omega}$", "Alternative to proportions--More in DATA119")
-odds_r <- c("$\\phi$", "$\\hat{\\phi}$", "Medical Research--More in DATA119")
-
-parm_table <- rbind(mu, sd, prop, corr, int, slope, odds, odds_r)
-colnames(parm_table) <- c("Parameter", "Statistic", "Used for")
-rownames(parm_table) <- c("Mean", "Std. Dev.", "Proportion", "Correlation", "Intercept", "Slope", "Odds", "Odds Ratio")
-
-kable(parm_table, escape = FALSE, booktabs = TRUE) %>%
-  column_spec(column = 1, width = "1in") %>%  # Set 1st column width
-  column_spec(column = 2, width = "1in")  %>%  # Set 2nd column width 
-  column_spec(column = 3, width = "1in") 
-```
+If you need a refresher on any of these terms, refer back to the Data Collection and Visualization lab, where we discussed populations, samples, parameters, and statistics in more detail.
 
 ```{r q1, echo=FALSE}
 question(
@@ -166,208 +340,18 @@ question(
 
 ## Point Estimates
 
-We have already said that statistical inference is the idea of making or drawing conclusions about parameters based on samples of data. Again, we very rarely know what these parameters are, which is why we need to test them! However, we might have data to calculate a statistic (like the sample average $\bar{x}$). Let's review some basic statistics including the mean of a sample, $\bar{x}$, the median of a sample, the standard deviation of a sample $s$, and a sample proportion, $\hat{p}$. 
-
-### Sample Mean $\bar{x}$
-
-The sample mean, $\bar{x}$, is a summary of the center of either a sample or the distribution of a random variable. The sample mean is also sometimes called the average of the dataset. 
-
-To compute the mean of a variable, we add up all of the values and divide by the total number of observations. Formally, 
-
-\begin{align*}
-\bar{x} & = \frac{x_1 + x_2 + ... + x_n}{n} \\
-& \frac{1}{n} \sum_{i=1}^n x_i
-\end{align*}
-
-There are a few different ways to calculate the mean of a sample in Python--it partially depends on how you've stored the data. If you're using a list, you can either use a combination of the built-in functions `sum()` and `len()`, or you can use `mean()` from the `statistics` module.
-
-The following cell contains a list representing the areas of all 50 United States. Write an expression calculating the mean with `sum()` and `len()`, and check to see that it is equal to the result calculating the mean with `mean()` from the `statistics` module.
-
-```{python ex2, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-areas_l = [50708, 566432, 113417, 51945, 156361, 103766,  4862,   1982, 54090, 58073,
-            6425,  82677,  55748, 36097,  55941,  81787, 39650,  44930, 30920,  9891, 
-            7826,  56817,  79289, 47296,  68995, 145587, 76483, 109889,  9027,  7521,
-          121412,  47831,  48798, 69273,  40975,  68782, 96184,  44966,  1049, 30225,
-           75955,  41328, 262134, 82096,   9267,  39780, 66570,  24070, 54464, 97203]
-```
-
-```{python ex2-solution, message = FALSE, warning = FALSE, echo = FALSE}
-sum(areas_l)/len(areas_l) == statistics.mean(areas_l)
-```
-
-```{r ex2-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-You can also use the `mean()` function from `numpy` to calculate the mean of an array. Turn `areas_l` into an array called `areas_a`, and then calculate the mean.
-
-```{python ex3, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-
-```
-
-```{python ex3-solution, message = FALSE, warning = FALSE, echo = FALSE}
-areas_a = np.array(areas_l)
-np.mean(areas_a)
-```
-
-```{r ex3-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-Finally, don't forget that we have methods for data stored in `pandas` data frames, which most often the way we want our data stored. We have an entire data frame, `state_x77_df`, which contains many other variables. Try using `pandas`'s `.mean()` method on this data frame--what values are returned?
-
-```{python ex4, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-
-```
-
-```{python ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
-state_x77_df.mean()
-```
-
-```{r ex4-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-If you wanted only the mean of the areas, you can select a column and apply the `.mean()` method--try this with the `Area` column in the cell below. 
-
-```{python ex5, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-
-```
-
-```{python ex5-solution, message = FALSE, warning = FALSE, echo = FALSE}
-state_x77_df["Area"].mean()
-```
-
-```{r ex5-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-### Sample Median
-
-The sample median (sometimes called $\tilde{x}$, but that is fairly rare) is the point at which the dataset is split in half--50% of observations below, and 50% of observations above. To related this to a concept we are already familiar with--the median is the $50^{th}$ percentile!
-
-To compute the median of a variable, we first order the values from smallest to largest:
-
-* If there are an odd number of observations, the median is the observation in the exact middle.
-* If there are an even number of observations, the median is the average of the two middle observations. 
-
-Because we are most frequently using arrays and data frames, we will skip the calculation of the median for a list of data. Instead, let's focus on finding the median using `numpy` and `pandas`. First, note that there is no *method* for calculating the median of an array, you MUST use `numpy`'s `median()` function instead. Use it to calculate the median in the cell below. 
-
-```{python ex6, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-
-```
-
-```{python ex6-solution, message = FALSE, warning = FALSE, echo = FALSE}
-np.median(areas_a)
-```
-
-```{r ex6-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-`pandas` does have a `median()` method--try using it in the cell below. 
-
-```{python ex7, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-
-```
-
-```{python ex7-solution, message = FALSE, warning = FALSE, echo = FALSE}
-state_x77_df.median()
-```
-
-```{r ex7-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-You could find the median of a single column similarly to how we found the mean--please refer to the previous section for details.
-
-Notice that the mean and the median should be measuring roughly the same thing: the center of the dataset. However, these numbers are fairly different! That has to do with **outliers**, or values that are unusually distant from the rest of the dataset. We can sometimes identify outliers using a histogram--create one for the areas of the United States in the cell below. 
-
-```{python ex8, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-
-```
-
-:::: {.discussionbox}
-::: {.center}
-**Discuss with a neighbor (or on Ed):**
-:::
-
-Do you see any outliers in the histogram? Using what you know about the United States, which states could be considered unusually large or small?
-
-::::
-
-**Robust Statistics** are statistics that are minimally influenced by outliers. You can also say these statistics are **resistant** to outliers. The median is robust, whereas the mean is not. In datasets with large outliers, it is good practice to report the median instead of the mean to avoid having your results impacted by extreme values.
-
-### Sample Standard Deviation $s$
-
-The **standard deviation** represents the typical distance of an observation in a dataset to the mean of the dataset. To compute the standard deviation:
-
-* We find the **deviation** of every observation in the dataset by subtracting the mean from each value. 
-* We square each of the deviations and divide by $n-1$. This quantity is known as the **variance**. 
-* Finally, we take the square root of the variance. 
-
-Formally, 
-
-\begin{align*}
-s & = \sqrt{\frac{(x_1- \bar{x})^2 + (x_2 - \bar{x})^2 + ... + (x_n - \bar{x})^2}{n-1}} \\
-& \sqrt{\frac{1}{n-1} \sum_{i = 1}^n (x_i - \bar{x})^2}
-\end{align*}
-
-As you may guess, it is helpful to know both the `numpy` function and `pandas` methods for standard deviation. First, look up and apply the `numpy` function. 
-
-```{python ex9, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-
-```
-
-```{python ex9-solution, message = FALSE, warning = FALSE, echo = FALSE}
-np.std(areas_a)
-```
-
-```{r ex9-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-Now, look up and apply the `pandas` method. 
-
-```{python ex10, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-
-```
-
-```{python ex10-solution, message = FALSE, warning = FALSE, echo = FALSE}
-state_x77_df.std()
-```
-
-```{r ex10-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-```{r q11, echo=FALSE}
-question(
-  "True or False: The standard deviations calculated with `numpy` and `pandas` are the same.",
-  answer("True"),
-  answer("False", correct = TRUE),
-  allow_retry = TRUE,
-  post_message = "Congratulations! You have found the second secret word: ANNIVERSARY. Enter this word in the Lab 9 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
-)
-```
-
-As it turns out, `numpy` and `pandas` use slightly different formulas. Please know that the one we prefer to use is `pandas`, but we can force `numpy` to give us the preferred equation using the argument `ddof=1`. 
-
-Recalculate the standard deviation using `ddof=1`, and check to see if it is equal to the standard deviation calculated by `pandas.` 
-
-```{python ex12, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
-
-```
-
-```{python ex12-solution, message = FALSE, warning = FALSE, echo = FALSE}
-np.std(areas_a, ddof=1) == state_x77_df.std()["Area"]
-```
-
-```{r ex12-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
-```
-
-`pandas` has one more useful method we haven't seen yet--the `.describe()` method. Apply `.describe()` to the data frame. Do you see some familiar values?
+Let's look at some statistics in practice. The data frame `state_x77_df` contains data on all 50 United States from the 1970s, with one row per state and eight variables:
+
+* `Population`: population estimate as of July 1, 1975 (in thousands)
+* `Income`: per capita income in 1974 (in dollars)
+* `Illiteracy`: percent of the population that was illiterate in 1970
+* `Life Exp`: life expectancy in years (1969--71)
+* `Murder`: murder and non-negligent manslaughter rate per 100,000 people (1976)
+* `HS Grad`: percent of the population that were high-school graduates in 1970
+* `Frost`: mean number of days with a minimum temperature below freezing (1931--1960) in the capital or a large city
+* `Area`: land area in square miles
+
+Rather than calculating each statistic one at a time, `pandas` gives us a shortcut: the `.describe()` method, which calculates several summary statistics for every numeric column of a data frame at once. Apply `.describe()` to `state_x77_df` in the cell below. Do you see some familiar values? (Hint: think back to the mean, standard deviation, and five-number summary from the Data Collection and Visualization lab.)
 
 ```{python ex13, exercise = TRUE, message = FALSE, exercise.setup = "setup_py"}
 
@@ -377,11 +361,9 @@ grade_this_code()
 state_x77_df.describe()
 ```
 
-```{r ex13-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex13-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
-
-<!-- ### Sample Proportion $\hat{p}$ -->
 
 ### Point Estimate Definition
 
@@ -399,8 +381,6 @@ Statistical inference is the idea of **making inferences or drawing conclusions*
 * **Hypothesis Tests** check to see if a dataset is consistent with a previously held belief or a given value for the population paramete (more on this next week!)
 
 These two flavors are related, but this lab focuses on confidence intervals. In contrast to a point estimate, an **interval estimate** gives us information about the variability of a statistic--that is, how much change we can expect in the statistic if we take a new sample. When we construct a confidence interval (a type of interval estimate), we are making statements about parameters (like the population mean $\mu$) that incorporate information about the **sampling variability**. **Confidence intervals are always statements about parameters**--there is no need to build an interval for a statistic, as we know exactly what values those take on. So, more technically, a confidence interval can be thought of as a range of reasonable values for a parameter based on the sample statistics.
-
-### Confidence Interval Framework
 
 ### Sampling Distributions
 
@@ -464,7 +444,7 @@ question(
   answer("`.ppf()`", correct = TRUE),
   answer("`.rvs()`"),
   allow_retry = TRUE,
-  post_message = "Congratulations! You have found the third secret word: LAZY. Enter this word in the Lab 9 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
+  post_message = "Congratulations! You have found the second secret word: LAZY. Enter this word in the Lab 9 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 )
 ```
 
@@ -513,7 +493,6 @@ question_numeric(
   "What is the $t$-score we would use in a 90% confidence interval with 8 degrees of freedom? Round to two decimals.",
   answer(1.86, correct = TRUE),
   min = 0,
-  max = 1,
   step = 0.01,
   allow_retry = TRUE
 )
@@ -524,13 +503,13 @@ question_numeric(
   "What is the $t$-score we would use in a 99% confidence interval with 2 degrees of freedom? Round to two decimals.",
   answer(9.92, correct = TRUE),
   min = 0,
-  max = 1,
   step = 0.01,
-  allow_retry = TRUE
+  allow_retry = TRUE,
+    post_message = "Congratulations! You have found the third secret word: ANNIVERSARY. Enter this word in the Lab 9 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 )
 ```
 
-### Steps for Confidence Intervals
+### Confidence Interval Framework
 
 Once you've determined a confidence interval is the correct procedure, there are four steps to building it:
 
@@ -550,7 +529,7 @@ In April 2020, McDonald's [transitioned to a limited menu to simplify tasks for 
 
 A McDonald's franchise owner wished to take a data-driven approach to business, and came to you with a sample of data from the drive-through trips at their location.
 
-### **Prepare**
+### Prepare
 
 The franchise owner would like to know what a reasonable value for the true mean drive through wait time (in seconds) might be, based on the sample of their data.
 
@@ -592,8 +571,8 @@ mean_mcds =
 mean_mcds = np.mean(mcds)
 ```
 
-```{r mean-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r mean-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 What is the sample standard deviation of the dataset? Save it as `std_mcds`.
@@ -610,8 +589,8 @@ std_mcds =
 std_mcds = np.std(mcds, ddof = 1)
 ```
 
-```{r sd-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r sd-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Finally, what is the sample size?
@@ -624,8 +603,8 @@ Finally, what is the sample size?
 len(mcds)
 ```
 
-```{r n-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r n-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Finally, we have to pick a confidence level. The "standard" level is 95\%, which we will use here.
@@ -666,24 +645,11 @@ The next step is to check. For a "traditional" piece of inference like a $t$-int
 Create a histogram using the sample.
 
 ```{python histogram, exercise = TRUE, exercise.setup = "setup_py"}
+import matplotlib.pyplot as plt
 
 ```
 
-```{r q27, echo=FALSE}
-question(
-  "Check all options that apply to the shape of this histogram.",
-  answer("Uniform"),
-  answer("Unimodal", correct = TRUE),
-  answer("Bimodal"),
-  answer("Multimodal"),
-  answer("Symmetric", correct = TRUE),
-  answer("Right-Skewed"),
-  answer("Left-Skewed"),
-  allow_retry = TRUE
-)
-```
-
-Normal distributions are symmetric and unimodal (also often called "bell-shaped")--this data is normal, and therefore, we are safe in assuming that the sampling distribution is also normal.
+Normal distributions are symmetric and unimodal (also often called "bell-shaped")--this data is approximately normal, and therefore, we are safe in assuming that the sampling distribution is also normal.
 
 2. Next, we assume the data are independent from each other, that is, no one observation gives us any information about the others. There is no good way to check independence other than to look at the context of the data. In this case, the franchise owner has assured us the sample is random, and therefore, we are again safe in assuming the data is independent.
 
@@ -703,8 +669,8 @@ Implement this formula in the cell below, and save the standard error as `se_mcd
 se_mcds = std_mcds/np.sqrt(len(mcds))
 ```
 
-```{r se-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r se-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Now we need to calculate the margin of error. Remember that the formula for the margin of error is
@@ -775,8 +741,8 @@ Now, find the value of $t$ we should be using in the interval--call it $t^*$, or
 t_star = t.ppf(0.975, df = 63)
 ```
 
-```{r ex30-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex30-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Now, combine the `t_star` and `se_mcds` to find the margin of error. Save it as `MoE_mcds`.
@@ -789,23 +755,23 @@ Now, combine the `t_star` and `se_mcds` to find the margin of error. Save it as 
 MoE_mcds = se_mcds*t_star
 ```
 
-```{r ex31-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex31-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
-Now, we can calculate the final interval by adding and subtracting the margin of error from the sample mean. Carry out these calculations below:
+Now, we can calculate the final interval by adding and subtracting the margin of error from the sample mean. Carry out these calculations below, and save the lower and upper bounds of the interval as `lower_mcds` and `upper_mcds`:
 
 ```{python ex32, exercise = TRUE, exercise.setup = "setup_py"}
 
 ```
 
 ```{python ex32-solution, message = FALSE, warning = FALSE, echo = FALSE}
-mean_mcds - MoE_mcds 
-mean_mcds + MoE_mcds 
+lower_mcds = mean_mcds - MoE_mcds
+upper_mcds = mean_mcds + MoE_mcds
 ```
 
-```{r ex32-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex32-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 ### Conclude
@@ -839,8 +805,8 @@ There is a somewhat faster way to build the $t$-interval, and, if you are not co
 t.interval(0.95, 63, loc=mean_mcds, scale=se_mcds)
 ```
 
-```{r ex34-code-check, message = FALSE, warning = FALSE}
-grade_this_code()
+```{r ex34-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 :::: {.discussionbox}
