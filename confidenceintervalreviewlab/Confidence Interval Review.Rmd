@@ -448,10 +448,10 @@ from scipy.stats import t
 ```{r q15, echo=FALSE}
 question(
   "What method allows us to calculate probabilities associated with a `t` random variable?",
-  answer(".cdf()", correct = TRUE),
-  answer(".pdf()"),
-  answer(".ppf()"),
-  answer(".rvs()"),
+  answer("`.cdf()`", correct = TRUE),
+  answer("`.pdf()`"),
+  answer("`.ppf()`"),
+  answer("`.rvs()`"),
   allow_retry = TRUE
 )
 ```
@@ -459,10 +459,10 @@ question(
 ```{r q16, echo=FALSE}
 question(
   "What method allows us to calculate percentiles associated with a `t` random variable?",
-  answer(".cdf()"),
-  answer(".pdf()"),
-  answer(".ppf()", correct = TRUE),
-  answer(".rvs()"),
+  answer("`.cdf()`"),
+  answer("`.pdf()`"),
+  answer("`.ppf()`", correct = TRUE),
+  answer("`.rvs()`"),
   allow_retry = TRUE,
   post_message = "Congratulations! You have found the third secret word: LAZY. Enter this word in the Lab 9 assignment on Gradescope exactly as it appears here (all caps, no spaces) to earn completion credit."
 )
