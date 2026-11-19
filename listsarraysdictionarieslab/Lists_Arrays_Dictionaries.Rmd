@@ -29,6 +29,7 @@ library(reticulate)
 #     (not just rely on setup).
 #   list(expr = "..."): this Python expression, evaluated after the code runs (e.g. a
 #     list the code changes in place).
+#   defines = ...: variables the student's code must also assign (e.g. a saved result).
 #   list(error = "TypeError"): the student's code must raise this error (no solution needed).
 #   structure = ...: rules the code must also follow (see check_structure below), so
 #     that e.g. typing the answer (True) doesn't pass a question about an operator.
@@ -78,7 +79,7 @@ def fresh_namespace(setup):
         exec(compile(chunk, "<setup>", "exec"), g)
     return g
 
-def get_result(code, setup=None, var=None, expr=None, last_value=False, all_values=False):
+def get_result(code, setup=None, var=None, expr=None, last_value=False, all_values=False, defines=()):
     import ast
     tree = ast.parse(code)
     if not tree.body:
@@ -95,6 +96,11 @@ def get_result(code, setup=None, var=None, expr=None, last_value=False, all_valu
             values.append(eval(compile(ast.Expression(node), "<exercise>", "eval"), g))
         else:
             exec(compile(ast.Module([stmt], type_ignores=[]), "<exercise>", "exec"), g)
+    # Variables have to be assigned by the student, not just left over from setup
+    assigned = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Store)}
+    for name in defines:
+        if name not in assigned or name not in g:
+            raise NameError(name + " not defined")
     if expr is not None:
         return eval(expr, g)
     if all_values:
@@ -109,8 +115,6 @@ def get_result(code, setup=None, var=None, expr=None, last_value=False, all_valu
             # Last line is `name = expr`, so read `name`
             return g[last.targets[0].id]
         raise ValueError("last line is not an expression")
-    # The variables have to be assigned by the student, not just left over from setup
-    assigned = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Store)}
     names = [var] if isinstance(var, str) else list(var)
     for name in names:
         if name not in assigned or name not in g:
@@ -160,9 +164,40 @@ def values_match(actual, expected):
         import numpy as np
     except ImportError:
         np = None
+    try:
+        import pandas as pd
+    except ImportError:
+        pd = None
     def is_bool(x):
         return isinstance(x, bool) or (np is not None and isinstance(x, np.bool_))
+    def normalize(x):
+        # values="name" and values=["name"] in a pivot table differ only by an extra
+        # top level on the columns, and a one-column data frame holds the same values
+        # as a series, so neither difference counts
+        if isinstance(x, pd.DataFrame):
+            if x.columns.nlevels > 1 and x.columns.get_level_values(0).nunique() == 1:
+                x = x.droplevel(0, axis=1)
+            if x.shape[1] == 1:
+                x = x.iloc[:, 0]
+        return x
     def match(a, e):
+        # Data frames and series must have the same rows (in order), columns, and values;
+        # names and dtypes (e.g. int vs float) are ignored
+        if pd is not None and isinstance(e, (pd.Series, pd.DataFrame)):
+            if not isinstance(a, (pd.Series, pd.DataFrame)):
+                return False
+            a, e = normalize(a), normalize(e)
+            if type(a) is not type(e):
+                return False
+            try:
+                if isinstance(e, pd.Series):
+                    pd.testing.assert_series_equal(a, e, check_dtype=False, check_names=False, check_index_type=False)
+                else:
+                    pd.testing.assert_frame_equal(a, e, check_dtype=False, check_names=False,
+                                                  check_index_type=False, check_column_type=False)
+                return True
+            except Exception:
+                return False
         if np is not None and isinstance(e, np.ndarray):
             if not isinstance(a, np.ndarray) or a.shape != e.shape:
                 return False
@@ -241,7 +276,8 @@ custom_checker <- function(label, user_code, solution_code, check_code, envir_re
         var <- if (length(spec$var) > 1) as.list(spec$var) else spec$var
         get_result <- function(code) {
           helpers$get_result(code, setup = setup, var = var, expr = spec$expr,
-                             last_value = isTRUE(spec$last_value), all_values = isTRUE(spec$all_values))
+                             last_value = isTRUE(spec$last_value), all_values = isTRUE(spec$all_values),
+                             defines = as.list(spec$defines))
         }
         actual <- get_result(user_code)
         expected <- get_result(solution_code)
