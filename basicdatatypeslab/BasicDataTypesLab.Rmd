@@ -17,8 +17,182 @@ library(gradethis)
 library(learnr)
 library(reticulate)
 
+# Exercises graded on a value instead of the exact code. Every exercise with a
+# Submit button needs an entry here (and a -check chunk, which enables the button).
+#   list(last_value = TRUE): the value of the student's last line (or the variable it
+#     assigns) must match the last value of the -solution chunk. print(x) counts as x.
+#   list(all_values = TRUE): every bare line's value must match the solution's, in order.
+#   list(var = ...): the student's code must assign these variables itself (not just
+#     rely on setup_py), with the same values as the solution.
+#   list(error = "TypeError"): the student's code must raise this error.
+#   structure = ...: rules the code must also follow (see check_structure below), so
+#     that typing the answer (e.g. True) doesn't pass a question about an operator.
+# Strings, Booleans, and types must match exactly; numbers must be close, and if the
+# solution gives a float the student's answer has to be a float too.
+# Any exercise not listed is graded by exact code match against its -solution chunk.
+value_checks <- list(
+  ex2 = list(last_value = TRUE),
+  ex3 = list(last_value = TRUE),
+  ex4 = list(last_value = TRUE),
+  ex9 = list(all_values = TRUE),
+  ex11 = list(last_value = TRUE),
+  ex12 = list(last_value = TRUE),
+  ex13 = list(var = "Chewbacca"),
+  ex14 = list(var = "Chewbacca"),
+  ex15 = list(var = c("Chewbacca", "Luke", "C3PO", "R2D2", "Leia", "Han")),
+  ex16 = list(last_value = TRUE, structure = "compare"),
+  ex17 = list(last_value = TRUE, structure = "compare"),
+  ex18 = list(last_value = TRUE, structure = c("compare", "or")),
+  ex19 = list(last_value = TRUE, structure = c("compare", "and")),
+  ex21 = list(last_value = TRUE, structure = "compare"),
+  ex22 = list(last_value = TRUE, structure = "compare"),
+  ex23 = list(var = "leia_lower", structure = "compare"),
+  ex24 = list(last_value = TRUE),
+  ex26 = list(last_value = TRUE),
+  ex28 = list(last_value = TRUE),
+  ex29 = list(last_value = TRUE),
+  ex30 = list(error = "TypeError")
+)
+
+# Python helpers for custom_checker (done in Python so they work the same on every
+# Python version).
+# get_result runs code like learnr does (setup objects visible, new variables kept
+# separate) and returns the value being checked.
+# check_structure returns "" if the code follows every rule, otherwise what is missing.
+# raises says whether the code raises the named error.
+# values_match compares a student's result to the expected one.
+checker_py <- '
+# (imports go inside the functions because py_run_string keeps top-level names local)
+def get_result(code, var=None, last_value=False, all_values=False):
+    import ast
+    import __main__
+    tree = ast.parse(code)
+    if not tree.body:
+        raise ValueError("no code")
+    user_vars = {}
+    values = []
+    for stmt in tree.body:
+        if isinstance(stmt, ast.Expr):
+            node = stmt.value
+            # print(x) shows the same thing as a bare x
+            if (isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "print"
+                    and len(node.args) == 1 and not node.keywords):
+                node = node.args[0]
+            values.append(eval(compile(ast.Expression(node), "<exercise>", "eval"), __main__.__dict__, user_vars))
+        else:
+            exec(compile(ast.Module([stmt], type_ignores=[]), "<exercise>", "exec"), __main__.__dict__, user_vars)
+    if all_values:
+        if not values:
+            raise ValueError("no values")
+        return values
+    if last_value:
+        last = tree.body[-1]
+        if isinstance(last, ast.Expr):
+            return values[-1]
+        if isinstance(last, ast.Assign) and len(last.targets) == 1 and isinstance(last.targets[0], ast.Name):
+            # Last line is `name = expr`, so read `name`
+            return user_vars[last.targets[0].id]
+        raise ValueError("last line is not an expression")
+    names = [var] if isinstance(var, str) else list(var)
+    for name in names:
+        if name not in user_vars:
+            raise NameError(name + " not defined")
+    return user_vars[var] if isinstance(var, str) else [user_vars[name] for name in names]
+
+def check_structure(code, rules=()):
+    import ast
+    nodes = list(ast.walk(ast.parse(code)))
+    for rule in rules:
+        if rule == "compare":
+            if not any(isinstance(n, ast.Compare) for n in nodes):
+                return "Make sure to use a comparison operator."
+        elif rule in ("or", "and"):
+            op = ast.Or if rule == "or" else ast.And
+            if not any(isinstance(n, ast.BoolOp) and isinstance(n.op, op) for n in nodes):
+                return "Make sure to use the `" + rule + "` operator."
+        else:
+            raise ValueError("unknown structure rule: " + rule)
+    return ""
+
+def raises(code, error):
+    import builtins
+    import __main__
+    try:
+        exec(code, __main__.__dict__, {})
+    except getattr(builtins, error):
+        return True
+    except Exception:
+        return False
+    return False
+
+def values_match(actual, expected):
+    import math
+    def match(a, e):
+        if isinstance(e, (list, tuple)):
+            return isinstance(a, (list, tuple)) and len(a) == len(e) and all(match(x, y) for x, y in zip(a, e))
+        if isinstance(e, type):
+            return a is e
+        if isinstance(e, bool):
+            return isinstance(a, bool) and a == e
+        if isinstance(e, str):
+            return isinstance(a, str) and a == e
+        if isinstance(e, (int, float)):
+            if isinstance(a, bool) or not isinstance(a, (int, float)):
+                return False
+            if isinstance(e, float) and not isinstance(a, float):
+                return False
+            return math.isclose(a, e, rel_tol=1e-9, abs_tol=1e-9)
+        try:
+            return bool(a == e)
+        except Exception:
+            return False
+    return match(actual, expected)
+'
+
+custom_checker <- function(label, user_code, solution_code, check_code, envir_result, evaluate_result, envir_prep, last_value, stage, ...) {
+  # (learnr doesn't pass the last value of Python chunks, so we run the code)
+  if (label %in% names(value_checks)) {
+    if (stage != "check") return()
+    spec <- value_checks[[label]]
+    structure_msg <- tryCatch({
+      helpers <- reticulate::py_run_string(checker_py, local = TRUE, convert = FALSE)
+      reticulate::py_to_r(helpers$check_structure(user_code, as.list(spec$structure)))
+    }, error = function(e) "")
+    if (nzchar(structure_msg)) {
+      return(list(message = paste(random_encouragement(), structure_msg), correct = FALSE))
+    }
+    correct <- tryCatch({
+      helpers <- reticulate::py_run_string(checker_py, local = TRUE, convert = FALSE)
+      if (!is.null(spec$error)) {
+        isTRUE(reticulate::py_to_r(helpers$raises(user_code, spec$error)))
+      } else {
+        var <- if (length(spec$var) > 1) as.list(spec$var) else spec$var
+        get_result <- function(code) {
+          helpers$get_result(code, var = var, last_value = isTRUE(spec$last_value),
+                             all_values = isTRUE(spec$all_values))
+        }
+        # Student's code runs first, so if it modifies shared data the solution can't fill it in for them
+        actual <- get_result(user_code)
+        expected <- get_result(solution_code)
+        isTRUE(reticulate::py_to_r(helpers$values_match(actual, expected)))
+      }
+    }, error = function(e) FALSE)
+    if (correct) {
+      return(list(message = random_praise(), correct = TRUE))
+    }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+  # Exact code checking (requires a <label>-solution chunk and <label>-code-check chunk)
+  if (stage == "code_check") {
+      if (user_code == solution_code){
+          return(list(message = random_praise(), correct = TRUE))
+      }
+    return(list(message = random_encouragement(), correct = FALSE))
+  }
+}
+
 gradethis_setup()
-tutorial_options(exercise.completion = FALSE, exercise.blanks = "\\.{3}", exercise.reveal_solution = FALSE)
+tutorial_options(exercise.completion = FALSE, exercise.checker = custom_checker, exercise.blanks = "\\.{3}", exercise.reveal_solution = FALSE)
 ```
 
 ```{r header, echo = FALSE}
@@ -83,8 +257,8 @@ You can type anything into the cell, but usually, you should be typing code to a
 2+2
 ```
 
-```{r ex2-check, context="server"}
-grade_this_code()
+```{r ex2-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 This time, you should see a light "Submit Answer" button at the top of the cell. Click on it--what do you see? If you wrote something like `2+2`, you should see a green box saying that you got the right answer. 
@@ -99,13 +273,13 @@ Now, write some code that will tell you anything BUT the answer to the question 
 2+2
 ```
 
-```{r ex3-check, context="server"}
-grade_this_code()
+```{r ex3-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Click on the "Submit Answer" button. This time, you should see a red box saying that your answer was incorrect. Most of the time, this means that you should revisit your code--you can submit the answer multiple times until you get the right answer. For now, you can move on!
 
-Sometimes, the cells expect your code to match ours exactly. For example, edit the code in the cell below to give the answer to $2+2 -3 + 3$ and click on the "Submit Answer" button.
+The cells check the *value* your code gives, not whether your code matches ours exactly. For example, edit the code in the cell below to give the answer to $2+2 -3 + 3$ and click on the "Submit Answer" button.
 
 ```{python ex4, exercise=TRUE, exercise.setup="setup_py"}
 2+2
@@ -115,11 +289,11 @@ Sometimes, the cells expect your code to match ours exactly. For example, edit t
 2+2
 ```
 
-```{r ex4-check, context="server"}
-grade_this_code()
+```{r ex4-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
-Even though `2+2` and `2+2-3+3` give the same value, `4`, the tutorial is telling you that you didn't get the right answer because your code is not an exact match. In this class, we will usually use exact code matching so that you can learn the basics, but there might be times where there are multiple ways to get the right answer. You are always welcome to experiment and ask us for help! 
+Our answer was written as `2+2`, but your code is still marked correct because `2+2` and `2+2-3+3` give the same value, `4`. There are usually multiple ways to get the right answer, so you are always welcome to experiment and ask us for help! 
 
 <!-- For example, write a line of code below that should yield a result of `4`. -->
 
@@ -296,8 +470,8 @@ type(18)
 type(22.7)
 ```
 
-```{r ex9-check, context="server"}
-grade_this_code()
+```{r ex9-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 ```{r q4, echo=FALSE}
@@ -410,8 +584,8 @@ Using the `+` and `/` operators, as well as the parentheses, write a line of cod
 (172+167+96+150+180+238)/6
 ```
 
-```{r ex11-check}
-grade_this_code()
+```{r ex11-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 As we have said, there are not many `int`- and `float`-specific methods, but there are some built-in functions in Python that make working with numbers easier:
@@ -433,8 +607,8 @@ Convert the integer 172 to a float using one of these functions in the cell belo
 float(172)
 ```
 
-```{r ex12-check}
-grade_this_code()
+```{r ex12-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 ```{r q6, echo=FALSE}
@@ -477,8 +651,8 @@ Chewbacca = 238
 Chewbacca = 228
 ```
 
-```{r ex13-check}
-grade_this_code()
+```{r ex13-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 In this case, the variable name is `Chewbacca`. Notice that it appears in black! Now, edit the code above so that `Chewbacca` is equal to 228, not 238. 
@@ -495,8 +669,8 @@ Chewbacca = 228
 print(Chewbacca)
 ```
 
-```{r ex14-check}
-grade_this_code()
+```{r ex14-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Now, add some code to assign heights to the rest of our characters, Luke Skywalker, C-3PO, R2-D2, Leia Organa, and Han Solo. Remember, the heights are:
@@ -511,7 +685,7 @@ Now, add some code to assign heights to the rest of our characters, Luke Skywalk
 ```{python ex15, exercise=TRUE, exercise.setup="setup_py"}
 Chewbacca = 228
 Luke = ...
-C3P0 = ...
+C3PO = ...
 R2D2 = ...
 Leia = ...
 Han = ...
@@ -526,8 +700,8 @@ Leia = 150
 Han = 180
 ```
 
-```{r ex15-check}
-grade_this_code()
+```{r ex15-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Variable names *can* be anything, but it's generally good to avoid the names of the built-in functions as well as the [Python keywords](https://www.w3schools.com/python/python_ref_keywords.asp), listed below:
@@ -546,7 +720,7 @@ Note that the keywords ALSO appear as blue.
 
 ## Booleans
 
-Now let's practice working with Booleans using our variables, `Chewbacca`, `Luke`, `C3P0`, `R2D2`, `Leia`, and `Han`. Remember that Booleans are outputted by the comparison operators:
+Now let's practice working with Booleans using our variables, `Chewbacca`, `Luke`, `C3PO`, `R2D2`, `Leia`, and `Han`. Remember that Booleans are outputted by the comparison operators:
 
 | Comparison | Operator | True Example | False Example |
 |:---------:|:-----:|:------:|------:|
@@ -567,8 +741,8 @@ Is Luke taller than Leia? Write a line of code using the right comparison operat
 Luke > Leia
 ```
 
-```{r ex16-check,}
-grade_this_code()
+```{r ex16-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Is Chewbacca shorter than Han Solo? Write a line of code using the right comparison operator and the variable names. 
@@ -581,8 +755,8 @@ Is Chewbacca shorter than Han Solo? Write a line of code using the right compari
 Chewbacca < Han 
 ```
 
-```{r ex17-check}
-grade_this_code()
+```{r ex17-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 It can be helpful to combine some of these comparisons using Python's [logical operators](https://www.w3schools.com/python/python_operators_logical.asp). Click on the link and read about these new operators. Then, use them to complete the questions below. You may also find it helpful to use parentheses.
@@ -597,20 +771,8 @@ Is Leia taller than *either* of the droids, R2-D2 or C-3PO?
 Leia > (R2D2 or C3PO)
 ```
 
-```{r ex18-check}
-grade_this({
-  if (is.null(.result)) {
-    fail("Make sure your last line returns the comparison result (don't assign it to a variable).")
-  }
-  if (!grepl("or", .user_code)) {
-    fail("Make sure to use the `or` operator.")
-  }
-  if (isTRUE(reticulate::py_to_r(.result))) {
-    pass(random_praise())
-  } else {
-    fail(random_encouragement())
-  }
-})
+```{r ex18-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Is Chewbacca taller than *both* of the droids, R2-D2 or C-3PO?
@@ -623,20 +785,8 @@ Is Chewbacca taller than *both* of the droids, R2-D2 or C-3PO?
 Chewbacca > (R2D2 and C3PO)
 ```
 
-```{r ex19-check}
-grade_this({
-  if (is.null(.result)) {
-    fail("Make sure your last line returns the comparison result (don't assign it to a variable).")
-  }
-  if (!grepl("and", .user_code)) {
-    fail("Make sure to use the `and` operator.")
-  }
-  if (isTRUE(reticulate::py_to_r(.result))) {
-    pass(random_praise())
-  } else {
-    fail(random_encouragement())
-  }
-})
+```{r ex19-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 ## Strings
@@ -664,8 +814,8 @@ Strings are the same whether you use double or single quotes to define them. Wri
 Leia_fullname == 'Leia Organa'
 ```
 
-```{r ex21-check}
-grade_this_code()
+```{r ex21-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Make sure you are careful to use the single equals sign, `=`, when assigning variables, and the double equals sign, `==`, when checking equality!
@@ -680,11 +830,11 @@ Now, write a line of code using a comparison operator to see if `Leia_fullname` 
 Leia_fullname == 'leia organa'
 ```
 
-```{r ex22-check}
-grade_this_code()
+```{r ex22-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
-Python does not consider two strings to be the same unless they match exactly. This is where some of the methods come in. The `.lower()` method should convert all of the characters in a string to lowercase. Try and use it with our variable name in the cell below. Save the lowercase version as a new variable, `Leia_lower`, and check to see if it is equal to `"leia organa"`.
+Python does not consider two strings to be the same unless they match exactly. This is where some of the methods come in. The `.lower()` method should convert all of the characters in a string to lowercase. Try and use it with our variable name in the cell below. Save the lowercase version as a new variable, `leia_lower`, and check to see if it is equal to `"leia organa"`.
 
 ```{python ex23, exercise=TRUE, exercise.setup="setup_py"}
 leia_lower = Leia_fullname...
@@ -696,8 +846,8 @@ leia_lower = Leia_fullname.lower()
 leia_lower == "leia organa"
 ```
 
-```{r ex23-check}
-grade_this_code()
+```{r ex23-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Now, use the `.capitalize()` method to try and undo what you just did. 
@@ -718,8 +868,8 @@ leia_lower...
 leia_lower.capitalize()
 ```
 
-```{r ex24-check}
-grade_this_code()
+```{r ex24-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 Like I said, there are many many string methods. Check out a [table of string methods](https://www.w3schools.com/python/python_strings_methods.asp)--can you find one that will do the opposite of `.lower()`?
@@ -756,8 +906,8 @@ message.count("Kenobi")
 message.count("father")
 ```
 
-```{r ex26-check}
-grade_this_code()
+```{r ex26-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 
@@ -786,8 +936,8 @@ stormtrooper = "These aren't the droids we're looking for."
 obiwan + stormtrooper
 ```
 
-```{r ex28-check}
-grade_this_code()
+```{r ex28-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 When used with strings, the `+` is the concatenation operator. It pastes the two messages together, exactly as they are--notice that there is no space in between the sentences in the concatenated message, even though we would normally put one there. 
@@ -804,8 +954,8 @@ message_short = "Help me, Obi-Wan Kenobi. You're my only hope."
 message_short*3
 ```
 
-```{r ex29-check}
-grade_this_code()
+```{r ex29-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 You should notice that the multiplication operator will repeat the string (in this case, three times). What happens if you multiply by 1.5 instead?
@@ -820,8 +970,8 @@ message_short = "Help me, Obi-Wan Kenobi. You're my only hope."
 message_short*1.5
 ```
 
-```{r ex30-check}
-grade_this_code()
+```{r ex30-check, message = FALSE, warning = FALSE}
+# Graded by custom_checker via value_checks (this chunk enables the Submit button)
 ```
 
 You should get an error! Remember that sometimes error messages are frustrating, but they are supposed to help us debug our code. In this case, we got a `TypeError`, because we tried to multiply a string (allowed) by an object of the `float` type (not allowed). The multiplication operator only works with type `int`.
