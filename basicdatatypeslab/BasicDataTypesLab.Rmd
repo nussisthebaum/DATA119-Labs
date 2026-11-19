@@ -279,57 +279,6 @@ Now, write some code that will tell you anything BUT the answer to the question 
 
 Click on the "Submit Answer" button. This time, you should see a red box saying that your answer was incorrect. Most of the time, this means that you should revisit your code--you can submit the answer multiple times until you get the right answer. For now, you can move on!
 
-The cells check the *value* your code gives, not whether your code matches ours exactly. For example, edit the code in the cell below to give the answer to $2+2 -3 + 3$ and click on the "Submit Answer" button.
-
-```{python ex4, exercise=TRUE, exercise.setup="setup_py"}
-2+2
-```
-
-```{python ex4-solution, message = FALSE, warning = FALSE, echo = FALSE}
-2+2
-```
-
-```{r ex4-check, message = FALSE, warning = FALSE}
-# Graded by custom_checker via value_checks (this chunk enables the Submit button)
-```
-
-Our answer was written as `2+2`, but your code is still marked correct because `2+2` and `2+2-3+3` give the same value, `4`. There are usually multiple ways to get the right answer, so you are always welcome to experiment and ask us for help! 
-
-<!-- For example, write a line of code below that should yield a result of `4`. -->
-
-<!-- ```{python ex5, exercise=TRUE, exercise.setup="setup_py"} -->
-<!-- 2+2 -->
-<!-- ``` -->
-
-<!-- ```{python ex5-solution, message = FALSE, warning = FALSE, echo = FALSE} -->
-<!-- 4 -->
-<!-- ``` -->
-
-<!-- ```{r ex5-check, context="server"} -->
-<!-- grade_this({ -->
-<!--   if (is.null(.result)) { -->
-<!--     fail("Make sure to write your line of code!") -->
-<!--   } -->
-
-<!--   res <- reticulate::py_to_r(.result) -->
-
-<!--   ex5_ans = 4 -->
-
-<!--   if (identical(res, ex5_ans)) { -->
-<!--     pass(random_praise()) -->
-<!--   } else { -->
-<!--     fail(random_encouragement()) -->
-<!--   } -->
-<!-- }) -->
-<!-- ``` -->
-
-<!-- :::: {.discussionbox} -->
-<!-- ::: {.center} -->
-<!-- **Discuss with a neighbor (or on Ed):** -->
-<!-- ::: -->
-<!-- What code did you write that gives `4` as an answer? Is it different from what your neighbors wrote? -->
-<!-- :::: -->
-
 Sometimes, you might see a yellow box with a strange error. If you do, please know that you are likely not making a mistake and we need to fix the issue on the back end. If you see something like this, please let your instructor know!
 
 ## Syntax Highlighting
