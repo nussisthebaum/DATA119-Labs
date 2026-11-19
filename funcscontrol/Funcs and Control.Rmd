@@ -601,7 +601,7 @@ def get_ticket_price(day):
 ```
 
 ```{r q11, echo=FALSE}
-question('Using the rewritten function above, what does `get_ticket_price("Wednesday")` return?',
+question('Answer this question without running any code: what will `get_ticket_price("Wednesday")` return now?',
          answer("`3`"),
          answer("`5`", correct = TRUE, message = 'Separate `if` statements are each checked on their own. The first `if` sets the price to `3`, but then Python moves on to the second `if`. Wednesday is not in `WEEKEND`, so the `else` block runs and overwrites the price with `5`. With `elif`, Python stops checking once one condition is `True`, so the Wednesday price would never be overwritten.'),
          answer("`6`"),
